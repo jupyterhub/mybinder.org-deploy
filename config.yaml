@@ -1,0 +1,35 @@
+hub:
+    cookieSecret: "4f8c22aa1d1c900a217fb541b3c4a2facccd795bcd375e415bb21261c9a8b5cf8723cf6e66c7466b306c8c0d5f7de8b5e2700da8df411aa27346553876cf6d2e"
+    publicURL: http://104.198.224.169
+    image:
+      tag: v94ff73b
+    extraConfig: |
+      import json
+      from tmpauthenticator import TmpAuthenticator
+      class DynamicImageAuth(TmpAuthenticator):
+          def process_user(self, user, handler):
+              image = handler.get_argument('image', None, True)
+              user.spawner.singleuser_image_spec = image
+              user.spawner.default_url = handler.get_argument('default_url', '/tree', True)
+              return user
+      c.JupyterHub.authenticator_class = DynamicImageAuth
+      c.DynamicImageAuth.force_new_server = True
+      c.KubeSpawner.args.append('--NotebookApp.disable_check_xsrf=True')
+      c.KubeSpawner.args.append('--NotebookApp.allow_origin="*"')
+      # FIXME: Make this more secure?
+      c.KubeSpawner.args.append('--NotebookApp.tornado_settings={}'.format(json.dumps({'headers': {'Content-Security-Policy': ' '}})))
+
+
+auth:
+  type: tmp
+
+singleuser:
+  storage:
+    type: none
+  memory:
+    guarantee: null
+
+builder:
+  enabled: true
+  registry:
+    prefix: binder-testing
