@@ -29,8 +29,7 @@ singleuser:
   memory:
     guarantee: null
 
-builder:
+binder:
   enabled: true
   registry:
     prefix: binder-testing
-  builderImage: jupyterhub/builderhub-builder:v0.1.15
