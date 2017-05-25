@@ -1,8 +1,6 @@
 hub:
     cookieSecret: "4f8c22aa1d1c900a217fb541b3c4a2facccd795bcd375e415bb21261c9a8b5cf8723cf6e66c7466b306c8c0d5f7de8b5e2700da8df411aa27346553876cf6d2e"
     publicURL: http://104.155.157.27
-    image:
-      tag: v94ff73b
     extraConfig: |
       import json
       from tmpauthenticator import TmpAuthenticator
