@@ -1,2 +1,5 @@
 hub:
     publicURL: http://104.198.224.169
+
+binder:
+  publicIP: 35.184.96.239
