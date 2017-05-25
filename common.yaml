@@ -18,9 +18,8 @@ hub:
       c.KubeSpawner.args.append('--NotebookApp.tornado_settings={}'.format(json.dumps({'headers': {'Content-Security-Policy': ' '}})))
 
 
-auth:
-  type: tmp
-
+prePuller:
+   enabled: false
 singleuser:
   storage:
     type: none
