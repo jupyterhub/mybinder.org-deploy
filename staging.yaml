@@ -1,2 +1,5 @@
 hub:
     publicURL: http://104.155.157.27
+
+binder:
+  repo2dockerImage: jupyter/repo2docker:v0.2.1
