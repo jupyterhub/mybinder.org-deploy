@@ -3,3 +3,4 @@ hub:
 
 binder:
   publicIP: 35.184.96.239
+  repo2dockerImage: jupyter/repo2docker:v0.2.2
