@@ -1,0 +1,6 @@
+ingress:
+  enabled: true
+
+jupyterhub:
+  ingress:
+    enabled: true

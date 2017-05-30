@@ -1,0 +1,27 @@
+ingress:
+  host: beta.mybinder.org
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  tls:
+    - secretName: beta-binder-tls
+      hosts:
+        - beta.mybinder.org
+
+
+registry:
+  prefix: gcr.io/binder-testing/beta-
+
+hub:
+  url: http://hub.binder-beta.omgwtf.in
+
+jupyterhub:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    host: hub.binder-beta.omgwtf.in
+    tls:
+      - secretName: beta-jupyterhub-tls
+        hosts:
+          - hub.binder-beta.omgwtf.in

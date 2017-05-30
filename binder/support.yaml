@@ -1,0 +1,4 @@
+nginx-ingress:
+  controller:
+    service:
+      loadBalancerIP: 35.184.96.239
