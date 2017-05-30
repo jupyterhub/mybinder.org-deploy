@@ -1,0 +1,31 @@
+nginx-ingress:
+  controller:
+    stats:
+      enabled: true
+
+prometheus:
+  alertmanager:
+    enabled: false
+  server:
+    persistentVolume:
+      size: "100Gi"
+
+grafana:
+  server:
+    ingress:
+      enabled: true
+      hosts:
+        - grafana.lol.omgwtf.in
+      annotations:
+        kubernetes.io/ingress.class: "nginx"
+        kubernetes.io/tls-acme: "true"
+      tls:
+        - secretName: grafana-tls-secret
+          hosts:
+            - grafana.lol.omgwtf.in
+
+kube-lego:
+  config:
+    LEGO_EMAIL: yuvipanda@gmail.com
+    LEGO_URL: https://acme-v01.api.letsencrypt.org/directory
+  
