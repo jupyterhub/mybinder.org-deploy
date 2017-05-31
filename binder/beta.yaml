@@ -26,4 +26,4 @@ jupyterhub:
         hosts:
           - hub.binder-beta.omgwtf.in
 
-repo2dockerImage: jupyter/repo2docker:v0.2.3
+repo2dockerImage: jupyter/repo2docker:v0.2.4
