@@ -1,0 +1,29 @@
+ingress:
+  host: binder.binder-staging.omgwtf.in
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+  tls:
+    - secretName: staging-binder-tls
+      hosts:
+        - staging.binder-staging.omgwtf.in
+
+
+registry:
+  prefix: gcr.io/binder-testing/staging-
+
+hub:
+  url: https://hub.binder-staging.omgwtf.in
+
+jupyterhub:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    host: hub.binder-staging.omgwtf.in
+    tls:
+      - secretName: staging-jupyterhub-tls
+        hosts:
+          - hub.binder-staging.omgwtf.in
+
+repo2dockerImage: jupyter/repo2docker:v0.2.4
