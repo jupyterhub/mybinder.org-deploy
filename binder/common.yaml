@@ -1,6 +1,16 @@
 ingress:
   enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+  https:
+    enabled: true
+    type: "kube-lego"
 
 jupyterhub:
   ingress:
     enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    https:
+      enabled: true
+      type: "kube-lego"
