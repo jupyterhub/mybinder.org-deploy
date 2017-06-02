@@ -1,5 +1,7 @@
 nginx-ingress:
   controller:
+    image:
+      tag: 0.9.0-beta.7
     stats:
       enabled: true
 
