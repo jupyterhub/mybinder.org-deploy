@@ -11,4 +11,4 @@ jupyterhub:
   ingress:
     host: hub.binder-staging.omgwtf.in
 
-repo2dockerImage: jupyter/repo2docker:v0.2.5
+repo2dockerImage: jupyter/repo2docker:v0.2.7
