@@ -10,6 +10,8 @@ hub:
 
 jupyterhub:
   ingress:
+    annotations:
+      ingress.kubernetes.io/proxy-body-size: 64m
     host: hub.binder-beta.omgwtf.in
 
 repo2dockerImage: jupyter/repo2docker:v0.2.7
