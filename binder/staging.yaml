@@ -1,6 +1,9 @@
 ingress:
   host: binder.binder-staging.omgwtf.in
 
+service:
+  type: ClusterIP
+
 registry:
   prefix: gcr.io/binder-testing/staging-
 
@@ -8,6 +11,9 @@ hub:
   url: https://hub.binder-staging.omgwtf.in
 
 jupyterhub:
+  proxy:
+    service:
+      type: ClusterIP
   ingress:
     host: hub.binder-staging.omgwtf.in
 
