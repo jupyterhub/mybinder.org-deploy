@@ -6,6 +6,9 @@ ingress:
     enabled: true
     type: "kube-lego"
 
+registry:
+  enabled: true
+
 jupyterhub:
   ingress:
     enabled: true
