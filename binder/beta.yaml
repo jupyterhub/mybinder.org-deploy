@@ -3,7 +3,7 @@ ingress:
 
 
 registry:
-  prefix: gcr.io/binder-testing/beta-
+  prefix: gcr.io/binder-testing/beta-v4-1-
 
 hub:
   url: http://hub.binder-beta.omgwtf.in
@@ -14,6 +14,6 @@ jupyterhub:
       ingress.kubernetes.io/proxy-body-size: 64m
     host: hub.binder-beta.omgwtf.in
 
-repo2dockerImage: jupyter/repo2docker:v0.2.10
+repo2dockerImage: jupyter/repo2docker:v0.4.1
 
 googleAnalyticsCode: "UA-101904940-1"

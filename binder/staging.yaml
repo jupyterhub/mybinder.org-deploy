@@ -5,7 +5,7 @@ service:
   type: ClusterIP
 
 registry:
-  prefix: gcr.io/binder-testing/staging-
+  prefix: gcr.io/binder-testing/stage-v04-1-
 
 hub:
   url: https://hub.binder-staging.omgwtf.in
@@ -17,4 +17,4 @@ jupyterhub:
   ingress:
     host: hub.binder-staging.omgwtf.in
 
-repo2dockerImage: jupyter/repo2docker:v0.2.10
+repo2dockerImage: jupyter/repo2docker:v0.4.1
