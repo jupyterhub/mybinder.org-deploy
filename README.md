@@ -1,7 +1,6 @@
-# [binderhub-deploy][]
+# [mybinder.org-deploy][]
 
-Deployment config files for [BinderHub][], a [JupyterHub][] based implementation
-of Binder.
+Deployment config files for [beta.mybinder.org](https://beta.mybinder.org).
 
 ## Contents
 
