@@ -13,21 +13,18 @@ for `beta.mybinder.org`.
 ### `binder` directory
 
 - `common.yaml` configuration settings that are used in all deployment files
-- `staging.yaml` config used for staging the `beta.mybinder.org` deployment
-  for testing
+- `staging.yaml` config used for "staging" binder service, which currently
+  lives [here](https://binder.binder-staging.omgwtf.in/) (will move at some
+  point to `staging.mybinder.org`)
 - `beta.yaml` config used for the beta deployment
 - `prod.yaml` config used in a production deployment
 
 ### `support` directory
 
-- `Chart.yaml` identifies name, API version, and version of the chart
-- `requirements.yaml` identifies third party dependencies, such as
-  prometheus, grafana, and others, and their specific versions
-- `values.yaml` config values for third party tools
-
-### repo root directory
-
-- `common.yaml` (TODO: How does this differ from the common.yaml in the binder directory)
+This contains a set of 3rd party charts we use for supporting our own code
+on the binder deployment. The charts we use and their versions are specified
+in `requirements.yaml`, and the configuration of those charts is in
+`values.yaml`.
 
 [mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
 [BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
