@@ -1,6 +1,7 @@
+version: 0.1.0-401c3f9
+
 ingress:
   host: beta.mybinder.org
-
 
 registry:
   prefix: gcr.io/binder-testing/beta-v4-1-
