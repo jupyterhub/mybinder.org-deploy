@@ -2,7 +2,8 @@
 
 Deployment config files for [beta.mybinder.org](https://beta.mybinder.org).
 
-*Note: If you wish to deploy your own Binder instance, you should refer
+*Note: If you wish to deploy your own Binder instance, please do not use these
+files as they are specific to `mybinder.org`. Instead, you should refer
 to the [`jupyterhub/binderhub`][] repo and the [BinderHub documentation][]*
 
 ## Contents
@@ -10,7 +11,7 @@ to the [`jupyterhub/binderhub`][] repo and the [BinderHub documentation][]*
 This repo contains config files used in the deployment workflow
 for `beta.mybinder.org`.
 
-### `binder` directory
+### `config` directory
 
 - `common.yaml` configuration settings that are used in all deployment files
 - `staging.yaml` config used for "staging" binder service, which currently
