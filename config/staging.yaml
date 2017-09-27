@@ -1,3 +1,5 @@
+version: 0.1.0-401c3f9
+
 ingress:
   host: binder.binder-staging.omgwtf.in
 
