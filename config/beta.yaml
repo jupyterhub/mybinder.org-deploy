@@ -7,13 +7,13 @@ registry:
   prefix: gcr.io/binder-testing/beta-v4-1-
 
 hub:
-  url: http://hub.binder-beta.omgwtf.in
+  url: https://hub.beta.mybinder.org
 
 jupyterhub:
   ingress:
     annotations:
       ingress.kubernetes.io/proxy-body-size: 64m
-    host: hub.binder-beta.omgwtf.in
+    host: hub.beta.mybinder.org
 
 repo2dockerImage: jupyter/repo2docker:v0.4.1
 
