@@ -1,7 +1,7 @@
 version: 0.1.0-183addc
 
 ingress:
-  host: binder.binder-staging.omgwtf.in
+  host: staging.mybinder.org
 
 service:
   type: ClusterIP
@@ -10,13 +10,13 @@ registry:
   prefix: gcr.io/binder-testing/stage-v04-1-
 
 hub:
-  url: https://hub.binder-staging.omgwtf.in
+  url: https://hub.staging.mybinder.org
 
 jupyterhub:
   proxy:
     service:
       type: ClusterIP
   ingress:
-    host: hub.binder-staging.omgwtf.in
+    host: hub.staging.mybinder.org
 
 repo2dockerImage: jupyter/repo2docker:v0.4.1
