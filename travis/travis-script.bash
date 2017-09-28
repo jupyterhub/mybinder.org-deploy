@@ -12,6 +12,9 @@ tar xvf travis/deploy-secrets.tar.gz
 # Set up the gcloud SDK for use!
 export PATH=${HOME}/google-cloud-sdk/bin:${PATH}
 
-gcloud auth activate-service-account --key-file=travis/deploy-secrets/google-auth-key.json
+gcloud auth activate-service-account --key-file=deploy-secrets/google-auth-key.json
+gcloud container clusters get-credentials binder-hub --zone=us-central1-a --project=binder-testing
+
+kubectl version
 
 echo "Done!"
