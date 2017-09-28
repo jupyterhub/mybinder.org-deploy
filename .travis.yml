@@ -8,7 +8,7 @@ script:
 
 before_deploy:
 # Set up the gcloud SDK
-- curl -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-173.0.0-linux-x86_64.tar.gz | tar xvfz -
+- curl -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-173.0.0-linux-x86_64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
 
 deploy:
   provider: script
