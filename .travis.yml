@@ -1,0 +1,11 @@
+language: python
+
+before_install:
+# Set up the gcloud SDK
+- if [ ! -d ${HOME}/google-cloud-sdk ]; then
+     curl https://sdk.cloud.google.com | bash;
+  fi
+
+deploy:
+  provider: script
+  script: ./travis/travis-script.bash
