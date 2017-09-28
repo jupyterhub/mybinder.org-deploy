@@ -3,6 +3,9 @@ language: python
 install:
   - pip install --no-cache-dir pyyaml
 
+script:
+  - true
+
 before_deploy:
 # Set up the gcloud SDK
 - curl -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-173.0.0-linux-x86_64.tar.gz | tar xvfz -
