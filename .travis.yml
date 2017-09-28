@@ -9,6 +9,10 @@ script:
 before_deploy:
 # Set up the gcloud SDK
 - curl -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-173.0.0-linux-x86_64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
+- ${HOME}/google-cloud-sdk/bin/gcloud components install kubectl
+
+env:
+  - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 
 deploy:
   provider: script
