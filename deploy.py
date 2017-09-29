@@ -18,6 +18,7 @@ def deploy(release):
         release,
         'jupyterhub/binderhub',
         '--version', config['version'],
+        '--wait',
         '-f', 'config/common.yaml',
         '-f', 'config/secret/common.yaml',
         '-f', os.path.join('config', release + '.yaml'),
