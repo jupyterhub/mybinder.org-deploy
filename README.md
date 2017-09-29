@@ -1,74 +1,53 @@
 # [mybinder.org-deploy][]
 
-Deployment procedure and configuration files for
-[beta.mybinder.org](https://beta.mybinder.org).
+This repository contains configuration files and documentation related to the
+[binderhub](https://github.com/jupyterhub/binderhub) deployment open to the
+public at [beta.mybinder.org](https://beta.mybinder.org).
 
 *Note: If you wish to deploy your own Binder instance, please do not use these
 files as they are specific to `mybinder.org`. Instead, you should refer
 to the [`jupyterhub/binderhub`][] repo and the [BinderHub documentation][].*
 
-## Deploying
+There are two branches here: staging & beta. These should always be the same -
+beta should not drift away from staging too much. staging branch should
+correspond to the config
+for [staging.mybinder.org](https://staging.mybinder.org) & the beta branch
+to [beta.mybinder.org](https://beta.mybinder.org).
 
-The state of the *production* and *staging* clusters for `mybinder.org` should
-match the `master` branch of this git repository.
+## Deploying a change
 
-Currently, users deploy the site manually using required deployment scripts,
-such as `deploy.py`. We will soon automate the deployment process for ease of
-use, consistency, monitoring, and resiliency.
+Deploying a change is quite simple!
 
-## Deployment Process
+1. Make the change you want. 
+2. Make a PR to the `staging` branch with the changes you want!
+3. Get this PR merged. This will make travis do a deployment
+   to [staging](https://staging.mybinder.org)
+4. Verify that staging works as intended. If there are *any* issues at all,
+   however minor - stop, investigate, and do not proceed until you are
+   completely convinced that it is ok!
+5. Make a new PR, merging staging into the beta branch.
+6. Get this PR merged, and wait for travis to make a deployment
+   to [beta](https://beta.mybinder.org)
+7. CELEBRATE!
 
-### Prerequisites
-
-Before deploying, you need the following:
-
-1. Be a team member of the Google Cloud project that is being used for
-   `mybinder.org`.
-
-2. Access to the [git-crypt](https://github.com/AGWA/git-crypt) symmetric
-   encryption key file used to encrypt secrets in this repository.
-
-3. A recent version of [helm](https://helm.sh/) installed locally in `$PATH`.
-
-4. Some knowledge of how to debug stuff when it goes wrong :)
-
-### How to deploy
-
-1. Make changes to the config.
-
-2. Commit the changes to the git repository. We recommend following the
-   PR process, when able to do so.
-
-3. Deploy to `staging` first:
-
-   ```bash
-   ./deploy.py deploy staging
-   ```
-
-4. Go to `staging` (currently at https://binder.binder-staging.omgwtf.in)
-   and make sure everything works ok. Test the new functionality you just
-   deployed and make sure it works as expected.
-
-5. Make sure the changes you made in Step 2 are found in the `beta` config
-   files too.
-
-6. Deploy to `beta` after verifying Step 4 and 5:
-
-   ```bash
-   ./deploy.py deploy beta
-   ```
-
-7. Make sure that everything works ok in `beta`!
-
-As this process is still very manual, please use these steps as a
-**deployment checklist**. There'll be lots of improvements to automate deployment
-coming soon.
+More detailed information to come soon!
 
 ## Repository structure
 
-This repository contains configuration files and documentation related to the
-[binderhub](https://github.com/jupyterhub/binderhub) deployment open to the
-public at [beta.mybinder.org](https://beta.mybinder.org).
+This repository contains purely config files. Related repositories with more
+interesting contents are:
+
+1. [binderhub](https://github.com/jupyterhub/binderhub)
+   
+   This contains the binderhub code (UI & hub management) & helm chart. This is
+   where most of the action is. If you wanna change the UI / UX or hub
+   management aspects of mybinder.org, go here!
+
+2. [repo2docker](http://github.com/jupyter/repo2docker)
+
+   This is used to do the actual building of git repositories into docker
+   images, and can be used standalone too. If you want to change how a git
+   repository is converted into a docker image to be run for the user, go here!
 
 ### `config` directory
 
