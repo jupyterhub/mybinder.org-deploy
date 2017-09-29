@@ -2,3 +2,14 @@ nginx-ingress:
   controller:
     service:
       loadBalancerIP: 35.184.96.239
+
+prometheus:
+  alertmanager:
+    enabled: false
+  pushgateway:
+    enabled: false
+  rbac:
+    create: true
+  server:
+    persistentVolume:
+      size: 500Gi
