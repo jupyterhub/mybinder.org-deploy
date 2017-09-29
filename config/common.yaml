@@ -1,4 +1,4 @@
-version: 0.1.0-183addc
+version: 0.1.0-6f57b2a
 
 service:
   type: ClusterIP
