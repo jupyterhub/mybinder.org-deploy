@@ -16,6 +16,7 @@ gcloud auth activate-service-account --key-file=deploy-secrets/google-auth-key.j
 gcloud container clusters get-credentials binder-hub --zone=us-central1-a --project=binder-testing
 
 kubectl version
+kubectl --namespace=kube-system get pod
 helm init --client-only
 helm version
 
