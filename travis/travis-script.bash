@@ -4,7 +4,7 @@ set -euo pipefail
 # Keeping this here rather than make travis.yml too complex
 
 echo "Starting deploy..."
-
+cd ${TRAVIS_BUILD_DIR}
 
 openssl aes-256-cbc -K $encrypted_510e3970077d_key -iv $encrypted_510e3970077d_iv -in travis/deploy-secrets.tar.gz.enc -out travis/deploy-secrets.tar.gz -d
 tar xvf travis/deploy-secrets.tar.gz
