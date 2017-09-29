@@ -27,5 +27,9 @@ jupyterhub:
     https:
       enabled: true
       type: "kube-lego"
+  singleuser:
+    memory:
+      guarantee: 1G
+      limit: 4G
 
 repo2dockerImage: jupyter/repo2docker:v0.4.1
