@@ -1,3 +1,9 @@
+version: 0.1.0-183addc
+
+service:
+  type: ClusterIP
+
+
 ingress:
   enabled: true
   annotations:
@@ -10,6 +16,9 @@ registry:
   enabled: true
 
 jupyterhub:
+  proxy:
+    service:
+      type: ClusterIP
   ingress:
     enabled: true
     annotations:
@@ -18,3 +27,5 @@ jupyterhub:
     https:
       enabled: true
       type: "kube-lego"
+
+repo2dockerImage: jupyter/repo2docker:v0.4.1
