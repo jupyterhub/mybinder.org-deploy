@@ -24,4 +24,7 @@ helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
 
 python3 ./deploy.py deploy ${TRAVIS_BRANCH}
 
+# Run some tests to make sure we really did pass!
+py.test --binder-url=https://${TRAVIS_BRANCH}.mybinder.org --hub-url=https://hub.${TRAVIS_BRANCH}.mybinder.org tests/
+
 echo "Done!"
