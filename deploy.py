@@ -9,7 +9,7 @@ def deploy(release):
     # Set up helm!
     subprocess.check_call(['helm', 'repo', 'update'])
 
-    with open(os.path.join('config', release + '.yaml')) as f:
+    with open('config/common.yaml') as f:
         config = yaml.safe_load(f)
 
     helm = [

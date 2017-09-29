@@ -1,4 +1,3 @@
-version: 0.1.0-183addc
 
 ingress:
   host: beta.mybinder.org
@@ -11,10 +10,6 @@ hub:
 
 jupyterhub:
   ingress:
-    annotations:
-      ingress.kubernetes.io/proxy-body-size: 64m
     host: hub.beta.mybinder.org
-
-repo2dockerImage: jupyter/repo2docker:v0.4.1
 
 googleAnalyticsCode: "UA-101904940-1"
