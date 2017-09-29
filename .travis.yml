@@ -10,9 +10,11 @@ before_deploy:
 # Set up the gcloud SDK
 - curl -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-173.0.0-linux-x86_64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
 - ${HOME}/google-cloud-sdk/bin/gcloud components install kubectl
+- curl -L https://storage.googleapis.com/kubernetes-helm/helm-v2.6.1-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file - && mv ${HOME}/linux-amd64 ${HOME}/helm
 
 env:
   - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+  - PATH=${HOME}/google-cloud-sdk/bin:${HOME}/helm:${PATH}
 
 deploy:
   provider: script
