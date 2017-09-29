@@ -14,7 +14,7 @@ def deploy(release):
 
     helm = [
         'helm', 'upgrade', '--install',
-        '--namespace', release, '--debug',
+        '--namespace', release,
         release,
         'jupyterhub/binderhub',
         '--version', config['version'],
