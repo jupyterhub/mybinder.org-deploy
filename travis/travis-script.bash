@@ -25,6 +25,9 @@ helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
 python3 ./deploy.py deploy ${TRAVIS_BRANCH}
 
 # Run some tests to make sure we really did pass!
+# sleep for a couple seconds to give nginx-ingress time to reload.
+# See https://github.com/jupyterhub/mybinder.org-deploy/issues/55 for details
+sleep 2s
 py.test --binder-url=https://${TRAVIS_BRANCH}.mybinder.org --hub-url=https://hub.${TRAVIS_BRANCH}.mybinder.org tests/
 
 echo "Done!"
