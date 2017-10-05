@@ -32,4 +32,4 @@ jupyterhub:
       guarantee: 1G
       limit: 4G
 
-repo2dockerImage: jupyter/repo2docker:v0.4.1
+repo2dockerImage: jupyter/repo2docker:65d5411
