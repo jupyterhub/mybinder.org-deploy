@@ -30,39 +30,39 @@ deploy to the production branch of the repository (called `beta`).
 5. Verify that [staging.mybinder.org][] works as intended. Please take your
    time to check that the change is working as expected.
 
-**If the changes look correct.**
+**If the changes look correct:**
 
 6. Make a new PR, merging [staging][] into the [beta][] branch.
 7. Get this PR merged, and wait for Travis to make a deployment to [beta][].
 8. CELEBRATE! :tada:
 
-**If the changes don't look correct, or there is an error.**
+**If the changes don't look correct, or there is an error:**
 
 6. **Immediately revert the PR that was made to the [staging][] branch.**
 7. Verify that [staging.mybinder.org][] is working as it was before the PR
    and revert.
 8. Troubleshoot and make changes to your fork. Repeat the process from Step 1.
 
-## Upgrading dependencies for the public mybinder.org deployment
+## Upgrading dependencies for the mybinder.org deployment
 
 Upgrading dependencies used by [mybinder.org][] requires making changes
-to the `config` files of one or more repositories that are used to build the
-[mybinder.org][] service. The following sections cover how to do this for
-various dependencies. In each case, you'll need to deploy these changes
-by following the steps above in [Deploying a change](#deploying-a-change).
+to the `config` files of repositories that are used to build the
+[mybinder.org][] service. The following sections cover how to do upgrade
+dependencies for [BinderHub][] and [repo2docker][]. In each case, you'll need
+to deploy these changes by following the steps above in [Deploying a change][].
 
 ### BinderHub
 
 This section explains how to upgrade the [mybinder.org][] deployment after
 making a change in the [BinderHub][] repo.
 
-1. After changes to [BinderHub][] have been merged.
+1. Merge changes to [BinderHub][].
 2. Open the [Travis build for BinderHub](https://travis-ci.org/jupyterhub/binderhub),
    navigate to the page corresponding to the master branch.
 3. If the build succeeds, grab the hash that is displayed at the end of the
-   travis output. It looks something like
+   travis output. It looks something like:
 
-   `create mode 100644 binderhub-0.1.0-fbf6e5a.tgz`
+       create mode 100644 binderhub-0.1.0-fbf6e5a.tgz
 
    The hash is the string at the very end, between `-` and `.tgz`. In this
    example, it is `fbf6e5a`.
@@ -73,12 +73,12 @@ making a change in the [BinderHub][] repo.
    `config/common.yaml`.
 5. Toward the beginning of the file, you will see a line similar to:
 
-       version: 0.1.0-9623b55 
-    
+       version: 0.1.0-9623b55
+
    Replace the existing hash that comes just after the `-`. In this example,
    replace `9623b55`  with the hash `fbf6e5a`that you've copied in step 3. The
    edited line will be:
-   
+
        version: 0.1.0-fbf6e5a
 
 6. Merge this change to `config/common.yaml` into the [mybinder.org-deploy][]
@@ -87,35 +87,32 @@ making a change in the [BinderHub][] repo.
 
 ### repo2docker
 
-1. After changes to `repo2docker` have been merged.
-2. Open the travis build for `repo2docker`, find the text "Pushed new
-   repo2docker image: <YOUR-IMAGE-NAME>". Copy the text in `<YOUR-IMAGE-NAME>`.
-   **Note**: You may need to unfold the code in the `Deploying application` line
-   in order to see this text.
-3. In your fork of the `mybinder.org-deploy` repository,
-   open `config/common.yaml`.
-4. Under `repo2dockerImage`, replace the text that is there with what you copied
-   in step 2.
-5. Merge this change into the `mybinder.org-deploy` repository following the
-   steps in the `Deploying a change` section above to deploy the change
-   to `staging`, and then `beta`.
+This section explains how to upgrade the [mybinder.org][] deployment after
+making a change in the [repo2docker][] repo.
+
+1. Merge changes to [repo2docker][].
+2. Open the [Travis build for repo2docker](https://travis-ci.org/jupyter/repo2docker),
+   find the text:
+
+       Pushed new repo2docker image: <YOUR-IMAGE-NAME>
+
+   Copy the text in `<YOUR-IMAGE-NAME>`. **Note**: You may need to unfold the
+   code in the `Deploying application` line in order to see this text.
+3. In your fork of the [mybinder.org-deploy][] repository, open
+   `config/common.yaml`.
+4. Toward the end of the file you will see `repo2dockerImage`, replace the
+   text that is there with what you copied in step 2. For example, the
+   edited file will look similar to:
+
+       repo2dockerImage: jupyter/repo2docker:65d5411
+
+5. Merge this change to `config/common.yaml` into the [mybinder.org-deploy][]
+   repository following the steps in the [Deploying a change][] section above
+   to deploy the change to [staging][], and then [beta][].
 
 ## Repository structure
 
-This repository contains purely config files. Related repositories with more
-interesting contents are:
-
-1. [binderhub][]
-
-   This contains the binderhub code (UI & hub management) & helm chart. This is
-   where most of the action is. If you wanna change the UI / UX or hub
-   management aspects of mybinder.org, go here!
-
-2. [repo2docker](http://github.com/jupyter/repo2docker)
-
-   This is used to do the actual building of git repositories into docker
-   images, and can be used standalone too. If you want to change how a git
-   repository is converted into a docker image to be run for the user, go here!
+This repository contains purely config files.
 
 ### `config` directory
 
@@ -153,6 +150,23 @@ code on the `mybinder` deployment. The charts we use and their versions are
 specified in `requirements.yaml`, and the configuration of those charts is in
 `values.yaml`.
 
+### Related repositories
+
+Related repositories used by the [mybinder.org][] service are:
+
+1. [binderhub][]
+
+   This contains the [binderhub][] code (UI & hub management) & helm chart.
+   To change the UI / UX or hub management aspects of [mybinder.org][],
+   go to [binderhub][].
+
+2. [repo2docker][]
+
+   This is used to do the actual building of git repositories into docker
+   images, and can be used standalone too. If you want to change how a git
+   repository is converted into a docker image to be run for the user,
+   go to [repo2docker][].
+
 [mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
 [mybinder.org]: https://beta.mybinder.org
 [beta.mybinder.org]: https://beta.mybinder.org
@@ -163,3 +177,5 @@ specified in `requirements.yaml`, and the configuration of those charts is in
 [binderhub]: https://github.com/jupyterhub/binderhub
 [`jupyterhub/binderhub`]: https://github.com/jupyterhub/binderhub
 [BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
+[repo2docker]: http://github.com/jupyter/repo2docker
+[Deploying a change]: #deploying-a-change
