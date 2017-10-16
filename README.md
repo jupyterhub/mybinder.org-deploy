@@ -34,7 +34,9 @@ deploy to the production branch of the repository (called `beta`).
 
 6. Make a new PR, merging [staging][] into the [beta][] branch.
 7. Get this PR merged, and wait for Travis to make a deployment to [beta][].
-8. CELEBRATE! :tada:
+8. Verify that [beta.mybinder.org][] works as intended. Please take your
+   time to check that the change is working as expected.
+9. CELEBRATE! :tada:
 
 **If the changes don't look correct, or there is an error:**
 
