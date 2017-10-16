@@ -1,8 +1,10 @@
-version: 0.1.0-789e30a
+version: 0.1.0-fbf6e5a
 
 service:
   type: ClusterIP
 
+cors: &cors
+  allowOrigin: "*"
 
 ingress:
   enabled: true
@@ -16,6 +18,9 @@ registry:
   enabled: true
 
 jupyterhub:
+  hub:
+    extraConfigMap:
+      cors: *cors
   proxy:
     service:
       type: ClusterIP
