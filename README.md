@@ -1,52 +1,57 @@
 # [mybinder.org-deploy][]
 
 This repository contains configuration files and documentation related to the
-[binderhub](https://github.com/jupyterhub/binderhub) deployment open to the
-public at [beta.mybinder.org](https://beta.mybinder.org).
+[binderhub][] deployment open to the public at [beta.mybinder.org][].
 
-*Note: If you wish to deploy your own Binder instance, please do not use these
-files as they are specific to `mybinder.org`. Instead, you should refer
-to the [`jupyterhub/binderhub`][] repo and the [BinderHub documentation][].*
+**Important: If you wish to deploy your own Binder instance, please do not
+use these files as they are specific to `mybinder.org`.** Instead, you should
+refer to the [`jupyterhub/binderhub`][] repo and the
+[BinderHub documentation][].
 
-There are two branches here: staging & beta. These should always be the same -
-beta should not drift away from staging too much. staging branch should
-correspond to the config
-for [staging.mybinder.org](https://staging.mybinder.org) & the beta branch
-to [beta.mybinder.org](https://beta.mybinder.org).
+## Basics
+
+This repo contains two branches: `staging` and `beta`. The `staging` branch
+corresponds to the config for [staging.mybinder.org][] and the `beta`
+branch to [beta.mybinder.org][]. In general (except when performing a
+deployment), these branches should always be the same, and `beta` should not
+drift away from `staging` too much.
 
 ## Deploying a change
 
-Deploying a change follows a two-step process. First you'll deploy to
-the `staging` branch of the repository, then if all looks well you'll deploy
-to the production branch of the repository (called `beta`)
+Deploying a change follows a two-step process. First, you'll deploy to
+the `staging` branch of the repository. Second, if all looks well, you'll
+deploy to the production branch of the repository (called `beta`).
 
-1. Make the change you want.
-2. Make a PR to the `staging` branch with the changes you want!
-3. Get this PR merged. This will make travis do a deployment
-   to [staging](https://staging.mybinder.org)
-4. Go to `staging.mybinder.org` to look at the changes.
-5. Verify that staging works as intended. If there are *any* issues at all,
-   however minor - stop, investigate, and do not proceed until you are
-   completely convinced that it is ok!
+1. Make the changes on your fork.
+2. Make a PR to the `staging` branch with the changes you want.
+3. Review, accept, and merge this PR. This will make Travis deploy the changes
+   to [staging.mybinder.org][].
+4. Go to [staging.mybinder.org][] to look at the changes.
+5. Verify that [staging.mybinder.org][] works as intended. Please take your
+   time to check that the change is working as expected.
 
 **If the changes look correct.**
-6. Make a new PR, merging staging into the beta branch.
-7. Get this PR merged, and wait for travis to make a deployment
-   to [beta](https://beta.mybinder.org)
-8. CELEBRATE!
+
+6. Make a new PR, merging [staging][] into the [beta][] branch.
+7. Get this PR merged, and wait for Travis to make a deployment to [beta][].
+8. CELEBRATE! :tada:
 
 **If the changes don't look correct, or there is an error.**
-6. **Immediately revert the PR that was made to `staging`.**
-7. Make changes to your fork and repeat the process above until it looks
-   correct.
+
+6. **Immediately revert the PR that was made to the [staging][] branch.**
+7. Verify that [staging.mybinder.org][] is working as it was before the PR
+   and revert.
+8. Troubleshoot and make changes to your fork. Repeat the process from Step 1.
 
 ## Upgrading dependencies on the public deployment
+
 Upgrading dependencies that `mybinder.org` uses requires making specific changes
 to the `config` files of the repository. The following sections cover how to do
 this for various dependencies. In each case, you'll need to deploy these changes
 by following the steps above in `Deploying a change`.
 
 ### BinderHub
+
 1. After changes to `BinderHub` have been merged.
 2. Open the travis build for `BinderHub`, navigate to the page corresponding to
    the master branch.
@@ -66,6 +71,7 @@ by following the steps above in `Deploying a change`.
    to `staging`, and then `beta`.
 
 ### repo2docker
+
 1. After changes to `repo2docker` have been merged.
 2. Open the travis build for `repo2docker`, find the text "Pushed new
    repo2docker image: <YOUR-IMAGE-NAME>". Copy the text in `<YOUR-IMAGE-NAME>`.
@@ -75,7 +81,7 @@ by following the steps above in `Deploying a change`.
    open `config/common.yaml`.
 4. Under `repo2dockerImage`, replace the text that is there with what you copied
    in step 2.
-6. Merge this change into the `mybinder.org-deploy` repository following the
+5. Merge this change into the `mybinder.org-deploy` repository following the
    steps in the `Deploying a change` section above to deploy the change
    to `staging`, and then `beta`.
 
@@ -84,7 +90,7 @@ by following the steps above in `Deploying a change`.
 This repository contains purely config files. Related repositories with more
 interesting contents are:
 
-1. [binderhub](https://github.com/jupyterhub/binderhub)
+1. [binderhub][]
 
    This contains the binderhub code (UI & hub management) & helm chart. This is
    where most of the action is. If you wanna change the UI / UX or hub
@@ -133,5 +139,10 @@ specified in `requirements.yaml`, and the configuration of those charts is in
 `values.yaml`.
 
 [mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
-[BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
+[beta.mybinder.org]: https://beta.mybinder.org
+[beta]: https://beta.mybinder.org
+[staging.mybinder.org]: https://staging.mybinder.org
+[staging]: https://staging.mybinder.org
+[binderhub]: https://github.com/jupyterhub/binderhub
 [`jupyterhub/binderhub`]: https://github.com/jupyterhub/binderhub
+[BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
