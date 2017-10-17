@@ -1,4 +1,4 @@
-version: 0.1.0-fbf6e5a
+version: 0.1.0-3b1009b
 
 service:
   type: ClusterIP
@@ -37,4 +37,4 @@ jupyterhub:
       guarantee: 1G
       limit: 4G
 
-repo2dockerImage: jupyter/repo2docker:65d5411
+repo2dockerImage: jupyter/repo2docker:52f5ba1
