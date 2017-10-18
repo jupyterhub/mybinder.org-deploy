@@ -18,6 +18,8 @@ registry:
   enabled: true
 
 jupyterhub:
+  cull:
+    timeout: 600
   hub:
     extraConfigMap:
       cors: *cors
