@@ -30,12 +30,14 @@ to the production branch of the repository (called `beta`)
    completely convinced that it is ok!
 
 **If the changes look correct.**
+
 6. Make a new PR, merging staging into the beta branch.
 7. Get this PR merged, and wait for travis to make a deployment
    to [beta](https://beta.mybinder.org)
 8. CELEBRATE!
 
 **If the changes don't look correct, or there is an error.**
+
 6. **Immediately revert the PR that was made to `staging`.**
 7. Make changes to your fork and repeat the process above until it looks
    correct.
