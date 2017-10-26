@@ -1,3 +1,45 @@
+binderhub:
+  service:
+    type: ClusterIP
+
+  cors: &cors
+    allowOrigin: "*"
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    https:
+      enabled: true
+      type: "kube-lego"
+
+  registry:
+    enabled: true
+
+  jupyterhub:
+    cull:
+      timeout: 600
+    hub:
+      extraConfigMap:
+        cors: *cors
+    proxy:
+      service:
+        type: ClusterIP
+    ingress:
+      enabled: true
+      annotations:
+        ingress.kubernetes.io/proxy-body-size: 64m
+        kubernetes.io/ingress.class: nginx
+      https:
+        enabled: true
+        type: "kube-lego"
+    singleuser:
+      memory:
+        guarantee: 1G
+        limit: 4G
+
+  repo2dockerImage: jupyter/repo2docker:9dffb2c
+
 nginx-ingress:
   rbac:
     create: true

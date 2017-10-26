@@ -2,7 +2,7 @@ ingress:
   host: staging.mybinder.org
 
 registry:
-  prefix: gcr.io/binder-testing/stage-v04-1-
+  prefix: gcr.io/binder-staging/image-v0-4-
 
 hub:
   url: https://hub.staging.mybinder.org

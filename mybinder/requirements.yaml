@@ -11,3 +11,6 @@ dependencies:
  - name: kube-lego
    version: 0.1.11
    repository: https://kubernetes-charts.storage.googleapis.com
+ - name: binderhub
+   version: 0.1.0-9692255
+   repository: https://jupyerhub.github.io/helm-chart
