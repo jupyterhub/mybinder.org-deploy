@@ -21,7 +21,7 @@ gcloud container clusters get-credentials ${TARGET} --zone=us-central1-a --proje
 
 # Make sure we have our helm repo!
 helm init --client-only
-helm repo add jupyterhub https://jupyterhub.github.io/helm-chart/
+helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
 
 python3 ./deploy.py deploy ${TARGET}
 
