@@ -1,13 +1,14 @@
-ingress:
-  host: staging.mybinder.org
-
-registry:
-  prefix: gcr.io/binder-staging/image-v0-4-
-
-hub:
-  url: https://hub.staging.mybinder.org
-
-jupyterhub:
+binderhub:
   ingress:
-    host: hub.staging.mybinder.org
+    host: staging.mybinder.org
+
+  registry:
+    prefix: gcr.io/binder-staging/image-v0-4-
+
+  hub:
+    url: https://hub.staging.mybinder.org
+
+  jupyterhub:
+    ingress:
+      host: hub.staging.mybinder.org
 
