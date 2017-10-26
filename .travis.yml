@@ -33,6 +33,7 @@ deploy:
     branch:
       - staging
       - beta
+      - prod
 
 notifications:
   webhooks:

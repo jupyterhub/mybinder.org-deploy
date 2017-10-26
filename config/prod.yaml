@@ -1,0 +1,15 @@
+binderhub:
+  ingress:
+    host: mybinder.org
+
+  registry:
+    prefix: gcr.io/binder-prod/prod-v4-1-
+
+  hub:
+    url: https://hub.mybinder.org
+
+  jupyterhub:
+    ingress:
+      host: hub.mybinder.org
+
+  googleAnalyticsCode: "UA-101904940-1"
