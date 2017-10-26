@@ -16,7 +16,7 @@ git-crypt unlock travis/crypt-key
 
 # Authenticate to gcloud & get it to authenticate to kubectl!
 gcloud auth activate-service-account --key-file=secrets/gke-auth-key-${TARGET}.json
-gcloud container clusters get-credentials binder-hub --zone=us-central1-a --project=binder-${TARGET}
+gcloud container clusters get-credentials ${TARGET} --zone=us-central1-a --project=binder-${TARGET}
 
 
 # Make sure we have our helm repo!
