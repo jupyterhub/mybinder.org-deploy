@@ -54,7 +54,6 @@ nginx-ingress:
     stats:
       enabled: true
     service:
-      loadBalancerIP: 35.184.96.239
       # Preserve client IPs
       externalTrafficPolicy: Local
 

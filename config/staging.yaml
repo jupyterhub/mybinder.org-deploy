@@ -12,3 +12,7 @@ binderhub:
     ingress:
       host: hub.staging.mybinder.org
 
+nginx-ingress:
+  controller:
+    service:
+      loadBalancerIP: 104.197.11.66
