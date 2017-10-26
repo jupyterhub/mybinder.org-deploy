@@ -15,7 +15,7 @@ before_deploy:
 # Install kubectl!
 - ${HOME}/google-cloud-sdk/bin/gcloud components install kubectl
 # Install helm
-- curl -L https://storage.googleapis.com/kubernetes-helm/helm-v2.6.1-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file - && mv ${HOME}/linux-amd64 ${HOME}/helm
+- curl -L https://storage.googleapis.com/kubernetes-helm/helm-v2.7.0-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file - && mv ${HOME}/linux-amd64 ${HOME}/helm
 # Install git-crypt
 - mkdir -p ${HOME}/git-crypt && curl -L https://github.com/AGWA/git-crypt/archive/0.5.0.tar.gz | tar --directory ${HOME}/git-crypt --gzip --file - --extract --strip-components=1 && cd ${HOME}/git-crypt && make
 # Restore where we were!
