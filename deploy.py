@@ -9,20 +9,16 @@ def deploy(release):
     # Set up helm!
     subprocess.check_call(['helm', 'repo', 'update'])
 
-    with open('config/common.yaml') as f:
-        config = yaml.safe_load(f)
+    subprocess.check_call(['helm', 'dep', 'up'], cwd='mybinder')
 
     helm = [
         'helm', 'upgrade', '--install',
         '--namespace', release,
         release,
-        'jupyterhub/binderhub',
-        '--version', config['version'],
+        'mybinder',
         '--wait',
-        '-f', 'config/common.yaml',
-        '-f', 'config/secret/common.yaml',
         '-f', os.path.join('config', release + '.yaml'),
-        '-f', os.path.join('config', 'secret', release + '.yaml')
+        '-f', os.path.join('secrets', 'config', release + '.yaml')
     ]
 
     subprocess.check_call(helm)

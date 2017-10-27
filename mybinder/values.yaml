@@ -1,3 +1,45 @@
+binderhub:
+  service:
+    type: ClusterIP
+
+  cors: &cors
+    allowOrigin: "*"
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    https:
+      enabled: true
+      type: "kube-lego"
+
+  registry:
+    enabled: true
+
+  jupyterhub:
+    cull:
+      timeout: 600
+    hub:
+      extraConfigMap:
+        cors: *cors
+    proxy:
+      service:
+        type: ClusterIP
+    ingress:
+      enabled: true
+      annotations:
+        ingress.kubernetes.io/proxy-body-size: 64m
+        kubernetes.io/ingress.class: nginx
+      https:
+        enabled: true
+        type: "kube-lego"
+    singleuser:
+      memory:
+        guarantee: 1G
+        limit: 4G
+
+  repo2dockerImage: jupyter/repo2docker:9dffb2c
+
 nginx-ingress:
   rbac:
     create: true
@@ -6,15 +48,21 @@ nginx-ingress:
       annotations:
         prometheus.io/scrape: "true"
   controller:
+    config:
+      # Allow POSTs of upto 64MB, for large notebook support.
+      proxy-body-size: 64m
     stats:
       enabled: true
     service:
-      loadBalancerIP: 35.184.96.239
+      # Preserve client IPs
+      externalTrafficPolicy: Local
 
 kube-lego:
   config:
     LEGO_EMAIL: yuvipanda@gmail.com
     LEGO_URL: https://acme-v01.api.letsencrypt.org/directory
+  rbac:
+    create: true
 
 
 prometheus:

@@ -1,2 +1,1 @@
-config/secret.yaml filter=git-crypt diff=git-crypt
-config/secret/* filter=git-crypt diff=git-crypt
+secrets/** filter=git-crypt diff=git-crypt

@@ -1,15 +1,15 @@
-
-ingress:
-  host: beta.mybinder.org
-
-registry:
-  prefix: gcr.io/binder-testing/beta-v4-1-
-
-hub:
-  url: https://hub.beta.mybinder.org
-
-jupyterhub:
+binderhub:
   ingress:
-    host: hub.beta.mybinder.org
+    host: beta.mybinder.org
 
-googleAnalyticsCode: "UA-101904940-1"
+  registry:
+    prefix: gcr.io/binder-testing/beta-v4-1-
+
+  hub:
+    url: https://hub.beta.mybinder.org
+
+  jupyterhub:
+    ingress:
+      host: hub.beta.mybinder.org
+
+  googleAnalyticsCode: "UA-101904940-1"
