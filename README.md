@@ -18,6 +18,9 @@ drift away from `staging` too much.
 
 ## Pre-requisites
 
+The following are tools and technologies that mybinder.org uses. You should have
+a working familiarity with them in order to make changes to the mybinder.org deployment.
+
 ### Google Cloud Platform
 
 MyBinder.org currently runs on Google Cloud. There are two Google Cloud projects
