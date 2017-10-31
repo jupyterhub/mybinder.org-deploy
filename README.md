@@ -10,17 +10,60 @@ refer to the [`jupyterhub/binderhub`][] repo and the
 
 ## Basics
 
-This repo contains two branches: `staging` and `beta`. The `staging` branch
-corresponds to the config for [staging.mybinder.org][] and the `beta`
-branch to [beta.mybinder.org][]. In general (except when performing a
-deployment), these branches should always be the same, and `beta` should not
+This repo contains two branches: `staging` and `prod`. The `staging` branch
+corresponds to the config for [staging.mybinder.org][] and the `prod`
+branch to [mybinder.org][]. In general (except when performing a
+deployment), these branches should always be the same, and `prod` should not
 drift away from `staging` too much.
+
+## Pre-requisites
+
+The following are tools and technologies that mybinder.org uses. You should have
+a working familiarity with them in order to make changes to the mybinder.org deployment.
+
+### Google Cloud Platform
+
+MyBinder.org currently runs on Google Cloud. There are two Google Cloud projects
+that we use:
+
+1. `binder-staging` contains all resources for the staging deployment
+2. `binder-prod` contains all resources for the production deployment
+
+We'll hand out credentials to anyone who wants to play with the staging deployment,
+so please just ask!
+
+While you only need merge access in this repository to deploy changes, ideally
+you should also have access to the two Google Cloud Projects so you can debug
+things when deployments fail.
+
+### Kubernetes Basics
+
+We heavily use Kubernetes for the mybinder.org deployment, and it is important you
+have a working knowledge of how to use Kubernetes. Detailed explanations are out
+of the scope of this repository, but there is a good [list of tutorials](https://kubernetes.io/docs/tutorials/).
+Specifically, going through the [interactive tutorial](https://kubernetes.io/docs/tutorials/kubernetes-basics/)
+to get comfortable using `kubectl` is required.
+
+### Helm Basics
+
+We use [helm](https://helm.sh) to manage our deployments, and it is imporant you
+have a working knowledge of how to use helm. Detailed explanations are out of the
+scope of this repository, but [docs.helm.sh](https://docs.helm.sh) is an excellent
+source of information. At a minimum, you must at least understand:
+
+* [What is a chart?](https://docs.helm.sh/developing_charts/#charts)
+* [What are values files?](https://docs.helm.sh/chart_template_guide/#values-files)
+* [How do chart dependencies work?](https://docs.helm.sh/developing_charts/#chart-dependencies)
+
+This is a non-exhaustive list. Feel free to ask us questions on the gitter channel or
+here if something specific does not make sense!
+
 
 ## Deploying a change
 
 Deploying a change follows a two-step process. First, you'll deploy to
 the `staging` branch of the repository. Second, if all looks well, you'll
-deploy to the production branch of the repository (called `beta`).
+deploy to the `prod` (production) branch of the repository.
 
 1. Make the changes on your fork.
 2. Make a PR to the `staging` branch with the changes you want.
@@ -32,9 +75,9 @@ deploy to the production branch of the repository (called `beta`).
 
 **If the changes look correct:**
 
-6. Make a new PR, merging [staging][] into the [beta][] branch.
-7. Get this PR merged, and wait for Travis to make a deployment to [beta][].
-8. Verify that [beta.mybinder.org][] works as intended. Please take your
+6. Make a new PR, merging [staging][] into the [prod][] branch.
+7. Get this PR merged, and wait for Travis to make a deployment to [prod][].
+8. Verify that [mybinder.org][] works as intended. Please take your
    time to check that the change is working as expected.
 9. CELEBRATE! :tada:
 
@@ -58,6 +101,12 @@ to deploy these changes by following the steps above in [Deploying a change][].
 This section explains how to upgrade the [mybinder.org][] deployment after
 making a change in the [BinderHub][] repo.
 
+BinderHub is deployed via a helm chart that is tied to a particular commit on the
+BinderHub repository. BinderHub is a "requirement" for this mybinder.org deployment,
+which is why it is specified in requirements.yaml. Upgrading the version of BinderHub
+that is used in mybinder.org corresponds to updating the BinderHub helm chart version,
+which we step through below.
+
 1. Merge changes to [BinderHub][].
 2. Open the [Travis build for BinderHub](https://travis-ci.org/jupyterhub/binderhub),
    navigate to the page corresponding to the master branch.
@@ -72,25 +121,34 @@ making a change in the [BinderHub][] repo.
    <img src="docs/static/travis-screenshot.png" width="500" />
 
 4. In your fork of the [mybinder.org-deploy][] repository, open
-   `config/common.yaml`.
-5. Toward the beginning of the file, you will see a line similar to:
+   `mybinder/requirements.yaml`.
+5. Toward the end of the file, you will see lines similar to:
 
-       version: 0.1.0-9623b55
+      - name: binderhub
+        version: 0.1.0-9692255
+        repository: https://jupyterhub.github.io/helm-chart
 
-   Replace the existing hash that comes just after the `-`. In this example,
-   replace `9623b55`  with the hash `fbf6e5a`that you've copied in step 3. The
-   edited line will be:
+   Replace the existing hash that comes just after the `-` under 'version' with new hash
+   from step 3. In this example, replace `9692255`  with the hash `fbf6e5a`that you've
+   copied in step 3. The edited lines will be:
 
-       version: 0.1.0-fbf6e5a
+      - name: binderhub
+        version: 0.1.0-fbf6e5a
+        repository: https://jupyterhub.github.io/helm-chart
 
 6. Merge this change to `config/common.yaml` into the [mybinder.org-deploy][]
    repository following the steps in the [Deploying a change][] section above
-   to deploy the change to [staging][], and then [beta][].
+   to deploy the change to [staging][], and then [prod][].
 
 ### repo2docker
 
 This section explains how to upgrade the [mybinder.org][] deployment after
 making a change in the [repo2docker][] repo.
+
+BinderHub uses a docker image with repo2docker in it. When a new commit is merged in
+the repo2docker repository, a new version of this image is pushed. We then configure
+BinderHub to use the newly built image (which is identified by a tag) by editing `values.yaml`.
+The following lines describe how to point mybinder.org to the new repo2docker image
 
 1. Merge changes to [repo2docker][].
 2. Open the [Travis build for repo2docker](https://travis-ci.org/jupyter/repo2docker),
@@ -101,56 +159,57 @@ making a change in the [repo2docker][] repo.
    Copy the text in `<YOUR-IMAGE-NAME>`. **Note**: You may need to unfold the
    code in the `Deploying application` line in order to see this text.
 3. In your fork of the [mybinder.org-deploy][] repository, open
-   `config/common.yaml`.
-4. Toward the end of the file you will see `repo2dockerImage`, replace the
+   `mybinder/values.yaml`.
+4. Somewhere in the file you will see `repo2dockerImage`, replace the
    text that is there with what you copied in step 2. For example, the
    edited file will look similar to:
 
        repo2dockerImage: jupyter/repo2docker:65d5411
 
-5. Merge this change to `config/common.yaml` into the [mybinder.org-deploy][]
+5. Merge this change to `mybinder/values.yaml` into the [mybinder.org-deploy][]
    repository following the steps in the [Deploying a change][] section above
    to deploy the change to [staging][], and then [beta][].
 
 ## Repository structure
 
-This repository contains purely config files.
+This repository contains a 'meta chart' (`mybinder`) that fully captures the
+state of the deployment on mybinder.org. Since it is a full helm chart, you
+can read the [official helm chart structure](https://github.com/kubernetes/helm/blob/master/docs/charts.md#the-chart-file-structure)
+document to know more about its structure.
 
-### `config` directory
 
-This contains config YAML files that fully describe the current state of the
-mybinder.org deployment:
+### Dependent charts
 
-- `common.yaml`: public, non-secret settings that are common to both
-  `staging` and `production` deployments.
-- `staging.yaml`: config that is specific to the `staging` mybinder, which
-  lives [here](https://binder.binder-staging.omgwtf.in/) (will move at some
-  point to `staging.mybinder.org`)
-- `beta.yaml`: config specific to the `beta` mybinder.
+The core of the meta-chart pattern is to install a bunch of [dependent charts](https://github.com/kubernetes/helm/blob/master/docs/charts.md#chart-dependencies),
+specified in `mybinder/requirements.yaml`. This contains both support
+charts like nginx-ingress & kube-lego, but also the core application chart
+`binderhub`. Everything is version pinned here.
+
+### Configuration values
+
+The following files fully capture the state of the deployment for staging:
+
+1. `mybinder/values.yaml` - Common configuration values between prod &
+   staging
+2. `secret/config/staging.yaml` - Secret values specific to the staging
+   deployment
+3. `config/staging.yaml` - Non-secret values specific to the staging
+   deployment
+
+The following files fully capture the state of the production deployment:
+
+1. `mybinder/values.yaml` - Common configuration values between prod &
+   staging
+2. `secret/config/prod.yaml` - Secret values specific to the production
+   deployment
+3. `config/prod.yaml` - Non-secret values specific to the production
+   deployment
 
 **Important**: For maintainability and consistency, we try to keep the contents
-of `staging.yaml` and `beta.yaml` super minimal - they should be as close
-to each other as possible. We want `staging` to mirror `beta` so we can test
-things before pushing them out.
-
-### `config/secret` subdirectory
-
-This contains files that should be kept *'secret'* from the rest of the world
-i.e. secret keys, cookie secrets, etc. Though secret, keeping them in the git
-repo is the simplest and easiest way to distribute them securely to
-**deployment team** members. We use [git-crypt](https://github.com/AGWA/git-crypt)
-for this purpose.
-
-- `staging.yaml` has secrets specific to the `staging` mybinder.
-- `beta.yaml` has secrets specific to the `beta` mybinder.
-- `common.yaml` has secrets specific to both `staging` and `beta` mybinders.
-
-### `support` directory
-
-This contains a set of third party charts which we use for supporting our own
-code on the `mybinder` deployment. The charts we use and their versions are
-specified in `requirements.yaml`, and the configuration of those charts is in
-`values.yaml`.
+of `staging.yaml` and `prod.yaml` super minimal - they should be as close
+to each other as possible. We want all common config in `values.yaml` so testing
+on staging gives us confidence it will work on prod. We also never share the same
+secrets between staging & prod for security boundary reasons.
 
 ### Related repositories
 
@@ -168,6 +227,7 @@ Related repositories used by the [mybinder.org][] service are:
    images, and can be used standalone too. If you want to change how a git
    repository is converted into a docker image to be run for the user,
    go to [repo2docker][].
+
 
 [mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
 [mybinder.org]: https://beta.mybinder.org
