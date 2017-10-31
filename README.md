@@ -58,6 +58,12 @@ to deploy these changes by following the steps above in [Deploying a change][].
 This section explains how to upgrade the [mybinder.org][] deployment after
 making a change in the [BinderHub][] repo.
 
+BinderHub is deployed via a helm chart that is tied to a particular commit on the
+BinderHub repository. BinderHub is a "requirement" for this mybinder.org deployment,
+which is why it is specified in requirements.yaml. Upgrading the version of BinderHub
+that is used in mybinder.org corresponds to updating the BinderHub helm chart version,
+which we step through below.
+
 1. Merge changes to [BinderHub][].
 2. Open the [Travis build for BinderHub](https://travis-ci.org/jupyterhub/binderhub),
    navigate to the page corresponding to the master branch.
@@ -95,6 +101,11 @@ making a change in the [BinderHub][] repo.
 
 This section explains how to upgrade the [mybinder.org][] deployment after
 making a change in the [repo2docker][] repo.
+
+BinderHub uses a docker image with repo2docker in it. When a new commit is merged in
+the repo2docker repository, a new version of this image is pushed. We then configure
+BinderHub to use the newly built image (which is identified by a tag) by editing `values.yaml`.
+The following lines describe how to point mybinder.org to the new repo2docker image
 
 1. Merge changes to [repo2docker][].
 2. Open the [Travis build for repo2docker](https://travis-ci.org/jupyter/repo2docker),
