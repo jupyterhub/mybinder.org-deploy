@@ -182,8 +182,8 @@ that we use:
 1. `binder-staging` contains all resources for the staging deployment
 2. `binder-prod` contains all resources for the production deployment
 
-We'll hand out credentials to anyone who wants to the staging deployment, so
-please just ask!
+We'll hand out credentials to anyone who wants to play with the staging deployment,
+so please just ask!
 
 [mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
 [mybinder.org]: https://beta.mybinder.org
