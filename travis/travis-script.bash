@@ -26,7 +26,7 @@ helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
 python3 ./deploy.py deploy ${TARGET}
 
 # Run some tests to make sure we really did pass!
-if [ "${TARGET}" = "prod"]; then
+if [ "${TARGET}" = "prod" ]; then
     BINDER_URL="https://mybinder.org"
     HUB_URL="https://hub.mybinder.org"
 else
