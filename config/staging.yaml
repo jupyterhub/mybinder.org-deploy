@@ -16,3 +16,10 @@ nginx-ingress:
   controller:
     service:
       loadBalancerIP: 104.197.11.66
+
+redirector:
+  redirects:
+    - type: host
+      host:
+        from: beta.staging.mybinder.org
+        to: staging.mybinder.org

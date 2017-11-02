@@ -1,0 +1,14 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: redirector-config
+data:
+  redirects.conf: |
+    {{- range $redirect := .Values.redirector.redirects }}
+    server {
+          listen 80;
+          server_name {{ $redirect.host.from }};
+
+          rewrite (.*) https://{{ $redirect.host.to }}$1 redirect;
+    }
+    {{ end }}

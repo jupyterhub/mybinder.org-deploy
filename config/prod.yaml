@@ -13,3 +13,10 @@ binderhub:
       host: hub.mybinder.org
 
   googleAnalyticsCode: "UA-101904940-1"
+
+redirector:
+  redirects:
+    - type: host
+      host:
+        from: beta.mybinder.org
+        to: staging.mybinder.org
