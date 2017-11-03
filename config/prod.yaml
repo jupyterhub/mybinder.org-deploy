@@ -19,4 +19,4 @@ redirector:
     - type: host
       host:
         from: beta.mybinder.org
-        to: staging.mybinder.org
+        to: mybinder.org
