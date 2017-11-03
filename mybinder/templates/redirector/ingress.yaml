@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: redirector
+  labels:
+    app: redirector
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    {{ range $redirect := .Values.redirector.redirects }}
+    - host: {{ $redirect.host.from | quote }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: redirector
+              servicePort: 80
+    {{ end }}
+  tls:
+    - secretName: kubelego-tls-redirector
+      hosts:
+      {{- range $redirect := .Values.redirector.redirects }}
+      - {{ $redirect.host.from }}
+      {{- end }}
