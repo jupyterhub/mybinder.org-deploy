@@ -1,0 +1,30 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: redirector
+spec:
+  selector:
+    matchLabels:
+      app: redirector
+      component: nginx
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/redirector/configmap.yaml") . | sha256sum }}
+      labels:
+        app: redirector
+        component: nginx
+    spec:
+      volumes:
+        - name: config
+          configMap:
+            name: redirector-config
+      containers:
+      - name: nginx
+        image: nginx:1.13.6
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - mountPath: /etc/nginx/conf.d/
+            name: config
