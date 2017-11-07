@@ -1,9 +1,9 @@
-# MyBinder.org deployment policy
+# Deployment policy for mybinder.org
 
 Deployments to mybinder.org should be:
 
 1. **Safe**. We will have good, user friendly tooling + lots of safeguards, so people can deploy without fear of accidentally breaking the site.
-2. **Easy**. We want a lot of people to be involved in maintaining mybinder.org, so we must make sure deployments are also easy to do. Most deployments should not require specific sysadmin knowledge. 
+2. **Easy**. We want a lot of people to be involved in maintaining mybinder.org, so we must make sure deployments are also easy to do. Most deployments should not require specific sysadmin knowledge.
 
 These two should be our guiding principles.
 
