@@ -20,3 +20,7 @@ redirector:
       host:
         from: beta.mybinder.org
         to: mybinder.org
+    - type: host
+      host:
+        from: docs.mybinder.org
+        to: mybinder.readthedocs.io
