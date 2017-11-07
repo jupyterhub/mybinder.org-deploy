@@ -5,6 +5,7 @@ Deployment and Site Reliability Guide for mybinder.org
    :maxdepth: 2
    :caption: Contents:
 
+   deployment_policy.md
 
 
 Indices and tables
