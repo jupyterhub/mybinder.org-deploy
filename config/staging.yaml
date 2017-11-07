@@ -23,3 +23,7 @@ redirector:
       host:
         from: beta.staging.mybinder.org
         to: staging.mybinder.org
+    - type: host
+      host:
+        from: docs.staging.mybinder.org
+        to: mybinder.readthedocs.io
