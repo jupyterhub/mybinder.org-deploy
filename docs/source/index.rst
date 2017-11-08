@@ -1,17 +1,11 @@
 Deployment and Site Reliability Guide for mybinder.org
 ======================================================
 
-Introduction
-------------
-
 .. toctree::
    :maxdepth: 2
    :caption: Introduction
 
    production_environment.md
-
-Deployment
-----------
 
 .. toctree::
    :maxdepth: 2
@@ -20,9 +14,6 @@ Deployment
    deployment_policy.md
    deployment_fundamentals.md
    deploying_mybinder.md
-
-Incidents
----------
 
 .. toctree::
    :maxdepth: 2

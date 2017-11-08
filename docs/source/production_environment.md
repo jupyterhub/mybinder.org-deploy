@@ -13,14 +13,14 @@ can read the [official helm chart structure](https://github.com/kubernetes/helm/
 document to know more about its structure.
 
 
-### Dependent charts
+## Dependent charts
 
 The core of the meta-chart pattern is to install a bunch of [dependent charts](https://github.com/kubernetes/helm/blob/master/docs/charts.md#chart-dependencies),
 specified in `mybinder/requirements.yaml`. This contains both support
 charts like nginx-ingress & kube-lego, but also the core application chart
 `binderhub`. Everything is version pinned here.
 
-### Configuration values
+## Configuration values
 
 The following files fully capture the state of the deployment for staging:
 
@@ -46,7 +46,7 @@ to each other as possible. We want all common config in `values.yaml` so testing
 on staging gives us confidence it will work on prod. We also never share the same
 secrets between staging & prod for security boundary reasons.
 
-### MyBinder.org specific extra software
+## MyBinder.org specific extra software
 
 We sometimes want to run additional software for the mybinder deployment that
 does not already have a chart, or would be too cumbersome to use with a chart.
@@ -54,7 +54,7 @@ For those cases, we can create kubernetes objects directly from the `mybinder`
 meta chart. You can see an example of this under `mybinder/templates/redirector`
 that is used to set up a simple nginx based HTTP redirector.
 
-### Related repositories
+## Related repositories
 
 Related repositories used by the [mybinder.org][] service are:
 
