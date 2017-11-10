@@ -5,6 +5,18 @@ set -euo pipefail
 
 TARGET="${TRAVIS_BRANCH}"
 
+if [ "${TARGET}" = "prod" ]; then
+    BINDER_URL="https://mybinder.org"
+    HUB_URL="https://hub.mybinder.org"
+    # Specify currently active cluster
+    # FIXME: Deploy to multiple clusters?
+    CLUSTER="prod-a"
+else
+    BINDER_URL="https://${TARGET}.mybinder.org"
+    HUB_URL="https://hub.${TARGET}.mybinder.org"
+    CLUSTER="${TARGET}"
+fi
+
 echo "Starting deploy..."
 
 # Unlock our secret files!
@@ -16,7 +28,7 @@ git-crypt unlock travis/crypt-key
 
 # Authenticate to gcloud & get it to authenticate to kubectl!
 gcloud auth activate-service-account --key-file=secrets/gke-auth-key-${TARGET}.json
-gcloud container clusters get-credentials ${TARGET} --zone=us-central1-a --project=binder-${TARGET}
+gcloud container clusters get-credentials ${CLUSTER} --zone=us-central1-a --project=binder-${TARGET}
 
 
 # Make sure we have our helm repo!
@@ -26,13 +38,6 @@ helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
 python3 ./deploy.py deploy ${TARGET}
 
 # Run some tests to make sure we really did pass!
-if [ "${TARGET}" = "prod" ]; then
-    BINDER_URL="https://mybinder.org"
-    HUB_URL="https://hub.mybinder.org"
-else
-    BINDER_URL="https://${TARGET}.mybinder.org"
-    HUB_URL="https://hub.${TARGET}.mybinder.org"
-fi
 py.test --binder-url=${BINDER_URL} --hub-url=${HUB_URL}
 
 echo "Done!"
