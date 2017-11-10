@@ -14,6 +14,11 @@ binderhub:
 
   googleAnalyticsCode: "UA-101904940-1"
 
+nginx-ingress:
+  controller:
+    service:
+      loadBalancerIP: 35.202.202.188
+
 redirector:
   redirects:
     - type: host
