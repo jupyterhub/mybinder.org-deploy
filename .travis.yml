@@ -37,8 +37,12 @@ deploy:
   on:
     branch:
       - staging
-      - beta
       - prod
+
+branches:
+  only:
+    - staging
+    - prod
 
 notifications:
   webhooks:
