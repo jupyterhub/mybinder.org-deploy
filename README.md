@@ -136,7 +136,7 @@ which we step through below.
         version: 0.1.0-fbf6e5a
         repository: https://jupyterhub.github.io/helm-chart
 
-6. Merge this change to `config/common.yaml` into the [mybinder.org-deploy][]
+6. Merge this change to `mybinder/requirements.yaml` into the [mybinder.org-deploy][]
    repository following the steps in the [Deploying a change][] section above
    to deploy the change to [staging][], and then [prod][].
 
