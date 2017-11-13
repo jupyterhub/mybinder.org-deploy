@@ -1,4 +1,8 @@
-# [mybinder.org-deploy][]
+# mybinder.org-deploy
+
+- Staging: [![Staging Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=staging)](https://travis-ci.org/jupyterhub/mybinder.org-deploy)
+- Production: [![Production Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=prod)](https://travis-ci.org/jupyterhub/mybinder.org-deploy/branches)
+
 
 This repository contains configuration files and documentation related to the
 [binderhub][] deployment open to the public at [mybinder.org][].
