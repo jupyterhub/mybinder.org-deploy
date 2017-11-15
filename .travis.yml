@@ -20,7 +20,7 @@ before_deploy:
 # Install git-crypt
 - |
   curl -L https://github.com/minrk/git-crypt-bin/releases/download/0.5.0/git-crypt > git-crypt
-  shasum -a 256 46c288cc849c23a28239de3386c6050e5c7d7acd50b1d0248d86e6efff09c61b git-crypt
+  echo "46c288cc849c23a28239de3386c6050e5c7d7acd50b1d0248d86e6efff09c61b  git-crypt" | shasum -a 256 -c -
   chmod +x git-crypt
   mv git-crypt ${HOME}/bin/git-crypt
 # Restore where we were!
@@ -37,8 +37,12 @@ deploy:
   on:
     branch:
       - staging
-      - beta
       - prod
+
+branches:
+  only:
+    - staging
+    - prod
 
 notifications:
   webhooks:

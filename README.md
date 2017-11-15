@@ -1,7 +1,11 @@
-# [mybinder.org-deploy][]
+# mybinder.org-deploy
+
+- Staging: [![Staging Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=staging)](https://travis-ci.org/jupyterhub/mybinder.org-deploy)
+- Production: [![Production Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=prod)](https://travis-ci.org/jupyterhub/mybinder.org-deploy/branches)
+
 
 This repository contains configuration files and documentation related to the
-[binderhub][] deployment open to the public at [beta.mybinder.org][].
+[binderhub][] deployment open to the public at [mybinder.org][].
 
 **Important: If you wish to deploy your own Binder instance, please do not
 use these files as they are specific to [mybinder.org][].** Instead, you should
@@ -168,7 +172,7 @@ The following lines describe how to point mybinder.org to the new repo2docker im
 
 5. Merge this change to `mybinder/values.yaml` into the [mybinder.org-deploy][]
    repository following the steps in the [Deploying a change][] section above
-   to deploy the change to [staging][], and then [beta][].
+   to deploy the change to [staging][], and then [prod][].
 
 ## Repository structure
 
@@ -238,9 +242,8 @@ Related repositories used by the [mybinder.org][] service are:
 
 
 [mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
-[mybinder.org]: https://beta.mybinder.org
-[beta.mybinder.org]: https://beta.mybinder.org
-[beta]: https://beta.mybinder.org
+[prod]: https://mybinder.org
+[mybinder.org]: https://mybinder.org
 [staging.mybinder.org]: https://staging.mybinder.org
 [staging]: https://staging.mybinder.org
 [BinderHub]: https://github.com/jupyterhub/binderhub
