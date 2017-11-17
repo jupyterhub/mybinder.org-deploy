@@ -117,10 +117,10 @@ which we step through below.
 3. If the build succeeds, grab the hash that is displayed at the end of the
    travis output. It looks something like:
 
-       Successfully packaged chart and saved it to: gh-pages/binderhub-0.1.0-f87ac35.tgz
+       create mode 100644 binderhub-0.1.0-fbf6e5a.tgz
 
    The hash is the string at the very end, between `-` and `.tgz`. In this
-   example, it is `f87ac35`.
+   example, it is `fbf6e5a`.
 
    <img src="docs/static/travis-screenshot.png" width="500" />
 
@@ -133,7 +133,7 @@ which we step through below.
         repository: https://jupyterhub.github.io/helm-chart
 
    Replace the existing hash that comes just after the `-` under 'version' with new hash
-   from step 3. In this example, replace `9692255`  with the hash `f87ac35`that you've
+   from step 3. In this example, replace `9692255`  with the hash `fbf6e5a`that you've
    copied in step 3. The edited lines will be:
 
       - name: binderhub
