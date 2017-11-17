@@ -1,0 +1,141 @@
+#!/usr/bin/env python3
+"""
+Create firewall rules for a Kubernetes cluster
+
+Assumes that you have first activated the correct project for gcloud API, e.g.
+
+    gcloud config set project binder-staging
+
+Currently creates three egress rules:
+
+- allow internal kube communication
+- whitelist http/s to the world
+- block all other egress traffic communication
+"""
+
+import json
+import os
+import pipes
+from subprocess import check_output
+import sys
+
+# CIDR for the whole world
+WORLD_CIDR = '0.0.0.0/0'
+
+
+def gcloud(*args):
+    """Run a gcloud command and return its parsed JSON output"""
+    cmd = ['gcloud', '--format=json']
+    cmd.extend(args)
+    print(' '.join(map(pipes.quote, cmd)))
+    return json.loads(check_output(cmd).decode('utf8', 'replace'))
+
+# Usage: gcloud compute firewall-rules create NAME (--action=ACTION | --allow=PROTOCOL[:PORT[-PORT]],[PROTOCOL[:PORT[-PORT]],...]) [optional flags]
+#   optional flags may be  --action | --allow | --description |
+#                          --destination-ranges | --direction | --help |
+#                          --network | --priority | --rules | --source-ranges |
+#                          --source-tags | --target-tags
+
+
+def add_rule(name, rule, existing_rules, replace=False):
+    """Add a single firewall rule"""
+    if name in existing_rules:
+        # TODO: check if the rule is correct
+        print(f"{name} already exists.", end=' ')
+        if replace:
+            print("deleting...")
+            gcloud('compute', 'firewall-rules', 'delete', '-q', name)
+        else:
+            print("skipping...")
+            return
+    cmd = ['compute', 'firewall-rules', 'create', name]
+    for key, value in rule.items():
+        cmd.append(f'--{key}={value}')
+    gcloud(*cmd)
+
+
+def main(cluster, replace=False):
+    cluster_info = gcloud('container', 'clusters', 'describe', cluster)
+    prefix = f"binder-{cluster}-fw-"
+    cluster_cidr = cluster_info['clusterIpv4Cidr']
+    rules = {
+        rule['name']: rule
+        for rule in gcloud('compute', 'firewall-rules', 'list')
+    }
+
+    # get the node network tags for our cluster
+    # is there a more direct way to get this?
+    nodes = gcloud('compute', 'instances', 'list')
+    # instance_group_prefix = ['gke-staging-default-pool-80145d64-', ...]
+    instance_group_prefixes = [
+        url.rsplit('/', 1)[1].rsplit('-', 1)[0] + '-'
+        for url in cluster_info['instanceGroupUrls']
+    ]
+
+    # get nodes for our cluster
+    cluster_nodes = [
+        node for node in nodes
+        if any(
+            node['name'].startswith(prefix)
+            for prefix in instance_group_prefixes)
+    ]
+    assert cluster_nodes, f"No cluster nodes for {instance_group_prefixes}"
+
+    # construct a set of the node netowork tags
+    # there may only be one of these
+    node_tags = set()
+    for node in cluster_nodes:
+        node_tags.update(node['tags']['items'])
+    assert node_tags, f"No node tags for {instance_group_prefixes}"
+
+    base_rule = {
+        'direction': 'egress',
+        'source-tags': ','.join(node_tags)
+    }
+
+    # Don't block internal kubernetes communication
+    # This prevents the next (default-deny) rule from disabling kubernetes
+    # communication
+    add_rule(prefix + 'allow-kube', {
+        'priority': 100,
+        'description': f"Allow internal kubernetes communication for cluster {cluster}",
+        'direction': 'egress',
+        'target-tags': ','.join(node_tags),
+        'destination-ranges': cluster_cidr,
+        'allow': 'all',
+    }, rules, replace=replace)
+    # default: deny all world communication
+    # this is the lowest priority rule of all
+    # and allows subsequent rules to be a whitelist
+    add_rule(prefix + 'default-deny', {
+        'priority': 65535,
+        'description': f"Default deny access to the world for cluster {cluster}",
+        'direction': 'egress',
+        'action': 'DENY',
+        'rules': 'all',
+        'target-tags': ','.join(node_tags),
+        'destination-ranges': WORLD_CIDR,
+    }, rules, replace=replace)
+
+    # whitelist http(s) to the world, as the only access we have
+    add_rule(prefix + 'http-only', {
+        'priority': 1000,
+        'description': f"Allow HTTP(S) access to the outside world for cluster {cluster}",
+        'direction': 'egress',
+        'destination-ranges': WORLD_CIDR,
+        'target-tags': ','.join(node_tags),
+        'allow': 'tcp:80,tcp:443',
+    }, rules, replace=replace)
+
+
+if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        'cluster',
+        help="The name of the cluster to set up firewall rules for")
+    parser.add_argument('--replace', action='store_true',
+                        help="Delete and replace existing rules (instead of skipping them)")
+    opts = parser.parse_args()
+
+    main(opts.cluster, replace=opts.replace)
