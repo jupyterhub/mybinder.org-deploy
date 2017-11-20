@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# ref https://wiki.archlinux.org/index.php/advanced_traffic_control
+
+set -ex
+
+export IFACE=${IFACE:-eth0}
+# export DST_IP=${DST_IP:-$KUBERNETES_SERVICE_HOST}
+export SRC_IP=${SRC_IP:-$(ifconfig ${IFACE} | grep 'inet addr' | cut -d: -f2 | awk '{print $1}')}
+
+export UPLOAD_RATE=${UPLOAD_RATE:-1mbit}
+export DOWNLOAD_RATE=${DOWNLOAD_RATE:-4mbit}
+
+if [[ -z "${UPLOAD_RATE}" && -z "${DOWNLOAD_RATE}" ]]; then
+    # nothing to throttle
+    exit 0
+fi
+
+# set up defaults
+tc qdisc add dev ${IFACE} root handle 1: htb default 30
+# 30 is the default. Is it ever used?
+tc class add dev ${IFACE} parent 1: classid 1:30 htb rate 100gbit
+tc qdisc add dev ${IFACE} parent 1:30 handle 30: sfq perturb 10
+
+# 10: rate-limit uploads from the container
+if [[ ! -z "${UPLOAD_RATE}" ]]; then
+    echo "Limiting uploads from ${SRC_IP} at ${UPLOAD_RATE}"
+    tc class add dev ${IFACE} parent 1: classid 1:10 htb rate ${UPLOAD_RATE}
+    tc qdisc add dev ${IFACE} parent 1:10 handle 10: sfq perturb 10
+    tc filter add dev ${IFACE} parent 1: prio 1 protocol ip u32 match ip src ${SRC_IP}/32 flowid 1:10
+fi
+
+# 20: rate-limit downloads
+# not sure what the download rate does yet, if anything.
+# it's definitely not downloads to the container from the outside
+if [[ ! -z "${DOWNLOAD_RATE}" ]]; then
+    echo "Limiting downloads from ${SRC_IP} at ${DOWNLOAD_RATE}"
+    tc class add dev ${IFACE} parent 1: classid 1:20 htb rate ${DOWNLOAD_RATE}
+    tc qdisc add dev ${IFACE} parent 1:20 handle 20: sfq perturb 10
+    tc filter add dev ${IFACE} parent 1: prio 1 protocol ip u32 match ip dst ${SRC_IP}/32 flowid 1:20
+fi
