@@ -57,7 +57,17 @@ def add_rule(name, rule, existing_rules, replace=False):
 def main(cluster, replace=False):
     cluster_info = gcloud('container', 'clusters', 'describe', cluster)
     prefix = f"binder-{cluster}-fw-"
-    cluster_cidr = cluster_info['clusterIpv4Cidr']
+    # allow any 10.*
+    # this is more broad that I would like,
+    # but I can't figure out what else will unblock
+    # helm port forwarding
+    # it's okay for now as a temporary solution while we wait for
+    # egress NetworkPolicy
+    kube_cidr = '10.0.0.0/8'
+    # cluster_cidr = cluster_info['clusterIpv4Cidr']
+    # services_cidr = cluster_info['servicesIpv4Cidr']
+    # kube_cidr = ','.join([cluster_cidr, services_cidr])
+
     rules = {
         rule['name']: rule
         for rule in gcloud('compute', 'firewall-rules', 'list')
@@ -81,7 +91,7 @@ def main(cluster, replace=False):
     ]
     assert cluster_nodes, f"No cluster nodes for {instance_group_prefixes}"
 
-    # construct a set of the node netowork tags
+    # construct a set of the node network tags
     # there may only be one of these
     node_tags = set()
     for node in cluster_nodes:
@@ -101,7 +111,7 @@ def main(cluster, replace=False):
         'description': f"Allow internal kubernetes communication for cluster {cluster}",
         'direction': 'egress',
         'target-tags': ','.join(node_tags),
-        'destination-ranges': cluster_cidr,
+        'destination-ranges': kube_cidr,
         'allow': 'all',
     }, rules, replace=replace)
     # default: deny all world communication
@@ -118,7 +128,7 @@ def main(cluster, replace=False):
     }, rules, replace=replace)
 
     # whitelist http(s) to the world, as the only access we have
-    add_rule(prefix + 'http-only', {
+    add_rule(prefix + 'allow-http', {
         'priority': 1000,
         'description': f"Allow HTTP(S) access to the outside world for cluster {cluster}",
         'direction': 'egress',
