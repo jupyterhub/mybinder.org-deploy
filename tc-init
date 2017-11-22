@@ -2,7 +2,7 @@
 
 # ref https://wiki.archlinux.org/index.php/advanced_traffic_control
 
-set -ex
+set -e
 
 export IFACE=${IFACE:-eth0}
 # export DST_IP=${DST_IP:-$KUBERNETES_SERVICE_HOST}
