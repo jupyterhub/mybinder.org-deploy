@@ -8,9 +8,10 @@ spec:
   - name: tc-init
     image: minrk/tc-init:0.0.1
     env:
-    - name: UPLOAD_RATE
+    - name: EGRESS_BANDWIDTH
       value: 1mbit
-    # - name: DOWNLOAD_RATE
+    # ingress doesn't seem to work
+    # - name: INGRESS_BANDWIDTH
     #   value: 4mbit
     securityContext:
       capabilities:

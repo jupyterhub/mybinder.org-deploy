@@ -10,9 +10,9 @@ Use with:
 spec:
   initContainers:
   - name: tc-init
-    image: minrk/tc-init:0.0.1
+    image: minrk/tc-init:0.0.2
     env:
-    - name: UPLOAD_RATE
+    - name: EGRESS_BANDWIDTH
       value: 1mbit
     securityContext:
       capabilities:
