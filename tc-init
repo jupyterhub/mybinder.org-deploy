@@ -10,6 +10,7 @@ export SRC_IP=${SRC_IP:-$(ifconfig ${IFACE} | grep 'inet addr' | cut -d: -f2 | a
 
 if [[ -z "${EGRESS_BANDWIDTH}" && -z "${INGRESS_BANDWIDTH}" ]]; then
     # nothing to throttle
+    echo "EGRESS_BANDWIDTH not set, skipping tc-init"
     exit 0
 fi
 
