@@ -24,6 +24,9 @@ echo "Starting deploy..."
 # encrypt our git-crypt key
 openssl aes-256-cbc -K $encrypted_510e3970077d_key -iv $encrypted_510e3970077d_iv -in travis/crypt-key.enc -out travis/crypt-key -d
 git-crypt unlock travis/crypt-key
+# ensure private keys have private permissions,
+# otherwise ssh will ignore them
+chmod 0600 secrets/*key
 
 
 # Authenticate to gcloud & get it to authenticate to kubectl!
