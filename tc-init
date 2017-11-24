@@ -14,6 +14,9 @@ if [[ -z "${EGRESS_BANDWIDTH}" && -z "${INGRESS_BANDWIDTH}" ]]; then
     exit 0
 fi
 
+# echo commands that we execute
+set -x
+
 # set up defaults
 tc qdisc add dev ${IFACE} root handle 1: htb default 30
 # 30 is the default. Is it ever used?
