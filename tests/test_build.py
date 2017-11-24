@@ -19,8 +19,10 @@ def push_dummy_gh_branch(repo, branch, keyfile):
     clone directory when done.
     """
 
+    git_env = {'GIT_SSH_COMMAND': f"ssh -i {keyfile}"}
+
     with tempfile.TemporaryDirectory() as gitdir:
-        subprocess.check_call(['git', 'clone', repo, gitdir])
+        subprocess.check_call(['git', 'clone', repo, gitdir], env=git_env)
         branchfile = os.path.join(gitdir, 'branchname')
         with open(branchfile, 'w') as f:
             f.write(branch)
