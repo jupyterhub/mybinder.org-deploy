@@ -37,6 +37,20 @@ binderhub:
       memory:
         guarantee: 1G
         limit: 4G
+      initContainers:
+      - name: tc-init
+        image: minrk/tc-init:0.0.3
+        env:
+          - name: EGRESS_BANDWIDTH
+            value: 1mbit
+        securityContext:
+          # capabilities.add seems to be disabled
+          # by the `runAsUser: 1000` in the pod-level securityContext
+          # unless we explicitly run as root
+          runAsUser: 0
+          capabilities:
+            add:
+            - NET_ADMIN
 
   repo2dockerImage: jupyter/repo2docker:093184b
 
