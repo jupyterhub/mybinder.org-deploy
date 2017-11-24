@@ -27,24 +27,22 @@ def push_dummy_gh_branch(repo, branch, keyfile):
         with open(branchfile, 'w') as f:
             f.write(branch)
         subprocess.check_call(['git', 'add', branchfile], cwd=gitdir)
-        subprocess.check_call(['git', 'commit', '-m', 'Dummy update for {}'.format(branch)], cwd=gitdir)
+        subprocess.check_call(['git', 'commit', '-m', f'Dummy update for {branch}'], cwd=gitdir)
         subprocess.check_call(
-            ['git', 'push', 'origin', 'HEAD:{}'.format(branch)],
-            env={
-                'GIT_SSH_COMMAND': 'ssh -i {}'.format(keyfile)
-            },
-            cwd=gitdir
+            ['git', 'push', 'origin', f'HEAD:{branch}'],
+            env=git_env,
+            cwd=gitdir,
         )
 
-        yield
-        # Delete the branch so we don't clutter!
-        subprocess.check_call(
-            ['git', 'push', 'origin', ':{}'.format(branch)],
-            env={
-                'GIT_SSH_COMMAND': 'ssh -i {}'.format(keyfile)
-            },
-            cwd=gitdir
-        )
+        try:
+            yield
+        finally:
+            # Delete the branch so we don't clutter!
+            subprocess.check_call(
+                ['git', 'push', 'origin', f':{branch}'],
+                env=git_env,
+                cwd=gitdir,
+            )
 
 
 
