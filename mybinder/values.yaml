@@ -39,8 +39,10 @@ binderhub:
         limit: 4G
       initContainers:
       - name: tc-init
-        image: minrk/tc-init:0.0.3
+        image: minrk/tc-init:0.0.4
         env:
+          - name: WHITELIST_CIDR
+            value: 10.0.0.0/8
           - name: EGRESS_BANDWIDTH
             value: 1mbit
         securityContext:
