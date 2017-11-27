@@ -28,7 +28,12 @@ if [[ ! -z "${EGRESS_BANDWIDTH}" ]]; then
     echo "Limiting uploads from ${SRC_IP} at ${EGRESS_BANDWIDTH}"
     tc class add dev ${IFACE} parent 1: classid 1:10 htb rate ${EGRESS_BANDWIDTH}
     tc qdisc add dev ${IFACE} parent 1:10 handle 10: sfq perturb 10
-    tc filter add dev ${IFACE} parent 1: prio 1 protocol ip u32 match ip src ${SRC_IP}/32 flowid 1:10
+    if [[ ! -z "${WHITELIST_CIDR}" ]]; then
+        # whitelist egress destinations that should not be throttled,
+        # e.g. 10.0.0.0/8 for local connections
+        tc filter add dev ${IFACE} parent 1: prio 1 protocol ip u32 match ip dst "${WHITELIST_CIDR}" flowid 1:30
+    fi
+    tc filter add dev ${IFACE} parent 1: prio 10 protocol ip u32 match ip src ${SRC_IP}/32 flowid 1:10
 fi
 
 # 20: rate-limit downloads
