@@ -1,4 +1,4 @@
-# Deployment policy for mybinder.org
+# Deployment policy
 
 Deployments to mybinder.org should be:
 

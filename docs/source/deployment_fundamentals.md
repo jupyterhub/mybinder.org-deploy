@@ -1,4 +1,4 @@
-# Fundamentals of deployment
+# Deployment Fundamentals
 
 ## Basics - Staging and Production
 

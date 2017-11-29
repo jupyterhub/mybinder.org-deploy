@@ -1,4 +1,4 @@
-# The production environment of mybinder.org
+# Production environment
 
 This section is an overview of the repositories, projects, and
 systems used in a mybinder.org production deployment.
