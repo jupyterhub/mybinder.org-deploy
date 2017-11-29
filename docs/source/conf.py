@@ -49,7 +49,7 @@ source_suffix = ['.rst', '.md']
 master_doc = 'index'
 
 # General information about the project.
-project = 'Deployment and Site Reliability Guide for mybinder.org'
+project = 'Site Reliability Guide for mybinder.org'
 copyright = '2017, Binder Team'
 author = 'Binder Team'
 
@@ -92,7 +92,12 @@ html_theme = 'alabaster'
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-# html_theme_options = {}
+html_theme_options = {
+    'show_related': True,
+    'description': "A Site Reliability Guide for mybinder.org deployment",
+    'github_user': 'jupyterhub',
+    'github_repo': 'binderhub',
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -109,7 +114,8 @@ html_sidebars = {
         'about.html',
         'navigation.html',
         'relations.html',  # needs 'show_related': True theme option to display
-        'searchbox.html',
+        'sourcelink.html',
+        'searchbox.html'
     ]
 }
 
@@ -117,7 +123,7 @@ html_sidebars = {
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'mybinderorgDeploymentandSREGuidedoc'
+htmlhelp_basename = 'mybinderorgSREGuidedoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -144,8 +150,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'mybinderorgDeploymentandSREGuide.tex',
-        'Deployment and SRE Guide for mybinder.org',
+    (master_doc, 'mybinderorgSREGuide.tex',
+        'SRE Guide for mybinder.org',
         'Binder Team', 'manual'),
 ]
 
@@ -154,8 +160,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'mybinderorgdeploymentandsreguide',
-        'Deployment and SRE Guide for mybinder.org',
+    (master_doc, 'mybinderorgsreguide',
+        'SRE Guide for mybinder.org',
         [author], 1)
 ]
 
@@ -166,9 +172,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'mybinderorgDeploymentandSREGuide',
-        'Deployment and SRE Guide for mybinder.org',
-        author, 'mybinderorgDeploymentandSREGuide',
+    (master_doc, 'mybinderorgSREGuide',
+        'SRE Guide for mybinder.org',
+        author, 'mybinderorgSREGuide',
         'One line description of project.', 'Miscellaneous'),
 ]
 
