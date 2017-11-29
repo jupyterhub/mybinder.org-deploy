@@ -52,13 +52,11 @@ here if something specific does not make sense!
 
 [mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
 [mybinder.org]: https://mybinder.org
-[beta.mybinder.org]: https://beta.mybinder.org
-[beta]: https://beta.mybinder.org
 [staging.mybinder.org]: https://staging.mybinder.org
 [staging]: https://staging.mybinder.org
 [BinderHub]: https://github.com/jupyterhub/binderhub
 [binderhub]: https://github.com/jupyterhub/binderhub
 [`jupyterhub/binderhub`]: https://github.com/jupyterhub/binderhub
 [BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
-[repo2docker]: http://github.com/jupyter/repo2docker
+[repo2docker]: https://github.com/jupyter/repo2docker
 [Deploying a change]: #deploying-a-change

@@ -9,13 +9,13 @@ Reference: [Google SRE book section on Production Environment](https://landing.g
 
 This repository contains a 'meta chart' (`mybinder`) that fully captures the
 state of the deployment on mybinder.org. Since it is a full helm chart, you
-can read the [official helm chart structure](https://github.com/kubernetes/helm/blob/master/docs/charts.md#the-chart-file-structure)
+can read the [official helm chart structure](https://docs.helm.sh/developing_charts/#the-chart-file-structure)
 document to know more about its structure.
 
 
 ## Dependent charts
 
-The core of the meta-chart pattern is to install a bunch of [dependent charts](https://github.com/kubernetes/helm/blob/master/docs/charts.md#chart-dependencies),
+The core of the meta-chart pattern is to install a bunch of [dependent charts](https://docs.helm.sh/developing_charts/#chart-dependencies),
 specified in `mybinder/requirements.yaml`. This contains both support
 charts like nginx-ingress & kube-lego, but also the core application chart
 `binderhub`. Everything is version pinned here.
@@ -73,14 +73,12 @@ Related repositories used by the [mybinder.org][] service are:
 
 
 [mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
-[mybinder.org]: https://beta.mybinder.org
-[beta.mybinder.org]: https://beta.mybinder.org
-[beta]: https://beta.mybinder.org
+[mybinder.org]: https://mybinder.org
 [staging.mybinder.org]: https://staging.mybinder.org
 [staging]: https://staging.mybinder.org
 [BinderHub]: https://github.com/jupyterhub/binderhub
 [binderhub]: https://github.com/jupyterhub/binderhub
 [`jupyterhub/binderhub`]: https://github.com/jupyterhub/binderhub
 [BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
-[repo2docker]: http://github.com/jupyter/repo2docker
+[repo2docker]: https://github.com/jupyter/repo2docker
 [Deploying a change]: #deploying-a-change
