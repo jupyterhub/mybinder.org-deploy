@@ -52,7 +52,7 @@ binderhub:
             add:
             - NET_ADMIN
 
-  repo2dockerImage: jupyter/repo2docker:093184b
+  repo2dockerImage: jupyter/repo2docker:3cd4519
 
 nginx-ingress:
   rbac:
