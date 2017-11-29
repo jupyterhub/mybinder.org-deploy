@@ -51,6 +51,7 @@ This is a non-exhaustive list. Feel free to ask us questions on the gitter chann
 here if something specific does not make sense!
 
 [mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
+[prod]: https://mybinder.org
 [mybinder.org]: https://mybinder.org
 [staging.mybinder.org]: https://staging.mybinder.org
 [staging]: https://staging.mybinder.org
@@ -59,4 +60,3 @@ here if something specific does not make sense!
 [`jupyterhub/binderhub`]: https://github.com/jupyterhub/binderhub
 [BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
 [repo2docker]: https://github.com/jupyter/repo2docker
-[Deploying a change]: #deploying-a-change

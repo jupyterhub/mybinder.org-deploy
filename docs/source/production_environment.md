@@ -46,7 +46,7 @@ to each other as possible. We want all common config in `values.yaml` so testing
 on staging gives us confidence it will work on prod. We also never share the same
 secrets between staging & prod for security boundary reasons.
 
-## MyBinder.org specific extra software
+## mybinder.org specific extra software
 
 We sometimes want to run additional software for the mybinder deployment that
 does not already have a chart, or would be too cumbersome to use with a chart.
@@ -73,6 +73,7 @@ Related repositories used by the [mybinder.org][] service are:
 
 
 [mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
+[prod]: https://mybinder.org
 [mybinder.org]: https://mybinder.org
 [staging.mybinder.org]: https://staging.mybinder.org
 [staging]: https://staging.mybinder.org
@@ -81,4 +82,3 @@ Related repositories used by the [mybinder.org][] service are:
 [`jupyterhub/binderhub`]: https://github.com/jupyterhub/binderhub
 [BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
 [repo2docker]: https://github.com/jupyter/repo2docker
-[Deploying a change]: #deploying-a-change

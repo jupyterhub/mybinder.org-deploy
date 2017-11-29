@@ -44,7 +44,7 @@ Launch timeout bump (to about 10mins) is deployed again [1](https://github.com/j
 
 ### 11:29
 
-The [cluster autoscaler](https://cloud.google.com/container-engine/docs/cluster-autoscaler) kicks in, resizing the cluster down to about 4 nodes.
+The [cluster autoscaler](https://cloud.google.com/kubernetes-engine/docs/concepts/cluster-autoscaler) kicks in, resizing the cluster down to about 4 nodes.
 
 Everything is fine and builds / launches are working again.
 

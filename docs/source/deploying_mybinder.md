@@ -80,7 +80,7 @@ which we step through below.
         repository: https://jupyterhub.github.io/helm-chart
 
 6. Merge this change to `config/common.yaml` into the [mybinder.org-deploy][]
-   repository following the steps in the [Deploying a change][] section above
+   repository following the steps in the [Two-phase deployment  process][] section above
    to deploy the change to [staging][], and then [prod][].
 
 ### Making changes to repo2docker
@@ -110,11 +110,12 @@ The following lines describe how to point mybinder.org to the new repo2docker im
        repo2dockerImage: jupyter/repo2docker:65d5411
 
 5. Merge this change to `mybinder/values.yaml` into the [mybinder.org-deploy][]
-   repository following the steps in the [Deploying a change][] section above
+   repository following the steps in the [Two-phase deployment  process][] section above
    to deploy the change to [staging][], and then [prod][].
 
 
 [mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
+[prod]: https://mybinder.org
 [mybinder.org]: https://mybinder.org
 [staging.mybinder.org]: https://staging.mybinder.org
 [staging]: https://staging.mybinder.org
