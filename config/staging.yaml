@@ -4,7 +4,7 @@ binderhub:
       - staging.mybinder.org
 
   registry:
-    prefix: gcr.io/binder-staging/image-v0-4-
+    prefix: gcr.io/binder-staging/r2d-3cd4519
 
   hub:
     url: https://hub.staging.mybinder.org
