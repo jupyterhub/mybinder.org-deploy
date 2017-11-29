@@ -1,6 +1,7 @@
 binderhub:
   ingress:
-    host: mybinder.org
+    hosts:
+      - mybinder.org
 
   registry:
     prefix: gcr.io/binder-prod/prod-v4-1-
@@ -10,7 +11,12 @@ binderhub:
 
   jupyterhub:
     ingress:
-      host: hub.mybinder.org
+      hosts:
+        - hub.mybinder.org
+      tls:
+        - secretName: kubelego-tls-jupyterhub-prod
+          hosts:
+            - hub.mybinder.org
 
   googleAnalyticsCode: "UA-101904940-1"
 
