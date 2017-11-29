@@ -1,4 +1,4 @@
-# Cluster Full Incident, 2017-10-17
+# Cluster Full, 2017-10-17
 
 ## Summary
 
@@ -8,13 +8,13 @@ Users were reporting failed launches after building. This was caused by the clus
 
 All times in PST
 
-### 2017-10-17 07:42 
+### 2017-10-17 07:42
 
 Users report all launches are failing with a 'took too long to launch' error
 
 ### 08:47
 
-Investigation starts, and the cluster is full - there are 94 pending pods and a full ten nodes. 
+Investigation starts, and the cluster is full - there are 94 pending pods and a full ten nodes.
 
 ### 09:14
 
@@ -55,13 +55,10 @@ Everything is fine and builds / launches are working again.
 1. If a pod doesn't start in time, kubespawner should kill it. If it enters error state, kubespawner should kill it. In general, it should never 'orphan' pods. [Issue](https://github.com/jupyterhub/kubespawner/issues/95)
 
 ### BinderHub
- 
+
 1. Make the launch timeout more configurable, and specified in seconds [Issue](https://github.com/jupyterhub/binderhub/issues/244)
 2. If launch fails, then BinderHub should actually call stop on the server & try to stop the server if it is running. [Issue](https://github.com/jupyterhub/binderhub/issues/245)
 
 ### Process
 
 1. We need better alerting for when cluster is full, ideally before it is full! [Issue](https://github.com/jupyterhub/mybinder.org-deploy/issues/125)
-
-
-
