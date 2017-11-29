@@ -1,5 +1,5 @@
-Deployment and Site Reliability Guide for mybinder.org
-======================================================
+Site Reliability Guide for mybinder.org
+=======================================
 
 .. toctree::
    :maxdepth: 2
@@ -19,11 +19,11 @@ Deployment and Site Reliability Guide for mybinder.org
    :maxdepth: 2
    :caption: Incidents
 
-   incident-reports/incident_reports_toc.md
-   incident-reports/2017-10-17-cluster-full.md
-   incident-reports/2017-09-29-504.md
-   incident-reports/2017-09-27-hub-403.md
-   incident-reports/template-incident-report.md
+   incident-reports/incident_reports_toc
+   incident-reports/2017-10-17-cluster-full
+   incident-reports/2017-09-29-504
+   incident-reports/2017-09-27-hub-403
+   incident-reports/template-incident-report
 
 Indices and tables
 ==================

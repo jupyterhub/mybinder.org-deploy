@@ -1,6 +1,6 @@
-# Template for incident reporting
+# Template for reports
 
-## {{ incident name }}, {{ incident date: yyyy-mm-dd }}
+## {{ incident date: yyyy-mm-dd }}, {{ incident name }}
 
 ## Summary
 
