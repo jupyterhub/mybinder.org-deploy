@@ -134,7 +134,7 @@ def main(cluster, replace=False):
         'direction': 'egress',
         'destination-ranges': WORLD_CIDR,
         'target-tags': ','.join(node_tags),
-        'allow': 'tcp:80,tcp:443',
+        'allow': 'tcp:80,tcp:443,tcp:9418',
     }, rules, replace=replace)
 
 
