@@ -262,4 +262,4 @@ Related repositories used by the [mybinder.org][] service are:
 [BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
 [repo2docker]: http://github.com/jupyter/repo2docker
 [Deploying a change]: #deploying-a-change
-[Site Reliability Guide for mybinder.org][http://mybinder-sre.readthedocs.io/en/latest/]
+[Site Reliability Guide for mybinder.org]: http://mybinder-sre.readthedocs.io/en/latest/
