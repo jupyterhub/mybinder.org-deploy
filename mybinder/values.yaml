@@ -85,6 +85,8 @@ nginx-ingress:
       annotations:
         prometheus.io/scrape: "true"
   controller:
+    scope:
+      enabled: true
     config:
       # Allow POSTs of upto 64MB, for large notebook support.
       proxy-body-size: 64m
