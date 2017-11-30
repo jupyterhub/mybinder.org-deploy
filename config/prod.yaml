@@ -4,7 +4,7 @@ binderhub:
       - mybinder.org
 
   registry:
-    prefix: gcr.io/binder-prod/r2d-3cd4519
+    prefix: gcr.io/binder-prod/r2d-fd74043
 
   hub:
     url: https://hub.mybinder.org
