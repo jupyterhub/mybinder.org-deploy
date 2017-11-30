@@ -85,6 +85,7 @@ nginx-ingress:
       annotations:
         prometheus.io/scrape: "true"
   controller:
+    replicaCount: 5
     scope:
       enabled: true
     config:
