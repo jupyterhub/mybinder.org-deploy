@@ -1,0 +1,6 @@
+name: mybinder-deploy
+type: sphinx
+conda:
+    file: docs/environment.yml
+python:
+  version: 3
