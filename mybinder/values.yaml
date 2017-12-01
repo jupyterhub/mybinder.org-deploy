@@ -25,6 +25,14 @@ binderhub:
     proxy:
       service:
         type: ClusterIP
+      chp:
+        resources:
+          requests:
+            memory: 1Gi
+      nginx:
+        resources:
+          requests:
+            memory: 1Gi
     ingress:
       enabled: true
       annotations:
