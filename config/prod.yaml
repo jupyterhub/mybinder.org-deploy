@@ -20,6 +20,26 @@ binderhub:
 
   googleAnalyticsCode: "UA-101904940-1"
 
+grafana:
+  server:
+    ingress:
+      hosts:
+        - grafana.mybinder.org
+      tls:
+        - hosts:
+            - grafana.mybinder.org
+          secretName: kubelego-tls-grafana
+
+prometheus:
+  server:
+    ingress:
+        hosts:
+          - prometheus.mybinder.org
+        tls:
+          - hosts:
+              - prometheus.mybinder.org
+            secretName: kubelego-tls-prometheus
+
 nginx-ingress:
   controller:
     service:
