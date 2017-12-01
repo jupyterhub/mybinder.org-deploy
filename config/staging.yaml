@@ -18,6 +18,26 @@ binderhub:
           hosts:
             - hub.staging.mybinder.org
 
+grafana:
+  server:
+    ingress:
+      hosts:
+        - grafana.staging.mybinder.org
+      tls:
+        - hosts:
+            - grafana.staging.mybinder.org
+          secretName: kubelego-tls-grafana
+
+prometheus:
+  server:
+    ingress:
+        hosts:
+          - prometheus.staging.mybinder.org
+        tls:
+          - hosts:
+              - prometheus.staging.mybinder.org
+            secretName: kubelego-tls-prometheus
+
 nginx-ingress:
   controller:
     service:
