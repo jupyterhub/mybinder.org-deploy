@@ -14,7 +14,7 @@ refer to the [`jupyterhub/binderhub`][] repo and the
 
 ## Site Reliability Guide
 
-[![Documentation Status](http://readthedocs.org/projects/mybinder-sre/badge/?version=latest)](http://mybinder-sre.readthedocs.io/en/latest/?badge=latest)
+![Documentation Status][rtd-badge]
 
 We have a [Site Reliability Guide for mybinder.org][] on ReadTheDocs. This guide
 includes our deployment policy, production environment information, and
@@ -263,3 +263,4 @@ Related repositories used by the [mybinder.org][] service are:
 [repo2docker]: http://github.com/jupyter/repo2docker
 [Deploying a change]: #deploying-a-change
 [Site Reliability Guide for mybinder.org]: http://mybinder-sre.readthedocs.io/en/latest/
+[rtd-badge]: http://readthedocs.org/projects/mybinder-sre/badge/?version=latest
