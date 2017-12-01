@@ -12,6 +12,16 @@ use these files as they are specific to [mybinder.org][].** Instead, you should
 refer to the [`jupyterhub/binderhub`][] repo and the
 [BinderHub documentation][].
 
+## Site Reliability Guide
+
+![Documentation Status][rtd-badge]
+
+We have a [Site Reliability Guide for mybinder.org][] on ReadTheDocs. This guide
+includes our deployment policy, production environment information, and
+incident reports.
+
+The following provides basic information about deployment.
+
 ## Basics
 
 This repo contains two branches: `staging` and `prod`. The `staging` branch
@@ -252,3 +262,5 @@ Related repositories used by the [mybinder.org][] service are:
 [BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
 [repo2docker]: http://github.com/jupyter/repo2docker
 [Deploying a change]: #deploying-a-change
+[Site Reliability Guide for mybinder.org]: http://mybinder-sre.readthedocs.io/en/latest/
+[rtd-badge]: http://readthedocs.org/projects/mybinder-sre/badge/?version=latest
