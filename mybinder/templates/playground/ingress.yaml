@@ -11,15 +11,17 @@ metadata:
 spec:
   rules:
     {{ range $host := .Values.playground.ingress.hosts }}
-    - host: {{ $host.host }}
+    - host: {{ $host }}
       http:
         paths:
           - path: /
             backend:
               serviceName: playground
-              servicePort: 8000
+              servicePort: 80
     {{ end }}
   tls:
     - secretName: kubelego-tls-playground
       hosts:
-      - {{ .Values.playground.host }}
+      {{ range $host := .Values.playground.ingress.hosts }}
+      - {{ $host }}
+      {{- end }}
