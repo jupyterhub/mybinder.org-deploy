@@ -4,7 +4,7 @@ metadata:
   name: pen
   labels:
     app: pen
-    component: nginx
+    component: playground
 spec:
   ports:
   - port: 80
@@ -12,4 +12,4 @@ spec:
     targetPort: 8000
   selector:
     app: pen
-    component: nginx
+    component: playground

@@ -4,6 +4,7 @@ metadata:
   name: pen
   labels:
     app: pen
+    component: playground
   annotations:
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
@@ -19,4 +20,4 @@ spec:
   tls:
     - secretName: kubelego-tls-pen
       hosts:
-      - pen.mybinder.org
+      - {{ .Values.pen.host }}

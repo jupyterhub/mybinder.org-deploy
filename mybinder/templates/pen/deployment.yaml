@@ -6,13 +6,13 @@ spec:
   selector:
     matchLabels:
       app: pen
-      component: nginx
+      component: playground
   replicas: {{ .Values.pen.replicas }}
   template:
     metadata:
       labels:
         app: pen
-        component: nginx
+        component: playground
     spec:
       containers:
       - name: pen
