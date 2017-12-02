@@ -15,7 +15,7 @@ spec:
         component: frontend
     spec:
       containers:
-      - name: pen
+      - name: playground
         image: {{ .Values.playground.image }}
         ports:
         - containerPort: 3000
