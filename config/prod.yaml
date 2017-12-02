@@ -55,3 +55,8 @@ redirector:
       host:
         from: docs.mybinder.org
         to: mybinder.readthedocs.io
+
+playground:
+  ingress:
+    hosts:
+      - playground.mybinder.org
