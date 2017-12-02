@@ -18,4 +18,4 @@ spec:
       - name: pen
         image: {{ .Values.playground.image }}
         ports:
-        - containerPort: {{ .Values.playground.port }}
+        - containerPort: 3000

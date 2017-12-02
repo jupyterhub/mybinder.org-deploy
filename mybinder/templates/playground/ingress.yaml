@@ -10,14 +10,16 @@ metadata:
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
-    - host: {{ .Values.playground.host }}
+    {{ range $host := .Values.playground.ingress.hosts }}
+    - host: {{ $host.host }}
       http:
         paths:
           - path: /
             backend:
               serviceName: playground
               servicePort: 8000
+    {{ end }}
   tls:
-    - secretName: kubelego-tls-pen
+    - secretName: kubelego-tls-playground
       hosts:
       - {{ .Values.playground.host }}

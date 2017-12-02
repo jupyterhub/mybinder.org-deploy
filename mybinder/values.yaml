@@ -85,6 +85,10 @@ binderhub:
 
   repo2dockerImage: jupyter/repo2docker:fd74043
 
+playground:
+  image: yuvipanda/play.nteract.io:v0.1
+  replicas: 1
+
 nginx-ingress:
   rbac:
     create: true

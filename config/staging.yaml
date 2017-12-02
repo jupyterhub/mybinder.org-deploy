@@ -55,7 +55,6 @@ redirector:
         to: mybinder.readthedocs.io
 
 playground:
-  image: yuvipanda/play.nteract.io:v0.1
-  host: playground.staging.mybinder.org
-  replicas: 1
-  port: 3000
+  ingress:
+    hosts:
+      - playground.staging.mybinder.org
