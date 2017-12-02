@@ -9,7 +9,7 @@ metadata:
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
-    - host: pen.mybinder.org
+    - host: {{ .Values.pen.host }}
       http:
         paths:
           - path: /
