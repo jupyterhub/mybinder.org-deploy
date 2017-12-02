@@ -3,13 +3,13 @@ kind: Service
 metadata:
   name: pen
   labels:
-    app: pen
-    component: playground
+    app: playground
+    component: frontend
 spec:
   ports:
   - port: 80
     protocol: TCP
     targetPort: 8000
   selector:
-    app: pen
-    component: playground
+    app: playground
+    component: frontend

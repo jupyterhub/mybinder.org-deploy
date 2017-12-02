@@ -3,21 +3,21 @@ kind: Ingress
 metadata:
   name: pen
   labels:
-    app: pen
-    component: playground
+    app: playground
+    component: frontend
   annotations:
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
-    - host: {{ .Values.pen.host }}
+    - host: {{ .Values.playground.host }}
       http:
         paths:
           - path: /
             backend:
-              serviceName: pen
+              serviceName: playground
               servicePort: 8000
   tls:
     - secretName: kubelego-tls-pen
       hosts:
-      - {{ .Values.pen.host }}
+      - {{ .Values.playground.host }}

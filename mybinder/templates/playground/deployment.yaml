@@ -1,0 +1,21 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: playground
+spec:
+  selector:
+    matchLabels:
+      app: playground
+      component: frontend
+  replicas: {{ .Values.playground.replicas }}
+  template:
+    metadata:
+      labels:
+        app: playground
+        component: frontend
+    spec:
+      containers:
+      - name: pen
+        image: {{ .Values.playground.image }}
+        ports:
+        - containerPort: {{ .Values.playground.port }}
