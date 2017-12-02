@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: pen
+  labels:
+    app: pen
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    - host: pen.mybinder.org
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: pen
+              servicePort: 8000
+  tls:
+    - secretName: kubelego-tls-pen
+      hosts:
+      - pen.mybinder.org

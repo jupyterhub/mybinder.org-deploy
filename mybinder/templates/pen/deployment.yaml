@@ -1,0 +1,22 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: pen
+spec:
+  selector:
+    matchLabels:
+      app: pen
+      component: nginx
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pen
+        component: nginx
+    spec:
+      containers:
+      - name: pen
+        image: python:3.6-slim
+        command: python3 -m http.server
+        ports:
+        - containerPort: 8000
