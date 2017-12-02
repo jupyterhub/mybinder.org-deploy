@@ -53,3 +53,8 @@ redirector:
       host:
         from: docs.staging.mybinder.org
         to: mybinder.readthedocs.io
+
+playground:
+  ingress:
+    hosts:
+      - playground.staging.mybinder.org
