@@ -88,7 +88,7 @@ binderhub:
 playground:
   image:
     name: yuvipanda/play.nteract.io
-    tag: v0.1
+    tag: v0.2
   replicas: 1
 
 nginx-ingress:
