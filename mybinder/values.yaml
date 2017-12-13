@@ -16,9 +16,6 @@ binderhub:
   registry:
     enabled: true
 
-  dind:
-    enabled: true
-
   jupyterhub:
     cull:
       timeout: 600
