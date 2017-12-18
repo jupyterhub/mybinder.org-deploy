@@ -86,7 +86,7 @@ binderhub:
             add:
             - NET_ADMIN
 
-  repo2dockerImage: jupyter/repo2docker:fd74043
+  repo2dockerImage: jupyter/repo2docker:1c7bd6e
 
 playground:
   image:
