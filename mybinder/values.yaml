@@ -1,4 +1,9 @@
 binderhub:
+  extraConfig:
+    bans: |
+        c.GitHubRepoProvider.banned_specs = [
+          '^navoshta/juno-demo-notebooks.*'
+        ]
   service:
     type: ClusterIP
 
