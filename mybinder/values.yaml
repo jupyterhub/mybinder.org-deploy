@@ -119,6 +119,10 @@ nginx-ingress:
       # Preserve client IPs
       externalTrafficPolicy: Local
 
+static:
+  paths:
+    - /badge.svg
+
 kube-lego:
   config:
     LEGO_EMAIL: yuvipanda@gmail.com

@@ -45,6 +45,11 @@ nginx-ingress:
     service:
       loadBalancerIP: 35.202.202.188
 
+static:
+  ingress:
+    hosts:
+      - static.mybinder.org
+
 redirector:
   redirects:
     - type: host
