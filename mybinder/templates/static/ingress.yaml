@@ -1,0 +1,37 @@
+# Ingress that serves whitelisted static images only
+# This allows end users to include our badges without us
+# accidentally tracking all the people who see the badges.
+# https://github.com/jupyterhub/binderhub/issues/379 has more info.
+#
+# This is a separate path-whitelisted ingress rather than just
+# a domain alias to prevent possible reflection attacks.
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: static
+  labels:
+    app: static
+    component: frontend
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    {{ $root := . }}
+    {{ range $host := .Values.static.ingress.hosts }}
+    - host: {{ $host }}
+      http:
+        paths:
+          {{ range $path := $root.Values.static.paths }}
+          - path: {{ $path }}
+            backend:
+              serviceName: binder
+              servicePort: 80
+          {{ end }}
+    {{ end }}
+  tls:
+    - secretName: kubelego-tls-static
+      hosts:
+      {{ range $host := .Values.static.ingress.hosts }}
+      - {{ $host }}
+      {{- end }}
