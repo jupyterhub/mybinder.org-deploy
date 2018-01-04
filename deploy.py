@@ -23,6 +23,27 @@ def deploy(release):
 
     subprocess.check_call(helm)
 
+    # Explicitly wait for the hub, proxy and binder deployments to be up and running
+    # --wait in helm isn't good enough for these
+    subprocess.check_call([
+        'kubectl', 'rollout', 'status',
+        '--namespace', release,
+        '--watch', 'deployment/hub',
+    ])
+
+    subprocess.check_call([
+        'kubectl', 'rollout', 'status',
+        '--namespace', release,
+        '--watch', 'deployment/binder',
+    ])
+
+    subprocess.check_call([
+        'kubectl', 'rollout', 'status',
+        '--namespace', release,
+        '--watch', 'deployment/proxy',
+    ])
+
+
 
 def main():
     argparser = argparse.ArgumentParser()
