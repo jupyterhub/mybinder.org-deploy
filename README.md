@@ -43,7 +43,7 @@ deploy to the `prod` (production) branch of the repository.
 
 ### Deploy to Staging
 
-1. Make the changes on your fork.
+1. Make the [changes](#upgrading-dependencies-for-the-mybinderorg-deployment) on your fork.
 2. Make a PR to the `staging` branch with the changes you want.
 3. Review, accept, and merge this PR. This will make Travis deploy the changes
    to [staging.mybinder.org][].
