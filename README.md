@@ -16,9 +16,9 @@ Instead, you should review the [BinderHub documentation][] and the
 ## Site Reliability Guide [![Documentation Status](http://readthedocs.org/projects/mybinder-sre/badge/?version=staging)](http://mybinder-sre.readthedocs.io/en/staging/?badge=staging)
 
 [Site Reliability Guide for mybinder.org][] includes:
-- our deployment policy
-- production environment information
-- incident reports and a new incident template
+- our [deployment policy](http://mybinder-sre.readthedocs.io/en/staging/deployment_policy.html)
+- [production environment](http://mybinder-sre.readthedocs.io/en/staging/production_environment.html) and [configuration](http://mybinder-sre.readthedocs.io/en/staging/production_environment.html#configuration-values) information
+- [incident reports](http://mybinder-sre.readthedocs.io/en/staging/incident-reports/incident_reports_toc.html) and a [new incident template](https://github.com/jupyterhub/mybinder.org-deploy/blob/staging/docs/source/incident-reports/template-incident-report.md)
 
 ## Key Links
 
@@ -28,7 +28,7 @@ Instead, you should review the [BinderHub documentation][] and the
 | TravisCI Tests | [![Staging Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=staging)](https://travis-ci.org/jupyterhub/mybinder.org-deploy) | [![Production Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=prod)](https://travis-ci.org/jupyterhub/mybinder.org-deploy/branches) |
 | Deployment checklist | staging | prod |
 | Deployment docs | [staging](#deploy-to-staging) | [prod](#deploy-to-production) |
-| Monitoring | staging | prod |
+| Monitoring | staging | [prod](https://grafana.mybinder.org/dashboard/db/kubernetes-cluster-monitoring-binder-prod?refresh=10s&orgId=1) |
 
 | Helm chart  | dev | stable |
 |-------------|-----|--------|
