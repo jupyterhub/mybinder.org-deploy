@@ -13,7 +13,7 @@ If you wish to deploy your own Binder instance, please **do not use** these file
 Instead, you should review the [BinderHub documentation][] and the
 [`jupyterhub/binderhub`][] repo to set up your deployment.
 
-## Site Reliability Guide ![Documentation Status][rtd-badge]
+## Site Reliability Guide [![Documentation Status](http://readthedocs.org/projects/mybinder-sre/badge/?version=staging)](http://mybinder-sre.readthedocs.io/en/staging/?badge=staging)
 
 [Site Reliability Guide for mybinder.org][] includes:
 - our deployment policy
@@ -84,6 +84,7 @@ source of information. At a minimum, you must at least understand:
 This is a non-exhaustive list. Feel free to ask us questions on the gitter channel or
 here if something specific does not make sense!
 
+---
 
 ## Deploying a change
 
@@ -196,6 +197,8 @@ The following lines describe how to point mybinder.org to the new repo2docker im
    repository following the steps in the [Deploying a change][] section above
    to deploy the change to [staging][], and then [prod][].
 
+---
+
 ## Repository structure
 
 This repository contains a 'meta chart' (`mybinder`) that fully captures the
@@ -203,6 +206,7 @@ state of the deployment on mybinder.org. Since it is a full helm chart, you
 can read the [official helm chart structure](https://github.com/kubernetes/helm/blob/master/docs/charts.md#the-chart-file-structure)
 document to know more about its structure.
 
+---
 
 ### Dependent charts
 
@@ -210,6 +214,8 @@ The core of the meta-chart pattern is to install a bunch of [dependent charts](h
 specified in `mybinder/requirements.yaml`. This contains both support
 charts like nginx-ingress & kube-lego, but also the core application chart
 `binderhub`. Everything is version pinned here.
+
+---
 
 ### Configuration values
 
@@ -237,6 +243,8 @@ to each other as possible. We want all common config in `values.yaml` so testing
 on staging gives us confidence it will work on prod. We also never share the same
 secrets between staging & prod for security boundary reasons.
 
+---
+
 ### MyBinder.org specific extra software
 
 We sometimes want to run additional software for the mybinder deployment that
@@ -244,6 +252,8 @@ does not already have a chart, or would be too cumbersome to use with a chart.
 For those cases, we can create kubernetes objects directly from the `mybinder`
 meta chart. You can see an example of this under `mybinder/templates/redirector`
 that is used to set up a simple nginx based HTTP redirector.
+
+---
 
 ### Related repositories
 
@@ -274,5 +284,5 @@ Related repositories used by the [mybinder.org][] service are:
 [BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
 [repo2docker]: http://github.com/jupyter/repo2docker
 [Deploying a change]: #deploying-a-change
-[Site Reliability Guide for mybinder.org]: http://mybinder-sre.readthedocs.io/en/latest/
-[rtd-badge]: http://readthedocs.org/projects/mybinder-sre/badge/?version=latest
+[Site Reliability Guide for mybinder.org]: http://mybinder-sre.readthedocs.io
+[![Documentation Status](http://readthedocs.org/projects/mybinder-sre/badge/?version=staging)](http://mybinder-sre.readthedocs.io/en/staging/?badge=staging)
