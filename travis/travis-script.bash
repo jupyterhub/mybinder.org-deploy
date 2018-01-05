@@ -43,9 +43,13 @@ python3 ./deploy.py deploy ${TARGET}
 # FIXME: add readiness probe so that deploy doesn't finish before
 # hub is available.
 # For now, sleep to give deploy a chance to warm up.
-sleep 10
+# The current reason for this sleep is that the nginx configuration reload drops connections,
+# which occurs *after* deployment is fully ready.
+# There does not appear to be a way to query whether nginx has finished updating.
+sleep 30
 
 # Run some tests to make sure we really did pass!
-py.test --binder-url=${BINDER_URL} --hub-url=${HUB_URL}
+# Currently retrying to account for nginx dropping connections.
+travis_retry py.test --binder-url=${BINDER_URL} --hub-url=${HUB_URL}
 
 echo "Done!"
