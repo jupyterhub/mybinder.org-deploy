@@ -20,17 +20,21 @@ Instead, you should review the [BinderHub documentation][] and the
 - production environment information
 - incident reports and a new incident template
 
-## Links
+## Key Links
 
-- [Prod - mybinder.org](https://mybinder.org)
-- [Staging - staging.mybinder.org](https://staging.mybinder.org)
+|             | Staging | Production |
+| ----------- | ------- | ---------- |
+| Site     |[staging.mybinder.org](https://staging.mybinder.org) | [mybinder.org](https://mybinder.org) |
+| TravisCI Tests | [![Staging Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=staging)](https://travis-ci.org/jupyterhub/mybinder.org-deploy) | [![Production Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=prod)](https://travis-ci.org/jupyterhub/mybinder.org-deploy/branches) |
+| Deployment checklist | staging | prod |
+| Deployment docs | staging | prod |
+| Monitoring | staging | prod |
 
-- Tests: TravisCI - Staging [![Staging Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=staging)](https://travis-ci.org/jupyterhub/mybinder.org-deploy)
-- Tests: TravisCI - Prod [![Production Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=prod)](https://travis-ci.org/jupyterhub/mybinder.org-deploy/branches)
-- Helm chart: [JupyterHub stable](https://jupyterhub.github.io/helm-chart/#stable-releases)
-- Helm chart: [JupyterHub dev](https://jupyterhub.github.io/helm-chart/#development-releases-jupyterhub)
-- Helm chart: [BinderHub dev](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub)
-- [Site Reliability Guide](http://mybinder-sre.readthedocs.io)
+| Helm chart  | dev | stable |
+|-------------|-----|--------|
+| JupyterHub  | [ dev](https://jupyterhub.github.io/helm-chart/#development-releases-jupyterhub) | [stable](https://jupyterhub.github.io/helm-chart/#stable-releases) |
+| BinderHub | [dev](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub)| - |
+
 
 ---
 
