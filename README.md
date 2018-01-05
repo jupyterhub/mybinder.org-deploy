@@ -27,7 +27,7 @@ Instead, you should review the [BinderHub documentation][] and the
 | Site     |[staging.mybinder.org](https://staging.mybinder.org) | [mybinder.org](https://mybinder.org) |
 | TravisCI Tests | [![Staging Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=staging)](https://travis-ci.org/jupyterhub/mybinder.org-deploy) | [![Production Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=prod)](https://travis-ci.org/jupyterhub/mybinder.org-deploy/branches) |
 | Deployment checklist | staging | prod |
-| Deployment docs | staging | prod |
+| Deployment docs | [staging](#deploy-to-staging) | [prod](#deploy-to-production) |
 | Monitoring | staging | prod |
 
 | Helm chart  | dev | stable |
@@ -41,6 +41,8 @@ Deploying a change follows a two-step process. First, you'll deploy to
 the `staging` branch of the repository. Second, if all looks well, you'll
 deploy to the `prod` (production) branch of the repository.
 
+### Deploy to Staging
+
 1. Make the changes on your fork.
 2. Make a PR to the `staging` branch with the changes you want.
 3. Review, accept, and merge this PR. This will make Travis deploy the changes
@@ -51,11 +53,7 @@ deploy to the `prod` (production) branch of the repository.
 
 **If the changes look correct:**
 
-6. Make a new PR, merging [staging][] into the [prod][] branch.
-7. Get this PR merged, and wait for Travis to make a deployment to [prod][].
-8. Verify that [mybinder.org][] works as intended. Please take your
-   time to check that the change is working as expected.
-9. CELEBRATE! :tada:
+Proceed to [Deploy to Production](#deploy-to-production) section.
 
 **If the changes don't look correct, or there is an error:**
 
@@ -63,6 +61,15 @@ deploy to the `prod` (production) branch of the repository.
 7. Verify that [staging.mybinder.org][] is working as it was before the PR
    and revert.
 8. Troubleshoot and make changes to your fork. Repeat the process from Step 1.
+
+### Deploy to Production
+
+1. Always deploy changes to staging prior to deploying to production.
+2. Make a new PR, merging [staging][] into the [prod][] branch.
+3. Merge this PR, and wait for Travis to make a deployment to [prod][].
+4. Verify that [mybinder.org][] works as intended. Please take your
+   time to check that the change is working as expected.
+5. CELEBRATE! :tada:
 
 ## Upgrading dependencies for the mybinder.org deployment
 
