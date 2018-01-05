@@ -1,26 +1,38 @@
 # mybinder.org-deploy
 
-- Staging: [![Staging Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=staging)](https://travis-ci.org/jupyterhub/mybinder.org-deploy)
-- Production: [![Production Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=prod)](https://travis-ci.org/jupyterhub/mybinder.org-deploy/branches)
+Staging: [![Staging Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=staging)](https://travis-ci.org/jupyterhub/mybinder.org-deploy) |
+Production: [![Production Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=prod)](https://travis-ci.org/jupyterhub/mybinder.org-deploy/branches)
 
+Deployment, configuration, and Site Reliability documentation files for the
+public [mybinder.org][] service.
 
-This repository contains configuration files and documentation related to the
-[binderhub][] deployment open to the public at [mybinder.org][].
+#### Deploying a Binder Service other than mybinder.org
 
-**Important: If you wish to deploy your own Binder instance, please do not
-use these files as they are specific to [mybinder.org][].** Instead, you should
-refer to the [`jupyterhub/binderhub`][] repo and the
-[BinderHub documentation][].
+These files are specific to [mybinder.org][].
+If you wish to deploy your own Binder instance, please **do not use** these files.
+Instead, you should review the [BinderHub documentation][] and the
+[`jupyterhub/binderhub`][] repo to set up your deployment.
 
-## Site Reliability Guide
+## Site Reliability Guide ![Documentation Status][rtd-badge]
 
-![Documentation Status][rtd-badge]
+[Site Reliability Guide for mybinder.org][] includes:
+- our deployment policy
+- production environment information
+- incident reports and a new incident template
 
-We have a [Site Reliability Guide for mybinder.org][] on ReadTheDocs. This guide
-includes our deployment policy, production environment information, and
-incident reports.
+## Links
 
-The following provides basic information about deployment.
+- [Prod - mybinder.org](https://mybinder.org)
+- [Staging - staging.mybinder.org](https://staging.mybinder.org)
+
+- Tests: TravisCI - Staging [![Staging Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=staging)](https://travis-ci.org/jupyterhub/mybinder.org-deploy)
+- Tests: TravisCI - Prod [![Production Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=prod)](https://travis-ci.org/jupyterhub/mybinder.org-deploy/branches)
+- Helm chart: [JupyterHub stable](https://jupyterhub.github.io/helm-chart/#stable-releases)
+- Helm chart: [JupyterHub dev](https://jupyterhub.github.io/helm-chart/#development-releases-jupyterhub)
+- Helm chart: [BinderHub dev](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub)
+- [Site Reliability Guide](http://mybinder-sre.readthedocs.io)
+
+---
 
 ## Basics
 
