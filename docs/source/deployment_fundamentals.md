@@ -38,7 +38,7 @@ to get comfortable using `kubectl` is required.
 
 ### Helm Basics
 
-We use [helm](https://helm.sh) to manage our deployments, and it is imporant you
+We use [helm](https://helm.sh) to manage our deployments, and it is important you
 have a working knowledge of how to use helm. Detailed explanations are out of the
 scope of this repository, but [docs.helm.sh](https://docs.helm.sh) is an excellent
 source of information. At a minimum, you must at least understand:
@@ -50,13 +50,5 @@ source of information. At a minimum, you must at least understand:
 This is a non-exhaustive list. Feel free to ask us questions on the gitter channel or
 here if something specific does not make sense!
 
-[mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
-[prod]: https://mybinder.org
 [mybinder.org]: https://mybinder.org
 [staging.mybinder.org]: https://staging.mybinder.org
-[staging]: https://staging.mybinder.org
-[BinderHub]: https://github.com/jupyterhub/binderhub
-[binderhub]: https://github.com/jupyterhub/binderhub
-[`jupyterhub/binderhub`]: https://github.com/jupyterhub/binderhub
-[BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
-[repo2docker]: https://github.com/jupyter/repo2docker
