@@ -123,7 +123,7 @@ which we step through below.
 
 1. Merge changes to [BinderHub][].
 2. Open the [Travis build for BinderHub](https://travis-ci.org/jupyterhub/binderhub),
-   navigate to the page corresponding to the master branch.
+   navigate to the page corresponding to the master branch, `TEST=helm` job.
 3. If the build succeeds, grab the hash that is displayed at the end of the
    travis output. It looks something like:
 
