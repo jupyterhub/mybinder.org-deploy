@@ -23,6 +23,7 @@ binderhub:
 
   dind:
     enabled: true
+    initContainers: *initContainers
 
   jupyterhub:
     cull:
@@ -51,7 +52,7 @@ binderhub:
       memory:
         guarantee: 1G
         limit: 4G
-      initContainers:
+      initContainers: &initContainers
       - name: tc-init
         image: minrk/tc-init:0.0.4
         env:
