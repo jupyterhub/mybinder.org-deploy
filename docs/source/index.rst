@@ -13,7 +13,6 @@ Site Reliability Guide for mybinder.org
 
    deployment_policy.md
    deployment_fundamentals.md
-   deploying_mybinder.md
 
 .. toctree::
    :maxdepth: 2

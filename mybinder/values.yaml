@@ -23,6 +23,32 @@ binderhub:
 
   dind:
     enabled: true
+    initContainers:
+      # Only block access to metadata service, do not throttle network
+      # egress yet, since that slows down image pushing
+      - name: block-metadata
+        image: minrk/tc-init:0.0.4
+        # Block access to GCE Metadata Service from user pods!
+        command:
+          - iptables
+          - -A
+          - OUTPUT
+          - -p
+          - tcp
+          - --dport
+          - "80"
+          - -d
+          - 169.254.169.254
+          - -j
+          - DROP
+        securityContext:
+          # capabilities.add seems to be disabled
+          # by the `runAsUser: 1000` in the pod-level securityContext
+          # unless we explicitly run as root
+          runAsUser: 0
+          capabilities:
+            add:
+            - NET_ADMIN
 
   jupyterhub:
     cull:
@@ -175,6 +201,9 @@ grafana:
       url = https://grafana.net
 
 prometheus:
+  nodeExporter:
+    updateStrategy:
+      type: RollingUpdate
   alertmanager:
     enabled: false
   pushgateway:

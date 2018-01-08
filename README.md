@@ -1,77 +1,39 @@
 # mybinder.org-deploy
 
-- Staging: [![Staging Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=staging)](https://travis-ci.org/jupyterhub/mybinder.org-deploy)
-- Production: [![Production Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=prod)](https://travis-ci.org/jupyterhub/mybinder.org-deploy/branches)
+Staging: [![Staging Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=staging)](https://travis-ci.org/jupyterhub/mybinder.org-deploy) |
+Production: [![Production Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=prod)](https://travis-ci.org/jupyterhub/mybinder.org-deploy/branches)
 
+Deployment, configuration, and Site Reliability documentation files for the
+public [mybinder.org][] service.
 
-This repository contains configuration files and documentation related to the
-[binderhub][] deployment open to the public at [mybinder.org][].
+#### Deploying a Binder Service other than mybinder.org
 
-**Important: If you wish to deploy your own Binder instance, please do not
-use these files as they are specific to [mybinder.org][].** Instead, you should
-refer to the [`jupyterhub/binderhub`][] repo and the
-[BinderHub documentation][].
+These files are specific to [mybinder.org][].
+If you wish to deploy your own Binder instance, please **do not use** these files.
+Instead, you should review the [BinderHub documentation][] and the
+[`jupyterhub/binderhub`][] repo to set up your deployment.
 
-## Site Reliability Guide
+## Site Reliability Guide [![Documentation Status](http://readthedocs.org/projects/mybinder-sre/badge/?version=staging)](http://mybinder-sre.readthedocs.io/en/staging/?badge=staging)
 
-![Documentation Status][rtd-badge]
+[Site Reliability Guide for mybinder.org][] includes:
+- our [deployment policy](http://mybinder-sre.readthedocs.io/en/staging/deployment_policy.html)
+- [production environment](http://mybinder-sre.readthedocs.io/en/staging/production_environment.html) and [configuration](http://mybinder-sre.readthedocs.io/en/staging/production_environment.html#configuration-values) information
+- [incident reports](http://mybinder-sre.readthedocs.io/en/staging/incident-reports/incident_reports_toc.html) and a [new incident template](https://github.com/jupyterhub/mybinder.org-deploy/blob/staging/docs/source/incident-reports/template-incident-report.md)
 
-We have a [Site Reliability Guide for mybinder.org][] on ReadTheDocs. This guide
-includes our deployment policy, production environment information, and
-incident reports.
+## Key Links
 
-The following provides basic information about deployment.
+|             | Staging | Production |
+| ----------- | ------- | ---------- |
+| Site     |[staging.mybinder.org](https://staging.mybinder.org) | [mybinder.org](https://mybinder.org) |
+| TravisCI Tests | [![Staging Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=staging)](https://travis-ci.org/jupyterhub/mybinder.org-deploy) | [![Production Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=prod)](https://travis-ci.org/jupyterhub/mybinder.org-deploy/branches) |
+| Deployment checklist | staging | prod |
+| Deployment docs | [staging](#deploy-to-staging) | [prod](#deploy-to-production) |
+| Monitoring | staging | [prod](https://grafana.mybinder.org/dashboard/db/kubernetes-cluster-monitoring-binder-prod?refresh=10s&orgId=1) |
 
-## Basics
-
-This repo contains two branches: `staging` and `prod`. The `staging` branch
-corresponds to the config for [staging.mybinder.org][] and the `prod`
-branch to [mybinder.org][]. In general (except when performing a
-deployment), these branches should always be the same, and `prod` should not
-drift away from `staging` too much.
-
-## Pre-requisites
-
-The following are tools and technologies that mybinder.org uses. You should have
-a working familiarity with them in order to make changes to the mybinder.org deployment.
-
-### Google Cloud Platform
-
-MyBinder.org currently runs on Google Cloud. There are two Google Cloud projects
-that we use:
-
-1. `binder-staging` contains all resources for the staging deployment
-2. `binder-prod` contains all resources for the production deployment
-
-We'll hand out credentials to anyone who wants to play with the staging deployment,
-so please just ask!
-
-While you only need merge access in this repository to deploy changes, ideally
-you should also have access to the two Google Cloud Projects so you can debug
-things when deployments fail.
-
-### Kubernetes Basics
-
-We heavily use Kubernetes for the mybinder.org deployment, and it is important you
-have a working knowledge of how to use Kubernetes. Detailed explanations are out
-of the scope of this repository, but there is a good [list of tutorials](https://kubernetes.io/docs/tutorials/).
-Specifically, going through the [interactive tutorial](https://kubernetes.io/docs/tutorials/kubernetes-basics/)
-to get comfortable using `kubectl` is required.
-
-### Helm Basics
-
-We use [helm](https://helm.sh) to manage our deployments, and it is imporant you
-have a working knowledge of how to use helm. Detailed explanations are out of the
-scope of this repository, but [docs.helm.sh](https://docs.helm.sh) is an excellent
-source of information. At a minimum, you must at least understand:
-
-* [What is a chart?](https://docs.helm.sh/developing_charts/#charts)
-* [What are values files?](https://docs.helm.sh/chart_template_guide/#values-files)
-* [How do chart dependencies work?](https://docs.helm.sh/developing_charts/#chart-dependencies)
-
-This is a non-exhaustive list. Feel free to ask us questions on the gitter channel or
-here if something specific does not make sense!
-
+| Helm chart  | dev | stable |
+|-------------|-----|--------|
+| JupyterHub  | [ dev](https://jupyterhub.github.io/helm-chart/#development-releases-jupyterhub) | [stable](https://jupyterhub.github.io/helm-chart/#stable-releases) |
+| BinderHub | [dev](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub)| - |
 
 ## Deploying a change
 
@@ -79,7 +41,9 @@ Deploying a change follows a two-step process. First, you'll deploy to
 the `staging` branch of the repository. Second, if all looks well, you'll
 deploy to the `prod` (production) branch of the repository.
 
-1. Make the changes on your fork.
+### Deploy to Staging
+
+1. Make the [changes](#upgrading-dependencies-for-the-mybinderorg-deployment) on your fork.
 2. Make a PR to the `staging` branch with the changes you want.
 3. Review, accept, and merge this PR. This will make Travis deploy the changes
    to [staging.mybinder.org][].
@@ -89,11 +53,7 @@ deploy to the `prod` (production) branch of the repository.
 
 **If the changes look correct:**
 
-6. Make a new PR, merging [staging][] into the [prod][] branch.
-7. Get this PR merged, and wait for Travis to make a deployment to [prod][].
-8. Verify that [mybinder.org][] works as intended. Please take your
-   time to check that the change is working as expected.
-9. CELEBRATE! :tada:
+Proceed to [Deploy to Production](#deploy-to-production) section.
 
 **If the changes don't look correct, or there is an error:**
 
@@ -101,6 +61,15 @@ deploy to the `prod` (production) branch of the repository.
 7. Verify that [staging.mybinder.org][] is working as it was before the PR
    and revert.
 8. Troubleshoot and make changes to your fork. Repeat the process from Step 1.
+
+### Deploy to Production
+
+1. Always deploy changes to staging prior to deploying to production.
+2. Make a new PR, merging [staging][] into the [prod][] branch.
+3. Merge this PR, and wait for Travis to make a deployment to [prod][].
+4. Verify that [mybinder.org][] works as intended. Please take your
+   time to check that the change is working as expected.
+5. CELEBRATE! :tada:
 
 ## Upgrading dependencies for the mybinder.org deployment
 
@@ -184,73 +153,6 @@ The following lines describe how to point mybinder.org to the new repo2docker im
    repository following the steps in the [Deploying a change][] section above
    to deploy the change to [staging][], and then [prod][].
 
-## Repository structure
-
-This repository contains a 'meta chart' (`mybinder`) that fully captures the
-state of the deployment on mybinder.org. Since it is a full helm chart, you
-can read the [official helm chart structure](https://github.com/kubernetes/helm/blob/master/docs/charts.md#the-chart-file-structure)
-document to know more about its structure.
-
-
-### Dependent charts
-
-The core of the meta-chart pattern is to install a bunch of [dependent charts](https://github.com/kubernetes/helm/blob/master/docs/charts.md#chart-dependencies),
-specified in `mybinder/requirements.yaml`. This contains both support
-charts like nginx-ingress & kube-lego, but also the core application chart
-`binderhub`. Everything is version pinned here.
-
-### Configuration values
-
-The following files fully capture the state of the deployment for staging:
-
-1. `mybinder/values.yaml` - Common configuration values between prod &
-   staging
-2. `secret/config/staging.yaml` - Secret values specific to the staging
-   deployment
-3. `config/staging.yaml` - Non-secret values specific to the staging
-   deployment
-
-The following files fully capture the state of the production deployment:
-
-1. `mybinder/values.yaml` - Common configuration values between prod &
-   staging
-2. `secret/config/prod.yaml` - Secret values specific to the production
-   deployment
-3. `config/prod.yaml` - Non-secret values specific to the production
-   deployment
-
-**Important**: For maintainability and consistency, we try to keep the contents
-of `staging.yaml` and `prod.yaml` super minimal - they should be as close
-to each other as possible. We want all common config in `values.yaml` so testing
-on staging gives us confidence it will work on prod. We also never share the same
-secrets between staging & prod for security boundary reasons.
-
-### MyBinder.org specific extra software
-
-We sometimes want to run additional software for the mybinder deployment that
-does not already have a chart, or would be too cumbersome to use with a chart.
-For those cases, we can create kubernetes objects directly from the `mybinder`
-meta chart. You can see an example of this under `mybinder/templates/redirector`
-that is used to set up a simple nginx based HTTP redirector.
-
-### Related repositories
-
-Related repositories used by the [mybinder.org][] service are:
-
-1. [binderhub][]
-
-   This contains the [binderhub][] code (UI & hub management) & helm chart.
-   To change the UI / UX or hub management aspects of [mybinder.org][],
-   go to [binderhub][].
-
-2. [repo2docker][]
-
-   This is used to do the actual building of git repositories into docker
-   images, and can be used standalone too. If you want to change how a git
-   repository is converted into a docker image to be run for the user,
-   go to [repo2docker][].
-
-
 [mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
 [prod]: https://mybinder.org
 [mybinder.org]: https://mybinder.org
@@ -262,5 +164,4 @@ Related repositories used by the [mybinder.org][] service are:
 [BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
 [repo2docker]: http://github.com/jupyter/repo2docker
 [Deploying a change]: #deploying-a-change
-[Site Reliability Guide for mybinder.org]: http://mybinder-sre.readthedocs.io/en/latest/
-[rtd-badge]: http://readthedocs.org/projects/mybinder-sre/badge/?version=latest
+[Site Reliability Guide for mybinder.org]: http://mybinder-sre.readthedocs.io
