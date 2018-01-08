@@ -201,6 +201,9 @@ grafana:
       url = https://grafana.net
 
 prometheus:
+  nodeExporter:
+    updateStrategy:
+      type: RollingUpdate
   alertmanager:
     enabled: false
   pushgateway:
