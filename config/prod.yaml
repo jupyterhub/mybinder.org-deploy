@@ -19,6 +19,7 @@ binderhub:
             - hub.mybinder.org
 
   googleAnalyticsCode: "UA-101904940-1"
+  googleAnalyticsDomain: "mybinder.org"
 
 grafana:
   server:
