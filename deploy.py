@@ -17,6 +17,7 @@ def deploy(release):
         release,
         'mybinder',
         '--wait',
+        '--timeout', '600',
         '-f', os.path.join('config', release + '.yaml'),
         '-f', os.path.join('secrets', 'config', release + '.yaml')
     ]
