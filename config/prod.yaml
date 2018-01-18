@@ -45,6 +45,7 @@ nginx-ingress:
   controller:
     service:
       loadBalancerIP: 35.202.202.188
+    replicaCount: 10
 
 static:
   ingress:
