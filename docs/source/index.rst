@@ -20,6 +20,7 @@ Site Reliability Guide for mybinder.org
 
    incident-reports/incident_reports_toc
    incident-reports/2018-01-18-ssl-outdated.md
+   incident-reports/2018-01-17-ubuntu-upgrade
    incident-reports/2018-01-04-failed-staging-deploy.md
    incident-reports/2017-11-30-oom-proxy
    incident-reports/2017-10-17-cluster-full
