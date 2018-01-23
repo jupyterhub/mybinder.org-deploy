@@ -53,15 +53,15 @@ Tweet + Email listserv announcing bump to Artful.
 ### Process
 
 * Note that Ubuntu non-LTS is on a ~9 month cycle, not the 1 year cycle we assumed.
-* Keep bumping Ubuntu versions until we hit LTS, then stop
-* Subscribe to the ubuntu-announce mailing list
+  Keep bumping Ubuntu versions until we hit LTS, then stop [Issue](https://github.com/jupyter/repo2docker/issues/198)
+* Subscribe to the ubuntu-announce mailing list [Issue](https://github.com/jupyterhub/mybinder.org-deploy/issues/296)
 
 ### repo2docker
-* Separate python version from distro version
-* Allow users to pin distros (with an apt.yaml)
+* Separate python version from distro version [Issue](https://github.com/jupyter/repo2docker/issues/185)
+* Allow users to pin distros (with an apt.yaml) [PR](https://github.com/jupyter/repo2docker/pull/148)
 
 ### Misc
-* Keep our own apt mirror
+* Keep our own apt mirror [Issue](https://github.com/jupyterhub/mybinder.org-deploy/issues/295)
 
 ### mybinder.org-deploy
-* Continuous tests should be run against binder, to tell us when things fail
+* Continuous tests should be run against binder, to tell us when things fail [Issue](https://github.com/jupyterhub/mybinder.org-deploy/issues/19)
