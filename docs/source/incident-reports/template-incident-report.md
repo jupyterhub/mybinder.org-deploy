@@ -4,7 +4,6 @@
 
 ## Summary
 
-
 ## Timeline
 
 All times in PST
@@ -31,3 +30,5 @@ Steps for future.
 ### {{ action topic or project }}
 
 Steps for future.
+
+## Supporting information, issues, and PRs
