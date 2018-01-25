@@ -163,6 +163,7 @@ grafana:
       annotations:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
+    installPlugins: mtanda-histogram-panel
   serverConfigFile:
     grafana.ini: |
       ; instance_name = ${HOSTNAME}
