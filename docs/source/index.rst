@@ -15,6 +15,12 @@ Site Reliability Guide for mybinder.org
    deployment_fundamentals.md
 
 .. toctree::
+    :maxdepth: 2
+    :caption: Operation
+
+    command_snippets.md
+
+.. toctree::
    :maxdepth: 2
    :caption: Incidents
 
