@@ -46,6 +46,6 @@ python3 ./deploy.py deploy ${TARGET}
 sleep 10
 
 # Run some tests to make sure we really did pass!
-py.test --binder-url=${BINDER_URL} --hub-url=${HUB_URL}
+py.test -s --binder-url=${BINDER_URL} --hub-url=${HUB_URL}
 
 echo "Done!"
