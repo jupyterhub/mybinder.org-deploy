@@ -2,7 +2,8 @@ binderhub:
   extraConfig:
     bans: |
         c.GitHubRepoProvider.banned_specs = [
-          '^navoshta/juno-demo-notebooks.*'
+          '^ds-100/textbook.*',
+          '^samlau95/nbinteract-image.*'
         ]
   service:
     type: ClusterIP
