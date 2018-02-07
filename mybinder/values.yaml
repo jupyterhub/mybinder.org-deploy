@@ -1,10 +1,4 @@
 binderhub:
-  extraConfig:
-    bans: |
-        c.GitHubRepoProvider.banned_specs = [
-          '^ds-100/textbook.*',
-          '^samlau95/nbinteract-image.*'
-        ]
   service:
     type: ClusterIP
 
@@ -86,29 +80,6 @@ binderhub:
             value: 10.0.0.0/8
           - name: EGRESS_BANDWIDTH
             value: 1mbit
-        securityContext:
-          # capabilities.add seems to be disabled
-          # by the `runAsUser: 1000` in the pod-level securityContext
-          # unless we explicitly run as root
-          runAsUser: 0
-          capabilities:
-            add:
-            - NET_ADMIN
-      - name: block-metadata
-        image: minrk/tc-init:0.0.4
-        # Block access to GCE Metadata Service from user pods!
-        command:
-          - iptables
-          - -A
-          - OUTPUT
-          - -p
-          - tcp
-          - --dport
-          - "80"
-          - -d
-          - 169.254.169.254
-          - -j
-          - DROP
         securityContext:
           # capabilities.add seems to be disabled
           # by the `runAsUser: 1000` in the pod-level securityContext
