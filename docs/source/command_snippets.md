@@ -68,10 +68,10 @@ have issues where some pods get 'stuck' and never actually
 die, sometimes forever. This causes nodes to not be
 killed automatically.
 
-You can use the 'kill-old-user-pods.py' script to kill them. You can run it with:
+You can use the 'old-user-pods.py' script to lis/kill these pods. You can run it with:
 
 ```bash
-./scripts/kill-old-user-pods.py <number-of-hours> --delete
+./scripts/old-user-pods.py <number-of-hours> --delete
 ```
 
 If you do not pass --delete, it will simply print all the matching pods.
