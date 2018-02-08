@@ -58,3 +58,21 @@ be run by changing your directory to the root of this repository, then running
 ```
 python scripts/delete_pods_matching_name.py <your-query> --delete
 ```
+
+## Delete all user pods older than a given number of hours
+
+We use the Kubernetes cluster autoscaler, which
+removes nodes from the kubernetes cluster when they have
+been 'empty' for more than 10 minutes However, we
+have issues where some pods get 'stuck' and never actually
+die, sometimes forever. This causes nodes to not be
+killed automatically.
+
+You can use the 'old-user-pods.py' script to lis/kill these pods. You can run it with:
+
+```bash
+./scripts/old-user-pods.py <number-of-hours> --delete
+```
+
+If you do not pass --delete, it will simply print all the matching pods.
+You will need the `kubernetes` python library installed to use this script!
