@@ -7,3 +7,5 @@ mybinder/charts
 mybinder/requirements.lock
 
 .ipynb_checkpoints
+
+docs/_build

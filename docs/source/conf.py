@@ -39,6 +39,15 @@ source_parsers = {
     '.md': 'recommonmark.parser.CommonMarkParser',
 }
 
+# Use autostructify so we can get some rST in the markdown
+from recommonmark.transform import AutoStructify
+def setup(app):
+    app.add_config_value('recommonmark_config', {
+      'enable_eval_rst': True
+    }, True)
+    app.add_transform(AutoStructify)
+
+
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
