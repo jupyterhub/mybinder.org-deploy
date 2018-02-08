@@ -44,3 +44,17 @@ pods. The `--no-headers` asks kubectl to not print column titles as a header.
 The `awk` command selects the 7th column in the output (which is the node name).
 The sort / uniq / sort combination helps print the number of pods per each node in
 sorted order.
+
+## Delete all pods that match a given name
+
+Sometimes you want to delete all the pods for a given repository. The easiest
+way to do this is to name-match the part of the pod name that corresponds to
+the repo (since there will be a bunch of random characters as well).
+
+Here's a python script that will match pods with a given name and delete them
+(you need to uncomment the line to actually do the deleting). The script can
+be run by changing your directory to the root of this repository, then running
+
+```
+python scripts/delete_pods_matching_name.py <your-query> --delete
+```
