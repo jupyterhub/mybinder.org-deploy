@@ -95,7 +95,7 @@ binderhub:
             add:
             - NET_ADMIN
       schedulerStrategy: pack
-  repo2dockerImage: jupyter/repo2docker:v0.5
+  repo2dockerImage: jupyter/repo2docker:687788f
 
 playground:
   image:
