@@ -29,3 +29,18 @@ most likely give you an error about certain pods running on the node that
 prevent it from draining the node. It is Ok (and expected) to use the suggested
 flags to force the draining: `kubectl drain <nodename> --ignore-daemonsets --force --delete-local-data`. The autoscaler should now remove the  node for you.
 This can take 10-15minutes.
+
+## Find out how many user pods are running on various nodes
+
+You can find the number of user pods on various nodes with the following command:
+
+```bash
+kubectl --namespace=prod get pod --no-headers -o wide -l component=singleuser-server | awk '{ print $7; }' | sort | uniq -c | sort -n
+```
+
+The `-o wide` lists extra information per pod, including the name of the node it is
+running on. The `-l component=singleuser-server` makes it only show you user server
+pods. The `--no-headers` asks kubectl to not print column titles as a header.
+The `awk` command selects the 7th column in the output (which is the node name).
+The sort / uniq / sort combination helps print the number of pods per each node in
+sorted order.
