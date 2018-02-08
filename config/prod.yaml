@@ -33,6 +33,11 @@ grafana:
 
 prometheus:
   server:
+    persistentVolume:
+      # Use a large SSD Volume in production
+      size: 2000Gi
+      storageClass: ssd
+    retention: 60d
     ingress:
         hosts:
           - prometheus.mybinder.org
