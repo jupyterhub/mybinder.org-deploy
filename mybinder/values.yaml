@@ -61,6 +61,15 @@ binderhub:
       service:
         type: ClusterIP
       chp:
+        cmd:
+          - configurable-http-proxy
+          - --ip=0.0.0.0
+          - --port=8000
+          - --api-ip=0.0.0.0
+          - --api-port=8001
+          - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
+          - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
+          - --log-level=error
         resources:
           requests:
             memory: 1Gi
