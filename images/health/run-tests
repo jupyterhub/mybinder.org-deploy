@@ -1,0 +1,28 @@
+#!/bin/bash
+
+set -euo pipefail
+
+function notify_success() {
+    # TODO update status page
+    echo "success!"
+}
+
+function notify_failure() {
+    # TODO update status page, trigger notifications
+    echo "failure!"
+}
+set -x
+
+while true; do
+    if (pytest --binder-url=${BINDER_URL} \
+               --hub-url=${HUB_URL} \
+               -vx /srv/tests 2>&1 \
+        | tee /tmp/last-output
+    ); then
+        notify_success
+    else
+        notify_failure
+    fi
+    sleep ${TEST_INTERVAL}
+done
+
