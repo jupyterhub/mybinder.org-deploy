@@ -25,6 +25,7 @@ Site Reliability Guide for mybinder.org
    :caption: Incidents
 
    incident-reports/incident_reports_toc
+   incident-reports/2018-01-18-reddit-hug.md
    incident-reports/2018-01-18-ssl-outdated.md
    incident-reports/2018-01-17-ubuntu-upgrade
    incident-reports/2018-01-04-failed-staging-deploy.md
