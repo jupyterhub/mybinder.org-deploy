@@ -36,13 +36,11 @@ deploy:
   script: ./travis/travis-script.bash
   on:
     branch:
-      - staging
-      - prod
+      - master
 
 branches:
   only:
-    - staging
-    - prod
+    - master
 
 notifications:
   webhooks:
