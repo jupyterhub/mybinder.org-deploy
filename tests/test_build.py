@@ -76,8 +76,12 @@ def test_build_binder(binder_url):
             # This means we never got a 'Ready'!
             assert False
 
-        r = requests.get(notebook_url + '/api', headers={
+        headers = {
             'Authorization': f'token {token}'
-        })
+        }
+        r = requests.get(notebook_url + '/api', headers=headers)
         assert r.status_code == 200
         assert 'version' in r.json()
+
+        r = requests.post(notebook_url + '/api/shutdown', headers=headers)
+        assert r.status_code == 200
