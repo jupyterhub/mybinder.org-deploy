@@ -1,0 +1,4 @@
+pytest
+pytest-timeout
+pyyaml
+requests
