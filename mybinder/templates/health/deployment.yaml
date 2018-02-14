@@ -1,0 +1,38 @@
+{% if }
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: binder-health
+spec:
+  selector:
+    matchLabels:
+      app: binder-health
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/health/secret.yaml") . | sha256sum }}
+      labels:
+      app: binder-health
+    spec:
+      volumes:
+        - name: secret
+          secret:
+            defaultMode: 400
+            name: binder-health-secret
+      containers:
+      - name: health
+        imagePullPolicy: Always
+        image: minrk/binder-health
+        volumeMounts:
+          - mountPath: /secrets
+            name: secret
+            readOnly: true
+        env:
+          - name: TEST_INTERVAL
+            value: .Values.health.interval
+          - name: HUB_URL
+            value: .Values.binderhub.hub.url
+          - name: BINDER_URL
+            # is there a better source of the binder URL?
+            value: .Values.binderhub.ingress.hosts[0]
