@@ -4,8 +4,6 @@ set -euo pipefail
 # Keeping this here rather than make travis.yml too complex
 # We deploy to staging, run some automated tests, and if they pass we deploy to production!
 
-TARGET="${TRAVIS_BRANCH}"
-
 function deploy {
     KIND="${1}"
     CLUSTER="${2}"
@@ -25,15 +23,15 @@ function deploy {
 
 
     # Authenticate to gcloud & get it to authenticate to kubectl!
-    gcloud auth activate-service-account --key-file=secrets/gke-auth-key-${TARGET}.json
-    gcloud container clusters get-credentials ${CLUSTER} --zone=us-central1-a --project=binder-${TARGET}
+    gcloud auth activate-service-account --key-file=secrets/gke-auth-key-${KIND}.json
+    gcloud container clusters get-credentials ${CLUSTER} --zone=us-central1-a --project=binder-${KIND}
 
 
     # Make sure we have our helm repo!
     helm init --client-only
     helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
 
-    python3 ./deploy.py deploy ${TARGET}
+    python3 ./deploy.py deploy ${KIND}
 
     # FIXME: add readiness probe so that deploy doesn't finish before
     # hub is available.
