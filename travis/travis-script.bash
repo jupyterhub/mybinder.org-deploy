@@ -32,7 +32,7 @@ function deploy {
     python3 ./deploy.py deploy ${KIND}
 
     # Run some tests to make sure we really did pass!
-    py.test -s --binder-url=${BINDER_URL} --hub-url=${HUB_URL}
+    py.test --binder-url=${BINDER_URL} --hub-url=${HUB_URL}
 
     echo "Done deploying to ${KIND}!"
 }
