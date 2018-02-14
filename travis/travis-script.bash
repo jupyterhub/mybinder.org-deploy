@@ -4,6 +4,15 @@ set -euo pipefail
 # Keeping this here rather than make travis.yml too complex
 # We deploy to staging, run some automated tests, and if they pass we deploy to production!
 
+# Unlock our secret files!
+# Travis allows encrypting only one file per repo (boo) so we use it to
+# encrypt our git-crypt key
+openssl aes-256-cbc -K $encrypted_510e3970077d_key -iv $encrypted_510e3970077d_iv -in travis/crypt-key.enc -out travis/crypt-key -d
+git-crypt unlock travis/crypt-key
+# ensure private keys have private permissions,
+# otherwise ssh will ignore them
+chmod 0600 secrets/*key
+
 function deploy {
     KIND="${1}"
     CLUSTER="${2}"
@@ -12,20 +21,9 @@ function deploy {
 
     echo "Starting deploy to ${KIND}..."
 
-    # Unlock our secret files!
-    # Travis allows encrypting only one file per repo (boo) so we use it to
-    # encrypt our git-crypt key
-    openssl aes-256-cbc -K $encrypted_510e3970077d_key -iv $encrypted_510e3970077d_iv -in travis/crypt-key.enc -out travis/crypt-key -d
-    git-crypt unlock travis/crypt-key
-    # ensure private keys have private permissions,
-    # otherwise ssh will ignore them
-    chmod 0600 secrets/*key
-
-
     # Authenticate to gcloud & get it to authenticate to kubectl!
     gcloud auth activate-service-account --key-file=secrets/gke-auth-key-${KIND}.json
     gcloud container clusters get-credentials ${CLUSTER} --zone=us-central1-a --project=binder-${KIND}
-
 
     # Make sure we have our helm repo!
     helm init --client-only
