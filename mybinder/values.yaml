@@ -3,7 +3,6 @@ binderhub:
     bans: |
         c.GitHubRepoProvider.banned_specs = [
           '^ds-100/textbook.*',
-          '^samlau95/nbinteract-image.*'
         ]
   service:
     type: ClusterIP
