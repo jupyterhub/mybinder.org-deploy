@@ -1,6 +1,6 @@
 # mybinder.org-deploy
 
-Deployment: [![Staging Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=master)](https://travis-ci.org/jupyterhub/mybinder.org-deploy)
+Deployment: [![Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=master)](https://travis-ci.org/jupyterhub/mybinder.org-deploy)
 
 Deployment, configuration, and Site Reliability documentation files for the
 public [mybinder.org][] service.
@@ -12,19 +12,19 @@ If you wish to deploy your own Binder instance, please **do not use** these file
 Instead, you should review the [BinderHub documentation][] and the
 [`jupyterhub/binderhub`][] repo to set up your deployment.
 
-## Site Reliability Guide [![Documentation Status](http://readthedocs.org/projects/mybinder-sre/badge/?version=staging)](http://mybinder-sre.readthedocs.io/en/staging/?badge=staging)
+## Site Reliability Guide [![Documentation Status](http://readthedocs.org/projects/mybinder-sre/badge/?version=latest)](http://mybinder-sre.readthedocs.io/en/latest/?badge=latest)
 
 [Site Reliability Guide for mybinder.org][] includes:
-- our [deployment policy](http://mybinder-sre.readthedocs.io/en/staging/deployment_policy.html)
-- [production environment](http://mybinder-sre.readthedocs.io/en/staging/production_environment.html) and [configuration](http://mybinder-sre.readthedocs.io/en/staging/production_environment.html#configuration-values) information
-- [incident reports](http://mybinder-sre.readthedocs.io/en/staging/incident-reports/incident_reports_toc.html) and a [new incident template](https://github.com/jupyterhub/mybinder.org-deploy/blob/staging/docs/source/incident-reports/template-incident-report.md)
+- our [deployment policy](http://mybinder-sre.readthedocs.io/en/latest/deployment_policy.html)
+- [production environment](http://mybinder-sre.readthedocs.io/en/latest/production_environment.html) and [configuration](http://mybinder-sre.readthedocs.io/en/latest/production_environment.html#configuration-values) information
+- [incident reports](http://mybinder-sre.readthedocs.io/en/latest/incident-reports/incident_reports_toc.html) and a [new incident template](https://github.com/jupyterhub/mybinder.org-deploy/blob/master/docs/source/incident-reports/template-incident-report.md)
 
 ## Key Links
 
 |             | Staging | Production |
 | ----------- | ------- | ---------- |
 | Site     |[staging.mybinder.org](https://staging.mybinder.org) | [mybinder.org](https://mybinder.org) |
-| TravisCI Tests | [![Staging Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=staging)](https://travis-ci.org/jupyterhub/mybinder.org-deploy) | [![Production Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=prod)](https://travis-ci.org/jupyterhub/mybinder.org-deploy/branches) |
+| TravisCI Deployment | [![Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=master)](https://travis-ci.org/jupyterhub/mybinder.org-deploy)
 | Deployment checklist | staging | prod |
 | Deployment docs | [staging](#deploy-to-staging) | [prod](#deploy-to-production) |
 | Monitoring | staging | [prod](https://grafana.mybinder.org/dashboard/db/kubernetes-cluster-monitoring-binder-prod?refresh=10s&orgId=1) |
@@ -36,9 +36,9 @@ Instead, you should review the [BinderHub documentation][] and the
 
 ## Deploying a change
 
-Deploying a change follows a two-step process. First, you'll deploy to
-the `staging` branch of the repository. Second, if all looks well, you'll
-deploy to the `prod` (production) branch of the repository.
+Deploying a change involves making a PR
+with your desired change and merging it to
+master.
 
 ### Deploy to Staging
 
@@ -47,7 +47,7 @@ deploy to the `prod` (production) branch of the repository.
 3. Review, accept, and merge this PR. This will make Travis deploy the changes
    to [staging.mybinder.org][], run tests in the `tests/` directory against it.
 4. If the tests succeed, the change will be deployed to [mybinder.org][].
-5. If the tests fail, the chane will *not* be deployed to [mybinder.org][].
+5. If the tests fail, the change will *not* be deployed to [mybinder.org][].
    The deployer would then need to investigate why it failed, and if they can
    not figure out a cause in about 10 minutes, revert the change.
    Ideally, the build should not remain broken for more than ten minutes.
