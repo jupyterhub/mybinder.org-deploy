@@ -31,11 +31,6 @@ function deploy {
 
     python3 ./deploy.py deploy ${KIND}
 
-    # FIXME: add readiness probe so that deploy doesn't finish before
-    # hub is available.
-    # For now, sleep to give deploy a chance to warm up.
-    sleep 10
-
     # Run some tests to make sure we really did pass!
     py.test -s --binder-url=${BINDER_URL} --hub-url=${HUB_URL}
 
