@@ -143,6 +143,95 @@ recommend running the standard Kubernetes debugging commands with the
 kubectl --namespace=<my-namespace> logs <kube-lego-object>
 ```
 
+
+## Secrets
+
+Since we use this repo for deployment, it needs credentials for things like our
+google cloud account, and secret tokens for our helm charts. Since this is a
+public repo, we don't want these credentials to be readable in public! To solve
+this, we use [git-crypt][] to store *encrypted* versions of files that should
+be kept secret. These files are in the `secrets` folder. `git-crypt` uses a
+shared secret to encrypt and decrypt files. For automated deployments, Travis
+has access to the git-crypt secret in an encrypted environment variable. If you
+don't need to edit the secret files, then you don't need the git-crypt secret,
+or to see the contents of the secret files. When you clone, you will just have
+the opaque, encrypted files. If you need access to view or edit the encrypted
+files, you will need the git-crypt secret. See below for a procedure to share
+the secret. Once you have unlocked the repo with `git-crypt`, you will be able
+to view and edit the encrypted files as if they were any other file. `git-
+crypt` handles the encryption and decryption transparently via git filters.
+
+
+### Sharing secrets
+
+Sharing secrets is tricky! There is a handy tool called [ssh-vault][] which
+allows you to securely share information via a mechanism we all have available
+here: ssh public keys on GitHub!
+
+To securely share the git-crypt key, both parties should have git-crypt and
+ssh-vault. On mac, these are both available from homebrew:
+
+    brew install git-crypt ssh-vault
+
+To encrypt the key with ssh-vault, pipe the key file through `ssh-vault
+create`. Assuming you are in a mybinder.org-deploy directory that is already
+setup with git-crypt:
+
+```bash
+[sender] $ cat .git/git-crypt/keys/default | ssh-vault -u receiver create
+```
+
+where `receiver` is the recipient's GitHub username, e.g. `willing` or
+`choldgraf`.
+
+The result should look something like this:
+
+```
+SSH-VAULT;AES256;30:40:9b:bd:16:26:f6:d2:1d:85:7a:dc:63:c9:e6:ae
+LRCe3CrLL/isMhYVvA5gxZFCLCNyz64EepesTyKYklcMqUBZ1DML1rIXe4KBSudG
+D9rbKP1PILGVaTHU2D2aSNJQUGNt3q+e3G8f5gpPJHvZeM9+mXKW4I3C8HfjU4sD
+EKsm38ShYRAAtO5uTOToSd6j2vdakwEyO2YT7w2PTXiOL0VVeti7i9u+ENv1sxrg
+oyAcN7tYA8Q/k3+zRy6ISJD8uEa/s9Igf99V0o7ocPpjON4oGsaLShuA8w0d3D+Y
+kk0f1iBZ1k/0QoqPTL8JXjLh9Ba6o8TH6vi8rkZlmBrjDEg5cVlko/HadSnskQ/0
+gW5CHn6XP0pIex59V9Tpiw==;dPQUIVgskPrYec3QqRqCrUkoRq1Ig5yOHihQJaS
+EoTGNMwI=
+```
+
+The sender can deliver this encrypted copy to the receiver, via less secure
+transport mechanism, such as a gitter private message, SMS, email, etc.
+
+The receiver can now decrypt the message with ssh-vault and use it to unlock
+the mybinder.org-deploy repo. Assuming the shared message has been saved to a
+file `encrypted-key`:
+
+```bash
+[receiver] $ cat encrypted-key | ssh-vault view | git-crypt unlock -
+# remove the encrypted temporary file
+[receiver] $ rm encrypted-key
+```
+
+On a mac, you can use `pbcopy` and `pbpaste` to use the clipboard instead of
+creating files:
+
+```bash
+[sender] $ cat .git/git-crypt/keys/default | ssh-vault -u receiver create | pbcopy
+# the encrypted message is in sender's clipboard
+# deliver it to the receiver, and once it is in their clipboard:
+[receiver] $ pbpaste | ssh-vault view | git-crypt unlock -
+```
+
+
+### Who has the keys?
+
+People who currently have the git-crypt secret include:
+
+- @minrk
+- @yuvipanda
+- *add yourself here if you have it*
+
+Contact one of them if you need access to the git-crypt key.
+
+
 [mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
 [prod]: https://mybinder.org
 [mybinder.org]: https://mybinder.org
@@ -153,3 +242,5 @@ kubectl --namespace=<my-namespace> logs <kube-lego-object>
 [`jupyterhub/binderhub`]: https://github.com/jupyterhub/binderhub
 [BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
 [repo2docker]: https://github.com/jupyter/repo2docker
+[git-crypt]: https://github.com/AGWA/git-crypt
+[ssh-vault]: https://github.com/ssh-vault/ssh-vault
