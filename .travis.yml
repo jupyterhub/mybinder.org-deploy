@@ -16,6 +16,8 @@ before_deploy:
 - |
   # Install gcloud SDK!
   curl -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-173.0.0-linux-x86_64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
+  # Test if this fails
+  vaasgasdg
 - |
   # Install Kubectl
   curl -L https://storage.googleapis.com/kubernetes-release/release/v1.9.0/bin/linux/amd64/kubectl > ${HOME}/bin/kubectl
