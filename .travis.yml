@@ -11,13 +11,14 @@ install:
 script:
  - true
 
+# We are using before_deploy instead of script or deploy
+# since before_deploy gives us nice, folded log views,
+# which neither script nor deploy seems to!
 before_deploy:
 - mkdir -p ${HOME}/bin
 - |
   # Install gcloud SDK!
   curl -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-173.0.0-linux-x86_64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
-  # Test if this fails
-  vaasgasdg
 - |
   # Install Kubectl
   curl -L https://storage.googleapis.com/kubernetes-release/release/v1.9.0/bin/linux/amd64/kubectl > ${HOME}/bin/kubectl
@@ -46,24 +47,26 @@ before_deploy:
   git-crypt unlock travis/crypt-key
   chmod 0600 secrets/*key
 - |
-  # Deploy to staging & verify it works
-  python ./deploy.py staging staging && \
+  # Deploy to staging
+  python ./deploy.py staging staging
+- |
+  # Verify staging works
   py.test --binder-url=https://staging.mybinder.org --hub-url=https://hub.staging.mybinder.org
+- |
+  # Deploy to production
+  python ./deploy.py prod prod-a
+- |
+  # Verify production works
+  py.test --binder-url=https://mybinder.org --hub-url=https://hub.mybinder.org
 
 env:
   global:
     - CLOUDSDK_CORE_DISABLE_PROMPTS=1
     - PATH=${HOME}/google-cloud-sdk/bin:${HOME}/bin:${PATH}
 
-# HACK: This is in deploy and not script simply because travis will *not*
-# cancel subsequent steps if an earlier step fails!!!! So we do not want
-# to deploy to prod if staging failed, so it's in deploy (which is not run
-# if script fails) rather than as script.
-# FIXME: Maybe move to CircleCI?
 deploy:
   provider: script
-  script: python ./deploy.py prod prod-a && py.test --binder-url=https://mybinder.org --hub-url=https://hub.mybinder.org
-  skip_cleanup: true
+  script: /bin/true
   on:
     branch:
       - master
