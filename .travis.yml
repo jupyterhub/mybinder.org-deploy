@@ -6,7 +6,7 @@ python:
 cache: pip
 
 install:
-  - pip install pyyaml pytest pytest-timeout requests
+  - pip install pyyaml pytest pytest-timeout pytest-xdist requests
 
 script:
  - true
@@ -51,13 +51,13 @@ before_deploy:
   python ./deploy.py staging staging
 - |
   # Verify staging works
-  py.test --binder-url=https://staging.mybinder.org --hub-url=https://hub.staging.mybinder.org
+  py.test -n 2 --binder-url=https://staging.mybinder.org --hub-url=https://hub.staging.mybinder.org
 - |
   # Deploy to production
   python ./deploy.py prod prod-a
 - |
   # Verify production works
-  py.test --binder-url=https://mybinder.org --hub-url=https://hub.mybinder.org
+  py.test -n 2--binder-url=https://mybinder.org --hub-url=https://hub.mybinder.org
 
 env:
   global:
