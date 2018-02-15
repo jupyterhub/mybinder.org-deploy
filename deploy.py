@@ -4,8 +4,13 @@ import subprocess
 import yaml
 import os
 
+# Color codes for colored output!
+BOLD = subprocess.check_output(['tput', 'bold']).decode()
+GREEN = subprocess.check_output(['tput', 'setaf', '2']).decode()
+NC = subprocess.check_output(['tput', 'sgr0']).decode()
 
 def deploy(release):
+    print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC)
     helm = [
         'helm', 'upgrade', '--install',
         '--namespace', release,
@@ -17,10 +22,16 @@ def deploy(release):
         '-f', os.path.join('secrets', 'config', release + '.yaml')
     ]
 
-    subprocess.check_call(helm)
+    try:
+        subprocess.check_output(helm)
+    except subprocess.CalledProcessError as e:
+        print("FAILED: Helm upgrade failed!")
+        print(e.output)
+        raise
+    print(BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC)
 
     # Explicitly wait for all deployments and daemonsets to be fully rolled out
-
+    print(BOLD + GREEN + f"Waiting for all deployments and daemonsets in {release} to be ready" + NC)
     deployments = subprocess.check_output([
         'kubectl',
         '--namespace', release,
@@ -45,15 +56,7 @@ def deploy(release):
 
 def main():
     argparser = argparse.ArgumentParser()
-    argparser.add_argument(
-        '--user-image-spec',
-        default='berkeleydsep/datahub-user'
-    )
-    subparsers = argparser.add_subparsers(dest='action')
-
-    deploy_parser = subparsers.add_parser('deploy', description='Deploy with helm')
-    deploy_parser.add_argument('release', default='staging')
-
+    argparser.add_argument('release')
 
     args = argparser.parse_args()
 
