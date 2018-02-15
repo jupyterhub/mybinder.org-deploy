@@ -226,6 +226,7 @@ prometheus:
 
 health:
   enabled: true
+  gitterWebHook:
   interval: 300
   sshKey: ''
 

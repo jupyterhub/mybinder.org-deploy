@@ -2,26 +2,57 @@
 
 set -euo pipefail
 
-function notify_success() {
-    # TODO update status page
-    echo "success!"
-}
 
-function notify_failure() {
-    # TODO update status page, trigger notifications
-    echo "failure!"
-}
-set -x
+LAST_STATUS=""
+if [[ ! -z "$GITTER_WEBHOOK" ]]; then
+    function notify_success() {
+        if [[ "$LAST_STATUS" == "failed" ]]; then
+            ok="back to normal"
+        else
+            ok="ok"
+        fi
+        echo "notifying gitter of success"
+        curl -d "message=healthcheck for $BINDER_URL is $ok!" "$GITTER_WEBHOOK"
+    }
+    function notify_failure() {
+        echo "notifying gitter of failure"
+        message=$(cat <<EOF
+healhcheck for $BINDER_URL failed!
+
+Test output:
+
+\`\`\`
+$(cat /tmp/last-output)
+\`\`\`
+EOF
+)
+        curl -d level=error -d "message=$message" "$GITTER_WEBHOOK"
+    }
+
+else
+    alias notify_success="echo success"
+    alias notify_failure="echo failure"
+fi
+
+LAST_STATUS=""
+TEST_CMD="pytest --binder-url=${BINDER_URL}
+                --hub-url=${HUB_URL}
+                -vx /srv/tests"
 
 while true; do
-    if (pytest --binder-url=${BINDER_URL} \
-               --hub-url=${HUB_URL} \
-               -vx /srv/tests 2>&1 \
-        | tee /tmp/last-output
-    ); then
-        notify_success
+    date
+    echo "+ $TEST_CMD"
+    if $TEST_CMD 2>&1 | tee /tmp/last-output; then
+        if [[ "$LAST_STATUS" != "success" ]]; then
+            notify_success
+        fi
+        LAST_STATUS=success
     else
+        # unconditionally notify on failure!
         notify_failure
+        # if [[ "$LAST_STATUS" != "failure" ]]; then
+        # fi
+        LAST_STATUS=failure
     fi
     sleep ${TEST_INTERVAL}
 done
