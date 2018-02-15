@@ -57,7 +57,7 @@ before_deploy:
   python ./deploy.py prod prod-a
 - |
   # Verify production works
-  py.test -n 2--binder-url=https://mybinder.org --hub-url=https://hub.mybinder.org
+  py.test -n 2 --binder-url=https://mybinder.org --hub-url=https://hub.mybinder.org
 
 env:
   global:
