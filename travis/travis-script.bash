@@ -45,7 +45,7 @@ function deploy {
 
     echo -e "${BOLDREVERSEGREEN}SUCCESS: Credentials for deploying to ${KIND} activated${NC}"
 
-    python3 ./deploy.py deploy ${KIND}
+    python3 ./deploy.py ${KIND}
 
     echo -e "${BOLDREVERSEGREEN}SUCCESS: Deployment push to ${KIND} completed${NC}"
     echo -e "${BOLDREVERSEGREEN}Running tests to validate deployment...${NC}"
