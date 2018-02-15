@@ -9,9 +9,6 @@ install:
   - pip install pyyaml pytest pytest-timeout requests
 
 script:
-  - true
-
-before_deploy:
 - mkdir -p ${HOME}/bin
 - |
   # Install gcloud SDK!
@@ -44,27 +41,24 @@ before_deploy:
   git-crypt unlock travis/crypt-key
   chmod 0600 secrets/*key
 - |
-  # Deploy to staging
-  python ./deploy.py staging staging
-- |
-  # Verify staging deployment
+  # Deploy to staging & verify it works
+  python ./deploy.py staging staging && \
   py.test --binder-url=https://staging.mybinder.org --hub-url=https://hub.staging.mybinder.org
-- |
-  # Deploy to prod
-  python ./deploy.py prod prod-a
-- |
-  # Verify prod deployment
-  py.test --binder-url=https://mybinder.org --hub-url=https://hub.mybinder.org
 
 env:
   global:
     - CLOUDSDK_CORE_DISABLE_PROMPTS=1
     - PATH=${HOME}/google-cloud-sdk/bin:${HOME}/bin:${PATH}
 
+# HACK: This is in deploy and not script simply because travis will *not*
+# cancel subsequent steps if an earlier step fails!!!! So we do not want
+# to deploy to prod if staging failed, so it's in deploy (which is not run
+# if script fails) rather than as script.
+# FIXME: Maybe move to CircleCI?
 deploy:
   provider: script
-  skip_cleanup: true
-  script: true
+  script: python ./deploy.py prod prod-a && py.test --binder-url=https://mybinder.org --hub-url=https://hub.mybinder.org
+  skip_cleanup:
   on:
     branch:
       - master
