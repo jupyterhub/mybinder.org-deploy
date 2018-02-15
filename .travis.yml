@@ -45,6 +45,8 @@ env:
 
 deploy:
   provider: script
+  # We create files in pre_deploy that we need in deploy!
+  skip_cleanup: true
   script: ./travis/travis-script.bash
   on:
     branch:
