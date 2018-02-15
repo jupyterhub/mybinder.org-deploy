@@ -10,7 +10,7 @@ GREEN = subprocess.check_output(['tput', 'setaf', '2']).decode()
 NC = subprocess.check_output(['tput', 'sgr0']).decode()
 
 def deploy(release):
-    print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC)
+    print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
     helm = [
         'helm', 'upgrade', '--install',
         '--namespace', release,
@@ -23,10 +23,10 @@ def deploy(release):
     ]
 
     subprocess.check_call(helm)
-    print(BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC)
+    print(BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC, flush=True)
 
     # Explicitly wait for all deployments and daemonsets to be fully rolled out
-    print(BOLD + GREEN + f"Waiting for all deployments and daemonsets in {release} to be ready" + NC)
+    print(BOLD + GREEN + f"Waiting for all deployments and daemonsets in {release} to be ready" + NC, flush=True)
     deployments = subprocess.check_output([
         'kubectl',
         '--namespace', release,
