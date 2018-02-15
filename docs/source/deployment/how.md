@@ -3,32 +3,14 @@
 This document explains **how** to deploy a change to mybinder.org.
 For information on what exactly a deployment does, see [what](what.html).
 
-## Deploying a change
-
-Deploying a change involves making a PR with your desired change and merging it to
-master.
-
-1. Make the [changes](#upgrading-dependencies-for-the-mybinderorg-deployment) on your fork.
-2. Make a PR to the `master` branch with the changes you want.
-3. Review, accept, and merge this PR. This will make Travis deploy the changes
-   to [staging.mybinder.org](https://staging.mybinder.org), run tests in the `tests/` directory against it.
-4. If the tests succeed, the change will be deployed to mybinder.org.
-5. If the tests fail, the change will *not* be deployed to mybinder.org.
-   The deployer would then need to investigate why it failed, and if they can
-   not figure out a cause in about 10 minutes, revert the change.
-   Ideally, the build should not remain broken for more than ten minutes.
-6. Troubleshoot and make changes to your fork. Repeat the process from Step 1.
-  
-The [what](what.html) document has more details on common ways deployments can go
-wrong, and how to debug them.
-
-## Afte a PR lands in binderhub or repo2docker
+## Proposing a change
 
 When a new change has landed in either [BinderHub](https://github.com/jupyterhub/binderhub)
 or [repo2docker](https://github.com/jupyter/repo2docker), they need to be explicitly
-deployed to mybinder.org for users to benefit from them.
+deployed to mybinder.org for users to benefit from them. This is the most common kind of
+change deployed to mybinder.org.
 
-### BinderHub
+### BinderHub updates
 
 This section explains how to upgrade the mybinder.org deployment after
 merging a PR in the BinderHub repo.
@@ -50,7 +32,9 @@ which we step through below.
    The hash is the string at the very end, between `-` and `.tgz`. In this
    example, it is `f87ac35`.
 
-   <img src="docs/static/travis-screenshot.png" width="500" />
+   ```eval_rst
+   .. image:: travis-screenshot.png
+   ```
 
 4. In your fork of the [mybinder.org-deploy][https://github.com/jupyterhub/mybinder.org-deploy] 
    repository, open `mybinder/requirements.yaml`.
@@ -69,10 +53,10 @@ which we step through below.
         repository: https://jupyterhub.github.io/helm-chart
 
 6. Merge this change to `mybinder/requirements.yaml` into the mybinder.org-deploy
-   repository following the steps in the [Deploying a change][#deploying-a-change] section above
+   repository following the steps in the [Deploying a change][#deploying-a-change] section
    to deploy the change.
 
-### repo2docker
+### repo2docker updates
 
 This section explains how to upgrade the mybinder.org deployment after
 merging a PR in the [repo2docker][https://github.com/jupyterhub/repo2docker] repo.
@@ -99,5 +83,24 @@ The following lines describe how to point mybinder.org to the new repo2docker im
        repo2dockerImage: jupyter/repo2docker:65d5411
 
 5. Merge this change to `mybinder/values.yaml` into the mybinder.org-deploy
-   repository following the steps in the [Deploying a change][#deploying-a-change] section above
+   repository following the steps in the [Deploying a change][#deploying-a-change] section
    to deploy the change.
+
+## Deploying a change
+
+Deploying a change involves making a PR with your desired change and merging it to
+master.
+
+1. Make the [changes](#upgrading-dependencies-for-the-mybinderorg-deployment) on your fork.
+2. Make a PR to the `master` branch with the changes you want.
+3. Review, accept, and merge this PR. This will make Travis deploy the changes
+   to [staging.mybinder.org](https://staging.mybinder.org), run tests in the `tests/` directory against it.
+4. If the tests succeed, the change will be deployed to mybinder.org.
+5. If the tests fail, the change will *not* be deployed to mybinder.org.
+   The deployer would then need to investigate why it failed, and if they can
+   not figure out a cause in about 10 minutes, revert the change.
+   Ideally, the build should not remain broken for more than ten minutes.
+6. Troubleshoot and make changes to your fork. Repeat the process from Step 1.
+
+The [what](what.html) document has more details on common ways deployments can go
+wrong, and how to debug them.
