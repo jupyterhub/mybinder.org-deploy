@@ -24,13 +24,6 @@ git-crypt unlock travis/crypt-key
 chmod 0600 secrets/*key
 echo -e "${BOLDREVERSEGREEN}SUCCESS: Decrypted secrets required for deployment${NC}"
 
-# Make sure we have our helm repo!
-helm init --client-only
-helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
-helm repo update
-cd mybinder && helm dep up && cd ..
-echo -e "${BOLDREVERSEGREEN}SUCCESS: Set up helm chart repository${NC}"
-
 function deploy {
     KIND="${1}"
     CLUSTER="${2}"
