@@ -6,11 +6,6 @@ import os
 
 
 def deploy(release):
-    # Set up helm!
-    subprocess.check_call(['helm', 'repo', 'update'])
-
-    subprocess.check_call(['helm', 'dep', 'up'], cwd='mybinder')
-
     helm = [
         'helm', 'upgrade', '--install',
         '--namespace', release,
