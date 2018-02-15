@@ -22,7 +22,7 @@ def setup_auth(release, cluster):
     # Use gcloud to populate ~/.kube/config, which kubectl / helm can use
     subprocess.check_call([
         "gcloud", "container", "clusters", "get-credentials",
-        cluster, "--zone=us-central1-a", f"--project=binder-{release}""
+        cluster, "--zone=us-central1-a", f"--project=binder-{release}"
     ])
 
 
