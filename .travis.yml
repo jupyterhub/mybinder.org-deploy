@@ -61,7 +61,7 @@ env:
 deploy:
   provider: script
   script: python ./deploy.py prod prod-a && py.test --binder-url=https://mybinder.org --hub-url=https://hub.mybinder.org
-  skip_cleanup:
+  skip_cleanup: true
   on:
     branch:
       - master
