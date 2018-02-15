@@ -11,8 +11,13 @@ if [[ ! -z "$GITTER_WEBHOOK" ]]; then
         else
             ok="ok"
         fi
+        if [[ -z "$LAST_STATUS" ]]; then
+            first="first"
+        else
+            first=""
+        fi
         echo "notifying gitter of success"
-        curl -d "message=healthcheck for $BINDER_URL is $ok!" "$GITTER_WEBHOOK"
+        curl -d "message=${first} healthcheck for $BINDER_URL is $ok!" "$GITTER_WEBHOOK"
     }
     function notify_failure() {
         echo "notifying gitter of failure"
