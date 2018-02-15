@@ -7,7 +7,7 @@ set -euo pipefail
 # Colors we gonna use for colored output
 GREEN=$(tput setaf 2)
 REVERSE=$(tput rev)
-BOLD=${tput bold}
+BOLD=$(tput bold)
 BOLDREVERSEGREEN="${BOLD}${REVERSE}${GREEN}"
 NC=$(tput sgr0) # Reset to default
 
