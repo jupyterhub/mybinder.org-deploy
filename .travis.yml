@@ -7,8 +7,8 @@ cache: pip
 
 install:
   - |
-  # Stage 1: Install pytest + test dependencies
-  pip install pyyaml pytest pytest-timeout pytest-xdist requests
+    # Stage 1: Install pytest + test dependencies
+    pip install pyyaml pytest pytest-timeout pytest-xdist requests
 
 script:
  - true
