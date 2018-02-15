@@ -31,7 +31,6 @@ before_deploy:
   mv git-crypt ${HOME}/bin/git-crypt
 # Restore where we were!
 - cd ${TRAVIS_BUILD_DIR}
-
 env:
   global:
     - CLOUDSDK_CORE_DISABLE_PROMPTS=1
