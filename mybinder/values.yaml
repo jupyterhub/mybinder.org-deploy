@@ -225,7 +225,9 @@ prometheus:
         kubernetes.io/tls-acme: "true"
 
 health:
+  enabled: true
   interval: 300
+  sshKey: ''
 
 proxyPatches:
   nodeSelector: {}

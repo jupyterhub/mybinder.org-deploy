@@ -1,25 +1,34 @@
-{% if }
+{{- if .Values.health.enabled -}}
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
   name: binder-health
+  labels:
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: binder-health
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
 spec:
   selector:
     matchLabels:
       app: binder-health
+      component: pytest
   replicas: 1
   template:
     metadata:
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/health/secret.yaml") . | sha256sum }}
       labels:
-      app: binder-health
+        name: binder-health
+        app: binder-health
+        component: pytest
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
     spec:
       volumes:
         - name: secret
           secret:
-            defaultMode: 400
-            name: binder-health-secret
+            secretName: binder-health-secret
       containers:
       - name: health
         imagePullPolicy: Always
@@ -29,10 +38,15 @@ spec:
             name: secret
             readOnly: true
         env:
+          {{- if .Values.health.gitterWebHook }}
+          - name: GITTER_WEBHOOK
+            value: {{ .Values.health.gitterWebHook }}
+          {{- end }}
           - name: TEST_INTERVAL
-            value: .Values.health.interval
+            value: {{ .Values.health.interval | quote }}
           - name: HUB_URL
-            value: .Values.binderhub.hub.url
+            value: {{ .Values.binderhub.hub.url }}
           - name: BINDER_URL
             # is there a better source of the binder URL?
-            value: .Values.binderhub.ingress.hosts[0]
+            value: https://{{ index .Values.binderhub.ingress.hosts 0 }}
+{{- end }}
