@@ -6,7 +6,9 @@ python:
 cache: pip
 
 install:
-  - pip install pyyaml pytest pytest-timeout pytest-xdist requests
+  - |
+  # Stage 1: Install pytest + test dependencies
+  pip install pyyaml pytest pytest-timeout pytest-xdist requests
 
 script:
  - true
@@ -15,31 +17,25 @@ script:
 # since before_deploy gives us nice, folded log views,
 # which neither script nor deploy seems to!
 before_deploy:
-- mkdir -p ${HOME}/bin
 - |
-  # Install gcloud SDK!
+  # Stage 1: Install gcloud SDK
   curl -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-173.0.0-linux-x86_64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
 - |
-  # Install Kubectl
+  # Stage 1: Install Kubectl
+  mkdir -p ${HOME}/bin
   curl -L https://storage.googleapis.com/kubernetes-release/release/v1.9.0/bin/linux/amd64/kubectl > ${HOME}/bin/kubectl
   chmod +x ${HOME}/bin/kubectl
 - |
-  # Install helm
+  # Stage 1: Install helm
   curl -L https://storage.googleapis.com/kubernetes-helm/helm-v2.7.0-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file - && mv ${HOME}/linux-amd64/helm ${HOME}/bin/helm
 - |
-  # Set up helm!
-  helm init --client-only
-  helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
-  helm repo update
-  (cd mybinder && helm dep up)
-- |
-  # Install git-crypt
+  # Stage 1: Install git-crypt
   curl -L https://github.com/minrk/git-crypt-bin/releases/download/0.5.0/git-crypt > git-crypt
   echo "46c288cc849c23a28239de3386c6050e5c7d7acd50b1d0248d86e6efff09c61b  git-crypt" | shasum -a 256 -c -
   chmod +x git-crypt
   mv git-crypt ${HOME}/bin/git-crypt
 - |
-  # Unlock our secret files!
+  # Stage 2, Step 1: Unlock our secret files!
   # Travis allows encrypting only one file per repo (boo) so we use it to
   # encrypt our git-crypt key
   cd ${TRAVIS_BUILD_DIR}
@@ -47,16 +43,22 @@ before_deploy:
   git-crypt unlock travis/crypt-key
   chmod 0600 secrets/*key
 - |
-  # Deploy to staging
+  # Stage 2, Step 2: Set up helm!
+  helm init --client-only
+  helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
+  helm repo update
+  (cd mybinder && helm dep up)
+- |
+  # Stage 3, Step 1: Deploy to staging
   python ./deploy.py staging staging
 - |
-  # Verify staging works
+  # Stage 3, Step 2: Verify staging works
   py.test -n 2 --binder-url=https://staging.mybinder.org --hub-url=https://hub.staging.mybinder.org
 - |
-  # Deploy to production
+  # Stage 4, Step 1: Deploy to production
   python ./deploy.py prod prod-a
 - |
-  # Verify production works
+  # Stage 4, Step 2: Verify production works
   py.test -n 2 --binder-url=https://mybinder.org --hub-url=https://hub.mybinder.org
 
 env:
