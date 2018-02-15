@@ -13,6 +13,7 @@ Site Reliability Guide for mybinder.org
 
    deployment_policy.md
    deployment/prereqs.md
+   deployment/how.md
    deployment/what.md
 
 .. toctree::

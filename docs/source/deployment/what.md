@@ -1,7 +1,7 @@
 # What does a MyBinder.org deployment do?
 
 This document tries to explain *what* is going on when a deployment
-to mybinder.org happens. For *how* to do a deploy, look at the [README.md](https://github.com/jupyterhub/mybinder.org-deploy/blob/master/README.md).
+to mybinder.org happens. For *how* to do a deploy, please see [how](how.html).
 
 The deployment happens in various **stages**, each of which comprise of
 a series of **steps**. Each step of the deployment is
