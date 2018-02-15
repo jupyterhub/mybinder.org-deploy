@@ -94,12 +94,13 @@ master.
 1. Make the [changes](#upgrading-dependencies-for-the-mybinderorg-deployment) on your fork.
 2. Make a PR to the `master` branch with the changes you want.
 3. Review, accept, and merge this PR. This will make Travis deploy the changes
-   to [staging.mybinder.org](https://staging.mybinder.org), run tests in the `tests/` directory against it.
+   to [staging.mybinder.org](https://staging.mybinder.org), and run tests in the `tests/`
+   directory against it.
 4. If the tests succeed, the change will be deployed to mybinder.org.
 5. If the tests fail, the change will *not* be deployed to mybinder.org.
-   The deployer would then need to investigate why it failed, and if they can
-   not figure out a cause in about 10 minutes, revert the change.
-   Ideally, the build should not remain broken for more than ten minutes.
+   The deployer then must investigate why it failed. **If they can
+   not figure out a cause in about 10 minutes, revert the change.**
+   The build should not remain broken for more than ten minutes.
 6. Troubleshoot and make changes to your fork. Repeat the process from Step 1.
 
 The [what](what.html) document has more details on common ways deployments can go
