@@ -22,12 +22,7 @@ def deploy(release):
         '-f', os.path.join('secrets', 'config', release + '.yaml')
     ]
 
-    try:
-        subprocess.check_output(helm)
-    except subprocess.CalledProcessError as e:
-        print("FAILED: Helm upgrade failed!")
-        print(e.output)
-        raise
+    subprocess.check_call(helm)
     print(BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC)
 
     # Explicitly wait for all deployments and daemonsets to be fully rolled out

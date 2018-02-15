@@ -12,16 +12,6 @@ NC=$(tput sgr0) # Reset to default
 
 echo -e "${BOLDGREEN}Starting deployment process${NC}"
 
-# Unlock our secret files!
-# Travis allows encrypting only one file per repo (boo) so we use it to
-# encrypt our git-crypt key
-openssl aes-256-cbc -K $encrypted_510e3970077d_key -iv $encrypted_510e3970077d_iv -in travis/crypt-key.enc -out travis/crypt-key -d
-git-crypt unlock travis/crypt-key
-# ensure private keys have private permissions,
-# otherwise ssh will ignore them
-chmod 0600 secrets/*key
-echo -e "${BOLDREVERSEGREEN}SUCCESS: Decrypted secrets required for deployment${NC}"
-
 function deploy {
     KIND="${1}"
     CLUSTER="${2}"
