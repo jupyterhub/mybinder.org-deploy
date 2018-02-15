@@ -9,6 +9,9 @@ install:
   - pip install pyyaml pytest pytest-timeout requests
 
 script:
+ - true
+
+before_deploy:
 - mkdir -p ${HOME}/bin
 - |
   # Install gcloud SDK!
