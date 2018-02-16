@@ -53,11 +53,11 @@ before_deploy:
   source secrets/grafana-api-key
   export PULL_REQUEST_ID=$(git log -1 --pretty=%B | head -n1 | sed 's/^.*#\([0-9]*\).*/\1/')
   export AUTHOR_NAME="$(git log  -1 --pretty=%aN)"
-  export PULL_REQUEST_TITLE="$(git log --pretty=%B -1 | tail +3)"
+  export PULL_REQUEST_TITLE="$(git log --pretty=%B -1 | tail -n+3)"
   python3 travis/post-grafana-annotation.py  \
     --grafana-url https://grafana.mybinder.org \
     --tag deployment-start \
-    $(echo -en "${PULL_REQUEST_TITLE}\n\n${AUTHOR_NAME}: https://github.com/${TRAVIS_REPO_SLUG}/pull/${PULL_REQUEST_ID}")
+    '$(echo -en "${PULL_REQUEST_TITLE}\n\n${AUTHOR_NAME}: https://github.com/${TRAVIS_REPO_SLUG}/pull/${PULL_REQUEST_ID}")'
 - |
   # Stage 3, Step 1: Deploy to staging
   python ./deploy.py staging staging
