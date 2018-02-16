@@ -18,6 +18,14 @@ script:
 # which neither script nor deploy seems to!
 before_deploy:
 - |
+  # Stage 0: Post message to Grafana that deployment is starting
+  source secrets/grafana-api-key
+  export PULL_REQUEST_ID=$(git log -1 --pretty=%B | head -n1 | sed 's/^.*#\([0-9]*\).*/\1/')
+  python3 travis/post-grafana-annotation.py  \
+    --grafana-url https://grafana.mybinder.org \
+    --tag deployment-start \
+    "https://github.com/${TRAVIS_REPO_SLUG}/pull/${PULL_REQUEST_ID}"
+- |
   # Stage 1: Install gcloud SDK
   curl -L https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-173.0.0-linux-x86_64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
 - |
