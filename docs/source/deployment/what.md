@@ -11,14 +11,6 @@ source of truth for deployment. *If this document disagrees with it,`.travis.yml
 If any of the steps in any stage fails, all following steps
 are canceled and the deployment is marked as failed.
 
-## Stage 0: Tell Grafana our deployment is starting
-
-Before we start deployment, we create an [annotation](http://docs.grafana.org/reference/annotations/)
-in Grafana, recording the fact that a deployment is starting.
-
-This is very useful when looking at dashboards, since you can see
-the effects of deployments in various metrics.
-
 ## Stage 1: Installing deployment tools
 
 ### Step 1: Install all the things!
@@ -181,6 +173,14 @@ charts.
    you have not waited long enough after merging a PR in the binderhub repo before
    bumping the version here. Make sure the version of binderhub is visible in
    https://jupyterhub.github.io/helm-chart before merging a PR here.
+
+### Step 3: Tell Grafana our deployment is starting
+
+We create an [annotation](http://docs.grafana.org/reference/annotations/)
+in Grafana, recording the fact that a deployment is starting.
+
+This is very useful when looking at dashboards, since you can see
+the effects of deployments in various metrics.
 
 ## Stage 3: Deploy to staging
 
