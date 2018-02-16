@@ -1,11 +1,17 @@
 Site Reliability Guide for mybinder.org
 =======================================
 
+Introduction
+------------
+
 .. toctree::
    :maxdepth: 2
    :caption: Introduction
 
    production_environment.md
+
+Deployment and Operation
+------------------------
 
 .. toctree::
    :maxdepth: 2
@@ -22,8 +28,11 @@ Site Reliability Guide for mybinder.org
 
     command_snippets.md
 
+Incident Reports
+----------------
+
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Incidents
 
    incident-reports/incident_reports_toc
@@ -38,7 +47,7 @@ Site Reliability Guide for mybinder.org
    incident-reports/template-incident-report
 
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
