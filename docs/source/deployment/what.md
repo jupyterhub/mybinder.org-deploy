@@ -11,6 +11,33 @@ source of truth for deployment. *If this document disagrees with it,`.travis.yml
 If any of the steps in any stage fails, all following steps
 are canceled and the deployment is marked as failed.
 
+## Stage 0: Linting
+
+Before we begin, we do a quick lint check to make sure that there are no
+obvious syntax errors that could cause deployments to fail in unpredictable
+ways.
+
+### Step 1: YAML Syntax Lint
+
+We use [yamllint](https://github.com/adrienverge/yamllint) to make sure there
+are no syntax errors in any of our YAML files. YAML syntax can be finnicky,
+so catching them automatically should help. The linter does not try to be
+too picky about style enforcement wherever possible - it will only fail on
+syntax errors, but report warnings about other possible issues.
+
+Just because `yamllint` passes does not mean the YAML is correct - it is
+only linting on syntax. You might still have typos or other issues with your
+YAML.
+
+The Helm community has [some tips](https://github.com/kubernetes/helm/blob/master/docs/chart_template_guide/yaml_techniques.md)
+on common YAML issues. Learn X in Y Minutes also has a nice [guide on YAML](https://learnxinyminutes.com/docs/yaml/).
+You can also use [yamllint](https://github.com/adrienverge/yamllint) locally to validate
+your YAML files.
+
+You can lint YAML locally by installing `yamllint`, and then running it on the
+files you wish to check. Do **not** use an online linting service, since accidentally
+pasting secrets into it might compromise mybinder.org.
+
 ## Stage 1: Installing deployment tools
 
 ### Step 1: Install all the things!
@@ -204,18 +231,12 @@ the helm deployment is complete!
 
 #### What could go wrong?
 
-1. YAML formatting issue in one of the config files
+1. YAML issues in one of the config files
 
-   YAML syntax can be finnicky sometimes, and fail in non-obvious ways. The most common
-   error is the presence of tab characters in YAML, which will make them always fail.
-   
-   The Helm community has [some tips](https://github.com/kubernetes/helm/blob/master/docs/chart_template_guide/yaml_techniques.md)
-   on common YAML issues. Learn X in Y Minutes also has a nice [guide on YAML](https://learnxinyminutes.com/docs/yaml/).
-   You can also use [yamllint](https://github.com/adrienverge/yamllint) locally to validate
-   your YAML files.
-   
-   Remember to **not** copy paste any secret files into online YAML Linting applications
-   for linting! That could possibly compromise mybinder.org.
+   Even though the YAML linter in Stage 0 should catch all YAML syntax errors,
+   it does not mean there are no YAML errors! A python file could be syntactically
+   correct but buggy - same is true for YAML too. You might have a typo, or
+   use the wrong type of key (object vs list, string vs number, string vs boolean, etc).
    
 2. Kubernetes cluster is having difficulties
 

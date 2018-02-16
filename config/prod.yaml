@@ -39,12 +39,12 @@ prometheus:
       storageClass: ssd
     retention: 60d
     ingress:
-        hosts:
-          - prometheus.mybinder.org
-        tls:
-          - hosts:
-              - prometheus.mybinder.org
-            secretName: kubelego-tls-prometheus
+      hosts:
+        - prometheus.mybinder.org
+      tls:
+        - hosts:
+            - prometheus.mybinder.org
+          secretName: kubelego-tls-prometheus
 
 nginx-ingress:
   controller:

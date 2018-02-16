@@ -8,10 +8,10 @@ cache: pip
 install:
   - |
     # Stage 1: Install pytest + test dependencies
-    pip install pyyaml pytest pytest-timeout pytest-xdist requests
+    pip install pyyaml yamllint pytest pytest-timeout pytest-xdist requests
 
 script:
- - true
+- yamllint config/*.yaml mybinder/*.yaml secrets/config/*.yaml
 
 # We are using before_deploy instead of script or deploy
 # since before_deploy gives us nice, folded log views,
