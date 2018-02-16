@@ -1,19 +1,12 @@
-# Deployment Fundamentals
-
-## Basics - Staging and Production
-
-This repo contains two branches: `staging` and `prod`. The `staging` branch
-corresponds to the config for [staging.mybinder.org][] and the `prod`
-branch to [mybinder.org][]. In general (except when performing a
-deployment), these branches should always be the same, and `prod` should not
-drift away from `staging` too much.
-
-## Pre-requisites
+# Pre-requisite technologies
 
 The following are tools and technologies that mybinder.org uses. You should have
 a working familiarity with them in order to make changes to the mybinder.org deployment.
 
-### Google Cloud Platform
+This is a non-exhaustive list. Feel free to ask us questions on the gitter channel or
+here if something specific could be clearer!
+
+## Google Cloud Platform
 
 MyBinder.org currently runs on Google Cloud. There are two Google Cloud projects
 that we use:
@@ -28,15 +21,15 @@ While you only need merge access in this repository to deploy changes, ideally
 you should also have access to the two Google Cloud Projects so you can debug
 things when deployments fail.
 
-### Kubernetes Basics
+## Kubernetes
 
-We heavily use Kubernetes for the mybinder.org deployment, and it is important you
+We heavily use [Kubernetes](https://k8s.io) for the mybinder.org deployment, and it is important you
 have a working knowledge of how to use Kubernetes. Detailed explanations are out
 of the scope of this repository, but there is a good [list of tutorials](https://kubernetes.io/docs/tutorials/).
 Specifically, going through the [interactive tutorial](https://kubernetes.io/docs/tutorials/kubernetes-basics/)
 to get comfortable using `kubectl` is required.
 
-### Helm Basics
+## Helm
 
 We use [helm](https://helm.sh) to manage our deployments, and it is important you
 have a working knowledge of how to use helm. Detailed explanations are out of the
@@ -47,8 +40,11 @@ source of information. At a minimum, you must at least understand:
 * [What are values files?](https://docs.helm.sh/chart_template_guide/#values-files)
 * [How do chart dependencies work?](https://docs.helm.sh/developing_charts/#chart-dependencies)
 
-This is a non-exhaustive list. Feel free to ask us questions on the gitter channel or
-here if something specific does not make sense!
+## Travis
+
+We use [Travis CI](http://travis-ci.org/) for doing all our deployments. Our
+`.travis.yml` file contains the entire configuration for our deployment. Travis CI
+has documentation on the [various components of the `.travis.yml` file](https://docs.travis-ci.com/user/customizing-the-build/).
 
 [mybinder.org]: https://mybinder.org
 [staging.mybinder.org]: https://staging.mybinder.org
