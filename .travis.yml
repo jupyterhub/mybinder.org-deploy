@@ -57,7 +57,7 @@ before_deploy:
   python3 travis/post-grafana-annotation.py  \
     --grafana-url https://grafana.mybinder.org \
     --tag deployment-start \
-    $"${PULL_REQUEST_TITLE}\n\n${AUTHOR_NAME}: https://github.com/${TRAVIS_REPO_SLUG}/pull/${PULL_REQUEST_ID}"
+    $(echo -en "${PULL_REQUEST_TITLE}\n\n${AUTHOR_NAME}: https://github.com/${TRAVIS_REPO_SLUG}/pull/${PULL_REQUEST_ID}")
 - |
   # Stage 3, Step 1: Deploy to staging
   python ./deploy.py staging staging
