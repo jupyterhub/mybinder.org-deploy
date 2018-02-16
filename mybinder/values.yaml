@@ -104,7 +104,7 @@ binderhub:
             add:
             - NET_ADMIN
       schedulerStrategy: pack
-  repo2dockerImage: jupyter/repo2docker:687788f
+  repo2dockerImage: jupyter/repo2docker:a1406c1
 
 playground:
   image:
@@ -187,6 +187,10 @@ grafana:
 
       [grafana_net]
       url = https://grafana.net
+
+      [smtp]
+      enabled = true
+
 
 prometheus:
   nodeExporter:
