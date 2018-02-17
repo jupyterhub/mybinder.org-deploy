@@ -10,6 +10,15 @@ Introduction
 
    production_environment.md
 
+Components
+----------
+
+.. toctree::
+   :maxdepth: 2
+
+   components/metrics.md
+   components/dashboards.md
+
 Deployment and Operation
 ------------------------
 
