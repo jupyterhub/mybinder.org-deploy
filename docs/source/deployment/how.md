@@ -3,14 +3,15 @@
 This document explains **how** to deploy a change to mybinder.org.
 For information on what exactly a deployment does, see [what](what.html).
 
-## Proposing a change
-
 When a new change has landed in either [BinderHub](https://github.com/jupyterhub/binderhub)
 or [repo2docker](https://github.com/jupyter/repo2docker), they need to be explicitly
 deployed to mybinder.org for users to benefit from them. This is the most common kind of
 change deployed to mybinder.org.
 
-### BinderHub updates
+The first two sections of this page cover how to upgrade either `repo2docker` or
+`BinderHub`.
+
+## Updating BinderHub
 
 This section explains how to upgrade the mybinder.org deployment after
 merging a PR in the BinderHub repo.
@@ -56,7 +57,7 @@ which we step through below.
    repository following the steps in the [Deploying a change][#deploying-a-change] section
    to deploy the change.
 
-### repo2docker updates
+## Updating repo2docker
 
 This section explains how to upgrade the mybinder.org deployment after
 merging a PR in the [repo2docker](https://github.com/jupyterhub/repo2docker) repo.
