@@ -1,7 +1,7 @@
 # Operational Dashboards with Grafana
 
 We use [Grafana](https://grafana.com/) for creating dashboards
-from our [metrics](metrics.md). Dashboards are useful for
+from our [metrics](../metrics.html). Dashboards are useful for
 understanding the current status of the system and all its components
 at a glance. They are also very useful to try and debug what
 is going wrong during / after an outage.
@@ -9,12 +9,12 @@ is going wrong during / after an outage.
 ## What is it?
 
 ```eval_rst
-.. image:: dashboard.png
+.. image:: ../../_static/images/dashboard.png
 ```
 
-A dashboard is a set of pre-defined graphs in a particular layout that 
+A dashboard is a set of pre-defined graphs in a particular layout that
 provide an overview of a system. In our case, they provide an overview
-of the [operational metrics](metrics.md) of the components that make
+of the [operational metrics](../metrics.html) of the components that make
 up mybinder.org.
 
 ## Where is it?
@@ -59,7 +59,6 @@ marker with info about the deployment on each graph, so you can easily
 tell if a particular deployment has caused changes in any metric.
 This is very useful for debugging!
 
-We use the script in `travis/post-grafana-annotation.py` to 
+We use the script in `travis/post-grafana-annotation.py` to
 create annotations just before each deployment. See the docstring in
 the script for more details.
-
