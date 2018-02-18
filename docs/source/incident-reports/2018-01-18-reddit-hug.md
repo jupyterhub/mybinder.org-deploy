@@ -1,4 +1,4 @@
-# incident date: 2018-01-18, reddit hugs mybinder
+# 2018-01-18, reddit hugs mybinder
 
 ## Summary
 

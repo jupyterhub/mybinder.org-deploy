@@ -36,6 +36,7 @@ Incident Reports
    :caption: Incidents
 
    incident-reports/incident_reports_toc
+   incident-reports/2018-02-12-launch-fail.md
    incident-reports/2018-01-18-reddit-hug.md
    incident-reports/2018-01-18-ssl-outdated.md
    incident-reports/2018-01-17-ubuntu-upgrade
