@@ -13,7 +13,7 @@ with open('/etc/proxy/routes.json') as f:
     for prefix, target in required_routes.items():
         if target.startswith('service:'):
             service_name = target.split(':', 1)[1].upper()
-            service_env = f"{service_name.upper()}_SERVICE"
+            service_env = f"{service_name.upper().replace('-', '_')}_SERVICE"
             host = os.environ[service_env + '_HOST']
             port = os.environ[service_env + '_PORT']
             service_target = f"http://{host}:{port}"
