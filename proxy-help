@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+
+import os
+import json
+import time
+import traceback
+
+import requests
+
+
+with open('/etc/proxy/routes.json') as f:
+    required_routes = json.load(f)
+    for prefix, target in required_routes.items():
+        if target.startswith('service:'):
+            service_name = target.split(':', 1)[1].upper()
+            service_env = f"{service_name.upper()}_SERVICE"
+            host = os.environ[service_env + '_HOST']
+            port = os.environ[service_env + '_PORT']
+            service_target = f"http://{host}:{port}"
+            required_routes[prefix] = service_target
+
+
+s = requests.Session()
+s.headers['Authorization'] = f"token {os.environ['CONFIGPROXY_AUTH_TOKEN']}"
+
+routes_url = f"http://{os.environ['PROXY_API_SERVICE_HOST']}:{os.environ['PROXY_API_SERVICE_PORT']}/api/routes"
+
+
+def ensure_routes():
+    r = s.get(routes_url)
+    r.raise_for_status()
+    current_routes = r.json()
+    from pprint import pprint
+    pprint(current_routes)
+    for prefix, target in required_routes.items():
+        current_route = current_routes.get(prefix)
+        if current_route and current_route['target'] == target:
+            print(f"{prefix} -> {target} up-to-date")
+            continue
+        print(f"Adding route for {prefix} -> {target}")
+        r = s.post(routes_url + prefix, data=json.dumps({'target': target}))
+        r.raise_for_status()
+
+
+interval = int(os.environ.get('CHECK_PROXY_INTERVAL') or '60')
+
+while True:
+    try:
+        ensure_routes()
+    except Exception:
+        traceback.print_traceback()
+    time.sleep(interval)
