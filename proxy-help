@@ -30,8 +30,6 @@ def ensure_routes():
     r = s.get(routes_url)
     r.raise_for_status()
     current_routes = r.json()
-    from pprint import pprint
-    pprint(current_routes)
     for prefix, target in required_routes.items():
         current_route = current_routes.get(prefix)
         if current_route and current_route['target'] == target:
