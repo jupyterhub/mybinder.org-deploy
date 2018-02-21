@@ -211,7 +211,7 @@ prometheus:
         kubernetes.io/tls-acme: "true"
 
 proxyPatches:
-  enabled: false
+  enabled: true
   interval: 60
   routes:
     "/user": "service:proxy-patches"
