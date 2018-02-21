@@ -43,6 +43,9 @@ prometheus:
               - prometheus.staging.mybinder.org
             secretName: kubelego-tls-prometheus
 
+proxyPatches:
+  enabled: true
+
 nginx-ingress:
   controller:
     service:

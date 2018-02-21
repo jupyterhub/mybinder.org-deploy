@@ -1,0 +1,16 @@
+{{- if .Values.proxyPatches.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy-patches
+  labels:
+    app: proxy-patches
+    component: proxy-patches
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: proxy-patches
+    component: proxy-patches
+{{- end }}

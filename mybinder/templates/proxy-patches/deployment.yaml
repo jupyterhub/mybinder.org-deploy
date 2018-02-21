@@ -1,0 +1,53 @@
+{{- if .Values.proxyPatches.enabled }}
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: proxy-patches
+  labels:
+    app: proxy-patches
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: proxy-patches
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/proxy-patches/configmap.yaml") . | sha256sum }}
+      labels:
+        app: proxy-patches
+        component: proxy-patches
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: proxy-patches-nginx-config
+        - name: proxy-help-config
+          configMap:
+            name: proxy-help-config
+      containers:
+      - name: nginx
+        image: nginx:1.13.6
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - mountPath: /etc/nginx/conf.d/
+            name: nginx-config
+      - name: proxy-help
+        image: minrk/proxy-help:0.1
+        volumeMounts:
+          - mountPath: /etc/proxy
+            name: proxy-help-config
+        env:
+          - name: CHECK_PROXY_INTERVAL
+            value: {{ .Values.proxyPatches.interval | quote }}
+          - name: CONFIGPROXY_AUTH_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: hub-secret
+                key: proxy.token
+{{- end }}

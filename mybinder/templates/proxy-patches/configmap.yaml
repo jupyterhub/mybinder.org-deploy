@@ -1,0 +1,20 @@
+{{- if .Values.proxyPatches.enabled }}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: proxy-patches-nginx-config
+data:
+  redirects.conf: |
+    server {
+          listen 80;
+          rewrite (.*) https://{{ index .Values.binderhub.ingress.hosts 0 }} redirect;
+    }
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: proxy-help-config
+data:
+  routes.json: {{ toJson .Values.proxyPatches.routes | quote }}
+{{- end }}
