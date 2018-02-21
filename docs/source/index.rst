@@ -8,6 +8,7 @@ Introduction
    :maxdepth: 2
    :caption: Introduction
 
+   getting_started.md
    production_environment.md
 
 Components
