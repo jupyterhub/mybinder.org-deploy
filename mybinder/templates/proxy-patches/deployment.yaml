@@ -1,11 +1,11 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: stopped-pods
+  name: proxy-patches
   labels:
-    app: stopped-pods
+    app: proxy-patches
     chart: {{ .Chart.Name }}-{{ .Chart.Version }}
-    component: stopped-pods
+    component: proxy-patches
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 
@@ -14,17 +14,17 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/configmap: {{ include (print $.Template.BasePath "/stopped-pods/configmap.yaml") . | sha256sum }}
+        checksum/configmap: {{ include (print $.Template.BasePath "/proxy-patches/configmap.yaml") . | sha256sum }}
       labels:
-        app: stopped-pods
-        component: stopped-pods
+        app: proxy-patches
+        component: proxy-patches
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
     spec:
       volumes:
         - name: nginx-config
           configMap:
-            name: stopped-pods-config
+            name: proxy-patches-config
         - name: proxy-help-config
           configMap:
             name: proxy-help-config
