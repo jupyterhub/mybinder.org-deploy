@@ -5,7 +5,6 @@ metadata:
   name: proxy-patches
   labels:
     app: proxy-patches
-    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
     component: proxy-patches
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
