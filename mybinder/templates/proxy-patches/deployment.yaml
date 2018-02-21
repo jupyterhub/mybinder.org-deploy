@@ -38,8 +38,7 @@ spec:
           - mountPath: /etc/nginx/conf.d/
             name: nginx-config
       - name: proxy-help
-        image: minrk/proxy-help
-        imagePullPolicy: Always
+        image: minrk/proxy-help:0.1
         volumeMounts:
           - mountPath: /etc/proxy
             name: proxy-help-config
