@@ -5,19 +5,33 @@ that are useful for operating and investigating what is happening on the
 cluster. Think of it as a mybinder.org specific extension of the [kubernetes
 cheatsheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/).
 
+## List all pods that match a given name or age
 
-## List all pods older than X
+Sometimes you want to delete all the pods for a given repository. The easiest
+way to do this is to name-match the part of the pod name that corresponds to
+the repo (since there will be a bunch of random characters as well).
 
-To get a list of all pods older than four hours:
+Here's a python script that will match pods with a given name or a given
+age. You can use it with the following pattern:
+
 ```
-kubectl get pod --namespace=prod | grep '^jupyter-' | grep '\(\([12][0-9]\|[4-9]\)h\|d\)$'
+python scripts/delete-pods.py --pod-name <your-query> --older-than <your-query>
 ```
 
-or all those that have existed for more than 24hours:
-```
-kubectl get pod --namespace=prod | grep '^jupyter-' | grep 'd$' | awk '{print $1}')
-```
+* `--pod-name` is a string and will be matched to any pod that contains this string.
+* `--older-than` is a float (in hours) and will match any pod that is older than this amount.
 
+Note, they are both optional, but you need to supply *at least* one. Running
+the above command by itself will list all pods that match the query.
+
+## Delete all pods that match a given name or age
+
+If you wish to **delete** the pods that match the query above, you supply the `--delete`
+kwarg like so:
+
+```
+python scripts/delete-pods.py --pod-name <your-query> --older-than <your-query> --delete
+```
 
 ## Remove a node from the cluster
 
@@ -44,35 +58,3 @@ pods. The `--no-headers` asks kubectl to not print column titles as a header.
 The `awk` command selects the 7th column in the output (which is the node name).
 The sort / uniq / sort combination helps print the number of pods per each node in
 sorted order.
-
-## Delete all pods that match a given name
-
-Sometimes you want to delete all the pods for a given repository. The easiest
-way to do this is to name-match the part of the pod name that corresponds to
-the repo (since there will be a bunch of random characters as well).
-
-Here's a python script that will match pods with a given name and delete them
-(you need to uncomment the line to actually do the deleting). The script can
-be run by changing your directory to the root of this repository, then running
-
-```
-python scripts/delete_pods_matching_name.py <your-query> --delete
-```
-
-## Delete all user pods older than a given number of hours
-
-We use the Kubernetes cluster autoscaler, which
-removes nodes from the kubernetes cluster when they have
-been 'empty' for more than 10 minutes However, we
-have issues where some pods get 'stuck' and never actually
-die, sometimes forever. This causes nodes to not be
-killed automatically.
-
-You can use the 'old-user-pods.py' script to lis/kill these pods. You can run it with:
-
-```bash
-./scripts/old-user-pods.py <number-of-hours> --delete
-```
-
-If you do not pass --delete, it will simply print all the matching pods.
-You will need the `kubernetes` python library installed to use this script!
