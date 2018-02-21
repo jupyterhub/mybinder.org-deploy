@@ -1,3 +1,4 @@
+{{- if .Values.proxyPatches.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -12,3 +13,4 @@ spec:
   selector:
     app: proxy-patches
     component: proxy-patches
+{{- end }}

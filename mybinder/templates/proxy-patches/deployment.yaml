@@ -1,3 +1,4 @@
+{{- if .Values.proxyPatches.enabled }}
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
@@ -48,3 +49,4 @@ spec:
               secretKeyRef:
                 name: hub-secret
                 key: proxy.token
+{{- end }}

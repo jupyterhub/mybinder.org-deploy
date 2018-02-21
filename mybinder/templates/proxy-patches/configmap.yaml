@@ -1,3 +1,4 @@
+{{- if .Values.proxyPatches.enabled }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -19,3 +20,4 @@ data:
     {
       "/user": "service:proxy-patches"
     }
+{{- end }}
