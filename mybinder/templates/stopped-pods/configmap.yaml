@@ -1,0 +1,21 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: stopped-pods-config
+data:
+  redirects.conf: |
+    server {
+          listen 80;
+          rewrite (.*) https://{{ index .Values.binderhub.ingress.hosts 0 }} redirect;
+    }
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: proxy-help-config
+data:
+  routes.json: |
+    {
+      "/user": "service:stopped-pods"
+    }

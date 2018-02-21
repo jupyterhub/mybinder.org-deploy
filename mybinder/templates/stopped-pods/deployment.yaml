@@ -1,0 +1,50 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: stopped-pods
+  labels:
+    app: stopped-pods
+    chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    component: stopped-pods
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/stopped-pods/configmap.yaml") . | sha256sum }}
+      labels:
+        app: stopped-pods
+        component: stopped-pods
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+    spec:
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: stopped-pods-config
+        - name: proxy-help-config
+          configMap:
+            name: proxy-help-config
+      containers:
+      - name: nginx
+        image: nginx:1.13.6
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - mountPath: /etc/nginx/conf.d/
+            name: nginx-config
+      - name: proxy-help
+        image: minrk/proxy-help
+        imagePullPolicy: Always
+        volumeMounts:
+          - mountPath: /etc/proxy
+            name: proxy-help-config
+        env:
+          - name: CONFIGPROXY_AUTH_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: hub-secret
+                key: proxy.token
