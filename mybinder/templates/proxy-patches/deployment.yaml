@@ -25,7 +25,7 @@ spec:
       volumes:
         - name: nginx-config
           configMap:
-            name: proxy-patches-config
+            name: proxy-patches-nginx-config
         - name: proxy-help-config
           configMap:
             name: proxy-help-config
@@ -44,6 +44,8 @@ spec:
           - mountPath: /etc/proxy
             name: proxy-help-config
         env:
+          - name: CHECK_PROXY_INTERVAL
+            value: {{ .Values.proxyPatches.interval | quote }}
           - name: CONFIGPROXY_AUTH_TOKEN
             valueFrom:
               secretKeyRef:

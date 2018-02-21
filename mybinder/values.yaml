@@ -212,4 +212,6 @@ prometheus:
 
 proxyPatches:
   enabled: false
-
+  interval: 60
+  routes:
+    "/user": "service:proxy-patches"
