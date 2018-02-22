@@ -41,21 +41,12 @@ Deployment and Operation
 Incident Reports
 ----------------
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Incidents
+For more information on our guidelines and goals for incident reports, see
+:ref:`incident-reporting`. Below is a list of incident reports in reverse
+chronological order.
 
-   incident-reports/incident_reports_toc
-   incident-reports/2018-02-12-launch-fail.md
-   incident-reports/2018-01-18-reddit-hug.md
-   incident-reports/2018-01-18-ssl-outdated.md
-   incident-reports/2018-01-17-ubuntu-upgrade
-   incident-reports/2018-01-04-failed-staging-deploy.md
-   incident-reports/2017-11-30-oom-proxy
-   incident-reports/2017-10-17-cluster-full
-   incident-reports/2017-09-29-504
-   incident-reports/2017-09-27-hub-403
-   incident-reports/template-incident-report
+.. include:: incident_reporting.rst
+   :start-after: (in reverse chronological order)
 
 Indices and tables
 ------------------
