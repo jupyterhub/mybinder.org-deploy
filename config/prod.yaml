@@ -40,9 +40,7 @@ prometheus:
     retention: 60d
     ingress:
         hosts:
-          # The Prometheus chart requires the trailing slash
-          # See https://github.com/kubernetes/charts/pull/3546
-          - prometheus.mybinder.org/
+          - prometheus.mybinder.org
         tls:
           - hosts:
               - prometheus.mybinder.org
