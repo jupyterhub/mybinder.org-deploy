@@ -82,3 +82,25 @@ To find out hostnames to try look at the `metadata.name` field of a kubernetes
 service in the helm chart. You should be able to connect to each of them using
 the name as the hostname. Take care to use the right port, not all of them are
 listening on 80.
+
+## Manually increase cluster size
+
+Sometimes we know ahead of time that mybinder.org will receive a lot of traffic.
+As preparation we might choose to increase the size of the cluster before the
+event.
+
+To pre-emptively bump the cluster size beyond current occupancy, it's two steps:
+
+* increase autoscaler minimum size (http://console.cloud.google.com/), this
+  will lead to a brief period where the kubernetes API is not available.
+* resize cluster to new minimum size explicitly with `gcloud container clusters resize prod-a --size 3`
+  replacing 3 with your target size.
+
+Manually resizing a cluster with autoscaling on doesn't always work because the autoscaler
+can automatically reduce the cluster size after asking for more nodes that
+aren't needed. Increasing the minimum size works if you are resizing from
+outside the autoscaler's bounds (e.g. 2) to the new minimum cluster size (3), so the
+autoscaler doesn't have any idle nodes available for deletion. Similarly if
+the new minimum is higher than the current size and there is no need to increase
+the size of the cluster the autoscaler will not scale up the cluster even though
+it is below the minimum size.
