@@ -3,13 +3,48 @@ binderhub:
     hosts:
       - mybinder.org
 
+  resources:
+    requests:
+      cpu: "2"
+      memory: 2Gi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+
   registry:
     prefix: gcr.io/binder-prod/r2d-fd74043
 
   hub:
+
     url: https://hub.mybinder.org
 
   jupyterhub:
+    hub:
+      resources:
+        requests:
+          cpu: "2"
+          memory: 2Gi
+        limits:
+          cpu: "2"
+          memory: 2Gi
+
+    proxy:
+      chp:
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: "0.5"
+          limits:
+            memory: 512Mi
+            cpu: "0.5"
+      nginx:
+        resources:
+          requests:
+            memory: 2Gi
+            cpu: 1
+          limits:
+            memory: 2Gi
+            cpu: 1
     ingress:
       hosts:
         - hub.mybinder.org
