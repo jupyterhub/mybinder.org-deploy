@@ -12,8 +12,8 @@ binderhub:
   jupyterhub:
     singleuser:
       memory:
-        guarantee: 256Mi
-        limit: 256Mi
+        guarantee: 256M
+        limit: 256M
     ingress:
       hosts:
         - hub.staging.mybinder.org
