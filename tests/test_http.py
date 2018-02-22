@@ -20,12 +20,9 @@ def test_hub_up(hub_url):
     assert resp.status_code == 403
 
 
-def test_hub_user_redirect(hub_url, binder_url):
+def test_hub_user_redirect(hub_url):
     """Requesting a Hub URL for a non-running user"""
-    # this should redirect
+    # this should *not* redirect for now,
     resp = requests.get(hub_url + "/user/doesntexist")
-    # this *shouldn't* raise 404 or 403
-    # because it should be handled by the /user/ redirect in proxy-patches
-    resp.raise_for_status()
-    assert resp.url == binder_url
+    assert resp.status_code == 404
 
