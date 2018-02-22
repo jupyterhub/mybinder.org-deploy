@@ -10,6 +10,10 @@ binderhub:
     url: https://hub.staging.mybinder.org
 
   jupyterhub:
+    singleuser:
+      memory:
+        guarantee: 256Mi
+        limit: 256Mi
     ingress:
       hosts:
         - hub.staging.mybinder.org

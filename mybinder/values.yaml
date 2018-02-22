@@ -77,9 +77,6 @@ binderhub:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
     singleuser:
-      memory:
-        guarantee: 2G
-        limit: 2G
       initContainers:
       - name: tc-init
         image: minrk/tc-init:0.0.4

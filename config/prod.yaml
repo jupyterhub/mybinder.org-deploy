@@ -19,6 +19,10 @@ binderhub:
     url: https://hub.mybinder.org
 
   jupyterhub:
+    singleuser:
+      memory:
+        guarantee: 2G
+        limit: 2G
     hub:
       resources:
         requests:
