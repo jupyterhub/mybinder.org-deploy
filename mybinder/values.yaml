@@ -1,9 +1,9 @@
 binderhub:
   extraConfig:
+    # Add banned repositories to the list below
+    # They should be strings that will match "^<org-name>/<repo-name>.*"
     bans: |
         c.GitHubRepoProvider.banned_specs = [
-          '^ds-100/textbook.*',
-          '^samlau95/nbinteract-image.*'
         ]
   service:
     type: ClusterIP

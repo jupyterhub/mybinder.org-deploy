@@ -22,11 +22,6 @@ binderhub:
           hosts:
             - hub.staging.mybinder.org
 
-  extraConfig:
-    bans: |
-        c.GitHubRepoProvider.banned_specs = [
-        ]
-
 grafana:
   server:
     ingress:
