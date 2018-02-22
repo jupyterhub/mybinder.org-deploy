@@ -62,6 +62,13 @@ binderhub:
 
 grafana:
   server:
+    resources:
+      requests:
+        cpu: "0.2"
+        memory: 512Mi
+      limits:
+        cpu: "0.2"
+        memory: 512Mi
     ingress:
       hosts:
         - grafana.mybinder.org
@@ -72,6 +79,13 @@ grafana:
 
 prometheus:
   server:
+    resources:
+      requests:
+        cpu: "4"
+        memory: 8Gi
+      limits:
+        cpu: "4"
+        memory: 8Gi
     persistentVolume:
       # Use a large SSD Volume in production
       size: 2000Gi
