@@ -77,3 +77,8 @@ to try talking to are:
     * http://google.com/, the internet
     * the CHP API needs a token so run: `headers={'Authorization': 'token ' + os.environ['CONFIGPROXY_AUTH_TOKEN']}`
       and then`requests.get('http://proxy-api:8001/api/routes', headers=headers)`
+
+To find out hostnames to try look at the `metadata.name` field of a kubernetes
+service in the helm chart. You should be able to connect to each of them using
+the name as the hostname. Take care to use the right port, not all of them are
+listening on 80.
