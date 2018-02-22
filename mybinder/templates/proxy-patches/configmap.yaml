@@ -8,20 +8,10 @@ data:
     server {
       listen 80;
 
-      # we want to redirect *humans* to the landing page,
-      # but not stale API requests from clients
-      if ($request_method != GET) {
-        # 404 on anything but a GET request
-        return 404;
-      }
-      location ~ ^/user/.*/api/ {
-        # 404 on API requests
-        # these can happen when a pod has been culled
-        # but clients are still connected and trying to poll
-        return 404;
-      }
+      # Return 404 for anything that comes here
+      # This preserves the same behavior as before, just without overloading the hub
       location / {
-        rewrite (.*) https://{{ index .Values.binderhub.ingress.hosts 0 }} redirect;
+        return 404;
       }
     }
 
