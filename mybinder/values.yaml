@@ -8,6 +8,14 @@ binderhub:
   service:
     type: ClusterIP
 
+  resources:
+    requests:
+      cpu: "2"
+      memory: 2Gi
+    limits:
+      cpu: "2"
+      memory: 2Gi
+
   cors: &cors
     allowOrigin: "*"
 
@@ -55,6 +63,13 @@ binderhub:
     cull:
       timeout: 600
     hub:
+      resources:
+        requests:
+          cpu: "2"
+          memory: 2Gi
+        limits:
+          cpu: "2"
+          memory: 2Gi
       extraConfigMap:
         cors: *cors
     proxy:
@@ -72,11 +87,16 @@ binderhub:
           - --log-level=error
         resources:
           requests:
-            memory: 1Gi
+            memory: 512Mi
+            cpu: "0.5"
+          limits:
+            memory: 512Mi
+            cpu: "0.5"
       nginx:
         resources:
           requests:
             memory: 1Gi
+            cpu: "0.5"
     ingress:
       enabled: true
       annotations:
