@@ -9,12 +9,50 @@ data:
       listen 80;
 
       # Return 404 for anything that comes here
-      # This preserves the same behavior as before, just without overloading the hub
+      # serve an informative error about stopped pods
+      error_page 404 /404.html;
+      location /404.html {
+        root /srv/proxy-patches;
+        internal;
+      }
       location / {
         return 404;
       }
     }
 
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: proxy-html-files
+data:
+  404.html: >
+    <html>
+    <head>
+    <title>Your Binder has stopped</title>
+    {{ $rootUrl := printf "https://%s" (index .Values.binderhub.ingress.hosts 0) }}
+    <link href="{{ $rootUrl }}/static/dist/styles.css" rel="stylesheet">
+    </head>
+    <body>
+    <div class="container">
+    <h3 class="text-center">Your Binder has stopped!</h3>
+    <p>
+    If this was your Binder, it may have been stopped due to an
+    error or culled by the monitoring service due to age or idleness.
+    </p>
+    <p>
+    If this was a link you were given, it wasn't the right link!
+    You might ask the person who gave you the link to share the binder URL
+    and not the URL they see in their browser when the Binder is running.
+    It should look like <tt>{{ $rootUrl }}/v2/gh/...</tt>
+    and not <tt>{{ .Values.binderhub.hub.url }}/user/...</tt>
+    </p>
+    <p>
+    <a href="{{ $rootUrl }}">The main Binder page</a>
+    will show you this link for a given repo, and even give you a snippet to make a badge
+    that links to your Binder.
+    </p>
+    </body>
 ---
 kind: ConfigMap
 apiVersion: v1

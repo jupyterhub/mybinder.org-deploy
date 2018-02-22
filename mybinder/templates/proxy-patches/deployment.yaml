@@ -25,6 +25,9 @@ spec:
         - name: nginx-config
           configMap:
             name: proxy-patches-nginx-config
+        - name: nginx-files
+          configMap:
+            name: proxy-html-files
         - name: proxy-help-config
           configMap:
             name: proxy-help-config
@@ -36,6 +39,8 @@ spec:
         volumeMounts:
           - mountPath: /etc/nginx/conf.d/
             name: nginx-config
+          - mountPath: /srv/proxy-patches/
+            name: nginx-files
       - name: proxy-help
         image: minrk/proxy-help:0.1
         volumeMounts:
