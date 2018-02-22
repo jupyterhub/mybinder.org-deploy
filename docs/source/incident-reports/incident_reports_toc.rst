@@ -20,6 +20,7 @@ Incident history
    :maxdepth: 1
    :caption: Incidents
 
+   2018-02-20-jupyterlab-announcement.md
    2018-02-12-launch-fail.md
    2018-01-18-reddit-hug.md
    2018-01-18-ssl-outdated.md
