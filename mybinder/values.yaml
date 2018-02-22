@@ -93,7 +93,7 @@ binderhub:
           capabilities:
             add:
             - NET_ADMIN
-      schedulerStrategy: pack
+      schedulerStrategy: pack'
   repo2dockerImage: jupyter/repo2docker:9809b93
   perRepoQuota: 200
 
