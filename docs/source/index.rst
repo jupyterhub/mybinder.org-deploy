@@ -19,6 +19,7 @@ Components
 
    components/metrics.md
    components/dashboards.md
+   components/ingress.md
 
 Deployment and Operation
 ------------------------
