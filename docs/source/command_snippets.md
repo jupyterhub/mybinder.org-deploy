@@ -104,3 +104,14 @@ autoscaler doesn't have any idle nodes available for deletion. Similarly if
 the new minimum is higher than the current size and there is no need to increase
 the size of the cluster the autoscaler will not scale up the cluster even though
 it is below the minimum size.
+
+## Acronyms that Chris likes to use in Gitter
+
+It has been pointed out that Chris often employs the use of unusually
+long acronyms. This is a short list of translations so that the world can
+understand his unique and special mind.
+
+* TYVM: Thank You Very Much
+* SGTM: Sounds Good To Me
+* LMKWYT: Let Me Know What You Think
+* WDYT: What Do You Think
