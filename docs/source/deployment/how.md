@@ -26,17 +26,14 @@ which we step through below.
 2. Open the [branches page for the BinderHub travis account](https://travis-ci.org/jupyterhub/binderhub/branches).
 3. Click on the number for the latest build on "Master". It will say "#NNN passed".
 4. You'll see a list of builds that have been run on this branch. Click on the `TEST=helm` job.
-5. If the build succeeds (is green), grab the hash that is displayed at the end of the
-   travis output. It looks something like:
+5. If the build succeeds (is green), a new helm chart for BinderHub will automatically
+   be published and listed on GitHub. Go to the [BinderHub Helm Chart](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub)
+   page and grab the hash for the latest published version (at the top).
 
-       Successfully packaged chart and saved it to: gh-pages/binderhub-0.1.0-f87ac35.tgz
+       binderhub-<version-number>-<hash-name>
 
-   The hash is the string at the very end, between `-` and `.tgz`. In this
+   You want to copy `<hash-name>`. It will look something like
    example, it is `f87ac35`.
-
-   ```eval_rst
-   .. image:: travis-screenshot.png
-   ```
 
 6. In your fork of the [mybinder.org-deploy](https://github.com/jupyterhub/mybinder.org-deploy)
    repository, open `mybinder/requirements.yaml`.
