@@ -13,9 +13,9 @@ our Ingress needs.
 
 ## Nginx Ingress
 
-We run on Google Cloud's Kubernetes Engine. Note that GKE comes pre-installed with
+We run on Google Cloud's Kubernetes Engine. Even thought GKE comes pre-installed with
 the [Google Cloud Load Balancer Ingress provider](https://github.com/kubernetes/ingress-gce),
-but we decided to use nginx instead for the following reasons:
+we decided to use nginx instead for the following reasons:
 
 1. GCLB has a 30s default timeout on all HTTP connections. This is counted
    not just when connection is idle, but from connection start time. This
