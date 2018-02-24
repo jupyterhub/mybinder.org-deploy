@@ -20,6 +20,7 @@ Components
    components/metrics.md
    components/dashboards.md
    components/ingress.md
+   components/cloud.md
 
 Deployment and Operation
 ------------------------

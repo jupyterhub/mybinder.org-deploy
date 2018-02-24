@@ -105,6 +105,48 @@ the new minimum is higher than the current size and there is no need to increase
 the size of the cluster the autoscaler will not scale up the cluster even though
 it is below the minimum size.
 
+## Manually decrease cluster size
+
+The autoscaler has issues scaling nodes *down*, and so scaling down needs to be
+manually done. The problems are caused by problem is caused by:
+
+1. The cluster autoscaler will never remove nodes that have user pods running.
+2. We can not tell the Kubernetes Scheduler to 'pack' user pods efficiently -
+   if there are two nodes, one with 60 user pods and another with 2, a new user
+   pod can end up in either of those. Since all user pods need to be gone from
+   a node before it can be scaled down, this leads to inefficient
+   load distribution.
+
+Because of this, you might have to manually scale down the cluster now and then.
+
+You can find the node utilization with the following command:
+
+```bash
+kubectl --namespace=prod get pod  -o wide | grep jupyter | awk '{ print $7; }' | sort | uniq -c | sort -n
+```
+
+This outputs something like:
+
+```
+     1  gke-prod-a-ssd-pool-32-134a959a-d34f
+     36 gke-prod-a-ssd-pool-32-134a959a-b8f0
+     79 gke-prod-a-ssd-pool-32-134a959a-k7f8
+```
+
+The first node has only one pod in it, so you can `cordon` it:
+
+```bash
+kubectl cordon  gke-prod-a-ssd-pool-32-134a959a-d34f
+```
+
+And after a few hours, you can remove all pods from it:
+
+```bash
+kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0  gke-prod-a-ssd-pool-32-134a959a-d34f
+```
+
+After this, the node should be automatically killed by the autoscaler in about 10 minutes.
+
 ## Acronyms that Chris likes to use in Gitter
 
 It has been pointed out that Chris often employs the use of unusually
