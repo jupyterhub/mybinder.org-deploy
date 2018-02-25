@@ -13,7 +13,7 @@ our Ingress needs.
 
 ## Nginx Ingress
 
-We run on Google Cloud's Kubernetes Engine. Even thought GKE comes pre-installed with
+We run on Google Cloud's Kubernetes Engine. Even though GKE comes pre-installed with
 the [Google Cloud Load Balancer Ingress provider](https://github.com/kubernetes/ingress-gce),
 we decided to use nginx instead for the following reasons:
 
