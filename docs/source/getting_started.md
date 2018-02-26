@@ -46,6 +46,19 @@ kubectl --namespace=prod get pod
 
 and a list of all running Binder pods should be printed.
 
+### Connect to the staging deployment
+
+Now that you're connected to prod it's time to connect to staging. To do so,
+pull the staging credentials on to your local machine:
+
+```
+gcloud container clusters get-credentials staging --zone us-central1-a --project binder-staging
+```
+
+You can now switch between the `prod` and `staging` deployments by changing your
+`kubectl` context. See the [Kubectl context documentation](https://kubernetes-v1-4.github.io/docs/user-guide/kubectl/kubectl_config_use-context/)
+for more information.
+
 ## Look at the project Grafana
 
 Another useful resource is the [mybinder.org Grafana dashboard](https://grafana.mybinder.org/?orgId=1).
