@@ -1,3 +1,4 @@
+.DS_Store
 *~
 __pycache__
 *.py[co]
@@ -9,3 +10,4 @@ mybinder/requirements.lock
 .ipynb_checkpoints
 
 docs/_build
+travis/crypt-key
