@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: pod-culler
+  labels:
+    app: pod-culler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-culler
+  template:
+    metadata:
+      labels:
+        app: pod-culler
+    spec:
+      containers:
+      - name: culler
+        image: {{ .Values.podCuller.image.name }}:{{ .Values.podCuller.image.tag }}
+        resources:
+          requests:
+            memory: 100Mi
+        env:
+        - name: MAX_AGE
+          value: {{ .Values.culler.maxAge | quote }}
+        - name: INTERVAL
+          value: {{ .Values.culler.interval | quote }}
