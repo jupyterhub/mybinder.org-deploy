@@ -6,6 +6,9 @@ binderhub:
   registry:
     prefix: gcr.io/binder-staging/r2d-acae7f9-
 
+  build:
+    appendixUrl: https://github.com/jupyterhub/mybinder.org-deploy/archive/7a07920b2.tar.gz
+
   hub:
     url: https://hub.staging.mybinder.org
 
