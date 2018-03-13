@@ -33,6 +33,18 @@ kwarg like so:
 python scripts/delete-pods.py --pod-name <your-query> --older-than <your-query> --delete
 ```
 
+## Forcibly delete a pod
+
+Sometimes pods aren't easily deleted, e.g., if they are in a state `Unknown`
+or `NodeLost` kubernetes may not be able to fluidly delete them. This is because
+kubernetes waits for pods to gracefully delete, and if a pod cannot do this
+(e.g., because it is totally unable to communicated with kubernetes), the
+delete process won't happen. In this case, you can delete such pods with:
+
+```
+kubectl --namespace=prod delete pod <POD-NAME> --grace-period=0 --force
+```
+
 ## Remove a node from the cluster
 
 First cordon off the node with `kubectl cordon <nodename>`.
