@@ -100,7 +100,7 @@ binderhub:
         CULL_KERNEL_TIMEOUT: '600'
         CULL_INTERVAL: '60'
   build:
-    repo2dockerImage: jupyter/repo2docker:acae7f9
+    repo2dockerImage: jupyter/repo2docker:05168b0
   perRepoQuota: 200
 
 playground:
