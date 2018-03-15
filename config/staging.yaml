@@ -7,7 +7,16 @@ binderhub:
     prefix: gcr.io/binder-staging/r2d-acae7f9-
 
   build:
-    appendixUrl: https://github.com/jupyterhub/mybinder.org-deploy/archive/7a07920b2.tar.gz
+    appendix: |
+      USER root
+      ENV BINDER_URL={binder_url}
+      ENV REPO_URL={repo_url}
+      RUN cd /tmp \
+       && wget -q https://github.com/jupyterhub/mybinder.org-deploy/archive/329ab6a52c272cf425f9bd69221bf072893f87b1.tar.gz -O appendix.tar.gz \
+       && tar --wildcards -xzf appendix.tar.gz --strip 1 */appendix\
+       && ./appendix/run-appendix \
+       && rm -rf appendix.tar.gz appendix
+      USER $NB_USER
 
   hub:
     url: https://hub.staging.mybinder.org
