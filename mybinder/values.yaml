@@ -94,6 +94,11 @@ binderhub:
             add:
             - NET_ADMIN
       schedulerStrategy: pack
+      extraEnv:
+        CULL_CONNECTED: '1'
+        CULL_TIMEOUT: '600'
+        CULL_KERNEL_TIMEOUT: '600'
+        CULL_INTERVAL: '60'
   build:
     repo2dockerImage: jupyter/repo2docker:acae7f9
   perRepoQuota: 200
