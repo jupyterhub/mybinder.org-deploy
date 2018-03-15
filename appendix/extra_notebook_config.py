@@ -4,7 +4,12 @@ c.NotebookApp.jinja_template_vars.update({
     'binder_url': os.environ.get('BINDER_URL', 'https://mybinder.org'),
 })
 
-# shutdown notebook after no activity for 10 minutes
+
+# if a user leaves a notebook with a running kernel,
+# the effective idle timeout will typically be CULL_TIMEOUT + CULL_KERNEL_TIMEOUT
+# as culling the kernel will register activity,
+# resetting the no_activity timer for the server as a whole
+
 if os.getenv('CULL_TIMEOUT'):
     # shutdown the server after no activity
     c.NotebookApp.shutdown_no_activity_timeout = int(os.getenv('CULL_TIMEOUT'))
