@@ -57,6 +57,9 @@ binderhub:
     hub:
       extraConfigMap:
         cors: *cors
+      extraConfig:
+        neverRestart: |
+          c.KubeSpawner.singleuser_extra_pod_config.update({'restartPolicy': 'Never'})
     proxy:
       service:
         type: ClusterIP
@@ -94,8 +97,13 @@ binderhub:
             add:
             - NET_ADMIN
       schedulerStrategy: pack
+      extraEnv:
+        CULL_CONNECTED: '1'
+        CULL_TIMEOUT: '600'
+        CULL_KERNEL_TIMEOUT: '600'
+        CULL_INTERVAL: '60'
   build:
-    repo2dockerImage: jupyter/repo2docker:acae7f9
+    repo2dockerImage: jupyter/repo2docker:05168b0
   perRepoQuota: 200
 
 playground:
