@@ -116,6 +116,14 @@ binderhub:
       USER $NB_USER
   perRepoQuota: 200
 
+podCuller:
+  image:
+    name: minrk/binder-pod-culler
+    tag: 12ebbc7
+  # these times are minutes:
+  maxAge: 360
+  interval: 30
+
 playground:
   image:
     name: yuvipanda/play.nteract.io

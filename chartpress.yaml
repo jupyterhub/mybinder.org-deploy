@@ -1,0 +1,6 @@
+charts:
+  - name: mybinder
+    imagePrefix: minrk/binder-
+    images:
+      pod-culler:
+        valuesPath: podCuller.image

@@ -1,0 +1,63 @@
+#!/usr/bin/env python3
+"""
+Delete all user pods older than a given duration.
+
+We use the Kubernetes cluster autoscaler, which
+removes nodes from the kubernetes cluster when they have
+been 'empty' for more than 10 minutes However, we
+have issues where some pods get 'stuck' and never actually
+die, sometimes forever. This causes nodes to not be
+killed automatically.
+
+This script makes it easier to find and delete pods that match a certain
+name or age. By default, it only *finds* and lists these pods. If the `--delete` flag
+is given, it will also *delete* those pods.
+
+You need the `kubernetes` python library installed for this to work.
+"""
+import argparse
+from kubernetes import config, client
+from datetime import datetime, timedelta, timezone
+
+# Load kubernetes incluster config
+config.load_incluster_config()
+namespace = os.environ['POD_NAMESPACE']
+kube = client.CoreV1Api()
+
+# load time options (units are minutes)
+max_age = float(os.getenv('MAX_AGE') or '360')
+interval = float(os.getenv('INTERVAL') or '60') * 60
+
+def cull_pods(max_age_hours):
+    """Cull pods older than max_age hours"""
+    pods = kube.list_namespaced_pod(namespace, label_selector="component=singleuser-server")
+    total_pods = []
+    age_cutoff = timedelta(minutes=max_age)
+    for pod in pods.items:
+        # API results always use UTC timezone
+        age = datetime.now(timezone.utc) - pod.status.start_time.replace(tzinfo=timezone.utc)
+        if age > cutoff:
+            if False:
+                kube.delete_namespaced_pod(pod.metadata.name, namespace, client.V1DeleteOptions())
+                print("Deleted {:.1f}h old pod {}".format(age.total_seconds() / 60 / 60, pod.metadata.name))
+                summary_text = 'Deleted {} pods'
+            else:
+                print("Found {:.1f}h old pod {}".format(age.total_seconds() / 60 / 60, pod.metadata.name))
+                summary_text = 'Found {} pods'
+
+            total_pods.append(pod.metadata.name)
+
+    print('---', '\n', summary_text.format(len(total_pods)))
+
+
+def main():
+    while True:
+        try:
+            cull_pods(max_age)
+        except Exception:
+            traceback.print_traceback()
+        time.sleep(interval_minutes * 60)
+
+
+if __name__ == '__main__':
+    main()
