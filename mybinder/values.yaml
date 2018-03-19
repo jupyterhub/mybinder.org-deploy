@@ -155,6 +155,7 @@ kube-lego:
 
 grafana:
   server:
+    image: "minrk/grafana:4.6.3-pr142"
     ingress:
       enabled: true
       annotations:
