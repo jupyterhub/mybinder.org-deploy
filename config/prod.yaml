@@ -44,10 +44,10 @@ binderhub:
       nginx:
         resources:
           requests:
-            memory: 2Gi
+            memory: 3Gi
             cpu: 1
           limits:
-            memory: 2Gi
+            memory: 3Gi
             cpu: 1
     ingress:
       hosts:
