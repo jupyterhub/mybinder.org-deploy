@@ -54,6 +54,8 @@ binderhub:
   jupyterhub:
     cull:
       timeout: 600
+      # maxAge is 6 hours: 6 * 3600 = 21600
+      maxAge: 21600
     hub:
       extraConfigMap:
         cors: *cors
