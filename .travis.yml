@@ -63,13 +63,13 @@ before_deploy:
   python ./deploy.py staging staging
 - |
   # Stage 3, Step 2: Verify staging works
-  py.test -n 2 --binder-url=https://staging.mybinder.org --hub-url=https://hub.staging.mybinder.org
+  travis_retry py.test -n 2 --binder-url=https://staging.mybinder.org --hub-url=https://hub.staging.mybinder.org
 - |
   # Stage 4, Step 1: Deploy to production
   python ./deploy.py prod prod-a
 - |
   # Stage 4, Step 2: Verify production works
-  py.test -n 2 --binder-url=https://mybinder.org --hub-url=https://hub.mybinder.org
+  travis_retry py.test -n 2 --binder-url=https://mybinder.org --hub-url=https://hub.mybinder.org
 
 env:
   global:
