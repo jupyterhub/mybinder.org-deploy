@@ -11,3 +11,6 @@ mybinder/requirements.lock
 
 docs/_build
 travis/crypt-key
+
+# Chris sandbox file name
+sandbox.ipynb
