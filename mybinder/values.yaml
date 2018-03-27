@@ -53,6 +53,9 @@ binderhub:
 
   jupyterhub:
     cull:
+      # cull every 11 minutes so it is out of phase
+      # with the proxy check-routes interval of five minutes
+      every: 660
       timeout: 600
       # maxAge is 6 hours: 6 * 3600 = 21600
       maxAge: 21600
