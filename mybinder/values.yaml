@@ -205,6 +205,13 @@ grafana:
 
       [smtp]
       enabled = true
+      host = smtp.gmail.com:587
+      user = mybinderbot@gmail.com
+      password = """binderrules"""
+      skip_verify = true
+      from_address = mybinderbot@gmail.com
+      from_name = BinderBot
+
 
 
 prometheus:
