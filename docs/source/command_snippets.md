@@ -5,7 +5,13 @@ that are useful for operating and investigating what is happening on the
 cluster. Think of it as a mybinder.org specific extension of the [kubernetes
 cheatsheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/).
 
-## List all pods that match a given name or age
+## The mybinder-tools Python repository
+
+Note that there is a helper package for working with Kubernetes in Python,
+you can find it in the [mybinder-tools repo](https://github.com/jupyterhub/mybinder-tools).
+
+## Pod management
+### List all pods that match a given name or age
 
 Sometimes you want to delete all the pods for a given repository. The easiest
 way to do this is to name-match the part of the pod name that corresponds to
@@ -24,7 +30,7 @@ python scripts/delete-pods.py --pod-name <your-query> --older-than <your-query>
 Note, they are both optional, but you need to supply *at least* one. Running
 the above command by itself will list all pods that match the query.
 
-## Delete all pods that match a given name or age
+### Delete all pods that match a given name or age
 
 If you wish to **delete** the pods that match the query above, you supply the `--delete`
 kwarg like so:
@@ -33,7 +39,7 @@ kwarg like so:
 python scripts/delete-pods.py --pod-name <your-query> --older-than <your-query> --delete
 ```
 
-## Forcibly delete a pod
+### Forcibly delete a pod
 
 Sometimes pods aren't easily deleted, e.g., if they are in a state `Unknown`
 or `NodeLost` kubernetes may not be able to fluidly delete them. This is because
@@ -45,18 +51,85 @@ delete process won't happen. In this case, you can delete such pods with:
 kubectl --namespace=prod delete pod <POD-NAME> --grace-period=0 --force
 ```
 
-## Remove a node from the cluster
+## Node control and information
 
-First cordon off the node with `kubectl cordon <nodename>`.
-Wait for there to be no `jupyter-*` pods on the node. You can check this with
-`kubectl get pods --namespace=prod -o wide | grep "<nodename>$" | grep "^jupyter-"`.
-Then drain the node `kubectl drain <nodename>`. The kubectl drain command will
-most likely give you an error about certain pods running on the node that
-prevent it from draining the node. It is Ok (and expected) to use the suggested
-flags to force the draining: `kubectl drain <nodename> --ignore-daemonsets --force --delete-local-data`. The autoscaler should now remove the  node for you.
-This can take 10-15minutes.
+### Manually increase cluster size
 
-## Find out how many user pods are running on various nodes
+Sometimes we know ahead of time that mybinder.org will receive a lot of traffic.
+As preparation we might choose to increase the size of the cluster before the
+event.
+
+To pre-emptively bump the cluster size beyond current occupancy, follow these steps:
+
+* Increase autoscaler minimum size. (note this will lead to a brief period where
+  the kubernetes API is not available.)
+  * Go to http://console.cloud.google.com/
+  * Click "Kubernetes engine" -> "edit" button
+  * Under "Node Pools" find the "minimum size" field and update it.
+
+* Use the `gcloud` command line tool to explicitly resize the cluster.
+  * `gcloud container clusters resize prod-a --size <NEW-SIZE>`
+
+Manually resizing a cluster with autoscaling on doesn't always work because the autoscaler
+can automatically reduce the cluster size after asking for more nodes that
+aren't needed. Increasing the minimum size works if you are resizing from
+outside the autoscaler's bounds (e.g. 2) to the new minimum cluster size (3), so the
+autoscaler doesn't have any idle nodes available for deletion. Similarly if
+the new minimum is higher than the current size and there is no need to increase
+the size of the cluster the autoscaler will not scale up the cluster even though
+it is below the minimum size.
+
+### Removing a node from the cluster
+
+To remove a node from the cluster, we follow a two-step process. We first
+**cordon** the node, which prevents new pods from being scheduled on it. We then
+**drain** the node, which removes all remaining pods from the node.
+
+* Step 1. Cordon the node
+
+  ```bash
+  kubectl cordon gke-prod-a-ssd-pool-32-134a959a-d34f
+  ```
+
+  "cordoning" explicitly tells kubernetes **not** to start new pods on this node.
+  For more information on cordoning, see :ref:`term-cordoning`.
+* Step 2. Wait a few hours for pods to naturally get deleted from the node.
+  We'd rather not forcibly delete pods if possible. However if you *need* to
+  delete all the pods on the node, you can skip to step 3.
+* Step 3. Remove all pods from the node
+
+  ```bash
+  kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0  <NODE-NAME>
+  ```
+
+  After running this, the node should now (forcibly) have 0 pods running on it.
+* Step 4. Confirm the node has no pods on it after a few minutes. You can do this
+  with:
+
+  ```bash
+  `kubectl get pods --namespace=prod -o wide | grep "<NODE-NAME>$" | grep "^jupyter-"`
+  ```
+
+  If there are any pods remaining, manually delete them with `kubectl delete pod`.
+
+Once the node has no pods on it, the autoscaler will automatically remove it.
+
+**A note on the need for scaling down with the autoscaler**.
+The autoscaler has issues scaling nodes *down*, so scaling down needs to be
+manually done. The problems are caused by:
+
+1. The cluster autoscaler will never remove nodes that have user pods running.
+2. We can not tell the Kubernetes Scheduler to 'pack' user pods efficiently -
+   if there are two nodes, one with 60 user pods and another with 2, a new user
+   pod can end up in either of those. Since all user pods need to be gone from
+   a node before it can be scaled down, this leads to inefficient
+   load distribution.
+
+Because the autoscaler will only remove a node when it has no pods, this means
+it is unlikely that nodes will be properly removed. Thus the necessity for
+manually scaling down now and then.
+
+### List how many user pods are running on all nodes
 
 You can find the number of user pods on various nodes with the following command:
 
@@ -71,7 +144,9 @@ The `awk` command selects the 7th column in the output (which is the node name).
 The sort / uniq / sort combination helps print the number of pods per each node in
 sorted order.
 
-## Manually confirm network between pods is working
+## Networking
+
+### Manually confirm network between pods is working
 
 To confirm that binderhub can talk to jupyterhub, to the internet in general, or
 you want to confirm for yourself that there is no connectivity problem between
@@ -94,79 +169,6 @@ To find out hostnames to try look at the `metadata.name` field of a kubernetes
 service in the helm chart. You should be able to connect to each of them using
 the name as the hostname. Take care to use the right port, not all of them are
 listening on 80.
-
-## Manually increase cluster size
-
-Sometimes we know ahead of time that mybinder.org will receive a lot of traffic.
-As preparation we might choose to increase the size of the cluster before the
-event.
-
-To pre-emptively bump the cluster size beyond current occupancy, it's two steps:
-
-* increase autoscaler minimum size (http://console.cloud.google.com/), this
-  will lead to a brief period where the kubernetes API is not available.
-* resize cluster to new minimum size explicitly with `gcloud container clusters resize prod-a --size 3`
-  replacing 3 with your target size.
-
-Manually resizing a cluster with autoscaling on doesn't always work because the autoscaler
-can automatically reduce the cluster size after asking for more nodes that
-aren't needed. Increasing the minimum size works if you are resizing from
-outside the autoscaler's bounds (e.g. 2) to the new minimum cluster size (3), so the
-autoscaler doesn't have any idle nodes available for deletion. Similarly if
-the new minimum is higher than the current size and there is no need to increase
-the size of the cluster the autoscaler will not scale up the cluster even though
-it is below the minimum size.
-
-## Manually scaling down the cluster size
-
-The autoscaler has issues scaling nodes *down*, so scaling down needs to be
-manually done. The problems are caused by:
-
-1. The cluster autoscaler will never remove nodes that have user pods running.
-2. We can not tell the Kubernetes Scheduler to 'pack' user pods efficiently -
-   if there are two nodes, one with 60 user pods and another with 2, a new user
-   pod can end up in either of those. Since all user pods need to be gone from
-   a node before it can be scaled down, this leads to inefficient
-   load distribution.
-
-Because the autoscaler will only remove a node when it has no pods, this means
-it is unlikely that nodes will be properly removed. Thus the necessity for
-manually scaling down now and then.
-
-You can print the node utilization with the following command:
-
-```bash
-kubectl --namespace=prod get pod  -o wide | grep jupyter | awk '{ print $7; }' | sort | uniq -c | sort -n
-```
-
-This outputs something like:
-
-```
-     1  gke-prod-a-ssd-pool-32-134a959a-d34f
-     36 gke-prod-a-ssd-pool-32-134a959a-b8f0
-     79 gke-prod-a-ssd-pool-32-134a959a-k7f8
-```
-
-This prints the number of pods on the node on the left, and the node name
-on the right.
-
-In this case, the first node has only one pod in it, so you can `cordon` it:
-
-```bash
-kubectl cordon gke-prod-a-ssd-pool-32-134a959a-d34f
-```
-
-"cordoning" explicitly tells kubernetes **not** to start new pods on this node.
-For more information on cordoning, see :ref:`term-cordoning`.
-
-And after a few hours, you can remove all pods from it with:
-
-```bash
-kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0  gke-prod-a-ssd-pool-32-134a959a-d34f
-```
-
-After running this, the node should now (forcibly) have 0 pods running on it,
-and will be automatically killed by the autoscaler in about 10 minutes.
 
 ## Acronyms that Chris likes to use in Gitter
 
