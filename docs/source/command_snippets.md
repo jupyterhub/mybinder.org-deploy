@@ -51,7 +51,20 @@ delete process won't happen. In this case, you can delete such pods with:
 kubectl --namespace=prod delete pod <POD-NAME> --grace-period=0 --force
 ```
 
-## Node control and information
+### Effects of deleting production pods
+
+Below is a list of each production pod, and the expected outcome that comes with
+deleting each one.
+
+* `hub-` XXX
+* `binder-` XXX
+* `proxy-` XXX
+* `proxy-patches-` XXX
+* `redirector-` XXX
+* `jupyter-` - Deleting a user pod will shut down their session. The user will
+  encounter errors when they attempt to submit code to the kernel.
+
+## Node management and information
 
 ### Manually increase cluster size
 
@@ -88,7 +101,7 @@ To remove a node from the cluster, we follow a two-step process. We first
 * Step 1. Cordon the node
 
   ```bash
-  kubectl cordon gke-prod-a-ssd-pool-32-134a959a-d34f
+  kubectl cordon <NODE-NAME>
   ```
 
   "cordoning" explicitly tells kubernetes **not** to start new pods on this node.
@@ -143,6 +156,37 @@ pods. The `--no-headers` asks kubectl to not print column titles as a header.
 The `awk` command selects the 7th column in the output (which is the node name).
 The sort / uniq / sort combination helps print the number of pods per each node in
 sorted order.
+
+### Recycling nodes
+
+We have found that nodes older than > 4 days often begin to have problems.
+The nature of these problems is often hard to debug, but they tend to be
+fixed by "recycling" the nodes (AKA, creating a new node to take the place
+of the older node). Here's the process for recycling nodes.
+
+* **List the node ages.** The following command will list the current nodes
+  and their ages.
+
+  `kubectl get node`
+
+* **Check if any nodes are > 4 days old.** These are the nodes that we can
+  recycle.
+
+* **Cordon the node you'd like to recycle.**
+
+  `kubectl cordon <NODE-NAME>`
+
+* **If you need a new node immediately.** E.g., if we think a currently-used
+  node is causing problems and we need to move production pods to a new node.
+  In this case, manually resize the cluster up so that a new node is added,
+  then delete the relevant pods from the (cordoned) old node.
+* **Wait a few hours.** This gives the pods time to naturally leave the node.
+* **Drain the node.** Run the following command to remove all pods from the node.
+
+  `kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0  <NODE-NAME>`
+
+If necessary, you can then scale the cluster back down.
+
 
 ## Networking
 
