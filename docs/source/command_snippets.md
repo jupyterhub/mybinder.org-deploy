@@ -56,12 +56,12 @@ kubectl --namespace=prod delete pod <POD-NAME> --grace-period=0 --force
 Below is a list of each production pod, and the expected outcome that comes with
 deleting each one.
 
-* `hub-` XXX
-* `binder-` XXX
-* `proxy-` XXX
-* `proxy-patches-` XXX
-* `redirector-` XXX
-* `jupyter-` - Deleting a user pod will shut down their session. The user will
+* `hub-` active user sessions will not be affected. New and pending launches will fail until the new Hub comes back.
+* `binder-` the `mybinder.org` website will temporarily go down. Active user sessions will not be affected.
+* `proxy-` all current users will lose connections (kernel connection lost) until the proxy returns and the Hub restores the routes. Server state is unaffected. Most browser sessions should recover by restoring connections. All pending launches will fail due to lost connections.
+* `proxy-patches-` brief, minor degradation of error messages when browsers attempt to connect to a not-running server. This results in increased load on the Hub, handling requests from browsers whose idle servers have been culled.
+* `redirector-` redirect sites (beta.mybinder.org) will 404 instead of sending to mybinder.org.
+* `jupyter-` deleting a user pod will shut down their session. The user will
   encounter errors when they attempt to submit code to the kernel.
 
 ## Node management and information
@@ -171,21 +171,24 @@ of the older node). Here's the process for recycling nodes.
 
 * **Check if any nodes are > 4 days old.** These are the nodes that we can
   recycle.
-
 * **Cordon the node you'd like to recycle.**
 
   `kubectl cordon <NODE-NAME>`
 
 * **If you need a new node immediately.** E.g., if we think a currently-used
   node is causing problems and we need to move production pods to a new node.
+
   In this case, manually resize the cluster up so that a new node is added,
   then delete the relevant pods from the (cordoned) old node.
+
 * **Wait a few hours.** This gives the pods time to naturally leave the node.
 * **Drain the node.** Run the following command to remove all pods from the node.
 
   `kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0  <NODE-NAME>`
 
-If necessary, you can then scale the cluster back down.
+* **If it isn't deleted after several hours, delete the node.** with
+
+  `kubectl delete <NODE-NAME>`
 
 
 ## Networking
