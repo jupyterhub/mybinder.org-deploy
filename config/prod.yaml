@@ -24,7 +24,7 @@ binderhub:
         guarantee: 2G
         limit: 2G
       cpu:
-        gurantee: "1m"
+        guarantee: "1m"
         limit: 2
     hub:
       resources:
