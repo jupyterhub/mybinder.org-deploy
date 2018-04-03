@@ -15,7 +15,7 @@ binderhub:
         guarantee: 256M
         limit: 256M
       cpu:
-        guarantee: "1m"
+        guarantee: 0.1
         limit: 1
     ingress:
       hosts:
