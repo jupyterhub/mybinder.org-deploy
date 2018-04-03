@@ -15,7 +15,7 @@ binderhub:
         guarantee: 256M
         limit: 256M
       cpu:
-        limit: "1"
+        limit: 1
     ingress:
       hosts:
         - hub.staging.mybinder.org
