@@ -13,12 +13,6 @@ install:
 script:
  - true
 
-jobs:
-  include:
-    - if: type = cron
-      stage: cron
-      script: echo "this is cron"
-
 # We are using before_deploy instead of script or deploy
 # since before_deploy gives us nice, folded log views,
 # which neither script nor deploy seems to!
