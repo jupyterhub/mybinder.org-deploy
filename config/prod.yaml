@@ -21,8 +21,8 @@ binderhub:
   jupyterhub:
     singleuser:
       memory:
-        guarantee: 8G
-        limit: 8G
+        guarantee: 2G
+        limit: 2G
       cpu:
         guarantee: 0.1
         limit: 2
