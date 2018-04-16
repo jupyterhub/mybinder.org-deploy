@@ -119,7 +119,7 @@ binderhub:
        && ./appendix/run-appendix \
        && rm -rf appendix.tar.gz appendix
       USER $NB_USER
-  perRepoQuota: 200
+  perRepoQuota: 100
 
 playground:
   image:
