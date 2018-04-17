@@ -4,7 +4,6 @@ binderhub:
     # They should be strings that will match "^<org-name>/<repo-name>.*"
     bans: |
         c.GitHubRepoProvider.banned_specs = [
-          '^samlau95/nbinteract-image.*',
         ]
   service:
     type: ClusterIP
