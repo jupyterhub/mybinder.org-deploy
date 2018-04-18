@@ -28,18 +28,12 @@ def setup_auth(release, cluster):
 
 def deploy(release):
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
-    # Temporary fix: delete proxy deployment before upgrading
-    # needed due to changing labels causing upgrade failure
-    subprocess.check_call([
-        'kubectl',
-        '--namespace', release,
-        'delete', 'deployment', 'proxy',
-    ])
     helm = [
         'helm', 'upgrade', '--install',
         '--namespace', release,
         release,
         'mybinder',
+        '--force',
         '--wait',
         '--timeout', '600',
         '-f', os.path.join('config', release + '.yaml'),
