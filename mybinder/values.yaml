@@ -51,6 +51,9 @@ binderhub:
             add:
             - NET_ADMIN
 
+  imageCleaner:
+    inodeAvailThreshold: 0
+
   jupyterhub:
     cull:
       # cull every 11 minutes so it is out of phase
