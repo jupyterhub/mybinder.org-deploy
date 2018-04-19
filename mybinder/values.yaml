@@ -63,6 +63,8 @@ binderhub:
       # maxAge is 6 hours: 6 * 3600 = 21600
       maxAge: 21600
     hub:
+      image:
+        tag: 322336a
       extraConfigMap:
         cors: *cors
       extraConfig:
