@@ -55,10 +55,7 @@ before_deploy:
   # Stage 3, Step 2: Verify staging works
   travis_retry py.test -n 2 --binder-url=https://staging.mybinder.org --hub-url=https://hub.staging.mybinder.org
 - |
-  # Stage 4, Step 1: Deploy to production
-  python ./deploy.py prod prod-a
-- |
-  # Stage 4, Step 2: Post message to Grafana that deployment has completed
+  # Stage 4, Step 1: Post message to Grafana that deployment to production has started
   source secrets/grafana-api-key
   export PULL_REQUEST_ID=$(git log -1 --pretty=%B | head -n1 | sed 's/^.*#\([0-9]*\).*/\1/')
   export AUTHOR_NAME="$(git log  -1 --pretty=%aN)"
@@ -66,7 +63,10 @@ before_deploy:
   python3 travis/post-grafana-annotation.py  \
     --grafana-url https://grafana.mybinder.org \
     --tag deployment-start \
-    "$(echo -en \"${PULL_REQUEST_TITLE}\\n\\n${AUTHOR_NAME}: https://github.com/${TRAVIS_REPO_SLUG}/pull/${PULL_REQUEST_ID}\")"
+    "$(echo -en ${PULL_REQUEST_TITLE}\\n\\n${AUTHOR_NAME}: https://github.com/${TRAVIS_REPO_SLUG}/pull/${PULL_REQUEST_ID})"
+- |
+  # Stage 4, Step 2: Deploy to production
+  python ./deploy.py prod prod-a
 - |
   # Stage 4, Step 3: Verify production works
   travis_retry py.test -n 2 --binder-url=https://mybinder.org --hub-url=https://hub.mybinder.org
