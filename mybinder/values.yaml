@@ -52,7 +52,7 @@ binderhub:
             - NET_ADMIN
 
   imageCleaner:
-    inodeAvailThreshold: .6
+    inodeAvailThreshold: 0.6
 
   jupyterhub:
     cull:
