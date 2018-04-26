@@ -1,0 +1,8 @@
+<!-- If this PR is a bump to either BinderHub or repo2docker,
+use the template below in your PR description. If it is not,
+(e.g., a docs PR) then you can delete the template below. -->
+
+This is a <BinderHub / repo2docker> version bump. See the link
+below for a diff of new changes:
+
+https://github.com/jupyterhub/<REPO-NAME>/compare/<OLD-HASH>...<NEW-HASH>

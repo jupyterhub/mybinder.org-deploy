@@ -43,6 +43,7 @@ which we step through below.
         version: 0.1.0-9692255
         repository: https://jupyterhub.github.io/helm-chart
 
+   COPY the *old* hash value (above, it is `9692255`) and keep it for later.
    Replace the existing hash that comes just after the `-` under 'version' with new hash
    from step 3. In this example, replace `9692255`  with the hash `f87ac35`that you've
    copied in step 3. The edited lines will be:
@@ -78,11 +79,16 @@ The following lines describe how to point mybinder.org to the new repo2docker im
    code in the `Deploying application` line in order to see this text.
 6. In your fork of the mybinder.org-deploy repository, open
    `mybinder/values.yaml`.
-7. Somewhere in the file you will see `repo2dockerImage`, replace the
-   text that is there with what you copied in step 2. For example, the
-   edited file will look similar to:
-
+7. Somewhere in the file you will see `repo2dockerImage`, it will look like
+   this:
+   
        repo2dockerImage: jupyter/repo2docker:65d5411
+   
+   COPY the *old* hash value (above, it is `65d5411`) and keep it for later.
+8. Replace the *old* hash that is there with what you copied in step 2.
+   For example, the edited file will look similar to:
+
+       repo2dockerImage: jupyter/repo2docker:<YOUR-NEW-HASH>
 
 8. Merge this change to `mybinder/values.yaml` into the mybinder.org-deploy
    repository following the steps in the [Deploying a change](#deploying-a-change) section
@@ -96,18 +102,31 @@ Deploying a change involves making a PR with your desired change and merging it 
 master.
 
 1. Make the [changes](#upgrading-dependencies-for-the-mybinderorg-deployment) on your fork.
-2. Make a PR to the `master` branch with the changes you want.
-   **In this case, you can merge your own PR**.
-3. Review, accept, and merge this PR. This will make Travis deploy the changes
+2. Keep track of the **hashes** that were updated. You should have both the *old* hash that
+   was replaced, and the *new* hash that replaced it.
+3. Make a PR to the `master` branch with the changes you want.
+4. In the description of the PR, include a link to the *diff* between the old and new hashes
+   for the repository we're updating. It should have the following form:
+   
+       https://github.com/jupyterhub/<REPO-NAME>/compare/<OLD-HASH>...<NEW-HASH>
+       
+   For example, this is what the link for a recent update to BinderHub looks like:
+   
+       https://github.com/jupyterhub/binderhub/compare/3c21fde...af0d09e
+       
+5. Review, accept, and merge this PR. This will make Travis deploy the changes
    to [staging.mybinder.org](https://staging.mybinder.org), and run tests in the `tests/`
-   directory against it.
-4. If the tests succeed, the change will be deployed to mybinder.org.
-5. If the tests fail, the change will *not* be deployed to mybinder.org.
+   directory against it. **In this case, you can merge your own PR**. Note that if the
+   PR is a large change to the Kubernetes setup, this may take some time, and Travis may
+   time-out in the process. If this happens and you _expect_ it to happen, you can restart
+   travis a few times.
+6. If the tests succeed, the change will be deployed to mybinder.org.
+7. If the tests fail, the change will *not* be deployed to mybinder.org.
    You must then investigate why it failed. **If you can
    not figure out a cause in about 10 minutes, revert the change.**
    You can revert the change with [the GitHub UI](https://help.github.com/articles/reverting-a-pull-request/) and immediately
    merge the reversion PR that GitHub creates.
-6. Troubleshoot and make changes to your fork. Repeat the process from Step 1.
+8. Troubleshoot and make changes to your fork. Repeat the process from Step 1.
 
 ### Deploying to *only* `staging`
 
