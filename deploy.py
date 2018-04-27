@@ -9,7 +9,6 @@ BOLD = subprocess.check_output(['tput', 'bold']).decode()
 GREEN = subprocess.check_output(['tput', 'setaf', '2']).decode()
 NC = subprocess.check_output(['tput', 'sgr0']).decode()
 
-
 def setup_auth(release, cluster):
     """
     Set up GCloud + Kubectl authentication for talking to a given cluster
@@ -27,21 +26,7 @@ def setup_auth(release, cluster):
     ])
 
 
-def setup_helm():
-    """ensure helm is up to date"""
-    subprocess.check_output([
-        'helm', 'init', '--upgrade',
-    ])
-    # wait for tiller to come up
-    subprocess.check_call([
-        'kubectl', 'rollout', 'status',
-        '--namespace', 'kube-system',
-        '--watch', 'deployment', 'tiller-deploy',
-    ])
-
-
 def deploy(release):
-    """Deploy jupyterhub"""
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
     helm = [
         'helm', 'upgrade', '--install',
@@ -97,9 +82,6 @@ def main():
     args = argparser.parse_args()
 
     setup_auth(args.release, args.cluster)
-    setup_helm()
     deploy(args.release)
 
-
-if __name__ == '__main__':
-    main()
+main()
