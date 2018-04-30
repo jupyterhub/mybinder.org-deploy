@@ -64,21 +64,32 @@ binderhub:
   googleAnalyticsDomain: "mybinder.org"
 
 grafana:
-  server:
-    resources:
-      requests:
-        cpu: "0.2"
-        memory: 512Mi
-      limits:
-        cpu: "0.2"
-        memory: 512Mi
-    ingress:
-      hosts:
-        - grafana.mybinder.org
-      tls:
-        - hosts:
-            - grafana.mybinder.org
-          secretName: kubelego-tls-grafana
+  resources:
+    requests:
+      cpu: "0.2"
+      memory: 512Mi
+    limits:
+      cpu: "0.2"
+      memory: 512Mi
+  ingress:
+    hosts:
+      - grafana.mybinder.org
+    tls:
+      - hosts:
+          - grafana.mybinder.org
+        secretName: kubelego-tls-grafana
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: prometheus
+          orgId: 1
+          type: prometheus
+          url: https://prometheus.staging.mybinder.org
+          access: direct
+          isDefault: true
+          editable: false
+
 
 prometheus:
   server:
@@ -95,12 +106,12 @@ prometheus:
       storageClass: ssd
     retention: 60d
     ingress:
-        hosts:
-          - prometheus.mybinder.org
-        tls:
-          - hosts:
-              - prometheus.mybinder.org
-            secretName: kubelego-tls-prometheus
+      hosts:
+        - prometheus.mybinder.org
+      tls:
+        - hosts:
+            - prometheus.mybinder.org
+          secretName: kubelego-tls-prometheus
 
 nginx-ingress:
   controller:
