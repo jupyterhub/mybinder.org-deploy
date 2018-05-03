@@ -5,6 +5,7 @@ binderhub:
     bans: |
       c.GitHubRepoProvider.banned_specs = [
         # e.g. '^org/repo.*',
+        '^ines/spacy-binder.*',
       ]
   service:
     type: ClusterIP
