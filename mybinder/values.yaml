@@ -4,7 +4,7 @@ binderhub:
     # They should be strings that will match "^<org-name>/<repo-name>.*"
     bans: |
       c.GitHubRepoProvider.banned_specs = [
-        '^ines/spacy-binder.*',
+        # e.g. '^org/repo.*',
       ]
   service:
     type: ClusterIP
