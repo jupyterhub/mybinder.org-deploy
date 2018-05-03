@@ -3,8 +3,9 @@ binderhub:
     # Add banned repositories to the list below
     # They should be strings that will match "^<org-name>/<repo-name>.*"
     bans: |
-        c.GitHubRepoProvider.banned_specs = [
-        ]
+      c.GitHubRepoProvider.banned_specs = [
+        '^ines/spacy-binder.*',
+      ]
   service:
     type: ClusterIP
 
