@@ -164,53 +164,23 @@ kube-lego:
     create: true
 
 grafana:
-  server:
-    image: "minrk/grafana:4.6.3-pr142"
-    ingress:
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+  persistence:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+
+  grafana.ini:
+    auth.anonymous:
       enabled: true
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "true"
-  serverConfigFile:
-    grafana.ini: |
-      ; instance_name = ${HOSTNAME}
-      [paths]
-      data = /var/lib/grafana/data
-      logs = /var/log/grafana
-      plugins = /var/lib/grafana/plugins
-
-      [snapshots]
-      external_enabled = true
-      external_snapshot_url = https://snapshots-origin.raintank.io
-      external_snapshot_name = Publish to snapshot.raintank.io
-
-      [users]
-      ;allow_sign_up = true
-      ;allow_org_create = true
-      ;auto_assign_org = true
-      ;auto_assign_org_role = Viewer
-      ;login_hint = email or username
-      ;default_theme = dark
-
-      [auth.anonymous]
-      enabled = true
-      org_name = Main Org.
-      org_role = Viewer
-
-      [log]
-      mode = console
-      level = info
-
-      [dashboards.json]
-      enabled = true
-      path = /var/lib/grafana/dashboards
-
-      [grafana_net]
-      url = https://grafana.net
-
-      [smtp]
-      enabled = true
-
+      org_name: Main Org.
+      org_role: Viewer
+    smtp:
+      enabled: true
 
 prometheus:
   nodeExporter:
