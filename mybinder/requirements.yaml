@@ -3,10 +3,11 @@ dependencies:
    version: 0.8.13
    repository: https://kubernetes-charts.storage.googleapis.com
  - name: prometheus
-   version: 6.2.1
+   # Pin to 5.2.x until https://github.com/kubernetes/charts/pull/3546#issuecomment-367542705 is sorted
+   version: 5.2.1
    repository: https://kubernetes-charts.storage.googleapis.com
  - name: grafana
-   version: 1.2.0
+   version: 0.6.1
    repository: https://kubernetes-charts.storage.googleapis.com
  - name: kube-lego
    version: 0.1.12

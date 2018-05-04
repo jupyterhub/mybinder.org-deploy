@@ -26,34 +26,24 @@ binderhub:
             - hub.staging.mybinder.org
 
 grafana:
-  ingress:
-    hosts:
-      - grafana.staging.mybinder.org
-    tls:
-      - hosts:
-          - grafana.staging.mybinder.org
-        secretName: kubelego-tls-grafana
-  datasources:
-    datasources.yaml:
-      apiVersion: 1
-      datasources:
-        - name: prometheus
-          orgId: 1
-          type: prometheus
-          url: https://prometheus.staging.mybinder.org
-          access: direct
-          isDefault: true
-          editable: false
+  server:
+    ingress:
+      hosts:
+        - grafana.staging.mybinder.org
+      tls:
+        - hosts:
+            - grafana.staging.mybinder.org
+          secretName: kubelego-tls-grafana
 
 prometheus:
   server:
     ingress:
-      hosts:
-        - prometheus.staging.mybinder.org
-      tls:
-        - hosts:
-            - prometheus.staging.mybinder.org
-          secretName: kubelego-tls-prometheus
+        hosts:
+          - prometheus.staging.mybinder.org
+        tls:
+          - hosts:
+              - prometheus.staging.mybinder.org
+            secretName: kubelego-tls-prometheus
 
 nginx-ingress:
   controller:
