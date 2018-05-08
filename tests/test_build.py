@@ -68,7 +68,7 @@ def test_build_binder(binder_url):
                 # include message output for debugging
                 if data.get('message'):
                     sys.stdout.write(data['message'])
-                if data['phase'] == 'ready':
+                if data.get('phase') == 'ready':
                     notebook_url = data['url']
                     token = data['token']
                     break
