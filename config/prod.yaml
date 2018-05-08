@@ -85,7 +85,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.staging.mybinder.org
+          url: https://prometheus.mybinder.org
           access: direct
           isDefault: true
           editable: false
