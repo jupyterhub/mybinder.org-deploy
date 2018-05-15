@@ -12,5 +12,5 @@ dependencies:
    version: 0.1.12
    repository: https://kubernetes-charts.storage.googleapis.com
  - name: binderhub
-   version: 0.1.0-a5d1851
+   version: 0.1.0-10e99d9
    repository: https://jupyterhub.github.io/helm-chart
