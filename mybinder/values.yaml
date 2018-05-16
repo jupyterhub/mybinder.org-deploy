@@ -54,7 +54,10 @@ binderhub:
             - NET_ADMIN
 
   imageCleaner:
-    inodeAvailThreshold: 0
+    # when 80% of inodes are used,
+    # cull images until only 40% are used.
+    imageGCThresholdHigh: 80
+    imageGCThresholdLow: 40
 
   jupyterhub:
     cull:
