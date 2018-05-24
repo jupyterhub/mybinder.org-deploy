@@ -116,7 +116,7 @@ binderhub:
         CULL_KERNEL_TIMEOUT: '600'
         CULL_INTERVAL: '60'
   build:
-    repo2dockerImage: jupyter/repo2docker:a6c001a
+    repo2dockerImage: jupyter/repo2docker:42ad233
     appendix: |
       USER root
       ENV BINDER_URL={binder_url}
