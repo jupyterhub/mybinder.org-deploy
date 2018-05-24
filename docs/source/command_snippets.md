@@ -10,7 +10,134 @@ cheatsheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/).
 Note that there is a helper package for working with Kubernetes in Python,
 you can find it in the [mybinder-tools repo](https://github.com/jupyterhub/mybinder-tools).
 
+## Cluster management
+
+### Upgrading kubernetes
+
+Upgrading Kubernetes is done in two steps:
+
+1. upgrade the kubernetes master version
+2. upgrade the node version
+
+First, we can upgrade the master version.
+This is easiest via the Google Cloud Console which gives you a button to pick the latest version.
+Upgrading master will result in some brief downtime of Binder during the upgrade.
+It should take a couple of minutes.
+
+To upgrade the master version with `gcloud`:
+
+```bash
+gcloud --project=binder-staging container clusters upgrade staging --master
+gcloud --project=binder-prod container clusters upgrade prod-a --master
+```
+
+Now we can start the process of upgrading node versions, which takes more time.
+Upgrading nodes really means replacing each node with a new one with the same name, using the new version.
+If we use the above `container clusters upgrade` command to upgrade nodes,
+it will take a very long time as Kubernetes drains nodes one by one to replace them.
+To minimize downtime at the expense of some extra nodes for a while,
+we create a whole new node pool with the new version and then cordon
+and eventually delete the existing one.
+
+**Note:** the process for changing node machine-type is the same
+as the process for upgrading kubernetes node version,
+since it is also creating a new node pool and draining and deleting the old one.
+
+#### Upgrading staging
+
+First, start the upgrade on staging by creating a new node pool.
+Check the node type, number of nodes, and disk size.
+The new pool should match the old one.
+
+```bash
+# old_pool is the name of the pool that we are replacing
+old_pool=default-pool
+# new_pool is the name our new pool will have. It must be different
+new_pool=standard-4
+
+
+gcloud --project=binder-staging container node-pools create $new_pool \
+    --cluster=staging \
+    --disk-size=500 \
+    --machine-type=n1-standard-4 \
+    --enable-autorepair \
+    --num-nodes=2
+```
+
+After the pool is created, cordon the previous nodes:
+
+```bash
+# for each node in the old pool:
+kubectl cordon $node
+```
+
+Test that launches succeed on the new nodes by visiting
+https://staging.mybinder.org/v2/gh/binderhub-ci-repos/requirements/master
+
+Once this is verified to be successful, the old nodes pool can be drained:
+
+```bash
+kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0 $node
+```
+
+and then the node pool deleted:
+
+```bash
+gcloud --project=binder-staging container node-pools delete $old_pool --cluster=staging
+```
+
+#### Upgrading prod
+
+Upgrading production is mostly the same as upgrading staging.
+It has a couple small differences in node configuration,
+and we don't want to delete the old pool as soon as we have the new one
+because there will be active users on it.
+
+As with staging, first we create the new pool,
+copying configuration from the old pool.
+On production, we use `pd-ssd` disks, enable autoscaling,
+and use the larger `n1-highmem-32` nodes.
+
+```bash
+old_pool=ssd-pool
+new_pool=hm32
+
+gcloud --project=binder-prod container node-pools create $new_pool \
+    --cluster=prod-a \
+    --disk-type=pd-ssd \
+    --disk-size=1000 \
+    --machine-type=n1-highmem-32 \
+    --num-nodes=2 \
+    --enable-autoscaling \
+    --min-nodes=2 \
+    --max-nodes=8
+```
+
+Once the new pool is created, we can start cordoning the old pool.
+To avoid new nodes being allocated in the old pool,
+set the autoscaling upper limit to 1 on the old pool,
+or disable autoscaling on the old pool.
+This can only be done via the cloud console at this time.
+
+Since prod has a lot of load which can overwhelm a new node,
+we don't want to cordon the whole old pool immediately,
+which would drive all of Binder's traffic to the new nodes.
+Instead, we cordon the old nodes gradually, starting with ~half of the pool.
+After the new nodes have had a chance to warm up
+(check cluster utilization and user pods metrics in grafana, around 10 minutes should be fine),
+we can cordon the rest of the old pool.
+
+At each point, especially after the old pool is fully cordoned,
+verify that launches work on the new nodes by visiting
+https://mybinder.org/v2/gh/binderhub-ci-repos/requirements/master
+
+Unlike staging, prod has active users, so we don't want to delete the cordoned node pool immediately.
+Wait for user pods to drain from the old nodes (6 hours max), then drain them.
+After draining the nodes, the old pool can be deleted.
+
+
 ## Pod management
+
 ### List all pods that match a given name or age
 
 Sometimes you want to delete all the pods for a given repository. The easiest
