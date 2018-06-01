@@ -6,6 +6,7 @@ binderhub:
       c.GitHubRepoProvider.banned_specs = [
         # e.g. '^org/repo.*',
         '^ines/spacy-binder.*',
+        '^SamLau95/nbinteract-image.*',
       ]
   service:
     type: ClusterIP
