@@ -1,6 +1,6 @@
 dependencies:
  - name: nginx-ingress
-   version: 0.8.13
+   version: 0.20.1
    repository: https://kubernetes-charts.storage.googleapis.com
  - name: prometheus
    version: 6.2.1
