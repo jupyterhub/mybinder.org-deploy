@@ -29,3 +29,14 @@ if os.getenv('CULL_CONNECTED') not in {'', '0'}:
 
 # trust proxy headers
 c.NotebookApp.trust_xheaders = True
+
+import sys
+import traceback
+
+for key in sorted(os.environ):
+    if key.startswith("EXTRA_NBCONFIG_"):
+        try:
+            exec(os.envion[key])
+        except Exception as e:
+            print("Error loading config from env %s: %s" % (key, os.envion[key]))
+            traceback.print_exception(*sys.exc_info())
