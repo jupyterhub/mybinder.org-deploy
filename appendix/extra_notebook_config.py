@@ -26,3 +26,6 @@ if os.getenv('CULL_INTERVAL'):
 # this is what allows us to shutdown servers when people leave a notebook open and wander off
 if os.getenv('CULL_CONNECTED') not in {'', '0'}:
     c.MappingKernelManager.cull_connected = True
+
+# trust proxy headers
+c.NotebookApp.trust_xheaders = True
