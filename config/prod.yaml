@@ -12,7 +12,7 @@ binderhub:
       memory: 2Gi
 
   registry:
-    prefix: gcr.io/binder-prod/r2d-05168b0-
+    prefix: gcr.io/binder-prod/r2d-d4c9c88-
 
   hub:
 
