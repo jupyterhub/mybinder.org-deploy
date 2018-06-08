@@ -152,6 +152,8 @@ nginx-ingress:
       proxy-body-size: 64m
     stats:
       enabled: true
+    metrics:
+      enabled: true
     service:
       # Preserve client IPs
       externalTrafficPolicy: Local
