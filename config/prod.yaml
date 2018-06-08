@@ -21,11 +21,11 @@ binderhub:
   jupyterhub:
     singleuser:
       memory:
-        guarantee: 2G
+        guarantee: 1G
         limit: 2G
       cpu:
         guarantee: 0.1
-        limit: 2
+        limit: 1
     hub:
       resources:
         requests:
