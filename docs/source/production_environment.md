@@ -210,6 +210,19 @@ file `encrypted-key`:
 [receiver] $ rm encrypted-key
 ```
 
+If your ssh key requries a passphrase then the above might not work. Below a
+method that does work but creates an intermediate file that contains the clear
+text. Make sure you know what this means. If you have `ssh-vault` v0.12.4 you
+can run the following:
+```
+ssh-vault -o clear-git-crypt-key view encrypted-key
+git-crypt unlock clear-git-crypt-key
+rm clear-git-crypt-key
+```
+This solves the problem that `ssh-vault` prints the passphraes prompt to
+standard out as well as the decrypted key. Make sure to delete `clear-git-crypt-key`
+which contains the clear text git-crypt key.
+
 On a mac, you can use `pbcopy` and `pbpaste` to use the clipboard instead of
 creating files:
 
@@ -227,6 +240,7 @@ People who currently have the git-crypt secret include:
 
 - @minrk
 - @yuvipanda
+- @betatim
 - *add yourself here if you have it*
 
 Contact one of them if you need access to the git-crypt key.
