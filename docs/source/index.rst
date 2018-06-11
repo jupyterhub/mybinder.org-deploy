@@ -39,6 +39,7 @@ Deployment and Operation
     :maxdepth: 2
     :caption: Operation
 
+    common_problems.md
     command_snippets.md
 
 Incident Reports
