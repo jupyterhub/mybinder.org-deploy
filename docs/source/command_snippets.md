@@ -98,17 +98,20 @@ copying configuration from the old pool.
 On production, we use `pd-ssd` disks, enable autoscaling,
 and use the larger `n1-highmem-32` nodes.
 
+Note: `gcloud beta` is currently required for the `--disk-type` argument.
+
 ```bash
 old_pool=ssd-pool
 new_pool=hm32
 
-gcloud --project=binder-prod container node-pools create $new_pool \
+gcloud beta --project=binder-prod container node-pools create $new_pool \
     --cluster=prod-a \
     --disk-type=pd-ssd \
     --disk-size=1000 \
-    --machine-type=n1-highmem-32 \
+    --machine-type=n1-highmem-16 \
     --num-nodes=2 \
     --enable-autoscaling \
+    --enable-autorepair \
     --min-nodes=2 \
     --max-nodes=8
 ```
