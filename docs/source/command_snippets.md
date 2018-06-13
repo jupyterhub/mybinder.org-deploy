@@ -344,6 +344,38 @@ service in the helm chart. You should be able to connect to each of them using
 the name as the hostname. Take care to use the right port, not all of them are
 listening on 80.
 
+### Banning traffic
+
+Sometimes there's bad traffic, either malicious or accidental,
+and we want to block traffic, either incoming or outgoing,
+between Binder and that source.
+
+We can blacklist traffic in three ways:
+
+1. ingress ip (bans requests to Binder coming from this ip or ip range)
+2. egress ip (bans outgoing traffic *from* Binder to these ip addresses)
+3. egress DNS (disables DNS resolution for specified domains)
+
+All of these are *stored* in the `secrets/ban.py` file.
+These are not upgraded
+
+To update what should be banned, edit the `secrets/ban.py` file
+and find the relevant list. If ip-based banning changed,
+run the `scripts/firewall-rules` script to update the firewall:
+
+```bash
+./scripts/firewall-rules --project=binder-staging [gke_binder-staging_us-central1-a_staging]
+./scripts/firewall-rules --project=binder-prod [gke_binder-prod_us-central1-a_prod-a]
+```
+
+If it is an update to the DNS block list, run the `secrets/ban.py` script:
+
+```bash
+./secrets/ban.py gke_binder-staging_us-central1-a_staging
+./secrets/ban.py gke_binder-prod_us-central1-a_prod-a
+```
+
+
 ## Acronyms that Chris likes to use in Gitter
 
 It has been pointed out that Chris often employs the use of unusually
