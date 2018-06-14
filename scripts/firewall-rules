@@ -85,23 +85,29 @@ def main(cluster, replace=False):
     # services_cidr = cluster_info['servicesIpv4Cidr']
     # kube_cidr = ','.join([cluster_cidr, services_cidr])
 
+    # construct dict of rules by name
     rules = {rule['name']: rule for rule in gcloud('compute', 'firewall-rules', 'list')}
 
     # get the node network tags for our cluster
     # is there a more direct way to get this?
+    # first, get a list of nodes in our project
     nodes = gcloud('compute', 'instances', 'list')
-    # instance_group_prefix = ['gke-staging-default-pool-80145d64-', ...]
+    # get list of group prefixes for all the nodes
+    # instance_group_prefixes = ['gke-staging-default-pool-80145d64-', ...]
     instance_group_prefixes = [
         url.rsplit('/', 1)[1].rsplit('-', 1)[0] + '-'
         for url in cluster_info['instanceGroupUrls']
     ]
 
-    # get nodes for our cluster
+    # filter the nodes that correspond to our cluster
+    # (i.e. that match one of the above instance group prefixes)
     cluster_nodes = [
         node
         for node in nodes
         if any(node['name'].startswith(prefix) for prefix in instance_group_prefixes)
     ]
+    # sanity check: did this match any nodes?
+    # give up if it didn't because something is wrong.
     assert cluster_nodes, f"No cluster nodes for {instance_group_prefixes}"
 
     # construct a set of the node network tags
@@ -111,7 +117,7 @@ def main(cluster, replace=False):
         node_tags.update(node['tags']['items'])
     assert node_tags, f"No node tags for {instance_group_prefixes}"
 
-    # Banned ips
+    # ingress and egress rules for banned ips
 
     add_rule(
         prefix + "banned-ingress-ips",
