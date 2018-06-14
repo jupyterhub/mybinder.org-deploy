@@ -181,16 +181,21 @@ def main(cluster, replace=False):
         replace=replace,
     )
 
-    # whitelist http(s) to the world, as the only access we have
+    # whitelist connections to the world
+    # this is currently:
+    # HTTP[S]: 80,443
+    # git: 9418
+    # rsync: 873
+    # xroot: 1094
     add_rule(
         prefix + 'allow-http',
         {
             'priority': 1000,
-            'description': f"Allow HTTP(S) access to the outside world for cluster {cluster}",
+            'description': f"Allow approved traffic to the outside world for cluster {cluster}",
             'direction': 'egress',
             'destination-ranges': WORLD_CIDR,
             'target-tags': ','.join(node_tags),
-            'allow': 'tcp:80,tcp:443,tcp:9418',
+            'allow': 'tcp:80,tcp:443,tcp:9418,tcp:873,tcp:1094',
         },
         rules,
         replace=replace,
