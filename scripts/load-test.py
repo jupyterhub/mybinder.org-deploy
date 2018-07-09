@@ -29,13 +29,15 @@ def launch_binder(n, repo, ref='master', filepath=None,
     time.sleep(delay)
 
     launched_at = time.time()
+    total_bytes = 0
 
     for evt in build_binder(repo, ref=ref, binder_url=binder_url):
         if 'message' in evt:
-            print(n, "[{phase}] {message}".format(
-                phase=evt.get('phase', ''),
-                message=evt['message'].rstrip(),
-            ))
+            #print(n, "[{phase}] {message}".format(
+            #    phase=evt.get('phase', ''),
+            #    message=evt['message'].rstrip(),
+            #))
+            pass
         if evt.get('phase') == 'ready':
             ready_at = time.time()
             s = requests.Session()
@@ -46,12 +48,13 @@ def launch_binder(n, repo, ref='master', filepath=None,
                 url = "{url}notebooks/{filepath}?token={token}".format(
                     filepath=filepath, **evt
                     )
-            print(n, "ready at %s" % url)
+            #print(n, "ready at %s" % url)
 
             # GET the notebook
             r = s.get(url)
             r.raise_for_status()
             notebook_at = time.time()
+            total_bytes += len(r.content)
 
             # spawn a kernel
             # POST {url}api/sessions?token={token}
@@ -66,6 +69,7 @@ def launch_binder(n, repo, ref='master', filepath=None,
                        )
             r.raise_for_status()
             kernel_at = time.time()
+            total_bytes += len(r.content)
 
             # biggest file in the session
             url = ("{url}nbextensions/jupyter-js-widgets/"
@@ -74,6 +78,7 @@ def launch_binder(n, repo, ref='master', filepath=None,
             r = s.get(url)
             r.raise_for_status()
             widgets_at = time.time()
+            total_bytes += len(r.content)
 
             done_at = time.time()
             return {'idx': n,
@@ -83,7 +88,9 @@ def launch_binder(n, repo, ref='master', filepath=None,
                     'notebook': notebook_at,
                     'widgets': widgets_at,
                     'end': done_at,
-                    'status': 'success'}
+                    'total_bytes': total_bytes,
+                    'status': 'success',
+                    }
 
     else:
         failed_at = time.time()
@@ -114,7 +121,7 @@ if __name__ == '__main__':
     opts = parser.parse_args()
 
     gun_time = time.time()
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=100) as executor:
         results = {}
         for n in range(opts.n_launches):
             job = executor.submit(launch_binder, n,
