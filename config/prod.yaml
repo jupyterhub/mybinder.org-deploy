@@ -99,7 +99,7 @@ prometheus:
         memory: 8Gi
       limits:
         cpu: "4"
-        memory: 8Gi
+        memory: 16Gi
     persistentVolume:
       # Use a large SSD Volume in production
       size: 2000Gi
