@@ -73,7 +73,7 @@ binderhub:
         cors: *cors
       extraConfig:
         neverRestart: |
-          c.KubeSpawner.singleuser_extra_pod_config.update({'restartPolicy': 'Never'})
+          c.KubeSpawner.extra_pod_config.update({'restart_policy': 'Never'})
     proxy:
       service:
         type: ClusterIP
