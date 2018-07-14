@@ -3,13 +3,13 @@ import json
 import time
 import random
 import pickle
+import json
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import requests
 
 
-#https://mybinder.org/v2/gh/fboylu/binder/master?filepath=00_DevelopModel.ipynb
 def build_binder(repo,
                  ref='master',
                  binder_url='https://mybinder.org'):
@@ -24,8 +24,15 @@ def build_binder(repo,
 
 
 def launch_binder(n, repo, ref='master', filepath=None,
-                  binder_url='https://mybinder.org'):
-    delay = random.random() * 10
+                  binder_url='https://mybinder.org',
+                  delay=10):
+    """Launch a new binder from `repo` at `ref`
+
+    Use `delay` to delay the launch by a random amount in seconds.
+
+    If `filepath` is set a notebook with that name will be fetched.
+    """
+    delay = random.random() * delay
     time.sleep(delay)
 
     launched_at = time.time()
@@ -33,10 +40,6 @@ def launch_binder(n, repo, ref='master', filepath=None,
 
     for evt in build_binder(repo, ref=ref, binder_url=binder_url):
         if 'message' in evt:
-            #print(n, "[{phase}] {message}".format(
-            #    phase=evt.get('phase', ''),
-            #    message=evt['message'].rstrip(),
-            #))
             pass
         if evt.get('phase') == 'ready':
             ready_at = time.time()
@@ -48,7 +51,6 @@ def launch_binder(n, repo, ref='master', filepath=None,
                 url = "{url}notebooks/{filepath}?token={token}".format(
                     filepath=filepath, **evt
                     )
-            #print(n, "ready at %s" % url)
 
             # GET the notebook
             r = s.get(url)
@@ -57,7 +59,6 @@ def launch_binder(n, repo, ref='master', filepath=None,
             total_bytes += len(r.content)
 
             # spawn a kernel
-            # POST {url}api/sessions?token={token}
             url = "{url}api/sessions?token={token}".format(**evt)
             r = s.post(url, json={"path": "Foobar.ipynb",
                                   "type": "notebook",
@@ -107,7 +108,7 @@ if __name__ == '__main__':
     parser.add_argument(
         '--filepath', default=None, help="The notebook to open")
     parser.add_argument(
-        '--results', default='results.pkl', help="The file to store results in")
+        '--results', default='results.json', help="File name to store results in")
     parser.add_argument(
         '--n-launches', default=5, help='Number of launches to perform',
         type=int)
@@ -148,10 +149,10 @@ if __name__ == '__main__':
                           (idx, launch['end'] - launch['start'])
                           )
 
-    with open(opts.results, 'wb') as f:
-        pickle.dump({'gun_time': gun_time,
-                     'results': launches},
-                    f)
+    with open(opts.results, 'w') as f:
+        json.dump({'gun_time': gun_time,
+                   'results': launches},
+                  f)
 
     import pprint
     pprint.pprint(launches)
