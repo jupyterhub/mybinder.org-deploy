@@ -1,11 +1,19 @@
+userNodeSelector: &userNodeSelector
+  cloud.google.com/gke-nodepool: hm16
+coreNodeSelector: &coreNodeSelector
+  cloud.google.com/gke-nodepool: core-pool
+
 binderhub:
+  build:
+    nodeSelector: *userNodeSelector
+  nodeSelector: *coreNodeSelector
   ingress:
     hosts:
       - mybinder.org
 
   resources:
     requests:
-      cpu: "2"
+      cpu: "0.25"
       memory: 2Gi
     limits:
       cpu: "2"
@@ -20,6 +28,7 @@ binderhub:
 
   jupyterhub:
     singleuser:
+      nodeSelector: *userNodeSelector
       memory:
         guarantee: 1G
         limit: 2G
@@ -27,20 +36,22 @@ binderhub:
         guarantee: 0.1
         limit: 1
     hub:
+      nodeSelector: *coreNodeSelector
       resources:
         requests:
-          cpu: "2"
+          cpu: "0.25"
           memory: 2Gi
         limits:
           cpu: "2"
           memory: 2Gi
 
     proxy:
+      nodeSelector: *coreNodeSelector
       chp:
         resources:
           requests:
             memory: 512Mi
-            cpu: "0.5"
+            cpu: "0.25"
           limits:
             memory: 512Mi
             cpu: "0.5"
@@ -48,7 +59,7 @@ binderhub:
         resources:
           requests:
             memory: 3Gi
-            cpu: 1
+            cpu: "0.25"
           limits:
             memory: 3Gi
             cpu: 1
@@ -64,6 +75,7 @@ binderhub:
   googleAnalyticsDomain: "mybinder.org"
 
 grafana:
+  nodeSelector: *coreNodeSelector
   resources:
     requests:
       cpu: "0.2"
@@ -90,12 +102,15 @@ grafana:
           isDefault: true
           editable: false
 
+kube-lego:
+  nodeSelector: *coreNodeSelector
 
 prometheus:
+  nodeSelector: *coreNodeSelector
   server:
     resources:
       requests:
-        cpu: "4"
+        cpu: "2"
         memory: 16Gi
       limits:
         cpu: "4"
@@ -114,6 +129,7 @@ prometheus:
           secretName: kubelego-tls-prometheus
 
 nginx-ingress:
+  nodeSelector: *coreNodeSelector
   controller:
     service:
       loadBalancerIP: 35.202.202.188
@@ -124,7 +140,11 @@ static:
     hosts:
       - static.mybinder.org
 
+proxy-patches:
+  nodeSelector: *coreNodeSelector
+
 redirector:
+  nodeSelector: *coreNodeSelector
   redirects:
     - type: host
       host:

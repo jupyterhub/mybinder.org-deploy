@@ -21,6 +21,7 @@ spec:
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
     spec:
+      nodeSelector: {{ toJson .Values.proxyPatches.nodeSelector }}
       volumes:
         - name: nginx-config
           configMap:
