@@ -16,6 +16,7 @@ spec:
         app: redirector
         component: nginx
     spec:
+      nodeSelector: {{ toJson .Values.redirector.nodeSelector }}
       volumes:
         - name: config
           configMap:

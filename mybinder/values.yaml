@@ -163,6 +163,10 @@ nginx-ingress:
       # Preserve client IPs
       externalTrafficPolicy: Local
 
+redirector:
+  nodeSelector: {}
+  redirects: []
+
 static:
   paths:
     - /badge.svg
@@ -213,6 +217,7 @@ prometheus:
         kubernetes.io/tls-acme: "true"
 
 proxyPatches:
+  nodeSelector: {}
   enabled: true
   interval: 60
   routes:
