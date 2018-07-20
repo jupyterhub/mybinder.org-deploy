@@ -106,8 +106,8 @@ kube-lego:
   nodeSelector: *coreNodeSelector
 
 prometheus:
-  nodeSelector: *coreNodeSelector
   server:
+    nodeSelector: *coreNodeSelector
     resources:
       requests:
         cpu: "2"
