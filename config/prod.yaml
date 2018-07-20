@@ -40,10 +40,10 @@ binderhub:
       resources:
         requests:
           cpu: "0.25"
-          memory: 2Gi
+          memory: 1Gi
         limits:
           cpu: "2"
-          memory: 2Gi
+          memory: 1Gi
 
     proxy:
       nodeSelector: *coreNodeSelector
@@ -58,10 +58,10 @@ binderhub:
       nginx:
         resources:
           requests:
-            memory: 3Gi
+            memory: 1Gi
             cpu: "0.25"
           limits:
-            memory: 3Gi
+            memory: 1Gi
             cpu: 1
     ingress:
       hosts:
