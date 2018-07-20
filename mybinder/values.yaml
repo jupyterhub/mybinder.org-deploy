@@ -140,6 +140,8 @@ playground:
 nginx-ingress:
   rbac:
     create: true
+  defaultBackend:
+    minAvailable: 0
   statsExporter:
     service:
       annotations:
