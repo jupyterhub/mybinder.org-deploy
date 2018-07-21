@@ -46,6 +46,24 @@ to each other as possible. We want all common config in `values.yaml` so testing
 on staging gives us confidence it will work on prod. We also never share the same
 secrets between staging & prod for security boundary reasons.
 
+## Deployment nodes and pools
+
+The staging cluster has one node pool, which makes things simple.
+The production cluster has two, one for "core" pods (the hub, etc.)
+and another dedicated to "user" pods (builds and user servers).
+This strategy helps protect our key services from potential issues caused by users and helps us drain user nodes when we need to.
+
+Since only user pods should be running on the user nodes,
+cordoning that node should result it in being drained and reclaimed
+after the max-pod-age lifetime limit
+which often wouldn't happen without manual intervention.
+
+In the future, when we implement a pod packing strategy,
+nodes could get reclaimed
+
+Users and core pods are assigned to their pools via a `nodeSelector` in `config/prod.yaml`.
+We have one pool of each, which has a name.
+
 ## mybinder.org specific extra software
 
 We sometimes want to run additional software for the mybinder deployment that

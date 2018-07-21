@@ -93,10 +93,20 @@ It has a couple small differences in node configuration,
 and we don't want to delete the old pool as soon as we have the new one
 because there will be active users on it.
 
+Production has two node pools:
+
+1. a "core" pool, which runs the hub, binder, etc.
+2. a "user" pool, where user pods run.
+
+The process is mostly the same, but we do it in two steps (for two pools),
+and we have to update our deployment configuration to tell it to use the new pools.
+
 As with staging, first we create the new pool,
 copying configuration from the old pool.
 On production, we use `pd-ssd` disks, enable autoscaling,
-and use the larger `n1-highmem-32` nodes.
+and use the larger `n1-highmem-16` nodes for users.
+
+The 'core' pool uses n1-highmem-4 nodes and has a smaller, 250GB SSD.
 
 Note: `gcloud beta` is currently required for the `--disk-type` argument.
 
@@ -112,8 +122,22 @@ gcloud beta --project=binder-prod container node-pools create $new_pool \
     --num-nodes=2 \
     --enable-autoscaling \
     --enable-autorepair \
-    --min-nodes=2 \
+    --min-nodes=1 \
     --max-nodes=8
+
+old_core_pool=core-pool
+new_core_pool=core-pool-1-11
+
+gcloud beta --project=binder-prod container node-pools create $new_core_pool \
+    --cluster=prod-a \
+    --disk-type=pd-ssd \
+    --disk-size=250 \
+    --machine-type=n1-highmem-4 \
+    --num-nodes=1 \
+    --enable-autoscaling \
+    --enable-autorepair \
+    --min-nodes=1 \
+    --max-nodes=4
 ```
 
 Once the new pool is created, we can start cordoning the old pool.
