@@ -1,5 +1,5 @@
 userNodeSelector: &userNodeSelector
-  cloud.google.com/gke-nodepool: hm16
+  cloud.google.com/gke-nodepool: temp-hm16
 coreNodeSelector: &coreNodeSelector
   cloud.google.com/gke-nodepool: core-pool
 
