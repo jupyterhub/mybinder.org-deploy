@@ -1,5 +1,5 @@
 userNodeSelector: &userNodeSelector
-  cloud.google.com/gke-nodepool: temp-hm16
+  mybinder.org/pool-type: users
 coreNodeSelector: &coreNodeSelector
   cloud.google.com/gke-nodepool: core-pool
 
