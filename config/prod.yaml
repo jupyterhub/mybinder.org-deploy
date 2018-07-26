@@ -140,7 +140,7 @@ static:
     hosts:
       - static.mybinder.org
 
-proxy-patches:
+proxyPatches:
   nodeSelector: *coreNodeSelector
 
 redirector:
