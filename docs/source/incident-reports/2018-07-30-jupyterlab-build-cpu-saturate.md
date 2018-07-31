@@ -49,7 +49,6 @@ This is the utilization behavior seen:
 
 Behavior is once again going wrong. Launches taking forever to load. We note
 a lot of networky-looking problems in the logs.
-Noted lots of
 
 ### 13:41
 
