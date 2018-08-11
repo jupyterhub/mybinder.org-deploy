@@ -323,30 +323,6 @@ of the older node). Here's the process for recycling nodes.
 
 ## Networking
 
-### Manually confirm network between pods is working
-
-To confirm that binderhub can talk to jupyterhub, to the internet in general, or
-you want to confirm for yourself that there is no connectivity problem between
-pods follow this recipe.
-
-1. connect to the pod you want to use as "source", for example the jupyterhub
-pod: `kubectl --namespace=prod exec -it hub-989cc9bd-bbkbk /bin/bash`
-1. start `python3`, `import requests`
-1. use `requests.get(host)` to check connectivity. Some interesting hostnames
-to try talking to are:
-    * http://binder/, the binderhub service
-    * http://hub:8081/hub/api, the jupyterhub API
-    * http://proxy-public/hub/api, the CHP route that redirects you to the
-      jupyterhub API (content of the response should be equal)
-    * http://google.com/, the internet
-    * the CHP API needs a token so run: `headers={'Authorization': 'token ' + os.environ['CONFIGPROXY_AUTH_TOKEN']}`
-      and then`requests.get('http://proxy-api:8001/api/routes', headers=headers)`
-
-To find out hostnames to try look at the `metadata.name` field of a kubernetes
-service in the helm chart. You should be able to connect to each of them using
-the name as the hostname. Take care to use the right port, not all of them are
-listening on 80.
-
 ### Banning traffic
 
 Sometimes there's bad traffic, either malicious or accidental,
