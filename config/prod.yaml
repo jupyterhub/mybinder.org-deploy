@@ -1,7 +1,7 @@
 userNodeSelector: &userNodeSelector
   mybinder.org/pool-type: users
 coreNodeSelector: &coreNodeSelector
-  cloud.google.com/gke-nodepool: core-pool
+  mybinder.org/pool-type: core
 
 binderhub:
   build:
