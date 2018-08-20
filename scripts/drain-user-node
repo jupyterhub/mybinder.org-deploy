@@ -1,0 +1,154 @@
+#!/usr/bin/env python3
+"""
+Drain a cordoned node with user pods,
+leaving user pods to finish draining on their own.
+
+To be run after cordoning a user node,
+to increase the likelihood of that node being reclaimed promptly
+by the autoscaler.
+
+Drains replicaset-controlled pods *other than user pods* from a node
+so that the autoscaler can reclaim it when it's ready.
+
+This drains pods such as `kube-dns` that can end up blocking
+autoscaler reclamation without disrupting user pods.
+"""
+
+import argparse
+import sys
+from kubernetes import config, client
+
+# Setup our parameters
+argparser = argparse.ArgumentParser(description=__doc__)
+argparser.add_argument(
+    "--dry-run",
+    action="store_true",
+    help="Dry run (report what would happen, don't actually do anything)",
+)
+argparser.add_argument(
+    "-y", dest="answer_yes", action="store_true", help="Answer yes (skips confirmation)"
+)
+argparser.add_argument(
+    "nodes",
+    nargs="*",
+    help="The nodes. If not given, all cordoned nodes will be drained.",
+)
+
+kube_context_help = (
+    "Context pointing to the cluster to use. To list the "
+    "current activated context, run `kubectl config get-contexts`. Default: currently active context"
+)
+argparser.add_argument("--kube-context", default=None, help=kube_context_help)
+args = argparser.parse_args()
+
+# prefix to avoid scaring people during output
+if args.dry_run:
+    dry_prefix = "(Not actually) "
+else:
+    dry_prefix = ""
+
+# Connect to kubernetes
+config.load_kube_config(context=args.kube_context)
+kube = client.CoreV1Api()
+
+# determine the nodes to drain
+kube_nodes = {node.metadata.name: node for node in kube.list_node().items}
+
+nodes_to_drain = []
+
+if not args.nodes:
+    # nodes not specified, drain all cordoned nodes
+    for node_name, node in kube_nodes.items():
+        if node.spec.unschedulable:
+            nodes_to_drain.append(node_name)
+    if not nodes_to_drain:
+        sys.exit("No cordoned nodes to drain!")
+else:
+    # validate node list (verify the nodes exist and are cordoned)
+    nodes_to_drain = args.nodes
+    for node_name in args.nodes:
+        if node_name not in kube_nodes:
+            sys.exit(f"No such node: {node_name}")
+        node = kube_nodes[node_name]
+        if not node.spec.unschedulable:
+            # verify that the node is cordoned
+            msg = f"Node {node_name} is not cordoned!"
+            if args.dry_run:
+                print(msg)
+            else:
+                # abort if it's not a dry run
+                sys.exit(msg)
+
+
+def delete_pod(pod, reason):
+    """Delete a pod for a given reason"""
+    print(f"{dry_prefix}Deleting {pod.metadata.name}: {reason}")
+    if args.dry_run:
+        return
+    kube.delete_namespaced_pod(pod.metadata.name, pod.metadata.namespace, {})
+
+
+# get all pods
+pods = kube.list_pod_for_all_namespaces().items
+
+
+for node in nodes_to_drain:
+    print(f"{dry_prefix}Draining non-user pods from cordoned node {node}")
+    pod_count = 0
+    to_delete = []
+    # find the pods on the node to be deleted
+    for pod in [pod for pod in pods if pod.spec.node_name == node]:
+        pod_count += 1
+        name = pod.metadata.name
+        owner = pod.metadata.owner_references
+        if owner:
+            owner = owner[0]
+        if owner and owner.kind == "ReplicaSet":
+            # delete pods owned by a ReplicaSet that will be relocated
+            # after deletion
+            to_delete.append((pod, f"owned by {owner.kind}"))
+            continue
+        elif owner:
+            print(f"Skipping {name} owned by {owner.kind}")
+        else:
+            # allow deleting stopped pods
+            if pod.status.phase in {"Failed", "Completed"}:
+                to_delete.append((pod, f"Pod {pod.status.phase}"))
+            if not (
+                # a build
+                pod.metadata.labels.get("component") == "binderhub-build"
+                or (
+                    # a singleuser pod
+                    pod.metadata.labels.get("app") == "jupyterhub"
+                    and pod.metadata.labels.get("component") == "singleuser-server"
+                )
+            ):
+                print(f"Skipping {name} with no owner")
+
+    # report summary and confirm deletion
+    if not to_delete:
+        print("Found no pods to delete")
+        continue
+
+    delete_count = len(to_delete)
+    print(f"{dry_prefix}The following {delete_count} pods will be deleted:")
+    print(
+        "  "
+        + "\n  ".join(
+            "{} {}".format(pod.metadata.name, reason) for pod, reason in to_delete
+        )
+    )
+    if not args.answer_yes and not args.dry_run:
+        ans = input(f"Delete {delete_count} pods [y/N? ")
+        if not ans.lower().startswith("y"):
+            print("aborting...")
+            sys.exit(0)
+    # actually do the delition
+    if not args.dry_run:
+        for pod, reason in to_delete:
+            delete_pod(pod, reason)
+
+    print(
+        f"{dry_prefix}Deleted {delete_count} pods, left {pod_count - delete_count} running."
+    )
+    print(f"Node {node} should be reclaimed when user pods finish draining")
