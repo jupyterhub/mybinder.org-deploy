@@ -114,11 +114,15 @@ for node in nodes_to_drain:
             # allow deleting stopped pods
             if pod.status.phase in {"Failed", "Completed"}:
                 to_delete.append((pod, f"Pod {pod.status.phase}"))
+                continue
+
+            # show pods we aren't choosing to delete,
+            # as long as they aren't user/build pods
             if not (
-                # a build
+                # it's a build
                 pod.metadata.labels.get("component") == "binderhub-build"
                 or (
-                    # a singleuser pod
+                    # it's a singleuser server
                     pod.metadata.labels.get("app") == "jupyterhub"
                     and pod.metadata.labels.get("component") == "singleuser-server"
                 )
@@ -143,7 +147,8 @@ for node in nodes_to_drain:
         if not ans.lower().startswith("y"):
             print("aborting...")
             sys.exit(0)
-    # actually do the delition
+
+    # actually do the deletion
     if not args.dry_run:
         for pod, reason in to_delete:
             delete_pod(pod, reason)
