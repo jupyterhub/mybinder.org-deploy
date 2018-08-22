@@ -93,17 +93,37 @@ It has a couple small differences in node configuration,
 and we don't want to delete the old pool as soon as we have the new one
 because there will be active users on it.
 
+Production has two node pools:
+
+1. a "core" pool, which runs the hub, binder, etc.
+2. a "user" pool, where user pods run.
+
+The process is mostly the same, but we do it in two steps (for two pools),
+and we have to update our deployment configuration to tell it to use the new pools.
+
 As with staging, first we create the new pool,
 copying configuration from the old pool.
 On production, we use `pd-ssd` disks, enable autoscaling,
-and use the larger `n1-highmem-32` nodes.
+and use the larger `n1-highmem-16` nodes for users.
+
+The 'core' pool uses n1-highmem-4 nodes and has a smaller, 250GB SSD.
 
 Note: `gcloud beta` is currently required for the `--disk-type` argument.
 
-```bash
-old_pool=ssd-pool
-new_pool=hm32
+First we'll create variables that point to our old and new node pools to make it clear when we're creating new things vs. deleting old things.
 
+```bash
+# old_pool is the name of the existing user pool, to be deleted
+old_pool=ssd-pool
+# new_pool can be anything, as long as it isn't the same as old_pool
+# something short but descriptive, e.g. hm16 for highmem-16 nodes
+new_pool=hm16
+```
+
+Then we can create the new user pool:
+
+```bash
+# create the new user pool
 gcloud beta --project=binder-prod container node-pools create $new_pool \
     --cluster=prod-a \
     --disk-type=pd-ssd \
@@ -112,8 +132,30 @@ gcloud beta --project=binder-prod container node-pools create $new_pool \
     --num-nodes=2 \
     --enable-autoscaling \
     --enable-autorepair \
-    --min-nodes=2 \
-    --max-nodes=8
+    --min-nodes=1 \
+    --max-nodes=8 \
+    --node-labels hub.jupyter.org/node-purpose=user,mybinder.org/pool-type=users
+```
+
+and/or create the new core pool:
+
+```bash
+# the name of the old 'core' pool
+old_core_pool=core-pool
+# the name of the new 'core' pool
+new_core_pool=core-1-11
+
+gcloud beta --project=binder-prod container node-pools create $new_core_pool \
+    --cluster=prod-a \
+    --disk-type=pd-ssd \
+    --disk-size=250 \
+    --machine-type=n1-highmem-4 \
+    --num-nodes=1 \
+    --enable-autoscaling \
+    --enable-autorepair \
+    --min-nodes=1 \
+    --max-nodes=4 \
+    --node-labels hub.jupyter.org/node-purpose=core,mybinder.org/pool-type=core
 ```
 
 Once the new pool is created, we can start cordoning the old pool.

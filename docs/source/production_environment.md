@@ -46,6 +46,31 @@ to each other as possible. We want all common config in `values.yaml` so testing
 on staging gives us confidence it will work on prod. We also never share the same
 secrets between staging & prod for security boundary reasons.
 
+## Deployment nodes and pools
+
+The staging cluster has one node pool, which makes things simple.
+The production cluster has two, one for "core" pods (the hub, etc.)
+and another dedicated to "user" pods (builds and user servers).
+This strategy helps protect our key services from potential issues caused by users and helps us drain user nodes when we need to.
+
+Since ~only user pods should be running on the user nodes,
+cordoning that node should result in it being drained and reclaimed
+after the max-pod-age lifetime limit
+which often wouldn't happen without manual intervention.
+
+It is still *not quite true* that only user pods are running on the user nodes at this point.
+There can be some pods such as heapster and kube-dns that may run on user nodes,
+and need to be manually removed from the pod after cordoning before the autoscaler will allow culling.
+
+In the future, when we implement a pod packing strategy and node taints,
+nodes could get reclaimed truly automatically without any intervention,
+but we are not there yet.
+
+Users and core pods are assigned to their pools via a `nodeSelector` in `config/prod.yaml`.
+We use a custom label `mybinder.org/node-purpose = core | user`
+to select which node a pod should run on.
+
+
 ## mybinder.org specific extra software
 
 We sometimes want to run additional software for the mybinder deployment that
