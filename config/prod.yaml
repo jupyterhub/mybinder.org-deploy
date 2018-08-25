@@ -33,7 +33,7 @@ binderhub:
         guarantee: 512M
         limit: 2G
       cpu:
-        guarantee: 0.1
+        guarantee: 0.01
         limit: 1
     hub:
       nodeSelector: *coreNodeSelector
