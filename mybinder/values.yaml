@@ -1,4 +1,14 @@
 binderhub:
+  networkPolicy:
+    enabled: true
+    egress:
+      tcpPorts:
+        - 80 # http
+        - 443 # https
+        - 9418 # git
+        - 873 # rsync
+        - 1094 # xroot
+      cidr: 0.0.0.0/0
   extraConfig:
     # Add banned repositories to the list below
     # They should be strings that will match "^<org-name>/<repo-name>.*"
@@ -69,12 +79,16 @@ binderhub:
       # maxAge is 6 hours: 6 * 3600 = 21600
       maxAge: 21600
     hub:
+      networkPolicy:
+        enabled: true
       extraConfigMap:
         cors: *cors
       extraConfig:
         neverRestart: |
           c.KubeSpawner.extra_pod_config.update({'restart_policy': 'Never'})
     proxy:
+      networkPolicy:
+        enabled: true
       service:
         type: ClusterIP
       chp:
@@ -94,6 +108,10 @@ binderhub:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
     singleuser:
+      networkPolicy:
+        enabled: true
+        egress: []
+
       initContainers:
       - name: tc-init
         image: minrk/tc-init:0.0.4

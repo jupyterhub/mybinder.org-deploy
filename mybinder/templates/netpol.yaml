@@ -1,0 +1,52 @@
+{{- if .Values.binderhub.networkPolicy.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: binder-users
+  labels:
+    app: binderhub
+    component: user-netpol
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+spec:
+  podSelector:
+    # apply this to both places user code runs: dind and singleuser-server
+    matchExpressions:
+      - key: component
+        operator: In
+        values:
+          - singleuser-server
+          - dind
+    matchLabels:
+      release: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+    - Egress
+  # block ingress unless explicitly allowed by other policies
+  ingress: []
+  egress:
+    # allow DNS resolution in the cluster
+    # it would be nicer to be able to pin this to only the kube-dns service,
+    # but we can only seem to select *pods* not *services* as the destination
+    - ports:
+        - port: 53
+          protocol: TCP
+        - port: 53
+          protocol: UDP
+      to:
+        - ipBlock:
+            cidr: 10.0.0.0/8
+    # allow access to the world,
+    # but not the cluster
+    - ports:
+        {{ range $port := .Values.binderhub.networkPolicy.egress.tcpPorts }}
+        - port: {{ $port }}
+          protocol: TCP
+        {{ end }}
+      to:
+      - ipBlock:
+          cidr: {{ .Values.binderhub.networkPolicy.egress.cidr }}
+          except:
+            - 169.254.169.254/32
+            - 10.0.0.0/8
+{{- end }}
