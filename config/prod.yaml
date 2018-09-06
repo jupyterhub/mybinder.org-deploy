@@ -70,6 +70,9 @@ binderhub:
         - secretName: kubelego-tls-jupyterhub-prod
           hosts:
             - hub.mybinder.org
+    scheduling:
+      userScheduler:
+        nodeSelector: *coreNodeSelector
 
   googleAnalyticsCode: "UA-101904940-1"
   googleAnalyticsDomain: "mybinder.org"
