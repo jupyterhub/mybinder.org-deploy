@@ -6,7 +6,6 @@ metadata:
   labels:
     app: proxy-patches
     component: proxy-patches
-    hub.jupyter.org/network-access-hub: "true"
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 
@@ -19,6 +18,7 @@ spec:
       labels:
         app: proxy-patches
         component: proxy-patches
+        hub.jupyter.org/network-access-hub: "true"
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
     spec:
