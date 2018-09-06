@@ -107,6 +107,9 @@ binderhub:
         ingress.kubernetes.io/proxy-body-size: 64m
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
+    scheduling:
+      userScheduler:
+        enabled: true
     singleuser:
       networkPolicy:
         enabled: true
