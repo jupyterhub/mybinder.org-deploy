@@ -110,6 +110,7 @@ binderhub:
     scheduling:
       userScheduler:
         enabled: true
+        replicas: 2
     singleuser:
       networkPolicy:
         enabled: true
