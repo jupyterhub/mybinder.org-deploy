@@ -3,6 +3,7 @@
 __pycache__
 *.py[co]
 .cache
+.pytest_cache
 
 mybinder/charts
 mybinder/requirements.lock
