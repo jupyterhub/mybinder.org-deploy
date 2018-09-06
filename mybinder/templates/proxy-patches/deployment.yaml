@@ -18,7 +18,7 @@ spec:
       labels:
         app: proxy-patches
         component: proxy-patches
-        hub.jupyter.org/network-access-hub: "true"
+        hub.jupyter.org/network-access-proxy-api: "true"
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
     spec:
@@ -49,6 +49,8 @@ spec:
           - mountPath: /etc/proxy
             name: proxy-help-config
         env:
+          - name: PYTHONUNBUFFERED
+            value: "1"
           - name: CHECK_PROXY_INTERVAL
             value: {{ .Values.proxyPatches.interval | quote }}
           - name: CONFIGPROXY_AUTH_TOKEN
