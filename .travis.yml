@@ -55,7 +55,7 @@ before_deploy:
   python ./deploy.py staging staging
 - |
   # Stage 3, Step 2: Verify staging works
-  travis_retry py.test -n 2 --binder-url=https://staging.mybinder.org --hub-url=https://hub.staging.mybinder.org
+  travis_retry py.test -vx -n 2 --binder-url=https://staging.mybinder.org --hub-url=https://hub.staging.mybinder.org
 - |
   # Stage 4, Step 1: Post message to Grafana that deployment to production has started
   source secrets/grafana-api-key
