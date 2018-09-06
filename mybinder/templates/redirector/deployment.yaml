@@ -7,6 +7,8 @@ spec:
     matchLabels:
       app: redirector
       component: nginx
+      heritage: {{ .Release.Service }}
+      release: {{ .Release.Name }}
   replicas: 1
   template:
     metadata:
@@ -15,6 +17,8 @@ spec:
       labels:
         app: redirector
         component: nginx
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
     spec:
       nodeSelector: {{ toJson .Values.redirector.nodeSelector }}
       volumes:

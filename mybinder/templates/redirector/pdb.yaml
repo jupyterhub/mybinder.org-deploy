@@ -1,0 +1,14 @@
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: redirector
+  labels:
+    app: redirector
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  minAvailable: 0
+  selector:
+    matchLabels:
+      app: redirector
+      release: {{ .Release.Name }}
