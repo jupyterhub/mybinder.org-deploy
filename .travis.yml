@@ -71,7 +71,7 @@ before_deploy:
   python ./deploy.py prod prod-a
 - |
   # Stage 4, Step 3: Verify production works
-  travis_retry py.test -n 2 --binder-url=https://mybinder.org --hub-url=https://hub.mybinder.org
+  travis_retry py.test -vx -n 2 --binder-url=https://mybinder.org --hub-url=https://hub.mybinder.org
 
 
 env:
