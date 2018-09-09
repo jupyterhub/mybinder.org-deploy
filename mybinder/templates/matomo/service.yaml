@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: matomo
+  labels:
+    app: matomo
+spec:
+  type: {{ .Values.matomo.service.type }}
+  selector:
+    app: matomo
+  ports:
+    - name: matomo
+      protocol: TCP
+      port: 80

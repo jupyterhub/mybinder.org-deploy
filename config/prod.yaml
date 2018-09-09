@@ -165,3 +165,9 @@ redirector:
       host:
         from: status.mybinder.org
         to: mybinder.readthedocs.io/en/latest/status.html
+
+matomo:
+  db:
+    instanceName: binder-prod:us-central1:matomo
+  trustedHosts:
+    - mybinder.org
