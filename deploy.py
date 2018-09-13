@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import argparse
-import subprocess
+import json
 import os
+import subprocess
 
 import yaml
 
@@ -31,34 +32,46 @@ def setup_auth(release, cluster):
 
 def setup_helm(release):
     """ensure helm is up to date"""
-    subprocess.check_output(['helm', 'init', '--upgrade'])
+    subprocess.check_call(['helm', 'init', '--upgrade'])
 
+    deployment = json.loads(subprocess.check_output([
+        'kubectl',
+        '--namespace=kube-system',
+        'get',
+        'deployment',
+        'tiller-deploy',
+        '-o', 'json',
+    ]).decode('utf8'))
     # patch tiller nodeSelector
     # helm init can set this with `--node-selectors`,
     # but it cannot be applied after upgrade
     # https://github.com/helm/helm/issues/4063
     with open(os.path.join(HERE, 'config', release + '.yaml')) as f:
         config = yaml.safe_load(f)
-    nodeSelector = config.get('coreNodeSelector')
-    patch = yaml.dump({
-        'spec': {
-            'template': {
-                'spec': {
-                    'nodeSelector': nodeSelector,
-                },
-            },
-        },
-    })
-    subprocess.check_call([
-        'kubectl',
-        'patch',
-        '--namespace',
-        'kube-system',
-        'deployment',
-        'tiller-deploy',
-        '-p',
-        patch,
-    ])
+    node_selector = config.get('coreNodeSelector', None)
+    current_node_selector = deployment['spec']['template']['spec'].get('nodeSelector')
+
+    if current_node_selector != node_selector:
+        patch = {'path': '/spec/template/spec/nodeSelector'}
+        if not node_selector:
+            patch['op'] = 'remove'
+        if not current_node_selector:
+            patch['op'] = 'add'
+            patch['value'] = node_selector
+        else:
+            patch['op'] = 'replace'
+            patch['value'] = node_selector
+        subprocess.check_call([
+            'kubectl',
+            'patch',
+            '--namespace',
+            'kube-system',
+            'deployment',
+            'tiller-deploy',
+            '--type=json',
+            '-p',
+            json.dumps([patch]),
+        ])
 
     # wait for tiller to come up
     subprocess.check_call([
