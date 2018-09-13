@@ -14,10 +14,10 @@ binderhub:
   resources:
     requests:
       cpu: "0.25"
-      memory: 2Gi
+      memory: 1Gi
     limits:
       cpu: "2"
-      memory: 2Gi
+      memory: 1Gi
 
   registry:
     prefix: gcr.io/binder-prod/r2d-aee37be-
@@ -50,18 +50,18 @@ binderhub:
       chp:
         resources:
           requests:
-            memory: 512Mi
-            cpu: "0.25"
+            memory: 256Mi
+            cpu: "0.1"
           limits:
-            memory: 512Mi
+            memory: 256Mi
             cpu: "0.5"
       nginx:
         resources:
           requests:
-            memory: 1Gi
+            memory: 512Mi
             cpu: "0.25"
           limits:
-            memory: 1Gi
+            memory: 512Mi
             cpu: 1
     ingress:
       hosts:
@@ -81,11 +81,11 @@ grafana:
   nodeSelector: *coreNodeSelector
   resources:
     requests:
-      cpu: "0.2"
-      memory: 512Mi
+      cpu: "0"
+      memory: 128Mi
     limits:
-      cpu: "0.2"
-      memory: 512Mi
+      cpu: "0.25"
+      memory: 128Mi
   ingress:
     hosts:
       - grafana.mybinder.org
@@ -114,10 +114,10 @@ prometheus:
     resources:
       requests:
         cpu: "2"
-        memory: 16Gi
+        memory: 12Gi
       limits:
         cpu: "2"
-        memory: 16Gi
+        memory: 12Gi
     persistentVolume:
       # Use a large SSD Volume in production
       size: 2000Gi
