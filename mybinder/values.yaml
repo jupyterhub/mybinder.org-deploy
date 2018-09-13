@@ -1,4 +1,9 @@
 binderhub:
+
+  replicas: 2
+  pdb:
+    minAvailable: 1
+
   networkPolicy:
     enabled: true
     egress:
