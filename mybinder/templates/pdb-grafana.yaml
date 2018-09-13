@@ -1,0 +1,14 @@
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: grafana
+  labels:
+    app: grafana
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  minAvailable: 0
+  selector:
+    matchLabels:
+      app: grafana
+      release: {{ .Release.Name }}

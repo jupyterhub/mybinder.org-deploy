@@ -1,0 +1,17 @@
+{{- if .Values.proxyPatches.enabled }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: proxy-patches
+  labels:
+    app: proxy-patches
+    component: proxy-patches
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  minAvailable: 0
+  selector:
+    matchLabels:
+      app: proxy-patches
+      release: {{ .Release.Name }}
+{{- end }}
