@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 import argparse
 import subprocess
-import yaml
 import os
+
+import yaml
 
 # Color codes for colored output!
 BOLD = subprocess.check_output(['tput', 'bold']).decode()
 GREEN = subprocess.check_output(['tput', 'setaf', '2']).decode()
 NC = subprocess.check_output(['tput', 'sgr0']).decode()
+HERE = os.path.dirname(__file__)
 
 
 def setup_auth(release, cluster):
@@ -27,11 +29,37 @@ def setup_auth(release, cluster):
     ])
 
 
-def setup_helm():
+def setup_helm(release):
     """ensure helm is up to date"""
-    subprocess.check_output([
-        'helm', 'init', '--upgrade',
+    subprocess.check_output(['helm', 'init', '--upgrade'])
+
+    # patch tiller nodeSelector
+    # helm init can set this with `--node-selectors`,
+    # but it cannot be applied after upgrade
+    # https://github.com/helm/helm/issues/4063
+    with open(os.path.join(HERE, 'config', release + '.yaml')) as f:
+        config = yaml.safe_load(f)
+    nodeSelector = config.get('coreNodeSelector')
+    patch = yaml.dump({
+        'spec': {
+            'template': {
+                'spec': {
+                    'nodeSelector': nodeSelector,
+                },
+            },
+        },
+    })
+    subprocess.check_call([
+        'kubectl',
+        'patch',
+        '--namespace',
+        'kube-system',
+        'deployment',
+        'tiller-deploy',
+        '-p',
+        patch,
     ])
+
     # wait for tiller to come up
     subprocess.check_call([
         'kubectl', 'rollout', 'status',
@@ -97,7 +125,7 @@ def main():
     args = argparser.parse_args()
 
     setup_auth(args.release, args.cluster)
-    setup_helm()
+    setup_helm(args.release)
     deploy(args.release)
 
 
