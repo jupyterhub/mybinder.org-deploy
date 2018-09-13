@@ -86,6 +86,8 @@ binderhub:
     hub:
       networkPolicy:
         enabled: true
+      pdb:
+        minAvailable: 0
       extraConfigMap:
         cors: *cors
       extraConfig:
@@ -94,6 +96,8 @@ binderhub:
     proxy:
       networkPolicy:
         enabled: true
+      pdb:
+        minAvailable: 0
       service:
         type: ClusterIP
       chp:
