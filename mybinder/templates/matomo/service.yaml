@@ -4,10 +4,14 @@ metadata:
   name: matomo
   labels:
     app: matomo
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
 spec:
   type: {{ .Values.matomo.service.type }}
   selector:
     app: matomo
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
   ports:
     - name: matomo
       protocol: TCP
