@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: matomo
+  labels:
+    app: matomo
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    {{ range $host := .Values.matomo.ingress.hosts }}
+    - host: {{ $host }}
+      http:
+        paths:
+          - path: /matomo
+            backend:
+              serviceName: matomo
+              servicePort: 80
+    {{ end }}
+  tls:
+    - secretName: kubelego-tls-matomo
+      hosts:
+      {{ range $host := .Values.matomo.ingress.hosts }}
+      - {{ $host }}
+      {{- end }}
