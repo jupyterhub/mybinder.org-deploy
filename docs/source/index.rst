@@ -22,6 +22,7 @@ Components
    components/dashboards.md
    components/ingress.md
    components/cloud.md
+   components/matomo.rst
 
 Deployment and Operation
 ------------------------
