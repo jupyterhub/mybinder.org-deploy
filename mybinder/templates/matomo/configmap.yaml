@@ -1,0 +1,84 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: matomo-config
+  labels:
+    app: matomo
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  config.ini.php: |
+    [database]
+    host = "127.0.0.1"
+    username = {{ .Values.matomo.db.username | quote }}
+    password = {{ .Values.matomo.db.password | quote }}
+    dbname = {{ .Values.matomo.db.name | quote}}
+    tables_prefix = {{ .Values.matomo.db.tables_prefix | quote }}
+
+    [General]
+    salt = {{ .Values.matomo.salt | quote }}
+    {{ range $host := .Values.matomo.trustedHosts }}
+    trusted_hosts[] = {{ $host | quote}}
+    {{ end }}
+
+    [PluginsInstalled]
+    PluginsInstalled[] = "Diagnostics"
+    PluginsInstalled[] = "Login"
+    PluginsInstalled[] = "CoreAdminHome"
+    PluginsInstalled[] = "UsersManager"
+    PluginsInstalled[] = "SitesManager"
+    PluginsInstalled[] = "Installation"
+    PluginsInstalled[] = "Monolog"
+    PluginsInstalled[] = "Intl"
+    PluginsInstalled[] = "CorePluginsAdmin"
+    PluginsInstalled[] = "CoreHome"
+    PluginsInstalled[] = "WebsiteMeasurable"
+    PluginsInstalled[] = "CoreVisualizations"
+    PluginsInstalled[] = "Proxy"
+    PluginsInstalled[] = "API"
+    PluginsInstalled[] = "ExamplePlugin"
+    PluginsInstalled[] = "Widgetize"
+    PluginsInstalled[] = "Transitions"
+    PluginsInstalled[] = "LanguagesManager"
+    PluginsInstalled[] = "Actions"
+    PluginsInstalled[] = "Dashboard"
+    PluginsInstalled[] = "MultiSites"
+    PluginsInstalled[] = "Referrers"
+    PluginsInstalled[] = "UserLanguage"
+    PluginsInstalled[] = "DevicesDetection"
+    PluginsInstalled[] = "Goals"
+    PluginsInstalled[] = "Ecommerce"
+    PluginsInstalled[] = "SEO"
+    PluginsInstalled[] = "Events"
+    PluginsInstalled[] = "UserCountry"
+    PluginsInstalled[] = "GeoIp2"
+    PluginsInstalled[] = "VisitsSummary"
+    PluginsInstalled[] = "VisitFrequency"
+    PluginsInstalled[] = "VisitTime"
+    PluginsInstalled[] = "VisitorInterest"
+    PluginsInstalled[] = "ExampleAPI"
+    PluginsInstalled[] = "RssWidget"
+    PluginsInstalled[] = "Feedback"
+    PluginsInstalled[] = "CoreUpdater"
+    PluginsInstalled[] = "CoreConsole"
+    PluginsInstalled[] = "ScheduledReports"
+    PluginsInstalled[] = "UserCountryMap"
+    PluginsInstalled[] = "Live"
+    PluginsInstalled[] = "CustomVariables"
+    PluginsInstalled[] = "PrivacyManager"
+    PluginsInstalled[] = "ImageGraph"
+    PluginsInstalled[] = "Annotations"
+    PluginsInstalled[] = "MobileMessaging"
+    PluginsInstalled[] = "Overlay"
+    PluginsInstalled[] = "SegmentEditor"
+    PluginsInstalled[] = "Insights"
+    PluginsInstalled[] = "Morpheus"
+    PluginsInstalled[] = "Contents"
+    PluginsInstalled[] = "BulkTracking"
+    PluginsInstalled[] = "Resolution"
+    PluginsInstalled[] = "DevicePlugins"
+    PluginsInstalled[] = "Heartbeat"
+    PluginsInstalled[] = "Marketplace"
+    PluginsInstalled[] = "ProfessionalServices"
+    PluginsInstalled[] = "UserId"
+    PluginsInstalled[] = "CustomPiwikJs"

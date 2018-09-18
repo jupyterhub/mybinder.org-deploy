@@ -80,3 +80,11 @@ redirector:
       host:
         from: playground.staging.mybinder.org
         to: play.nteract.io
+
+matomo:
+  db:
+    instanceName: binder-staging:us-central1:matomo
+  trustedHosts:
+    - staging.mybinder.org
+  hosts:
+    - staging.mybinder.org

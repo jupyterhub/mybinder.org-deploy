@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matomo
+  labels:
+    app: matomo
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.matomo.replicas }}
+  selector:
+    matchLabels:
+      app: matomo
+      heritage: {{ .Release.Service }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: matomo
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+    spec:
+      volumes:
+      - name: cloudsql-instance-credentials
+        secret:
+          secretName: cloudsql-instance-credentials
+      - name: matomo-config
+        configMap:
+          name: matomo-config
+      containers:
+      - name: piwik
+        image: matomo:3.5.1-apache
+        volumeMounts:
+          - name: matomo-config
+            mountPath: /var/www/html/config/config.ini.php
+            subPath: config.ini.php
+      - name: cloudsql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:1.11
+        command:
+          - /cloud_sql_proxy
+          - -instances={{ .Values.matomo.db.instanceName }}=tcp:3306
+          - -credential_file=/secrets/cloudsql/credentials.json
+        securityContext:
+          runAsUser: 2  # non-root user
+          allowPrivilegeEscalation: false
+        volumeMounts:
+          - name: cloudsql-instance-credentials
+            mountPath: /secrets/cloudsql
+            readOnly: true

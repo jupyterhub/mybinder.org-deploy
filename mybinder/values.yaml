@@ -255,3 +255,12 @@ proxyPatches:
   interval: 60
   routes:
     "/user": "service:proxy-patches"
+
+matomo:
+  replicas: 1
+  service:
+    type: ClusterIP
+  db:
+    username: matomo
+    name: matomo
+    tables_prefix: matomo_
