@@ -86,5 +86,6 @@ matomo:
     instanceName: binder-staging:us-central1:matomo
   trustedHosts:
     - staging.mybinder.org
-  hosts:
-    - staging.mybinder.org
+  ingress:
+    hosts:
+      - staging.mybinder.org

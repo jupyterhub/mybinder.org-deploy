@@ -171,5 +171,6 @@ matomo:
     instanceName: binder-prod:us-central1:matomo
   trustedHosts:
     - mybinder.org
-  hosts:
-    - mybinder.org
+  ingress:
+    hosts:
+      - mybinder.org
