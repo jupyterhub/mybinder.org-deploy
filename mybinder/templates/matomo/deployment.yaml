@@ -30,10 +30,21 @@ spec:
       containers:
       - name: piwik
         image: matomo:3.5.1-apache
+        lifecycle:
+          # matomo wants to chown its config.ini.php file.
+          # configmaps are mounted as readonly, so this doesn't work
+          # postStart copies our config file into default path, so matomo will start.
+          # This should ideally be using emptyDir + initContainer, since postStart ordering
+          # is not guaranteed. However, there are other config files in /var/www/html/config that
+          # we do not really wanna overwrite.
+          postStart:
+            exec:
+              - cp
+              - /etc/matomo-config/*
+              - /var/www/html/config/
         volumeMounts:
           - name: matomo-config
-            mountPath: /var/www/html/config/config.ini.php
-            subPath: config.ini.php
+            mountPath: /etc/matomo-config
       - name: cloudsql-proxy
         image: gcr.io/cloudsql-docker/gce-proxy:1.11
         command:
