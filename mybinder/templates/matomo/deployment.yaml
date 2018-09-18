@@ -40,9 +40,10 @@ spec:
           postStart:
             exec:
               command:
-                - cp
-                - /etc/matomo-config/*
-                - /var/www/html/config/
+                # use /bin/sh so we can glob
+                - /bin/sh
+                - -c
+                - cp /etc/matomo-config/* /var/www/html/config/
         volumeMounts:
           - name: matomo-config
             mountPath: /etc/matomo-config
