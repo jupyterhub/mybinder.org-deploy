@@ -39,9 +39,10 @@ spec:
           # we do not really wanna overwrite.
           postStart:
             exec:
-              - cp
-              - /etc/matomo-config/*
-              - /var/www/html/config/
+              command:
+                - cp
+                - /etc/matomo-config/*
+                - /var/www/html/config/
         volumeMounts:
           - name: matomo-config
             mountPath: /etc/matomo-config
