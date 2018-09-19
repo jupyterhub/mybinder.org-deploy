@@ -27,4 +27,27 @@ to provision a fully managed, standard mysql database. The
 `sidecar pattern <https://cloud.google.com/sql/docs/mysql/connect-kubernetes-engine>`_
 is used to connect Matomo to this database. A service account with appropriate
 credentials to connect to the database has been provisioned & checked-in
-to the repo.
+to the repo. A MySQL user with name ``matomo`` should also be created in
+the Google Cloud Console.
+
+Initial Installation
+====================
+
+Matomo is a PHP application, and this has a number of drawbacks. The initial
+install **`must <https://github.com/matomo-org/matomo/issues/10257>`_** be completed
+with a manual web interface. Matomo will error if it finds a complete ``config.ini.php``
+file (which we provide) but no database tables exist.
+
+The first time you install Matomo, you need to do the following:
+
+1. Do a deploy. This sets up Matomo, but not the database tables
+2. Use ``kubectl --namespace=<namespace> exec -it <matomo-pod> /bin/bash`` to
+   get shell on the matomo container.
+3. Run ``rm config/config.ini.php``.
+4. Visit the web interface & complete installation. The database username & password
+   are available in the secret encrypted files in this repo. So is the admin username
+   and password. This creates the database tables.
+5. When the setup is complete, delete the pod. This should bring up our ``config.ini.php``
+   file, and everything should work normally.
+
+This is not ideal.

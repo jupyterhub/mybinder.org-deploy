@@ -18,7 +18,7 @@ spec:
           - path: /matomo
             backend:
               serviceName: matomo
-              servicePort: 80
+              servicePort: 9000
     {{ end }}
   tls:
     - secretName: kubelego-tls-matomo

@@ -15,6 +15,9 @@ spec:
       release: {{ .Release.Name }}
   template:
     metadata:
+      annotations:
+        checksum/matomo-config: {{ include (print $.Template.BasePath "/matomo/configmap.yaml") . | sha256sum }}
+        checksum/nginx-config: {{ include (print $.Template.BasePath "/matomo/nginx-configmap.yaml") . | sha256sum }}
       labels:
         app: matomo
         heritage: {{ .Release.Service }}
@@ -27,6 +30,9 @@ spec:
       - name: matomo-config
         configMap:
           name: matomo-config
+      - name: matomo-nginx-config
+        configMap:
+          name: matomo-nginx-config
       - name: matomo-config-rw
         emptyDir: {}
       initContainers:
@@ -43,11 +49,18 @@ spec:
           - name: matomo-config-rw
             mountPath: /etc/matomo-config-rw
       containers:
-      - name: piwik
-        image: matomo:3.5.1-fpm
+      - name: matomo
+        image: matomo:3.5.1-apache
         volumeMounts:
           - name: matomo-config-rw
             mountPath: /var/www/html/config/
+      - name: nginx
+        image: nginx:1.15
+        ports:
+        - containerPort: 9000
+        volumeMounts:
+          - mountPath: /etc/nginx/conf.d/
+            name: matomo-nginx-config
       - name: cloudsql-proxy
         image: gcr.io/cloudsql-docker/gce-proxy:1.11
         command:
