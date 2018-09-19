@@ -82,6 +82,7 @@ redirector:
         to: play.nteract.io
 
 matomo:
+  enabled: true
   db:
     instanceName: binder-staging:us-central1:matomo
   trustedHosts:

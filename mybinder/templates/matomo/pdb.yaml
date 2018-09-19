@@ -1,3 +1,4 @@
+{{- if .Values.matomo.enabled }}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -14,3 +15,4 @@ spec:
       app: matomo
       heritage: {{ .Release.Service }}
       release: {{ .Release.Name }}
+{{- end }}

@@ -1,3 +1,4 @@
+{{- if .Values.matomo.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -74,3 +75,4 @@ spec:
           - name: cloudsql-instance-credentials
             mountPath: /secrets/cloudsql
             readOnly: true
+{{- end }}

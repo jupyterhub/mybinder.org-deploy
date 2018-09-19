@@ -257,6 +257,7 @@ proxyPatches:
     "/user": "service:proxy-patches"
 
 matomo:
+  enabled: true
   replicas: 1
   service:
     type: ClusterIP
