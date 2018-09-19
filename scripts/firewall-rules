@@ -22,6 +22,13 @@ import sys
 # CIDR for the whole world
 WORLD_CIDR = '0.0.0.0/0'
 
+# CloudSQL instances for staging & prod
+# FIXME: Find a way to use network tags instead of IPs
+MATOMO_SQL_IPS = {
+    'staging': '104.198.150.158/32',
+    'prod': '35.226.234.102/32'
+}
+
 # location of secrets directory (where ban.py lives)
 here = os.path.dirname(os.path.abspath(__file__))
 secrets = os.path.join(os.path.dirname(here), "secrets")
@@ -199,6 +206,23 @@ def main(cluster, replace=False):
         },
         rules,
         replace=replace,
+    )
+
+    # whitelist connections to CloudSQL for Matomo
+    # This target sport 3307, which is specific to CloudSQL
+    # and can be accessed only via cloud-sql proxy & its strong authentication
+    add_rule(
+        prefix + 'allow-matomo-mysql',
+        {
+            'priority': 800,
+            'description': f'Allow CloudSQL traffic to MySQL instances for matomo',
+            'direction': 'egress',
+            'destination-ranges': MATOMO_SQL_IPS[cluster],
+            'target-tags': ','.join(node_tags),
+            'allow': 'tcp:3307',
+        },
+        rules,
+        replace=replace
     )
 
 
