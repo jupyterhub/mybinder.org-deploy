@@ -1,3 +1,4 @@
+{{- if .Values.matomo.enabled }}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
@@ -45,3 +46,4 @@ spec:
             # Ideally, we should only allow outgoing connections to
             # CloudSQL & Google's OAuth servers.
             cidr: 0.0.0.0/0
+{{- end }}
