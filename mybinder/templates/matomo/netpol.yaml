@@ -1,0 +1,47 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: matomo
+  labels:
+    app: matomo
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+spec:
+  podSelector:
+    # apply this to both places user code runs: dind and singleuser-server
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - matomo
+    matchLabels:
+      release: {{ .Release.Name }}
+  policyTypes:
+    - Egress
+  # block ingress unless explicitly allowed by other policies
+  ingress: []
+  egress:
+    # Allow:
+    # - DNS lookups (but only inside cluster)
+    - ports:
+        - port: 53
+          protocol: TCP
+        - port: 53
+          protocol: UDP
+      to:
+        - ipBlock:
+            cidr: 10.0.0.0/8
+    # Allow:
+    # - CloudSQL connections for MySQL (3307)
+    # - HTTPS connections for OAuth2
+    - ports:
+        - port: 3307
+          protocol: TCP
+        - port: 443
+          protocol: TCP
+      to:
+        - ipBlock:
+            # FIXME: Allow all outgoing connections.
+            # Ideally, we should only allow outgoing connections to
+            # CloudSQL & Google's OAuth servers.
+            cidr: 0.0.0.0/0

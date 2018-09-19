@@ -17,6 +17,12 @@ data:
 
     [General]
     salt = {{ .Values.matomo.salt | quote }}
+
+    ; Use the header HTTP_X_FORWARDED_URI to construct the current script name
+    proxy_uri_header = 1
+    proxy_client_headers[] = "HTTP_X_FORWARDED_FOR"
+    proxy_host_header[] = "HTTP_X_FORWARDED_HOST"
+
     {{ range $host := .Values.matomo.trustedHosts }}
     trusted_hosts[] = {{ $host | quote}}
     {{ end }}
