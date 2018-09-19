@@ -57,3 +57,25 @@ Admin access
 
 The admin username for Matomo is ``admin``. You can find the password in
 ``secret/staging.yaml`` for staging & ``secret/prod.yaml`` for prod.
+
+Security
+========
+
+PHP code is notoriously hard to secure. Matomo has had security audits,
+so it's not the worst. However, we should treat it with suspicion &
+wall off as much of it away as possible. Arbitrary code execution
+vulnerabilities often happen in PHP, so we gotta use that as our
+security model.
+
+We currently have:
+
+1. A firewall hole (in Google Cloud) allowing it access to the CloudSQL
+   instance it needs to store data in. Only port 3307 (which is used by
+   the OAuth2+ServiceAccount authenticated CloudSQLProxy) is open. This
+   helps prevent random MySQL password grabbers from inside the cluster.
+2. A Kubernetes NetworkPolicy is in place that limits what outbound
+   connections Matomo can make. This should be further tightened down -
+   ingress should only be allowed on the nginx port from our ingress
+   controllers.
+3. We do not mount a Kubernetes ServiceAccount in the Matomo pod. This
+   denies it access to the KubernetesAPI.
