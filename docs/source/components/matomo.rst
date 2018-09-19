@@ -27,8 +27,8 @@ to provision a fully managed, standard mysql database. The
 `sidecar pattern <https://cloud.google.com/sql/docs/mysql/connect-kubernetes-engine>`_
 is used to connect Matomo to this database. A service account with appropriate
 credentials to connect to the database has been provisioned & checked-in
-to the repo. A MySQL user with name ``matomo`` should also be created in
-the Google Cloud Console.
+to the repo. A MySQL user with name ``matomo`` & a MySQL database with name ``matomo``
+should also be created in the Google Cloud Console.
 
 Initial Installation
 ====================
@@ -51,3 +51,9 @@ The first time you install Matomo, you need to do the following:
    file, and everything should work normally.
 
 This is not ideal.
+
+Admin access
+============
+
+The admin username for Matomo is ``admin``. You can find the password in
+``secret/staging.yaml`` for staging & ``secret/prod.yaml`` for prod.
