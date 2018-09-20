@@ -9,7 +9,7 @@ install:
   - |
     # Stage 1: Install pytest + test dependencies
     pip install --upgrade setuptools pip
-    pip install --upgrade pyyaml pytest pytest-timeout pytest-xdist requests
+    pip install --upgrade -r requirements.txt
 
 script:
  - true

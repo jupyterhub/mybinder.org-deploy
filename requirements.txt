@@ -1,0 +1,6 @@
+pyyaml
+pytest
+pytest-timeout
+pytest-xdist
+requests
+kubernetes
