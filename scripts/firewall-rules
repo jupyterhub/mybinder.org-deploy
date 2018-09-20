@@ -26,7 +26,7 @@ WORLD_CIDR = '0.0.0.0/0'
 # FIXME: Find a way to use network tags instead of IPs
 MATOMO_SQL_IPS = {
     'staging': '104.198.150.158/32',
-    'prod': '35.226.234.102/32'
+    'prod-a': '35.226.234.102/32'
 }
 
 # location of secrets directory (where ban.py lives)
