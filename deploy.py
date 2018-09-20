@@ -83,6 +83,12 @@ def setup_helm(release):
 
 def deploy(release):
     """Deploy jupyterhub"""
+    print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
+    subprocess.check_call([
+        "python3",
+        "secrets/ban.py",
+    ])
+
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
     helm = [
         'helm', 'upgrade', '--install',
@@ -99,12 +105,6 @@ def deploy(release):
 
     subprocess.check_call(helm)
     print(BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC, flush=True)
-
-    print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
-    subprocess.check_call([
-        "python3",
-        "secrets/ban.py",
-    ])
 
     # Explicitly wait for all deployments and daemonsets to be fully rolled out
     print(BOLD + GREEN + f"Waiting for all deployments and daemonsets in {release} to be ready" + NC, flush=True)
