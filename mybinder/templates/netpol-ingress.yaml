@@ -1,0 +1,32 @@
+{{- if (and .Values.binderhub.networkPolicy.enabled .Values.binderhub.networkPolicy.ingress.bannedIps) }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: banned-ingress
+  labels:
+    app: binderhub
+    component: banned-ingress
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+spec:
+  podSelector:
+    matchLabels:
+      app: nginx-ingress
+      component: controller
+      release: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+  # block ingress from banned client ips
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+            {{- range $ipOrCidr := .Values.binderhub.networkPolicy.ingress.bannedIps }}
+              {{- if (contains $ipOrCidr "/") }}
+              - {{ $ipOrCidr }}
+              {{- else }}
+              - {{ $ipOrCidr}}/32
+              {{- end }}
+            {{- end }}
+{{- end }}

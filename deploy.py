@@ -93,11 +93,18 @@ def deploy(release):
         '--wait',
         '--timeout', '600',
         '-f', os.path.join('config', release + '.yaml'),
-        '-f', os.path.join('secrets', 'config', release + '.yaml')
+        '-f', os.path.join('secrets', 'config', 'common.yaml'),
+        '-f', os.path.join('secrets', 'config', release + '.yaml'),
     ]
 
     subprocess.check_call(helm)
     print(BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC, flush=True)
+
+    print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
+    subprocess.check_call([
+        "python3",
+        "secrets/ban.py",
+    ])
 
     # Explicitly wait for all deployments and daemonsets to be fully rolled out
     print(BOLD + GREEN + f"Waiting for all deployments and daemonsets in {release} to be ready" + NC, flush=True)

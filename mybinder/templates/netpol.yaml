@@ -49,4 +49,11 @@ spec:
           except:
             - 169.254.169.254/32
             - 10.0.0.0/8
+          {{- range $ipOrCidr := .Values.binderhub.networkPolicy.egress.bannedIps }}
+            {{- if (contains $ipOrCidr "/") }}
+            - {{ $ipOrCidr }}
+            {{- else }}
+            - {{ $ipOrCidr}}/32
+            {{- end }}
+          {{- end }}
 {{- end }}
