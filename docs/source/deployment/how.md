@@ -101,7 +101,7 @@ The following lines describe how to point mybinder.org to the new repo2docker im
 Deploying a change involves making a PR with your desired change and merging it to
 master.
 
-1. Make the [changes](#upgrading-dependencies-for-the-mybinderorg-deployment) on your fork.
+1. Make the changes as described above [on your fork of this repo](https://github.com/jupyterhub/mybinder.org-deploy).
 2. Keep track of the **hashes** that were updated. You should have both the *old* hash that
    was replaced, and the *new* hash that replaced it.
 3. Make a PR to the `master` branch with the changes you want.
