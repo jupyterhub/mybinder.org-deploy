@@ -257,6 +257,7 @@ proxyPatches:
 
 matomo:
   enabled: true
+  nodeSelector: {}
   replicas: 1
   service:
     type: ClusterIP

@@ -28,6 +28,7 @@ spec:
         component: matomo
     spec:
       automountServiceAccountToken: false
+      nodeSelector: {{ toJson .Values.matomo.nodeSelector }}
       volumes:
       - name: cloudsql-instance-credentials
         secret:
