@@ -45,11 +45,13 @@ binderhub:
 
 
   imageCleaner:
-    enabled: false
+    enabled: true
     # when 80% of inodes are used,
     # cull images until only 40% are used.
     imageGCThresholdHigh: 80
     imageGCThresholdLow: 40
+    host:
+      enabled: false
 
   extraFooterScripts:
     00-matomo-tracking: |
