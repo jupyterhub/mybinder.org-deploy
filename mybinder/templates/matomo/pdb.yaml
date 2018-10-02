@@ -8,8 +8,12 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 spec:
-
+  # Use 1.0 rather than 1, since `gt` only works with floats
+  {{ if gt .Values.matomo.replicas 1.0 }}
+  minAvailable: 1
+  {{ else }}
   minAvailable: 0
+  {{ end }}
   selector:
     matchLabels:
       app: matomo
