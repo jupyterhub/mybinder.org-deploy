@@ -175,3 +175,10 @@ matomo:
   ingress:
     hosts:
       - mybinder.org
+  resources:
+    requests:
+      cpu: 0.1
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 1Gi
