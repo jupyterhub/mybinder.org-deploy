@@ -60,6 +60,7 @@ spec:
         volumeMounts:
           - name: matomo-config-rw
             mountPath: /var/www/html/config/
+        resources: {{ toJson .Values.matomo.resources }}
       - name: nginx
         image: nginx:1.15
         ports:
