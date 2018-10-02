@@ -167,6 +167,7 @@ redirector:
         to: mybinder.readthedocs.io/en/latest/status.html
 
 matomo:
+  nodeSelector: *coreNodeSelector
   db:
     instanceName: binder-prod:us-central1:matomo
   trustedHosts:
