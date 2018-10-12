@@ -76,6 +76,8 @@ binderhub:
 
 
   jupyterhub:
+    custom:
+      cors: *cors
     cull:
       # cull every 11 minutes so it is out of phase
       # with the proxy check-routes interval of five minutes
@@ -88,8 +90,6 @@ binderhub:
         enabled: true
       pdb:
         minAvailable: 0
-      extraConfigMap:
-        cors: *cors
       extraConfig:
         neverRestart: |
           c.KubeSpawner.extra_pod_config.update({'restart_policy': 'Never'})
