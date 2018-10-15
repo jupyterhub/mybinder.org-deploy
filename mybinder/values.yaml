@@ -210,6 +210,8 @@ kube-lego:
     LEGO_URL: https://acme-v01.api.letsencrypt.org/directory
   rbac:
     create: true
+  image:
+    tag: 0.1.7
 
 grafana:
   ingress:
