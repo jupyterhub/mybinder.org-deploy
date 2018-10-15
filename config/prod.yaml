@@ -157,10 +157,10 @@ redirector:
       host:
         from: docs.mybinder.org
         to: mybinder.readthedocs.io
-    - type: host
-      host:
-        from: playground.mybinder.org
-        to: play.nteract.io
+    # - type: host
+    #   host:
+    #     from: playground.mybinder.org
+    #     to: play.nteract.io
 
 matomo:
   replicas: 3
