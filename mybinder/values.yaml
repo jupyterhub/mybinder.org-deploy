@@ -45,7 +45,7 @@ binderhub:
 
 
   imageCleaner:
-    enabled: true
+    enabled: false
     # when 80% of inodes are used,
     # cull images until only 40% are used.
     imageGCThresholdHigh: 80
