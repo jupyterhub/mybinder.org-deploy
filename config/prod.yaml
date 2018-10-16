@@ -9,7 +9,7 @@ binderhub:
   nodeSelector: *coreNodeSelector
 
   dind:
-    hostLibDir: /mnt/ssd0/dind
+    hostLibDir: /mnt/disks/ssd0/dind
 
   ingress:
     hosts:
