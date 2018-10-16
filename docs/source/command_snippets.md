@@ -128,8 +128,9 @@ gcloud beta --project=binder-prod container node-pools create $new_pool \
     --cluster=prod-a \
     --disk-type=pd-ssd \
     --disk-size=1000 \
-    --machine-type=n1-highmem-16 \
+    --machine-type=n1-highmem-8 \
     --num-nodes=2 \
+    --local-ssds=1 \
     --enable-autoscaling \
     --enable-autorepair \
     --min-nodes=1 \
