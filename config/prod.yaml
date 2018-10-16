@@ -7,6 +7,10 @@ binderhub:
   build:
     nodeSelector: *userNodeSelector
   nodeSelector: *coreNodeSelector
+
+  dind:
+    hostLibDir: /mnt/ssd0/dind
+
   ingress:
     hosts:
       - mybinder.org
