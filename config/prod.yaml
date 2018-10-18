@@ -10,6 +10,13 @@ binderhub:
 
   dind:
     hostLibDir: /mnt/disks/ssd0/dind
+    resources:
+      requests:
+        cpu: "2"
+        memory: 10Gi
+      limits:
+        cpu: "5"
+        memory: 12Gi
 
   ingress:
     hosts:
