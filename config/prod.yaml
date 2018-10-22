@@ -168,6 +168,10 @@ redirector:
       host:
         from: docs.mybinder.org
         to: mybinder.readthedocs.io
+    - type: host
+      host:
+        from: z2jh.jupyter.org
+        to: zero-to-jupyterhub.readthedocs.io
     # - type: host
     #   host:
     #     from: playground.mybinder.org
