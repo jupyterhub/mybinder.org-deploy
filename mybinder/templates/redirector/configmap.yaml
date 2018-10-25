@@ -9,6 +9,10 @@ data:
           listen 80;
           server_name {{ $redirect.host.from }};
 
+    {{- if (eq $redirect.type "url") }}
+          rewrite (.*) https://{{ $redirect.host.to }} redirect;
+    {{- else }}
           rewrite (.*) https://{{ $redirect.host.to }}$1 redirect;
+    {{- end }}
     }
     {{ end }}
