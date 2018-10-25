@@ -15,9 +15,27 @@ binderhub:
         - 1094 # xroot
       cidr: 0.0.0.0/0
   extraConfig:
+    # Send Events to StackDriver on Google Cloud
+    # This doesn't need any extra permissions, since the GKE nodes have
+    # permission to write to StackDriver by default. We don't block access
+    # to cloud metadata in binderhub pod, so this should 'just work'.
+    01-eventlog: |
+      import google.cloud.logging
+      import google.cloud.logging.handlers
+      class JSONCloudLoggingHandler(google.cloud.logging.handlers.CloudLoggingHandler):
+          def emit(self, record):
+              record.name = None
+              super().emit(record)
+
+      def _make_eventsink_handler(el):
+          client = google.cloud.logging.Client()
+          # These events are not parsed as JSON in stackdriver, so give it a different name
+          # for now. Should be fixed in https://github.com/googleapis/google-cloud-python/pull/6293
+          return [JSONCloudLoggingHandler(client, name='binderhub-events-text')]
+      c.EventLog.handlers_maker = _make_eventsink_handler
     # Add banned repositories to the list below
     # They should be strings that will match "^<org-name>/<repo-name>.*"
-    bans: |
+    02-banned-repos: |
       c.GitHubRepoProvider.banned_specs = [
         # e.g. '^org/repo.*',
         '^ines/spacy-binder.*',
