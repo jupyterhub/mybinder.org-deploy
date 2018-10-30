@@ -28,6 +28,9 @@ data:
     trusted_hosts[] = {{ $host | quote}}
     {{ end }}
 
+    ; Use database for sessions, since we run multiple copies of matomo
+    session_save_handler = dbtable
+
     [PluginsInstalled]
     PluginsInstalled[] = "Diagnostics"
     PluginsInstalled[] = "Login"
