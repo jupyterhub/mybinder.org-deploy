@@ -176,6 +176,10 @@ redirector:
       host:
         from: status.mybinder.org
         to: mybinder.readthedocs.io/en/latest/status.html
+    - type: url
+      host:
+        from: matomo.mybinder.org
+        to: mybinder.org/matomo/index.php
 
 matomo:
   replicas: 3
