@@ -63,6 +63,9 @@ before_deploy:
   (cd mybinder && helm dep up)
 - |
   # Stage 3, Step 1: Build images if needed
+  # We build and push our misc images to prod only for now.
+  # Staging has readonly access to prod images.
+  docker login -u _json_key --password-stdin https://gcr.io < secrets/gcr-auth-key-prod.json
   chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
   # Doing this here, since git crypt doesn't like unclean checkouts
 - |

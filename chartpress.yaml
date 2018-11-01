@@ -1,6 +1,6 @@
 charts:
   - name: mybinder
-    imagePrefix: jupyterhub/mybinder-extr
+    imagePrefix: jupyterhub/mybinder-tool-
     images:
       events-archiver:
         valuesPath: eventsArchiver.image
