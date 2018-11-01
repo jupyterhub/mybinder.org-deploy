@@ -45,7 +45,7 @@ binderhub:
     type: ClusterIP
 
   cors: &cors
-    allowOrigin: "*"
+    allowOrigin: '*'
 
   ingress:
     enabled: true
@@ -53,7 +53,7 @@ binderhub:
       kubernetes.io/ingress.class: nginx
     https:
       enabled: true
-      type: "kube-lego"
+      type: kube-lego
 
   registry:
     enabled: true
@@ -133,7 +133,7 @@ binderhub:
       annotations:
         ingress.kubernetes.io/proxy-body-size: 64m
         kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "true"
+        kubernetes.io/tls-acme: 'true'
     scheduling:
       userScheduler:
         enabled: true
@@ -144,21 +144,21 @@ binderhub:
         egress: []
 
       initContainers:
-      - name: tc-init
-        image: minrk/tc-init:0.0.4
-        env:
-          - name: WHITELIST_CIDR
-            value: 10.0.0.0/8
-          - name: EGRESS_BANDWIDTH
-            value: 1mbit
-        securityContext:
+        - name: tc-init
+          image: minrk/tc-init:0.0.4
+          env:
+            - name: WHITELIST_CIDR
+              value: 10.0.0.0/8
+            - name: EGRESS_BANDWIDTH
+              value: 1mbit
+          securityContext:
           # capabilities.add seems to be disabled
           # by the `runAsUser: 1000` in the pod-level securityContext
           # unless we explicitly run as root
-          runAsUser: 0
-          capabilities:
-            add:
-            - NET_ADMIN
+            runAsUser: 0
+            capabilities:
+              add:
+                - NET_ADMIN
       schedulerStrategy: pack
       extraEnv:
         CULL_CONNECTED: '1'
@@ -193,8 +193,8 @@ nginx-ingress:
   statsExporter:
     service:
       annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "10254"
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '10254'
   controller:
     replicaCount: 5
     scope:
@@ -208,8 +208,8 @@ nginx-ingress:
       enabled: true
       service:
         annotations:
-          prometheus.io/scrape: "true"
-          prometheus.io/port: "10254"
+          prometheus.io/scrape: 'true'
+          prometheus.io/port: '10254'
     service:
       # Preserve client IPs
       externalTrafficPolicy: Local
@@ -236,7 +236,7 @@ grafana:
     enabled: true
     annotations:
       kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
+      kubernetes.io/tls-acme: 'true'
   persistence:
     enabled: true
     accessModes:
@@ -267,14 +267,14 @@ prometheus:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "true"
+        kubernetes.io/tls-acme: 'true'
 
 proxyPatches:
   nodeSelector: {}
   enabled: true
   interval: 60
   routes:
-    "/user": "service:proxy-patches"
+    /user: service:proxy-patches
 
 matomo:
   enabled: true
@@ -287,3 +287,8 @@ matomo:
     username: matomo
     name: matomo
     tables_prefix: matomo_
+
+eventsArchiver:
+  image:
+    name: jupyterhub/mybinder-extraevents-archiver
+    tag: set-by-chartpress

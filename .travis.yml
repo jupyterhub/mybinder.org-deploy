@@ -1,5 +1,16 @@
 language: python
 
+git:
+  depth: false
+
+services:
+  - docker
+sudo: required
+
+branches:
+  only:
+    - master
+
 python:
   - 3.6
 
@@ -12,7 +23,9 @@ install:
     pip install --upgrade -r requirements.txt
 
 script:
- - true
+- |
+  # Build any images we need
+  chartpress --commit-range ${TRAVIS_COMMIT_RANGE}
 
 # We are using before_deploy instead of script or deploy
 # since before_deploy gives us nice, folded log views,
@@ -85,10 +98,6 @@ deploy:
   on:
     branch:
       - master
-
-branches:
-  only:
-    - master
 
 notifications:
   webhooks:
