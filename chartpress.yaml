@@ -1,6 +1,6 @@
 charts:
   - name: mybinder
-    imagePrefix: jupyterhub/mybinder-tool-
+    imagePrefix: gcr.io/binder-prod/mybinder-tool-
     images:
       events-archiver:
         valuesPath: eventsArchiver.image
