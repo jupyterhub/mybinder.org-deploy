@@ -1,0 +1,6 @@
+charts:
+  - name: mybinder
+    imagePrefix: jupyterhub/mybinder-extr
+    images:
+      events-archiver:
+        valuesPath: eventsArchiver.image
