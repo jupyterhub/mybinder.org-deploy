@@ -1,0 +1,2 @@
+google-cloud-logging==1.8.0
+python-dateutil==2.7.5
