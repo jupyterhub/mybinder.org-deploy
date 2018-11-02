@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: events-archiver
+  labels:
+    app: events-archiver
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: 1
+  strategy: Recreate
+  selector:
+    matchLabels:
+      app: events-archiver
+      heritage: {{ .Release.Service }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: events-archiver
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+    spec:
+      volumes:
+      - name: secrets
+        secret:
+          secretName: events-archiver-secrets
+      containers:
+      - name: events-archiver
+        image: {{ .Values.eventsArchiver.image.name}}:{{ .Values.eventsArchiver.image.tag }}
+        env:
+          - name: GOOGLE_APPLICATION_CREDENTIALS
+            value: /secrets/service-account.json
+          - name: PROJECT_NAME
+            value: {{ .Values.projectName }}
+        volumeMounts:
+          - name: secrets
+            mountPath: /secrets
+            readOnly: true
