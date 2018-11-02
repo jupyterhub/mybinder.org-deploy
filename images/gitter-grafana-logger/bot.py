@@ -60,7 +60,7 @@ def main():
     argparser.add_argument(
         '--gitter-url',
         help='URL of the gitter room',
-        default='https://stream.gitter.im/v1/rooms/59960250d73408ce4f71dd92/chatMessages'
+        default='https://stream.gitter.im/v1/rooms/5b618e23d73408ce4fa31667/chatMessages'
     )
     args = argparser.parse_args()
 
