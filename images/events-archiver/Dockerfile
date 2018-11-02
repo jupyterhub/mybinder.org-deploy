@@ -4,4 +4,4 @@ ADD . /srv
 
 RUN python3 -m pip install --no-cache-dir -r /srv/requirements.txt
 
-CMD ["python3", "/srv/event-archiver.py"]
+CMD ["/srv/run.bash"]
