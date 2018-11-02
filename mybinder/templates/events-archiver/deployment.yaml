@@ -8,7 +8,8 @@ metadata:
     release: {{ .Release.Name }}
 spec:
   replicas: 1
-  strategy: Recreate
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: events-archiver
