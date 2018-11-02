@@ -292,3 +292,8 @@ eventsArchiver:
   image:
     name: jupyterhub/mybinder-extraevents-archiver
     tag: set-by-chartpress
+
+gitterGrafanaLogger:
+  image:
+    name: set-by-chartpress
+    tag: set-by-chartpress
