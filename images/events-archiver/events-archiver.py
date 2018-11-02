@@ -37,53 +37,57 @@ def main():
     )
 
     argparser.add_argument(
-        'start_time',
-        help='Read events emitted during & after this timestamp' 
+        'source_bucket',
+        help='GCS bucket to read exported stackdriver events from'
     )
 
     argparser.add_argument(
-        'end_time',
-        help='Read events emitted during & until this timestamp' 
+        'destination_bucket',
+        help='GCS bucket to write archived events to'
     )
 
     argparser.add_argument(
-        'bucket_name',
-        help='GCS bucket to archive events to'
+        '--date',
+        help='Date to archive events for. Defaults to today',
+        type=parse,
+        default=datetime.utcnow().isoformat()
     )
 
     argparser.add_argument(
-        'object_name',
-        help='Name of GCS object to archive to'
+        '--object-name-template',
+        help='Template to use when outputting archived events. {date} is substituted',
+        default='events-{date}.jsonl'
     )
 
     args = argparser.parse_args()
 
+
+    storage_client = storage.Client()
+    src_bucket = storage.Bucket(storage_client, args.source_bucket)
+    dest_bucket = storage.Bucket(storage_client, args.destination_bucket)
+
+
+    prefix = args.log_name + '/' + args.date.strftime('%Y/%m/%d')
+    print(f'Finding blobs with prefix {prefix}')
+    src_blobs = src_bucket.list_blobs(prefix=prefix)
+
     count = 0
-    with tempfile.TemporaryFile(mode='w') as f:
-        for event in fetch_events(
-            args.project, args.log_name,
-            parse(args.start_time).isoformat() + 'Z', parse(args.end_time).isoformat() + 'Z'
-        ):
-            f.write(event + '\n')
-            count += 1
-            if count % 100 == 0:
-                print(f'Wrote {count} lines')
+    with tempfile.TemporaryFile(mode='w+') as out:
+        for src_blob in src_blobs:
+            with tempfile.TemporaryFile(mode='wb+') as temp:
+                src_blob.download_to_file(temp)
+                temp.seek(0)
 
+                for line in temp:
+                    event = json.loads(line)['jsonPayload']['message']
+                    out.write(event + '\n')
+                    count += 1
 
-        print(f'Total {count} lines written')
-
-        f.flush()
-        f.seek(0)
-
-        storage_client = storage.Client()
-        bucket = storage_client.get_bucket(args.bucket_name)
-        blob = bucket.blob(args.object_name)
-        blob.upload_from_file(f)
-
-        print(f'File uploaded to {args.bucket_name}/{args.object_name}')
-
-
-
+        out.seek(0)
+        blob_name = args.object_name_template.format(date=args.date.strftime('%Y-%m-%d'))
+        blob = dest_bucket.blob(blob_name)
+        blob.upload_from_file(out)
+        print(f'Uploaded {args.destination_bucket}/{blob_name} with {count} events')
 
 
 if __name__ == '__main__':
