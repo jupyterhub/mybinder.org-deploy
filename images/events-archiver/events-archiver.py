@@ -10,20 +10,21 @@ from google.cloud import logging, storage
 import tempfile
 
 
-def fetch_events(project, log_name, start_time, end_time):
-    client = logging.Client()
-    filter = f"""
-    logName="projects/{project}/logs/{log_name}" AND
-    timestamp >= "{start_time}" AND timestamp <= "{end_time}"
+def process_event(event_line):
     """
+    Post process event if needed.
 
-    for page in client.list_entries(filter_=filter).pages:
-        for entry in page:
-            yield entry.payload['message']
-        # API limit is 1 read request per second for whole project
-        # We sleep 5s between requests to be nicer
-        # https://cloud.google.com/logging/quotas
-        time.sleep(5)
+    Takes in a string representing event, returns string back.
+    """
+    event = json.loads(event_line)
+    if 'timestamp' in event:
+        # Trim timestamp to minute resolution before making public
+        # Should hopefully make it harder to de-anonymize users by observing timing
+        event['timestamp'] = parse(event['timestamp']).replace(
+            second=0, microsecond=0
+        ).isoformat() + 'Z'
+    return json.dumps(event)
+
 
 def main():
     argparser = argparse.ArgumentParser()
@@ -59,6 +60,20 @@ def main():
         default='events-{date}.jsonl'
     )
 
+    argparser.add_argument(
+        '--debug',
+        help='Print events when processing',
+        action='store_true',
+        default=False
+    )
+
+    argparser.add_argument(
+        '--dry-run',
+        help='Do not upload processed events to GCS',
+        action='store_true',
+        default=False
+    )
+
     args = argparser.parse_args()
 
 
@@ -79,15 +94,19 @@ def main():
                 temp.seek(0)
 
                 for line in temp:
-                    event = json.loads(line)['jsonPayload']['message']
-                    out.write(event + '\n')
+                    event = process_event(json.loads(line)['jsonPayload']['message'])
+                    if args.debug:
+                        print(event)
+                    if not args.dry_run:
+                        out.write(event + '\n')
                     count += 1
 
-        out.seek(0)
-        blob_name = args.object_name_template.format(date=args.date.strftime('%Y-%m-%d'))
-        blob = dest_bucket.blob(blob_name)
-        blob.upload_from_file(out)
-        print(f'Uploaded {args.destination_bucket}/{blob_name} with {count} events')
+        if not args.dry_run:
+            out.seek(0)
+            blob_name = args.object_name_template.format(date=args.date.strftime('%Y-%m-%d'))
+            blob = dest_bucket.blob(blob_name)
+            blob.upload_from_file(out)
+            print(f'Uploaded {args.destination_bucket}/{blob_name} with {count} events')
 
 
 if __name__ == '__main__':
