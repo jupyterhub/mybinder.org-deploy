@@ -92,3 +92,7 @@ matomo:
   ingress:
     hosts:
       - staging.mybinder.org
+
+eventsArchiver:
+  sourceBucket: mybinder-staging-events-raw-export
+  destinationBucket: mybinder-staging-events-archive

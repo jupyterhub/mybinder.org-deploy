@@ -34,6 +34,10 @@ spec:
             value: /secrets/service-account.json
           - name: PROJECT_NAME
             value: {{ .Values.projectName }}
+          - name: SOURCE_BUCKET
+            value: {{ .Values.eventsArchiver.sourceBucket | quote }}
+          - name: DESTINATION_BUCKET
+            value: {{ .Values.eventsArchiver.destinationBucket | quote }}
         volumeMounts:
           - name: secrets
             mountPath: /secrets
