@@ -1,18 +1,18 @@
+#!/usr/bin/env python3
 import argparse
 import json
 import os
-import threading
 import time
+import aiohttp
+import asyncio
 
-import requests
 
-
-def create_annotation(grafana_url, grafana_api_key, text):
+async def create_annotation(session, grafana_url, grafana_api_key, text):
     """
     Create annotation in a grafana instance.
     """
-    tags = ['operations log']
-    return requests.post(
+    tags = ['ops-log']
+    async with session.post(
         grafana_url + "/api/annotations",
         json={
             'tags': tags,
@@ -23,34 +23,37 @@ def create_annotation(grafana_url, grafana_api_key, text):
         headers={
             'Authorization': f'Bearer {grafana_api_key}'
         }
-    ).text
+    ) as resp:
+        return await resp.text()
 
 
-def stream_chat(gitter_url, grafana_url, GITTER_KEY, GRAFANA_KEY):
-    r = requests.get(gitter_url,
-                     stream=True,
-                     headers={
-                         'Authorization': f'Bearer {GITTER_KEY}'
-                     })
+async def stream_chat(session, gitter_room_id, grafana_url, GITTER_KEY, GRAFANA_KEY):
+    gitter_stream_url = f'https://stream.gitter.im/v1/rooms/{gitter_room_id}/chatMessages'
 
-    for line in r.iter_lines():
-        # filter out empty lines
-        if line:
-            decoded_line = line.decode('utf-8')
+    print(f'Started connection to Gitter Room {gitter_room_id}')
+    async with session.get(
+            gitter_stream_url,
+            headers={'Authorization': f'Bearer {GITTER_KEY}'}
+        ) as response:
+        async for line in response.content:
+            # filter out empty lines
+            if line:
+                decoded_line = line.decode('utf-8')
 
-            try:
-                msg = json.loads(decoded_line)
-            except json.decoder.JSONDecodeError:
-                continue
+                try:
+                    msg = json.loads(decoded_line)
+                except json.decoder.JSONDecodeError:
+                    continue
 
-            text = msg['text'].strip()
-            if text.startswith("!log"):
-                name = msg['fromUser']['username']
-                print(f"{name}: {text}")
-                create_annotation(grafana_url, GRAFANA_KEY, f"{name}: {text}")
+                text = msg['text'].strip()
+                if text.startswith("!log"):
+                    name = msg['fromUser']['username']
+                    print(f"Received {name}: {text}")
+                    await create_annotation(session, grafana_url, GRAFANA_KEY, f"{name}: {text}")
+                    print(f"Annotation created for {name}: {text}")
 
 
-def main():
+async def main():
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         '--grafana-url',
@@ -58,17 +61,22 @@ def main():
         default='https://grafana.mybinder.org'
     )
     argparser.add_argument(
-        '--gitter-url',
-        help='URL of the gitter room',
-        default='https://stream.gitter.im/v1/rooms/5b618e23d73408ce4fa31667/chatMessages'
+        '--gitter-room-id',
+        help='IDs of rooms to watch',
+        action='append'
     )
     args = argparser.parse_args()
 
     GRAFANA_KEY = os.environ['GRAFANA_API_KEY']
     GITTER_KEY = os.environ['GITTER_API_KEY']
 
-    stream_chat(args.gitter_url, args.grafana_url, GITTER_KEY, GRAFANA_KEY)
+    async with aiohttp.ClientSession() as session:
+        await asyncio.gather(*[
+            asyncio.ensure_future(stream_chat(session, room_id, args.grafana_url, GITTER_KEY, GRAFANA_KEY))
+            for room_id in args.gitter_room_id
+        ])
 
 
 if __name__ == '__main__':
-    main()
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(main())
