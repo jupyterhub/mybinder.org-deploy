@@ -11,11 +11,11 @@ data:
   {{ $name }}: {{ $content | toJson | quote }}
   {{- end }}
   {{- end }}
-  {{- (.Files.Glob "etc/jupyter/*").AsConfig | nindent 2 }}
+  {{- (.Files.Glob "files/etc/jupyter/*").AsConfig | nindent 2 }}
 ---
 kind: ConfigMap
 apiVersion: v1
 metadata:
   name: user-etc-jupyter-templates
 data:
-  {{- (.Files.Glob "etc/jupyter/templates/*").AsConfig | nindent 2 }}
+  {{- (.Files.Glob "files/etc/jupyter/templates/*").AsConfig | nindent 2 }}
