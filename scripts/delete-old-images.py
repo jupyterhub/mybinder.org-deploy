@@ -2,79 +2,72 @@
 """Cleanup images that don't match the current image prefix"""
 
 import asyncio
-from asyncio.subprocess import create_subprocess_exec, PIPE
+import atexit
 import json
-
-jsonmod = json
+from functools import partial
 from multiprocessing import cpu_count
 import os
 import pipes
-from subprocess import check_call
 import sys
+import time
 
+import aiohttp
 import tqdm
 import yaml
 
 HERE = os.path.dirname(__file__)
 
-# limit on the number of concurrent outstanding requests
-# gcloud api uses a surprising large amount of CPU,
-# so don't oversubscribe by default
-process_pool = asyncio.BoundedSemaphore(cpu_count())
 
-
-def setup_auth(release):
-    return check_call(
-        [
-            "gcloud",
-            "auth",
-            "activate-service-account",
-            f"--key-file=secrets/gke-auth-key-{release}.json",
-        ]
-    )
-
-
-async def gcloud(cmd, **kwargs):
-    """Run a gcloud command"""
-    cmd = ["gcloud", "--format=json"] + cmd
-
-    cmd_s = " ".join(map(pipes.quote, cmd))
-    # print("> " + cmd_s)
-    async with process_pool:
-        p = await create_subprocess_exec(*cmd, stdout=PIPE, **kwargs)
-        stdout, stderr = await p.communicate()
-        exit_code = await p.wait()
-    if exit_code:
-        print(f"{cmd_s} exited with status {exit_code}")
-        sys.exit(exit_code)
-    return json.loads(stdout.decode("utf8"))
-
-
-async def list_images(project):
+async def list_images(session, project):
     """List the images for a project"""
-    return await gcloud(
-        ["container", "images", "list", f"--repository=gcr.io/{project}"]
-    )
+    images = []
+    first = True
+    url = "https://gcr.io/v2/_catalog"
+    while url:
+        async with session.get(url) as r:
+            text = await r.text()
+            try:
+                r.raise_for_status()
+            except Exception:
+                print(text)
+                raise
+        resp = json.loads(text)
+        for image in resp["repositories"]:
+            if image.startswith(project + "/"):
+                yield image
+        url = resp.get("next")
 
 
-async def list_tags(image):
-    """List the tags for an image"""
-    tags = await gcloud(["container", "images", "list-tags", image])
-    return {"image": image, "tags": tags}
+async def get_manifest(session, image):
+    """List the tags for an image
+
+    Returns a dict of the form:
+    {
+        'sha:digest': {
+            imageSizeBytes: '123',
+            tag: ['tags'],
+            ...
+        }
+    """
+    async with session.get(f"https://gcr.io/v2/{image}/tags/list") as r:
+        text = await r.text()
+        try:
+            r.raise_for_status()
+        except Exception:
+            print(text)
+            raise
+    return json.loads(text)
 
 
-async def delete_tag(image, digest):
-    await gcloud(
-        [
-            "container",
-            "images",
-            "delete",
-            f"{image}@{digest}",
-            "--force-delete-tags",
-            "--quiet",
-        ],
-        stderr=PIPE,
-    )
+async def delete_image(session, image, digest, tags):
+    manifests = f"https://gcr.io/v2/{image}/manifests"
+    # delete tags first (required)
+    for tag in tags:
+        async with session.delete(f"{manifests}/{tag}") as r:
+            r.raise_for_status()
+    # this is the actual deletion
+    async with session.delete(f"{manifests}/{digest}") as r:
+        r.raise_for_status()
 
 
 async def main(release="staging", project=None):
@@ -85,46 +78,83 @@ async def main(release="staging", project=None):
 
     prefix = config["binderhub"]["registry"]["prefix"]
 
-    images = await list_images(project)
-    tag_futures = []
-    print("Fetching images")
-    found = 0
-    for image in images:
-        if image["name"].startswith(prefix):
-            # print(f"Not deleting current {image['name']}")
-            found += 1
-            continue
-        tag_futures.append(list_tags(image["name"]))
-    if not found:
-        raise RuntimeError(
-            f"No images matching prefix {prefix}. Would delete all images!"
+    with open(
+        os.path.join(HERE, os.pardir, "secrets", "config", release + ".yaml")
+    ) as f:
+        config = yaml.safe_load(f)
+
+    password = config["binderhub"]["registry"]["password"]
+
+    start = time.perf_counter()
+
+    async with aiohttp.ClientSession(
+        auth=aiohttp.BasicAuth("_json_key", password)
+    ) as session:
+
+        print(f"Fetching images")
+        tag_futures = []
+        matches = 0
+        total_images = 0
+        async for image in list_images(session, project):
+            total_images += 1
+            if f"gcr.io/{image}".startswith(prefix):
+                matches += 1
+                continue
+            # don't call ensure_future here
+            # because we don't want to kick off everything before
+            tag_futures.append(asyncio.ensure_future(get_manifest(session, image)))
+        if not matches:
+            raise RuntimeError(
+                f"No images matching prefix {prefix}. Would delete all images!"
+            )
+        print(f"Not deleting {matches} images starting with {prefix}")
+        if not tag_futures:
+            print("Nothing to delete")
+            return
+        print(f"{len(tag_futures)} images to delete (not counting tags)")
+
+        delete_futures = []
+        print("Fetching tags")
+        delete_progress = tqdm.tqdm(
+            total=len(tag_futures), position=2, unit_scale=True, desc="tags deleted"
         )
-    print(f"Not deleting {found} images starting with {prefix}")
-    if not images:
-        print("Nothing to delete")
-        return
+        delete_byte_progress = tqdm.tqdm(
+            total=0, position=3, unit="B", unit_scale=True, desc="bytes deleted"
+        )
+        for f in tqdm.tqdm(
+            asyncio.as_completed(tag_futures),
+            total=len(tag_futures),
+            position=1,
+            desc="images retrieved",
+        ):
+            manifest = await f
+            image = manifest["name"]
+            if len(manifest["manifest"]) > 1:
+                delete_progress.total += len(manifest["manifest"]) - 1
+            for digest, info in manifest["manifest"].items():
+                nbytes = int(info["imageSizeBytes"])
+                delete_byte_progress.total += nbytes
+                f = asyncio.ensure_future(delete_image(session, image, digest, info))
+                delete_futures.append(f)
+                # update progress when done
+                f.add_done_callback(lambda f: delete_progress.update(1))
+                f.add_done_callback(
+                    partial(
+                        lambda nbytes, f: delete_byte_progress.update(nbytes), nbytes
+                    )
+                )
 
-    delete_futures = []
-    print("Fetching tags")
-    delete_progress = tqdm.tqdm(total=len(tag_futures), position=2, desc="tags deleted")
-    for f in tqdm.tqdm(
-        asyncio.as_completed(tag_futures),
-        total=len(tag_futures),
-        position=1,
-        desc="images",
-    ):
-        taginfo = await f
-        image = taginfo["image"]
-        if len(taginfo["tags"]) > 1:
-            delete_progress.total += len(taginfo["tags"]) - 1
-        for tag in taginfo["tags"]:
-            f = asyncio.ensure_future(delete_tag(image, tag["digest"]))
-            f.add_done_callback(lambda f: delete_progress.update(1))
-            delete_futures.append(f)
-
-    print("Waiting to complete")
-    if delete_futures:
-        await asyncio.wait(delete_futures)
+        if delete_futures:
+            await asyncio.wait(delete_futures)
+        delete_progress.close()
+        delete_byte_progress.close()
+        await asyncio.sleep(1)
+        print("\n\n\n\n")
+        print(f"Deleted {len(tag_futures)} images ({delete_progress.total} tags)")
+        print(
+            f"Deleted {delete_byte_progress.total} bytes (not counting shared layers)"
+        )
+        print(f"in {int(time.perf_counter() - start)} seconds")
 
 
 if __name__ == "__main__":
@@ -139,13 +169,5 @@ if __name__ == "__main__":
         help="The release whose images should be cleaned up",
     )
     parser.add_argument("--project", type=str, default="", help="The project to use")
-    parser.add_argument(
-        "-j",
-        "--concurrency",
-        type=int,
-        default=cpu_count(),
-        help="The number of concurrent calls to the gcloud API.",
-    )
     opts = parser.parse_args()
-    process_pool = asyncio.BoundedSemaphore(opts.concurrency)
     asyncio.get_event_loop().run_until_complete(main(opts.release, opts.project))
