@@ -288,6 +288,10 @@ matomo:
     name: matomo
     tables_prefix: matomo_
 
+gcsProxy:
+  replicas: 1
+  nodeSelector: {}
+
 eventsArchiver:
   image:
     name: jupyterhub/mybinder-extraevents-archiver

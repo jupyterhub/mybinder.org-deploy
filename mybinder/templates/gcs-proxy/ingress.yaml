@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gcs-proxy
+  labels:
+    app: gcs-proxy
+    component: nginx
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    {{ range $bucket := .Values.gcsProxy.buckets }}
+    - host: {{ $bucket.host | quote }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: gcs-proxy
+              servicePort: 80
+    {{ end }}
+  tls:
+    - secretName: kubelego-tls-gcs-proxy
+      hosts:
+      {{- range $bucket := .Values.gcsProxy.buckets }}
+      - {{ $bucket.host }}
+      {{- end }}

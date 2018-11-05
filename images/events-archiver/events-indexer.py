@@ -10,6 +10,7 @@ import json
 import argparse
 import sys
 from dateutil.parser import parse
+import mimetypes
 from datetime import datetime
 import tempfile
 from google.cloud import logging, storage
@@ -88,16 +89,19 @@ def main():
         jsonlfile.seek(0)
 
         if not args.dry_run:
-            bucket.blob('index.html').upload_from_file(htmlfile)
+            html_blob = bucket.blob('index.html')
+            html_blob.upload_from_file(htmlfile, content_type='text/html')
             bucket.blob('index.jsonl').upload_from_file(jsonlfile)
 
 
     print(STATIC_FILES, file=sys.stderr)
+
     # Upload static assets
     for static_file in STATIC_FILES:
         blob_name = os.path.relpath(static_file, HERE)
-        bucket.blob(blob_name).upload_from_filename(static_file)
-
+        static_blob = bucket.blob(blob_name)
+        mimetype, _ = mimetypes.guess_type(static_file)
+        static_blob.upload_from_filename(static_file, content_type=mimetype)
         
 
 if __name__ == '__main__':

@@ -1,0 +1,16 @@
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: gcs-proxy
+  labels:
+    app: gcs-proxy
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  minAvailable: 0
+  selector:
+    matchLabels:
+      release: {{ .Release.Name }}
+      heritage: {{ .Release.Service }}
+      app: gcs-proxy
+      component: nginx
