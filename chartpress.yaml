@@ -4,3 +4,5 @@ charts:
     images:
       events-archiver:
         valuesPath: eventsArchiver.image
+      gitter-grafana-logger:
+        valuesPath: gitterGrafanaLogger.image

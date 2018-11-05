@@ -96,3 +96,8 @@ matomo:
 eventsArchiver:
   sourceBucket: mybinder-staging-events-raw-export
   destinationBucket: mybinder-staging-events-archive
+
+
+gitterGrafanaLogger:
+  # Only run one copy of logger bot
+  enabled: false
