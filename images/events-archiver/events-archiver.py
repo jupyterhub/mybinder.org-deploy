@@ -10,20 +10,19 @@ from google.cloud import logging, storage
 import tempfile
 
 
-def process_event(event_line):
+def process_event(event):
     """
     Post process event if needed.
 
-    Takes in a string representing event, returns string back.
+    Takes in a dict representing event, returns dict back.
     """
-    event = json.loads(event_line)
     if 'timestamp' in event:
         # Trim timestamp to minute resolution before making public
         # Should hopefully make it harder to de-anonymize users by observing timing
         event['timestamp'] = parse(event['timestamp']).replace(
             second=0, microsecond=0
         ).isoformat() + 'Z'
-    return json.dumps(event)
+    return event
 
 
 def main():
@@ -87,21 +86,26 @@ def main():
     src_blobs = src_bucket.list_blobs(prefix=prefix)
 
     count = 0
-    with tempfile.TemporaryFile(mode='w+') as out:
-        for src_blob in src_blobs:
-            with tempfile.TemporaryFile(mode='wb+') as temp:
-                src_blob.download_to_file(temp)
-                temp.seek(0)
+    all_events = []
+    for src_blob in src_blobs:
+        with tempfile.TemporaryFile(mode='wb+') as temp:
+            src_blob.download_to_file(temp)
+            temp.seek(0)
 
-                for line in temp:
-                    event = process_event(json.loads(line)['jsonPayload']['message'])
-                    if args.debug:
-                        print(event)
-                    if not args.dry_run:
-                        out.write(event + '\n')
-                    count += 1
+            for line in temp:
+                event = process_event(json.loads(json.loads(line)['jsonPayload']['message']))
+                if args.debug:
+                    print(event)
+                if not args.dry_run:
+                    all_events.append(event)
+                count += 1
 
-        if not args.dry_run:
+    if not args.dry_run:
+        # Timestamp is ISO8601 in UTC, so can be sorted lexicographically
+        all_events.sort(key=lambda event: event['timestamp'])
+        with tempfile.TemporaryFile(mode='w+') as out:
+            for event in all_events:
+                out.write(json.dumps(event) + '\n')
             out.seek(0)
             blob_name = args.object_name_template.format(date=args.date.strftime('%Y-%m-%d'))
             blob = dest_bucket.blob(blob_name)
