@@ -294,6 +294,7 @@ eventsArchiver:
     tag: set-by-chartpress
 
 gitterGrafanaLogger:
+  enabled: true
   image:
     name: set-by-chartpress
     tag: set-by-chartpress

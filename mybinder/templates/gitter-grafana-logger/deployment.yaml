@@ -1,0 +1,40 @@
+{{ if .Values.gitterGrafanaLogger.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: gitter-grafana-logger
+  labels:
+    app: gitter-grafana-logger
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: gitter-grafana-logger
+      heritage: {{ .Release.Service }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: gitter-grafana-logger
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+    spec:
+      volumes:
+      - name: gitter-grafana-logger
+        image: {{ .Values.gitterGrafanaLogger.image.name}}:{{ .Values.gitterGrafanaLogger.image.tag }}
+        env:
+          - name: PROJECT_NAME
+            value: {{ .Values.projectName }}
+          - name: SOURCE_BUCKET
+            value: {{ .Values.eventsArchiver.sourceBucket | quote }}
+          - name: DESTINATION_BUCKET
+            value: {{ .Values.eventsArchiver.destinationBucket | quote }}
+        volumeMounts:
+          - name: secrets
+            mountPath: /secrets
+            readOnly: true
+{{ endif }}
