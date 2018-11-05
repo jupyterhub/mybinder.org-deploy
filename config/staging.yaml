@@ -96,3 +96,8 @@ matomo:
 eventsArchiver:
   sourceBucket: mybinder-staging-events-raw-export
   destinationBucket: mybinder-staging-events-archive
+
+gcsProxy:
+  buckets:
+    - name: mybinder-staging-events-archive
+      host: archive.analytics.staging.mybinder.org

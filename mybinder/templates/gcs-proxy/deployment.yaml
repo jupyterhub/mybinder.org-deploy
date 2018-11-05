@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gcs-proxy
+  labels:
+    app: gcs-proxy
+    component: nginx
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  selector:
+    matchLabels:
+      app: gcs-proxy
+      component: nginx
+      heritage: {{ .Release.Service }}
+      release: {{ .Release.Name }}
+  replicas: {{ .Values.gcsProxy.replicas }}
+  template:
+    metadata:
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/gcs-proxy/configmap.yaml") . | sha256sum }}
+      labels:
+        app: gcs-proxy
+        component: nginx
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+    spec:
+      nodeSelector: {{ toJson .Values.gcsProxy.nodeSelector }}
+      volumes:
+        - name: config
+          configMap:
+            name: gcs-proxy-config
+      containers:
+      - name: nginx
+        image: nginx:1.13.6
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - mountPath: /etc/nginx/conf.d/
+            name: config
