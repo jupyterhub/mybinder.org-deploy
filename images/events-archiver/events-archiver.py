@@ -109,6 +109,11 @@ def main():
             out.seek(0)
             blob_name = args.object_name_template.format(date=args.date.strftime('%Y-%m-%d'))
             blob = dest_bucket.blob(blob_name)
+            # Set metadata on the object so we know when this archive is for & how many events there are
+            blob.metadata = {
+                'Events-Date': args.date.strftime('%Y-%m-%d'),
+                'Events-Count': len(all_events)
+            }
             blob.upload_from_file(out)
             print(f'Uploaded {args.destination_bucket}/{blob_name} with {count} events')
 
