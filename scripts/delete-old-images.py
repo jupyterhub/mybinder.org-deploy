@@ -82,7 +82,7 @@ async def delete_image(session, image, digest, tags):
             raise
 
 
-async def main(release="staging", project=None):
+async def main(release="staging", project=None, concurrency=10):
     if not project:
         project = f"binder-{release}"
     with open(os.path.join(HERE, os.pardir, "config", release + ".yaml")) as f:
@@ -100,7 +100,8 @@ async def main(release="staging", project=None):
     start = time.perf_counter()
 
     async with aiohttp.ClientSession(
-        auth=aiohttp.BasicAuth("_json_key", password)
+        auth=aiohttp.BasicAuth("_json_key", password),
+        connector=aiohttp.TCPConnector(limit=concurrency),
     ) as session:
 
         print(f"Fetching images")
@@ -193,5 +194,14 @@ if __name__ == "__main__":
         help="The release whose images should be cleaned up",
     )
     parser.add_argument("--project", type=str, default="", help="The project to use")
+    parser.add_argument(
+        "-j",
+        "--concurrency",
+        type=int,
+        default=20,
+        help="The number of concurrent requests",
+    )
     opts = parser.parse_args()
-    asyncio.get_event_loop().run_until_complete(main(opts.release, opts.project))
+    asyncio.get_event_loop().run_until_complete(
+        main(opts.release, opts.project, opts.concurrency)
+    )
