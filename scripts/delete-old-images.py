@@ -2,12 +2,10 @@
 """Cleanup images that don't match the current image prefix"""
 
 import asyncio
-import json
 from functools import partial
 import os
-import sys
+from pprint import pformat
 import time
-import traceback
 
 import aiohttp
 import tqdm
@@ -19,6 +17,42 @@ HERE = os.path.dirname(__file__)
 CI_STRINGS = ["binderhub-ci-repos-", "binderhub-2dci-2drepos-"]
 
 
+class RequestFailed(Exception):
+    """Nicely formatted error for failed requests"""
+
+    def __init__(self, code, method, url, content, action=""):
+        self.code = code
+        self.content = content
+        self.method = method
+        self.url = url
+        self.action = action
+
+    def __str__(self):
+        return (
+            f"{self.action} {self.method} {self.url}"
+            f" failed with {self.code}:\n  {self.content}"
+        )
+
+
+async def raise_for_status(r, action=""):
+    """raise an informative error on failed requests"""
+    if r.status < 400:
+        return
+    if r.headers.get("Content-Type") == "application/json":
+        # try to parse json error messages
+        content = await r.json()
+        if isinstance(content, dict) and "errors" in content:
+            messages = []
+            for error in content["errors"]:
+                messages.append(f"{error.get('code')}: {error.get('message')}")
+            content = "\n".join(messages)
+        else:
+            content = pformat(content)
+    else:
+        content = await r.text()
+    raise RequestFailed(r.status, r.request_info.method, r.request_info.url, content)
+
+
 async def list_images(session, project):
     """List the images for a project"""
     images = []
@@ -26,13 +60,8 @@ async def list_images(session, project):
     url = "https://gcr.io/v2/_catalog"
     while url:
         async with session.get(url) as r:
-            text = await r.text()
-            try:
-                r.raise_for_status()
-            except Exception:
-                print(text)
-                raise
-        resp = json.loads(text)
+            await raise_for_status(r, "listing images")
+            resp = await r.json()
         for image in resp["repositories"]:
             if image.startswith(project + "/"):
                 yield image
@@ -51,35 +80,24 @@ async def get_manifest(session, image):
         }
     """
     async with session.get(f"https://gcr.io/v2/{image}/tags/list") as r:
-        text = await r.text()
-        try:
-            r.raise_for_status()
-        except Exception:
-            print(text)
-            raise
-    return json.loads(text)
+        await raise_for_status(r, f"Getting tags for {image}")
+        return await r.json()
 
 
 async def delete_image(session, image, digest, tags):
+    """Delete a single image
+
+    Tags must be removed before deleting the actual image
+    """
     manifests = f"https://gcr.io/v2/{image}/manifests"
     # delete tags first (required)
     for tag in tags:
         async with session.delete(f"{manifests}/{tag}") as r:
-            text = await r.text()
-            try:
-                r.raise_for_status()
-            except Exception:
-                print(text)
-                raise
+            await raise_for_status(r, f"Deleting tag {image}@{tag}")
 
     # this is the actual deletion
     async with session.delete(f"{manifests}/{digest}") as r:
-        text = await r.text()
-        try:
-            r.raise_for_status()
-        except Exception:
-            print(text)
-            raise
+        await raise_for_status(r, f"Deleting image {image}@{digest}")
 
 
 async def main(release="staging", project=None, concurrency=10):
@@ -128,7 +146,7 @@ async def main(release="staging", project=None, concurrency=10):
             return
         print(f"{len(tag_futures)} images to delete (not counting tags)")
 
-        delete_futures = []
+        delete_futures = set()
         print("Fetching tags")
         delete_progress = tqdm.tqdm(
             total=len(tag_futures), position=2, unit_scale=True, desc="builds deleted"
@@ -136,50 +154,48 @@ async def main(release="staging", project=None, concurrency=10):
         delete_byte_progress = tqdm.tqdm(
             total=0, position=3, unit="B", unit_scale=True, desc="bytes deleted"
         )
-        for f in tqdm.tqdm(
-            asyncio.as_completed(tag_futures),
-            total=len(tag_futures),
-            position=1,
-            desc="images retrieved",
-        ):
-            manifest = await f
-            image = manifest["name"]
-            if len(manifest["manifest"]) > 1:
-                delete_progress.total += len(manifest["manifest"]) - 1
-            for digest, info in manifest["manifest"].items():
-                nbytes = int(info["imageSizeBytes"])
-                delete_byte_progress.total += nbytes
-                f = asyncio.ensure_future(
-                    delete_image(session, image, digest, info["tag"])
-                )
-                delete_futures.append(f)
-                # update progress when done
-                f.add_done_callback(lambda f: delete_progress.update(1))
-                f.add_done_callback(
-                    partial(
-                        lambda nbytes, f: delete_byte_progress.update(nbytes), nbytes
+        try:
+            for f in tqdm.tqdm(
+                asyncio.as_completed(tag_futures),
+                total=len(tag_futures),
+                position=1,
+                desc="images retrieved",
+            ):
+                manifest = await f
+                image = manifest["name"]
+                if len(manifest["manifest"]) > 1:
+                    delete_progress.total += len(manifest["manifest"]) - 1
+                for digest, info in manifest["manifest"].items():
+                    nbytes = int(info["imageSizeBytes"])
+                    delete_byte_progress.total += nbytes
+                    f = asyncio.ensure_future(
+                        delete_image(session, image, digest, info["tag"])
                     )
-                )
+                    delete_futures.add(f)
+                    # update progress when done
+                    f.add_done_callback(lambda f: delete_progress.update(1))
+                    f.add_done_callback(
+                        partial(
+                            lambda nbytes, f: delete_byte_progress.update(nbytes),
+                            nbytes,
+                        )
+                    )
+                done, delete_futures = await asyncio.wait(delete_futures, timeout=0)
+                if done:
+                    # collect possible errors
+                    await asyncio.gather(*done)
 
-                def stop_on_failure(image, digest, f):
-                    error = f.exception()
-                    if error:
-                        tb = error.__traceback__
-                        traceback.print_exception(error.__class__, error, tb)
-                        sys.exit(f"Failed to delete {image}@{digest}")
-
-                f.add_done_callback(partial(stop_on_failure, image, digest))
-
-        if delete_futures:
-            await asyncio.wait(delete_futures)
-        delete_progress.close()
-        delete_byte_progress.close()
-        print("\n\n\n\n")
-        print(f"Deleted {len(tag_futures)} images ({delete_progress.total} tags)")
-        print(
-            f"Deleted {delete_byte_progress.total} bytes (not counting shared layers)"
-        )
-        print(f"in {int(time.perf_counter() - start)} seconds")
+            if delete_futures:
+                await asyncio.gather(*delete_futures)
+        finally:
+            delete_progress.close()
+            delete_byte_progress.close()
+            print("\n\n\n\n")
+            print(f"deleted {delete_progress.n} images")
+            print(
+                f"deleted {delete_byte_progress.n} bytes (not counting shared layers)"
+            )
+            print(f"in {int(time.perf_counter() - start)} seconds")
 
 
 if __name__ == "__main__":
