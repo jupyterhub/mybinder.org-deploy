@@ -2,6 +2,7 @@
 """Cleanup images that don't match the current image prefix"""
 
 import asyncio
+from collections import defaultdict
 from functools import partial
 import os
 from pprint import pformat
@@ -100,7 +101,7 @@ async def delete_image(session, image, digest, tags):
         await raise_for_status(r, f"Deleting image {image}@{digest}")
 
 
-async def main(release="staging", project=None, concurrency=10):
+async def main(release="staging", project=None, concurrency=20):
     if not project:
         project = f"binder-{release}"
     with open(os.path.join(HERE, os.pardir, "config", release + ".yaml")) as f:
@@ -116,10 +117,29 @@ async def main(release="staging", project=None, concurrency=10):
     password = config["binderhub"]["registry"]["password"]
 
     start = time.perf_counter()
+    semaphores = defaultdict(lambda: asyncio.BoundedSemaphore(concurrency))
+
+    async def bounded(f, *args, **kwargs):
+        """make an async call, bounding the concurrent calls with a semaphore
+
+        Limits the number of outstanding calls of any given function to `concurrency`.
+        Too many concurrent requests results in timeouts
+        since the timeout starts when the Python code is called,
+        not when the request actually initiates.
+
+        The concurrency limit is *per function*,
+        so with concurrency=20, there can be 20 outstanding calls to get_manifest
+        *and* 20 outstanding calls to delete_image.
+
+        This avoids the two separate queues contending with each other for slots.
+        """
+
+        async with semaphores[f]:
+            return await f(*args, **kwargs)
 
     async with aiohttp.ClientSession(
         auth=aiohttp.BasicAuth("_json_key", password),
-        connector=aiohttp.TCPConnector(limit=concurrency),
+        connector=aiohttp.TCPConnector(limit=2 * concurrency),
     ) as session:
 
         print(f"Fetching images")
@@ -135,7 +155,9 @@ async def main(release="staging", project=None, concurrency=10):
                 continue
             # don't call ensure_future here
             # because we don't want to kick off everything before
-            tag_futures.append(asyncio.ensure_future(get_manifest(session, image)))
+            tag_futures.append(
+                asyncio.ensure_future(bounded(get_manifest, session, image))
+            )
         if not matches:
             raise RuntimeError(
                 f"No images matching prefix {prefix}. Would delete all images!"
@@ -154,6 +176,7 @@ async def main(release="staging", project=None, concurrency=10):
         delete_byte_progress = tqdm.tqdm(
             total=0, position=3, unit="B", unit_scale=True, desc="bytes deleted"
         )
+
         try:
             for f in tqdm.tqdm(
                 asyncio.as_completed(tag_futures),
@@ -169,7 +192,7 @@ async def main(release="staging", project=None, concurrency=10):
                     nbytes = int(info["imageSizeBytes"])
                     delete_byte_progress.total += nbytes
                     f = asyncio.ensure_future(
-                        delete_image(session, image, digest, info["tag"])
+                        bounded(delete_image, session, image, digest, info["tag"])
                     )
                     delete_futures.add(f)
                     # update progress when done
