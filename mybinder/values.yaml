@@ -1,3 +1,27 @@
+etcJupyter:
+  jupyter_notebook_config.json:
+    NotebookApp:
+      tornado_settings:
+        trust_xheaders: True
+      allow_origin: '*'
+
+    # if a user leaves a notebook with a running kernel,
+    # the effective idle timeout will typically be CULL_TIMEOUT + CULL_KERNEL_TIMEOUT
+    # as culling the kernel will register activity,
+    # resetting the no_activity timer for the server as a whole
+
+    MappingKernelManager:
+      # shutdown the server after no activity
+      shutdown_no_activity_timeout: 600
+      # shutdown kernels after no activity
+      cull_idle_timeout: 600
+      # check for idle kernels this often
+      cull_interval: 60
+      # a kernel with open connections but no activity still counts as idle
+      # this is what allows us to shutdown servers
+      # when people leave a notebook open and wander off
+      cull_connected: True
+
 binderhub:
 
   replicas: 2
@@ -142,6 +166,19 @@ binderhub:
       networkPolicy:
         enabled: true
         egress: []
+      storage:
+        extraVolumes:
+          - name: etc-jupyter
+            configMap:
+              name: user-etc-jupyter
+          - name: etc-jupyter-templates
+            configMap:
+              name: user-etc-jupyter-templates
+        extraVolumeMounts:
+          - name: etc-jupyter
+            mountPath: /etc/jupyter
+          - name: etc-jupyter-templates
+            mountPath: /etc/jupyter/templates
 
       initContainers:
         - name: tc-init
@@ -160,23 +197,8 @@ binderhub:
               add:
                 - NET_ADMIN
       schedulerStrategy: pack
-      extraEnv:
-        CULL_CONNECTED: '1'
-        CULL_TIMEOUT: '600'
-        CULL_KERNEL_TIMEOUT: '600'
-        CULL_INTERVAL: '60'
   build:
     repo2dockerImage: jupyter/repo2docker:5cdd0ee
-    appendix: |
-      USER root
-      ENV BINDER_URL={binder_url}
-      ENV REPO_URL={repo_url}
-      RUN cd /tmp \
-       && wget -q https://github.com/jupyterhub/mybinder.org-deploy/archive/ce31915cfc76b749a4e089b7c105856cea545319.tar.gz -O appendix.tar.gz \
-       && tar --wildcards -xzf appendix.tar.gz --strip 1 */appendix \
-       && ./appendix/run-appendix \
-       && rm -rf appendix.tar.gz appendix
-      USER $NB_USER
   perRepoQuota: 100
 
 playground:
