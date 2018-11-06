@@ -15,6 +15,9 @@ import yaml
 
 HERE = os.path.dirname(__file__)
 
+# delete builds used for CI, as well
+CI_STRINGS = ["binderhub-ci-repos-", "binderhub-2dci-2drepos-"]
+
 
 async def list_images(session, project):
     """List the images for a project"""
@@ -106,7 +109,9 @@ async def main(release="staging", project=None):
         total_images = 0
         async for image in list_images(session, project):
             total_images += 1
-            if f"gcr.io/{image}".startswith(prefix):
+            if f"gcr.io/{image}".startswith(prefix) and not any(
+                ci_string in image for ci_string in CI_STRINGS
+            ):
                 matches += 1
                 continue
             # don't call ensure_future here
@@ -143,7 +148,9 @@ async def main(release="staging", project=None):
             for digest, info in manifest["manifest"].items():
                 nbytes = int(info["imageSizeBytes"])
                 delete_byte_progress.total += nbytes
-                f = asyncio.ensure_future(delete_image(session, image, digest, info['tag']))
+                f = asyncio.ensure_future(
+                    delete_image(session, image, digest, info["tag"])
+                )
                 delete_futures.append(f)
                 # update progress when done
                 f.add_done_callback(lambda f: delete_progress.update(1))
@@ -152,12 +159,14 @@ async def main(release="staging", project=None):
                         lambda nbytes, f: delete_byte_progress.update(nbytes), nbytes
                     )
                 )
+
                 def stop_on_failure(image, digest, f):
                     error = f.exception()
                     if error:
                         tb = error.__traceback__
                         traceback.print_exception(error.__class__, error, tb)
                         sys.exit(f"Failed to delete {image}@{digest}")
+
                 f.add_done_callback(partial(stop_on_failure, image, digest))
 
         if delete_futures:
