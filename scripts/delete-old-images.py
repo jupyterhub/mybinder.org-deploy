@@ -2,14 +2,12 @@
 """Cleanup images that don't match the current image prefix"""
 
 import asyncio
-import atexit
 import json
 from functools import partial
-from multiprocessing import cpu_count
 import os
-import pipes
 import sys
 import time
+import traceback
 
 import aiohttp
 import tqdm
@@ -64,10 +62,21 @@ async def delete_image(session, image, digest, tags):
     # delete tags first (required)
     for tag in tags:
         async with session.delete(f"{manifests}/{tag}") as r:
-            r.raise_for_status()
+            text = await r.text()
+            try:
+                r.raise_for_status()
+            except Exception:
+                print(text)
+                raise
+
     # this is the actual deletion
     async with session.delete(f"{manifests}/{digest}") as r:
-        r.raise_for_status()
+        text = await r.text()
+        try:
+            r.raise_for_status()
+        except Exception:
+            print(text)
+            raise
 
 
 async def main(release="staging", project=None):
@@ -116,7 +125,7 @@ async def main(release="staging", project=None):
         delete_futures = []
         print("Fetching tags")
         delete_progress = tqdm.tqdm(
-            total=len(tag_futures), position=2, unit_scale=True, desc="tags deleted"
+            total=len(tag_futures), position=2, unit_scale=True, desc="builds deleted"
         )
         delete_byte_progress = tqdm.tqdm(
             total=0, position=3, unit="B", unit_scale=True, desc="bytes deleted"
@@ -134,7 +143,7 @@ async def main(release="staging", project=None):
             for digest, info in manifest["manifest"].items():
                 nbytes = int(info["imageSizeBytes"])
                 delete_byte_progress.total += nbytes
-                f = asyncio.ensure_future(delete_image(session, image, digest, info))
+                f = asyncio.ensure_future(delete_image(session, image, digest, info['tag']))
                 delete_futures.append(f)
                 # update progress when done
                 f.add_done_callback(lambda f: delete_progress.update(1))
@@ -143,12 +152,18 @@ async def main(release="staging", project=None):
                         lambda nbytes, f: delete_byte_progress.update(nbytes), nbytes
                     )
                 )
+                def stop_on_failure(image, digest, f):
+                    error = f.exception()
+                    if error:
+                        tb = error.__traceback__
+                        traceback.print_exception(error.__class__, error, tb)
+                        sys.exit(f"Failed to delete {image}@{digest}")
+                f.add_done_callback(partial(stop_on_failure, image, digest))
 
         if delete_futures:
             await asyncio.wait(delete_futures)
         delete_progress.close()
         delete_byte_progress.close()
-        await asyncio.sleep(1)
         print("\n\n\n\n")
         print(f"Deleted {len(tag_futures)} images ({delete_progress.total} tags)")
         print(
