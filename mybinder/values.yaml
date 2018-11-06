@@ -1,18 +1,17 @@
 etcJupyter:
   jupyter_notebook_config.json:
     NotebookApp:
+      allow_origin: '*'
       tornado_settings:
         trust_xheaders: True
-      allow_origin: '*'
+      # shutdown the server after no activity
+      shutdown_no_activity_timeout: 600
 
     # if a user leaves a notebook with a running kernel,
     # the effective idle timeout will typically be CULL_TIMEOUT + CULL_KERNEL_TIMEOUT
     # as culling the kernel will register activity,
     # resetting the no_activity timer for the server as a whole
-
     MappingKernelManager:
-      # shutdown the server after no activity
-      shutdown_no_activity_timeout: 600
       # shutdown kernels after no activity
       cull_idle_timeout: 600
       # check for idle kernels this often
