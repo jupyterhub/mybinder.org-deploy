@@ -93,7 +93,12 @@ def main():
             temp.seek(0)
 
             for line in temp:
-                event = process_event(json.loads(json.loads(line)['jsonPayload']['message']))
+                event = json.loads(json.loads(line)['jsonPayload']['message'])
+                # Account for time when 'event' was nested
+                if 'event' in event:
+                    event.update(event['event'])
+                    del event['event']
+                event = process_event(event)
                 if args.debug:
                     print(event)
                 if not args.dry_run:
