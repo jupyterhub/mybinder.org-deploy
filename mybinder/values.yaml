@@ -3,7 +3,7 @@ etcJupyter:
     NotebookApp:
       allow_origin: '*'
       tornado_settings:
-        trust_xheaders: True
+        trust_xheaders: true
       # shutdown the server after no activity
       shutdown_no_activity_timeout: 600
 
@@ -19,7 +19,7 @@ etcJupyter:
       # a kernel with open connections but no activity still counts as idle
       # this is what allows us to shutdown servers
       # when people leave a notebook open and wander off
-      cull_connected: True
+      cull_connected: true
 
 binderhub:
 
