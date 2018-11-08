@@ -11,7 +11,6 @@ log_name = 'binderhub-events-text'
 source_bucket = os.environ['SOURCE_BUCKET']
 destination_bucket = os.environ['DESTINATION_BUCKET']
 
-
 while True:
     now = datetime.utcnow()
 
