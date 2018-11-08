@@ -43,6 +43,15 @@ Deployment and Operation
     common_problems.md
     command_snippets.md
 
+
+Analytics
+---------
+
+.. toctree::
+   :maxdepth: 2
+
+   analytics/events-archive
+
 Incident Reports
 ----------------
 
