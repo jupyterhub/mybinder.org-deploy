@@ -31,7 +31,7 @@ spec:
           configMap:
             name: gcs-proxy-config
       containers:
-      - name: nginx
+      - name: gcs-proxy-nginx
         image: nginx:1.13.6
         ports:
         - containerPort: 80
