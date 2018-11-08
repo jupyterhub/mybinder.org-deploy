@@ -80,6 +80,11 @@ binderhub:
     01-eventlog: |
       import google.cloud.logging
       import google.cloud.logging.handlers
+      # importing google cloud configures a root log handler,
+      # which prevents tornado's pretty-logging
+      import logging
+      logging.getLogger().handlers = []
+
       class JSONCloudLoggingHandler(google.cloud.logging.handlers.CloudLoggingHandler):
           def emit(self, record):
               record.name = None
