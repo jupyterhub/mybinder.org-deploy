@@ -23,7 +23,7 @@ You can test events archiver locally with:
 .. code-block:: bash
 
    GOOGLE_APPLICATION_CREDENTIALS=secrets/events-archiver-auth-key-prod.json \
-   python3 images/events-archiver/events-archiver.py \
+   python3 images/events-archiver/archiver.py \
            --debug \
            --dry-run \
            binder-prod binderhub-events-text  \
