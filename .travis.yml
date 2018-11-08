@@ -75,9 +75,6 @@ before_deploy:
   # Stage 4, Step 2: Verify staging works
   travis_retry py.test -vx -n 2 --binder-url=https://staging.mybinder.org --hub-url=https://hub.staging.mybinder.org
 - |
-  # temporary! stop here instead of proceeding to prod
-  exit 0
-- |
   # Stage 5, Step 1: Post message to Grafana that deployment to production has started
   source secrets/grafana-api-key
   export PULL_REQUEST_ID=$(git log -1 --pretty=%B | head -n1 | sed 's/^.*#\([0-9]*\).*/\1/')
