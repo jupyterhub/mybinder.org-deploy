@@ -21,7 +21,7 @@ def process_event(event):
         # Should hopefully make it harder to de-anonymize users by observing timing
         event['timestamp'] = parse(event['timestamp']).replace(
             second=0, microsecond=0
-        ).isoformat() + 'Z'
+        ).isoformat()
     return event
 
 
