@@ -6,5 +6,5 @@ ADD . .
 
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
 
-
-CMD ["/srv/run.py"]
+# Python seems to never wanna flush to stdout without the '-u'
+CMD ["python3", "-u", "/srv/run.py"]
