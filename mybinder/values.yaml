@@ -37,6 +37,40 @@ binderhub:
         - 873 # rsync
         - 1094 # xroot
       cidr: 0.0.0.0/0
+
+  config:
+    GitHubRepoProvider:
+      # Add banned repositories to the list below
+      # They should be strings that will match "^<org-name>/<repo-name>.*"
+      banned_specs:
+        # e.g. '^org/repo.*'
+        - ^ines/spacy-binder.*
+        - ^soft4voip/rak.*
+    BinderHub:
+      use_registry: true
+      build_image: jupyter/repo2docker:5cdd0ee
+      per_repo_quota: 100
+
+      extra_footer_scripts: |
+        // Only load Matomo if DNT is not set.
+        // This respects user preferences, and gives us a full score on uBlock origin
+        if (navigator.doNotTrack != "1" && // Most Firefox & Chrome
+          window.doNotTrack != "1" && // IE & Safari
+          navigator.msDoNotTrack != "1" // Old IE
+        ) {
+        console.log("Loading Matomo tracking, since Do Not Track is off");
+          var _paq = _paq || [];
+          /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+          _paq.push(['trackPageView']);
+          (function() {
+            var u="//" + window.location.hostname + "/matomo/";
+            _paq.push(['setTrackerUrl', u+'piwik.php']);
+            _paq.push(['setSiteId', '1']);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+            g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+          })();
+        }
+
   extraConfig:
     # Send Events to StackDriver on Google Cloud
     # This doesn't need any extra permissions, since the GKE nodes have
@@ -56,14 +90,10 @@ binderhub:
           # for now. Should be fixed in https://github.com/googleapis/google-cloud-python/pull/6293
           return [JSONCloudLoggingHandler(client, name='binderhub-events-text')]
       c.EventLog.handlers_maker = _make_eventsink_handler
-    # Add banned repositories to the list below
-    # They should be strings that will match "^<org-name>/<repo-name>.*"
-    02-banned-repos: |
-      c.GitHubRepoProvider.banned_specs = [
-        # e.g. '^org/repo.*',
-        '^ines/spacy-binder.*',
-        '^soft4voip/rak.*',
-      ]
+
+  registry:
+    url: https://gcr.io
+
   service:
     type: ClusterIP
 
@@ -78,12 +108,8 @@ binderhub:
       enabled: true
       type: kube-lego
 
-  registry:
-    enabled: true
-
   dind:
     enabled: true
-
 
   imageCleaner:
     enabled: true
@@ -93,28 +119,6 @@ binderhub:
     imageGCThresholdLow: 40
     host:
       enabled: false
-
-  extraFooterScripts:
-    00-matomo-tracking: |
-      // Only load Matomo if DNT is not set.
-      // This respects user preferences, and gives us a full score on uBlock origin
-      if (navigator.doNotTrack != "1" && // Most Firefox & Chrome
-        window.doNotTrack != "1" && // IE & Safari
-        navigator.msDoNotTrack != "1" // Old IE
-      ) {
-      console.log("Loading Matomo tracking, since Do Not Track is off");
-        var _paq = _paq || [];
-        /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-        _paq.push(['trackPageView']);
-        (function() {
-          var u="//" + window.location.hostname + "/matomo/";
-          _paq.push(['setTrackerUrl', u+'piwik.php']);
-          _paq.push(['setSiteId', '1']);
-          var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-          g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-        })();
-      }
-
 
   jupyterhub:
     custom:
@@ -196,9 +200,6 @@ binderhub:
               add:
                 - NET_ADMIN
       schedulerStrategy: pack
-  build:
-    repo2dockerImage: jupyter/repo2docker:5cdd0ee
-  perRepoQuota: 100
 
 playground:
   image:

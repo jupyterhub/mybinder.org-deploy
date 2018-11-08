@@ -6,8 +6,14 @@ coreNodeSelector: &coreNodeSelector
   mybinder.org/pool-type: core
 
 binderhub:
-  build:
-    nodeSelector: *userNodeSelector
+  config:
+    BinderHub:
+      build_node_selector: *userNodeSelector
+      hub_url: https://hub.mybinder.org
+      image_prefix: gcr.io/binder-prod/r2d-aee37be-
+      google_analytics_code: "UA-101904940-1"
+      google_analytics_domain: "mybinder.org"
+
   nodeSelector: *coreNodeSelector
 
   dind:
@@ -31,13 +37,6 @@ binderhub:
     limits:
       cpu: "2"
       memory: 1Gi
-
-  registry:
-    prefix: gcr.io/binder-prod/r2d-aee37be-
-
-  hub:
-
-    url: https://hub.mybinder.org
 
   jupyterhub:
     singleuser:
@@ -87,8 +86,6 @@ binderhub:
       userScheduler:
         nodeSelector: *coreNodeSelector
 
-  googleAnalyticsCode: "UA-101904940-1"
-  googleAnalyticsDomain: "mybinder.org"
 
 grafana:
   nodeSelector: *coreNodeSelector
