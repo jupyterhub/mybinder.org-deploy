@@ -56,7 +56,7 @@ binderhub:
         ENV BINDER_URL={binder_url}
         ENV REPO_URL={repo_url}
         RUN cd /tmp \
-         && wget -q https://github.com/jupyterhub/mybinder.org-deploy/archive/97827f491d45d76f5b5c35cf2612d95be6383ac0.tar.gz -O appendix.tar.gz \
+         && wget -q https://github.com/jupyterhub/mybinder.org-deploy/archive/e2d525e176b929ba39045155fc796b0fa8d1119f.tar.gz -O appendix.tar.gz \
          && tar --wildcards -xzf appendix.tar.gz --strip 1 */appendix \
          && ./appendix/run-appendix \
          && rm -rf appendix.tar.gz appendix
