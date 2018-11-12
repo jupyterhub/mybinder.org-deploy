@@ -56,4 +56,16 @@ spec:
             - {{ $ipOrCidr}}/32
             {{- end }}
           {{- end }}
+    # allow https access to the ingress controller
+    # (needed to fetch public urls hosted on this cluster,
+    # e.g. analytics.mybinder.org)
+    - ports:
+        - port: 443
+          protocol: TCP
+      to:
+        - podSelector:
+            matchLabels:
+              app: nginx-ingress
+              component: controller
+
 {{- end }}
