@@ -48,7 +48,7 @@ binderhub:
         - ^soft4voip/rak.*
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:5cdd0ee
+      build_image: jupyter/repo2docker:9f081a2
       per_repo_quota: 100
 
       extra_footer_scripts:
