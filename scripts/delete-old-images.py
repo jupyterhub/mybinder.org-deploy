@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
-"""Cleanup images that don't match the current image prefix"""
+"""
+Cleanup images that don't match the current image prefix.
+
+Currently deletes all images that don't match the current prefix,
+as well as old builds of the binderhub-ci-repos.
+
+Requires aiohttp and tqdm:
+
+    pip3 install aiohttp aiodns tqdm
+
+Usage:
+
+./scripts/delete-old-images.py [staging|prod]
+
+"""
 
 import asyncio
 from collections import defaultdict
@@ -224,21 +238,27 @@ async def main(release="staging", project=None, concurrency=20):
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(description="Delete images on unused prefixes")
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "release",
         type=str,
         nargs="?",
         default="staging",
-        help="The release whose images should be cleaned up",
+        help="The release whose images should be cleaned up (staging or prod)",
     )
-    parser.add_argument("--project", type=str, default="", help="The project to use")
+    parser.add_argument(
+        "--project",
+        type=str,
+        default="",
+        help="The gcloud project to use; only needed if not of the form `binder-{release}`.",
+    )
     parser.add_argument(
         "-j",
         "--concurrency",
         type=int,
         default=20,
-        help="The number of concurrent requests",
+        help="The number of concurrent requests to make. "
+        "Too high and there may be timeouts. Default is 20.",
     )
     opts = parser.parse_args()
     asyncio.get_event_loop().run_until_complete(
