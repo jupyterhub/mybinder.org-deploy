@@ -25,8 +25,8 @@ which we step through below.
 1. Merge changes to BinderHub.
 2. Open the [branches page for the BinderHub travis account](https://travis-ci.org/jupyterhub/binderhub/branches).
 3. Wait for the build for your PR merge to pass (it will say "#NNN passed").
-   If it does, then:
-
+   If it does, then continue to step 4. If it doesn't, take a look at the error message, and debug as needed
+   until they pass.
 4. Run the `list_new_commits.py` script in the `scripts/` of the
    `mybinder.org-deploy` repository. It will output something like the following:
 
@@ -34,6 +34,7 @@ which we step through below.
 
        BinderHub: https://github.com/jupyterhub/binderhub/compare/<OLD-HASH>...<NEW-HASH>
        repo2docker: https://github.com/jupyter/repo2docker/compare/<OLD-HASH>...<NEW-HASH>
+       JupyterHub: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/<OLD-HASH>...<NEW-HASH>
 
        ---------------------
 
@@ -75,7 +76,9 @@ The following lines describe how to point mybinder.org to the new repo2docker im
 1. Merge changes to repo2docker.
 2. Open the [branches page for repo2docker](https://travis-ci.org/jupyter/repo2docker/branches).
    And click on the number for the latest build on "Master".
-3. Wait for the build to pass (it will say "#NNN passed"). If it does, then:
+3. Wait for the build for your PR merge to pass (it will say "#NNN passed").
+   If it does, then continue to step 4. If it doesn't, take a look at the error message, and debug as needed
+   until they pass.
 4. Run the `list_new_commits.py` script in the `scripts/` of the
    `mybinder.org-deploy` repository. It will output something like the following:
 
@@ -83,7 +86,8 @@ The following lines describe how to point mybinder.org to the new repo2docker im
 
        BinderHub: https://github.com/jupyterhub/binderhub/compare/<OLD-HASH>...<NEW-HASH>
        repo2docker: https://github.com/jupyter/repo2docker/compare/<OLD-HASH>...<NEW-HASH>
-
+       JupyterHub: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/<OLD-HASH>...<NEW-HASH>
+       
        ---------------------
 
    Since you are updating repo2docker, copy the text in `<NEW-HASH>` for the
