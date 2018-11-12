@@ -107,7 +107,7 @@ async def main(release="staging", project=None, concurrency=20):
     with open(os.path.join(HERE, os.pardir, "config", release + ".yaml")) as f:
         config = yaml.safe_load(f)
 
-    prefix = config["binderhub"]["registry"]["prefix"]
+    prefix = config["binderhub"]["config"]["BinderHub"]["image_prefix"]
 
     with open(
         os.path.join(HERE, os.pardir, "secrets", "config", release + ".yaml")
