@@ -4,6 +4,14 @@ Site Reliability Guide for mybinder.org
 Introduction
 ------------
 
+This site is a collection of wisdom, tools, and other helpful information to assist in
+the maintenance and team-processes around the BinderHub deployment at `mybinder.org <https://mybinder.org>`_.
+It's probably only relevant to you if you are an active maintainer of this deployment, though
+feel free to browse this information if you think it is useful!
+
+If you're looking for the Binder docs, `see this link <https://docs.mybinder.org>`_. If you're looking
+for information on deploying your own BinderHub, `see this link <https://binderhub.readthedocs.io>`_.
+
 .. toctree::
    :maxdepth: 2
    :caption: Introduction
