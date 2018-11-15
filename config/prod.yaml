@@ -198,7 +198,7 @@ matomo:
       cpu: 1
       memory: 1Gi
 
-eventsArchiver:
+analyticsPublisher:
   sourceBucket: mybinder-events-raw-export
   destinationBucket: mybinder-events-archive
 

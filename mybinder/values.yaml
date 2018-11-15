@@ -320,7 +320,7 @@ gcsProxy:
   replicas: 1
   nodeSelector: {}
 
-eventsArchiver:
+analyticsPublisher:
   image:
     name: jupyterhub/mybinder-extraevents-archiver
     tag: set-by-chartpress

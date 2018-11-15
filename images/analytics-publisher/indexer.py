@@ -41,7 +41,7 @@ def index_events(project, bucket, debug=False, dry_run=False):
             'date': blob.metadata['Events-Date'],
             'count': blob.metadata['Events-Count']
         })
-    
+
     with tempfile.TemporaryFile(mode='w+') as htmlfile, \
          tempfile.TemporaryFile(mode='w+') as jsonlfile:
 
@@ -76,7 +76,7 @@ def index_events(project, bucket, debug=False, dry_run=False):
         mimetype, _ = mimetypes.guess_type(static_file)
         static_blob.upload_from_filename(static_file, content_type=mimetype)
         print(f'Uploaded static file {blob_name}')
-        
+
 
 def main():
     argparser = argparse.ArgumentParser()

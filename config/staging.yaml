@@ -92,7 +92,7 @@ matomo:
     hosts:
       - staging.mybinder.org
 
-eventsArchiver:
+analyticsPublisher:
   sourceBucket: mybinder-staging-events-raw-export
   destinationBucket: mybinder-staging-events-archive
 

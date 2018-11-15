@@ -2,5 +2,5 @@ charts:
   - name: mybinder
     imagePrefix: gcr.io/binder-prod/mybinder-tool-
     images:
-      events-archiver:
-        valuesPath: eventsArchiver.image
+      analytics-publisher:
+        valuesPath: analyticsPublisher.image

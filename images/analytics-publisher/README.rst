@@ -11,7 +11,7 @@ GCS bucket.
 Timestamp resolution reduction
 ==============================
 
-Publicly published events have timestamps with minute resolution - 
+Publicly published events have timestamps with minute resolution -
 second & microsecond information is trimmed. This is a precautionary measure
 to protect against possibly de-anonymization attacks in the future.
 
@@ -22,8 +22,8 @@ You can test events archiver locally with:
 
 .. code-block:: bash
 
-   GOOGLE_APPLICATION_CREDENTIALS=secrets/events-archiver-auth-key-prod.json \
-   python3 images/events-archiver/archiver.py \
+   GOOGLE_APPLICATION_CREDENTIALS=secrets/analytics-publisher-auth-key-prod.json \
+   python3 images/analytics-publisher/archiver.py \
            --debug \
            --dry-run \
            binder-prod binderhub-events-text  \
