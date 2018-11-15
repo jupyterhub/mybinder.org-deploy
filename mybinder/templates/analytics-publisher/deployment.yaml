@@ -26,19 +26,19 @@ spec:
       - name: secrets
         secret:
           secretName: analytics-publisher-secrets
+      - name: config
+        configMap:
+          name: analytics-publisher
       containers:
       - name: analytics-publisher
         image: {{ .Values.analyticsPublisher.image.name}}:{{ .Values.analyticsPublisher.image.tag }}
         env:
           - name: GOOGLE_APPLICATION_CREDENTIALS
             value: /secrets/service-account.json
-          - name: PROJECT_NAME
-            value: {{ .Values.projectName }}
-          - name: SOURCE_BUCKET
-            value: {{ .Values.analyticsPublisher.sourceBucket | quote }}
-          - name: DESTINATION_BUCKET
-            value: {{ .Values.analyticsPublisher.destinationBucket | quote }}
         volumeMounts:
           - name: secrets
             mountPath: /secrets
+            readOnly: true
+          - name: config
+            mountPath: /etc/analytics-publisher
             readOnly: true

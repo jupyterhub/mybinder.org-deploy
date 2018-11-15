@@ -93,8 +93,10 @@ matomo:
       - staging.mybinder.org
 
 analyticsPublisher:
-  sourceBucket: mybinder-staging-events-raw-export
-  destinationBucket: mybinder-staging-events-archive
+  project: binder-staging
+  events:
+    sourceBucket: mybinder-staging-events-raw-export
+    destinationBucket: mybinder-staging-events-archive
 
 gcsProxy:
   buckets:

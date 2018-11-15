@@ -321,6 +321,8 @@ gcsProxy:
   nodeSelector: {}
 
 analyticsPublisher:
+  events:
+    logName: binderhub-events-text
   image:
     name: jupyterhub/mybinder-extraevents-archiver
     tag: set-by-chartpress

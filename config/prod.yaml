@@ -199,8 +199,10 @@ matomo:
       memory: 1Gi
 
 analyticsPublisher:
-  sourceBucket: mybinder-events-raw-export
-  destinationBucket: mybinder-events-archive
+  project: binder-prod
+  events:
+    sourceBucket: mybinder-events-raw-export
+    destinationBucket: mybinder-events-archive
 
 gcsProxy:
   buckets:
