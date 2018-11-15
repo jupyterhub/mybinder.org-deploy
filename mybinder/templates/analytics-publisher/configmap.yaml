@@ -1,0 +1,10 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: analytics-publisher
+  labels:
+    app: analytics-publisher
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  analytics-publisher.json: {{ toJson .Values.analyticsPublisher | quote }}

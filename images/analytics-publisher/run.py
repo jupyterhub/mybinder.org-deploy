@@ -2,14 +2,15 @@
 from datetime import datetime, timedelta
 import time
 import os
+import json
 
 from archiver import archive_events
 from indexer import index_events
 
-project_name = os.environ['PROJECT_NAME']
-log_name = 'binderhub-events-text'
-source_bucket = os.environ['SOURCE_BUCKET']
-destination_bucket = os.environ['DESTINATION_BUCKET']
+with open('/etc/analytics-publisher/analytics-publisher.json') as f:
+    config = json.load(f)
+
+project_name = config['project']
 
 while True:
     now = datetime.utcnow()
@@ -23,22 +24,22 @@ while True:
         print("Archiving yesterday's events {}".format(yesterday.strftime('%Y-%m-%d')))
         archive_events(
             project=project_name,
-            log_name=log_name,
-            source_bucket=source_bucket,
-            destination_bucket=destination_bucket,
+            log_name=config['events']['logName'],
+            source_bucket=config['events']['sourceBucket'],
+            destination_bucket=config['events']['destinationBucket'],
             date=yesterday
         )
 
     print("Archiving today's events {}".format(now.strftime('%Y-%m-%d')))
     archive_events(
         project=project_name,
-        log_name=log_name,
-        source_bucket=source_bucket,
-        destination_bucket=destination_bucket,
+        log_name=config['events']['logName'],
+        source_bucket=config['events']['sourceBucket'],
+        destination_bucket=config['events']['destinationBucket'],
         date=now
     )
 
     print("Generating index")
-    index_events(project_name, destination_bucket)
+    index_events(project_name, config['events']['destinationBucket'])
     print('Sleeping for 2h')
     time.sleep(2 * 60 * 60)

@@ -92,9 +92,11 @@ matomo:
     hosts:
       - staging.mybinder.org
 
-eventsArchiver:
-  sourceBucket: mybinder-staging-events-raw-export
-  destinationBucket: mybinder-staging-events-archive
+analyticsPublisher:
+  project: binder-staging
+  events:
+    sourceBucket: mybinder-staging-events-raw-export
+    destinationBucket: mybinder-staging-events-archive
 
 gcsProxy:
   buckets:
