@@ -26,10 +26,13 @@ data:
             location / {
                   rewrite /$ /index.html;
 
-                  proxy_set_header    Host storage.googleapis.com;
-                  proxy_pass          https://gs/{{ $bucket.name }}$uri;
-                  proxy_http_version  1.1;
-                  proxy_set_header    Connection "";
+                  proxy_set_header        Host storage.googleapis.com;
+                  proxy_pass              https://gs/{{ $bucket.name }}$uri;
+                  proxy_http_version      1.1;
+                  proxy_set_header        Connection "";
+
+                  gzip                    on;
+                  gzip_proxied            any;
 
                   proxy_intercept_errors on;
                   proxy_hide_header       alt-svc;
