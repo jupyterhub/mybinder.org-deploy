@@ -267,6 +267,7 @@ grafana:
       kubernetes.io/tls-acme: 'true'
   persistence:
     enabled: true
+    size: 1Gi
     accessModes:
       - ReadWriteOnce
 
