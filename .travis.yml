@@ -35,11 +35,11 @@ before_deploy:
 - |
   # Stage 1: Install Kubectl
   mkdir -p ${HOME}/bin
-  curl -L https://storage.googleapis.com/kubernetes-release/release/v1.9.0/bin/linux/amd64/kubectl > ${HOME}/bin/kubectl
+  curl -L https://storage.googleapis.com/kubernetes-release/release/v1.11.4/bin/linux/amd64/kubectl > ${HOME}/bin/kubectl
   chmod +x ${HOME}/bin/kubectl
 - |
   # Stage 1: Install helm
-  curl -L https://storage.googleapis.com/kubernetes-helm/helm-v2.9.1-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
+  curl -L https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
   mv ${HOME}/linux-amd64/helm ${HOME}/bin/helm
 - |
   # Stage 1: Install git-crypt
