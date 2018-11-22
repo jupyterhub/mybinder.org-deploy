@@ -25,6 +25,9 @@ binderhub:
         - secretName: kubelego-tls-jupyterhub-staging
           hosts:
             - hub.staging.mybinder.org
+    scheduling:
+      userPlaceholder:
+        replicas: 2
 
 grafana:
   ingress:
