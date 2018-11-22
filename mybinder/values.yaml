@@ -171,6 +171,11 @@ binderhub:
       userScheduler:
         enabled: true
         replicas: 2
+      podPriority:
+        enabled: true
+      userPlaceholder:
+        enabled: true
+        replicas: 0
     singleuser:
       networkPolicy:
         enabled: true
