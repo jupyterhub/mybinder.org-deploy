@@ -44,13 +44,14 @@ while True:
         # Only publish cloudCosts if it is enabled.
         # We disable this for binder staging, since all our billing
         # exports are in prod only.
-        publish_daily_cost(
+        cloud_costs = publish_daily_cost(
             billing_bucket_name=config['cloudCosts']['sourceBucket'],
             target_bucket_name=config['destinationBucket'],
             target_object_name=config['cloudCosts']['fileName'],
             kind=config['cloudCosts']['kind']
         )
 
+        print("Uploaded cloud costs for {} days".format(len(cloud_costs)))
 
     print("Generating index")
     index_events(project_name, config['destinationBucket'])

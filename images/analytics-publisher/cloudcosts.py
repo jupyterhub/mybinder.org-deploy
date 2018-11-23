@@ -79,6 +79,8 @@ def publish_daily_cost(
 
         blob.upload_from_file(target_buffer)
 
+    return sorted_items
+
 def main():
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
