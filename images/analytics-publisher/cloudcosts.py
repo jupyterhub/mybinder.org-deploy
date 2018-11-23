@@ -16,7 +16,8 @@ def totals_from_csv(file):
     totals = {}
     reader = csv.DictReader(file)
     for row in reader:
-        totals[row['Start Time']] = totals.get(row['Start Time'], 0) + float(row['Cost'])
+        time_range = (row['Start Time'], row['End Time'])
+        totals[time_range] = totals.get(time_range, 0) + float(row['Cost'])
 
     return totals
 
@@ -25,8 +26,8 @@ def totals_from_json(file):
     totals = {}
     for item in json.load(file):
         cost = float(item['cost']['amount'])
-        start_time = item['startTime']
-        totals[start_time] = totals.get(start_time, 0) + cost
+        time_range = (item['startTime'], item['endTime'])
+        totals[time_range] = totals.get(time_range, 0) + cost
 
     return totals
 
@@ -52,20 +53,21 @@ def publish_daily_cost(
         else:
             current_totals = totals_from_json(buffer)
 
-        for start_time, cost in current_totals.items():
-            totals[start_time] = totals.get(start_time, 0) + cost
+        for time_range, cost in current_totals.items():
+            totals[time_range] = totals.get(time_range, 0) + cost
 
 
     # We want to push out sorted jsonl
     sorted_items = [
-        { 'date': start_time, 'cost': cost }
-        for start_time, cost in totals.items()
+        { 'startTime': start_time, 'endTime': end_time, 'cost': cost }
+        for (start_time, end_time), cost in totals.items()
     ]
 
-    sorted_items.sort(key=lambda d: d['date'])
+    sorted_items.sort(key=lambda d: d['startTime'])
 
     if debug:
-        print(json.dumps(sorted_items, indent=4))
+        for item in sorted_items:
+            print(json.dumps(item))
 
     if not dry_run:
         target_bucket = storage.Bucket(client, target_bucket_name)

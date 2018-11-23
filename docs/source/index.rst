@@ -59,6 +59,7 @@ Analytics
    :maxdepth: 2
 
    analytics/events-archive
+   analytics/cloud-costs
 
 Incident Reports
 ----------------
