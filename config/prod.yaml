@@ -202,9 +202,11 @@ matomo:
 
 analyticsPublisher:
   project: binder-prod
+  destinationBucket: mybinder-events-archive
   events:
     sourceBucket: mybinder-events-raw-export
-    destinationBucket: mybinder-events-archive
+  billing:
+    sourceBucket: binder-billing
 
 gcsProxy:
   buckets:

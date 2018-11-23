@@ -330,5 +330,11 @@ analyticsPublisher:
   events:
     logName: binderhub-events-text
   image:
-    name: jupyterhub/mybinder-extraevents-archiver
-    tag: set-by-chartpress
+    name:
+    tag:
+  cloudCosts:
+    # All billing info goes into same bucket in prod, to which staging has access
+    enabled: true
+    sourceBucket: binder-billing
+    fileName: cloud-costs.jsonl
+    kind: csv
