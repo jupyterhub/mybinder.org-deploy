@@ -21,6 +21,8 @@ spec:
         app: analytics-publisher
         heritage: {{ .Release.Service }}
         release: {{ .Release.Name }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/analytics-publisher/configmap.yaml") . | sha256sum }}
     spec:
       volumes:
       - name: secrets
