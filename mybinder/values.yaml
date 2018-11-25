@@ -172,9 +172,9 @@ binderhub:
         enabled: true
         replicas: 2
       podPriority:
-        enabled: true
+        enabled: false
       userPlaceholder:
-        enabled: true
+        enabled: false
         replicas: 0
     singleuser:
       networkPolicy:
