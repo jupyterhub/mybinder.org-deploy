@@ -1,9 +1,9 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: analytics-publisher
+  name: events-archiver
   labels:
-    app: analytics-publisher
+    app: events-archiver
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 spec:
