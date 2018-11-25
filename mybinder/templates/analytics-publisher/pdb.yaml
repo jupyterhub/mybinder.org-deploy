@@ -12,4 +12,4 @@ spec:
     matchLabels:
       release: {{ .Release.Name }}
       heritage: {{ .Release.Service }}
-      app: events-archiver
+      app: analytics-publisher
