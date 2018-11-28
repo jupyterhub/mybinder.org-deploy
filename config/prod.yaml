@@ -84,7 +84,7 @@ binderhub:
             - hub.mybinder.org
     scheduling:
       userPlaceholder:
-        replicas: 10
+        replicas: 25
       userScheduler:
         nodeSelector: *coreNodeSelector
 
