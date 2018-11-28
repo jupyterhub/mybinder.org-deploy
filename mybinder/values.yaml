@@ -175,7 +175,7 @@ binderhub:
         enabled: true
       userPlaceholder:
         enabled: true
-        replicas: 0
+        # replicas set in config/<deployment>
     singleuser:
       networkPolicy:
         enabled: true
