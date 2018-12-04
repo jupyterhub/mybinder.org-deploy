@@ -1,5 +1,5 @@
 import requests
-
+import pytest
 
 def test_binder_up(binder_url):
     """
@@ -20,6 +20,9 @@ def test_hub_up(hub_url):
     assert resp.status_code == 403
 
 
+# the proxy-patches pod can take up to 30 seconds
+# to register its route after a proxy restart
+@pytest.mark.flaky(reruns=3, reruns_delay=10)
 def test_hub_user_redirect(hub_url):
     """Requesting a Hub URL for a non-running user"""
     # this should *not* redirect for now,
