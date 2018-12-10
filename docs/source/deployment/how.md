@@ -99,14 +99,16 @@ The following lines describe how to point mybinder.org to the new repo2docker im
 6. Somewhere in the file you will see `repo2dockerImage`, it will look like
    this:
 
-       repo2dockerImage: jupyter/repo2docker:65d5411
+       BinderHub:
+         build_image: jupyter/repo2docker:65d5411
 
    Where `65d5411` is the same value in `<OLD-HASH>` above.
 
 7. Replace the *old* hash that is there with what you copied in step 4.
    For example, the edited file will look similar to:
-
-       repo2dockerImage: jupyter/repo2docker:<NEW-HASH>
+       
+       BinderHub:
+         build_image: jupyter/repo2docker:<NEW-HASH>
 
 8. Merge this change to `mybinder/values.yaml` into the mybinder.org-deploy
    repository following the steps in the [Deploying a change](#deploying-a-change) section
