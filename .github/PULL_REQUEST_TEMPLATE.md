@@ -2,7 +2,14 @@
 use the template below in your PR description. If it is not,
 (e.g., a docs PR) then you can delete the template below. -->
 
-This is a <BinderHub / repo2docker> version bump. See the link
-below for a diff of new changes:
+<!-- BinderHub bump -->
 
-https://github.com/jupyterhub/<REPO-NAME>/compare/<OLD-HASH>...<NEW-HASH>
+This is a BinderHub version bump. See the link below for a diff of new changes:
+
+https://github.com/jupyterhub/binderhub/compare/<OLD-HASH>...<NEW-HASH>
+
+<!-- repo2docker bump -->
+
+This is a repo2docker version bump. See the link below for a diff of new changes:
+
+https://github.com/jupyter/repo2docker/compare/<OLD-HASH>...<NEW-HASH>
