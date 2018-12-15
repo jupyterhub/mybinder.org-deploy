@@ -10,7 +10,7 @@ binderhub:
     BinderHub:
       build_node_selector: *userNodeSelector
       hub_url: https://hub.mybinder.org
-      image_prefix: gcr.io/binder-prod/r2d-aee37be-
+      image_prefix: gcr.io/binder-prod/r2d-72d7634-
       google_analytics_code: "UA-101904940-1"
       google_analytics_domain: "mybinder.org"
 
