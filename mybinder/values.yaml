@@ -265,6 +265,7 @@ redirector:
 static:
   paths:
     - /badge.svg
+    - /badge_logo.svg
 
 kube-lego:
   config:
