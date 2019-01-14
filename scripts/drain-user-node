@@ -103,7 +103,7 @@ for node in nodes_to_drain:
         owner = pod.metadata.owner_references
         if owner:
             owner = owner[0]
-        if owner and owner.kind == "ReplicaSet":
+        if owner and owner.kind in {"ReplicaSet", "StatefulSet"}:
             # delete pods owned by a ReplicaSet that will be relocated
             # after deletion
             to_delete.append((pod, f"owned by {owner.kind}"))
