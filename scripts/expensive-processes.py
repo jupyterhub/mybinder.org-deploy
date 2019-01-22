@@ -188,6 +188,9 @@ def suspicious_cmd(cmd):
     if "xmrig" in cmd:
         return True
 
+    if "socat" in cmd:
+        return True
+
     if "./python" in cmd:
         return True
 
