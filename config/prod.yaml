@@ -144,8 +144,8 @@ prometheus:
           secretName: kubelego-tls-prometheus
 
 nginx-ingress:
-  nodeSelector: *coreNodeSelector
   controller:
+    nodeSelector: *coreNodeSelector
     service:
       loadBalancerIP: 35.202.202.188
     replicaCount: 2
