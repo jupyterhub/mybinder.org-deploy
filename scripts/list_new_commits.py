@@ -38,7 +38,7 @@ for i_repo, i_url in repos.items():
     latest_hash[i_repo] = resp.json()[1]['sha']
 
 url_bhub = 'https://github.com/jupyterhub/binderhub/compare/{}...{}'.format(bhub_live, latest_hash['binderhub'][:7])
-url_r2d = 'https://github.com/jupyter/repo2docker/compare/{}...{}'.format(r2d_live, r2d_master[:7])
+url_r2d = 'https://github.com/jupyter/repo2docker/compare/{}...{}'.format(r2d_live, r2d_master[:8])
 url_jhub = 'https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/{}...{}'.format(jhub_live, latest_hash['jupyterhub'][:7])
 
 print('---------------------\n')
