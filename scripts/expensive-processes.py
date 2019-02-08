@@ -8,7 +8,7 @@ from operator import attrgetter
 import os
 import pipes
 import re
-from subprocess import check_output
+from subprocess import check_output, run
 import sys
 
 import kubernetes.client
@@ -52,7 +52,13 @@ def ssh(instance, ssh_cmd):
 def get_instances():
     """Get the instance names"""
     instance_json = gcloud("compute", "instances", "list")
-    return [i["name"] for i in instance_json if '6h5b' not in i['name']]
+    instances = []
+    for i in instance_json:
+        name = i["name"]
+        if any(x in name for x in ('g47m', '6h5b')):
+            continue
+        instances.append(name)
+    return instances
 
 
 def parse_t(timestring):
@@ -189,6 +195,12 @@ def suspicious_cmd(cmd):
         return True
 
     if "socat" in cmd:
+        return True
+
+    if "onion" in cmd:
+        return True
+
+    if "base64" in cmd:
         return True
 
     if "./python" in cmd:
