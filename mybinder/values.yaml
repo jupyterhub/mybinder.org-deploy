@@ -123,6 +123,10 @@ binderhub:
 
   dind:
     enabled: true
+    daemonset:
+      image:
+        name: docker
+        tag: 18.09.2-dind
 
   imageCleaner:
     enabled: true
