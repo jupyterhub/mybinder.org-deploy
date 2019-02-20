@@ -26,6 +26,7 @@ Incident history
    :maxdepth: 1
    :caption: Incidents
 
+   incident-reports/2019-02-20-no-logs
    incident-reports/2018-07-30-jupyterlab-build-cpu-saturate.md
    incident-reports/2018-07-08-podsnips-aplenty.md
    incident-reports/2018-04-18-cull-flood.md
