@@ -145,10 +145,8 @@ prometheus:
 
 nginx-ingress:
   controller:
-    nodeSelector: *coreNodeSelector
     service:
       loadBalancerIP: 35.202.202.188
-    replicaCount: 2
 
 static:
   ingress:

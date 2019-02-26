@@ -244,7 +244,23 @@ nginx-ingress:
         prometheus.io/scrape: 'true'
         prometheus.io/port: '10254'
   controller:
-    replicaCount: 5
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 100
+          podAffinityTerm:
+            labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - nginx-ingress
+              - key: component
+                operator: In
+                values:
+                - controller
+            topologyKey: kubernetes.io/hostname
+    replicaCount: 2
     scope:
       enabled: true
     config:
