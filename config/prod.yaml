@@ -42,7 +42,7 @@ binderhub:
     singleuser:
       nodeSelector: *userNodeSelector
       memory:
-        guarantee: 450M
+        guarantee: 550M
         limit: 2G
       cpu:
         guarantee: 0.01
