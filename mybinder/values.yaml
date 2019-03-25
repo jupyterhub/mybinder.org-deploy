@@ -45,7 +45,6 @@ binderhub:
       banned_specs:
         # e.g. '^org/repo.*'
         - ^ines/spacy-binder.*
-        - jupyterlab/jupyterlab-demo.*
         - ^soft4voip/rak.*
     BinderHub:
       use_registry: true
