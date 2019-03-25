@@ -11,7 +11,7 @@ Requires aiohttp and tqdm:
 
 Usage:
 
-./scripts/delete-old-images.py [staging|prod]
+./scripts/delete-old-images.py [staging|prod] [--dry-run]
 
 """
 
@@ -99,23 +99,36 @@ async def get_manifest(session, image):
         return await r.json()
 
 
-async def delete_image(session, image, digest, tags):
+async def delete_image(session, image, digest, tags, dry_run=False):
     """Delete a single image
 
     Tags must be removed before deleting the actual image
     """
+    if dry_run:
+        fetch = session.get
+        verb = "Checking"
+    else:
+        fetch = session.delete
+        verb = "Deleting"
+
     manifests = f"https://gcr.io/v2/{image}/manifests"
     # delete tags first (required)
     for tag in tags:
-        async with session.delete(f"{manifests}/{tag}") as r:
-            await raise_for_status(r, f"Deleting tag {image}@{tag}")
+        async with fetch(f"{manifests}/{tag}") as r:
+            await raise_for_status(r, f"{verb} tag {image}@{tag}")
 
     # this is the actual deletion
-    async with session.delete(f"{manifests}/{digest}") as r:
-        await raise_for_status(r, f"Deleting image {image}@{digest}")
+    async with fetch(f"{manifests}/{digest}") as r:
+        await raise_for_status(r, f"{verb} image {image}@{digest}")
 
 
-async def main(release="staging", project=None, concurrency=20):
+async def main(release="staging", project=None, concurrency=20, dry_run=True):
+    if dry_run:
+        print("THIS IS A DRY RUN.  NO IMAGES WILL BE DELETED.")
+        to_be = "to be "
+    else:
+        to_be = ""
+
     if not project:
         project = f"binder-{release}"
     with open(os.path.join(HERE, os.pardir, "config", release + ".yaml")) as f:
@@ -185,10 +198,13 @@ async def main(release="staging", project=None, concurrency=20):
         delete_futures = set()
         print("Fetching tags")
         delete_progress = tqdm.tqdm(
-            total=len(tag_futures), position=2, unit_scale=True, desc="builds deleted"
+            total=len(tag_futures),
+            position=2,
+            unit_scale=True,
+            desc=f"builds {to_be}deleted",
         )
         delete_byte_progress = tqdm.tqdm(
-            total=0, position=3, unit="B", unit_scale=True, desc="bytes deleted"
+            total=0, position=3, unit="B", unit_scale=True, desc=f"bytes {to_be}deleted"
         )
 
         try:
@@ -206,7 +222,14 @@ async def main(release="staging", project=None, concurrency=20):
                     nbytes = int(info["imageSizeBytes"])
                     delete_byte_progress.total += nbytes
                     f = asyncio.ensure_future(
-                        bounded(delete_image, session, image, digest, info["tag"])
+                        bounded(
+                            delete_image,
+                            session,
+                            image,
+                            digest,
+                            info["tag"],
+                            dry_run=dry_run,
+                        )
                     )
                     delete_futures.add(f)
                     # update progress when done
@@ -228,9 +251,9 @@ async def main(release="staging", project=None, concurrency=20):
             delete_progress.close()
             delete_byte_progress.close()
             print("\n\n\n\n")
-            print(f"deleted {delete_progress.n} images")
+            print(f"{to_be}deleted {delete_progress.n} images")
             print(
-                f"deleted {delete_byte_progress.n} bytes (not counting shared layers)"
+                f"{to_be}deleted {delete_byte_progress.n} bytes (not counting shared layers)"
             )
             print(f"in {int(time.perf_counter() - start)} seconds")
 
@@ -260,7 +283,12 @@ if __name__ == "__main__":
         help="The number of concurrent requests to make. "
         "Too high and there may be timeouts. Default is 20.",
     )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Do a dry-run (no images will be deleted)",
+    )
     opts = parser.parse_args()
     asyncio.get_event_loop().run_until_complete(
-        main(opts.release, opts.project, opts.concurrency)
+        main(opts.release, opts.project, opts.concurrency, dry_run=opts.dry_run)
     )
