@@ -62,10 +62,10 @@ binderhub:
       chp:
         resources:
           requests:
-            memory: 256Mi
+            memory: 320Mi
             cpu: "0.1"
           limits:
-            memory: 256Mi
+            memory: 320Mi
             cpu: "0.5"
       nginx:
         resources:
