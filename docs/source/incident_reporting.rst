@@ -26,6 +26,7 @@ Incident history
    :maxdepth: 1
    :caption: Incidents
 
+   incident-reports/2019-03-24-r2d-upgrade.md
    incident-reports/2019-02-20-no-logs.md
    incident-reports/2018-07-30-jupyterlab-build-cpu-saturate.md
    incident-reports/2018-07-08-podsnips-aplenty.md
