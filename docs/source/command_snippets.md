@@ -62,6 +62,7 @@ gcloud --project=binder-staging container node-pools create $new_pool \
     --machine-type=n1-standard-4 \
     --enable-autorepair \
     --num-nodes=2
+    --zone=us-central1-a
 ```
 
 After the pool is created, cordon the previous nodes:
@@ -74,7 +75,9 @@ kubectl cordon $node
 Test that launches succeed on the new nodes by visiting
 https://staging.mybinder.org/v2/gh/binderhub-ci-repos/requirements/master
 
-Once this is verified to be successful, the old nodes pool can be drained:
+> Note: You might have to restart one of the ingress pods named `staging-nginx-ingress-controller-*` as they will both be on cordoned nodes and hence not receiving traffic. The symptom of this is that https://staging.mybinder.org does not load anymore.
+
+Once this is verified to be successful, the old node pool can be drained:
 
 ```bash
 kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0 $node
@@ -83,7 +86,7 @@ kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0 $
 and then the node pool deleted:
 
 ```bash
-gcloud --project=binder-staging container node-pools delete $old_pool --cluster=staging
+gcloud --project=binder-staging container node-pools delete $old_pool --cluster=staging --zone=us-central1-a
 ```
 
 #### Upgrading prod
@@ -98,8 +101,7 @@ Production has two node pools:
 1. a "core" pool, which runs the hub, binder, etc.
 2. a "user" pool, where user pods run.
 
-The process is mostly the same, but we do it in two steps (for two pools),
-and we have to update our deployment configuration to tell it to use the new pools.
+The process is mostly the same, but we do it in two steps (for two pools).
 
 As with staging, first we create the new pool,
 copying configuration from the old pool.
@@ -114,7 +116,7 @@ First we'll create variables that point to our old and new node pools to make it
 
 ```bash
 # old_pool is the name of the existing user pool, to be deleted
-old_pool=ssd-pool
+old_pool=user-1dot11dot7
 # new_pool can be anything, as long as it isn't the same as old_pool
 # something short but descriptive, e.g. hm16 for highmem-16 nodes
 new_pool=hm16
@@ -126,6 +128,7 @@ Then we can create the new user pool:
 # create the new user pool
 gcloud beta --project=binder-prod container node-pools create $new_pool \
     --cluster=prod-a \
+    --zone=us-central1-a \
     --disk-type=pd-ssd \
     --disk-size=1000 \
     --machine-type=n1-highmem-8 \
@@ -148,6 +151,7 @@ new_core_pool=core-1-11
 
 gcloud beta --project=binder-prod container node-pools create $new_core_pool \
     --cluster=prod-a \
+    --zone=us-central1-a \
     --disk-type=pd-ssd \
     --disk-size=250 \
     --machine-type=n1-highmem-4 \
