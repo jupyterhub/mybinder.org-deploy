@@ -5,3 +5,4 @@ dependencies:
 - python=3.6
 - sphinx>=1.8.2
 - recommonmark
+- alabaster_jupyterhub

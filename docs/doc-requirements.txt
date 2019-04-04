@@ -1,2 +1,3 @@
 sphinx>=1.6
 recommonmark==0.4.0
+alabaster_jupyterhub
