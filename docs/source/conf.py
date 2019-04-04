@@ -130,6 +130,8 @@ html_sidebars = {
     ]
 }
 
+html_logo = '_static/images/logo.jpg'
+
 
 # -- Options for HTMLHelp output ------------------------------------------
 
