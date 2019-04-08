@@ -48,7 +48,7 @@ binderhub:
         - ^soft4voip/rak.*
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:9bcc41a
+      build_image: jupyter/repo2docker:8d8c21e5
       per_repo_quota: 100
       about_message: |
         <p>mybinder.org is public infrastructure operated by the <a href="https://jupyterhub-team-compass.readthedocs.io/en/latest/team.html#binder-team">Binder Project team</a>.<br /><br />
