@@ -12,7 +12,6 @@ state of the deployment on mybinder.org. Since it is a full helm chart, you
 can read the [official helm chart structure](https://docs.helm.sh/developing_charts/#the-chart-file-structure)
 document to know more about its structure.
 
-
 ## Dependent charts
 
 The core of the meta-chart pattern is to install a bunch of [dependent charts](https://docs.helm.sh/developing_charts/#chart-dependencies),
