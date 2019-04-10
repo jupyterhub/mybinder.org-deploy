@@ -11,6 +11,23 @@ change deployed to mybinder.org.
 The first two sections of this page cover how to upgrade either `repo2docker` or
 `BinderHub`.
 
+## Deployment policy
+
+Deployments to mybinder.org should be:
+
+1. **Safe**. We will have good, user friendly tooling + lots of safeguards,
+so people can deploy without fear of accidentally breaking the site.
+
+2. **Straightforward**. We want a lot of people to be involved in maintaining mybinder.org,
+so we must make sure deployments are also easy to do. Most deployments should
+not require specific sysadmin knowledge.
+
+3. **Timely**. We deploy changes to repo2docker and BinderHub within a few days of
+them being merged into master.
+
+These are all **aspirational** - we strive for hitting the above points,
+but recognize that work and life may get in the way of doing this perfectly.
+
 ## Updating BinderHub
 
 This section explains how to upgrade the mybinder.org deployment after
@@ -63,6 +80,7 @@ which we step through below.
    repository following the steps in the [Deploying a change](#deploying-a-change) section
    to deploy the change.
 
+
 ## Updating repo2docker
 
 This section explains how to upgrade the mybinder.org deployment after
@@ -87,7 +105,7 @@ The following lines describe how to point mybinder.org to the new repo2docker im
        BinderHub: https://github.com/jupyterhub/binderhub/compare/<OLD-HASH>...<NEW-HASH>
        repo2docker: https://github.com/jupyter/repo2docker/compare/<OLD-HASH>...<NEW-HASH>
        JupyterHub: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/<OLD-HASH>...<NEW-HASH>
-       
+
        ---------------------
 
    Since you are updating repo2docker, copy the text in `<NEW-HASH>` for the
@@ -106,13 +124,14 @@ The following lines describe how to point mybinder.org to the new repo2docker im
 
 7. Replace the *old* hash that is there with what you copied in step 4.
    For example, the edited file will look similar to:
-       
+
        BinderHub:
          build_image: jupyter/repo2docker:<NEW-HASH>
 
 8. Merge this change to `mybinder/values.yaml` into the mybinder.org-deploy
    repository following the steps in the [Deploying a change](#deploying-a-change) section
    to deploy the change.
+
 
 ## Deploying a change
 
@@ -179,3 +198,20 @@ to staging only, follow these steps:
 
 The [what](./what.html) document has more details on common ways deployments can go
 wrong, and how to debug them.
+
+
+## Changing the mybinder.org infrastructure
+
+Sometimes we need to make changes to the mybinder.org core infrastructure.
+These are changes to the infrastructure that don't directly touch binderhub or
+repo2docker, and often require more expertise. Examples for these include:
+
+1. Upgrading nginx Ingress controller
+2. Re-configuring our prometheus servers
+3. Upgrading to a new JupyterHub release
+4. Re-configuring autoscaling for the cluster
+5. Doing a kubernetes master upgrade.
+
+These changes require a different kind of review than deploying code. In this
+case, ensure that you have a fellow member of the mybinder.org operations
+team to assist in case something goes wrong.
