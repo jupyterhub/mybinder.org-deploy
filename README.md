@@ -14,7 +14,9 @@ Instead, you should review the [BinderHub documentation][] and the
 
 ## Site Reliability Guide [![Documentation Status](http://readthedocs.org/projects/mybinder-sre/badge/?version=latest)](http://mybinder-sre.readthedocs.io/en/latest/?badge=latest)
 
-This contains:
+[Site Reliability Guide](https://mybinder-sre.readthedocs.io/en/latest/index.html), the collected wisdom of operating mybinder.org.
+
+AMongst other things the guide contains:
 - [How to do a deployment](http://mybinder-sre.readthedocs.io/en/latest/deployment/how.html)
 - [What happens during a deployment?](http://mybinder-sre.readthedocs.io/en/latest/deployment/what.html)
 - [Incident reports for past incidents](http://mybinder-sre.readthedocs.io/en/latest/incident-reports/incident_reports_toc.html)
