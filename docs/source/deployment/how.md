@@ -22,6 +22,11 @@ so people can deploy without fear of accidentally breaking the site.
 so we must make sure deployments are also easy to do. Most deployments should
 not require specific sysadmin knowledge.
 
+3. **Timely**. We deploy changes to repo2docker and BinderHub within a few days of
+them being merged into master.
+
+These are all **aspirational** - we strive for hitting the above points,
+but recognize that work and life may get in the way of doing this perfectly.
 
 ## Updating BinderHub
 

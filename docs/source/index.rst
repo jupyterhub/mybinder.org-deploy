@@ -1,6 +1,16 @@
 Site Reliability Guide for mybinder.org
 =======================================
 
+This site is a collection of wisdom, tools, and other helpful information
+to assist in the maintenance and team-processes around the BinderHub deployment
+at `mybinder.org <https://mybinder.org>`_.
+
+If you are looking for documentation on how to use mybinder.org,
+`see the mybinder.org user documentation <https://docs.mybinder.org>`_. If you are looking
+for information on deploying your own BinderHub
+`see the BinderHub documentation <https://binderhub.readthedocs.io>`_.
+
+
 What is the mybinder.org operations team?
 -----------------------------------------
 
@@ -14,16 +24,10 @@ This site is a collection of wisdom, tools, and other helpful information that t
 mybinder.org operations team uses for maintenance and team-processes
 around the BinderHub deployment at `mybinder.org <https://mybinder.org>`_.
 
-**If you're interested in helping the mybinder.org operations team**, first
+**If you are interested in helping the mybinder.org operations team**, first
 check out `this post on what an operator does <https://discourse.jupyter.org/t/the-operators-no-binder-isnt-forming-a-rock-band/694>`_.
-If that still sounds interesting to you, please reach out to the operations team
-via the `Jupyter Discourse <https://discourse.jupyter.org>`_.
-
-Note that if you're not interested in information about the mybinder.org BinderHub deployment,
-you may find more useful information elsewhere. If you're looking for the
-Binder docs, `see this link <https://docs.mybinder.org>`_. If you're looking
-for information on deploying your own BinderHub
-`see this link <https://binderhub.readthedocs.io>`_.
+To show your interest in helping, please reach out to the operations team
+via `this Discourse thread <https://discourse.jupyter.org/t/interested-in-joining-the-mybinder-org-operations-team/761>`_.
 
 
 Getting started
