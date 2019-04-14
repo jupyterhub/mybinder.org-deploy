@@ -22,24 +22,23 @@ r2d_live = helm_chart['binderhub']['config']['BinderHub']['build_image'].split('
 
 print('Fetching latest commit SHA for BinderHub and repo2docker...')
 
-# Load latest r2d commit
-url = "https://api.github.com/repos/jupyter/repo2docker/commits"
+# Load latest r2d commit from dockerhub
+url = "https://hub.docker.com/v2/repositories/jupyter/repo2docker/tags/"
 resp = requests.get(url)
-r2d_master = resp.json()[0]['sha']
+r2d_master = resp.json()['results'][0]['name']
 
 # Load latest binderhub and jupyterhub commits
-repos = {'jupyterhub': 'zero-to-jupyterhub-k8s', 'binderhub': 'binderhub'}
-latest_hash = {}
-for i_repo, i_url in repos.items():
-    url = "https://api.github.com/repos/jupyterhub/{}/commits".format(i_url)
-    resp = requests.get(url)
-    # Grab the *second to latest* commit since this will be the image SHA
-    # The latest commit is the "merge" commit and is excluded.
-    latest_hash[i_repo] = resp.json()[1]['sha']
+url_helm_chart = 'https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml'
+helm_chart_yaml = load(requests.get(url_helm_chart).text)
 
-url_bhub = 'https://github.com/jupyterhub/binderhub/compare/{}...{}'.format(bhub_live, latest_hash['binderhub'][:7])
+latest_hash = {}
+for repo in ['binderhub', 'jupyterhub']:
+    updates_sorted = sorted(helm_chart_yaml['entries'][repo], key=lambda k: k['created'])
+    latest_hash[repo] = updates_sorted[-1]['version'].split('-')[-1]
+
+url_bhub = 'https://github.com/jupyterhub/binderhub/compare/{}...{}'.format(bhub_live, latest_hash['binderhub'])
 url_r2d = 'https://github.com/jupyter/repo2docker/compare/{}...{}'.format(r2d_live, r2d_master[:8])
-url_jhub = 'https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/{}...{}'.format(jhub_live, latest_hash['jupyterhub'][:7])
+url_jhub = 'https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/{}...{}'.format(jhub_live, latest_hash['jupyterhub'])
 
 print('---------------------\n')
 print('BinderHub: {}'.format(url_bhub))
