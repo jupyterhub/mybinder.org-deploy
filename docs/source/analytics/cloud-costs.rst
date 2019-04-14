@@ -4,7 +4,7 @@
 Cloud Costs Data
 ================
 
-In an effort to be more transparent about how we use our funds,
+In an effort to be transparent about how we use our funds,
 we publish the amount of money spent each day in cloud
 compute costs for running mybinder.org.
 
