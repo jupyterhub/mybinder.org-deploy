@@ -28,18 +28,17 @@ resp = requests.get(url)
 r2d_master = resp.json()[0]['sha']
 
 # Load latest binderhub and jupyterhub commits
-repos = {'jupyterhub': 'zero-to-jupyterhub-k8s', 'binderhub': 'binderhub'}
-latest_hash = {}
-for i_repo, i_url in repos.items():
-    url = "https://api.github.com/repos/jupyterhub/{}/commits".format(i_url)
-    resp = requests.get(url)
-    # Grab the *second to latest* commit since this will be the image SHA
-    # The latest commit is the "merge" commit and is excluded.
-    latest_hash[i_repo] = resp.json()[1]['sha']
+helm_chart_url = 'https://raw.githubusercontent.com/jupyterhub/helm-chart/gh-pages/index.yaml'
+helm_chart_yaml = load(requests.get(helm_chart_url).text)
 
-url_bhub = 'https://github.com/jupyterhub/binderhub/compare/{}...{}'.format(bhub_live, latest_hash['binderhub'][:7])
+latest_hash = {}
+for repo in ['binderhub', 'jupyterhub']:
+    updates_sorted = sorted(helm_chart_yaml['entries'][repo], key=lambda k: k['created'])
+    latest_hash[repo] = updates_sorted[-1]['version'].split('-')[-1]
+
+url_bhub = 'https://github.com/jupyterhub/binderhub/compare/{}...{}'.format(bhub_live, latest_hash['binderhub'])
 url_r2d = 'https://github.com/jupyter/repo2docker/compare/{}...{}'.format(r2d_live, r2d_master[:8])
-url_jhub = 'https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/{}...{}'.format(jhub_live, latest_hash['jupyterhub'][:7])
+url_jhub = 'https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/{}...{}'.format(jhub_live, latest_hash['jupyterhub'])
 
 print('---------------------\n')
 print('BinderHub: {}'.format(url_bhub))
