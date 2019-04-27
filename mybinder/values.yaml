@@ -227,7 +227,6 @@ binderhub:
             capabilities:
               add:
                 - NET_ADMIN
-      schedulerStrategy: pack
 
 playground:
   image:
