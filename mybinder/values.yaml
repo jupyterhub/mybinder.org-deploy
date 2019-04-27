@@ -50,7 +50,7 @@ binderhub:
     BinderHub:
       use_registry: true
       build_image: jupyter/repo2docker:bc9554e1
-      build_memory_limit: 3G
+      build_memory_limit: "3G"
       per_repo_quota: 100
       about_message: |
         <p>mybinder.org is public infrastructure operated by the <a href="https://jupyterhub-team-compass.readthedocs.io/en/latest/team.html#binder-team">Binder Project team</a>.<br /><br />
