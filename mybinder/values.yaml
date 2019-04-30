@@ -245,6 +245,13 @@ nginx-ingress:
         prometheus.io/scrape: 'true'
         prometheus.io/port: '10254'
   controller:
+    resources:
+      requests:
+        cpu: 0.5
+        memory: 240Mi
+      limits:
+        cpu: 0.8
+        memory: 240Mi
     affinity:
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
