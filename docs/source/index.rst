@@ -94,6 +94,7 @@ A public events archive with data about daily Binder launches.
    :maxdepth: 2
 
    analytics/events-archive
+   analytics/cloud-costs
 
 Incident Reports
 ----------------

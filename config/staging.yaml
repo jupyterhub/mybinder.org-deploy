@@ -96,9 +96,9 @@ matomo:
 
 analyticsPublisher:
   project: binder-staging
+  destinationBucket: mybinder-staging-events-archive
   events:
     sourceBucket: mybinder-staging-events-raw-export
-    destinationBucket: mybinder-staging-events-archive
 
 gcsProxy:
   buckets:
