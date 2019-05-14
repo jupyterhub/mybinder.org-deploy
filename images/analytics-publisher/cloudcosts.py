@@ -26,7 +26,7 @@ def totals_from_json(file):
     totals = {}
     for item in json.load(file):
         cost = float(item['cost']['amount'])
-        time_range = (item['startTime'], item['endTime'])
+        time_range = (item['start_time'], item['end_time'])
         totals[time_range] = totals.get(time_range, 0) + cost
 
     return totals
@@ -59,11 +59,16 @@ def publish_daily_cost(
 
     # We want to push out sorted jsonl
     sorted_items = [
-        { 'startTime': start_time, 'endTime': end_time, 'cost': cost }
+        {
+            'version': 1,
+            'start_time': start_time,
+            'end_time': end_time,
+            'cost': cost
+        }
         for (start_time, end_time), cost in totals.items()
     ]
 
-    sorted_items.sort(key=lambda d: d['startTime'])
+    sorted_items.sort(key=lambda d: d['start_time'])
 
     if debug:
         for item in sorted_items:

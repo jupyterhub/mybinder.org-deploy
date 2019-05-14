@@ -16,7 +16,12 @@ You can find the data in the `Analytics Archive
 <https://archive.analytics.mybinder.org/cloud-costs.jsonl>`_. Each line in
 the file is a JSON object, with the following keys:
 
-#. **startTime** and **endTime**
+#. **version**
+
+   Currently *1*, will be incremented when the structure of this format
+   changes.
+
+#. **start_time** and **end_time**
 
    The start and end of the billing period this item represents. These
    times are inclusive, and in pacific time observing DST (so PDT or PST).
@@ -29,4 +34,4 @@ the file is a JSON object, with the following keys:
    The cost of all cloud compute resources used during this time period. This
    is denominated in US Dollars.
 
-The lines are sorted by ``startTime``.
+The lines are sorted by ``start_time``.
