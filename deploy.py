@@ -11,9 +11,28 @@ BOLD = subprocess.check_output(['tput', 'bold']).decode()
 GREEN = subprocess.check_output(['tput', 'setaf', '2']).decode()
 NC = subprocess.check_output(['tput', 'sgr0']).decode()
 HERE = os.path.dirname(__file__)
+ABSOLUTE_HERE = os.path.dirname(os.path.realpath(__file__))
 
 
-def setup_auth(release, cluster):
+def setup_auth_ovh(release, cluster):
+    """
+    Set up authentication with 'binder-ovh' K8S from the ovh-kubeconfig.yml
+    """
+    print(f'Setup the OVH authentication for namespace {release}')
+
+    ovh_kubeconfig = os.path.join(ABSOLUTE_HERE, 'secrets', 'ovh-kubeconfig.yml')
+    os.environ['KUBECONFIG'] = ovh_kubeconfig
+    print(f'Current KUBECONFIG=\'{ovh_kubeconfig}\'')
+    stdout = subprocess.check_output([
+        'kubectl',
+        'config',
+        'use-context',
+        cluster
+    ])
+    print(stdout.decode('utf8'))
+
+
+def setup_auth_gcloud(release, cluster):
     """
     Set up GCloud + Kubectl authentication for talking to a given cluster
     """
@@ -135,7 +154,7 @@ def main():
     argparser.add_argument(
         'release',
         help="Release to deploy",
-        choices=['staging', 'prod']
+        choices=['staging', 'prod', 'ovh']
     )
     argparser.add_argument(
         'cluster',
@@ -144,7 +163,11 @@ def main():
 
     args = argparser.parse_args()
 
-    setup_auth(args.release, args.cluster)
+    if args.cluster == 'binder-ovh':
+        setup_auth_ovh(args.release, args.cluster)
+    else:
+        setup_auth_gcloud(args.release, args.cluster)
+
     setup_helm(args.release)
     deploy(args.release)
 

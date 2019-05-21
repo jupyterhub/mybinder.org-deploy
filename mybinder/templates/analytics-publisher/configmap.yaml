@@ -1,3 +1,4 @@
+{{- if .Values.analyticsPublisher.enabled }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -8,3 +9,4 @@ metadata:
     release: {{ .Release.Name }}
 data:
   analytics-publisher.json: {{ toJson .Values.analyticsPublisher | quote }}
+{{- end }}

@@ -1,3 +1,4 @@
+{{- if .Values.analyticsPublisher.enabled }}
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
@@ -13,3 +14,4 @@ spec:
       release: {{ .Release.Name }}
       heritage: {{ .Release.Service }}
       app: analytics-publisher
+{{- end }}
