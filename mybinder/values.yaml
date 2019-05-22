@@ -46,6 +46,7 @@ binderhub:
         # e.g. '^org/repo.*'
         - ^ines/spacy-binder.*
         - ^soft4voip/rak.*
+        - ^hmharshit/cn-ait.*
     BinderHub:
       use_registry: true
       build_image: jupyter/repo2docker:25ebca04
