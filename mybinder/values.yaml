@@ -48,6 +48,7 @@ binderhub:
         - ^ines/spacy-binder.*
         - ^soft4voip/rak.*
         - ^hmharshit/cn-ait.*
+        - ^shishirchoudharygic/mltraining/*
     BinderHub:
       use_registry: true
       build_image: jupyter/repo2docker:25ebca04
