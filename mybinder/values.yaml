@@ -36,6 +36,7 @@ binderhub:
         - 9418 # git
         - 873 # rsync
         - 1094 # xroot
+        - 1095 # xroot
       cidr: 0.0.0.0/0
 
   config:
