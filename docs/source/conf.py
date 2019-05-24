@@ -19,6 +19,7 @@
 
 # For conversion from markdown (.md) to html
 import recommonmark.parser
+from datetime import datetime
 
 # -- General configuration ------------------------------------------------
 
@@ -59,7 +60,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Site Reliability Guide for mybinder.org'
-copyright = '2017, Binder Team'
+copyright = '%d, Binder Team' % datetime.now().year
 author = 'Binder Team'
 
 # The version info for the project you're documenting, acts as replacement for
