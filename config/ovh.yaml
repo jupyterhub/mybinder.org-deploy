@@ -1,0 +1,156 @@
+projectName: ovh
+
+binderhub:
+  config:
+    BinderHub:
+      hub_url: https://hub-binder.mybinder.ovh
+      image_prefix: binder-registry.mybinder.ovh/binder-ovh/r2d-f18835fd-
+    DockerRegistry:
+      token_url: https://auth-binder-registry.mybinder.ovh/auth?service=binder-registry
+  extraConfig:
+    # Overriding this value because it uses GCP
+    01-eventlog: ""
+  registry:
+    url: https://binder-registry.mybinder.ovh
+    username: binder
+
+  ingress:
+    enabled: true
+    https:
+      enabled: true
+      type: custom
+    hosts:
+      - binder.mybinder.ovh
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: 'false'
+    tls:
+      - secretName: tls-crt
+        hosts:
+          - binder.mybinder.ovh
+
+  jupyterhub:
+    singleuser:
+      imagePullSecret:
+        enabled: true
+        registry: binder-registry.mybinder.ovh
+        username: binder
+        email:
+      memory:
+        guarantee: 256M
+        limit: 256M
+      cpu:
+        guarantee: 0.1
+        limit: 0.5
+    proxy:
+      https:
+        type: offload
+
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: 'false'
+      hosts:
+        - hub-binder.mybinder.ovh
+      tls:
+        - secretName: tls-crt
+          hosts:
+            - hub-binder.mybinder.ovh
+
+    scheduling:
+      userPlaceholder:
+        replicas: 2
+
+grafana:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: 'false'
+    hosts:
+      - grafana-mybinder.mybinder.ovh
+    tls:
+      - hosts:
+          - grafana-mybinder.mybinder.ovh
+        secretName: tls-crt
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: prometheus
+          orgId: 1
+          type: prometheus
+          url: https://prometheus-mybinder.mybinder.ovh
+          access: direct
+          isDefault: true
+          editable: false
+
+prometheus:
+  server:
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: 'false'
+      hosts:
+        - prometheus-mybinder.mybinder.ovh
+      tls:
+        - hosts:
+            - prometheus-mybinder.mybinder.ovh
+          secretName: tls-crt
+
+nginx-ingress:
+  controller:
+    hostNetwork: true
+    replicaCount: 1
+  scope:
+    enabled: false
+
+
+static:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: 'false'
+    hosts:
+      - static-mybinder.mybinder.ovh
+    tls:
+      - hosts:
+          - static-mybinder.mybinder.ovh
+        secretName: tls-crt
+
+redirector:
+  redirects:
+    - type: host
+      host:
+        from: beta-binder.mybinder.ovh
+        to: binder.mybinder.ovh
+    - type: host
+      host:
+        from: docs-mybinder.mybinder.ovh
+        to: mybinder.readthedocs.io
+    - type: host
+      host:
+        from: playground-mybinder.mybinder.ovh
+        to: play.nteract.io
+
+matomo:
+  enabled: false
+  db:
+    instanceName: binder-staging:us-central1:matomo
+  trustedHosts:
+    - staging-mybinder.mybinder.ovh
+  ingress:
+    hosts:
+      - staging-mybinder.mybinder.ovh
+
+analyticsPublisher:
+  enabled: false
+  project: binder-ovh
+  events:
+    sourceBucket: mybinder-staging-events-raw-export
+    destinationBucket: mybinder-staging-events-archive
+
+gcsProxy:
+  enabled: false
+  buckets:
+    - name: mybinder-staging-events-archive
+      host: archive-analytics-staging-mybinder.mybinder.ovh

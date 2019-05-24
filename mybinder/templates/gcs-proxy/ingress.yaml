@@ -1,3 +1,4 @@
+{{- if .Values.gcsProxy.enabled }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -27,3 +28,4 @@ spec:
       {{- range $bucket := .Values.gcsProxy.buckets }}
       - {{ $bucket.host }}
       {{- end }}
+{{- end }}

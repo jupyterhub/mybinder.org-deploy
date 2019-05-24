@@ -366,10 +366,12 @@ matomo:
     tables_prefix: matomo_
 
 gcsProxy:
+  enabled: true
   replicas: 1
   nodeSelector: {}
 
 analyticsPublisher:
+  enabled: true
   events:
     logName: binderhub-events-text
   image:
