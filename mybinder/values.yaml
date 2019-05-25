@@ -49,6 +49,7 @@ binderhub:
         - ^soft4voip/rak.*
         - ^hmharshit/cn-ait.*
         - ^shishirchoudharygic/mltraining.*
+        - ^hmharshit/mltraining.*
     BinderHub:
       use_registry: true
       build_image: jupyter/repo2docker:80b979f8
