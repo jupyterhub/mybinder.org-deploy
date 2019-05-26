@@ -384,3 +384,22 @@ analyticsPublisher:
     sourceBucket: binder-billing
     fileName: cloud-costs.jsonl
     kind: csv
+
+federationRedirect:
+  host: my.bndr.it
+  enabled: false
+  image:
+    name: set-by-chartpress
+    tag: set-by-chartpress
+  check:
+    period: 5
+    jitter: 0.1
+  hosts:
+    gke:
+      url: https://mybinder.org
+      weight: 4
+      health: https://mybinder.org/versions
+    ovh:
+      url: https://binder.mybinder.ovh
+      weight: 1
+      health: https://binder.mybinder.ovh/versions
