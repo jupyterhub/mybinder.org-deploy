@@ -210,3 +210,7 @@ gcsProxy:
   buckets:
     - name: mybinder-events-archive
       host: archive.analytics.mybinder.org
+
+federationRedirect:
+  host: my.bndr.it
+  enabled: true

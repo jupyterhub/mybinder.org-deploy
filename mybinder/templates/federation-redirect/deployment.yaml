@@ -1,0 +1,45 @@
+{{- if .Values.federationRedirect.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: federation-redirect
+  labels:
+    app: federation-redirect
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: federation-redirect
+      heritage: {{ .Release.Service }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: federation-redirect
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/federation-redirect/configmap.yaml") . | sha256sum }}
+    spec:
+      volumes:
+      - name: config
+        configMap:
+          name: federation-redirect
+      containers:
+      - name: federation-redirect
+        image: {{ .Values.federationRedirect.image.name}}:{{ .Values.federationRedirect.image.tag }}
+        volumeMounts:
+          - name: config
+            mountPath: /etc/federation-redirect
+            readOnly: true
+        resources:
+          requests:
+            cpu: 0.2
+            memory: 200Mi
+          limits:
+            cpu: 0.2
+            memory: 300Mi
+
+{{- end }}

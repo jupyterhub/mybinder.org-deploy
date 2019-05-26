@@ -4,3 +4,5 @@ charts:
     images:
       analytics-publisher:
         valuesPath: analyticsPublisher.image
+      federation-redirect:
+        valuesPath: federationRedirect.image

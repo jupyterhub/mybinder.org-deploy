@@ -1,0 +1,26 @@
+{{- if .Values.federationRedirect.enabled }}
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: federation-redirect
+  labels:
+    app: federation-redirect
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+spec:
+  rules:
+    - host: {{ .Values.federationRedirect.host | quote }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: federation-redirect
+              servicePort: 80
+  tls:
+    - secretName: kubelego-tls-federation-redirect
+      hosts:
+      - {{ .Values.federationRedirect.host | quote }}
+{{- end }}

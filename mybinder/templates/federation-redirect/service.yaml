@@ -1,0 +1,18 @@
+{{- if .Values.federationRedirect.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: federation-redirect
+  labels:
+    app: federation-redirect
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+  selector:
+    app: federation-redirect
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+{{- end }}

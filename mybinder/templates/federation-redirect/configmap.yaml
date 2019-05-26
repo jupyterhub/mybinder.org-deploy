@@ -1,0 +1,12 @@
+{{- if .Values.federationRedirect.enabled }}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: federation-redirect
+  labels:
+    app: federation-redirect
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  config.json: {{ toJson .Values.federationRedirect | quote }}
+{{- end }}

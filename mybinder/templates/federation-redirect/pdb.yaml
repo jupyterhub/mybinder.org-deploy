@@ -1,0 +1,17 @@
+{{- if .Values.federationRedirect.enabled }}
+apiVersion: policy/v1beta1
+kind: PodDisruptionBudget
+metadata:
+  name: federation-redirect
+  labels:
+    app: federation-redirect
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      release: {{ .Release.Name }}
+      heritage: {{ .Release.Service }}
+      app: federation-redirect
+{{- end }}
