@@ -52,7 +52,7 @@ binderhub:
         - ^hmharshit/mltraining.*
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:51898274
+      build_image: jupyter/repo2docker:9c52e5ab
       per_repo_quota: 100
       about_message: |
         <p>mybinder.org is public infrastructure operated by the <a href="https://jupyterhub-team-compass.readthedocs.io/en/latest/team.html#binder-team">Binder Project team</a>.<br /><br />
