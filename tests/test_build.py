@@ -48,7 +48,7 @@ def push_dummy_gh_branch(repo, branch, keyfile):
 
 
 
-@pytest.mark.timeout(300)
+@pytest.mark.timeout(498)
 def test_build_binder(binder_url):
     """
     We can launch an image that we know hasn't been built
