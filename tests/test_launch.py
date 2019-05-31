@@ -2,7 +2,7 @@ import json
 import pytest
 import requests
 
-@pytest.mark.timeout(300)
+@pytest.mark.timeout(497)
 def test_launch_binder(binder_url):
     """
     We can launch an image that most likely already has been built.
