@@ -28,10 +28,13 @@ CONFIG = {
     },
 }
 
-config_path = '/etc/federationn-redirect/config.json'
+config_path = '/etc/federation-redirect/config.json'
 if os.path.exists(config_path):
+    logging.info("Using config from '{}'.".format(config_path))
     with open(config_path) as f:
         CONFIG = json.load(f)
+else:
+    logging.warning("Using default config!")
 
 
 class RedirectHandler(RequestHandler):
