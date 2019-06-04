@@ -1,5 +1,4 @@
 import json
-import logging
 import os
 import random
 
@@ -8,8 +7,9 @@ import tornado.ioloop
 import tornado.web
 import tornado.options
 from tornado.ioloop import IOLoop
+from tornado.log import enable_pretty_logging, app_log
 
-from tornado.httpclient import AsyncHTTPClient, HTTPClientError
+from tornado.httpclient import AsyncHTTPClient
 from tornado.web import RequestHandler
 
 
@@ -30,11 +30,11 @@ CONFIG = {
 
 config_path = '/etc/federation-redirect/config.json'
 if os.path.exists(config_path):
-    logging.info("Using config from '{}'.".format(config_path))
+    app_log.info("Using config from '{}'.".format(config_path))
     with open(config_path) as f:
         CONFIG = json.load(f)
 else:
-    logging.warning("Using default config!")
+    app_log.warning("Using default config!")
 
 
 class RedirectHandler(RequestHandler):
@@ -58,17 +58,18 @@ class RedirectHandler(RequestHandler):
 
 async def health_check(host, active_hosts):
     all_hosts = CONFIG["hosts"]
-    logging.info("Checking health of {}".format(host))
+    app_log.info("Checking health of {}".format(host))
 
     client = AsyncHTTPClient()
     try:
         await client.fetch(all_hosts[host]["health"], request_timeout=2)
 
-    except HTTPClientError:
-        logging.warning("{} is unhealthy".format(host))
+    # any kind of exception means the host is unhealthy
+    except Exception:
+        app_log.warning("{} is unhealthy".format(host))
         if host in active_hosts:
             active_hosts.pop(host)
-            logging.warning("{} has been removed from the rotation".format(host))
+            app_log.warning("{} has been removed from the rotation".format(host))
 
         # remove the host from the rotation for a while
         # and wait longer than usual to check it again
@@ -83,7 +84,7 @@ async def health_check(host, active_hosts):
     else:
         if host not in active_hosts:
             active_hosts[host] = all_hosts[host]
-            logging.warning("{} has been added to the rotation".format(host))
+            app_log.warning("{} has been added to the rotation".format(host))
 
         # schedule ourselves to check again later
         jitter = CONFIG["check"]["jitter"] * (0.5 - random.random())
@@ -118,8 +119,8 @@ def make_app():
 
 
 def main():
-    tornado.options.parse_command_line()
-    logging.getLogger().setLevel(logging.DEBUG)
+    enable_pretty_logging()
+
     app = make_app()
     app.listen(8080)
     tornado.ioloop.IOLoop.current().start()
