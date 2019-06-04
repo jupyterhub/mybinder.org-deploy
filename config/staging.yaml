@@ -3,12 +3,12 @@ projectName: binder-staging
 binderhub:
   config:
     BinderHub:
-      hub_url: https://hub.staging.mybinder.org
+      hub_url: https://hub.gke.staging.mybinder.org
       image_prefix: gcr.io/binder-staging/r2d-72d7634-
 
   ingress:
     hosts:
-      - staging.mybinder.org
+      - gke.staging.mybinder.org
 
   jupyterhub:
     singleuser:
@@ -20,11 +20,11 @@ binderhub:
         limit: 0.5
     ingress:
       hosts:
-        - hub.staging.mybinder.org
+        - hub.gke.staging.mybinder.org
       tls:
         - secretName: kubelego-tls-jupyterhub-staging
           hosts:
-            - hub.staging.mybinder.org
+            - hub.gke.staging.mybinder.org
     scheduling:
       userPlaceholder:
         replicas: 2
@@ -104,3 +104,16 @@ gcsProxy:
   buckets:
     - name: mybinder-staging-events-archive
       host: archive.analytics.staging.mybinder.org
+
+federationRedirect:
+  host: staging.mybinder.org
+  enabled: true
+  hosts:
+    gke:
+      url: https://gke.staging.mybinder.org
+      weight: 4
+      health: https://gke.staging.mybinder.org/versions
+    ovh:
+      url: https://ovh.mybinder.org
+      weight: 1
+      health: https://ovh.mybinder.org/versions

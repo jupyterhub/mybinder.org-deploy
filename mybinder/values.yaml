@@ -396,10 +396,10 @@ federationRedirect:
     jitter: 0.1
   hosts:
     gke:
-      url: https://mybinder.org
+      url: https://gke.mybinder.org
       weight: 4
-      health: https://mybinder.org/versions
+      health: https://gke.mybinder.org/versions
     ovh:
-      url: https://binder.mybinder.ovh
+      url: https://ovh.mybinder.org
       weight: 1
-      health: https://binder.mybinder.ovh/versions
+      health: https://ovh.mybinder.org/versions
