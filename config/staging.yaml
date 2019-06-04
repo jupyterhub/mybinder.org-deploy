@@ -10,6 +10,7 @@ binderhub:
   ingress:
     hosts:
       - gke.staging.mybinder.org
+      - gke2.staging.mybinder.org
 
   jupyterhub:
     singleuser:
@@ -115,6 +116,6 @@ federationRedirect:
       weight: 4
       health: https://gke.staging.mybinder.org/versions
     ovh:
-      url: https://ovh.mybinder.org
+      url: https://gke2.staging.mybinder.org
       weight: 1
-      health: https://ovh.mybinder.org/versions
+      health: https://gke2.staging.mybinder.org/versions
