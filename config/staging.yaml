@@ -11,7 +11,6 @@ binderhub:
     hosts:
       - gke.staging.mybinder.org
       - gke2.staging.mybinder.org
-      - staging.mybinder.org
 
   jupyterhub:
     singleuser:
@@ -110,7 +109,7 @@ gcsProxy:
 
 federationRedirect:
   host: staging.mybinder.org
-  enabled: false
+  enabled: true
   hosts:
     gke:
       url: https://gke.staging.mybinder.org
