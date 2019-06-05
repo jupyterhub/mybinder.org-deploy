@@ -32,6 +32,22 @@ def setup_auth_ovh(release, cluster):
     print(stdout.decode('utf8'))
 
 
+def setup_ovh_ingress_link(release):
+    """
+    Setup the Ingress link ovh.mybinder.org -> binder.mybinder.ovh
+    """
+    ovh_ingress_path = os.path.join(ABSOLUTE_HERE, 'config', 'ovh', 'ovh_mybinder_org_ingress.yaml')
+    stdout = subprocess.check_output([
+        'kubectl',
+        'apply',
+        '-f',
+        ovh_ingress_path,
+        '-n',
+        release
+    ])
+    print(stdout.decode('utf8'))
+
+
 def setup_auth_gcloud(release, cluster):
     """
     Set up GCloud + Kubectl authentication for talking to a given cluster
@@ -165,6 +181,7 @@ def main():
 
     if args.cluster == 'binder-ovh':
         setup_auth_ovh(args.release, args.cluster)
+        setup_ovh_ingress_link(args.release)
     else:
         setup_auth_gcloud(args.release, args.cluster)
 
