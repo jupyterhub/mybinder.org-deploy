@@ -401,9 +401,9 @@ federationRedirect:
   hosts:
     gke:
       url: https://gke.mybinder.org
-      weight: 98
+      weight: 95
       health: https://gke.mybinder.org/versions
     ovh:
       url: https://ovh.mybinder.org
-      weight: 2
+      weight: 5
       health: https://ovh.mybinder.org/versions
