@@ -78,10 +78,12 @@ binderhub:
             cpu: 1
     ingress:
       hosts:
+        - hub.mybinder.org
         - hub.gke.mybinder.org
       tls:
         - secretName: kubelego-tls-jupyterhub-prod
           hosts:
+            - hub.mybinder.org
             - hub.gke.mybinder.org
     scheduling:
       userPlaceholder:
