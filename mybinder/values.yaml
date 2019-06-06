@@ -385,6 +385,10 @@ analyticsPublisher:
     fileName: cloud-costs.jsonl
     kind: csv
 
+# this is defined in secrets/ for the OVH cluster
+eventsArchiver:
+  serviceAccountKey: ""
+
 federationRedirect:
   host: mybinder.org
   enabled: false
