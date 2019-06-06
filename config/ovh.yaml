@@ -8,12 +8,21 @@ binderhub:
       image_prefix: binder-registry.mybinder.ovh/binder-ovh/r2d-f18835fd-
     DockerRegistry:
       token_url: https://auth-binder-registry.mybinder.ovh/auth?service=binder-registry
-  extraConfig:
-    # Overriding this value because it uses GCP
-    01-eventlog: ""
   registry:
     url: https://binder-registry.mybinder.ovh
     username: binder
+
+  extraVolumes:
+    - name: secrets
+      secret:
+        secretName: events-archiver-secrets
+  extraVolumeMounts:
+    - name: secrets
+      mountPath: /secrets
+      readOnly: true
+  extraEnv:
+    - name: GOOGLE_APPLICATION_CREDENTIALS
+      value: /secrets/service-account.json
 
   ingress:
     enabled: true
