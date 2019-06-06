@@ -9,7 +9,7 @@ binderhub:
   config:
     BinderHub:
       build_node_selector: *userNodeSelector
-      hub_url: https://hub.mybinder.org
+      hub_url: https://hub.gke.mybinder.org
       badge_base_url: https://mybinder.org
       image_prefix: gcr.io/binder-prod/r2d-f18835fd-
       google_analytics_code: "UA-101904940-1"
@@ -29,7 +29,7 @@ binderhub:
 
   ingress:
     hosts:
-      - mybinder.org
+      - gke.mybinder.org
 
   resources:
     requests:
@@ -79,10 +79,12 @@ binderhub:
     ingress:
       hosts:
         - hub.mybinder.org
+        - hub.gke.mybinder.org
       tls:
         - secretName: kubelego-tls-jupyterhub-prod
           hosts:
             - hub.mybinder.org
+            - hub.gke.mybinder.org
     scheduling:
       userPlaceholder:
         replicas: 25
@@ -213,5 +215,5 @@ gcsProxy:
       host: archive.analytics.mybinder.org
 
 federationRedirect:
-  host: my.bndr.it
+  host: mybinder.org
   enabled: true
