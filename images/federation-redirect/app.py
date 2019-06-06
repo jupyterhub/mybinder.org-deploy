@@ -18,17 +18,19 @@ CONFIG = {
     "check": {"period": 5, "jitter": 0.1},
     "hosts": {
         "gke": dict(
-            url="https://mybinder.org", weight=3, health="https://mybinder.org/versions"
+            url="https://gke.mybinder.org",
+            weight=3,
+            health="https://gke.mybinder.org/versions",
         ),
         "ovh": dict(
-            url="https://binder.mybinder.ovh",
+            url="https://ovh.mybinder.org",
             weight=1,
-            health="https://binder.mybinder.ovh/versions",
+            health="https://ovh.mybinder.org/versions",
         ),
     },
 }
 
-config_path = '/etc/federation-redirect/config.json'
+config_path = "/etc/federation-redirect/config.json"
 if os.path.exists(config_path):
     app_log.info("Using config from '{}'.".format(config_path))
     with open(config_path) as f:
@@ -102,6 +104,32 @@ def make_app():
             (r"/build/.*", RedirectHandler),
             (r"/v2/.*", RedirectHandler),
             (r"/repo/.*", RedirectHandler),
+            (
+                r"/(badge\_logo\.svg)",
+                tornado.web.RedirectHandler,
+                {
+                    "url": "https://static.mybinder.org/badge_logo.svg",
+                    "permanent": True,
+                },
+            ),
+            (
+                r"/(badge\.svg)",
+                tornado.web.RedirectHandler,
+                {"url": "https://static.mybinder.org/badge.svg", "permanent": True},
+            ),
+            (
+                r"/assets/(images/badge\.svg)",
+                tornado.web.RedirectHandler,
+                {
+                    "url": "https://gke.mybinder.org/assets/images/badge.svg",
+                    "permanent": True,
+                },
+            ),
+            (
+                r"/about",
+                tornado.web.RedirectHandler,
+                {"url": "https://gke.mybinder.org/about", "permanent": True},
+            ),
             (r"/", RedirectHandler),
         ],
         hosts=hosts,
