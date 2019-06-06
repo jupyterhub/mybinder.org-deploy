@@ -28,7 +28,7 @@ CONFIG = {
     },
 }
 
-config_path = '/etc/federation-redirect/config.json'
+config_path = "/etc/federation-redirect/config.json"
 if os.path.exists(config_path):
     app_log.info("Using config from '{}'.".format(config_path))
     with open(config_path) as f:
@@ -43,6 +43,10 @@ class RedirectHandler(RequestHandler):
         hosts = dict(self.settings["hosts"])
         self.host_names = [c["url"] for c in hosts.values()]
         self.host_weights = [c["weight"] for c in hosts.values()]
+
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-control-allow-headers", "cache-control")
 
     async def get(self):
         uri = self.request.uri
