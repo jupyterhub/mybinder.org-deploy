@@ -167,6 +167,14 @@ recommend running the standard Kubernetes debugging commands with the
 kubectl --namespace=<my-namespace> logs <kube-lego-object>
 ```
 
+### Exceptions on the OVH cluster
+
+On the OVH cluster all the binder components use a specific certificate on `*.mybinder.ovh` domain.
+
+Traffic for `ovh.mybinder.org` is redirected with a CNAME on `binder.mybinder.ovh`. That's why the OVH cluster should be able to serve 2 different certificates.
+
+- The `*.mybinder.ovh` certificate is managed by ingresses in the ovh helm configuration.
+- The `ovh.mybinder.org` certificate is managed by a specific ingress and `kube-lego` on the launch of `deploy.py` on the ovh stack.
 
 ## Secrets
 
