@@ -386,7 +386,7 @@ analyticsPublisher:
     kind: csv
 
 federationRedirect:
-  host: my.bndr.it
+  host: mybinder.org
   enabled: false
   image:
     name: set-by-chartpress
@@ -397,9 +397,9 @@ federationRedirect:
   hosts:
     gke:
       url: https://gke.mybinder.org
-      weight: 4
+      weight: 98
       health: https://gke.mybinder.org/versions
     ovh:
       url: https://ovh.mybinder.org
-      weight: 1
+      weight: 2
       health: https://ovh.mybinder.org/versions
