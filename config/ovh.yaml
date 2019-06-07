@@ -12,6 +12,16 @@ binderhub:
     url: https://binder-registry.mybinder.ovh
     username: binder
 
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: "0.25"
+      memory: 1Gi
+    limits:
+      cpu: "2"
+      memory: 1Gi
+
   extraVolumes:
     - name: secrets
       secret:
@@ -40,6 +50,14 @@ binderhub:
           - binder.mybinder.ovh
 
   jupyterhub:
+    hub:
+      resources:
+        requests:
+          cpu: "0.25"
+          memory: 1Gi
+        limits:
+          cpu: "2"
+          memory: 1Gi
     singleuser:
       imagePullSecret:
         enabled: true
@@ -47,14 +65,30 @@ binderhub:
         username: binder
         email:
       memory:
-        guarantee: 256M
-        limit: 256M
+        guarantee: 550M
+        limit: 2G
       cpu:
-        guarantee: 0.1
-        limit: 0.5
+        guarantee: 0.01
+        limit: 1
     proxy:
       https:
         type: offload
+      chp:
+        resources:
+          requests:
+            memory: 320Mi
+            cpu: "0.1"
+          limits:
+            memory: 320Mi
+            cpu: "0.5"
+      nginx:
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: "0.25"
+          limits:
+            memory: 512Mi
+            cpu: 1
 
     ingress:
       annotations:
