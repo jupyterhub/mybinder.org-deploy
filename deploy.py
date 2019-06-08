@@ -181,7 +181,6 @@ def main():
 
     if args.cluster == 'binder-ovh':
         setup_auth_ovh(args.release, args.cluster)
-        setup_ovh_ingress_link(args.release)
     else:
         setup_auth_gcloud(args.release, args.cluster)
 
