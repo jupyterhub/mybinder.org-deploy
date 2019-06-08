@@ -35,21 +35,9 @@ binderhub:
       value: /secrets/service-account.json
 
   ingress:
-    enabled: true
-    https:
-      enabled: true
-      type: custom
     hosts:
       - binder.mybinder.ovh
       - ovh.mybinder.org
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: 'false'
-    tls:
-      - secretName: tls-crt
-        hosts:
-          - binder.mybinder.ovh
-          - ovh.mybinder.org
 
   jupyterhub:
     hub:
