@@ -41,6 +41,7 @@ binderhub:
       type: custom
     hosts:
       - binder.mybinder.ovh
+      - ovh.mybinder.org
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: 'false'
@@ -48,6 +49,7 @@ binderhub:
       - secretName: tls-crt
         hosts:
           - binder.mybinder.ovh
+          - ovh.mybinder.org
 
   jupyterhub:
     hub:
