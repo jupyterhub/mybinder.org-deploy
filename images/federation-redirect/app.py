@@ -6,6 +6,7 @@ import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.options
+from tornado.gen import sleep
 from tornado.ioloop import IOLoop
 from tornado.log import enable_pretty_logging, app_log
 
@@ -15,12 +16,13 @@ from tornado.web import RequestHandler
 
 # Config for local testing
 CONFIG = {
-    "check": {"period": 5, "jitter": 0.1},
+    "check": {"period": 5, "jitter": 0.1, "retries": 3, "timeout": 2},
     "hosts": {
         "gke": dict(
             url="https://gke.mybinder.org",
             weight=3,
             health="https://gke.mybinder.org/versions",
+            prime=True,
         ),
         "ovh": dict(
             url="https://ovh.mybinder.org",
@@ -63,28 +65,55 @@ class RedirectHandler(RequestHandler):
 
 
 async def health_check(host, active_hosts):
+    check_config = CONFIG["check"]
     all_hosts = CONFIG["hosts"]
     app_log.info("Checking health of {}".format(host))
 
     client = AsyncHTTPClient()
     try:
-        await client.fetch(all_hosts[host]["health"], request_timeout=2)
+        for n in range(check_config["retries"]):
+            try:
+                await client.fetch(
+                    all_hosts[host]["health"], request_timeout=check_config["timeout"]
+                )
+            except Exception:
+                app_log.warning(
+                    "{} failed, attempt {} of {}".format(
+                        host, n + 1, check_config["retries"]
+                    )
+                )
+                # raise the exception on the last attempt
+                if n == check_config["retries"] - 1:
+                    raise
+                else:
+                    await sleep(1)
 
     # any kind of exception means the host is unhealthy
-    except Exception:
+    except Exception as e:
         app_log.warning("{} is unhealthy".format(host))
         if host in active_hosts:
-            active_hosts.pop(host)
-            app_log.warning("{} has been removed from the rotation".format(host))
+            # prime hosts are never removed, they always get traffic and users
+            # will see what ever healthy or unhealthy state they are in
+            # this protects us from the federation ending up with zero active
+            # hosts because of a glitch somewhere in the health checks
+            if all_hosts[host]["prime"]:
+                app_log.warning(
+                    "{} has NOT been removed because it is a prime ({})".format(
+                        host, str(e)
+                    )
+                )
+
+            else:
+                active_hosts.pop(host)
+                app_log.warning(
+                    "{} has been removed from the rotation ({})".format(host, str(e))
+                )
 
         # remove the host from the rotation for a while
         # and wait longer than usual to check it again
-        jitter = CONFIG["check"]["jitter"] * (0.5 - random.random())
+        jitter = check_config["jitter"] * (0.5 - random.random())
         IOLoop.current().call_later(
-            2 * (1 + jitter) * CONFIG["check"]["period"],
-            health_check,
-            host,
-            active_hosts,
+            2 * (1 + jitter) * check_config["period"], health_check, host, active_hosts
         )
 
     else:
@@ -93,9 +122,9 @@ async def health_check(host, active_hosts):
             app_log.warning("{} has been added to the rotation".format(host))
 
         # schedule ourselves to check again later
-        jitter = CONFIG["check"]["jitter"] * (0.5 - random.random())
+        jitter = check_config["jitter"] * (0.5 - random.random())
         IOLoop.current().call_later(
-            (1 + jitter) * CONFIG["check"]["period"], health_check, host, active_hosts
+            (1 + jitter) * check_config["period"], health_check, host, active_hosts
         )
 
 
