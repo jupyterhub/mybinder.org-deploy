@@ -167,7 +167,7 @@ def make_app():
         ],
         hosts=hosts,
         cookie_secret="get-me-dynamically",
-        debug=True,
+        debug=False,
     )
 
     # start monitoring all our potential hosts
