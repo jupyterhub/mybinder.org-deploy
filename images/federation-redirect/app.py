@@ -164,6 +164,7 @@ def make_app():
                 {"url": "https://gke.mybinder.org/about", "permanent": True},
             ),
             (r"/", RedirectHandler),
+            (r".*", RedirectHandler),
         ],
         hosts=hosts,
         cookie_secret="get-me-dynamically",
