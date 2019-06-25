@@ -52,7 +52,7 @@ binderhub:
         - ^hmharshit/mltraining.*
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:781a1361
+      build_image: jupyter/repo2docker:f45088b9
       per_repo_quota: 100
       banner_message: |
         Give us feedback on how mybinder.org is doing and what to improve: <a href="https://docs.google.com/forms/d/e/1FAIpQLSd3fiLCMuQsc48_ga2q_FJFqgFcVUkie7RBex4DtzzOyyNWHg/viewform">the mybinder.org user survey</a> (it is only three questions!). Thanks 📝!
