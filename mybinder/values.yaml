@@ -52,10 +52,10 @@ binderhub:
         - ^hmharshit/mltraining.*
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:6e93cb06
+      build_image: jupyter/repo2docker:2cded9b4
       per_repo_quota: 100
       banner_message: |
-        Give us feedback on how mybinder.org is doing and what to improve: <a href="https://docs.google.com/forms/d/e/1FAIpQLSd3fiLCMuQsc48_ga2q_FJFqgFcVUkie7RBex4DtzzOyyNWHg/viewform">the mybinder.org user survey</a> (it is only three questions!). Thanks 📝!
+        <div style="text-align: center;">Thanks to <a href="https://cloud.google.com/">Google Cloud</a> and <a href="https://www.ovh.com/">OVH</a> for sponsoring our computers 🎉!</div>
       about_message: |
         <p>mybinder.org is public infrastructure operated by the <a href="https://jupyterhub-team-compass.readthedocs.io/en/latest/team.html#binder-team">Binder Project team</a>.<br /><br />
         The Binder Project is a member of <a href="https://jupyter.org">Project Jupyter</a>, which is a fiscally
@@ -405,10 +405,10 @@ federationRedirect:
   hosts:
     gke:
       url: https://gke.mybinder.org
-      weight: 100
+      weight: 85
       health: https://gke.mybinder.org/versions
       prime: true
     ovh:
       url: https://ovh.mybinder.org
-      weight: 0
+      weight: 15
       health: https://ovh.mybinder.org/versions
