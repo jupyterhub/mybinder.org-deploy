@@ -6,6 +6,8 @@ binderhub:
       hub_url: https://hub-binder.mybinder.ovh
       badge_base_url: https://mybinder.org
       image_prefix: dlqpwel7.gra5.container-registry.ovh.net/binder/r2d-f18835fd-
+    DockerRegistry:
+      token_url: https://dlqpwel7.gra5.container-registry.ovh.net/service/token?service=harbor-registry
   registry:
     url: https://dlqpwel7.gra5.container-registry.ovh.net
     username: cLxohgOONW
