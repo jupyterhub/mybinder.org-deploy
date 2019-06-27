@@ -5,10 +5,12 @@ binderhub:
     BinderHub:
       hub_url: https://hub-binder.mybinder.ovh
       badge_base_url: https://mybinder.org
-      image_prefix: dlqpwel7.gra5.container-registry.ovh.net/binder/r2d-f18835fd-
+      image_prefix: binder-registry.mybinder.ovh/binder-ovh/r2d-f18835fd-
+    DockerRegistry:
+      token_url: https://auth-binder-registry.mybinder.ovh/auth?service=binder-registry
   registry:
-    url: https://dlqpwel7.gra5.container-registry.ovh.net
-    username: cLxohgOONW
+    url: https://binder-registry.mybinder.ovh
+    username: binder
 
   replicas: 1
 
@@ -49,8 +51,8 @@ binderhub:
     singleuser:
       imagePullSecret:
         enabled: true
-        registry: dlqpwel7.gra5.container-registry.ovh.net
-        username: cLxohgOONW
+        registry: binder-registry.mybinder.ovh
+        username: binder
         email:
       memory:
         guarantee: 550M
