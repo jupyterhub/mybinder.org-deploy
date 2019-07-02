@@ -137,7 +137,7 @@ new_pool=hm16
 
 > Note: You can see a list of the node pools by running:
 ```bash
-gcloud container node-pools list --cluster prod-a --project=binder-prod
+gcloud container node-pools list --cluster prod-a --project=binder-prod --zone=us-central1-a
 ```
 > To automatically assign the old pool name to a variable, run:
 ```bash
