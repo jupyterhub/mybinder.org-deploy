@@ -12,6 +12,15 @@ you can find it in the [mybinder-tools repo](https://github.com/jupyterhub/mybin
 
 ## Cluster management
 
+### Merging kubernetes credentials
+
+Before completing any of the command snippets below, you need to merge the kubernetes credentials of the cluster you'd like to work with into your `~/.kube/config` file.
+This is achieved by running:
+
+```
+gcloud container clusters get-credentials <CLUSTER-NAME> --zone us-central1-a
+```
+
 ### Upgrading kubernetes
 
 Upgrading Kubernetes is done in two steps:
