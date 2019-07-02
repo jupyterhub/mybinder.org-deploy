@@ -143,7 +143,7 @@ gcloud container node-pools list --cluster prod-a --project=binder-prod
 ```bash
 old_user_pool=$(gcloud container node-pools list --cluster prod-a --project=binder-prod --format json | jq -r '.[].name' | grep '^user')
 
-old_core_pool=$(gcloud container node-pools list --cluster prod-a --project=binder-prod --format json | jq -r '.[].name' | grep '^core')
+old_core_pool=$(gcloud container node-pools list --cluster prod-a --project=binder-prod --zone=us-central1-a --format json | jq -r '.[].name' | grep '^core')
 ```
 
 Then we can create the new user pool:
