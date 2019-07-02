@@ -50,6 +50,9 @@ binderhub:
         - ^hmharshit/cn-ait.*
         - ^shishirchoudharygic/mltraining.*
         - ^hmharshit/mltraining.*
+    GitRepoProvider:
+      banned_specs:
+        - ^https%3A%2F%2Fbitbucket.org%2Fnikiubel%2Fnikiubel.bitbucket.io.git/.*
     BinderHub:
       use_registry: true
       build_image: jupyter/repo2docker:4b0e8381
