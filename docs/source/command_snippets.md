@@ -203,7 +203,7 @@ we can cordon the rest of the old pool.
 
 At each point, especially after the old pool is fully cordoned,
 verify that launches work on the new nodes by visiting
-https://mybinder.org/v2/gh/binderhub-ci-repos/requirements/master
+[https://mybinder.org/v2/gh/binderhub-ci-repos/requirements/master](https://mybinder.org/v2/gh/binderhub-ci-repos/requirements/master)
 
 ```bash
 # for each node in node pool
