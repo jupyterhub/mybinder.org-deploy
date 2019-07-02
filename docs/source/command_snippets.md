@@ -18,7 +18,7 @@ Before completing any of the command snippets below, you need to merge the kuber
 This is achieved by running:
 
 ```bash
-gcloud container clusters get-credentials <CLUSTER-NAME> --zone us-central1-a
+gcloud container clusters get-credentials <CLUSTER-NAME> --zone=us-central1-a
 ```
 
 ### Upgrading kubernetes
