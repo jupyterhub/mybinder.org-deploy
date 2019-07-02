@@ -17,7 +17,7 @@ you can find it in the [mybinder-tools repo](https://github.com/jupyterhub/mybin
 Before completing any of the command snippets below, you need to merge the kubernetes credentials of the cluster you'd like to work with into your `~/.kube/config` file.
 This is achieved by running:
 
-```
+```bash
 gcloud container clusters get-credentials <CLUSTER-NAME> --zone us-central1-a
 ```
 
@@ -36,8 +36,8 @@ It should take a couple of minutes.
 To upgrade the master version with `gcloud`:
 
 ```bash
-gcloud --project=binder-staging container clusters upgrade staging --master
-gcloud --project=binder-prod container clusters upgrade prod-a --master
+gcloud --project=binder-staging container clusters upgrade staging --master --zone=us-central1-a
+gcloud --project=binder-prod container clusters upgrade prod-a --master --zone=us-central1-a
 ```
 
 Now we can start the process of upgrading node versions, which takes more time.
@@ -74,6 +74,8 @@ gcloud --project=binder-staging container node-pools create $new_pool \
     --zone=us-central1-a
 ```
 
+> Note: To see a list of the node pools, run `gcloud container node-pools list --cluster staging --project=binder-staging`.
+
 After the pool is created, cordon the previous nodes:
 
 ```bash
@@ -81,8 +83,10 @@ After the pool is created, cordon the previous nodes:
 kubectl cordon $node
 ```
 
+> Note: You can run `kubectl get nodes -n <NAMESPACE>` to see a list of the current nodes.
+
 Test that launches succeed on the new nodes by visiting
-https://staging.mybinder.org/v2/gh/binderhub-ci-repos/requirements/master
+[https://staging.mybinder.org/v2/gh/binderhub-ci-repos/requirements/master](https://staging.mybinder.org/v2/gh/binderhub-ci-repos/requirements/master)
 
 > Note: You might have to restart one of the ingress pods named `staging-nginx-ingress-controller-*` as they will both be on cordoned nodes and hence not receiving traffic. The symptom of this is that https://staging.mybinder.org does not load anymore.
 
@@ -119,7 +123,7 @@ and use the larger `n1-highmem-16` nodes for users.
 
 The 'core' pool uses n1-highmem-4 nodes and has a smaller, 250GB SSD.
 
-Note: `gcloud beta` is currently required for the `--disk-type` argument.
+> Note: `gcloud beta` is currently required for the `--disk-type` argument.
 
 First we'll create variables that point to our old and new node pools to make it clear when we're creating new things vs. deleting old things.
 
@@ -129,6 +133,17 @@ old_pool=user-1dot11dot7
 # new_pool can be anything, as long as it isn't the same as old_pool
 # something short but descriptive, e.g. hm16 for highmem-16 nodes
 new_pool=hm16
+```
+
+> Note: You can see a list of the node pools by running:
+```bash
+gcloud container node-pools list --cluster prod-a --project=binder-prod
+```
+> To automatically assign the old pool name to a variable, run:
+```bash
+old_user_pool=$(gcloud container node-pools list --cluster prod-a --project=binder-prod --format json | jq -r '.[].name' | grep '^user')
+
+old_core_pool=$(gcloud container node-pools list --cluster prod-a --project=binder-prod --format json | jq -r '.[].name' | grep '^core')
 ```
 
 Then we can create the new user pool:
@@ -190,10 +205,29 @@ At each point, especially after the old pool is fully cordoned,
 verify that launches work on the new nodes by visiting
 https://mybinder.org/v2/gh/binderhub-ci-repos/requirements/master
 
+```bash
+# for each node in node pool
+kubectl cordon $node
+```
+
+The `hub` pod will need to be manually migrated over to the new node pool.
+This is achieved by deleting the pod and it should automatically restart on one of the new core nodes.
+
+```bash
+kubectl delete pod <HUB-POD-NAME> -n prod
+```
+
+> Note: You can find <HUB-POD-NAME> by running `kubectl get pods -n prod`.
+
 Unlike staging, prod has active users, so we don't want to delete the cordoned node pool immediately.
 Wait for user pods to drain from the old nodes (6 hours max), then drain them.
 After draining the nodes, the old pool can be deleted.
 
+```bash
+kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0 $node
+
+gcloud --project=binder-prod container node-pools delete $old_pool --cluster=prod-a --zone=us-central1-a
+```
 
 ## Pod management
 
