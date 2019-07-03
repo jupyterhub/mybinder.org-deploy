@@ -194,7 +194,7 @@ or disable autoscaling on the old pool.
 This can only be done via the cloud console at this time.
 
 <html>
-<img src="images/node-pool-max-number.gif", alt="Set maximum number of nodes in a node pool" height="442" width="377">
+<img src="images/node-pool-max-number.gif", alt="Set maximum number of nodes in a node pool" height="442" width="440">
 </html>
 
 Since prod has a lot of load which can overwhelm a new node,
