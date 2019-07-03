@@ -193,6 +193,10 @@ set the autoscaling upper limit to 1 on the old pool,
 or disable autoscaling on the old pool.
 This can only be done via the cloud console at this time.
 
+<html>
+<img src="images/node-pool-max-number.gif", alt="Set maximum number of nodes in a node pool">
+</html>
+
 Since prod has a lot of load which can overwhelm a new node,
 we don't want to cordon the whole old pool immediately,
 which would drive all of Binder's traffic to the new nodes.
