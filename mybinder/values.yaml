@@ -55,7 +55,7 @@ binderhub:
         - ^https%3A%2F%2Fbitbucket.org%2Fnikiubel%2Fnikiubel.bitbucket.io.git/.*
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:a251ad26
+      build_image: jupyter/repo2docker:0d8b8a2e
       per_repo_quota: 100
       banner_message: |
         <div style="text-align: center;">Thanks to <a href="https://cloud.google.com/">Google Cloud</a> and <a href="https://www.ovh.com/">OVH</a> for sponsoring our computers 🎉!</div>
