@@ -50,6 +50,12 @@ binderhub:
         - ^hmharshit/cn-ait.*
         - ^shishirchoudharygic/mltraining.*
         - ^hmharshit/mltraining.*
+      high_quota_specs:
+        - ^jupyterlab/.*
+        - ^jupyter/.*
+        - ^jupyterhub/.*
+        - ^jupyter-widgets/.*
+
     GitRepoProvider:
       banned_specs:
         - ^https%3A%2F%2Fbitbucket.org%2Fnikiubel%2Fnikiubel.bitbucket.io.git/.*
@@ -57,6 +63,8 @@ binderhub:
       use_registry: true
       build_image: jupyter/repo2docker:fbe35033
       per_repo_quota: 100
+      per_repo_quota_higher: 200
+
       banner_message: |
         <div style="text-align: center;">Thanks to <a href="https://cloud.google.com/">Google Cloud</a> and <a href="https://www.ovh.com/">OVH</a> for sponsoring our computers 🎉!</div>
       about_message: |
