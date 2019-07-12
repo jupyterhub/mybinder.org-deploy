@@ -16,7 +16,7 @@ from tornado.web import RequestHandler
 
 # Config for local testing
 CONFIG = {
-    "check": {"period": 5, "jitter": 0.1, "retries": 3, "timeout": 2},
+    "check": {"period": 10, "jitter": 0.1, "retries": 3, "timeout": 2},
     "hosts": {
         "gke": dict(
             url="https://gke.mybinder.org",
@@ -28,6 +28,7 @@ CONFIG = {
             url="https://ovh.mybinder.org",
             weight=1,
             health="https://ovh.mybinder.org/versions",
+            # health="https://httpbin.org/status/404",
         ),
     },
 }
@@ -96,7 +97,7 @@ async def health_check(host, active_hosts):
             # will see what ever healthy or unhealthy state they are in
             # this protects us from the federation ending up with zero active
             # hosts because of a glitch somewhere in the health checks
-            if all_hosts[host]["prime"]:
+            if all_hosts[host].get("prime", False):
                 app_log.warning(
                     "{} has NOT been removed because it is a prime ({})".format(
                         host, str(e)
