@@ -1,6 +1,7 @@
 import json
 import os
 import random
+import sys
 
 import tornado
 import tornado.ioloop
@@ -10,7 +11,8 @@ from tornado.gen import sleep
 from tornado.ioloop import IOLoop
 from tornado.log import enable_pretty_logging, app_log
 
-from tornado.httpclient import AsyncHTTPClient
+from tornado.httpclient import AsyncHTTPClient, HTTPError, HTTPRequest
+from tornado.httputil import HTTPHeaders
 from tornado.web import RequestHandler
 
 
@@ -20,13 +22,13 @@ CONFIG = {
     "hosts": {
         "gke": dict(
             url="https://gke.mybinder.org",
-            weight=3,
+            weight=1,
             health="https://gke.mybinder.org/versions",
             prime=True,
         ),
         "ovh": dict(
             url="https://ovh.mybinder.org",
-            weight=1,
+            weight=10,
             health="https://ovh.mybinder.org/versions",
             # health="https://httpbin.org/status/404",
         ),
@@ -40,6 +42,55 @@ if os.path.exists(config_path):
         CONFIG = json.load(f)
 else:
     app_log.warning("Using default config!")
+
+
+class ProxyHandler(RequestHandler):
+    def initialize(self, host):
+        self.host = host
+
+    async def get(self):
+        uri = self.request.uri
+
+        target_url = self.host + uri
+
+        headers = self.request.headers.copy()
+        headers["Host"] = self.host[8:]
+
+        body = self.request.body
+        if not body:
+            if self.request.method == "POST":
+                body = b""
+            else:
+                body = None
+
+        client = AsyncHTTPClient()
+
+        req = HTTPRequest(target_url, method="GET", body=body, headers=headers)
+
+        response = await client.fetch(req, raise_error=False)
+
+        # For all non http errors...
+        if response.error and type(response.error) is not HTTPError:
+            self.set_status(500)
+            self.write(str(response.error))
+        else:
+            self.set_status(response.code, response.reason)
+
+            # clear tornado default header
+            self._headers = HTTPHeaders()
+
+            for header, v in response.headers.get_all():
+                if header not in (
+                    "Content-Length",
+                    "Transfer-Encoding",
+                    "Content-Encoding",
+                    "Connection",
+                ):
+                    # some headers appear multiple times, eg 'Set-Cookie'
+                    self.add_header(header, v)
+
+            if response.body:
+                self.write(response.body)
 
 
 class RedirectHandler(RequestHandler):
@@ -133,11 +184,17 @@ def make_app():
     # we want a copy of the hosts config that we can use to keep state
     hosts = dict(CONFIG["hosts"])
 
+    for host in hosts.values():
+        if host.get("prime", False):
+            prime_host = host["url"]
+            break
+
+    else:
+        sys.exit("No prime host configured!")
+
     app = tornado.web.Application(
         [
             (r"/build/.*", RedirectHandler),
-            (r"/v2/.*", RedirectHandler),
-            (r"/repo/.*", RedirectHandler),
             (
                 r"/(badge\_logo\.svg)",
                 tornado.web.RedirectHandler,
@@ -154,18 +211,9 @@ def make_app():
             (
                 r"/assets/(images/badge\.svg)",
                 tornado.web.RedirectHandler,
-                {
-                    "url": "https://gke.mybinder.org/assets/images/badge.svg",
-                    "permanent": True,
-                },
+                {"url": "https://static.mybinder.org/badge.svg", "permanent": True},
             ),
-            (
-                r"/about",
-                tornado.web.RedirectHandler,
-                {"url": "https://gke.mybinder.org/about", "permanent": True},
-            ),
-            (r"/", RedirectHandler),
-            (r".*", RedirectHandler),
+            (r".*", ProxyHandler, {"host": prime_host}),
         ],
         hosts=hosts,
         cookie_secret="get-me-dynamically",
@@ -182,6 +230,7 @@ def make_app():
 
 
 def main():
+    AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
     enable_pretty_logging()
 
     app = make_app()
