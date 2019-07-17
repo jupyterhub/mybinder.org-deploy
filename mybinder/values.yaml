@@ -55,6 +55,10 @@ binderhub:
         - ^jupyter/.*
         - ^jupyterhub/.*
         - ^jupyter-widgets/.*
+      spec_config:
+        - pattern: ^ipython/ipython-in-depth.*
+          config:
+            quota: 128
 
     GitRepoProvider:
       banned_specs:
