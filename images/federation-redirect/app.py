@@ -28,7 +28,7 @@ CONFIG = {
         ),
         "ovh": dict(
             url="https://ovh.mybinder.org",
-            weight=10,
+            weight=1,
             health="https://ovh.mybinder.org/versions",
             # health="https://httpbin.org/status/404",
         ),
@@ -111,7 +111,7 @@ class RedirectHandler(RequestHandler):
         # make sure the host is a valid choice and considered healthy
         if host_name not in self.host_names:
             host_name = random.choices(self.host_names, self.host_weights)[0]
-        self.set_cookie("host", host_name, max_age=10)
+        self.set_cookie("host", host_name, path=uri)
 
         self.redirect(host_name + uri)
 
