@@ -92,8 +92,12 @@ binderhub:
             - hub-binder.mybinder.ovh
 
     scheduling:
+      userScheduler:
+        enabled: false
+      podPriority:
+        enabled: false
       userPlaceholder:
-        replicas: 2
+        enabled: false
 
 grafana:
   ingress:
