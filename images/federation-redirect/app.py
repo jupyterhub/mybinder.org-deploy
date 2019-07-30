@@ -97,8 +97,8 @@ class RedirectHandler(RequestHandler):
     def prepare(self):
         # copy hosts config in case it changes while we are iterating over it
         hosts = dict(self.settings["hosts"])
-        self.host_names = [c["url"] for c in hosts.values()]
-        self.host_weights = [c["weight"] for c in hosts.values()]
+        self.host_names = [c["url"] for c in hosts.values() if c["weight"] > 0]
+        self.host_weights = [c["weight"] for c in hosts.values() if c["weight"] > 0]
 
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
