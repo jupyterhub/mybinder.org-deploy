@@ -421,9 +421,9 @@ federationRedirect:
     gke:
       url: https://gke.mybinder.org
       weight: 85
-      health: https://gke.mybinder.org/versions
+      health: https://gke.mybinder.org/health
       prime: true
     ovh:
       url: https://ovh.mybinder.org
       weight: 15
-      health: https://ovh.mybinder.org/versions
+      health: https://ovh.mybinder.org/health
