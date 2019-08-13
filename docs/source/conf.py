@@ -60,7 +60,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Site Reliability Guide for mybinder.org'
-copyright = '%d, Binder Team' % datetime.now().year
+copyright = '2017 - %d, Binder Team' % datetime.now().year
 author = 'Binder Team'
 
 # The version info for the project you're documenting, acts as replacement for
