@@ -165,7 +165,7 @@ async def health_check(host, active_hosts):
         # and wait longer than usual to check it again
         jitter = check_config["jitter"] * (0.5 - random.random())
         IOLoop.current().call_later(
-            2 * (1 + jitter) * check_config["period"], health_check, host, active_hosts
+            30 * (1 + jitter) * check_config["period"], health_check, host, active_hosts
         )
 
     else:
