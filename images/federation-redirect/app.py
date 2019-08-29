@@ -125,10 +125,19 @@ async def health_check(host, active_hosts):
     try:
         for n in range(check_config["retries"]):
             try:
-                await client.fetch(
+                response = await client.fetch(
                     all_hosts[host]["health"], request_timeout=check_config["timeout"]
                 )
-            except Exception:
+                health = json.loads(response.body)
+                if not health["ok"]:
+                    unhealthy_services = []
+                    for check in health["checks"]:
+                        if not check["ok"]:
+                            unhealthy_services.append(check)
+                        # NOTE: binderhub checks quota with total_pods <= quota
+                        # TODO should we handle this case or is okay to redirect even total_pods == quota ?
+                    raise Exception("{} is not healthy: {}".format(host, unhealthy_services))
+            except Exception as e:
                 app_log.warning(
                     "{} failed, attempt {} of {}".format(
                         host, n + 1, check_config["retries"]
@@ -156,13 +165,13 @@ async def health_check(host, active_hosts):
                 )
 
             else:
+                # remove the host from the rotation for a while
                 active_hosts.pop(host)
                 app_log.warning(
                     "{} has been removed from the rotation ({})".format(host, str(e))
                 )
 
-        # remove the host from the rotation for a while
-        # and wait longer than usual to check it again
+        # wait longer than usual to check unhealthy host again
         jitter = check_config["jitter"] * (0.5 - random.random())
         IOLoop.current().call_later(
             30 * (1 + jitter) * check_config["period"], health_check, host, active_hosts
