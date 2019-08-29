@@ -23,13 +23,13 @@ CONFIG = {
         "gke": dict(
             url="https://gke.mybinder.org",
             weight=1,
-            health="https://gke.mybinder.org/versions",
+            health="https://gke.mybinder.org/health",
             prime=True,
         ),
         "ovh": dict(
             url="https://ovh.mybinder.org",
             weight=1,
-            health="https://ovh.mybinder.org/versions",
+            health="https://ovh.mybinder.org/health",
             # health="https://httpbin.org/status/404",
         ),
     },
