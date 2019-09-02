@@ -23,13 +23,13 @@ CONFIG = {
         "gke": dict(
             url="https://gke.mybinder.org",
             weight=1,
-            health="https://gke.mybinder.org/versions",
+            health="https://gke.mybinder.org/health",
             prime=True,
         ),
         "ovh": dict(
             url="https://ovh.mybinder.org",
             weight=1,
-            health="https://ovh.mybinder.org/versions",
+            health="https://ovh.mybinder.org/health",
             # health="https://httpbin.org/status/404",
         ),
     },
@@ -125,10 +125,19 @@ async def health_check(host, active_hosts):
     try:
         for n in range(check_config["retries"]):
             try:
-                await client.fetch(
+                # raises an `HTTPError` if the request returned a non-200 response code
+                # health url returns 503 if a (hard check) service is unhealthy
+                response = await client.fetch(
                     all_hosts[host]["health"], request_timeout=check_config["timeout"]
                 )
-            except Exception:
+                health = json.loads(response.body)
+                for check in health["checks"]:
+                    # pod quota is a soft check
+                    if check["service"] == "Pod quota":
+                        if not check["ok"]:
+                            raise Exception("{} is over its quota: {}".format(host, check))
+                        break
+            except Exception as e:
                 app_log.warning(
                     "{} failed, attempt {} of {}".format(
                         host, n + 1, check_config["retries"]
@@ -156,13 +165,13 @@ async def health_check(host, active_hosts):
                 )
 
             else:
+                # remove the host from the rotation for a while
                 active_hosts.pop(host)
                 app_log.warning(
                     "{} has been removed from the rotation ({})".format(host, str(e))
                 )
 
-        # remove the host from the rotation for a while
-        # and wait longer than usual to check it again
+        # wait longer than usual to check unhealthy host again
         jitter = check_config["jitter"] * (0.5 - random.random())
         IOLoop.current().call_later(
             30 * (1 + jitter) * check_config["period"], health_check, host, active_hosts

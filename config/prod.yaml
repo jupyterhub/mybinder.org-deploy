@@ -215,5 +215,4 @@ gcsProxy:
       host: archive.analytics.mybinder.org
 
 federationRedirect:
-  host: mybinder.org
   enabled: true
