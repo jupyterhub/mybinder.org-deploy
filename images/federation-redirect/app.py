@@ -125,18 +125,18 @@ async def health_check(host, active_hosts):
     try:
         for n in range(check_config["retries"]):
             try:
+                # raises an `HTTPError` if the request returned a non-200 response code
+                # health url returns 503 if a (hard check) service is unhealthy
                 response = await client.fetch(
                     all_hosts[host]["health"], request_timeout=check_config["timeout"]
                 )
                 health = json.loads(response.body)
-                if not health["ok"]:
-                    unhealthy_services = []
-                    for check in health["checks"]:
+                for check in health["checks"]:
+                    # pod quota is a soft check
+                    if check["service"] == "Pod quota":
                         if not check["ok"]:
-                            unhealthy_services.append(check)
-                        # NOTE: binderhub checks quota with total_pods <= quota
-                        # TODO should we handle this case or is okay to redirect even total_pods == quota ?
-                    raise Exception("{} is not healthy: {}".format(host, unhealthy_services))
+                            raise Exception("{} is over its quota: {}".format(host, check))
+                        break
             except Exception as e:
                 app_log.warning(
                     "{} failed, attempt {} of {}".format(

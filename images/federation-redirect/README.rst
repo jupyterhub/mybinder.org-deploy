@@ -15,8 +15,8 @@ For each request a weighted random choice of all healthy targets is made and
 the visitor is redirected there.
 
 Periodically the redirector will ``GET`` the health check URL for a target. If
-it returns an error or any of services
-(``Docker registry``, ``JupyterHub API`` and ``Pod quota``) is unhealthy,
+it returns an error (if ``Docker registry`` or ``JupyterHub API`` is unhealthy)
+or the target is over its quota (``Pod quota``),
 the target is removed from the list of healthy targets.
 Unhealthy targets are checked less frequently but once they return to good
 health they are automatically added back to the list of viable targets.
