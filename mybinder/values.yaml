@@ -425,5 +425,9 @@ federationRedirect:
       prime: true
     ovh:
       url: https://ovh.mybinder.org
-      weight: 15
+      weight: 14
       health: https://ovh.mybinder.org/health
+    gesis:
+      url: https://notebooks.gesis.org/binder
+      weight: 1
+      health: https://notebooks.gesis.org/binder/health
