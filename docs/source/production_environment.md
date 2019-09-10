@@ -277,6 +277,7 @@ People who currently have the git-crypt secret include:
 - @betatim
 - @choldgraf
 - @mael-le-gal
+- @sgibson91
 - *add yourself here if you have it*
 
 Contact one of them if you need access to the git-crypt key.
