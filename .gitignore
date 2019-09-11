@@ -13,3 +13,5 @@ mybinder/requirements.lock
 docs/_build
 travis/crypt-key
 env
+
+.vscode/
