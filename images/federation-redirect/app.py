@@ -243,7 +243,7 @@ def main():
     enable_pretty_logging()
 
     app = make_app()
-    app.listen(8080)
+    app.listen(8080, xheaders=True)
     tornado.ioloop.IOLoop.current().start()
 
 
