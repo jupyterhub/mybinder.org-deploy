@@ -1,13 +1,13 @@
 apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
-  name: kube-lego
+  name: cert-manager
   labels:
-    app: kube-lego
+    app: cert-manager
     release: {{ .Release.Name }}
 spec:
   minAvailable: 0
   selector:
     matchLabels:
-      app: kube-lego
+      app: cert-manager
       release: {{ .Release.Name }}

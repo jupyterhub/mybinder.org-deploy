@@ -22,7 +22,7 @@ spec:
               servicePort: 9000
     {{ end }}
   tls:
-    - secretName: kubelego-tls-matomo
+    - secretName: certmanager-tls-matomo
       hosts:
       {{ range $host := .Values.matomo.ingress.hosts }}
       - {{ $host }}
