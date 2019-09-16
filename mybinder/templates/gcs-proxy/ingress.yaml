@@ -23,7 +23,7 @@ spec:
               servicePort: 80
     {{ end }}
   tls:
-    - secretName: certmanger-tls-gcs-proxy
+    - secretName: certmanager-tls-gcs-proxy
       hosts:
       {{- range $bucket := .Values.gcsProxy.buckets }}
       - {{ $bucket.host }}
