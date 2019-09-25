@@ -3,10 +3,11 @@ projectName: ovh
 binderhub:
   config:
     BinderHub:
-      pod_quota: 80
+      pod_quota: 90
       hub_url: https://hub-binder.mybinder.ovh
       badge_base_url: https://mybinder.org
       image_prefix: dlqpwel7.gra5.container-registry.ovh.net/binder/r2d-f18835fd-
+      sticky_builds: true
     DockerRegistry:
       token_url: https://dlqpwel7.gra5.container-registry.ovh.net/service/token?service=harbor-registry
   registry:
