@@ -6,6 +6,7 @@ binderhub:
       hub_url: https://hub.gke.staging.mybinder.org
       badge_base_url: https://staging.mybinder.org
       image_prefix: gcr.io/binder-staging/r2d-72d7634-
+      sticky_builds: true
 
   ingress:
     hosts:
