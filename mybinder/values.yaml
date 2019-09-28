@@ -420,12 +420,12 @@ federationRedirect:
   hosts:
     gke:
       url: https://gke.mybinder.org
-      weight: 85
+      weight: 80
       health: https://gke.mybinder.org/health
       prime: true
     ovh:
       url: https://ovh.mybinder.org
-      weight: 14
+      weight: 19
       health: https://ovh.mybinder.org/health
     gesis:
       url: https://notebooks.gesis.org/binder
