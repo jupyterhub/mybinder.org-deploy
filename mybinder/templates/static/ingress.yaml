@@ -30,7 +30,7 @@ spec:
           {{ end }}
     {{ end }}
   tls:
-    - secretName: certmanager-tls-static
+    - secretName: kubelego-tls-static
       hosts:
       {{ range $host := .Values.static.ingress.hosts }}
       - {{ $host }}

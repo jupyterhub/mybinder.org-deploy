@@ -20,7 +20,7 @@ spec:
               serviceName: federation-redirect
               servicePort: 80
   tls:
-    - secretName: certmanager-tls-federation-redirect
+    - secretName: kubelego-tls-federation-redirect
       hosts:
       - {{ .Values.federationRedirect.host | quote }}
 {{- end }}
