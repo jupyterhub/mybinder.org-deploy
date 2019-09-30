@@ -316,6 +316,7 @@ static:
 
 cert-manager:
   ingressShim:
+    defaultIssuerName: "staging"
     defaultIssuerKind: "ClusterIssuer"
     defaultACMEChallengeType: "http01"
 
