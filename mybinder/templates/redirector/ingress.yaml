@@ -19,7 +19,7 @@ spec:
               servicePort: 80
     {{ end }}
   tls:
-    - secretName: certmanager-tls-redirector
+    - secretName: kubelego-tls-redirector
       hosts:
       {{- range $redirect := .Values.redirector.redirects }}
       - {{ $redirect.host.from }}

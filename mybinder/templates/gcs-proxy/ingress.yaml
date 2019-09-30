@@ -23,7 +23,7 @@ spec:
               servicePort: 80
     {{ end }}
   tls:
-    - secretName: certmanager-tls-gcs-proxy
+    - secretName: kubelego-tls-gcs-proxy
       hosts:
       {{- range $bucket := .Values.gcsProxy.buckets }}
       - {{ $bucket.host }}
