@@ -249,12 +249,6 @@ binderhub:
               add:
                 - NET_ADMIN
 
-playground:
-  image:
-    name: yuvipanda/play.nteract.io
-    tag: v0.2
-  replicas: 1
-
 nginx-ingress:
   rbac:
     create: true
