@@ -32,6 +32,11 @@ CONFIG = {
             health="https://ovh.mybinder.org/health",
             # health="https://httpbin.org/status/404",
         ),
+        "gesis": dict(
+            url="https://notebooks.gesis.org/binder",
+            weight=1,
+            health="https://notebooks.gesis.org/binder/health",
+        ),
     },
 }
 
