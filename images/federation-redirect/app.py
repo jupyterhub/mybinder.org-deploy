@@ -25,6 +25,7 @@ CONFIG = {
             url="https://gke.mybinder.org",
             weight=1,
             health="https://gke.mybinder.org/health",
+            versions="https://gke.mybinder.org/versions",
             prime=True,
         ),
         "ovh": dict(
@@ -32,11 +33,13 @@ CONFIG = {
             weight=1,
             health="https://ovh.mybinder.org/health",
             # health="https://httpbin.org/status/404",
+            versions="https://ovh.mybinder.org/versions",
         ),
         "gesis": dict(
             url="https://notebooks.gesis.org/binder",
             weight=1,
             health="https://notebooks.gesis.org/binder/health",
+            versions="https://notebooks.gesis.org/binder/versions",
         ),
     },
 }
@@ -144,6 +147,16 @@ async def health_check(host, active_hosts):
                         if not check["ok"]:
                             raise Exception("{} is over its quota: {}".format(host, check))
                         break
+                # check versions
+                response = await client.fetch(
+                    all_hosts[host]["versions"], request_timeout=check_config["timeout"]
+                )
+                versions = json.loads(response.body)
+                if all_hosts[host].get("prime", False):
+                    all_hosts["versions"] = versions
+                elif versions != all_hosts.get("versions", versions):
+                    raise Exception("{} has different versions ({}) than prime ({})".
+                                    format(host, versions, all_hosts["versions"]))
             except Exception as e:
                 app_log.warning(
                     "{} failed, attempt {} of {}".format(
