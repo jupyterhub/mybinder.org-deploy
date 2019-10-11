@@ -7,6 +7,7 @@ import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.options
+from urllib.parse import urljoin
 from tornado.gen import sleep
 from tornado.ioloop import IOLoop
 from tornado.log import enable_pretty_logging, app_log
@@ -18,12 +19,13 @@ from tornado.web import RequestHandler
 
 # Config for local testing
 CONFIG = {
-    "check": {"period": 10, "jitter": 0.1, "retries": 3, "timeout": 2},
+    "check": {"period": 10, "jitter": 0.1, "retries": 5, "timeout": 2},
     "hosts": {
         "gke": dict(
             url="https://gke.mybinder.org",
             weight=1,
             health="https://gke.mybinder.org/health",
+            versions="https://gke.mybinder.org/versions",
             prime=True,
         ),
         "ovh": dict(
@@ -31,6 +33,13 @@ CONFIG = {
             weight=1,
             health="https://ovh.mybinder.org/health",
             # health="https://httpbin.org/status/404",
+            versions="https://ovh.mybinder.org/versions",
+        ),
+        "gesis": dict(
+            url="https://notebooks.gesis.org/binder",
+            weight=1,
+            health="https://notebooks.gesis.org/binder/health",
+            versions="https://notebooks.gesis.org/binder/versions",
         ),
     },
 }
@@ -113,7 +122,8 @@ class RedirectHandler(RequestHandler):
             host_name = random.choices(self.host_names, self.host_weights)[0]
         self.set_cookie("host", host_name, path=uri)
 
-        self.redirect(host_name + uri)
+        url = urljoin(host_name, uri)
+        self.redirect(url)
 
 
 async def health_check(host, active_hosts):
@@ -125,6 +135,7 @@ async def health_check(host, active_hosts):
     try:
         for n in range(check_config["retries"]):
             try:
+                # TODO we could use `asyncio.gather()` and fetch health and versions in parallel
                 # raises an `HTTPError` if the request returned a non-200 response code
                 # health url returns 503 if a (hard check) service is unhealthy
                 response = await client.fetch(
@@ -137,6 +148,20 @@ async def health_check(host, active_hosts):
                         if not check["ok"]:
                             raise Exception("{} is over its quota: {}".format(host, check))
                         break
+                # check versions
+                response = await client.fetch(
+                    all_hosts[host]["versions"], request_timeout=check_config["timeout"]
+                )
+                versions = json.loads(response.body)
+                # if this is the prime host store the versions so we can compare to them later
+                if all_hosts[host].get("prime", False):
+                    all_hosts["versions"] = versions
+                # check if this cluster is on the same versions as the prime
+                # w/o information about the prime's version we allow each
+                # cluster to be on its own versions
+                if versions != all_hosts.get("versions", versions):
+                    raise Exception("{} has different versions ({}) than prime ({})".
+                                    format(host, versions, all_hosts["versions"]))
             except Exception as e:
                 app_log.warning(
                     "{} failed, attempt {} of {}".format(

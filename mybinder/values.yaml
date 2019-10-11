@@ -409,19 +409,22 @@ federationRedirect:
   check:
     period: 10
     jitter: 0.1
-    retries: 3
+    retries: 5
     timeout: 2
   hosts:
     gke:
       url: https://gke.mybinder.org
       weight: 80
       health: https://gke.mybinder.org/health
+      versions: https://gke.mybinder.org/versions
       prime: true
     ovh:
       url: https://ovh.mybinder.org
       weight: 19
       health: https://ovh.mybinder.org/health
+      versions: https://ovh.mybinder.org/versions
     gesis:
       url: https://notebooks.gesis.org/binder
       weight: 1
       health: https://notebooks.gesis.org/binder/health
+      versions: https://notebooks.gesis.org/binder/versions
