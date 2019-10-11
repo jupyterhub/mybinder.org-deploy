@@ -153,9 +153,13 @@ async def health_check(host, active_hosts):
                     all_hosts[host]["versions"], request_timeout=check_config["timeout"]
                 )
                 versions = json.loads(response.body)
+                # if this is the prime host store the versions so we can compare to them later
                 if all_hosts[host].get("prime", False):
                     all_hosts["versions"] = versions
-                elif versions != all_hosts.get("versions", versions):
+                # check if this cluster is on the same versions as the prime
+                # w/o information about the prime's version we allow each
+                # cluster to be on its own versions
+                if versions != all_hosts.get("versions", versions):
                     raise Exception("{} has different versions ({}) than prime ({})".
                                     format(host, versions, all_hosts["versions"]))
             except Exception as e:
