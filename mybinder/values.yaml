@@ -409,7 +409,7 @@ federationRedirect:
   check:
     period: 10
     jitter: 0.1
-    retries: 3
+    retries: 5
     timeout: 2
   hosts:
     gke:

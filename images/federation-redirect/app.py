@@ -19,7 +19,7 @@ from tornado.web import RequestHandler
 
 # Config for local testing
 CONFIG = {
-    "check": {"period": 10, "jitter": 0.1, "retries": 3, "timeout": 2},
+    "check": {"period": 10, "jitter": 0.1, "retries": 5, "timeout": 2},
     "hosts": {
         "gke": dict(
             url="https://gke.mybinder.org",
@@ -135,6 +135,7 @@ async def health_check(host, active_hosts):
     try:
         for n in range(check_config["retries"]):
             try:
+                # TODO we could use `asyncio.gather()` and fetch health and versions in parallel
                 # raises an `HTTPError` if the request returned a non-200 response code
                 # health url returns 503 if a (hard check) service is unhealthy
                 response = await client.fetch(
