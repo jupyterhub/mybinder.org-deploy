@@ -120,3 +120,5 @@ federationRedirect:
       url: https://gke2.staging.mybinder.org
       weight: 1
       health: https://gke2.staging.mybinder.org/versions
+    # unset the gesis entry
+    gesis: null
