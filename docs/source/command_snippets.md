@@ -70,7 +70,7 @@ gcloud --project=binder-staging container node-pools create $new_pool \
     --disk-size=500 \
     --machine-type=n1-standard-4 \
     --enable-autorepair \
-    --num-nodes=2
+    --num-nodes=2 \
     --zone=us-central1-a
 ```
 
