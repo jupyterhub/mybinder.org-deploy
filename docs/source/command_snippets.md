@@ -62,7 +62,7 @@ The new pool should match the old one.
 # old_pool is the name of the pool that we are replacing
 old_pool=default-pool
 # new_pool is the name our new pool will have. It must be different
-new_pool=standard-4
+new_pool=pool-$(date +"%Y%m%d")
 
 
 gcloud --project=binder-staging container node-pools create $new_pool \
