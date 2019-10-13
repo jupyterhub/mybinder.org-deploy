@@ -96,7 +96,7 @@ Once this is verified to be successful, the old node pool can be drained:
 kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0 $node
 ```
 
-and then the node pool deleted:
+and then the node pool can be deleted:
 
 ```bash
 gcloud --project=binder-staging container node-pools delete $old_pool --cluster=staging --zone=us-central1-a
