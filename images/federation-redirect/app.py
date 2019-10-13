@@ -53,6 +53,15 @@ else:
     app_log.warning("Using default config!")
 
 
+# Remove empty entries from CONFIG["hosts"], these can happen because we
+# can't remove keys in our helm templates/config files. All we can do is
+# set them to Null/None. We need to turn the keys into a list so that we
+# can modify the dict while iterating over it
+for h in list(CONFIG["hosts"].keys()):
+    if CONFIG["hosts"][h] is None:
+        CONFIG["hosts"].pop(h)
+
+
 class ProxyHandler(RequestHandler):
     def initialize(self, host):
         self.host = host

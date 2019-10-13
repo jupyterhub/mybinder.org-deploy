@@ -115,8 +115,12 @@ federationRedirect:
     gke:
       url: https://gke.staging.mybinder.org
       weight: 4
-      health: https://gke.staging.mybinder.org/versions
+      health: https://gke.staging.mybinder.org/health
+      versions: https://gke.staging.mybinder.org/versions
     ovh:
       url: https://gke2.staging.mybinder.org
       weight: 1
-      health: https://gke2.staging.mybinder.org/versions
+      health: https://gke2.staging.mybinder.org/health
+      versions: https://gke2.staging.mybinder.org/versions
+    # unset the gesis entry
+    gesis: null
