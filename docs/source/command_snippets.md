@@ -62,7 +62,7 @@ The new pool should match the old one.
 # old_pool is the name of the pool that we are replacing
 old_pool=default-pool
 # new_pool is the name our new pool will have. It must be different
-new_pool=standard-4
+new_pool=pool-$(date +"%Y%m%d")
 
 
 gcloud --project=binder-staging container node-pools create $new_pool \
@@ -70,7 +70,7 @@ gcloud --project=binder-staging container node-pools create $new_pool \
     --disk-size=500 \
     --machine-type=n1-standard-4 \
     --enable-autorepair \
-    --num-nodes=2
+    --num-nodes=2 \
     --zone=us-central1-a
 ```
 
@@ -96,7 +96,7 @@ Once this is verified to be successful, the old node pool can be drained:
 kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0 $node
 ```
 
-and then the node pool deleted:
+and then the node pool can be deleted:
 
 ```bash
 gcloud --project=binder-staging container node-pools delete $old_pool --cluster=staging --zone=us-central1-a
