@@ -14,6 +14,16 @@ spec:
       app: federation-redirect
       heritage: {{ .Release.Service }}
       release: {{ .Release.Name }}
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: app
+            operator: In
+            values:
+            - federation-redirect
+        topologyKey: "kubernetes.io/hostname"
   template:
     metadata:
       labels:
