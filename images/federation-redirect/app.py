@@ -135,6 +135,15 @@ class RedirectHandler(RequestHandler):
         self.redirect(url)
 
 
+class ActiveHostsHandler(RequestHandler):
+    """Serve information about active hosts"""
+    def initialize(self, active_hosts):
+        self.active_hosts = active_hosts
+
+    async def get(self):
+        self.write({"active_hosts": self.active_hosts})
+
+
 async def health_check(host, active_hosts):
     check_config = CONFIG["check"]
     all_hosts = CONFIG["hosts"]
@@ -256,6 +265,7 @@ def make_app():
                 tornado.web.RedirectHandler,
                 {"url": "https://static.mybinder.org/badge.svg", "permanent": True},
             ),
+            (r"/active_hosts", ActiveHostsHandler, {"active_hosts": hosts}),
             (r".*", ProxyHandler, {"host": prime_host}),
         ],
         hosts=hosts,
