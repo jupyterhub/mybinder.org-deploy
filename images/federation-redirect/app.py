@@ -132,8 +132,7 @@ class ActiveHostsHandler(RequestHandler):
         self.active_hosts = active_hosts
 
     async def get(self):
-        self.set_header("Content-type", "application/json")
-        self.write(json.dumps({"active_hosts": self.active_hosts}))
+        self.write({"active_hosts": self.active_hosts})
 
 
 async def health_check(host, active_hosts):
