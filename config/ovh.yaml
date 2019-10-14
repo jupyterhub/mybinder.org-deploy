@@ -97,7 +97,7 @@ binderhub:
       userScheduler:
         enabled: false
       podPriority:
-        enabled: false
+        enabled: true
       userPlaceholder:
         enabled: 5
 
