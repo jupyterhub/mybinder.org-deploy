@@ -99,7 +99,7 @@ binderhub:
       podPriority:
         enabled: false
       userPlaceholder:
-        enabled: false
+        enabled: 5
 
 grafana:
   ingress:
