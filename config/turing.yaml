@@ -1,0 +1,191 @@
+projectName: turing
+
+binderhub:
+  config:
+    BinderHub:
+      pod_quota: 120
+      hub_url: #
+      badge_base_url: https://mybinder.org
+      image_prefix:
+      sticky_builds: true
+    DockerRegistry:
+      token_url:
+  registry:
+    url:
+
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: "0.25"
+      memory: 1Gi
+    limits:
+      cpu: "2"
+      memory: 1Gi
+
+  extraVolumes:
+    - name: secrets
+      secret:
+        secretName: events-archiver-secrets
+  extraVolumeMounts:
+    - name: secrets
+      mountPath: /secrets
+      readOnly: true
+  extraEnv:
+    - name: GOOGLE_APPLICATION_CREDENTIALS
+      value: /secrets/service-account.json
+
+  ingress:
+    hosts:
+      - #
+      - #
+
+  jupyterhub:
+    hub:
+      resources:
+        requests:
+          cpu: "0.25"
+          memory: 1Gi
+        limits:
+          cpu: "2"
+          memory: 1Gi
+    singleuser:
+      memory:
+        guarantee: 550M
+        limit: 2G
+      cpu:
+        guarantee: 0.01
+        limit: 1
+    proxy:
+      https:
+        type: offload
+      chp:
+        resources:
+          requests:
+            memory: 320Mi
+            cpu: "0.1"
+          limits:
+            memory: 320Mi
+            cpu: "0.5"
+      nginx:
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: "0.25"
+          limits:
+            memory: 512Mi
+            cpu: 1
+
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: 'false'
+      hosts:
+        - #
+      tls:
+        - secretName: tls-crt
+          hosts:
+            - #
+
+    scheduling:
+      userScheduler:
+        enabled: false
+      podPriority:
+        enabled: true
+      userPlaceholder:
+        enabled: true
+        replicas: 5
+
+grafana:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: 'false'
+    hosts:
+      - #
+    tls:
+      - hosts:
+          - #
+        secretName: tls-crt
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: prometheus
+          orgId: 1
+          type: prometheus
+          url: #
+          access: direct
+          isDefault: true
+          editable: false
+
+prometheus:
+  server:
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: 'false'
+      hosts:
+        - #
+      tls:
+        - hosts:
+            - #
+          secretName: tls-crt
+
+nginx-ingress:
+  controller:
+    hostNetwork: true
+    replicaCount: 1
+  scope:
+    enabled: false
+
+
+static:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: 'false'
+    hosts:
+      - #
+    tls:
+      - hosts:
+          - #
+        secretName: tls-crt
+
+redirector:
+  redirects:
+    - type: host
+      host:
+        from: #
+        to: #
+    - type: host
+      host:
+        from: #
+        to: mybinder.readthedocs.io
+    - type: host
+      host:
+        from: #
+        to: play.nteract.io
+
+matomo:
+  enabled: false
+  db:
+    instanceName: binder-staging:us-central1:matomo
+  trustedHosts:
+    - #
+  ingress:
+    hosts:
+      - #
+
+analyticsPublisher:
+  enabled: false
+  project: binder-turing
+  events:
+    sourceBucket: mybinder-staging-events-raw-export
+    destinationBucket: mybinder-staging-events-archive
+
+gcsProxy:
+  enabled: false
+  buckets:
+    - name: mybinder-staging-events-archive
+      host: #
