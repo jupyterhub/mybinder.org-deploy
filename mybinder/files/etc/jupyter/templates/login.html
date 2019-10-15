@@ -1,6 +1,13 @@
 {% extends "templates/login.html" %}
-{% block site %}
 
+{% block header_buttons %}
+{% block login_widget %}
+{% endblock %}
+<span class="flex-spacer"></span>
+{{super()}}
+{% endblock header_buttons %}
+
+{% block site %}
 <div id="ipython-main-app" class="container">
   <h1>Binder inaccessible</h1>
   <h2>
