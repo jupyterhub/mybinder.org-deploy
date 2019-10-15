@@ -4,14 +4,14 @@ binderhub:
   config:
     BinderHub:
       pod_quota: 120
-      hub_url: #
+      hub_url: https://hub.turing.mybinder.org
       badge_base_url: https://mybinder.org
-      image_prefix:
+      image_prefix: turingmybinderregistry.azurecr.io/binder-prod/binder-prod-
       sticky_builds: true
     DockerRegistry:
-      token_url:
+      token_url: https://turingmybinderregistry.azurecr.io/oauth2/token?service=turingmybinderregistry.azurecr.io
   registry:
-    url:
+    url: https://turingmybinderregistry.azurecr.io
 
   replicas: 1
 
@@ -37,8 +37,7 @@ binderhub:
 
   ingress:
     hosts:
-      - #
-      - #
+      - turing.mybinder.org
 
   jupyterhub:
     hub:
@@ -81,11 +80,11 @@ binderhub:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: 'false'
       hosts:
-        - #
+        - hub.turing.mybinder.org
       tls:
         - secretName: tls-crt
           hosts:
-            - #
+            - hub.turing.mybinder.org
 
     scheduling:
       userScheduler:
@@ -102,11 +101,11 @@ grafana:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: 'false'
     hosts:
-      - #
+      - grafana-turing.mybinder.org
     tls:
       - hosts:
-          - #
-        secretName: tls-crt
+          - grafana-turing.mybinder.org
+        secretName: tls-crt-turing
   datasources:
     datasources.yaml:
       apiVersion: 1
@@ -114,7 +113,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: #
+          url: https://prometheus-turing.mybinder.org
           access: direct
           isDefault: true
           editable: false
@@ -126,11 +125,11 @@ prometheus:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: 'false'
       hosts:
-        - #
+        - prometheus-turing.mybinder.org
       tls:
         - hosts:
-            - #
-          secretName: tls-crt
+            - prometheus-turing.mybinder.org
+          secretName: tls-crt-turing
 
 nginx-ingress:
   controller:
@@ -146,25 +145,25 @@ static:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: 'false'
     hosts:
-      - #
+      - static-turing.mybinder.org
     tls:
       - hosts:
-          - #
-        secretName: tls-crt
+          - static-turing.mybinder.org
+        secretName: tls-crt-turing
 
 redirector:
   redirects:
     - type: host
-      host:
-        from: #
-        to: #
+      # host:
+      #   from: beta-binder.mybinder.ovh
+      #   to: binder.mybinder.ovh
     - type: host
       host:
-        from: #
+        from: docs-turing.mybinder.org
         to: mybinder.readthedocs.io
     - type: host
       host:
-        from: #
+        from: playground-turing.mybinder.org
         to: play.nteract.io
 
 matomo:
@@ -172,10 +171,10 @@ matomo:
   db:
     instanceName: binder-staging:us-central1:matomo
   trustedHosts:
-    - #
+    - staging-turing.mybinder.org
   ingress:
     hosts:
-      - #
+      - staging-turing.mybinder.org
 
 analyticsPublisher:
   enabled: false
@@ -188,4 +187,4 @@ gcsProxy:
   enabled: false
   buckets:
     - name: mybinder-staging-events-archive
-      host: #
+      host: archive-analytics-staging-turing.mybinder.org
