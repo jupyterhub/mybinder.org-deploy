@@ -102,7 +102,8 @@ before_deploy:
 - |
   # Stage 5, Step 5: Verify production on ovh k8s works
   travis_retry py.test -vx -n 2 --binder-url=https://ovh.mybinder.org --hub-url=https://hub-binder.mybinder.ovh
-- # Stage 5, Step 6: Verify production on Turing k8s works
+- |
+  # Stage 5, Step 6: Verify production on Turing k8s works
   travis_retry py.test -vx -n 2 --binder-url=https://turing.mybinder.org --hub-url=https://hub.turing.mybinder.org
 
 
