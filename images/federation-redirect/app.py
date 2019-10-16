@@ -51,14 +51,17 @@ if os.path.exists(config_path):
 else:
     app_log.warning("Using default config!")
 
-
-# Remove empty entries from CONFIG["hosts"], these can happen because we
-# can't remove keys in our helm templates/config files. All we can do is
-# set them to Null/None. We need to turn the keys into a list so that we
-# can modify the dict while iterating over it
 for h in list(CONFIG["hosts"].keys()):
+    # Remove empty entries from CONFIG["hosts"], these can happen because we
+    # can't remove keys in our helm templates/config files. All we can do is
+    # set them to Null/None. We need to turn the keys into a list so that we
+    # can modify the dict while iterating over it
     if CONFIG["hosts"][h] is None:
         CONFIG["hosts"].pop(h)
+    # remove trailing slashes in host urls
+    # these can cause 404 after redirection (RedirectHandler) and we don't realize it
+    else:
+        CONFIG["hosts"][h]["url"] = CONFIG["hosts"][h]["url"].rstrip("/")
 
 
 class ProxyHandler(RequestHandler):
