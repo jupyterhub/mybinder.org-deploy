@@ -7,7 +7,6 @@ import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.options
-from urllib.parse import urljoin
 from tornado.gen import sleep
 from tornado.ioloop import IOLoop
 from tornado.log import enable_pretty_logging, app_log
@@ -131,8 +130,7 @@ class RedirectHandler(RequestHandler):
             host_name = random.choices(self.host_names, self.host_weights)[0]
         self.set_cookie("host", host_name, path=uri)
 
-        url = urljoin(host_name, uri)
-        self.redirect(url)
+        self.redirect(host_name + uri)
 
 
 class ActiveHostsHandler(RequestHandler):
