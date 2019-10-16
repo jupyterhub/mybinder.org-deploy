@@ -18,7 +18,7 @@ def setup_auth_turing():
     Set up athentication with Turing k8s cluster on Azure.
     """
     # Read in auth info
-    azure_file = os.path.join(HERE, "turing-auth-key-prod.json")
+    azure_file = os.path.join(ABSOLUTE_HERE, "secrets", "turing-auth-key-prod.json")
     with open(azure_file, "r") as stream:
         azure = json.load(stream)
 
