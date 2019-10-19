@@ -320,12 +320,6 @@ kube-lego:
   image:
     tag: 0.1.7
 
-cert-manager:
-  ingressShim:
-    defaultIssuerName: "staging"
-    defaultIssuerKind: "ClusterIssuer"
-    defaultACMEChallengeType: "http01"
-
 letsencrypt:
   contactEmail: yuvipanda@gmail.com
 
