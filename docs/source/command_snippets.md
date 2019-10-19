@@ -62,7 +62,7 @@ The new pool should match the old one.
 # old_pool is the name of the pool that we are replacing
 old_pool=default-pool
 # new_pool is the name our new pool will have. It must be different
-new_pool=standard-4
+new_pool=pool-$(date +"%Y%m%d")
 
 
 gcloud --project=binder-staging container node-pools create $new_pool \
@@ -70,7 +70,7 @@ gcloud --project=binder-staging container node-pools create $new_pool \
     --disk-size=500 \
     --machine-type=n1-standard-4 \
     --enable-autorepair \
-    --num-nodes=2
+    --num-nodes=2 \
     --zone=us-central1-a
 ```
 
@@ -96,7 +96,7 @@ Once this is verified to be successful, the old node pool can be drained:
 kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0 $node
 ```
 
-and then the node pool deleted:
+and then the node pool can be deleted:
 
 ```bash
 gcloud --project=binder-staging container node-pools delete $old_pool --cluster=staging --zone=us-central1-a
@@ -128,29 +128,24 @@ The 'core' pool uses n1-highmem-4 nodes and has a smaller, 250GB SSD.
 First we'll create variables that point to our old and new node pools to make it clear when we're creating new things vs. deleting old things.
 
 ```bash
-# old_pool is the name of the existing user pool, to be deleted
-old_pool=user-1dot11dot7
-# new_pool can be anything, as long as it isn't the same as old_pool
-# something short but descriptive, e.g. hm16 for highmem-16 nodes
-new_pool=hm16
+# old_user_pool is the name of the existing user pool, to be deleted
+# we can automatically assign this to a variable like so
+old_user_pool=$(gcloud container node-pools list --cluster prod-a --project=binder-prod --format json | jq -r '.[].name' | grep '^user')
+# new_user_pool can be anything, as long as it isn't the same as old_user_pool
+# we recommend appending with the date
+new_user_pool=user-$(date +"%Y%m%d")
 ```
 
 > Note: You can see a list of the node pools by running:
 ```bash
 gcloud container node-pools list --cluster prod-a --project=binder-prod --zone=us-central1-a
 ```
-> To automatically assign the old pool name to a variable, run:
-```bash
-old_user_pool=$(gcloud container node-pools list --cluster prod-a --project=binder-prod --zone=us-central1-a --format json | jq -r '.[].name' | grep '^user')
-
-old_core_pool=$(gcloud container node-pools list --cluster prod-a --project=binder-prod --zone=us-central1-a --format json | jq -r '.[].name' | grep '^core')
-```
 
 Then we can create the new user pool:
 
 ```bash
 # create the new user pool
-gcloud beta --project=binder-prod container node-pools create $new_pool \
+gcloud beta --project=binder-prod container node-pools create $new_user_pool \
     --cluster=prod-a \
     --zone=us-central1-a \
     --disk-type=pd-ssd \
@@ -169,9 +164,9 @@ and/or create the new core pool:
 
 ```bash
 # the name of the old 'core' pool
-old_core_pool=core-pool
+old_core_pool=$(gcloud container node-pools list --cluster prod-a --project=binder-prod --format json | jq -r '.[].name' | grep '^core')
 # the name of the new 'core' pool
-new_core_pool=core-1-11
+new_core_pool=core-$(date +"%Y%m%d")
 
 gcloud beta --project=binder-prod container node-pools create $new_core_pool \
     --cluster=prod-a \
@@ -230,7 +225,9 @@ After draining the nodes, the old pool can be deleted.
 ```bash
 kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0 $node
 
-gcloud --project=binder-prod container node-pools delete $old_pool --cluster=prod-a --zone=us-central1-a
+gcloud --project=binder-prod container node-pools delete $old_user_pool --cluster=prod-a --zone=us-central1-a
+
+gcloud --project=binder-prod container node-pools delete $old_core_pool --cluster=prod-a --zone=us-central1-a
 ```
 
 ## Pod management

@@ -18,12 +18,13 @@ from tornado.web import RequestHandler
 
 # Config for local testing
 CONFIG = {
-    "check": {"period": 10, "jitter": 0.1, "retries": 3, "timeout": 2},
+    "check": {"period": 10, "jitter": 0.1, "retries": 5, "timeout": 2},
     "hosts": {
         "gke": dict(
             url="https://gke.mybinder.org",
             weight=1,
             health="https://gke.mybinder.org/health",
+            versions="https://gke.mybinder.org/versions",
             prime=True,
         ),
         "ovh": dict(
@@ -31,6 +32,13 @@ CONFIG = {
             weight=1,
             health="https://ovh.mybinder.org/health",
             # health="https://httpbin.org/status/404",
+            versions="https://ovh.mybinder.org/versions",
+        ),
+        "gesis": dict(
+            url="https://notebooks.gesis.org/binder",
+            weight=1,
+            health="https://notebooks.gesis.org/binder/health",
+            versions="https://notebooks.gesis.org/binder/versions",
         ),
     },
 }
@@ -42,6 +50,18 @@ if os.path.exists(config_path):
         CONFIG = json.load(f)
 else:
     app_log.warning("Using default config!")
+
+for h in list(CONFIG["hosts"].keys()):
+    # Remove empty entries from CONFIG["hosts"], these can happen because we
+    # can't remove keys in our helm templates/config files. All we can do is
+    # set them to Null/None. We need to turn the keys into a list so that we
+    # can modify the dict while iterating over it
+    if CONFIG["hosts"][h] is None:
+        CONFIG["hosts"].pop(h)
+    # remove trailing slashes in host urls
+    # these can cause 404 after redirection (RedirectHandler) and we don't realize it
+    else:
+        CONFIG["hosts"][h]["url"] = CONFIG["hosts"][h]["url"].rstrip("/")
 
 
 class ProxyHandler(RequestHandler):
@@ -116,6 +136,15 @@ class RedirectHandler(RequestHandler):
         self.redirect(host_name + uri)
 
 
+class ActiveHostsHandler(RequestHandler):
+    """Serve information about active hosts"""
+    def initialize(self, active_hosts):
+        self.active_hosts = active_hosts
+
+    async def get(self):
+        self.write({"active_hosts": self.active_hosts})
+
+
 async def health_check(host, active_hosts):
     check_config = CONFIG["check"]
     all_hosts = CONFIG["hosts"]
@@ -125,6 +154,7 @@ async def health_check(host, active_hosts):
     try:
         for n in range(check_config["retries"]):
             try:
+                # TODO we could use `asyncio.gather()` and fetch health and versions in parallel
                 # raises an `HTTPError` if the request returned a non-200 response code
                 # health url returns 503 if a (hard check) service is unhealthy
                 response = await client.fetch(
@@ -137,6 +167,20 @@ async def health_check(host, active_hosts):
                         if not check["ok"]:
                             raise Exception("{} is over its quota: {}".format(host, check))
                         break
+                # check versions
+                response = await client.fetch(
+                    all_hosts[host]["versions"], request_timeout=check_config["timeout"]
+                )
+                versions = json.loads(response.body)
+                # if this is the prime host store the versions so we can compare to them later
+                if all_hosts[host].get("prime", False):
+                    all_hosts["versions"] = versions
+                # check if this cluster is on the same versions as the prime
+                # w/o information about the prime's version we allow each
+                # cluster to be on its own versions
+                if versions != all_hosts.get("versions", versions):
+                    raise Exception("{} has different versions ({}) than prime ({})".
+                                    format(host, versions, all_hosts["versions"]))
             except Exception as e:
                 app_log.warning(
                     "{} failed, attempt {} of {}".format(
@@ -222,6 +266,7 @@ def make_app():
                 tornado.web.RedirectHandler,
                 {"url": "https://static.mybinder.org/badge.svg", "permanent": True},
             ),
+            (r"/active_hosts", ActiveHostsHandler, {"active_hosts": hosts}),
             (r".*", ProxyHandler, {"host": prime_host}),
         ],
         hosts=hosts,

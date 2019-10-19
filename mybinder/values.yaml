@@ -65,7 +65,7 @@ binderhub:
         - ^https%3A%2F%2Fbitbucket.org%2Fnikiubel%2Fnikiubel.bitbucket.io.git/.*
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:0.10.0-83.g27eeef2
+      build_image: jupyter/repo2docker:0.10.0-100.g0dba611
       per_repo_quota: 100
       per_repo_quota_higher: 200
 
@@ -247,12 +247,6 @@ binderhub:
               add:
                 - NET_ADMIN
 
-playground:
-  image:
-    name: yuvipanda/play.nteract.io
-    tag: v0.2
-  replicas: 1
-
 nginx-ingress:
   rbac:
     create: true
@@ -267,10 +261,10 @@ nginx-ingress:
     resources:
       requests:
         cpu: 0.5
-        memory: 280Mi
+        memory: 440Mi
       limits:
         cpu: 0.8
-        memory: 340Mi
+        memory: 500Mi
     affinity:
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
@@ -413,19 +407,22 @@ federationRedirect:
   check:
     period: 10
     jitter: 0.1
-    retries: 3
+    retries: 5
     timeout: 2
   hosts:
     gke:
       url: https://gke.mybinder.org
       weight: 80
       health: https://gke.mybinder.org/health
+      versions: https://gke.mybinder.org/versions
       prime: true
     ovh:
       url: https://ovh.mybinder.org
       weight: 19
       health: https://ovh.mybinder.org/health
+      versions: https://ovh.mybinder.org/versions
     gesis:
       url: https://notebooks.gesis.org/binder
       weight: 1
       health: https://notebooks.gesis.org/binder/health
+      versions: https://notebooks.gesis.org/binder/versions
