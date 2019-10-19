@@ -139,6 +139,9 @@ binderhub:
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
+    https:
+      enabled: true
+      type: kube-lego
 
   dind:
     enabled: true
@@ -307,6 +310,15 @@ static:
   paths:
     - /badge.svg
     - /badge_logo.svg
+
+kube-lego:
+  config:
+    LEGO_EMAIL: yuvipanda@gmail.com
+    LEGO_URL: https://acme-v01.api.letsencrypt.org/directory
+  rbac:
+    create: true
+  image:
+    tag: 0.1.7
 
 cert-manager:
   ingressShim:
