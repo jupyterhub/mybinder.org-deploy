@@ -263,10 +263,10 @@ nginx-ingress:
     resources:
       requests:
         cpu: 0.5
-        memory: 280Mi
+        memory: 440Mi
       limits:
         cpu: 0.8
-        memory: 340Mi
+        memory: 500Mi
     affinity:
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
