@@ -138,53 +138,9 @@ nginx-ingress:
   scope:
     enabled: false
 
-
-static:
-  ingress:
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: 'false'
-    hosts:
-      - static-turing.mybinder.org
-    tls:
-      - hosts:
-          - static-turing.mybinder.org
-        secretName: tls-crt-turing
-
-redirector:
-  redirects:
-    - type: host
-      # host:
-      #   from: beta-binder.mybinder.ovh
-      #   to: binder.mybinder.ovh
-    - type: host
-      host:
-        from: docs-turing.mybinder.org
-        to: mybinder.readthedocs.io
-    - type: host
-      host:
-        from: playground-turing.mybinder.org
-        to: play.nteract.io
-
-matomo:
-  enabled: false
-  db:
-    instanceName: binder-staging:us-central1:matomo
-  trustedHosts:
-    - staging-turing.mybinder.org
-  ingress:
-    hosts:
-      - staging-turing.mybinder.org
-
 analyticsPublisher:
   enabled: false
   project: binder-turing
   events:
     sourceBucket: mybinder-staging-events-raw-export
     destinationBucket: mybinder-staging-events-archive
-
-gcsProxy:
-  enabled: false
-  buckets:
-    - name: mybinder-staging-events-archive
-      host: archive-analytics-staging-turing.mybinder.org
