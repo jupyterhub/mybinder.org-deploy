@@ -13,7 +13,7 @@ NC = subprocess.check_output(['tput', 'sgr0']).decode()
 HERE = os.path.dirname(__file__)
 ABSOLUTE_HERE = os.path.dirname(os.path.realpath(__file__))
 
-def setup_auth_turing():
+def setup_auth_turing(cluster):
     """
     Set up athentication with Turing k8s cluster on Azure.
     """
@@ -34,7 +34,7 @@ def setup_auth_turing():
     # Set kubeconfig
     creds_cmd = [
         "az", "aks", "get-credentials",
-        "--name", "prod",
+        "--name", cluster,
         "--resource-group", "binder-prod"
 
     ]
@@ -217,7 +217,7 @@ def main():
     if args.cluster == 'binder-ovh':
         setup_auth_ovh(args.release, args.cluster)
     elif args.cluster == 'turing':
-        setup_auth_turing()
+        setup_auth_turing(args.cluster)
     else:
         setup_auth_gcloud(args.release, args.cluster)
 
