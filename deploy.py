@@ -27,7 +27,7 @@ def setup_auth_turing():
         "az", "login", "--service-principal",
         "--username", azure["sp-app-id"],
         "--password", azure["sp-app-key"],
-        "--tenant", azure["tenant"]
+        "--tenant", azure["tenant-id"]
     ]
     subprocess.check_output(login_cmd)
 
