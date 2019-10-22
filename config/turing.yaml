@@ -4,7 +4,7 @@ binderhub:
   config:
     BinderHub:
       pod_quota: 120
-      hub_url: https://hub.turing.mybinder.org
+      hub_url: http://hub.turing.10.0.0.1.xip.io
       badge_base_url: https://mybinder.org
       image_prefix: turingmybinderregistry.azurecr.io/binder-prod/binder-prod-
       sticky_builds: true
@@ -37,7 +37,7 @@ binderhub:
 
   ingress:
     hosts:
-      - turing.mybinder.org
+      - turing.10.0.0.1.xip.io
 
   jupyterhub:
     hub:
@@ -80,11 +80,11 @@ binderhub:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: 'false'
       hosts:
-        - hub.turing.mybinder.org
+        - hub.turing.10.0.0.1.xip.io
       tls:
         - secretName: tls-crt
           hosts:
-            - hub.turing.mybinder.org
+            - hub.turing.10.0.0.1.xip.io
 
     scheduling:
       userScheduler:
@@ -101,10 +101,10 @@ grafana:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: 'false'
     hosts:
-      - grafana-turing.mybinder.org
+      - grafana-turing.10.0.0.1.xip.io
     tls:
       - hosts:
-          - grafana-turing.mybinder.org
+          - grafana-turing.10.0.0.1.xip.io
         secretName: tls-crt-turing
   datasources:
     datasources.yaml:
@@ -113,7 +113,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus-turing.mybinder.org
+          url: https://prometheus-turing.10.0.0.1.xip.io
           access: direct
           isDefault: true
           editable: false
@@ -125,10 +125,10 @@ prometheus:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: 'false'
       hosts:
-        - prometheus-turing.mybinder.org
+        - prometheus-turing.10.0.0.1.xip.io
       tls:
         - hosts:
-            - prometheus-turing.mybinder.org
+            - prometheus-turing.10.0.0.1.xip.io
           secretName: tls-crt-turing
 
 nginx-ingress:
