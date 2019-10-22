@@ -95,7 +95,7 @@ before_deploy:
   python ./deploy.py ovh binder-ovh
 - |
   # Stage 5, Step 4: Deploy to production on Turing k8s
-  python ./deploy.py prod turing
+  python ./deploy.py turing turing
 - |
   # Stage 5, Step 4: Verify production works
   travis_retry py.test -vx -n 2 --binder-url=https://gke.mybinder.org --hub-url=https://hub.gke.mybinder.org

@@ -198,7 +198,7 @@ def main():
     argparser.add_argument(
         'release',
         help="Release to deploy",
-        choices=['staging', 'prod', 'ovh']
+        choices=['staging', 'prod', 'ovh', 'turing']
     )
     argparser.add_argument(
         'cluster',
