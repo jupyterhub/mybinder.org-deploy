@@ -57,7 +57,7 @@ before_deploy:
   chmod 0600 secrets/*key
 - |
   # Stage 2, Step 2: Set up helm!
-  helm init --client-only
+  helm init --client-only --force-upgrade
   helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
   helm repo add cert-manager https://charts.jetstack.io
   helm repo update
