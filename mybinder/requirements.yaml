@@ -14,3 +14,6 @@ dependencies:
  - name: binderhub
    version: 0.2.0-5b3824d
    repository: https://jupyterhub.github.io/helm-chart
+- name: cert-manager
+  version: "v0.10.0"
+  repository: "https://charts.jetstack.io"
