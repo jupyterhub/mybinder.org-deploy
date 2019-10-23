@@ -67,7 +67,7 @@ def setup_auth_gcloud(release, cluster):
 
 def setup_helm(release):
     """ensure helm is up to date"""
-    subprocess.check_call(['helm', 'init', '--upgrade'])
+    subprocess.check_call(['helm', 'init', '--upgrade', '--force-upgrade'])
 
     deployment = json.loads(subprocess.check_output([
         'kubectl',
