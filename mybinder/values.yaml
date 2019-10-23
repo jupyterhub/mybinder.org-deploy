@@ -428,3 +428,6 @@ federationRedirect:
       weight: 1
       health: https://notebooks.gesis.org/binder/health
       versions: https://notebooks.gesis.org/binder/versions
+
+letsencrypt:
+  contactEmail: yuvipanda@gmail.com
