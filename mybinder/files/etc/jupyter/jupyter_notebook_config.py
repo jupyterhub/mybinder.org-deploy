@@ -1,13 +1,17 @@
 import os
 c.NotebookApp.extra_template_paths.append('/etc/jupyter/templates')
 
-federation_host = 'https://mybinder.org'
-current_hosts = ['https://gke.mybinder.org', 'https://ovh.mybinder.org']
-binder_url = os.environ.get('BINDER_URL', federation_host)
-persistent_binder_url = os.environ.get('PERSISTENT_BINDER_URL', '')
-for h in current_hosts:
-    binder_url = binder_url.replace(h, federation_host)
-    persistent_binder_url = persistent_binder_url.replace(h, federation_host)
+
+def make_federation_url(url):
+    federation_host = 'https://mybinder.org'
+    if not url:
+        return federation_host
+    url_parts = url.split('/v2/', 1)
+    return federation_host + '/v2/' + url_parts[-1]
+
+
+binder_url = make_federation_url(os.environ.get('BINDER_URL', ''))
+persistent_binder_url = make_federation_url(os.environ.get('PERSISTENT_BINDER_URL', ''))
 
 c.NotebookApp.jinja_template_vars.update({
     'binder_url': binder_url,
