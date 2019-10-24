@@ -68,6 +68,7 @@ run into when maintaining mybinder.org.
     common_problems.md
     command_snippets.md
     grafana_plots.md
+    federation.md
 
 
 Components
