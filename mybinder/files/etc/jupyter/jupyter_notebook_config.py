@@ -5,7 +5,7 @@ c.NotebookApp.extra_template_paths.append('/etc/jupyter/templates')
 def make_federation_url(url):
     federation_host = 'https://mybinder.org'
     if not url:
-        return federation_host
+        return ''
     url_parts = url.split('/v2/', 1)
     return federation_host + '/v2/' + url_parts[-1]
 
