@@ -14,7 +14,7 @@ the BinderHub federation, who is in it, how to join it, etc, see
 ==========================  ========  ===============  ==============  =========
 gke.mybinder.org
 ovh.mybinder.org
-gesis.mybinder.org
+notebooks.gesis.org/binder
 ==========================  ========  ===============  ==============  =========
 
 .. raw:: html
@@ -23,7 +23,7 @@ gesis.mybinder.org
    var fedUrls = [
        "https://gke.mybinder.org",
        "https://ovh.mybinder.org",
-       "https://gesis.mybinder.org"
+       "https://notebooks.gesis.org/binder"
    ]
 
    // Use a dictionary to store the rows that should be updated
