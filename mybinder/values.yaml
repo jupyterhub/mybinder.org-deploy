@@ -274,6 +274,11 @@ nginx-ingress:
       limits:
         cpu: 0.8
         memory: 500Mi
+    tolerations:
+      - key: "node.kubernetes.io/unschedulable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 30
     affinity:
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:

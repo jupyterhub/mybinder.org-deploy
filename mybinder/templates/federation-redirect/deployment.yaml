@@ -14,16 +14,6 @@ spec:
       app: federation-redirect
       heritage: {{ .Release.Service }}
       release: {{ .Release.Name }}
-  affinity:
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchExpressions:
-          - key: app
-            operator: In
-            values:
-            - federation-redirect
-        topologyKey: "kubernetes.io/hostname"
   template:
     metadata:
       labels:
@@ -33,6 +23,18 @@ spec:
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/federation-redirect/configmap.yaml") . | sha256sum }}
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - federation-redirect
+              topologyKey: "kubernetes.io/hostname"
       volumes:
       - name: config
         configMap:
@@ -51,5 +53,10 @@ spec:
           limits:
             cpu: 0.2
             memory: 300Mi
+      tolerations:
+      - key: "node.kubernetes.io/unschedulable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 30
 
 {{- end }}
