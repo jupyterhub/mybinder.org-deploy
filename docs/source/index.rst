@@ -30,83 +30,15 @@ To show your interest in helping, please reach out to the operations team
 via `this Discourse thread <https://discourse.jupyter.org/t/interested-in-joining-the-mybinder-org-operations-team/761>`_.
 
 
-Getting started
----------------
-
-These resources describe how to get started with the mybinder.org operations
-team. It contains checklists of steps to take to make sure you have the right
-permissions, as well as contextual information about the mybinder.org deployment.
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Introduction
-
-   introduction.md
-   getting_started.md
-   production_environment.md
-   terminology.md
-
-
-Deployment and Operation
-------------------------
-
-Team processes as well as useful information about what you might
-run into when maintaining mybinder.org.
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Deployment
-
-   deployment/prereqs.md
-   deployment/how.md
-   deployment/what.md
-
-.. toctree::
-    :maxdepth: 2
-    :caption: Operation
-
-    common_problems.md
-    command_snippets.md
-    grafana_plots.md
-    federation.md
-
-
-Components
-----------
-
-These pages describe the different technical pieces that make up the
-mybinder.org deployment.
-
 .. toctree::
    :maxdepth: 2
 
-   components/metrics.md
-   components/dashboards.md
-   components/ingress.md
-   components/cloud.md
-   components/matomo.rst
-
-
-Analytics
----------
-
-A public events archive with data about daily Binder launches.
-
-.. toctree::
-   :maxdepth: 2
-
-   analytics/events-archive
-   analytics/cloud-costs
-
-Incident Reports
-----------------
-
-For more information on our guidelines and goals for incident reports, see
-:ref:`incident-reporting`. Below is a list of incident reports in reverse
-chronological order.
-
-.. include:: incident_reporting.rst
-   :start-after: (in reverse chronological order)
+   getting_started/index
+   deployment/index
+   operation_guide/index
+   components/index
+   analytics/index
+   incident-reports/index
 
 Indices and tables
 ------------------
