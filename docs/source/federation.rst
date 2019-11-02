@@ -9,13 +9,13 @@ federation, along with the status of each. For more information about
 the BinderHub federation, who is in it, how to join it, etc, see
 `the BinderHub federation page <https://binderhub.readthedocs.io/en/latest/federation/federation.html>`_.
 
-==========================  ========  ===============  ==============  =========
-  URL                       Response  Docker registry  JupyterHub API  Pod quota
-==========================  ========  ===============  ==============  =========
+==========================  ========  ===============  ==============  =============== =====
+  URL                       Response  Docker registry  JupyterHub API  User/Build Pods Quota
+==========================  ========  ===============  ==============  =============== =====
 gke.mybinder.org
 ovh.mybinder.org
 gesis.mybinder.org
-==========================  ========  ===============  ==============  =========
+==========================  ========  ===============  ==============  =============== =====
 
 .. raw:: html
 
@@ -23,7 +23,7 @@ gesis.mybinder.org
    var fedUrls = [
        "https://gke.mybinder.org",
        "https://ovh.mybinder.org",
-       "https://gesis.mybinder.org"
+       "https://gesis.mybinder.org",
    ]
 
    // Use a dictionary to store the rows that should be updated
@@ -42,7 +42,7 @@ gesis.mybinder.org
 
        // Query the endpoint and update health icon
        var row = urlRows[url];
-       let [fieldUrl, fieldResponse, fieldRegistry, fieldHub, fieldQuota] = row.querySelectorAll('td')
+       let [fieldUrl, fieldResponse, fieldRegistry, fieldHub, fieldPods, fieldQuota] = row.querySelectorAll('td')
        $.getJSON(urlHealth, {})
            .done((resp) => {
                if (resp['ok'] == false) {
@@ -65,9 +65,8 @@ gesis.mybinder.org
                    setStatus(fieldHub, 'success')
                }
 
-               fieldQuota.textContent = `${respQuota['user_pods']}/${respQuota['total_pods']}`
-
-
+               fieldPods.textContent = `${respQuota['user_pods']}/${respQuota['build_pods']}`
+               fieldQuota.textContent = `${respQuota['quota']}`
            })
            .fail((resp) => {
                 setStatus(fieldResponse, 'fail')
