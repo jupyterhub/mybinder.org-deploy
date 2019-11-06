@@ -1,6 +1,6 @@
 import os
 c.NotebookApp.extra_template_paths.append('/etc/jupyter/templates')
-c.NotebookApp.jinja_environment_options = {'extensions': ['jinja2.ext.i18n']}
+
 
 def make_federation_url(url):
     federation_host = 'https://mybinder.org'
