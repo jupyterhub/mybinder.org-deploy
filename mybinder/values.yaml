@@ -295,7 +295,7 @@ nginx-ingress:
                 values:
                 - controller
             topologyKey: kubernetes.io/hostname
-    replicaCount: 2
+    replicaCount: 3
     scope:
       enabled: true
     config:
