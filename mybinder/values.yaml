@@ -426,13 +426,13 @@ federationRedirect:
   hosts:
     gke:
       url: https://gke.mybinder.org
-      weight: 66
+      weight: 84
       health: https://gke.mybinder.org/health
       versions: https://gke.mybinder.org/versions
       prime: true
     ovh:
       url: https://ovh.mybinder.org
-      weight: 19
+      weight: 1
       health: https://ovh.mybinder.org/health
       versions: https://ovh.mybinder.org/versions
     gesis:
