@@ -423,7 +423,6 @@ federationRedirect:
     jitter: 0.1
     retries: 5
     timeout: 2
-  load_balancer: "rendezvous"
   hosts:
     gke:
       url: https://gke.mybinder.org
@@ -436,3 +435,8 @@ federationRedirect:
       weight: 19
       health: https://ovh.mybinder.org/health
       versions: https://ovh.mybinder.org/versions
+    gesis:
+      url: https://gesis.mybinder.org
+      weight: 15
+      health: https://gesis.mybinder.org/health
+      versions: https://gesis.mybinder.org/versions
