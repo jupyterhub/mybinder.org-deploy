@@ -3,6 +3,8 @@ import os
 import random
 import sys
 
+from hashlib import blake2b
+
 import tornado
 import tornado.ioloop
 import tornado.web
@@ -19,6 +21,7 @@ from tornado.web import RequestHandler
 # Config for local testing
 CONFIG = {
     "check": {"period": 10, "jitter": 0.1, "retries": 5, "timeout": 2},
+    "load_balancer": "rendezvous",  # or "random"
     "hosts": {
         "gke": dict(
             url="https://gke.mybinder.org",
@@ -43,25 +46,60 @@ CONFIG = {
     },
 }
 
-config_path = "/etc/federation-redirect/config.json"
-if os.path.exists(config_path):
+
+def get_config(config_path):
     app_log.info("Using config from '{}'.".format(config_path))
+
     with open(config_path) as f:
-        CONFIG = json.load(f)
+        config = json.load(f)
+
+    for h in list(config["hosts"].keys()):
+        # Remove empty entries from CONFIG["hosts"], these can happen because we
+        # can't remove keys in our helm templates/config files. All we can do is
+        # set them to Null/None. We need to turn the keys into a list so that we
+        # can modify the dict while iterating over it
+        if config["hosts"][h] is None:
+            config["hosts"].pop(h)
+        # remove trailing slashes in host urls
+        # these can cause 404 after redirection (RedirectHandler) and we don't
+        # realize it
+        else:
+            config["hosts"][h]["url"] = config["hosts"][h]["url"].rstrip("/")
+
+    return config
+
+
+CONFIG_PATH = "/etc/federation-redirect/config.json"
+if os.path.exists(CONFIG_PATH):
+    CONFIG = get_config(CONFIG_PATH)
 else:
     app_log.warning("Using default config!")
 
-for h in list(CONFIG["hosts"].keys()):
-    # Remove empty entries from CONFIG["hosts"], these can happen because we
-    # can't remove keys in our helm templates/config files. All we can do is
-    # set them to Null/None. We need to turn the keys into a list so that we
-    # can modify the dict while iterating over it
-    if CONFIG["hosts"][h] is None:
-        CONFIG["hosts"].pop(h)
-    # remove trailing slashes in host urls
-    # these can cause 404 after redirection (RedirectHandler) and we don't realize it
-    else:
-        CONFIG["hosts"][h]["url"] = CONFIG["hosts"][h]["url"].rstrip("/")
+
+def blake2b_hash_as_int(b):
+    """Compute digest of the bytes `b` using the Blake2 hash function.
+    Returns a unsigned 64bit integer.
+    """
+    return int.from_bytes(blake2b(b, digest_size=8).digest(), "big")
+
+
+def rendezvous_rank(buckets, key):
+    """Rank the buckets for a given key using Rendez-vous hashing
+
+    Each bucket is scored for the specified key. The return value is a list of
+    all buckets, sorted in decreasing order (highest ranked first).
+    """
+    ranking = []
+    for bucket in buckets:
+        # The particular hash function doesn't matter a lot, as long as it is
+        # one that maps the key to a fixed sized value and distributes the keys
+        # uniformly across the output space
+        score = blake2b_hash_as_int(
+            b"%s-%s" % (str(key).encode(), str(bucket).encode())
+        )
+        ranking.append((score, bucket))
+
+    return [b for (s, b) in sorted(ranking, reverse=True)]
 
 
 class ProxyHandler(RequestHandler):
@@ -90,7 +128,7 @@ class ProxyHandler(RequestHandler):
         response = await client.fetch(req, raise_error=False)
 
         # For all non http errors...
-        if response.error and type(response.error) is not HTTPError:
+        if response.error and not isinstance(response.error, HTTPError):
             self.set_status(500)
             self.write(str(response.error))
         else:
@@ -114,6 +152,9 @@ class ProxyHandler(RequestHandler):
 
 
 class RedirectHandler(RequestHandler):
+    def initialize(self, load_balancer):
+        self.load_balancer = load_balancer
+
     def prepare(self):
         # copy hosts config in case it changes while we are iterating over it
         hosts = dict(self.settings["hosts"])
@@ -130,7 +171,12 @@ class RedirectHandler(RequestHandler):
         host_name = self.get_cookie("host")
         # make sure the host is a valid choice and considered healthy
         if host_name not in self.host_names:
-            host_name = random.choices(self.host_names, self.host_weights)[0]
+            if self.load_balancer == "rendezvous":
+                host_name = rendezvous_rank(self.host_names, uri)[0]
+            # "random" is our default or fall-back
+            else:
+                host_name = random.choices(self.host_names, self.host_weights)[0]
+
         self.set_cookie("host", host_name, path=uri)
 
         self.redirect(host_name + uri)
@@ -138,6 +184,7 @@ class RedirectHandler(RequestHandler):
 
 class ActiveHostsHandler(RequestHandler):
     """Serve information about active hosts"""
+
     def initialize(self, active_hosts):
         self.active_hosts = active_hosts
 
@@ -165,7 +212,9 @@ async def health_check(host, active_hosts):
                     # pod quota is a soft check
                     if check["service"] == "Pod quota":
                         if not check["ok"]:
-                            raise Exception("{} is over its quota: {}".format(host, check))
+                            raise Exception(
+                                "{} is over its quota: {}".format(host, check)
+                            )
                         break
                 # check versions
                 response = await client.fetch(
@@ -179,8 +228,11 @@ async def health_check(host, active_hosts):
                 # w/o information about the prime's version we allow each
                 # cluster to be on its own versions
                 if versions != all_hosts.get("versions", versions):
-                    raise Exception("{} has different versions ({}) than prime ({})".
-                                    format(host, versions, all_hosts["versions"]))
+                    raise Exception(
+                        "{} has different versions ({}) than prime ({})".format(
+                            host, versions, all_hosts["versions"]
+                        )
+                    )
             except Exception as e:
                 app_log.warning(
                     "{} failed, attempt {} of {}".format(
@@ -247,7 +299,7 @@ def make_app():
 
     app = tornado.web.Application(
         [
-            (r"/build/.*", RedirectHandler),
+            (r"/build/.*", RedirectHandler, {"load_balancer": CONFIG["load_balancer"]}),
             (
                 r"/(badge\_logo\.svg)",
                 tornado.web.RedirectHandler,
