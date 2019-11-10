@@ -423,6 +423,7 @@ federationRedirect:
     jitter: 0.1
     retries: 5
     timeout: 2
+  load_balancer: "rendezvous"
   hosts:
     gke:
       url: https://gke.mybinder.org
