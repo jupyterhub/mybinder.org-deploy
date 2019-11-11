@@ -109,7 +109,7 @@ def cache_key(uri):
     if key.startswith("/build/gh"):
         # remove branch/tag/reference, all instances of a repo should have
         # the same key and hence target
-        key = key.rplsit("/", maxsplit=1)[0]
+        key = key.rsplit("/", maxsplit=1)[0]
 
     return key
 
