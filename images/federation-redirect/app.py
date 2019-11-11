@@ -102,6 +102,18 @@ def rendezvous_rank(buckets, key):
     return [b for (s, b) in sorted(ranking, reverse=True)]
 
 
+def cache_key(uri):
+    """Compute key for load balancing decisions"""
+    key = uri.lower()
+
+    if key.startswith("/build/gh"):
+        # remove branch/tag/reference, all instances of a repo should have
+        # the same key and hence target
+        key = key.rplsit("/", maxsplit=1)[0]
+
+    return key
+
+
 class ProxyHandler(RequestHandler):
     def initialize(self, host):
         self.host = host
@@ -172,7 +184,7 @@ class RedirectHandler(RequestHandler):
         # make sure the host is a valid choice and considered healthy
         if host_name not in self.host_names:
             if self.load_balancer == "rendezvous":
-                host_name = rendezvous_rank(self.host_names, uri)[0]
+                host_name = rendezvous_rank(self.host_names, cache_key(uri))[0]
             # "random" is our default or fall-back
             else:
                 host_name = random.choices(self.host_names, self.host_weights)[0]
