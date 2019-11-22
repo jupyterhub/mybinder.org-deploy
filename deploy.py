@@ -118,6 +118,17 @@ def setup_helm(release):
 
 def deploy(release):
     """Deploy jupyterhub"""
+    print(
+        BOLD + GREEN + f"Installing cert-manager Custom Resource Definitions for {release}" + NC,
+        flush=True
+    )
+    subprocess.check_call([
+        "kubectl",
+        "apply",
+        "-f",
+        "https://raw.githubusercontent.com/jetstack/cert-manager/release-0.10/deploy/manifests/00-crds.yaml",
+    ])
+
     print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
     subprocess.check_call([
         "python3",

@@ -331,6 +331,9 @@ kube-lego:
   image:
     tag: 0.1.7
 
+letsencrypt:
+  contactEmail: yuvipanda@gmail.com
+
 grafana:
   ingress:
     enabled: true
