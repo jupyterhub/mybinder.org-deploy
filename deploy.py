@@ -165,6 +165,22 @@ def deploy(release):
         ])
 
 
+def install_crd(cluster):
+    """Install Custom Resource Definitions for cert-manager"""
+    print(
+        BOLD + GREEN +
+        f"Installing cert-manager Custom Resource Definitions on {cluster}" +
+        NC,
+        flush=True,
+    )
+
+    subprocess.check_call([
+        "kubectl",
+        "apply",
+        "-f",
+        "https://raw.githubusercontent.com/jetstack/cert-manager/release-0.10/deploy/manifests/00-crds.yaml",
+    ])
+
 def main():
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
@@ -185,6 +201,7 @@ def main():
         setup_auth_gcloud(args.release, args.cluster)
 
     setup_helm(args.release)
+    install_crd(args.cluster)
     deploy(args.release)
 
 
