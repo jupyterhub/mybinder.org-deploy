@@ -37,6 +37,7 @@ binderhub:
 
   ingress:
     hosts:
+      - binder.turing.10.0.0.1.xip.io
       - turing.10.0.0.1.xip.io
 
   jupyterhub:
@@ -105,7 +106,7 @@ grafana:
     tls:
       - hosts:
           - grafana-turing.10.0.0.1.xip.io
-        secretName: tls-crt-turing
+        secretName: tls-crt
   datasources:
     datasources.yaml:
       apiVersion: 1
@@ -129,7 +130,7 @@ prometheus:
       tls:
         - hosts:
             - prometheus-turing.10.0.0.1.xip.io
-          secretName: tls-crt-turing
+          secretName: tls-crt
 
 nginx-ingress:
   controller:
@@ -145,25 +146,25 @@ static:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: 'false'
     hosts:
-      - static-turing.mybinder.org
+      - static-turing.10.0.0.1.xip.io
     tls:
       - hosts:
-          - static-turing.mybinder.org
-        secretName: tls-crt-turing
+          - static-turing.10.0.0.1.xip.io
+        secretName: tls-crt
 
 redirector:
   redirects:
     - type: host
-      # host:
-      #   from: beta-binder.mybinder.ovh
-      #   to: binder.mybinder.ovh
+      host:
+        from: beta-binder.turing.10.0.0.1.xip.io
+        to: turing.10.0.0.1.xip.io
     - type: host
       host:
-        from: docs-turing.mybinder.org
+        from: docs-mybinder.turing.10.0.0.1.xip.io
         to: mybinder.readthedocs.io
     - type: host
       host:
-        from: playground-turing.mybinder.org
+        from: playground-turing.10.0.0.1.xip.io
         to: play.nteract.io
 
 matomo:
@@ -171,10 +172,10 @@ matomo:
   db:
     instanceName: binder-staging:us-central1:matomo
   trustedHosts:
-    - staging-turing.mybinder.org
+    - staging-mybinder.turing.10.0.0.1.xip.io
   ingress:
     hosts:
-      - staging-turing.mybinder.org
+      - staging-mybinder.turing.10.0.0.1.xip.io
 
 analyticsPublisher:
   enabled: false
@@ -187,4 +188,4 @@ gcsProxy:
   enabled: false
   buckets:
     - name: mybinder-staging-events-archive
-      host: archive-analytics-staging-turing.mybinder.org
+      host: archive-analytics-staging-mybinder.turing.10.0.0.1.xip.io
