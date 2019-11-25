@@ -1,2 +1,38 @@
 {% extends "templates/page.html" %}
-{% block login_widget %}{% endblock %}
+
+{% block header_buttons %}
+
+{% block login_widget %}
+{% endblock %}
+
+{% if ref_url %}
+<span>
+    <a id="visit-repo-link" href="{{ ref_url }}" class="btn btn-default btn-sm navbar-btn" target="_blank"
+       style="margin-right: 2px; margin-left: 4px;">Visit repo</a></span>
+{% endif %}
+
+{% if persistent_binder_url  %}
+<span>
+    <button id="copy-binder-link" title="Copy binder link to clipboard" class="btn btn-default btn-sm navbar-btn"
+            style="margin-right: 0; margin-left: 2px;"
+            data-url="{{ persistent_binder_url }}" onclick="copy_link_into_clipboard(this);">
+      Copy Binder link
+    </button>
+</span>
+{% endif %}
+
+{% endblock header_buttons %}
+
+{% block script %}
+{% if persistent_binder_url  %}
+<script type='text/javascript'>
+    function copy_link_into_clipboard(b) {
+        var $temp = $("<input>");
+        $(b).parent().append($temp);
+        $temp.val($(b).data('url')).select();
+        document.execCommand("copy");
+        $temp.remove();
+    }
+</script>
+{% endif %}
+{% endblock %}

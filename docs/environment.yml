@@ -6,4 +6,4 @@ dependencies:
 - sphinx>=1.8.2
 - recommonmark
 - pip:
-  - alabaster_jupyterhub
+  - -r doc-requirements.txt

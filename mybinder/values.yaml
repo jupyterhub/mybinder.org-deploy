@@ -65,12 +65,19 @@ binderhub:
         - ^https%3A%2F%2Fbitbucket.org%2Fnikiubel%2Fnikiubel.bitbucket.io.git/.*
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:0.10.0-100.g0dba611
+      build_image: jupyter/repo2docker:0.10.0-112.g242107b
       per_repo_quota: 100
       per_repo_quota_higher: 200
+      appendix: |
+        USER root
+        ENV BINDER_URL={binder_url}
+        ENV PERSISTENT_BINDER_URL={persistent_binder_url}
+        ENV REPO_URL={repo_url}
+        ENV REF_URL={ref_url}
+        USER $NB_USER
 
       banner_message: |
-        <div style="text-align: center;">Thanks to <a href="https://cloud.google.com/">Google Cloud</a> and <a href="https://www.ovh.com/">OVH</a> for sponsoring our computers 🎉!</div>
+        <div style="text-align: center;">Thanks to <a href="https://cloud.google.com/">Google Cloud</a>, <a href="https://www.ovh.com/">OVH</a> and <a href="https://notebooks.gesis.org">GESIS Notebooks</a> for supporting us 🎉!</div>
       about_message: |
         <p>mybinder.org is public infrastructure operated by the <a href="https://jupyterhub-team-compass.readthedocs.io/en/latest/team.html#binder-team">Binder Project team</a>.<br /><br />
         The Binder Project is a member of <a href="https://jupyter.org">Project Jupyter</a>, which is a fiscally
@@ -267,6 +274,11 @@ nginx-ingress:
       limits:
         cpu: 0.8
         memory: 500Mi
+    tolerations:
+      - key: "node.kubernetes.io/unschedulable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 30
     affinity:
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
@@ -283,7 +295,7 @@ nginx-ingress:
                 values:
                 - controller
             topologyKey: kubernetes.io/hostname
-    replicaCount: 2
+    replicaCount: 3
     scope:
       enabled: true
     config:
@@ -411,10 +423,11 @@ federationRedirect:
     jitter: 0.1
     retries: 5
     timeout: 2
+  load_balancer: "rendezvous"
   hosts:
     gke:
       url: https://gke.mybinder.org
-      weight: 80
+      weight: 66
       health: https://gke.mybinder.org/health
       versions: https://gke.mybinder.org/versions
       prime: true
@@ -424,7 +437,7 @@ federationRedirect:
       health: https://ovh.mybinder.org/health
       versions: https://ovh.mybinder.org/versions
     gesis:
-      url: https://notebooks.gesis.org/binder
-      weight: 1
-      health: https://notebooks.gesis.org/binder/health
-      versions: https://notebooks.gesis.org/binder/versions
+      url: https://gesis.mybinder.org
+      weight: 15
+      health: https://gesis.mybinder.org/health
+      versions: https://gesis.mybinder.org/versions
