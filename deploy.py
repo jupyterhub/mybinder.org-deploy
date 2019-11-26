@@ -226,7 +226,7 @@ def main():
     if args.cluster == 'turing':
         deploy(args.release, "turing")
     else:
-        deploy(args.release)
+        deploy(args.release, args.cluster)
 
 
 if __name__ == '__main__':
