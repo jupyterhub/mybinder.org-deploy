@@ -23,10 +23,6 @@ binderhub:
       cpu: "2"
       memory: 1Gi
 
-  extraVolumes:
-    - name: secrets
-      secret:
-        secretName: events-archiver-secrets
   extraVolumeMounts:
     - name: secrets
       mountPath: /secrets
