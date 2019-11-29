@@ -68,13 +68,6 @@ binderhub:
       build_image: jupyter/repo2docker:0.10.0-117.g3337eaa
       per_repo_quota: 100
       per_repo_quota_higher: 200
-      appendix: |
-        USER root
-        ENV BINDER_URL={binder_url}
-        ENV PERSISTENT_BINDER_URL={persistent_binder_url}
-        ENV REPO_URL={repo_url}
-        ENV REF_URL={ref_url}
-        USER $NB_USER
 
       banner_message: |
         <div style="text-align: center;">Thanks to <a href="https://cloud.google.com/">Google Cloud</a>, <a href="https://www.ovh.com/">OVH</a> and <a href="https://notebooks.gesis.org">GESIS Notebooks</a> for supporting us 🎉!</div>
