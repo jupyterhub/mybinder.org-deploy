@@ -102,6 +102,13 @@ binderhub:
         enabled: true
         replicas: 5
 
+  imageCleaner:
+    # Use 40GB as upper limit, size is given in bytes
+    imageGCThresholdHigh: 40e9
+    imageGCThresholdLow: 30e9
+    imageGCThresholdType: "absolute"
+
+
 grafana:
   ingress:
     annotations:
@@ -138,13 +145,6 @@ prometheus:
         - hosts:
             - prometheus-mybinder.mybinder.ovh
           secretName: tls-crt
-
-
-imageCleaner:
-  # Use 40GB as upper limit, size is given in bytes
-  imageGCThresholdHigh: 40e9
-  imageGCThresholdLow: 30e9
-  imageGCThresholdType: "absolute"
 
 
 nginx-ingress:
