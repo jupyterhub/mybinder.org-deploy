@@ -125,6 +125,7 @@ grafana:
           isDefault: true
           editable: false
 
+
 prometheus:
   server:
     ingress:
@@ -137,6 +138,14 @@ prometheus:
         - hosts:
             - prometheus-mybinder.mybinder.ovh
           secretName: tls-crt
+
+
+imageCleaner:
+  # Use 40GB as upper limit, size is given in bytes
+  imageGCThresholdHigh: 40e9
+  imageGCThresholdLow: 30e9
+  imageGCThresholdType: "absolute"
+
 
 nginx-ingress:
   controller:
