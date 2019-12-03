@@ -9,7 +9,7 @@ binderhub:
     01-eventlog: ""
   config:
     BinderHub:
-      pod_quota: 120
+      pod_quota: 20
       hub_url: http://hub.turing.wtte.ch
       badge_base_url: https://mybinder.org
       image_prefix: turingmybinderregistry.azurecr.io/binder-prod/binder-prod-
