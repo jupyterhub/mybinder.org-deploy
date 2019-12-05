@@ -65,7 +65,7 @@ binderhub:
         - ^https%3A%2F%2Fbitbucket.org%2Fnikiubel%2Fnikiubel.bitbucket.io.git/.*
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:0.10.0-119.ga5f3cd9
+      build_image: jupyter/repo2docker:0.10.0-85.g11fc69f
       per_repo_quota: 100
       per_repo_quota_higher: 200
 
