@@ -3,16 +3,13 @@ projectName: ovh
 binderhub:
   config:
     BinderHub:
-      pod_quota: 20
+      pod_quota: 30
       hub_url: https://hub-binder.mybinder.ovh
       badge_base_url: https://mybinder.org
-      image_prefix: dlqpwel7.gra5.container-registry.ovh.net/binder/r2d-f18835fd-
       sticky_builds: true
-    DockerRegistry:
-      token_url: https://dlqpwel7.gra5.container-registry.ovh.net/service/token?service=harbor-registry
-  registry:
-    url: https://dlqpwel7.gra5.container-registry.ovh.net
-    username: cLxohgOONW
+      # docker hub registry for OVH
+      use_registry: true
+      image_prefix: binderhubovh/ovhbhub-
 
   replicas: 1
 
@@ -102,6 +99,13 @@ binderhub:
         enabled: true
         replicas: 5
 
+  imageCleaner:
+    # Use 40GB as upper limit, size is given in bytes
+    imageGCThresholdHigh: 40e9
+    imageGCThresholdLow: 30e9
+    imageGCThresholdType: "absolute"
+
+
 grafana:
   ingress:
     annotations:
@@ -125,6 +129,7 @@ grafana:
           isDefault: true
           editable: false
 
+
 prometheus:
   server:
     ingress:
@@ -137,6 +142,7 @@ prometheus:
         - hosts:
             - prometheus-mybinder.mybinder.ovh
           secretName: tls-crt
+
 
 nginx-ingress:
   controller:

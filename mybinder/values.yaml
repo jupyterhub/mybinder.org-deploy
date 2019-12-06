@@ -68,16 +68,9 @@ binderhub:
         - ^https%3A%2F%2Fbitbucket.org%2Fnikiubel%2Fnikiubel.bitbucket.io.git/.*
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:0.10.0-112.g242107b
+      build_image: jupyter/repo2docker:0.10.0-123.gf79bf04
       per_repo_quota: 100
       per_repo_quota_higher: 200
-      appendix: |
-        USER root
-        ENV BINDER_URL={binder_url}
-        ENV PERSISTENT_BINDER_URL={persistent_binder_url}
-        ENV REPO_URL={repo_url}
-        ENV REF_URL={ref_url}
-        USER $NB_USER
 
       banner_message: |
         <div style="text-align: center;">Thanks to <a href="https://cloud.google.com/">Google Cloud</a>, <a href="https://www.ovh.com/">OVH</a> and <a href="https://notebooks.gesis.org">GESIS Notebooks</a> for supporting us 🎉!</div>
@@ -154,10 +147,6 @@ binderhub:
 
   dind:
     enabled: true
-    daemonset:
-      image:
-        name: docker
-        tag: 18.09.2-dind
 
   imageCleaner:
     enabled: true
