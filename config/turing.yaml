@@ -38,6 +38,11 @@ binderhub:
     annotations:
       kubernetes.io/ingress.class: nginx
       cert-manager.io/cluster-issuer: letsencrypt-staging
+      kubernetes.io/tls-acme: "true"
+    tls:
+      - secretName: tls-crt
+        hosts:
+          - testbinder.hub23.turing.ac.uk
 
   jupyterhub:
     hub:
@@ -76,7 +81,8 @@ binderhub:
     ingress:
       annotations:
         kubernetes.io/ingress.class: nginx
-        cert-manager.io/cluster-issuer: letsencrypt-prod
+        cert-manager.io/cluster-issuer: letsencrypt-staging
+        kubernetes.io/tls-acme: "true"
       hosts:
         - testhub.hub23.turing.ac.uk
       tls:
