@@ -430,7 +430,7 @@ federationRedirect:
   hosts:
     gke:
       url: https://gke.mybinder.org
-      weight: 66
+      weight: 65
       health: https://gke.mybinder.org/health
       versions: https://gke.mybinder.org/versions
       prime: true
@@ -444,3 +444,8 @@ federationRedirect:
       weight: 15
       health: https://gesis.mybinder.org/health
       versions: https://gesis.mybinder.org/versions
+    turing:
+      url: https://testbinder.hub23.turing.ac.uk
+      weight: 1
+      health: https://testbinder.hub23.turing.ac.uk/health
+      versions: https://testbinder.hub23.turing.ac.uk/versions
