@@ -4,6 +4,9 @@ tags:
   kubelego: false
   certmanager: true
 
+letsencrypt:
+  contactEmail: drsarahlgibson@gmail.com
+
 binderhub:
   extraConfig:
     01-eventlog: ""
