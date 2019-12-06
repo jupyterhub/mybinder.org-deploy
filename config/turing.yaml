@@ -135,6 +135,8 @@ nginx-ingress:
   controller:
     service:
       loadBalancerIP: 51.105.186.97
+    config:
+      proxy-body-size: 64m
 
 
 static:
@@ -187,3 +189,9 @@ gcsProxy:
   buckets:
     - name: mybinder-staging-events-archive
       host: archive-analytics-staging-mybinder.turing.10.0.0.1.xip.io
+
+certmanager:
+  ingressShim:
+    defaultIssuerName: "staging"
+    defaultIssuerKind: "ClusterIssuer"
+    defaultACMEChallengeType: "http01"
