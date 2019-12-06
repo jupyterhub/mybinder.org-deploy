@@ -3,7 +3,7 @@ projectName: ovh
 binderhub:
   config:
     BinderHub:
-      pod_quota: 50
+      pod_quota: 30
       hub_url: https://hub-binder.mybinder.ovh
       badge_base_url: https://mybinder.org
       sticky_builds: true
