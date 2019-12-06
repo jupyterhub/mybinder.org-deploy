@@ -10,7 +10,7 @@ binderhub:
   config:
     BinderHub:
       pod_quota: 20
-      hub_url: http://hub.turing.wtte.ch
+      hub_url: http://testhub.hub23.turing.ac.uk
       badge_base_url: https://mybinder.org
       image_prefix: turingmybinderregistry.azurecr.io/binder-prod/binder-prod-
       sticky_builds: true
@@ -31,7 +31,7 @@ binderhub:
 
   ingress:
     hosts:
-      - binder.turing.wtte.ch
+      - testbinder.hub23.turing.ac.uk
     annotations:
       kubernetes.io/ingress.class: nginx
       cert-manager.io/cluster-issuer: letsencrypt-prod
@@ -75,11 +75,11 @@ binderhub:
         kubernetes.io/ingress.class: nginx
         cert-manager.io/cluster-issuer: letsencrypt-prod
       hosts:
-        - hub.turing.wtte.ch
+        - testhub.hub23.turing.ac.uk
       tls:
         - secretName: tls-crt
           hosts:
-            - hub.turing.wtte.ch
+            - testhub.hub23.turing.ac.uk
 
     scheduling:
       userScheduler:
@@ -96,11 +96,11 @@ grafana:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: 'true'
     hosts:
-      - grafana.turing.wtte.ch
+      - grafana.hub23.turing.ac.uk
     tls:
       - secretName: tls-crt
         hosts:
-          - grafana.turing.wtte.ch
+          - grafana.hub23.turing.ac.uk
 
   datasources:
     datasources.yaml:
@@ -109,7 +109,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.turing.wtte.ch
+          url: https://prometheus.hub23.turing.ac.uk
           access: direct
           isDefault: true
           editable: false
@@ -121,10 +121,10 @@ prometheus:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: 'false'
       hosts:
-        - prometheus.turing.wtte.ch
+        - prometheus.hub23.turing.ac.uk
       tls:
         - hosts:
-            - prometheus.turing.wtte.ch
+            - prometheus.hub23.turing.ac.uk
           secretName: tls-crt
 
 
