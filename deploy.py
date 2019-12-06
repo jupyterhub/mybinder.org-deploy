@@ -145,14 +145,14 @@ def setup_helm(release):
     ])
 
 
-def deploy(release, cluster):
+def deploy(release):
     """Deploy jupyterhub"""
     print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
-    if cluster == "turing":
+    if release == "turing":
         subprocess.check_call([
             "python3",
             "secrets/ban.py",
-            "turing",
+            release,
         ])
     else:
         subprocess.check_call([
@@ -223,11 +223,7 @@ def main():
         setup_auth_gcloud(args.release, args.cluster)
 
     setup_helm(args.release)
-
-    if args.cluster == 'turing':
-        deploy(args.release, "turing")
-    else:
-        deploy(args.release, args.cluster)
+    deploy(args.release)
 
 
 if __name__ == '__main__':
