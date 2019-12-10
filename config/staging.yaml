@@ -1,5 +1,12 @@
 projectName: binder-staging
 
+tags:
+  kubelego: false
+  certmanager: true
+
+letsencrypt:
+  contactEmail: yuvipanda@gmail.com
+
 binderhub:
   config:
     BinderHub:
@@ -12,6 +19,14 @@ binderhub:
     hosts:
       - gke.staging.mybinder.org
       - gke2.staging.mybinder.org
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-staging
+      kubernetes.io/tls-acme: 'true'
+    tls:
+      - secretName: certmanager-tls-binder-staging
+        hosts:
+          - gke.staging.mybinder.org
+          - gke2.staging.mybinder.org
 
   jupyterhub:
     singleuser:
@@ -22,6 +37,8 @@ binderhub:
         guarantee: 0.1
         limit: 0.5
     ingress:
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-staging
       hosts:
         - hub.gke.staging.mybinder.org
       tls:
@@ -124,3 +141,9 @@ federationRedirect:
       versions: https://gke2.staging.mybinder.org/versions
     # unset the gesis entry
     gesis: null
+
+certmanager:
+  ingressShim:
+    defaultIssuerName: "staging"
+    defaultIssuerKind: "ClusterIssuer"
+    defaultACMEChallengeType: "http01"
