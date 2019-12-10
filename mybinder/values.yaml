@@ -1,3 +1,6 @@
+tags:
+  kubelego: true
+
 etcJupyter:
   jupyter_notebook_config.json:
     NotebookApp:
