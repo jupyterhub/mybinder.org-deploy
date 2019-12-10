@@ -434,7 +434,7 @@ federationRedirect:
       health: https://gesis.mybinder.org/health
       versions: https://gesis.mybinder.org/versions
     turing:
-      url: https://testbinder.hub23.turing.ac.uk
+      url: https://turing.mybinder.org
       weight: 1
-      health: https://testbinder.hub23.turing.ac.uk/health
-      versions: https://testbinder.hub23.turing.ac.uk/versions
+      health: https://turing.mybinder.org/health
+      versions: https://turing.mybinder.org/versions
