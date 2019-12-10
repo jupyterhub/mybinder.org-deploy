@@ -35,6 +35,7 @@ binderhub:
   ingress:
     hosts:
       - testbinder.hub23.turing.ac.uk
+      - turing.mybinder.org
     annotations:
       kubernetes.io/ingress.class: nginx
       cert-manager.io/cluster-issuer: letsencrypt-prod
@@ -43,6 +44,7 @@ binderhub:
       - secretName: turing-binder-tls-crt
         hosts:
           - testbinder.hub23.turing.ac.uk
+          - turing.mybinder.org
 
   jupyterhub:
     hub:
