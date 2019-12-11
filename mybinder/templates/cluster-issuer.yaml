@@ -1,6 +1,6 @@
+---
 {{- range $certmanager := .Values.binderhub.ingress.annotations }}
 {{- if (eq $certmanager.cert-manager.io/clusterissuer "letsencrypt-staging") }}
-    ---
     apiVersion: cert-manager.io/v1alpha2
     kind: ClusterIssuer
     metadata:
@@ -17,8 +17,8 @@
             ingress:
               class: nginx
 {{ end }}
+---
 {{- if (eq $certmanager.cert-manager.io/clusterissuer "letsencrypt-prod") }}
-    ---
     apiVersion: cert-manager.io/v1alpha2
     kind: ClusterIssuer
     metadata:
