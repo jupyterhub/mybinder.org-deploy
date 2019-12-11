@@ -163,16 +163,8 @@ redirector:
   redirects:
     - type: host
       host:
-        from: beta-binder.turing.10.0.0.1.xip.io
-        to: turing.10.0.0.1.xip.io
-    - type: host
-      host:
         from: docs-mybinder.turing.10.0.0.1.xip.io
         to: mybinder.readthedocs.io
-    - type: host
-      host:
-        from: playground-turing.10.0.0.1.xip.io
-        to: play.nteract.io
 
 matomo:
   enabled: false
