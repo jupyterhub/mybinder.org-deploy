@@ -1,32 +1,37 @@
----
-apiVersion: cert-manager.io/v1alpha2
-kind: ClusterIssuer
-metadata:
-  name: letsencrypt-staging
-  namespace: turing
-spec:
-  acme:
-    server: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: drsarahlgibson@gmail.com
-    privateKeySecretRef:
+{{- range $certmanager := .Values.binderhub.ingress.annotations }}
+{{- if (eq $certmanager.cert-manager.io/clusterissuer "letsencrypt-staging") }}
+    ---
+    apiVersion: cert-manager.io/v1alpha2
+    kind: ClusterIssuer
+    metadata:
       name: letsencrypt-staging
-    solvers:
-    - http01:
-        ingress:
-          class: nginx
----
-apiVersion: cert-manager.io/v1alpha2
-kind: ClusterIssuer
-metadata:
-  name: letsencrypt-prod
-  namespace: turing
-spec:
-  acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
-    email: drsarahlgibson@gmail.com
-    privateKeySecretRef:
+      namespace: turing
+    spec:
+      acme:
+        server: https://acme-staging-v02.api.letsencrypt.org/directory
+        email: drsarahlgibson@gmail.com
+        privateKeySecretRef:
+          name: letsencrypt-staging
+        solvers:
+        - http01:
+            ingress:
+              class: nginx
+{{ end }}
+{{- if (eq $certmanager.cert-manager.io/clusterissuer "letsencrypt-prod") }}
+    ---
+    apiVersion: cert-manager.io/v1alpha2
+    kind: ClusterIssuer
+    metadata:
       name: letsencrypt-prod
-    solvers:
-    - http01:
-        ingress:
-          class: nginx
+      namespace: turing
+    spec:
+      acme:
+        server: https://acme-v02.api.letsencrypt.org/directory
+        email: drsarahlgibson@gmail.com
+        privateKeySecretRef:
+          name: letsencrypt-prod
+        solvers:
+        - http01:
+            ingress:
+              class: nginx
+{{ end }}
