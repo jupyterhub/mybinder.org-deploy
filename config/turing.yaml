@@ -38,7 +38,7 @@ binderhub:
       - turing.mybinder.org
     annotations:
       kubernetes.io/ingress.class: nginx
-      cert-manager.io/cluster-issuer: letsencrypt-prod
+      cert-manager.io/cluster-issuer: letsencrypt-staging
       kubernetes.io/tls-acme: "true"
     tls:
       - secretName: turing-binder-tls-crt
@@ -200,6 +200,6 @@ gcsProxy:
 
 certmanager:
   ingressShim:
-    defaultIssuerName: "prod"
+    defaultIssuerName: "letsencrypt-staging"
     defaultIssuerKind: "ClusterIssuer"
     defaultACMEChallengeType: "http01"
