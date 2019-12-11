@@ -1,5 +1,5 @@
----
 {{- if .Values.tags.certmanager }}
+---
 apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
 metadata:
@@ -15,9 +15,7 @@ spec:
     - http01:
         ingress:
           class: nginx
-{{- end }}
 ---
-{{- if .Values.tags.certmanager }}
 apiVersion: cert-manager.io/v1alpha2
 kind: ClusterIssuer
 metadata:
