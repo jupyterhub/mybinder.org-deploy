@@ -13,7 +13,7 @@ binderhub:
   config:
     BinderHub:
       pod_quota: 20
-      hub_url: http://testhub.hub23.turing.ac.uk
+      hub_url: http://newhub.hub23.turing.ac.uk
       badge_base_url: https://mybinder.org
       image_prefix: turingmybinderregistry.azurecr.io/binder-prod/binder-prod-
       sticky_builds: true
@@ -34,16 +34,16 @@ binderhub:
 
   ingress:
     hosts:
-      - testbinder.hub23.turing.ac.uk
+      - newbinder.hub23.turing.ac.uk
       - turing.mybinder.org
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     tls:
-      - secretName: turing-binder-tls-crt
+      - secretName: turing-newbinder-tls-crt
         hosts:
-          - testbinder.hub23.turing.ac.uk
+          - newbinder.hub23.turing.ac.uk
           - turing.mybinder.org
 
   jupyterhub:
@@ -86,11 +86,11 @@ binderhub:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
       hosts:
-        - testhub.hub23.turing.ac.uk
+        - newhub.hub23.turing.ac.uk
       tls:
-        - secretName: turing-hub-tls-crt
+        - secretName: turing-newhub-tls-crt
           hosts:
-            - testhub.hub23.turing.ac.uk
+            - newhub.hub23.turing.ac.uk
 
     scheduling:
       userScheduler:
@@ -107,11 +107,11 @@ grafana:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: 'true'
     hosts:
-      - grafana.hub23.turing.ac.uk
+      - newgraf.hub23.turing.ac.uk
     tls:
-      - secretName: turing-grafana-tls-crt
+      - secretName: turing-newgraf-tls-crt
         hosts:
-          - grafana.hub23.turing.ac.uk
+          - newgraf.hub23.turing.ac.uk
 
   datasources:
     datasources.yaml:
@@ -120,7 +120,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.hub23.turing.ac.uk
+          url: https://newprom.hub23.turing.ac.uk
           access: direct
           isDefault: true
           editable: false
@@ -132,11 +132,11 @@ prometheus:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: 'false'
       hosts:
-        - prometheus.hub23.turing.ac.uk
+        - newprom.hub23.turing.ac.uk
       tls:
         - hosts:
-            - prometheus.hub23.turing.ac.uk
-          secretName: turing-prometheus-tls-crt
+            - newprom.hub23.turing.ac.uk
+          secretName: turing-newprom-tls-crt
 
 
 nginx-ingress:
@@ -153,11 +153,11 @@ static:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: 'false'
     hosts:
-      - static.hub23.turing.ac.uk
+      - newstat.hub23.turing.ac.uk
     tls:
       - hosts:
-          - static.hub23.turing.ac.uk
-        secretName: turing-static-tls-crt
+          - newstat.hub23.turing.ac.uk
+        secretName: turing-newstat-tls-crt
 
 redirector:
   redirects:
