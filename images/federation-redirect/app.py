@@ -14,7 +14,7 @@ from tornado.ioloop import IOLoop
 from tornado.log import enable_pretty_logging, app_log
 
 from tornado.httpclient import AsyncHTTPClient, HTTPError, HTTPRequest
-from tornado.httputil import HTTPHeaders
+from tornado.httputil import HTTPHeaders, url_concat
 from tornado.web import RequestHandler
 
 
@@ -125,6 +125,7 @@ class ProxyHandler(RequestHandler):
 
         headers = self.request.headers.copy()
         headers["Host"] = self.host[8:]
+        headers["X-Binder-Launch-Host"] = "https://mybinder.org/"
 
         body = self.request.body
         if not body:
@@ -191,7 +192,9 @@ class RedirectHandler(RequestHandler):
 
         self.set_cookie("host", host_name, path=uri)
 
-        self.redirect(host_name + uri)
+        redirect = url_concat(host_name + uri, {'binder_launch_host': 'https://mybinder.org/'})
+        app_log.debug('Redirecting to {}'.format(redirect))
+        self.redirect(redirect, status=307)
 
 
 class ActiveHostsHandler(RequestHandler):
