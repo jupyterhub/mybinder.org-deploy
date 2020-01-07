@@ -33,6 +33,7 @@ binderhub:
       memory: 1Gi
 
   ingress:
+    enabled: true
     hosts:
       - binder.mybinder.turing.ac.uk
       - turing.mybinder.org
@@ -40,6 +41,9 @@ binderhub:
       cert-manager.io/cluster-issuer: letsencrypt-prod
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
+      https:
+        enabled: true
+        type: nginx
     tls:
       - secretName: turing-binder-tls-crt
         hosts:
@@ -81,10 +85,14 @@ binderhub:
             cpu: 1
 
     ingress:
+      enabled: true
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-prod
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
+        https:
+          enabled: true
+          type: nginx
       hosts:
         - hub.mybinder.turing.ac.uk
       tls:
@@ -105,7 +113,7 @@ grafana:
   ingress:
     annotations:
       kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: 'true'
+      kubernetes.io/tls-acme: 'false'
     hosts:
       - grafana.mybinder.turing.ac.uk
     tls:
@@ -142,7 +150,7 @@ prometheus:
 nginx-ingress:
   controller:
     service:
-      loadBalancerIP: 51.105.153.145
+      loadBalancerIP: 51.105.120.231
     config:
       proxy-body-size: 64m
 
