@@ -1,0 +1,200 @@
+projectName: turing
+
+tags:
+  kubelego: false
+  certmanager: true
+
+letsencrypt:
+  contactEmail: drsarahlgibson@gmail.com
+
+binderhub:
+  extraConfig:
+    01-eventlog: ""
+  config:
+    BinderHub:
+      pod_quota: 20
+      hub_url: https://hub.mybinder.turing.ac.uk
+      badge_base_url: https://mybinder.org
+      image_prefix: turingmybinderregistry.azurecr.io/binder-prod/binder-prod-
+      sticky_builds: true
+    DockerRegistry:
+      token_url: https://turingmybinderregistry.azurecr.io/oauth2/token?service=turingmybinderregistry.azurecr.io
+  registry:
+    url: https://turingmybinderregistry.azurecr.io
+
+  replicas: 1
+
+  resources:
+    requests:
+      cpu: "0.25"
+      memory: 1Gi
+    limits:
+      cpu: "2"
+      memory: 1Gi
+
+  ingress:
+    enabled: true
+    hosts:
+      - binder.mybinder.turing.ac.uk
+      - turing.mybinder.org
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+      https:
+        enabled: true
+        type: nginx
+    tls:
+      - secretName: turing-binder-tls-crt
+        hosts:
+          - binder.mybinder.turing.ac.uk
+          - turing.mybinder.org
+
+  jupyterhub:
+    hub:
+      resources:
+        requests:
+          cpu: "0.25"
+          memory: 1Gi
+        limits:
+          cpu: "2"
+          memory: 1Gi
+    singleuser:
+      memory:
+        guarantee: 550M
+        limit: 2G
+      cpu:
+        guarantee: 0.01
+        limit: 1
+    proxy:
+      chp:
+        resources:
+          requests:
+            memory: 320Mi
+            cpu: "0.1"
+          limits:
+            memory: 320Mi
+            cpu: "0.5"
+      nginx:
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: "0.25"
+          limits:
+            memory: 512Mi
+            cpu: 1
+
+    ingress:
+      enabled: true
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+        https:
+          enabled: true
+          type: nginx
+      hosts:
+        - hub.mybinder.turing.ac.uk
+      tls:
+        - secretName: turing-hub-tls-crt
+          hosts:
+            - hub.mybinder.turing.ac.uk
+
+    scheduling:
+      userScheduler:
+        enabled: false
+      podPriority:
+        enabled: true
+      userPlaceholder:
+        enabled: true
+        replicas: 5
+
+grafana:
+  ingress:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: 'true'
+    hosts:
+      - grafana.mybinder.turing.ac.uk
+    tls:
+      - secretName: turing-grafana-tls-crt
+        hosts:
+          - grafana.mybinder.turing.ac.uk
+
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: prometheus
+          orgId: 1
+          type: prometheus
+          url: https://prometheus.mybinder.turing.ac.uk
+          access: direct
+          isDefault: true
+          editable: false
+
+prometheus:
+  server:
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: 'false'
+      hosts:
+        - prometheus.mybinder.turing.ac.uk
+      tls:
+        - hosts:
+            - prometheus.mybinder.turing.ac.uk
+          secretName: turing-prometheus-tls-crt
+
+
+nginx-ingress:
+  controller:
+    service:
+      loadBalancerIP: 51.105.120.231
+    config:
+      proxy-body-size: 64m
+
+
+static:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: 'false'
+    hosts:
+      - static.mybinder.turing.ac.uk
+    tls:
+      - hosts:
+          - static.mybinder.turing.ac.uk
+        secretName: turing-static-tls-crt
+
+redirector:
+  redirects:
+    - type: host
+      host:
+        from: docs-mybinder.turing.10.0.0.1.xip.io
+        to: mybinder.readthedocs.io
+
+matomo:
+  enabled: false
+  db:
+    instanceName: binder-staging:us-central1:matomo
+    serviceAccountKey: ""
+  trustedHosts:
+    - staging-mybinder.turing.10.0.0.1.xip.io
+  ingress:
+    hosts:
+      - staging-mybinder.turing.10.0.0.1.xip.io
+
+analyticsPublisher:
+  enabled: false
+  project: binder-turing
+  events:
+    sourceBucket: mybinder-staging-events-raw-export
+    destinationBucket: mybinder-staging-events-archive
+
+gcsProxy:
+  enabled: false
+  buckets:
+    - name: mybinder-staging-events-archive
+      host: archive-analytics-staging-mybinder.turing.10.0.0.1.xip.io

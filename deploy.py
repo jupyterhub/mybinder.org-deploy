@@ -14,6 +14,35 @@ HERE = os.path.dirname(__file__)
 ABSOLUTE_HERE = os.path.dirname(os.path.realpath(__file__))
 
 
+def setup_auth_turing(cluster):
+    """
+    Set up athentication with Turing k8s cluster on Azure.
+    """
+    # Read in auth info
+    azure_file = os.path.join(ABSOLUTE_HERE, "secrets", "turing-auth-key-prod.json")
+    with open(azure_file, "r") as stream:
+        azure = json.load(stream)
+
+    # Login in to Azure
+    login_cmd = [
+        "az", "login", "--service-principal",
+        "--username", azure["sp-app-id"],
+        "--password", azure["sp-app-key"],
+        "--tenant", azure["tenant-id"]
+    ]
+    subprocess.check_output(login_cmd)
+
+    # Set kubeconfig
+    creds_cmd = [
+        "az", "aks", "get-credentials",
+        "--name", cluster,
+        "--resource-group", "binder-prod"
+
+    ]
+    stdout = subprocess.check_output(creds_cmd)
+    print(stdout.decode('utf-8'))
+
+
 def setup_auth_ovh(release, cluster):
     """
     Set up authentication with 'binder-ovh' K8S from the ovh-kubeconfig.yml
@@ -122,6 +151,7 @@ def deploy(release):
     subprocess.check_call([
         "python3",
         "secrets/ban.py",
+        release,
     ])
 
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
@@ -170,7 +200,7 @@ def main():
     argparser.add_argument(
         'release',
         help="Release to deploy",
-        choices=['staging', 'prod', 'ovh']
+        choices=['staging', 'prod', 'ovh', 'turing']
     )
     argparser.add_argument(
         'cluster',
@@ -181,6 +211,8 @@ def main():
 
     if args.cluster == 'binder-ovh':
         setup_auth_ovh(args.release, args.cluster)
+    elif args.cluster == 'turing':
+        setup_auth_turing(args.cluster)
     else:
         setup_auth_gcloud(args.release, args.cluster)
 
