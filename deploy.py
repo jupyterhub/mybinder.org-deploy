@@ -148,11 +148,17 @@ def setup_helm(release):
 def deploy(release):
     """Deploy jupyterhub"""
     print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
-    subprocess.check_call([
-        "python3",
-        "secrets/ban.py",
-        release,
-    ])
+    if release == 'turing':
+        subprocess.check_call([
+            "python3",
+            "secrets/ban.py",
+            release,
+        ])
+    else:
+        subprocess.check_call([
+            "python3",
+            "secrets/ban.py",
+        ])
 
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
     helm = [
