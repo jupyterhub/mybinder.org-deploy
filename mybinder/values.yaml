@@ -1,5 +1,6 @@
 tags:
   kubelego: true
+  certmanager: false
 
 etcJupyter:
   jupyter_notebook_config.json:
