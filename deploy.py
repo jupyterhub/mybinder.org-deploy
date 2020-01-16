@@ -96,7 +96,36 @@ def setup_auth_gcloud(release, cluster):
 
 def setup_helm(release):
     """ensure helm is up to date"""
-    subprocess.check_call(['helm', 'init', '--upgrade'])
+    # First check the helm client and server versions
+    client_helm_cmd = ["helm", "version", "-c", "--short"]
+    client_version = subprocess.check_output(client_helm_cmd
+        ).decode('utf-8').split(":")[1].split("+")[0].strip()
+
+    server_helm_cmd = ["helm", "version", "-s", "--short"]
+    server_version = subprocess.check_output(server_helm_cmd
+        ).decode('utf-8').split(":")[1].split("+")[0].strip()
+
+    print(
+        "Client version: {}, Server version: {}".format(
+            client_version,
+            server_version,
+        )
+    )
+
+    if client_version != "v2.11.0":
+        raise Exception(
+            "You are not running helm v2.11.0 which is the version our continuous deployment system uses.\n" +
+            "Please change your installation and try again.\n" +
+        )
+    elif (client_version == "v2.11.0") and (client_version != server_version):
+        print(
+            "Helm client and server versions do not match. Performing a force upgrade."
+        )
+        subprocess.check_call(["helm", "init", "--upgrade", "--force-upgrade"])
+    elif (client_version == "v2.11.0") and (client_version == server_version):
+        subprocess.check_call(['helm', 'init', '--upgrade'])
+    else:
+        raise Exception("Please check your helm installation.")
 
     deployment = json.loads(subprocess.check_output([
         'kubectl',
