@@ -138,6 +138,7 @@ prometheus:
   server:
     ingress:
       annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: 'true'
       hosts:
@@ -161,8 +162,9 @@ nginx-ingress:
 static:
   ingress:
     annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
       kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: 'false'
+      kubernetes.io/tls-acme: 'true'
     hosts:
       - static.mybinder.turing.ac.uk
     tls:
