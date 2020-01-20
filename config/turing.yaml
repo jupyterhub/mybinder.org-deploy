@@ -139,12 +139,14 @@ prometheus:
     ingress:
       annotations:
         kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: 'false'
+        kubernetes.io/tls-acme: 'true'
       hosts:
         - prometheus.mybinder.turing.ac.uk
+        - prometheus.turing.mybinder.org
       tls:
         - hosts:
             - prometheus.mybinder.turing.ac.uk
+            - prometheus.turing.mybinder.org
           secretName: turing-prometheus-tls-crt
 
 
