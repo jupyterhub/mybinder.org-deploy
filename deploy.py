@@ -3,6 +3,8 @@ import argparse
 import json
 import os
 import subprocess
+import re
+import sys
 
 import yaml
 
@@ -240,6 +242,10 @@ def deploy(release):
 
 
 def main():
+
+    # Get current working directory
+    cwd = os.getcwd()
+
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         'release',
@@ -258,7 +264,7 @@ def main():
 
     args = argparser.parse_args()
 
-    if not args.local:
+    if (cwd.startswith('/home/travis')) and (not args.local):
         if args.cluster == 'binder-ovh':
             setup_auth_ovh(args.release, args.cluster)
         elif args.cluster == 'turing':
@@ -267,6 +273,24 @@ def main():
             setup_auth_gcloud(args.release, args.cluster)
 
         setup_helm(args.release)
+    elif (not cwd.startswith('/home/travis')) and (not args.local):
+        print(
+            "You do not seem to be running on Travis but have not set the --local flag."
+        )
+
+        regex_no = re.compile("^[n|N][o|O]$")
+        regex_yes = re.compile("^[y|Y][e|E][s|S]$")
+        response = input("Are you sure you want to execute this script? [yes/no]: ")
+
+        if regex_no.match(response):
+            print("Exiting script.")
+            sys.exit()
+        elif regex_yes.match(response):
+            pass
+        else:
+            raise ValueError(
+                "Unrecognised input. Expecting either yes or no."
+            )
 
     deploy(args.release)
 
