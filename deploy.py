@@ -107,11 +107,10 @@ def setup_helm(release):
     server_version = subprocess.check_output(server_helm_cmd
         ).decode('utf-8').split(":")[1].split("+")[0].strip()
 
-    print(
-        "Client version: {}, Server version: {}".format(
-            client_version,
-            server_version,
-        )
+    print(BOLD + GREEN +
+        f"Client version: {client_version}, Server version: {server_version}" +
+        NC,
+        flush=True
     )
 
     # Now check if the version of helm matches v2.11.0 which travis is expecting
