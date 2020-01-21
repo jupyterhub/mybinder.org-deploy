@@ -126,7 +126,7 @@ def setup_helm(release):
         raise Exception(
             "Helm client and server versions do not match. Performing a force upgrade often resolves this issue." +
             "Please run the following command and re-execute this script.\n\n" +
-            "\thelm init --upgrade --force-upgrade"
+            "helm init --upgrade --force-upgrade"
         )
     elif (client_version == "v2.11.0") and (client_version == server_version):
         # All is good! Perform normal helm init command.
