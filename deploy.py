@@ -130,7 +130,7 @@ def setup_helm(release):
         )
     elif (client_version == "v2.11.0") and (client_version == server_version):
         # All is good! Perform normal helm init command.
-        subprocess.check_call(['helm', 'init', '--upgrade'])
+        subprocess.check_call(['helm', 'init', '--client-only'])
     else:
         # This is a catch-all exception. Hopefully this doesn't execute!
         raise Exception("Please check your helm installation.")
