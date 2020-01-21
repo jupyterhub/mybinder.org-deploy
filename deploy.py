@@ -246,6 +246,7 @@ def main():
     # Get current working directory
     cwd = os.getcwd()
 
+    # parse command line args
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         'release',
@@ -264,7 +265,9 @@ def main():
 
     args = argparser.parse_args()
 
+    # Check if the script is being run on travis or hand the --local flag set
     if (cwd.startswith('/home/travis')) and (not args.local):
+        # script is running on travis, proceed with auth and helm setup
         if args.cluster == 'binder-ovh':
             setup_auth_ovh(args.release, args.cluster)
         elif args.cluster == 'turing':
@@ -273,21 +276,28 @@ def main():
             setup_auth_gcloud(args.release, args.cluster)
 
         setup_helm(args.release)
+
     elif (not cwd.startswith('/home/travis')) and (not args.local):
+        # Catch the case where the script is running locally but the --local flag
+        # has not been set. Check that the user is sure that they want to do this!
         print(
             "You do not seem to be running on Travis but have not set the --local flag."
         )
 
+        # Use regex to match user input
         regex_no = re.compile("^[n|N][o|O]$")
         regex_yes = re.compile("^[y|Y][e|E][s|S]$")
         response = input("Are you sure you want to execute this script? [yes/no]: ")
 
         if regex_no.match(response):
+            # User isn't sure - exit script
             print("Exiting script.")
             sys.exit()
         elif regex_yes.match(response):
+            # User is sure - proceed
             pass
         else:
+            # User wrote something that wasn't "yes" or "no"
             raise ValueError(
                 "Unrecognised input. Expecting either yes or no."
             )
