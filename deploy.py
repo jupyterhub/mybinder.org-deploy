@@ -117,7 +117,7 @@ def setup_helm(release):
         # The local helm version is not v2.11.0 - user needs to change the installation
         raise Exception(
             "You are not running helm v2.11.0 which is the version our continuous deployment system uses.\n" +
-            "Please change your installation and try again.\n" +
+            "Please change your installation and try again.\n"
         )
     elif (client_version == "v2.11.0") and (client_version != server_version):
         # The correct local version of helm is installed, but the server side
@@ -250,17 +250,24 @@ def main():
         'cluster',
         help='Cluster to do the deployment in'
     )
+    argparser.add_argument(
+        '--local',
+        action='store_true',
+        help="If the script is running locally, skip auth and helm steps."
+    )
 
     args = argparser.parse_args()
 
-    if args.cluster == 'binder-ovh':
-        setup_auth_ovh(args.release, args.cluster)
-    elif args.cluster == 'turing':
-        setup_auth_turing(args.cluster)
-    else:
-        setup_auth_gcloud(args.release, args.cluster)
+    if not args.local:
+        if args.cluster == 'binder-ovh':
+            setup_auth_ovh(args.release, args.cluster)
+        elif args.cluster == 'turing':
+            setup_auth_turing(args.cluster)
+        else:
+            setup_auth_gcloud(args.release, args.cluster)
 
-    setup_helm(args.release)
+        setup_helm(args.release)
+
     deploy(args.release)
 
 
