@@ -123,10 +123,11 @@ def setup_helm(release):
         # The correct local version of helm is installed, but the server side
         # has previously accidentally been upgraded. Perform a force-upgrade
         # to bring the server side back to v2.11.0
-        print(
-            "Helm client and server versions do not match. Performing a force upgrade."
+        raise Exception(
+            "Helm client and server versions do not match. Performing a force upgrade often resolves this issue." +
+            "Please run the following command and re-execute this script.\n\n" +
+            "\thelm init --upgrade --force-upgrade"
         )
-        subprocess.check_call(["helm", "init", "--upgrade", "--force-upgrade"])
     elif (client_version == "v2.11.0") and (client_version == server_version):
         # All is good! Perform normal helm init command.
         subprocess.check_call(['helm', 'init', '--upgrade'])
