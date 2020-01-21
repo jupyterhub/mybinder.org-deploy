@@ -127,7 +127,7 @@ def setup_helm(release):
         # to bring the server side back to v2.11.0
         raise Exception(
             "Helm client and server versions do not match. Performing a force upgrade often resolves this issue." +
-            "Please run the following command and re-execute this script.\n\n" +
+            "Please run the following command and re-execute this script.\n\n\t" +
             "helm init --upgrade --force-upgrade"
         )
     elif (client_version == "v2.11.0") and (client_version == server_version):
