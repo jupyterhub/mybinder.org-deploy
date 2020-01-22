@@ -27,6 +27,7 @@ import pipes
 import subprocess
 
 os.chdir(os.path.dirname(sys.argv[0]))
+print(os.getcwd())
 
 
 def check_call(cmd, **kwargs):
@@ -43,7 +44,7 @@ def check_call(cmd, **kwargs):
         sys.exit(e.returncode)
 
 
-def lint(yamllint_config, values, kubernetes_versions, output_dir, debug):
+def lint(chart_name, yamllint_config, values, kubernetes_versions, output_dir, debug):
     """Calls `helm lint`, `helm template`, `yamllint` and `kubeval`."""
 
     print("### Clearing output directory")
@@ -52,7 +53,9 @@ def lint(yamllint_config, values, kubernetes_versions, output_dir, debug):
 
     print("### Linting started")
     print("### 1/4 - helm lint: lint helm templates")
-    helm_lint_cmd = ["helm", "lint", "../../jupyterhub", "--values", values]
+    helm_lint_cmd = ["helm", "lint", f"../{chart_name}/"]
+    for file in values:
+        helm_lint_cmd.extend(["-f", f"../{file}"])
     if debug:
         helm_lint_cmd.append("--debug")
     check_call(helm_lint_cmd)
@@ -61,12 +64,12 @@ def lint(yamllint_config, values, kubernetes_versions, output_dir, debug):
     helm_template_cmd = [
         "helm",
         "template",
-        "../../jupyterhub",
-        "--values",
-        values,
+        f"../{chart_name}",
         "--output-dir",
         output_dir,
     ]
+    for file in values:
+        helm_template_cmd.extend(["-f", f"../{file}"])
     if debug:
         helm_template_cmd.append("--debug")
     check_call(helm_template_cmd)
@@ -104,7 +107,7 @@ if __name__ == "__main__":
     )
     argparser.add_argument(
         "--values",
-        default="lint-and-validate-values.yaml",
+        nargs="+",
         help="Specify Helm values in a YAML file (can specify multiple)",
     )
     argparser.add_argument(
@@ -123,10 +126,17 @@ if __name__ == "__main__":
         default="yamllint-config.yaml",
         help="Specify a yamllint config",
     )
+    argparser.add_argument(
+        "--chart-name",
+        default="mybinder",
+        help="Specify a helm chart to lint and validate"
+    )
 
     args = argparser.parse_args()
+    print(args)
 
     lint(
+        args.chart_name,
         args.yamllint_config,
         args.values,
         args.kubernetes_versions,
