@@ -39,4 +39,28 @@ jobs:
           cd git-crypt
           make
           make install PREFIX=${PWD}
-          cd .. && ls
+      - name: Unlock secrets
+        run: |
+          git-crypt/git-crypt unlock ${{ secrets.gitcryptSecret }}
+
+      # Now lint and validate the helm chart for each cluster
+      - name: Lint and Validate staging
+        run: |
+          python scripts/lint-and-validate.py --values config/staging.yaml secrets/config/staging.yaml secrets/config/common.yaml
+
+      - name: Lint and Validate prod
+        run: |
+          python scripts/lint-and-validate.py --values config/prod.yaml secrets/config/prod.yaml secrets/config/common.yaml
+
+      - name: Lint and Validate OVH
+        run: |
+          python scripts/lint-and-validate.py --values config/ovh.yaml secrets/config/ovh.yaml secrets/config/common.yaml
+
+      - name: Lint and Validate Turing
+        run: |
+          python scripts/lint-and-validate.py --values config/turing.yaml secrets/config/turing.yaml secrets/config/common.yaml
+
+      - name: Clean up
+        if: always()  # Always run this step
+        run: |
+          rm -rf scripts/rendered-templates
