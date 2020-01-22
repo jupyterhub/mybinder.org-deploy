@@ -38,4 +38,4 @@ jobs:
           git clone https://github.com/AGWA/git-crypt.git
           cd git-crypt
           make
-          make install PREFIX=/usr/local
+          make install PREFIX=${PWD}
