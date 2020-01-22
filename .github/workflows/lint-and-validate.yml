@@ -39,3 +39,4 @@ jobs:
           cd git-crypt
           make
           make install PREFIX=${PWD}
+          cd .. && ls
