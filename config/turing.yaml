@@ -8,8 +8,6 @@ letsencrypt:
   contactEmail: drsarahlgibson@gmail.com
 
 binderhub:
-  extraConfig:
-    01-eventlog: ""
   config:
     BinderHub:
       pod_quota: 20
@@ -49,6 +47,18 @@ binderhub:
         hosts:
           - binder.mybinder.turing.ac.uk
           - turing.mybinder.org
+
+  extraVolumes:
+    - name: event-secret
+      secret:
+        secretName: events-archiver-secret
+  extraVolumeMounts:
+    - name: event-secret
+      mountPath: /event-secret
+      readOnly: true
+  extraEnv:
+    - name: GOOGLE_APPLICATION_CREDENTIALS
+      value: /event-secret/service-account.json
 
   jupyterhub:
     hub:
