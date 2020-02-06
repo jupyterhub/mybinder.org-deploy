@@ -83,20 +83,22 @@ def blake2b_hash_as_int(b):
     return int.from_bytes(blake2b(b, digest_size=8).digest(), "big")
 
 
-def rendezvous_rank(buckets, key):
+def rendezvous_rank(buckets, weights, key):
     """Rank the buckets for a given key using Rendez-vous hashing
 
     Each bucket is scored for the specified key. The return value is a list of
     all buckets, sorted in decreasing order (highest ranked first).
     """
     ranking = []
-    for bucket in buckets:
+    for bucket, weight in zip(buckets, weights):
         # The particular hash function doesn't matter a lot, as long as it is
         # one that maps the key to a fixed sized value and distributes the keys
         # uniformly across the output space
         score = blake2b_hash_as_int(
             b"%s-%s" % (str(key).encode(), str(bucket).encode())
         )
+        # scale score by our per-host weights
+        score = score * weight
         ranking.append((score, bucket))
 
     return [b for (s, b) in sorted(ranking, reverse=True)]
@@ -185,7 +187,7 @@ class RedirectHandler(RequestHandler):
         # make sure the host is a valid choice and considered healthy
         if host_name not in self.host_names:
             if self.load_balancer == "rendezvous":
-                host_name = rendezvous_rank(self.host_names, cache_key(uri))[0]
+                host_name = rendezvous_rank(self.host_names, self.host_weights, cache_key(uri))[0]
             # "random" is our default or fall-back
             else:
                 host_name = random.choices(self.host_names, self.host_weights)[0]
