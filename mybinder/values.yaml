@@ -429,6 +429,11 @@ federationRedirect:
       weight: 19
       health: https://ovh.mybinder.org/health
       versions: https://ovh.mybinder.org/versions
+    gesis:
+      url: https://gesis.mybinder.org
+      weight: 0
+      health: https://gesis.mybinder.org/health
+      versions: https://gesis.mybinder.org/versions
     turing:
       url: https://turing.mybinder.org
       weight: 1
