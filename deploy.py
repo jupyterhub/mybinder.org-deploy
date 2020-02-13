@@ -3,6 +3,8 @@ import argparse
 import json
 import os
 import subprocess
+import re
+import sys
 
 import yaml
 
@@ -96,7 +98,44 @@ def setup_auth_gcloud(release, cluster):
 
 def setup_helm(release):
     """ensure helm is up to date"""
-    subprocess.check_call(['helm', 'init', '--upgrade'])
+    # First check the helm client and server versions
+    client_helm_cmd = ["helm", "version", "-c", "--short"]
+    client_version = subprocess.check_output(client_helm_cmd
+        ).decode('utf-8').split(":")[1].split("+")[0].strip()
+
+    server_helm_cmd = ["helm", "version", "-s", "--short"]
+    server_version = subprocess.check_output(server_helm_cmd
+        ).decode('utf-8').split(":")[1].split("+")[0].strip()
+
+    print(BOLD + GREEN +
+        f"Client version: {client_version}, Server version: {server_version}" +
+        NC,
+        flush=True
+    )
+
+    # Now check if the version of helm matches v2.11.0 which travis is expecting
+    if client_version != "v2.11.0":
+        # The local helm version is not v2.11.0 - user needs to change the installation
+        raise Exception(
+            "You are not running helm v2.11.0 which is the version our continuous deployment system uses.\n" +
+            "Please change your installation and try again.\n"
+        )
+    elif (client_version == "v2.11.0") and (client_version != server_version):
+        # The correct local version of helm is installed, but the server side
+        # has previously accidentally been upgraded. Perform a force-upgrade
+        # to bring the server side back to v2.11.0
+        raise Exception(
+            "Helm client and server versions do not match. Performing a force upgrade often resolves this issue." +
+            "Please run the following command and re-execute this script.\n\n\t" +
+            "helm init --upgrade --force-upgrade"
+        )
+    elif (client_version == "v2.11.0") and (client_version == server_version):
+        # All is good! Perform normal helm init command.
+        # We use the --client-only flag so that the Tiller installation is not affected.
+        subprocess.check_call(['helm', 'init', '--client-only'])
+    else:
+        # This is a catch-all exception. Hopefully this doesn't execute!
+        raise Exception("Please check your helm installation.")
 
     deployment = json.loads(subprocess.check_output([
         'kubectl',
@@ -202,6 +241,11 @@ def deploy(release):
 
 
 def main():
+
+    # Get current working directory
+    cwd = os.getcwd()
+
+    # parse command line args
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         'release',
@@ -212,17 +256,52 @@ def main():
         'cluster',
         help='Cluster to do the deployment in'
     )
+    argparser.add_argument(
+        '--local',
+        action='store_true',
+        help="If the script is running locally, skip auth and helm steps."
+    )
 
     args = argparser.parse_args()
 
-    if args.cluster == 'binder-ovh':
-        setup_auth_ovh(args.release, args.cluster)
-    elif args.cluster == 'turing':
-        setup_auth_turing(args.cluster)
-    else:
-        setup_auth_gcloud(args.release, args.cluster)
+    # Check if the local flag is set
+    if not args.local:
+        # Check if the script is being run on travis
+        if  not (cwd.startswith('/home/travis')):
+            # Catch the case where the script is running locally but the --local flag
+            # has not been set. Check that the user is sure that they want to do this!
+            print(
+                "You do not seem to be running on Travis but have not set the --local flag."
+            )
 
-    setup_helm(args.release)
+            # Use regex to match user input
+            regex_no = re.compile("^[n|N][o|O]$")
+            regex_yes = re.compile("^[y|Y][e|E][s|S]$")
+            response = input("Are you sure you want to execute this script? [yes/no]: ")
+
+            if regex_no.match(response):
+                # User isn't sure - exit script
+                print("Exiting script.")
+                sys.exit()
+            elif regex_yes.match(response):
+                # User is sure - proceed
+                pass
+            else:
+                # User wrote something that wasn't "yes" or "no"
+                raise ValueError(
+                    "Unrecognised input. Expecting either yes or no."
+                )
+
+        # script is running on travis, proceed with auth and helm setup
+        if args.cluster == 'binder-ovh':
+            setup_auth_ovh(args.release, args.cluster)
+        elif args.cluster == 'turing':
+            setup_auth_turing(args.cluster)
+        else:
+            setup_auth_gcloud(args.release, args.cluster)
+
+        setup_helm(args.release)
+
     deploy(args.release)
 
 
