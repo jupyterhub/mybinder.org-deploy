@@ -10,7 +10,7 @@ letsencrypt:
 binderhub:
   config:
     BinderHub:
-      pod_quota: 20
+      pod_quota: 40
       hub_url: https://hub.mybinder.turing.ac.uk
       badge_base_url: https://mybinder.org
       image_prefix: turingmybinderregistry.azurecr.io/binder-prod/binder-prod-
