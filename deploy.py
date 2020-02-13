@@ -15,6 +15,10 @@ NC = subprocess.check_output(['tput', 'sgr0']).decode()
 HERE = os.path.dirname(__file__)
 ABSOLUTE_HERE = os.path.dirname(os.path.realpath(__file__))
 
+# Get helm version environment variable
+HELM_VERSION = os.get_env("HELM_VERSION", None)
+if HELM_VERSION is None:
+    raise Exception("HELM_VERSION environment version must be set")
 
 def setup_auth_turing(cluster):
     """
@@ -113,23 +117,23 @@ def setup_helm(release):
         flush=True
     )
 
-    # Now check if the version of helm matches v2.11.0 which travis is expecting
-    if client_version != "v2.11.0":
-        # The local helm version is not v2.11.0 - user needs to change the installation
+    # Now check if the version of helm matches that which travis is expecting
+    if client_version != HELM_VERSION:
+        # The local helm version is not what was expected - user needs to change the installation
         raise Exception(
-            "You are not running helm v2.11.0 which is the version our continuous deployment system uses.\n" +
+            f"You are not running helm {HELM_VERSION} which is the version our continuous deployment system uses.\n" +
             "Please change your installation and try again.\n"
         )
-    elif (client_version == "v2.11.0") and (client_version != server_version):
+    elif (client_version == HELM_VERSION) and (client_version != server_version):
         # The correct local version of helm is installed, but the server side
         # has previously accidentally been upgraded. Perform a force-upgrade
-        # to bring the server side back to v2.11.0
+        # to bring the server side back to matching version
         raise Exception(
             "Helm client and server versions do not match. Performing a force upgrade often resolves this issue." +
             "Please run the following command and re-execute this script.\n\n\t" +
             "helm init --upgrade --force-upgrade"
         )
-    elif (client_version == "v2.11.0") and (client_version == server_version):
+    elif (client_version == HELM_VERSION) and (client_version == server_version):
         # All is good! Perform normal helm init command.
         # We use the --client-only flag so that the Tiller installation is not affected.
         subprocess.check_call(['helm', 'init', '--client-only'])
