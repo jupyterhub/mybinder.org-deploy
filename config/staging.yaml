@@ -123,5 +123,6 @@ federationRedirect:
       health: https://gke2.staging.mybinder.org/health
       versions: https://gke2.staging.mybinder.org/versions
     # unset the gesis and turing entries
-    gesis: null
+    gesis:
+      weight: 10
     turing: null
