@@ -76,7 +76,7 @@ before_deploy:
   # Doing this here, since git crypt doesn't like unclean checkouts
 - |
   # Stage 4, Step 1: Deploy to staging
-  python ./deploy.py staging staging
+  HELM_VERSION=${TRAVIS_HELM_VERSION} python ./deploy.py staging staging
 - |
   # Stage 4, Step 2: Verify staging works
   travis_retry py.test -vx -n 2 --binder-url=https://gke.staging.mybinder.org --hub-url=https://hub.gke.staging.mybinder.org
@@ -92,13 +92,13 @@ before_deploy:
     "$(echo -en ${PULL_REQUEST_TITLE}\\n\\n${AUTHOR_NAME}: https://github.com/${TRAVIS_REPO_SLUG}/pull/${PULL_REQUEST_ID})"
 - |
   # Stage 5, Step 2: Deploy to production
-  python ./deploy.py prod prod-a
+  HELM_VERSION=${TRAVIS_HELM_VERSION} python ./deploy.py prod prod-a
 - |
   # Stage 5, Step 3: Deploy to production on ovh k8s
-  python ./deploy.py ovh binder-ovh
+  HELM_VERSION=${TRAVIS_HELM_VERSION} python ./deploy.py ovh binder-ovh
 - |
   # Stage 5, Step 4: Deploy to production on Turing k8s
-  python ./deploy.py turing turing
+  HELM_VERSION=${TRAVIS_HELM_VERSION} python ./deploy.py turing turing
 - |
   # Stage 5, Step 5: Verify production works
   travis_retry py.test -vx -n 2 --binder-url=https://gke.mybinder.org --hub-url=https://hub.gke.mybinder.org
