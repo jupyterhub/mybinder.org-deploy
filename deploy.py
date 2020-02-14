@@ -18,7 +18,7 @@ ABSOLUTE_HERE = os.path.dirname(os.path.realpath(__file__))
 # Get helm version environment variable
 HELM_VERSION = os.get_env("HELM_VERSION", None)
 if HELM_VERSION is None:
-    raise Exception("HELM_VERSION environment version must be set")
+    raise Exception("HELM_VERSION environment variable must be set")
 
 def setup_auth_turing(cluster):
     """
