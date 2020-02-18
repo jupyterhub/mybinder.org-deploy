@@ -192,8 +192,10 @@ class RedirectHandler(RequestHandler):
 
         self.set_cookie("host", host_name, path=uri)
 
-        redirect = url_concat(host_name + uri, {'binder_launch_host': 'https://mybinder.org/'})
-        app_log.debug('Redirecting to {}'.format(redirect))
+        # do we sometimes want to add this url param? Not for build urls, at least
+        # redirect = url_concat(host_name + uri, {'binder_launch_host': 'https://mybinder.org/'})
+        redirect = host_name + uri
+        app_log.info('Redirecting {} to {}'.format(path, host_name))
         self.redirect(redirect, status=307)
 
 
