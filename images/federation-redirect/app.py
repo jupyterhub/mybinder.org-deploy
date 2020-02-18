@@ -11,7 +11,8 @@ import tornado.web
 import tornado.options
 from tornado.gen import sleep
 from tornado.ioloop import IOLoop
-from tornado.log import enable_pretty_logging, app_log
+from tornado.log import app_log
+from tornado import options
 
 from tornado.httpclient import AsyncHTTPClient, HTTPError, HTTPRequest
 from tornado.httputil import HTTPHeaders, url_concat
@@ -354,10 +355,11 @@ def make_app():
 
 def main():
     AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
-    enable_pretty_logging()
+    options.define("port", default=8080, help="port to listen on")
+    options.parse_command_line()
 
     app = make_app()
-    app.listen(8080, xheaders=True)
+    app.listen(options.options.port, xheaders=True)
     tornado.ioloop.IOLoop.current().start()
 
 
