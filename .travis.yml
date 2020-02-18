@@ -42,7 +42,8 @@ before_deploy:
   chmod +x ${HOME}/bin/kubectl
 - |
   # Stage 1: Install helm
-  curl -L https://storage.googleapis.com/kubernetes-helm/helm-v2.11.0-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
+  TRAVIS_HELM_VERSION=v2.11.0
+  curl -L https://storage.googleapis.com/kubernetes-helm/helm-${TRAVIS_HELM_VERSION}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
   mv ${HOME}/linux-amd64/helm ${HOME}/bin/helm
 - |
   # Stage 1: Install git-crypt
@@ -61,7 +62,6 @@ before_deploy:
 - |
   # Stage 2, Step 2: Set up helm!
   helm init --client-only
-  TRAVIS_HELM_VERSION=`helm version -c --short | sed 's/.*v\([0-9\.]*\).*/\1/'`
   echo ${TRAVIS_HELM_VERSION}
   helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
   helm repo add jetstack https://charts.jetstack.io
