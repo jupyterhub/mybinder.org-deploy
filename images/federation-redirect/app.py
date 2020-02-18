@@ -11,7 +11,8 @@ import tornado.web
 import tornado.options
 from tornado.gen import sleep
 from tornado.ioloop import IOLoop
-from tornado.log import enable_pretty_logging, app_log
+from tornado.log import app_log
+from tornado import options
 
 from tornado.httpclient import AsyncHTTPClient, HTTPError, HTTPRequest
 from tornado.httputil import HTTPHeaders, url_concat
@@ -179,21 +180,24 @@ class RedirectHandler(RequestHandler):
         self.set_header("Access-control-allow-headers", "cache-control")
 
     async def get(self):
+        path = self.request.path
         uri = self.request.uri
 
         host_name = self.get_cookie("host")
         # make sure the host is a valid choice and considered healthy
         if host_name not in self.host_names:
             if self.load_balancer == "rendezvous":
-                host_name = rendezvous_rank(self.host_names, cache_key(uri))[0]
+                host_name = rendezvous_rank(self.host_names, cache_key(path))[0]
             # "random" is our default or fall-back
             else:
                 host_name = random.choices(self.host_names, self.host_weights)[0]
 
-        self.set_cookie("host", host_name, path=uri)
+        self.set_cookie("host", host_name, path=path)
 
-        redirect = url_concat(host_name + uri, {'binder_launch_host': 'https://mybinder.org/'})
-        app_log.debug('Redirecting to {}'.format(redirect))
+        # do we sometimes want to add this url param? Not for build urls, at least
+        # redirect = url_concat(host_name + uri, {'binder_launch_host': 'https://mybinder.org/'})
+        redirect = host_name + uri
+        app_log.info('Redirecting {} to {}'.format(path, host_name))
         self.redirect(redirect, status=307)
 
 
@@ -352,10 +356,11 @@ def make_app():
 
 def main():
     AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
-    enable_pretty_logging()
+    options.define("port", default=8080, help="port to listen on")
+    options.parse_command_line()
 
     app = make_app()
-    app.listen(8080, xheaders=True)
+    app.listen(options.options.port, xheaders=True)
     tornado.ioloop.IOLoop.current().start()
 
 
