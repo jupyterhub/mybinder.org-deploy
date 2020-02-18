@@ -180,18 +180,19 @@ class RedirectHandler(RequestHandler):
         self.set_header("Access-control-allow-headers", "cache-control")
 
     async def get(self):
+        path = self.request.path
         uri = self.request.uri
 
         host_name = self.get_cookie("host")
         # make sure the host is a valid choice and considered healthy
         if host_name not in self.host_names:
             if self.load_balancer == "rendezvous":
-                host_name = rendezvous_rank(self.host_names, cache_key(uri))[0]
+                host_name = rendezvous_rank(self.host_names, cache_key(path))[0]
             # "random" is our default or fall-back
             else:
                 host_name = random.choices(self.host_names, self.host_weights)[0]
 
-        self.set_cookie("host", host_name, path=uri)
+        self.set_cookie("host", host_name, path=path)
 
         # do we sometimes want to add this url param? Not for build urls, at least
         # redirect = url_concat(host_name + uri, {'binder_launch_host': 'https://mybinder.org/'})
