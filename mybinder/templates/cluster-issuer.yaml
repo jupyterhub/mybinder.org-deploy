@@ -7,7 +7,7 @@ metadata:
 spec:
   acme:
     server: https://acme-staging-v02.api.letsencrypt.org/directory
-    email: binder-team@googlegrgoups.com
+    email: binder-team@googlegroups.com
     privateKeySecretRef:
       name: letsencrypt-staging
     solvers:
@@ -22,7 +22,7 @@ metadata:
 spec:
   acme:
     server: https://acme-v02.api.letsencrypt.org/directory
-    email: binder-team@googlegrgoups.com
+    email: binder-team@googlegroups.com
     privateKeySecretRef:
       name: letsencrypt-prod
     solvers:

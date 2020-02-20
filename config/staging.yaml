@@ -5,7 +5,7 @@ tags:
   certmanager: true
 
 letsencrypt:
-  contactEmail: binder-team@googlegrgoups.com
+  contactEmail: binder-team@googlegroups.com
 
 binderhub:
   config:
