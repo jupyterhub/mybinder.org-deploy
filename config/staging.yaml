@@ -1,5 +1,12 @@
 projectName: binder-staging
 
+tags:
+  kubelego: false
+  certmanager: true
+
+letsencrypt:
+  contactEmail: binder-team@googlegrgoups.com
+
 binderhub:
   config:
     BinderHub:
