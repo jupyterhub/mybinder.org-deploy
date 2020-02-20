@@ -7,6 +7,7 @@ tags:
 binderhub:
   config:
     BinderHub:
+      pod_quota: 0
       hub_url: https://hub.gke.staging.mybinder.org
       badge_base_url: https://staging.mybinder.org
       image_prefix: gcr.io/binder-staging/r2d-72d7634-
@@ -136,7 +137,7 @@ federationRedirect:
       versions: https://gke.staging.mybinder.org/versions
     ovh:
       url: https://gke2.staging.mybinder.org
-      weight: 1
+      weight: 0
       health: https://gke2.staging.mybinder.org/health
       versions: https://gke2.staging.mybinder.org/versions
     # unset the gesis and turing entries
