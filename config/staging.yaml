@@ -147,3 +147,9 @@ federationRedirect:
       weight: 1
     turing:
       weight: 0
+
+cert-manager:
+  ingressShim:
+    defaultIssuerName: "staging"
+    defaultIssuerKind: "Issuer"
+    defaultACMEChallengeType: "http01"
