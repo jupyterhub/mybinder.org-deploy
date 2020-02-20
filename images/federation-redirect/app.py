@@ -198,7 +198,7 @@ class RedirectHandler(RequestHandler):
         # redirect = url_concat(host_name + uri, {'binder_launch_host': 'https://mybinder.org/'})
         redirect = host_name + uri
         app_log.info('Redirecting {} to {}'.format(path, host_name))
-        self.redirect(redirect, status=302)
+        self.redirect(redirect, status=307)
 
 
 class ActiveHostsHandler(RequestHandler):
