@@ -4,9 +4,6 @@ tags:
   kubelego: false
   certmanager: true
 
-letsencrypt:
-  contactEmail: binder-team@googlegroups.com
-
 binderhub:
   config:
     BinderHub:
