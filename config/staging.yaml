@@ -150,6 +150,6 @@ federationRedirect:
 
 cert-manager:
   ingressShim:
-    defaultIssuerName: "staging"
+    defaultIssuerName: "letsencrypt-staging"
     defaultIssuerKind: "Issuer"
     defaultACMEChallengeType: "http01"
