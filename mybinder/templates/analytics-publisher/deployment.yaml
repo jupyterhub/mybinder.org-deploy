@@ -33,24 +33,24 @@ spec:
         configMap:
           name: analytics-publisher
       containers:
-      - name: analytics-publisher
-        image: {{ .Values.analyticsPublisher.image.name }}:{{ .Values.analyticsPublisher.image.tag }}
-        env:
-          - name: GOOGLE_APPLICATION_CREDENTIALS
-            value: /secrets/service-account.json
-        volumeMounts:
-          - name: secrets
-            mountPath: /secrets
-            readOnly: true
-          - name: config
-            mountPath: /etc/analytics-publisher
-            readOnly: true
-        resources:
-          requests:
-            cpu: 0.2
-            memory: 200Mi
-          limits:
-            cpu: 0.2
-            memory: 300Mi
+        - name: analytics-publisher
+          image: {{ .Values.analyticsPublisher.image.name }}:{{ .Values.analyticsPublisher.image.tag }}
+          env:
+            - name: GOOGLE_APPLICATION_CREDENTIALS
+              value: /secrets/service-account.json
+          volumeMounts:
+            - name: secrets
+              mountPath: /secrets
+              readOnly: true
+            - name: config
+              mountPath: /etc/analytics-publisher
+              readOnly: true
+          resources:
+            requests:
+              cpu: 0.2
+              memory: 200Mi
+            limits:
+              cpu: 0.2
+              memory: 300Mi
 
 {{- end }}
