@@ -34,7 +34,7 @@ spec:
           name: analytics-publisher
       containers:
       - name: analytics-publisher
-        image: {{ .Values.analyticsPublisher.image.name}}:{{ .Values.analyticsPublisher.image.tag }}
+        image: {{ .Values.analyticsPublisher.image.name }}:{{ .Values.analyticsPublisher.image.tag }}
         env:
           - name: GOOGLE_APPLICATION_CREDENTIALS
             value: /secrets/service-account.json
