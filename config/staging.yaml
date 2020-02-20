@@ -19,6 +19,13 @@ binderhub:
     hosts:
       - gke.staging.mybinder.org
       - gke2.staging.mybinder.org
+    annotations:
+      kubernetes.io/tls-acme: "true"
+    tls:
+      - secretName: cert-manager-binder-tls
+        hosts:
+          - gke.staging.mybinder.org
+          - gke2.staging.mybinder.org
 
   jupyterhub:
     singleuser:
@@ -31,6 +38,8 @@ binderhub:
     ingress:
       hosts:
         - hub.gke.staging.mybinder.org
+      annotations:
+        kubernetes.io/tls-acme: "true"
       tls:
         - secretName: kubelego-tls-jupyterhub-staging
           hosts:
@@ -43,6 +52,8 @@ grafana:
   ingress:
     hosts:
       - grafana.staging.mybinder.org
+    annotations:
+      kubernetes.io/tls-acme: "true"
     tls:
       - hosts:
           - grafana.staging.mybinder.org
@@ -64,10 +75,12 @@ prometheus:
     ingress:
       hosts:
         - prometheus.staging.mybinder.org
+      annotations:
+        kubernetes.io/tls-acme: "true"
       tls:
-        - hosts:
+        - secretName: kubelego-tls-prometheus
+          hosts:
             - prometheus.staging.mybinder.org
-          secretName: kubelego-tls-prometheus
 
 nginx-ingress:
   controller:
