@@ -20,7 +20,7 @@ binderhub:
     annotations:
       kubernetes.io/tls-acme: "true"
     tls:
-      - secretName: cert-manager-binder-tls
+      - secretName: cert-manager-binder-staging-tls
         hosts:
           - gke.staging.mybinder.org
           - gke2.staging.mybinder.org
@@ -39,7 +39,7 @@ binderhub:
       annotations:
         kubernetes.io/tls-acme: "true"
       tls:
-        - secretName: kubelego-tls-jupyterhub-staging
+        - secretName: cert-manager-jupyterhub-staging-tls
           hosts:
             - hub.gke.staging.mybinder.org
     scheduling:
@@ -55,7 +55,7 @@ grafana:
     tls:
       - hosts:
           - grafana.staging.mybinder.org
-        secretName: kubelego-tls-grafana
+        secretName: cert-manager-grafana-staging-tls
   datasources:
     datasources.yaml:
       apiVersion: 1
@@ -76,7 +76,7 @@ prometheus:
       annotations:
         kubernetes.io/tls-acme: "true"
       tls:
-        - secretName: kubelego-tls-prometheus
+        - secretName: cert-manager-prometheus-staging-tls
           hosts:
             - prometheus.staging.mybinder.org
 
