@@ -1,5 +1,9 @@
 projectName: binder-staging
 
+tags:
+  kubelego: false
+  certmanager: true
+
 binderhub:
   config:
     BinderHub:
@@ -13,6 +17,11 @@ binderhub:
     hosts:
       - gke.staging.mybinder.org
       - gke2.staging.mybinder.org
+    tls:
+      - secretName: certmanager-tls-binderhub-staging
+        hosts:
+          - gke.staging.mybinder.org
+          - gke2.staging.mybinder.org
 
   jupyterhub:
     singleuser:
@@ -26,7 +35,7 @@ binderhub:
       hosts:
         - hub.gke.staging.mybinder.org
       tls:
-        - secretName: kubelego-tls-jupyterhub-staging
+        - secretName: certmanager-tls-jupyterhub-staging
           hosts:
             - hub.gke.staging.mybinder.org
     scheduling:
@@ -40,7 +49,7 @@ grafana:
     tls:
       - hosts:
           - grafana.staging.mybinder.org
-        secretName: kubelego-tls-grafana
+        secretName: certmanager-tls-grafana
   datasources:
     datasources.yaml:
       apiVersion: 1
@@ -61,7 +70,7 @@ prometheus:
       tls:
         - hosts:
             - prometheus.staging.mybinder.org
-          secretName: kubelego-tls-prometheus
+          secretName: certmanager-tls-prometheus
 
 nginx-ingress:
   controller:
@@ -128,4 +137,3 @@ federationRedirect:
       weight: 1
     turing:
       weight: 0
-
