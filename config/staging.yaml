@@ -147,6 +147,8 @@ federationRedirect:
       weight: 0
 
 cert-manager:
+  webhook:
+    enabled: false
   ingressShim:
     defaultIssuerName: "letsencrypt-staging"
     defaultIssuerKind: "Issuer"
