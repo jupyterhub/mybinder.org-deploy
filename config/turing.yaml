@@ -209,6 +209,8 @@ gcsProxy:
       host: archive-analytics-staging-mybinder.turing.10.0.0.1.xip.io
 
 cert-manager:
+  webhook:
+    enabled: false
   ingressShim:
     defaultIssuerName: "letsencrypt-prod"
     defaultIssuerKind: "Issuer"
