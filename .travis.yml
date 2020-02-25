@@ -42,8 +42,7 @@ before_deploy:
   chmod +x ${HOME}/bin/kubectl
 - |
   # Stage 1: Install helm
-  TRAVIS_HELM_VERSION=v2.11.0
-  curl -L https://storage.googleapis.com/kubernetes-helm/helm-${TRAVIS_HELM_VERSION}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
+  curl -L https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
   mv ${HOME}/linux-amd64/helm ${HOME}/bin/helm
 - |
   # Stage 1: Install git-crypt
@@ -75,7 +74,7 @@ before_deploy:
   # Doing this here, since git crypt doesn't like unclean checkouts
 - |
   # Stage 4, Step 1: Deploy to staging
-  HELM_VERSION=${TRAVIS_HELM_VERSION} python ./deploy.py staging staging
+  python ./deploy.py staging staging
 - |
   # Stage 4, Step 2: Verify staging works
   travis_retry py.test -vx -n 2 --binder-url=https://gke.staging.mybinder.org --hub-url=https://hub.gke.staging.mybinder.org
@@ -91,13 +90,13 @@ before_deploy:
     "$(echo -en ${PULL_REQUEST_TITLE}\\n\\n${AUTHOR_NAME}: https://github.com/${TRAVIS_REPO_SLUG}/pull/${PULL_REQUEST_ID})"
 - |
   # Stage 5, Step 2: Deploy to production
-  HELM_VERSION=${TRAVIS_HELM_VERSION} python ./deploy.py prod prod-a
+  python ./deploy.py prod prod-a
 - |
   # Stage 5, Step 3: Deploy to production on ovh k8s
-  HELM_VERSION=${TRAVIS_HELM_VERSION} python ./deploy.py ovh binder-ovh
+  python ./deploy.py ovh binder-ovh
 - |
   # Stage 5, Step 4: Deploy to production on Turing k8s
-  HELM_VERSION=${TRAVIS_HELM_VERSION} python ./deploy.py turing turing
+  python ./deploy.py turing turing
 - |
   # Stage 5, Step 5: Verify production works
   travis_retry py.test -vx -n 2 --binder-url=https://gke.mybinder.org --hub-url=https://hub.gke.mybinder.org
@@ -113,6 +112,7 @@ env:
   global:
     - CLOUDSDK_CORE_DISABLE_PROMPTS=1
     - PATH=${HOME}/google-cloud-sdk/bin:${HOME}/bin:${PATH}
+    - HELM_VERSION=v2.16.1
 
 deploy:
   provider: script
