@@ -213,5 +213,5 @@ cert-manager:
     enabled: false
   ingressShim:
     defaultIssuerName: "letsencrypt-prod"
-    defaultIssuerKind: "Issuer"
+    defaultIssuerKind: "ClusterIssuer"
     defaultACMEChallengeType: "http01"
