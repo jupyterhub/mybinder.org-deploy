@@ -1,6 +1,9 @@
 name: mybinder
 channels:
-  - conda-forge
+  # use metachannel for faster solves / less memory on RTD
+  # which has memory issues with full conda-forge
+  # only need to list 'leaf' dependencies here
+  - https://metachannel.conda-forge.org/conda-forge/python,sphinx,recommonmark
 dependencies:
 - python=3.6
 - sphinx>=1.8.2
