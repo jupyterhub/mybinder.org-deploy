@@ -128,11 +128,8 @@ def setup_helm(release):
         # The correct local version of helm is installed, but the server side
         # has previously accidentally been upgraded. Perform a force-upgrade
         # to bring the server side back to matching version
-        raise Exception(
-            "Helm client and server versions do not match. Performing a force upgrade often resolves this issue." +
-            "Please run the following command and re-execute this script.\n\n\t" +
-            "helm init --upgrade --force-upgrade"
-        )
+        print(f"Upgrading helm from {server_version} to {HELM_VERSION}")
+        subprocess.check_call(['helm', 'init', '--upgrade', '--force-upgrade'])
     elif (client_version == HELM_VERSION) and (client_version == server_version):
         # All is good! Perform normal helm init command.
         # We use the --client-only flag so that the Tiller installation is not affected.
