@@ -112,7 +112,7 @@ env:
   global:
     - CLOUDSDK_CORE_DISABLE_PROMPTS=1
     - PATH=${HOME}/google-cloud-sdk/bin:${HOME}/bin:${PATH}
-    - HELM_VERSION=v2.16.1
+    - HELM_VERSION=v2.16.3
 
 deploy:
   provider: script
