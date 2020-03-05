@@ -74,7 +74,7 @@ binderhub:
       per_repo_quota_higher: 200
 
       banner_message: |
-        <div style="text-align: center;">Give us feedback on how mybinder.org is doing and what to improve: <a href="https://docs.google.com/forms/d/e/1FAIpQLSd3fiLCMuQsc48_ga2q_FJFqgFcVUkie7RBex4DtzzOyyNWHg/viewform" target="_blank">the mybinder.org user survey</a> (it is only three questions!). Thank you!</div>
+        <div style="text-align: center;">Thanks to <a href="https://cloud.google.com/">Google Cloud</a>, <a href="https://www.ovh.com/">OVH</a>, <a href="https://notebooks.gesis.org">GESIS Notebooks</a> and the <a href="https://turing.ac.uk">Turing Institute</a> for supporting us! 🎉</div>
       about_message: |
         <p>mybinder.org is public infrastructure operated by the <a href="https://jupyterhub-team-compass.readthedocs.io/en/latest/team.html#binder-team">Binder Project team</a>.<br /><br />
         The Binder Project is a member of <a href="https://jupyter.org">Project Jupyter</a>, which is a fiscally
