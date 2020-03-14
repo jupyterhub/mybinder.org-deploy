@@ -39,10 +39,10 @@ CONFIG = {
             versions="https://ovh.mybinder.org/versions",
         ),
         "gesis": dict(
-            url="https://notebooks.gesis.org/binder",
+            url="https://gesis.mybinder.org",
             weight=1,
-            health="https://notebooks.gesis.org/binder/health",
-            versions="https://notebooks.gesis.org/binder/versions",
+            health="https://gesis.mybinder.org/health",
+            versions="https://gesis.mybinder.org/versions",
         ),
     },
 }
