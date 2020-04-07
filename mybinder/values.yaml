@@ -63,9 +63,6 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
-        - pattern: ^california-civic-data-coalition/first-python-notebook-binder.*
-          config:
-            quota: 150
 
     GitRepoProvider:
       banned_specs:
