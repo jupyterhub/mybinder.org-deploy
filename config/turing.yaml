@@ -13,12 +13,10 @@ binderhub:
       pod_quota: 40
       hub_url: https://hub.mybinder.turing.ac.uk
       badge_base_url: https://mybinder.org
-      image_prefix: turingmybinderregistry.azurecr.io/binder-prod/binder-prod-
       sticky_builds: true
-    DockerRegistry:
-      token_url: https://turingmybinderregistry.azurecr.io/oauth2/token?service=turingmybinderregistry.azurecr.io
-  registry:
-    url: https://turingmybinderregistry.azurecr.io
+      # Docker Hub registry for Turing
+      use_registry: true
+      image_prefix: turingmybinder/binder-prod-
 
   replicas: 1
 
