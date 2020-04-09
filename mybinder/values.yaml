@@ -63,6 +63,9 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
+        - pattern: ^hugobowne/COVID-19-EDA-tutorial.*
+          config:
+            quota: 200
 
     GitRepoProvider:
       banned_specs:
