@@ -65,7 +65,7 @@ binderhub:
             quota: 128
         - pattern: ^hugobowne/COVID-19-EDA-tutorial.*
           config:
-            quota: 200
+            quota: 300
 
     GitRepoProvider:
       banned_specs:
