@@ -116,7 +116,7 @@ cert-manager:
   webhook:
     enabled: false
   ingressShim:
-    defaultIssuerName: "letsencrypt-staging"
+    defaultIssuerName: "letsencrypt-prod"
     defaultIssuerKind: "ClusterIssuer"
     defaultACMEChallengeType: "http01"
 
