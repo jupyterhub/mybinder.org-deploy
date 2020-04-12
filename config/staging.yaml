@@ -1,5 +1,9 @@
 projectName: binder-staging
 
+tags:
+  kubelego: false
+  certmanager: true
+
 binderhub:
   config:
     BinderHub:
@@ -107,6 +111,14 @@ gcsProxy:
   buckets:
     - name: mybinder-staging-events-archive
       host: archive.analytics.staging.mybinder.org
+
+cert-manager:
+  webhook:
+    enabled: false
+  ingressShim:
+    defaultIssuerName: "letsencrypt-staging"
+    defaultIssuerKind: "ClusterIssuer"
+    defaultACMEChallengeType: "http01"
 
 federationRedirect:
   host: staging.mybinder.org
