@@ -55,8 +55,6 @@ grafana:
           access: direct
           isDefault: true
           editable: false
-  grafana.ini:
-    allow_embedding: true
 
 prometheus:
   server:
