@@ -30,15 +30,12 @@ from datetime import datetime
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.intersphinx']
+extensions = ['sphinx.ext.intersphinx', 'recommonmark']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
 # Source parsers for things other than '.rst'
-source_parsers = {
-    '.md': 'recommonmark.parser.CommonMarkParser',
-}
 
 # Use autostructify so we can get some rST in the markdown
 from recommonmark.transform import AutoStructify
