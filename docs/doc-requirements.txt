@@ -1,3 +1,3 @@
-sphinx>=1.8.2
+sphinx>=3.0.1
 recommonmark
-https://github.com/pandas-dev/pandas-sphinx-theme/archive/ade576c92cfe46a372b6783fb83f45c44fc67976.zip
+pydata-sphinx-theme==0.1.1
