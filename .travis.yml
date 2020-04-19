@@ -38,7 +38,7 @@ before_deploy:
 - |
   # Stage 1: Install Kubectl
   mkdir -p ${HOME}/bin
-  curl -L https://storage.googleapis.com/kubernetes-release/release/v1.11.4/bin/linux/amd64/kubectl > ${HOME}/bin/kubectl
+  curl -L https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl > ${HOME}/bin/kubectl
   chmod +x ${HOME}/bin/kubectl
 - |
   # Stage 1: Install helm
