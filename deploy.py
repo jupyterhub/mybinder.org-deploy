@@ -208,6 +208,7 @@ def deploy(release):
         'mybinder',
         '--force',
         '--wait',
+        '--cleanup-on-fail',
         '--timeout', '600',
         '-f', os.path.join('config', release + '.yaml'),
         '-f', os.path.join('secrets', 'config', 'common.yaml'),
@@ -242,7 +243,6 @@ def deploy(release):
 
 
 def main():
-
     # Get current working directory
     cwd = os.getcwd()
 
@@ -268,7 +268,7 @@ def main():
     # Check if the local flag is set
     if not args.local:
         # Check if the script is being run on travis
-        if  not (cwd.startswith('/home/travis')):
+        if not (cwd.startswith('/home/travis')):
             # Catch the case where the script is running locally but the --local flag
             # has not been set. Check that the user is sure that they want to do this!
             print(
