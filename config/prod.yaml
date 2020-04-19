@@ -1,5 +1,9 @@
 projectName: binder-prod
 
+tags:
+  kubelego: false
+  certmanager: true
+
 userNodeSelector: &userNodeSelector
   mybinder.org/pool-type: users
 coreNodeSelector: &coreNodeSelector
@@ -214,6 +218,14 @@ gcsProxy:
   buckets:
     - name: mybinder-events-archive
       host: archive.analytics.mybinder.org
+
+cert-manager:
+  webhook:
+    enabled: false
+  ingressShim:
+    defaultIssuerName: "letsencrypt-prod"
+    defaultIssuerKind: "ClusterIssuer"
+    defaultACMEChallengeType: "http01"
 
 federationRedirect:
   enabled: true
