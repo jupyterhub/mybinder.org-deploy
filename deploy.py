@@ -207,9 +207,7 @@ def deploy(release):
         release,
         'mybinder',
         '--force',
-        '--wait',
         '--cleanup-on-fail',
-        '--timeout', '600',
         '-f', os.path.join('config', release + '.yaml'),
         '-f', os.path.join('secrets', 'config', 'common.yaml'),
         '-f', os.path.join('secrets', 'config', release + '.yaml'),
@@ -238,6 +236,7 @@ def deploy(release):
         subprocess.check_call([
             'kubectl', 'rollout', 'status',
             '--namespace', release,
+            '--timeout', '5m',
             '--watch', d
         ])
 
