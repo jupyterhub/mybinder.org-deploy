@@ -438,10 +438,7 @@ federationRedirect:
       health: https://gesis.mybinder.org/health
       versions: https://gesis.mybinder.org/versions
     turing:
-      url: https://turing.mybinder.org
-      weight: 1
-      health: https://turing.mybinder.org/health
-      versions: https://turing.mybinder.org/versions
+      weight: 0
 
 certmanager:
   ingressShim:
