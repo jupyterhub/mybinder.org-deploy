@@ -63,7 +63,7 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
-        - pattern: ^hugobowne/COVID-19-EDA-tutorial.*
+        - pattern: ^guiwitz/neubias_academy_biapy.*
           config:
             quota: 200
 
