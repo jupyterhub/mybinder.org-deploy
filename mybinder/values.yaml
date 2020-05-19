@@ -63,9 +63,6 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
-        - pattern: ^bluesky/tutorials.*
-          config:
-            quota: 300
 
     GitRepoProvider:
       banned_specs:
