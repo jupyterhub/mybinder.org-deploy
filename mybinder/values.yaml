@@ -63,9 +63,9 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
-        - pattern: ^guiwitz/neubias_academy_biapy.*
+        - pattern: ^bluesky/tutorials.*
           config:
-            quota: 200
+            quota: 300
 
     GitRepoProvider:
       banned_specs:
