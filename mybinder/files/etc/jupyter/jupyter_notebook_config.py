@@ -24,7 +24,7 @@ repo_url = os.environ.get('BINDER_REPO_URL', '')
 if repo_url and "binder-example" in repo_url:
     # Need a simple way to generate a stable but unique value for every repo
     # that we can then use to create a Jitsi meet URL
-    unique = hashlib.md5(repo_url.encode())[:10]
+    unique = hashlib.md5(repo_url.encode())
     jitsi_url = 'https://meet.jit.si/mybinder.org-%s#config.startWithVideoMuted=true&config.startWithAudioMuted=true&config.prejoinPageEnabled=true' % unique
 else:
     jitsi_url = ''
