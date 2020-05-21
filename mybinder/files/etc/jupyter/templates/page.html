@@ -5,6 +5,11 @@
 {% block login_widget %}
 {% endblock %}
 
+{% if jitsi_url %}
+    <a id="visit-repo-link" href="{{ jitsi_url }}" class="btn btn-default btn-sm navbar-btn" target="_blank"
+       style="margin-right: 2px; margin-left: 4px;">Join this repo's Video Chat</a></span>
+{% endif %}
+
 {% if ref_url %}
 <span>
     <a id="visit-repo-link" href="{{ ref_url }}" class="btn btn-default btn-sm navbar-btn" target="_blank"
