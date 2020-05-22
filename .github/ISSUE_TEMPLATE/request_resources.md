@@ -29,7 +29,3 @@ Use this form to request a temporary increase in limits for a repository to help
 ### 7. The exact times and dates of the event(s) (with timezone information)
 <!-- It would be great if you could notify us >48H ahead of the event -->
 ### 8. If you plan to advertise mybinder as the service running the event
-
-<!-- That would be great as it gives us all the information we need to make a decision and set things up.
-It also allows us to track our impact which will be useful when we report to those who fund mybinder.org or seek new funding.
--->
