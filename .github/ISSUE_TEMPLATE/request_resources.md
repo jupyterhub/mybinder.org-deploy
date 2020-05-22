@@ -27,5 +27,4 @@ Use this form to request a temporary increase in limits for a repository to help
 
 ### 6. How many people you expect to attend the event
 ### 7. The exact times and dates of the event(s) (with timezone information)
-<!-- It would be great if you could notify us >48H ahead of the event -->
 ### 8. If you plan to advertise mybinder as the service running the event
