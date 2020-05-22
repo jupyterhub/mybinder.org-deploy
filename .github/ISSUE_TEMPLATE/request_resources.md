@@ -4,8 +4,16 @@ about: Answer some questions to help us make a decision about your request and s
 labels: impact
 
 ---
-<!-- Hi, good luck with the webinars and fingers crossed! For one off/time limited events we can usually raise the limit.
-Could you please create a new issue to help us keep track of this? In the issue please mention:
+<!-- 
+🌟🌟🌟🌟🌟
+Use this form to request a temporary increase in limits for a repository to help with running an event.
+
+📅 Ideally open an issue two weeks before an event, though we will still consider requests up to 48 hours before the event 📅
+
+👉 Please answer all these questions. The more information you provide the faster we'll be able to make a decision. Feel free to add additional information at the end❗
+
+😻 The information you provide also allows us to track our impact which will be useful when we report to those who fund mybinder.org or seek new funding 😻
+🌟🌟🌟🌟🌟
 -->
 ### 1. Who you are
 ### 2. A few details about the event/course/context
