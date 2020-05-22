@@ -11,7 +11,7 @@ Could you please create a new issue to help us keep track of this? In the issue 
 ### A few details about the event/course/context
 ### If money is changing hands (attendees pay a fee, speaker is getting paid, free, etc)
 ### A link to the repository you are using
-### what type of event it is
+### What type of event it is:
 - [ ] talk
 - [ ] workshop
 - [ ] lecture course
@@ -20,7 +20,7 @@ Could you please create a new issue to help us keep track of this? In the issue 
 ### How many people you expect to attend the event
 ### The exact times and dates of the event(s) (with timezone information)
 <!-- It would be great if you could notify us >48H ahead of the event -->
-### Do you plan to advertise mybinder as the service running the event?
+### If you plan to advertise mybinder as the service running the event
 
 <!-- That would be great as it gives us all the information we need to make a decision and set things up.
 It also allows us to track our impact which will be useful when we report to those who fund mybinder.org or seek new funding.
