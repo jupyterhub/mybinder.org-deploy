@@ -1,5 +1,5 @@
 {{- if .Values.proxyPatches.enabled }}
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: proxy-patches
@@ -8,8 +8,12 @@ metadata:
     component: proxy-patches
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-
 spec:
+  selector:
+    matchLabels:
+      app: proxy-patches
+      component: proxy-patches
+      release: {{ .Release.Name }}
   replicas: 1
   template:
     metadata:
@@ -18,9 +22,9 @@ spec:
       labels:
         app: proxy-patches
         component: proxy-patches
-        hub.jupyter.org/network-access-proxy-api: "true"
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
+        hub.jupyter.org/network-access-proxy-api: "true"
     spec:
       nodeSelector: {{ toJson .Values.proxyPatches.nodeSelector }}
       volumes:
