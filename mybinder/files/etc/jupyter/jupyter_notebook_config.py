@@ -21,7 +21,7 @@ binder_persistent_request = os.environ.get('BINDER_PERSISTENT_REQUEST', '')
 repo_url = os.environ.get('BINDER_REPO_URL', '')
 
 # Roll this out only for binder-example repos to gain experience
-if repo_url and "binder-example" in repo_url:
+if repo_url:
     # Need a simple way to generate a stable but unique value for every repo
     # that we can then use to create a Jitsi meet URL
     unique = hashlib.md5(repo_url.encode()).hexdigest()
