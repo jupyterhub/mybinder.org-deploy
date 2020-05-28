@@ -93,7 +93,7 @@ before_deploy:
   python ./deploy.py prod prod-a
 #- |
 #  # Stage 5, Step 3: Deploy to production on ovh k8s
-#  python ./deploy.py ovh binder-ovh
+#  python ./deploy.py ovh ovh
 - |
   # Stage 5, Step 4: Deploy to production on Turing k8s
   python ./deploy.py turing turing

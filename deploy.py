@@ -51,7 +51,7 @@ def setup_auth_turing(cluster):
 
 def setup_auth_ovh(release, cluster):
     """
-    Set up authentication with 'binder-ovh' K8S from the ovh-kubeconfig.yml
+    Set up authentication with 'ovh' K8S from the ovh-kubeconfig.yml
     """
     print(f'Setup the OVH authentication for namespace {release}')
 
@@ -188,7 +188,7 @@ def setup_helm(release):
 def deploy(release):
     """Deploy jupyterhub"""
     print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
-    if release == 'turing':
+    if release == 'turing' or release == 'ovh':
         subprocess.check_call([
             "python3",
             "secrets/ban.py",
@@ -286,7 +286,7 @@ def main():
                 )
 
         # script is running on travis, proceed with auth and helm setup
-        if args.cluster == 'binder-ovh':
+        if args.cluster == 'ovh':
             setup_auth_ovh(args.release, args.cluster)
         elif args.cluster == 'turing':
             setup_auth_turing(args.cluster)
