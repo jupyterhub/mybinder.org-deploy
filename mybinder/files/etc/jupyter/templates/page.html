@@ -5,20 +5,28 @@
 {% block login_widget %}
 {% endblock %}
 
+{% if jitsi_url %}
+  <span>
+    <a id="visit-repo-link" href="{{ jitsi_url }}" class="btn btn-default btn-sm navbar-btn" target="_blank"
+       style="margin-right: 2px; margin-left: 4px;">Join this repo's Video Chat</a>
+  </span>
+{% endif %}
+
 {% if ref_url %}
-<span>
+  <span>
     <a id="visit-repo-link" href="{{ ref_url }}" class="btn btn-default btn-sm navbar-btn" target="_blank"
-       style="margin-right: 2px; margin-left: 4px;">Visit repo</a></span>
+       style="margin-right: 2px; margin-left: 4px;">Visit repo</a>
+  </span>
 {% endif %}
 
 {% if persistent_binder_url  %}
-<span>
+  <span>
     <button id="copy-binder-link" title="Copy binder link to clipboard" class="btn btn-default btn-sm navbar-btn"
             style="margin-right: 0; margin-left: 2px;"
             data-url="{{ persistent_binder_url }}" onclick="copy_link_into_clipboard(this);">
       Copy Binder link
     </button>
-</span>
+  </span>
 {% endif %}
 
 {% endblock header_buttons %}
