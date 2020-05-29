@@ -91,18 +91,18 @@ before_deploy:
 - |
   # Stage 5, Step 2: Deploy to production
   python ./deploy.py prod prod-a
-#- |
-#  # Stage 5, Step 3: Deploy to production on ovh k8s
-#  python ./deploy.py ovh ovh
+- |
+  # Stage 5, Step 3: Deploy to production on ovh k8s
+  python ./deploy.py ovh ovh
 - |
   # Stage 5, Step 4: Deploy to production on Turing k8s
   python ./deploy.py turing turing
 - |
   # Stage 5, Step 5: Verify production works
   travis_retry py.test -vx -n 2 --binder-url=https://gke.mybinder.org --hub-url=https://hub.gke.mybinder.org
-#- |
-#  # Stage 5, Step 6: Verify production on ovh k8s works
-#  travis_retry py.test -vx -n 2 --binder-url=https://ovh.mybinder.org --hub-url=https://hub-binder.mybinder.ovh
+- |
+  # Stage 5, Step 6: Verify production on ovh k8s works
+  travis_retry py.test -vx -n 2 --binder-url=https://ovh.mybinder.org --hub-url=https://hub-binder.mybinder.ovh
 - |
   # Stage 5, Step 7: Verify production on Turing k8s works
   travis_retry py.test -vx -n 2 --binder-url=https://turing.mybinder.org --hub-url=https://hub.mybinder.turing.ac.uk
