@@ -309,11 +309,23 @@ nginx-ingress:
 redirector:
   nodeSelector: {}
   redirects: []
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: 'true'
+    tls:
+      secretName: kubelego-tls-redirector
 
 static:
   paths:
     - /badge.svg
     - /badge_logo.svg
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: 'true'
+    tls:
+      secretName: kubelego-tls-static
 
 kube-lego:
   config:

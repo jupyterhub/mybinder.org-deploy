@@ -13,8 +13,9 @@ metadata:
     app: static
     component: frontend
   annotations:
-    kubernetes.io/ingress.class: nginx
-    kubernetes.io/tls-acme: "true"
+    {{- range $key, $value := .Values.static.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
 spec:
   rules:
     {{ $root := . }}
@@ -30,7 +31,7 @@ spec:
           {{ end }}
     {{ end }}
   tls:
-    - secretName: kubelego-tls-static
+    - secretName: {{ .Values.static.ingress.tls.secretName }}
       hosts:
       {{ range $host := .Values.static.ingress.hosts }}
       - {{ $host }}
