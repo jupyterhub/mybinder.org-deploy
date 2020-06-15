@@ -39,6 +39,7 @@ spec:
       - name: config
         configMap:
           name: federation-redirect
+      automountServiceAccountToken: false
       containers:
       - name: federation-redirect
         image: {{ .Values.federationRedirect.image.name}}:{{ .Values.federationRedirect.image.tag }}
