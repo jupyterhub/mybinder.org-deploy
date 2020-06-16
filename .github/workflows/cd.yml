@@ -56,6 +56,8 @@ jobs:
           curl -L https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           mv ${HOME}/linux-amd64/helm ${HOME}/bin/helm
 
+      - run: helm version
+
       - name: "Stage 2: Setup helm"
         run: |
           helm init --client-only
