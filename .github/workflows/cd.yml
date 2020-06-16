@@ -30,6 +30,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
+      - name: "Stage 0: Make /bin directory"
+        run: mkdir -p ${HOME}/bin
+
       - name: "Stage 1: Install dependencies"
         run: |
           pip install --upgrade setuptools pip
