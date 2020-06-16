@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  HELM_VERSION: 2.16.3
+  HELM_VERSION: "v2.16.3"
 
 jobs:
   staging-deploy:
@@ -54,7 +54,7 @@ jobs:
       - name: "Stage 1: Install helm"
         run: |
           echo ${HELM_VERSION}
-          curl -L https://storage.googleapis.com/kubernetes-helm/helm-v${HELM_VERSION}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
+          curl -L https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           mv ${HOME}/linux-amd64/helm ${HOME}/bin/helm
           chmod +x ${HOME}/bin/helm
 
