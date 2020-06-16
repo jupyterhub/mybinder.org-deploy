@@ -58,7 +58,10 @@ jobs:
           mv ${HOME}/linux-amd64/helm ${HOME}/bin/helm
           chmod +x ${HOME}/bin/helm
 
-      - run: helm version
+      - run: |
+          helm version
+          which helm
+          ${HOME}/bin/helm version
 
       - name: "Stage 2: Setup helm"
         run: |
