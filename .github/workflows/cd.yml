@@ -1,0 +1,66 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  HELM_VERSION: v2.16.3
+
+jobs:
+  staging-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: "Stage 0: Checkout repo"
+        uses: actions/checkout@v2
+
+      - name: "Stage 0: Setup Python 3.6"
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
+
+      - name: "Stage 0: Cache pip dependencies"
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: "Stage 1: Install dependencies"
+        run: |
+          pip install --upgrade setuptools pip
+          pip install --upgrade -r requirements.txt
+
+      - name: "Stage 1: Log into Docker"
+        uses: azure/docker-login@v1
+        with:
+          login-server: https://gcr.io
+          username: _json_key
+          password: cat secrets/gcr-auth-key-prod.json
+
+      - name: "Stage 1: Install gcloud SDK"
+        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+
+      - name: "Stage 1: Install kubectl"
+        uses: azure/setup-kubectl@v1
+
+      - name: "Stage 1: Install helm"
+        run: |
+          curl -L https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
+          mv ${HOME}/linux-amd64/helm ${HOME}/bin/helm
+
+      - name: "Stage 2: Setup helm"
+        run: |
+          helm init --client-only
+          helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
+          helm repo add jetstack https://charts.jetstack.io
+          helm repo update
+          (cd mybinder && helm dep up)
+
+      - name: "Stage 3: Build images (if required)"
+        run: |
+          chartpress --commit-range ${{ github.base_ref }}..${{ github.head_ref }} --push
