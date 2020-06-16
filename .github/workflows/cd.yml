@@ -38,12 +38,9 @@ jobs:
           pip install --upgrade setuptools pip
           pip install --upgrade -r requirements.txt
 
-      - name: "Stage 1: Log into Docker"
-        uses: azure/docker-login@v1
-        with:
-          login-server: https://gcr.io
-          username: _json_key
-          password: cat secrets/gcr-auth-key-prod.json
+      - name: "Stage 1: Install Docker"
+        run: |
+          sudo apt install docker.io -y
 
       - name: "Stage 1: Install gcloud SDK"
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
@@ -56,6 +53,10 @@ jobs:
           curl -L https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
 
+      - name: "Stage 2: Login to Docker"
+        run: |
+          docker login -u _json_key --password-stdin https://gcr.io < secrets/gcr-auth-key-prod.json
+
       - name: "Stage 2: Setup helm"
         run: |
           helm init --client-only
@@ -66,4 +67,4 @@ jobs:
 
       - name: "Stage 3: Build images (if required)"
         run: |
-          chartpress --commit-range ${{ github.base_ref }}..${{ github.head_ref }} --push
+          chartpress --commit-range ${{ github.base_ref }}..${{ github.head_ref }}
