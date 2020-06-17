@@ -84,6 +84,21 @@ jobs:
           max_attempts: 3
           command: echo "py.test -vx -n 2 --binder-url=https://gke.staging.mybinder.org --hub-url=https://hub.gke.staging.mybinder.org"
 
+      - name: "Stage 3: Post message to Grafana that deployment to production has started"
+        run: |
+          source secrets/grafana-api-key
+          export PULL_REQUEST_ID=$(git log -1 --pretty=%B | head -n1 | sed 's/^.*#\([0-9]*\).*/\1/')
+          export AUTHOR_NAME="$(git log  -1 --pretty=%aN)"
+          export PULL_REQUEST_TITLE="$(git log --pretty=%B -1 | tail -n+3)"
+          echo ${PULL_REQUEST_ID}
+          echo ${AUTHOR_NAME}
+          echo ${PULL_REQUEST_TITLE}
+        # python3 travis/post-grafana-annotation.py  \
+        #   --grafana-url https://grafana.mybinder.org \
+        #   --tag deployment-start \
+        #   "$(echo -en ${PULL_REQUEST_TITLE}\\n\\n${AUTHOR_NAME}: https://github.com/${TRAVIS_REPO_SLUG}/pull/${PULL_REQUEST_ID})"
+
+
   prod-deploy:
     # Previous job must have successfully completed for this job to execute
     needs: staging-deploy
