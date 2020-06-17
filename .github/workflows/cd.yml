@@ -65,18 +65,13 @@ jobs:
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
-      - name: "Stage 2: Set docker password as env variable"
-        run: |
-          DOCKER_PASSWORD=$( cat secrets/gcr-auth-key-prod.json )
-          echo "::set-env name=DOCKER_PASSWORD::${DOCKER_PASSWORD}"
-
       # Action Repo: https://github.com/Azure/docker-login
       - name: "Stage 2: Login to Docker"
         uses: azure/docker-login@v1
         with:
           login-server: "https://gcr.io"
           username: "_json_key"
-          password: "${DOCKER_PASSWORD}"
+          password: secrets/gcr-auth-key-prod.json
 
       - name: "Stage 2: Setup helm"
         run: |
