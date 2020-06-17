@@ -91,34 +91,10 @@ jobs:
     strategy:
       matrix:
         federation_member: ["prod", "ovh", "turing"]
-        binder_url: ["https://gke.mybinder.org", "https://ovh.mybinder.org", "https://turing.mybinder.org"]
-        hub_url: ["https://hub.gke.mybinder.org", "https://hub-binder.mybinder.ovh", "https://hub.mybinder.turing.ac.uk"]
-        # These matrix combinations will be skipped
-        exclude:
-          - federation_member: "prod"
-            binder_url: "https://ovh.mybinder.org"
-            hub_url: "https://hub-binder.mybinder.ovh"
-          - federation_member: "prod"
-            binder_url: "https://turing.mybinder.org"
-            hub_url: "https://hub.mybinder.turing.ac.uk"
-          - federation_member: "ovh"
-            binder_url: "https://gke.mybinder.org"
-            hub_url: "https://hub.gke.mybinder.org"
-          - federation_member: "ovh"
-            binder_url: "https://turing.mybinder.org"
-            hub_url: "https://hub.mybinder.turing.ac.uk"
-          - federation_member: "turing"
-            binder_url: "https://gke.mybinder.org"
-            hub_url: "https://hub.gke.mybinder.org"
-          - federation_member: "turing"
-            binder_url: "https://ovh.mybinder.org"
-            hub_url: "https://hub-binder.mybinder.ovh"
     steps:
       - name: Echo values
         run: |
           echo ${{ matrix.federation_member }}
-          echo ${{ matrix.binder_url }}
-          echo ${{ matrix.hub_url }}
 
       - name: "Stage 0: Checkout repo"
         uses: actions/checkout@v2
