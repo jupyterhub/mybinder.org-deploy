@@ -1,25 +1,38 @@
+# Useful GitHub Actions docs:
+#
+# - https://help.github.com/en/actions
+# - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions
+# - https://help.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow
+# - https://help.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions
+
 name: Continuous Deployment
 
+# Only trigger the workflow when pushing to master
 on:
   push:
     branches:
       - master
 
+# Global environment variables
 env:
   HELM_VERSION: "v2.16.3"
 
 jobs:
+  # Job to upgrade staging
   staging-deploy:
     runs-on: ubuntu-latest
     steps:
+      # Action Repo: https://github.com/actions/checkout
       - name: "Stage 0: Checkout repo"
         uses: actions/checkout@v2
 
+      # Action Repo: https://github.com/actions/setup-python
       - name: "Stage 0: Setup Python 3.6"
         uses: actions/setup-python@v1
         with:
           python-version: 3.6
 
+      # Action Repo: https://github.com/actions/cache
       - name: "Stage 0: Cache pip dependencies"
         uses: actions/cache@v2
         with:
@@ -33,9 +46,11 @@ jobs:
           pip install --upgrade setuptools pip
           pip install --upgrade -r requirements.txt
 
+      # Action Repo: https://github.com/GoogleCloudPlatform/github-actions/tree/master/setup-gcloud
       - name: "Stage 1: Install gcloud SDK"
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
 
+      # Action Repo: https://github.com/Azure/setup-kubectl
       - name: "Stage 1: Install kubectl"
         uses: azure/setup-kubectl@v1
 
@@ -44,6 +59,7 @@ jobs:
           curl -L https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
 
+      # Action Repo: https://github.com/sliteteam/github-action-git-crypt-unlock
       - name: "Stage 2: Unlock git-crypt secrets"
         uses: sliteteam/github-action-git-crypt-unlock@1.0.2
         env:
@@ -54,6 +70,7 @@ jobs:
           DOCKER_PASSWORD=$( cat secrets/gcr-auth-key-prod.json )
           echo "::set-env name=DOCKER_PASSWORD::${DOCKER_PASSWORD}"
 
+      # Action Repo: https://github.com/Azure/docker-login
       - name: "Stage 2: Login to Docker"
         uses: azure/docker-login@v1
         with:
@@ -71,12 +88,13 @@ jobs:
 
       - name: "Stage 3: Build images (if required)"
         run: |
-          chartpress --commit-range ${{ github.base_ref }}..${{ github.head_ref }}
+          chartpress --commit-range ${{ github.base_ref }}..${{ github.head_ref }} --push
 
       - name: "Stage 4: Deploy to staging"
         run: |
           python ./deploy.py staging staging
 
+      # Action Repo: https://github.com/nick-invision/retry
       - name: "Stage 4: Verify staging works"
         uses: nick-invision/retry@v1
         with:
@@ -97,8 +115,10 @@ jobs:
 
   prod-deploy:
     # Previous job must have successfully completed for this job to execute
+    # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idneeds
     needs: staging-deploy
     runs-on: ubuntu-latest
+    # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategy
     strategy:
       matrix:
         federation_member: ["prod", "ovh", "turing"]
@@ -124,6 +144,7 @@ jobs:
           pip install --upgrade setuptools pip
           pip install --upgrade -r requirements.txt
 
+      # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idif
       - name: "Stage 1: Install gcloud SDK"
         if: matrix.federation_member != 'turing'
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
