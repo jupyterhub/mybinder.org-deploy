@@ -75,29 +75,25 @@ jobs:
 
       - name: "Stage 4: Deploy to staging"
         run: |
-          echo "python ./deploy.py staging staging"
+          python ./deploy.py staging staging
 
       - name: "Stage 4: Verify staging works"
         uses: nick-invision/retry@v1
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: echo "py.test -vx -n 2 --binder-url=https://gke.staging.mybinder.org --hub-url=https://hub.gke.staging.mybinder.org"
+          command: py.test -vx -n 2 --binder-url=https://gke.staging.mybinder.org --hub-url=https://hub.gke.staging.mybinder.org
 
       - name: "Stage 3: Post message to Grafana that deployment to production has started"
         run: |
+          source secrets/grafana-api-key
           export PULL_REQUEST_ID=$(git log -1 --pretty=%B | head -n1 | sed 's/^.*#\([0-9]*\).*/\1/')
           export AUTHOR_NAME="$(git log  -1 --pretty=%aN)"
           export PULL_REQUEST_TITLE="$(git log --pretty=%B -1 | tail -n+3)"
-          echo ${PULL_REQUEST_ID}
-          echo ${AUTHOR_NAME}
-          echo ${PULL_REQUEST_TITLE}
-
-# source secrets/grafana-api-key
-# python3 travis/post-grafana-annotation.py  \
-#   --grafana-url https://grafana.mybinder.org \
-#   --tag deployment-start \
-#   "$(echo -en ${PULL_REQUEST_TITLE}\\n\\n${AUTHOR_NAME}: https://github.com/${TRAVIS_REPO_SLUG}/pull/${PULL_REQUEST_ID})"
+          python3 travis/post-grafana-annotation.py  \
+            --grafana-url https://grafana.mybinder.org \
+            --tag deployment-start \
+            "$(echo -en ${PULL_REQUEST_TITLE}\\n\\n${AUTHOR_NAME}: https://github.com/${TRAVIS_REPO_SLUG}/pull/${PULL_REQUEST_ID})"
 
   prod-deploy:
     # Previous job must have successfully completed for this job to execute
@@ -107,10 +103,6 @@ jobs:
       matrix:
         federation_member: ["prod", "ovh", "turing"]
     steps:
-      - name: Echo values
-        run: |
-          echo ${{ matrix.federation_member }}
-
       - name: "Stage 0: Checkout repo"
         uses: actions/checkout@v2
 
@@ -168,12 +160,12 @@ jobs:
       - name: "Stage 4: Deploy to ${{ matrix.federation_member }}"
         if: matrix.federation_member != 'prod'
         run: |
-          echo "python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.federation_member }}"
+          python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.federation_member }}
 
       - name: "Stage 4: Deploy to prod"
         if: matrix.federation_member == 'prod'
         run: |
-          echo "python ./deploy.py prod prod-a"
+          python ./deploy.py prod prod-a
 
       - name: "Stage 4: Verify prod works"
         if: matrix.federation_member == 'prod'
@@ -181,7 +173,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: echo "py.test -vx -n 2 --binder-url=https://gke.mybinder.org --hub-url=https://hub.gke.mybinder.org"
+          command: py.test -vx -n 2 --binder-url=https://gke.mybinder.org --hub-url=https://hub.gke.mybinder.org
 
       - name: "Stage 4: Verify OVH works"
         if: matrix.federation_member == 'ovh'
@@ -189,7 +181,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: echo "py.test -vx -n 2 --binder-url=https://ovh.mybinder.org --hub-url=https://hub-binder.mybinder.ovh"
+          command: py.test -vx -n 2 --binder-url=https://ovh.mybinder.org --hub-url=https://hub-binder.mybinder.ovh
 
       - name: "Stage 4: Verify Turing works"
         if: matrix.federation_member == 'turing'
@@ -197,4 +189,4 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: echo "py.test -vx -n 2 --binder-url=https://turing.mybinder.org --hub-url=https://hub.mybinder.turing.ac.uk"
+          command: py.test -vx -n 2 --binder-url=https://turing.mybinder.org --hub-url=https://hub.mybinder.turing.ac.uk
