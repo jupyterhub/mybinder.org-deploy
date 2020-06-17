@@ -99,4 +99,6 @@ jobs:
     steps:
       - name: Echo values
         run: |
-          echo ${{ matrix.federation_member }}
+          for item in ${{ matrix.federation_member }} ; do
+            echo item
+          done
