@@ -85,23 +85,34 @@ jobs:
       #     command: py.test -vx -n 2 --binder-url=https://gke.staging.mybinder.org --hub-url=https://hub.gke.staging.mybinder.org
 
   prod-deploy:
-    runs-on: ubuntu-latest
+    # Previous job must have successfully completed for this job to execute
     needs: staging-deploy
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         federation_member: ["prod", "ovh", "turing"]
         binder_url: ["https://gke.mybinder.org", "https://ovh.mybinder.org", "https://turing.mybinder.org"]
         hub_url: ["https://hub.gke.mybinder.org", "https://hub-binder.mybinder.ovh", "https://hub.mybinder.turing.ac.uk"]
+        # These matrix combinations will be skipped
         exclude:
           - federation_member: "prod"
-            binder_url: ["https://ovh.mybinder.org", "https://turing.mybinder.org"]
-            hub_url: ["https://hub-binder.mybinder.ovh", "https://hub.mybinder.turing.ac.uk"]
+            binder_url: "https://ovh.mybinder.org"
+            hub_url: "https://hub-binder.mybinder.ovh"
+          - federation_member: "prod"
+            binder_url: "https://turing.mybinder.org"
+            hub_url: "https://hub.mybinder.turing.ac.uk"
           - federation_member: "ovh"
-            binder_url: ["https://gke.mybinder.org", "https://turing.mybinder.org"]
-            hub_url: ["https://hub.gke.mybinder.org", "https://hub.mybinder.turing.ac.uk"]
+            binder_url: "https://gke.mybinder.org"
+            hub_url: "https://hub.gke.mybinder.org"
+          - federation_member: "ovh"
+            binder_url: "https://turing.mybinder.org"
+            hub_url: "https://hub.mybinder.turing.ac.uk"
           - federation_member: "turing"
-            binder_url: ["https://gke.mybinder.org", "https://ovh.mybinder.org"]
-            hub_url: ["https://hub.gke.mybinder.org", "https://hub-binder.mybinder.ovh"]
+            binder_url: "https://gke.mybinder.org"
+            hub_url: "https://hub.gke.mybinder.org"
+          - federation_member: "turing"
+            binder_url: "https://ovh.mybinder.org"
+            hub_url: "https://hub-binder.mybinder.ovh"
     steps:
       - name: Echo values
         run: |
