@@ -73,16 +73,16 @@ jobs:
         run: |
           chartpress --commit-range ${{ github.base_ref }}..${{ github.head_ref }}
 
-      # - name: "Stage 4: Deploy to staging"
-      #   run: |
-      #     python ./deploy.py staging staging
+      - name: "Stage 4: Deploy to staging"
+        run: |
+          echo "python ./deploy.py staging staging"
 
-      # - name: "Stage 4: Verify staging works"
-      #   uses: nick-invision/retry@v1
-      #   with:
-      #     timeout_minutes: 10
-      #     max_attempts: 3
-      #     command: py.test -vx -n 2 --binder-url=https://gke.staging.mybinder.org --hub-url=https://hub.gke.staging.mybinder.org
+      - name: "Stage 4: Verify staging works"
+        uses: nick-invision/retry@v1
+        with:
+          timeout_minutes: 10
+          max_attempts: 3
+          command: echo "py.test -vx -n 2 --binder-url=https://gke.staging.mybinder.org --hub-url=https://hub.gke.staging.mybinder.org"
 
   prod-deploy:
     # Previous job must have successfully completed for this job to execute
