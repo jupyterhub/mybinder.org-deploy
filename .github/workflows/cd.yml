@@ -173,7 +173,7 @@ jobs:
       - name: "Stage 4: Deploy to prod"
         if: matrix.federation_member == 'prod'
         run: |
-          echo "python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.federation_member }}-a"
+          echo "python ./deploy.py prod prod-a"
 
       - name: "Stage 4: Verify prod works"
         if: matrix.federation_member == 'prod'
