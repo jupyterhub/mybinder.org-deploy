@@ -38,10 +38,6 @@ jobs:
           pip install --upgrade setuptools pip
           pip install --upgrade -r requirements.txt
 
-      - name: "Stage 1: Install Docker"
-        run: |
-          sudo apt install docker.io -y
-
       - name: "Stage 1: Install gcloud SDK"
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
 
@@ -58,9 +54,17 @@ jobs:
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
-      - name: "Stage 2: Login to Docker"
+      - name: "Stage 2: Set docker password as env variable"
         run: |
-          docker login -u _json_key --password-stdin https://gcr.io < secrets/gcr-auth-key-prod.json
+          DOCKER_PASSWORD=$( cat secrets/gcr-auth-key-prod.json
+          echo "::set-env name=DOCKER_PASSWORD::${DOCKER_PASSWORD}"
+
+      - name: "Stage 2: Login to Docker"
+        uses: azure/docker-login@v1
+        with:
+          login-server: "https://gcr.io"
+          username: "_json_key"
+          password: "${DOCKER_PASSWORD}"
 
       - name: "Stage 2: Setup helm"
         run: |
