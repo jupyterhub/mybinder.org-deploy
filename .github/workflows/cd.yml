@@ -155,12 +155,12 @@ jobs:
         run: |
           echo "python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.federation_member }}"
 
-      - name: "Stage 4: Deploy to ${{ matrix.federation_member }}"
+      - name: "Stage 4: Deploy to prod"
         if: matrix.federation_member == 'prod'
         run: |
           echo "python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.federation_member }}-a"
 
-      - name: "Stage 4: Verify ${{ matrix.federation_member }} works"
+      - name: "Stage 4: Verify prod works"
         if: matrix.federation_member == 'prod'
         uses: nick-invision/retry@v1
         with:
@@ -168,7 +168,7 @@ jobs:
           max_attempts: 3
           command: echo "py.test -vx -n 2 --binder-url=https://gke.mybinder.org --hub-url=https://hub.gke.mybinder.org"
 
-      - name: "Stage 4: Verify ${{ matrix.federation_member }} works"
+      - name: "Stage 4: Verify OVH works"
         if: matrix.federation_member == 'ovh'
         uses: nick-invision/retry@v1
         with:
@@ -176,7 +176,7 @@ jobs:
           max_attempts: 3
           command: echo "py.test -vx -n 2 --binder-url=https://ovh.mybinder.org --hub-url=https://hub-binder.mybinder.ovh"
 
-      - name: "Stage 4: Verify ${{ matrix.federation_member }} works"
+      - name: "Stage 4: Verify Turing works"
         if: matrix.federation_member == 'turing'
         uses: nick-invision/retry@v1
         with:
