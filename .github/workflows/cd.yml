@@ -77,3 +77,7 @@ jobs:
       - name: "Stage 3: Build images (if required)"
         run: |
           chartpress --commit-range ${{ github.base_ref }}..${{ github.head_ref }}
+
+      # - name: "Stage 4: Deploy to staging"
+      #   run: |
+      #     python ./deploy.py staging staging
