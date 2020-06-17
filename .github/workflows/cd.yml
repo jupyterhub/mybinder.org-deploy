@@ -86,7 +86,7 @@ jobs:
 
       - name: "Stage 3: Post message to Grafana that deployment to production has started"
         run: |
-          source secrets/grafana-api-key
+        # source secrets/grafana-api-key
           export PULL_REQUEST_ID=$(git log -1 --pretty=%B | head -n1 | sed 's/^.*#\([0-9]*\).*/\1/')
           export AUTHOR_NAME="$(git log  -1 --pretty=%aN)"
           export PULL_REQUEST_TITLE="$(git log --pretty=%B -1 | tail -n+3)"
