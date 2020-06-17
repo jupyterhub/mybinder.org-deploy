@@ -71,7 +71,7 @@ jobs:
         with:
           login-server: "https://gcr.io"
           username: "_json_key"
-          password: secrets/gcr-auth-key-prod.json
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: "Stage 2: Setup helm"
         run: |
