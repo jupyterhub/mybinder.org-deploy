@@ -28,7 +28,7 @@ Amongst other things the guide contains:
 |             | Staging | Production |
 | ----------- | ------- | ---------- |
 | Site     |[staging.mybinder.org](https://staging.mybinder.org) | [mybinder.org](https://mybinder.org) |
-| TravisCI Deployment | [![Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=master)](https://travis-ci.org/jupyterhub/mybinder.org-deploy) (both) |
+| CI Deployment | [![Continuous Deployment](https://github.com/jupyterhub/mybinder.org-deploy/workflows/Continuous%20Deployment/badge.svg)](https://github.com/jupyterhub/mybinder.org-deploy/actions?query=workflow%3A%22Continuous+Deployment%22) (both) |
 | Deployment checklist | staging | prod |
 | Monitoring | staging | [prod](https://grafana.mybinder.org/dashboard/db/kubernetes-cluster-monitoring-binder-prod?refresh=60s&orgId=1) |
 
