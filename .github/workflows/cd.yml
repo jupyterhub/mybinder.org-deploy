@@ -89,3 +89,18 @@ jobs:
       #     max_attempts: 3
       #     command: py.test -vx -n 2 --binder-url=https://gke.staging.mybinder.org --hub-url=https://hub.gke.staging.mybinder.org
 
+  prod-deploy:
+    runs-on: ubuntu-latest
+    needs: staging-deploy
+    strategy:
+      matrix:
+        federation_member: ["prod", "ovh", "turing"]
+        binder_url: ["https://gke.mybinder.org", "https://ovh.mybinder.org", "https://turing.mybinder.org"]
+        hub_url: ["https://hub.gke.mybinder.org", "https://hub-binder.mybinder.ovh", "https://hub.mybinder.turing.ac.uk"]
+
+    steps:
+      - name: Echo values
+        run: |
+          echo ${{ matrix.federation_member }}
+          echo ${{ matrix.binder_url }}
+          echo ${{ matrix.hub_url }}
