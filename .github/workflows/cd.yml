@@ -53,6 +53,11 @@ jobs:
           curl -L https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
 
+      - name: "Stage 2: Unlock git-crypt secrets"
+        uses: sliteteam/github-action-git-crypt-unlock@1.0.2
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+
       - name: "Stage 2: Login to Docker"
         run: |
           docker login -u _json_key --password-stdin https://gcr.io < secrets/gcr-auth-key-prod.json
