@@ -146,3 +146,16 @@ jobs:
           helm repo add jetstack https://charts.jetstack.io
           helm repo update
           (cd mybinder && helm dep up)
+
+      # I'm hoping since chartpress pushed the built image during Stage 3 of
+      # staging-deploy job, that step can be skipped here.
+
+      - name: "Stage 4: Deploy to ${{ matrix.federation_member }}"
+        if: matrix.federation_member != 'prod'
+        run: |
+          echo "python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.federation_member }}"
+
+      - name: "Stage 4: Deploy to ${{ matrix.federation_member }}"
+        if: matrix.federation_member == 'prod'
+        run: |
+          echo "python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.federation_member }}-a"
