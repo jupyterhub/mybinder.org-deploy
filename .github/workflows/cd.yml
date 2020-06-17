@@ -56,7 +56,7 @@ jobs:
 
       - name: "Stage 2: Set docker password as env variable"
         run: |
-          DOCKER_PASSWORD=$( cat secrets/gcr-auth-key-prod.json
+          DOCKER_PASSWORD=$( cat secrets/gcr-auth-key-prod.json )
           echo "::set-env name=DOCKER_PASSWORD::${DOCKER_PASSWORD}"
 
       - name: "Stage 2: Login to Docker"
