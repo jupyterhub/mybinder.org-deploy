@@ -91,14 +91,9 @@ jobs:
     needs: staging-deploy
     strategy:
       matrix:
-        federation_member:
-          - ["prod", "https://gke.mybinder.org", "https://hub.gke.mybinder.org"]
-          - ["ovh", "https://ovh.mybinder.org", "https://hub-binder.mybinder.ovh"]
-          - ["turing", "https://turing.mybinder.org", "https://hub.mybinder.turing.ac.uk"]
+        federation_member: ["prod", "ovh", "turing"]
 
     steps:
       - name: Echo values
         run: |
-          for ITEM in ${{ matrix.federation_member }} ; do
-            echo ${ITEM}
-          done
+          echo ${{ matrix.federation_member }}
