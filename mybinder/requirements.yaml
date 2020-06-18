@@ -19,5 +19,5 @@ dependencies:
    tags:
      - certmanager
  - name: binderhub
-   version: 0.2.0-n178.h9cff5e3
+   version: 0.2.0-n181.h23ae206
    repository: https://jupyterhub.github.io/helm-chart
