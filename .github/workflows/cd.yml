@@ -126,11 +126,9 @@ jobs:
           - federation_member: turing
             binder_url: https://turing.mybinder.org
             hub_url: https://hub.mybinder.turing.ac.uk
-            cluster_name: turing
           - federation_member: ovh
             binder_url: https://ovh.mybinder.org
             hub_url: https://hub-binder.mybinder.ovh
-            cluster_name: ovh
 
     steps:
       - name: "Stage 0: Checkout repo"
@@ -192,7 +190,7 @@ jobs:
 
       - name: "Stage 4: Deploy to ${{ matrix.federation_member }}"
         run: |
-          python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.cluster_name }}
+          python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.cluster_name || matrix.federation_member }}
 
       - name: "Stage 4: Verify ${{ matrix.federation_member }} works"
         uses: nick-invision/retry@v1
