@@ -173,8 +173,9 @@ jobs:
           helm repo update
           helm dep up
 
-      # I'm hoping since chartpress pushed the built image during Stage 3 of
-      # staging-deploy job, that step can be skipped here.
+      - name: "Stage 3: Set image tag in chart"
+        run: |
+          chartpress --commit-range ${{ github.base_ref }}..${{ github.head_ref }} --push --skip-build
 
       - name: "Stage 4: Deploy to ${{ matrix.federation_member }}"
         if: matrix.federation_member != 'prod'
