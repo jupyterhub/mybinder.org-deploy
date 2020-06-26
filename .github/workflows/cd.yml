@@ -84,7 +84,7 @@ jobs:
 
       - name: "Stage 3: Build images (if required)"
         run: |
-          chartpress --commit-range ${{ github.base_ref }}..${{ github.head_ref }} --push
+          chartpress --push
 
       - name: "Stage 4: Deploy to staging"
         run: |
@@ -186,7 +186,7 @@ jobs:
 
       - name: "Stage 3: Set image tag in chart"
         run: |
-          chartpress --commit-range ${{ github.base_ref }}..${{ github.head_ref }} --push --skip-build
+          chartpress --skip-build
 
       - name: "Stage 4: Deploy to ${{ matrix.federation_member }}"
         run: |
