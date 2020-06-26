@@ -142,7 +142,7 @@ jobs:
 
       # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idif
       - name: "Stage 1: Install gcloud SDK"
-        if: matrix.federation_member != 'turing'
+        if: matrix.federation_member == 'prod'
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
 
       - name: "Stage 1: Install Azure CLI"
