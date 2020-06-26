@@ -74,12 +74,13 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: "Stage 2: Setup helm"
+        working-directory: mybinder
         run: |
           helm init --client-only
           helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
           helm repo add jetstack https://charts.jetstack.io
           helm repo update
-          (cd mybinder && helm dep up)
+          helm dep up
 
       - name: "Stage 3: Build images (if required)"
         run: |
@@ -164,12 +165,13 @@ jobs:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
       - name: "Stage 2: Setup helm"
+        working-directory: mybinder
         run: |
           helm init --client-only
           helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
           helm repo add jetstack https://charts.jetstack.io
           helm repo update
-          (cd mybinder && helm dep up)
+          helm dep up
 
       # I'm hoping since chartpress pushed the built image during Stage 3 of
       # staging-deploy job, that step can be skipped here.
