@@ -191,35 +191,12 @@ jobs:
           chartpress --commit-range ${{ github.base_ref }}..${{ github.head_ref }} --push --skip-build
 
       - name: "Stage 4: Deploy to ${{ matrix.federation_member }}"
-        if: matrix.federation_member != 'prod'
         run: |
-          python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.federation_member }}
+          python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.cluster_name }}
 
-      - name: "Stage 4: Deploy to prod"
-        if: matrix.federation_member == 'prod'
-        run: |
-          python ./deploy.py prod prod-a
-
-      - name: "Stage 4: Verify prod works"
-        if: matrix.federation_member == 'prod'
+      - name: "Stage 4: Verify ${{ matrix.federation_member }} works"
         uses: nick-invision/retry@v1
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: py.test -vx -n 2 --binder-url=https://gke.mybinder.org --hub-url=https://hub.gke.mybinder.org
-
-      - name: "Stage 4: Verify OVH works"
-        if: matrix.federation_member == 'ovh'
-        uses: nick-invision/retry@v1
-        with:
-          timeout_minutes: 10
-          max_attempts: 3
-          command: py.test -vx -n 2 --binder-url=https://ovh.mybinder.org --hub-url=https://hub-binder.mybinder.ovh
-
-      - name: "Stage 4: Verify Turing works"
-        if: matrix.federation_member == 'turing'
-        uses: nick-invision/retry@v1
-        with:
-          timeout_minutes: 10
-          max_attempts: 3
-          command: py.test -vx -n 2 --binder-url=https://turing.mybinder.org --hub-url=https://hub.mybinder.turing.ac.uk
+          command: py.test -vx -n 2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matric.hub_url }}
