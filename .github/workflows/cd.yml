@@ -199,4 +199,4 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: py.test -vx -n 2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matric.hub_url }}
+          command: py.test -vx -n 2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matrix.hub_url }}
