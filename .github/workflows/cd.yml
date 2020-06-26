@@ -118,7 +118,20 @@ jobs:
     strategy:
       fail-fast: false  # Do not cancel all jobs if one fails
       matrix:
-        federation_member: ["prod", "ovh", "turing"]
+        include:
+          - federation_member: prod
+            binder_url: https://gke.mybinder.org
+            hub_url: https://hub.gke.mybinder.org
+            cluster_name: prod-a
+          - federation_member: turing
+            binder_url: https://turing.mybinder.org
+            hub_url: https://hub.mybinder.turing.ac.uk
+            cluster_name: turing
+          - federation_member: ovh
+            binder_url: https://ovh.mybinder.org
+            hub_url: https://hub-binder.mybinder.ovh
+            cluster_name: ovh
+
     steps:
       - name: "Stage 0: Checkout repo"
         uses: actions/checkout@v2
