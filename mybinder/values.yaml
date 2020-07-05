@@ -63,6 +63,22 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1476
+        - pattern: ^ericmjl/bayesian-stats-modelling-tutorial.*
+          config:
+            quota: 300
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1477
+        - pattern: ^hugobowne/deep-learning-from-scratch-pytorch.*
+          config:
+            quota: 300
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1479
+        - pattern: ^xarray-contrib/xarray-tutorial.*
+          config:
+            quota: 300
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1480
+        - pattern: ^carpentries-incubator/introduction-to-conda-for-data-scientists.*
+          config:
+            quota: 300
 
     GitRepoProvider:
       banned_specs:
