@@ -79,6 +79,10 @@ binderhub:
         - pattern: ^carpentries-incubator/introduction-to-conda-for-data-scientists.*
           config:
             quota: 300
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1483
+        - pattern: ^dask/dask-tutorial.*
+          config:
+            quota: 300
 
     GitRepoProvider:
       banned_specs:
