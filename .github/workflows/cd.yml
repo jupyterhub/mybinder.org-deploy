@@ -61,7 +61,7 @@ jobs:
 
       # Action Repo: https://github.com/sliteteam/github-action-git-crypt-unlock
       - name: "Stage 2: Unlock git-crypt secrets"
-        uses: sliteteam/github-action-git-crypt-unlock@1.0.2
+        uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
@@ -92,7 +92,7 @@ jobs:
 
       # Action Repo: https://github.com/nick-invision/retry
       - name: "Stage 4: Verify staging works"
-        uses: nick-invision/retry@v1
+        uses: nick-invision/retry@39da88d5f7d15a96aed861dbabbe8b7443e3182a
         with:
           timeout_minutes: 10
           max_attempts: 3
@@ -171,7 +171,7 @@ jobs:
           sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
 
       - name: "Stage 2: Unlock git-crypt secrets"
-        uses: sliteteam/github-action-git-crypt-unlock@1.0.2
+        uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
@@ -193,7 +193,7 @@ jobs:
           python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.cluster_name || matrix.federation_member }}
 
       - name: "Stage 4: Verify ${{ matrix.federation_member }} works"
-        uses: nick-invision/retry@v1
+        uses: nick-invision/retry@39da88d5f7d15a96aed861dbabbe8b7443e3182a
         with:
           timeout_minutes: 10
           max_attempts: 3
