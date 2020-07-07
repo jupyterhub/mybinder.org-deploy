@@ -15,6 +15,7 @@ on:
 
 # Global environment variables
 env:
+  GCLOUD_SDK_VERION: "290.0.1"
   HELM_VERSION: "v2.16.3"
 
 jobs:
@@ -49,6 +50,8 @@ jobs:
       # Action Repo: https://github.com/GoogleCloudPlatform/github-actions/tree/master/setup-gcloud
       - name: "Stage 1: Install gcloud SDK"
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: ${GCLOUD_SDK_VERION}
 
       # Action Repo: https://github.com/Azure/setup-kubectl
       - name: "Stage 1: Install kubectl"
@@ -156,6 +159,8 @@ jobs:
       - name: "Stage 1: Install gcloud SDK"
         if: matrix.federation_member == 'prod'
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+        with:
+          version: ${GCLOUD_SDK_VERION}
 
       - name: "Stage 1: Install Azure CLI"
         if: matrix.federation_member == 'turing'
