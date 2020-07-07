@@ -17,6 +17,7 @@ on:
 env:
   GCLOUD_SDK_VERION: "290.0.1"
   HELM_VERSION: "v2.16.3"
+  KUBECTL_VERSION: "v1.18.0"
 
 jobs:
   # Job to upgrade staging
@@ -56,6 +57,8 @@ jobs:
       # Action Repo: https://github.com/Azure/setup-kubectl
       - name: "Stage 1: Install kubectl"
         uses: azure/setup-kubectl@v1
+        with:
+          version: ${KUBECTL_VERSION}
 
       - name: "Stage 1: Install helm"
         run: |
@@ -169,6 +172,8 @@ jobs:
 
       - name: "Stage 1: Install kubectl"
         uses: azure/setup-kubectl@v1
+        with:
+          version: ${KUBECTL_VERSION}
 
       - name: "Stage 1: Install helm"
         run: |
