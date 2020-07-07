@@ -52,17 +52,17 @@ jobs:
       - name: "Stage 1: Install gcloud SDK"
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
-          version: ${GCLOUD_SDK_VERION}
+          version: ${{ env.GCLOUD_SDK_VERION }}
 
       # Action Repo: https://github.com/Azure/setup-kubectl
       - name: "Stage 1: Install kubectl"
         uses: azure/setup-kubectl@v1
         with:
-          version: ${KUBECTL_VERSION}
+          version: ${{ env.KUBECTL_VERSION }}
 
       - name: "Stage 1: Install helm"
         run: |
-          curl -L https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
+          curl -L https://storage.googleapis.com/kubernetes-helm/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
 
       # Action Repo: https://github.com/sliteteam/github-action-git-crypt-unlock
@@ -163,7 +163,7 @@ jobs:
         if: matrix.federation_member == 'prod'
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
-          version: ${GCLOUD_SDK_VERION}
+          version: ${{ env.GCLOUD_SDK_VERION }}
 
       - name: "Stage 1: Install Azure CLI"
         if: matrix.federation_member == 'turing'
@@ -173,11 +173,11 @@ jobs:
       - name: "Stage 1: Install kubectl"
         uses: azure/setup-kubectl@v1
         with:
-          version: ${KUBECTL_VERSION}
+          version: ${{ env.KUBECTL_VERSION }}
 
       - name: "Stage 1: Install helm"
         run: |
-          curl -L https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
+          curl -L https://storage.googleapis.com/kubernetes-helm/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
 
       - name: "Stage 2: Unlock git-crypt secrets"
