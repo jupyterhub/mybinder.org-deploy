@@ -104,7 +104,7 @@ jobs:
           max_attempts: 3
           command: py.test -vx -n 2 --binder-url=https://gke.staging.mybinder.org --hub-url=https://hub.gke.staging.mybinder.org
 
-      - name: "Stage 3: Post message to Grafana that deployment to production has started"
+      - name: "Stage 5: Post message to Grafana that deployment to production has started"
         run: |
           source secrets/grafana-api-key
           export PULL_REQUEST_ID=$(git log -1 --pretty=%B | head -n1 | sed 's/^.*#\([0-9]*\).*/\1/')
