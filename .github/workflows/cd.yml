@@ -18,6 +18,10 @@ env:
   GCLOUD_SDK_VERION: "290.0.1"
   HELM_VERSION: "v2.16.3"
   KUBECTL_VERSION: "v1.18.0"
+  GIT_COMMITTER_EMAIL: ci-user@github.local
+  GIT_COMMITTER_NAME: CI User
+  GIT_AUTHOR_EMAIL: ci-user@github.local
+  GIT_AUTHOR_NAME: CI User
 
 jobs:
   # Job to upgrade staging
