@@ -122,7 +122,7 @@ def setup_helm(release):
         flush=True
     )
 
-    # Now check if the version of helm matches that which travis is expecting
+    # Now check if the version of helm matches that which CI is expecting
     if client_version != HELM_VERSION:
         # The local helm version is not what was expected - user needs to change the installation
         raise Exception(
@@ -264,12 +264,12 @@ def main():
 
     # Check if the local flag is set
     if not args.local:
-        # Check if the script is being run on travis
-        if not (cwd.startswith('/home/travis')):
+        # Check if the script is being run on CI
+        if not os.environ.get("CI"):
             # Catch the case where the script is running locally but the --local flag
             # has not been set. Check that the user is sure that they want to do this!
             print(
-                "You do not seem to be running on Travis but have not set the --local flag."
+                "You do not seem to be running on CI but have not set the --local flag."
             )
 
             # Use regex to match user input
@@ -290,7 +290,7 @@ def main():
                     "Unrecognised input. Expecting either yes or no."
                 )
 
-        # script is running on travis, proceed with auth and helm setup
+        # script is running on CI, proceed with auth and helm setup
         if args.cluster == 'ovh':
             setup_auth_ovh(args.release, args.cluster)
         elif args.cluster == 'turing':
