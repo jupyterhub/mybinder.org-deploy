@@ -92,7 +92,7 @@ binderhub:
             - hub.gke.mybinder.org
     scheduling:
       userPlaceholder:
-        replicas: 25
+        replicas: 75
       userScheduler:
         nodeSelector: *coreNodeSelector
 
