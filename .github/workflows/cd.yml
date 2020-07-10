@@ -95,6 +95,8 @@ jobs:
       - name: "Stage 4: Deploy to staging"
         run: |
           python ./deploy.py staging staging
+        env:
+          TERM: xterm
 
       # Action Repo: https://github.com/nick-invision/retry
       - name: "Stage 4: Verify staging works"
@@ -201,6 +203,8 @@ jobs:
       - name: "Stage 4: Deploy to ${{ matrix.federation_member }}"
         run: |
           python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.cluster_name || matrix.federation_member }}
+        env:
+          TERM: xterm
 
       - name: "Stage 4: Verify ${{ matrix.federation_member }} works"
         uses: nick-invision/retry@39da88d5f7d15a96aed861dbabbe8b7443e3182a
