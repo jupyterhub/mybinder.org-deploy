@@ -1,6 +1,6 @@
 # mybinder.org-deploy
 
-Deployment: [![Build Status](https://travis-ci.org/jupyterhub/mybinder.org-deploy.svg?branch=master)](https://travis-ci.org/jupyterhub/mybinder.org-deploy)
+Deployment: [![Build Status](https://github.com/jupyterhub/mybinder.org-deploy/workflows/Continuous%20Deployment/badge.svg)](https://github.com/jupyterhub/mybinder.org-deploy/actions)
 
 Deployment, configuration, and Site Reliability documentation files for the
 public [mybinder.org][] service.
