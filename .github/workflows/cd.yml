@@ -147,6 +147,8 @@ jobs:
     steps:
       - name: "Stage 0: Checkout repo"
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: "Stage 0: Setup Python 3.6"
         uses: actions/setup-python@v1
