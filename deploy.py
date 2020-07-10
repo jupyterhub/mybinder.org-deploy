@@ -9,9 +9,14 @@ import sys
 import yaml
 
 # Color codes for colored output!
-BOLD = subprocess.check_output(['tput', 'bold']).decode()
-GREEN = subprocess.check_output(['tput', 'setaf', '2']).decode()
-NC = subprocess.check_output(['tput', 'sgr0']).decode()
+if os.environ.get("TERM"):
+    BOLD = subprocess.check_output(['tput', 'bold']).decode()
+    GREEN = subprocess.check_output(['tput', 'setaf', '2']).decode()
+    NC = subprocess.check_output(['tput', 'sgr0']).decode()
+else:
+    # no term, no colors
+    BOLD = GREEN = NC = ""
+
 HERE = os.path.dirname(__file__)
 ABSOLUTE_HERE = os.path.dirname(os.path.realpath(__file__))
 
@@ -22,7 +27,7 @@ if HELM_VERSION is None:
 
 def setup_auth_turing(cluster):
     """
-    Set up athentication with Turing k8s cluster on Azure.
+    Set up authentication with Turing k8s cluster on Azure.
     """
     # Read in auth info
     azure_file = os.path.join(ABSOLUTE_HERE, "secrets", "turing-auth-key-prod.json")
