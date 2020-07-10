@@ -121,7 +121,8 @@ jobs:
           python3 post-grafana-annotation.py  \
             --grafana-url https://grafana.mybinder.org \
             --tag deployment-start \
-            "$(echo -en ${PULL_REQUEST_TITLE}\\n\\n${AUTHOR_NAME}: https://github.com/${{ github.repository }}/pull/${PULL_REQUEST_ID})"
+            "$(echo -en ${PULL_REQUEST_TITLE}\\n\\n${AUTHOR_NAME}: https://github.com/${{ github.repository }}/pull/${PULL_REQUEST_ID})" \
+          || echo "failed!"
 
   prod-deploy:
     # Previous job must have successfully completed for this job to execute
