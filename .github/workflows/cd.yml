@@ -31,6 +31,8 @@ jobs:
       # Action Repo: https://github.com/actions/checkout
       - name: "Stage 0: Checkout repo"
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       # Action Repo: https://github.com/actions/setup-python
       - name: "Stage 0: Setup Python 3.6"
