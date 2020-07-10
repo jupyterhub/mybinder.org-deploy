@@ -162,6 +162,9 @@ nginx-ingress:
   controller:
     hostNetwork: true
     replicaCount: 1
+    # OVH host-networking requires ingress controller on node-1
+    nodeSelector:
+      kubernetes.io/hostname: node-1
   scope:
     enabled: false
 
