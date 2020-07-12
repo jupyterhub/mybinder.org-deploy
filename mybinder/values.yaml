@@ -83,6 +83,14 @@ binderhub:
         - pattern: ^dask/dask-tutorial.*
           config:
             quota: 300
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1500
+        - pattern: ^ganga-devs/ganga.*
+          config:
+            quota: 300
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1499
+        - pattern: ^jpivarski/2020-07-13-pyhep2020-tutorial.*
+          config:
+            quota: 400
 
     GitRepoProvider:
       banned_specs:
