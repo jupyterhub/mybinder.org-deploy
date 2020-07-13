@@ -77,6 +77,8 @@ binderhub:
             quota: 300
         # https://github.com/jupyterhub/mybinder.org-deploy/issues/1514
         - pattern: ^stwunsch/pyhep2020-pyroot.*
+          config:
+            quota: 300
 
     GitRepoProvider:
       banned_specs:
