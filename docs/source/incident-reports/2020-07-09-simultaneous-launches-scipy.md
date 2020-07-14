@@ -128,7 +128,7 @@ issue.
 3. We should investigate resource allocations to builds, and possible limit concurrent
    builds per repo to a very small number (killing old builds is probably a better user
    experience than blocking new ones), as the failure corresponds to a spike in builds
-   but *not* a spike in launches.
+   but *not* a spike in launches. [issue for information gathering here](https://github.com/jupyterhub/mybinder.org-deploy/issues/1529).
 4. Add a launches-requested metric that is recorded immediately upon request, because
    our current launch metrics are only recorded when the launch either succeeds or
    fails, resulting in an inaccurately smooth and delayed metrics report. For example:
