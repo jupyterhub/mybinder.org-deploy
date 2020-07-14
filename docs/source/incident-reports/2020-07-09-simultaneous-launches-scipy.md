@@ -96,7 +96,7 @@ We noted that [launches returned to normal](https://gitter.im/jupyterhub/mybinde
 3. Include a "tips and recommendations" step to the official "quota increase" issues.
    Maybe a short list of 5 items that instructors should consider (like "don't make lots
    of changes just before the event") and we get them to verbally say "yes" to before
-   they are approved.
+   they are approved. [issue here](https://github.com/jupyterhub/mybinder.org-deploy/issues/1525)
 
 ### Documentation improvements
 
