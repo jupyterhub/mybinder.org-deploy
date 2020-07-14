@@ -92,7 +92,7 @@ We noted that [launches returned to normal](https://gitter.im/jupyterhub/mybinde
    can add a threshold to certain Grafana charts, indicating the current limit. Not sure
    how to keep it up-to-date.*
 2. Consider dedicated nodes or cluster for large events we know are going to use Binder a lot
-   (e.g. `scipy.mybinder.org`).
+   (e.g. `scipy.mybinder.org`). [see issue here](https://github.com/jupyterhub/mybinder.org-deploy/issues/1526)
 3. Include a "tips and recommendations" step to the official "quota increase" issues.
    Maybe a short list of 5 items that instructors should consider (like "don't make lots
    of changes just before the event") and we get them to verbally say "yes" to before
