@@ -63,20 +63,20 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1500
-        - pattern: ^ganga-devs/ganga.*
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1501
+        - pattern: ^CoffeaTeam/coffea-casa-tutorials.*
           config:
             quota: 300
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1506
-        - pattern: ^riga/law_pyhep2020.*
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1523
+        - pattern: ^lukasheinrich/pyhep2020-autodiff-tutorial.*
           config:
             quota: 300
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1512
-        - pattern: ^HDembinski/pyhep-2020-resample.*
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1510
+        - pattern: ^phinate/neos.*
           config:
             quota: 300
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1514
-        - pattern: ^stwunsch/pyhep2020-pyroot.*
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1521
+        - pattern: ^henryiii/python-performance-minicourse.*
           config:
             quota: 300
 
