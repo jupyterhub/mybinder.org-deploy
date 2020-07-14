@@ -104,7 +104,7 @@ We noted that [launches returned to normal](https://gitter.im/jupyterhub/mybinde
    before an event (or to separate out content/env repos)
 2. Something about spreading out Binder clicks for events so they don't all happen at once?
 
-Add these to the documentation and then add a link to these docs to the github quota increase
+Add these to the documentation and then add a link to these docs to the github quota increase [see here for an issue](https://github.com/jupyterhub/binder/issues/200)
 issue.
 
 ### Code and Configuration changes
