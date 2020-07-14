@@ -74,7 +74,7 @@ We noted that [launches returned to normal](https://gitter.im/jupyterhub/mybinde
    node capacity. During this time, many pods were pending, waiting for a slot.
 5. According to our metrics, launch success rate never dropped below 100%, but users
    experienced failures. This is perhaps because our timeout is 10 minutes (long!) and a
-   first-try failure at 10 minmutes followed by a success 5 minutes later is likely. The
+   first-try failure at 10 minutes followed by a success 5 minutes later is likely experienced as a failure by the user. The
    launch success rate chart shows 100% success rate *after retry* but high retry rate,
    indicating timeouts due to load:
 
