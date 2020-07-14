@@ -123,7 +123,7 @@ issue.
 
    ![](https://i.imgur.com/rYh0Whv.png)
    
-   If we decrease the launch timeout to 5 minutes, this will likely increase our failure rate, *according to metrics*, but should clear out the queue of what are likely already failed launches *according to users*. The result should be a better experience.
+   If we decrease the launch timeout to 5 minutes, this will likely increase our failure rate, *according to metrics*, but should clear out the queue of what are likely already failed launches *according to users*. The result should be a better experience. [issue](https://github.com/jupyterhub/mybinder.org-deploy/issues/1528).
 
 3. We should investigate resource allocations to builds, and possible limit concurrent
    builds per repo to a very small number (killing old builds is probably a better user
