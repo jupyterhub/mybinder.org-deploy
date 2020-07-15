@@ -41,6 +41,7 @@ jobs:
         run: |
           curl -L https://storage.googleapis.com/kubernetes-helm/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
+          rm -rf kubeval-linux-amd64.tar.gz
 
       - name: Install local charts
         working-directory: mybinder
