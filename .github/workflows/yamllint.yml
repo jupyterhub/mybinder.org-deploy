@@ -31,6 +31,12 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install yamllint
 
+      - name: Install kubeval
+        run: |
+          wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
+          tar xf kubeval-linux-amd64.tar.gz
+          sudo cp kubeval /usr/local/bin
+
       - name: Install helm
         run: |
           curl -L https://storage.googleapis.com/kubernetes-helm/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
