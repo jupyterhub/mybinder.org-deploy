@@ -63,22 +63,26 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1501
-        - pattern: ^CoffeaTeam/coffea-casa-tutorials.*
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1518
+        - pattern: ^zfit/PyHEP2020.*
           config:
             quota: 300
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1523
-        - pattern: ^lukasheinrich/pyhep2020-autodiff-tutorial.*
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1504
+        - pattern: ^SModelS/pyhep2020.*
           config:
             quota: 300
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1510
-        - pattern: ^phinate/neos.*
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1513
+        - pattern: ^HDembinski/pyhep-2020-iminuit.*
           config:
             quota: 300
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1521
-        - pattern: ^henryiii/python-performance-minicourse.*
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1503
+        - pattern: ^kropiv/MLforNIatPyHEP.*
           config:
-            quota: 300
+            quota: 200
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1507
+        - pattern: ^pyhf/tutorial-PyHEP-2020.*
+          config:
+            quota: 200
 
     GitRepoProvider:
       banned_specs:
