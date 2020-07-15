@@ -13,7 +13,11 @@ help avoid this in the future.
 
 All times in UC/Pacific
 
-[link to grafana during incident window](https://grafana.mybinder.org/d/3SpLQinmk/1-overview?orgId=1&from=1594299600000&to=1594305000000&var-cluster=default)
+links to grafana during incident window:
+
+- [overview](https://grafana.mybinder.org/d/3SpLQinmk/1-overview?orgId=1&from=1594299600000&to=1594307700000)
+- [node status](https://grafana.mybinder.org/d/nDQPwi7mk/node-activity?orgId=1&from=1594299600000&to=1594307700000)
+- [pod status](https://grafana.mybinder.org/d/fZWsQmnmz/pod-activity?orgId=1&from=1594299600000&to=1594307700000)
 
 ### 07:30am - First report
 
@@ -22,9 +26,10 @@ that the xarray tutorial noted some broken and/or slow launches on Binder.
 
 ### 07:35 - Note pending pods
 
-[We note there are many pending pods](https://gitter.im/jupyterhub/mybinder.org-deploy?at=5f072ac186ccb45b599592c9) during that time. We also noted that
-the xarray Binder had undergone many builds before the tutorial, which may have
-contributed to the time it took to pull Docker images on the nodes.
+[We note there are many pending pods](https://gitter.im/jupyterhub/mybinder.org-deploy?at=5f072ac186ccb45b599592c9) during that time,
+peaking around 07:15.
+We also noted that the xarray Binder had undergone many builds before the tutorial,
+which may have contributed to the time it took to pull Docker images on the nodes.
 
 We also noted that the placeholder pods and active pods seemed to do
 [some weird stuff](https://grafana.mybinder.org/d/nDQPwi7mk/node-activity?orgId=1&from=1594300376037&to=1594305103856&fullscreen&panelId=43):
@@ -52,15 +57,16 @@ We noted that we'd reached our node limit on GKE and
 
 ### 07:42 - Launches are back to normal
 
-We noted that [launches returned to normal](https://gitter.im/jupyterhub/mybinder.org-deploy?at=5f072ce0c7d15f7d0f801ab0).
+We noted that [launches returned to normal](https://gitter.im/jupyterhub/mybinder.org-deploy?at=5f072ce0c7d15f7d0f801ab0),
+even though a new node did not appear to be needed.
 
 ## Lessons learnt
 
 ### What went well
 
 1. We quickly heard about the problem and responded
-2. The deployment was relatively self-healing here (with one exception that we may
-   have hit a node limit on GKE)
+2. The deployment was relatively self-healing here, with one exception that we may
+   have hit a node limit on GKE. Demand dropped below the limit before the limit was increased.
 
 ### What went wrong
 
@@ -81,7 +87,7 @@ We noted that [launches returned to normal](https://gitter.im/jupyterhub/mybinde
    ![launch success rate chart](https://i.imgur.com/UiAgdwA.png)
 
 6. Users reported experiencing connection errors, but these are not reflected in our
-   metrics as failures
+   metrics as failures.
 
 
 ## Action items
@@ -90,7 +96,7 @@ We noted that [launches returned to normal](https://gitter.im/jupyterhub/mybinde
 
 1. Something about how to notice whether we're hitting GKE node limits? *We
    can add a threshold to certain Grafana charts, indicating the current limit. Not sure
-   how to keep it up-to-date.*
+   how to keep it up-to-date. [issue here](https://github.com/jupyterhub/mybinder.org-deploy/issues/1533).
 2. Consider dedicated nodes or cluster for large events we know are going to use Binder a lot
    (e.g. `scipy.mybinder.org`). [see issue here](https://github.com/jupyterhub/mybinder.org-deploy/issues/1526)
 3. Include a "tips and recommendations" step to the official "quota increase" issues.
@@ -119,20 +125,20 @@ issue.
 
    ![launch-time-chart](https://i.imgur.com/dO1FIfw.png)
 
-   If we limit to only the 99th percential of successful launches, we see that launches *almost never* take longer than 5 minutes and then succeed:
+   If we limit to only the 99th percentile of successful launches, we see that launches *almost never* take longer than 5 minutes and then succeed:
 
    ![](https://i.imgur.com/rYh0Whv.png)
-   
+
    If we decrease the launch timeout to 5 minutes, this will likely increase our failure rate, *according to metrics*, but should clear out the queue of what are likely already failed launches *according to users*. The result should be a better experience. [issue](https://github.com/jupyterhub/mybinder.org-deploy/issues/1528).
 
 3. We should investigate resource allocations to builds, and possible limit concurrent
    builds per repo to a very small number (killing old builds is probably a better user
    experience than blocking new ones), as the failure corresponds to a spike in builds
    but *not* a spike in launches. [issue for information gathering here](https://github.com/jupyterhub/mybinder.org-deploy/issues/1529).
-4. Add a launches-requested metric that is recorded immediately upon request, because
-   our current launch metrics are only recorded when the launch either succeeds or
+4. Use in-progress metrics (`binderhub_inprogress_launches|builds`) for instant feedback about current launch/build requests.
+   Our `launch_time_seconds` metrics are only recorded when the launch either succeeds or
    fails, resulting in an inaccurately smooth and delayed metrics report. For example:
    120 requests in 1 second that complete one at a time over a minute will look like a
-   smooth 2 requests/second in the current metrics.
+   smooth 2 requests/second in the current metrics. *done in grafana*.
 5. Implement a quota on prod so that pending pods beyond capacity fail informatively,
    rather than queuing, continuing to add to the load?
