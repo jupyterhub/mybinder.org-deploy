@@ -138,9 +138,9 @@ jobs:
             binder_url: https://gke.mybinder.org
             hub_url: https://hub.gke.mybinder.org
             cluster_name: prod-a
-          - federation_member: turing
-            binder_url: https://turing.mybinder.org
-            hub_url: https://hub.mybinder.turing.ac.uk
+          # - federation_member: turing
+          #   binder_url: https://turing.mybinder.org
+          #   hub_url: https://hub.mybinder.turing.ac.uk
           - federation_member: ovh
             binder_url: https://ovh.mybinder.org
             hub_url: https://hub-binder.mybinder.ovh
