@@ -74,8 +74,4 @@ jobs:
 
       - name: Validate k8s resources with kubeval
         run: |
-          RESOURCES=( $(find helm-${{ matrix.release }} -name '*.yaml' -print) )
-
-          for RESOURCE in $RESOURCES; do
-              kubeval --strict "${RESOURCE}"
-          done
+          kubeval --strict -d helm-${{ matrix.release }} .
