@@ -59,6 +59,7 @@ jobs:
           -f secrets/config/${{ matrix.release }}.yaml \
           --output-dir helm-${{ matrix.release }}
 
+      # We use --no-warnings in this step to reduce output to critical errors
       - name: Linting chart for ${{ matrix.release }}
         run: |
-          yamllint -d scripts/yamllint-config.yaml helm-${{ matrix.release }}
+          yamllint -d scripts/yamllint-config.yaml --no-warnings helm-${{ matrix.release }}
