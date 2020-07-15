@@ -53,7 +53,8 @@ jobs:
         run: |
           mkdir helm-${{ matrix.release }}
 
-      - run: git status
+      - name: Revert changes caused by unpacking kubeval
+        run: git checkout -- .
 
       - name: Unlock git-crypt secrets
         uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
