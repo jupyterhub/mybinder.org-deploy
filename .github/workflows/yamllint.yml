@@ -39,6 +39,7 @@ jobs:
       - name: Install local charts
         working-directory: mybinder
         run: |
+          helm init --client-only
           helm dep up
 
       - name: Make output directory for helm template
