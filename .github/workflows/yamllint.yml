@@ -54,11 +54,5 @@ jobs:
           --output-dir helm-${{ matrix.release }}
 
       - name: Linting chart for ${{ matrix.release }}
-        if: github.event.pull_request
         run: |
           yamllint -d scripts/yamllint-config.yaml helm-${{ matrix.release }}
-
-      - name: Linting chart for ${{ matrix.release }}
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        run: |
-          yamllint -d scripts/yamllint-config.yaml --no-warnings helm-${{ matrix.release }}
