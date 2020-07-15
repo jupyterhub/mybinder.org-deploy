@@ -1,0 +1,65 @@
+name: Lint YAML files
+
+on:
+  push:
+    paths:
+      - "**/*.yaml"
+      - "**/*.yml"
+  pull_request:
+    paths:
+      - "**/*.yaml"
+      - "**/*.yml"
+
+jobs:
+  yamllint:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        release: ["staging", "prod", "ovh", "turing"]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install yamllint
+
+      - name: Install helm
+        run: |
+          curl -L https://storage.googleapis.com/kubernetes-helm/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
+          sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
+
+      - name: Make output directory for helm template
+        run: |
+          mkdir helm-${{ matrix.release }}
+
+      - name: Unlock git-crypt secrets
+        uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+
+      - name: Template helm chart for ${{ matrix.release }}
+        run: |
+          helm template mybinder \
+          -f secrets/config/common.yaml \
+          -f config/${{ matrix.release }}.yaml \
+          -f config/${{ matrix.release }}/${{ matrix.release }}.yaml \
+          --output-dir helm-${{ matrix.release }}
+
+      - name: Linting chart for ${{ matrix.release }}
+        if: github.event.pull_request
+        run: |
+          yamllint -d scripts/yamllint-config.yaml helm-${{ matrix.release }}
+
+      - name: Linting chart for ${{ matrix.release }}
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        run: |
+          yamllint -d scripts/yamllint-config.yaml --no-warnings helm-${{ matrix.release }}
