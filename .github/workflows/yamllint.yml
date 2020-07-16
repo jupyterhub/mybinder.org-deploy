@@ -68,7 +68,9 @@ jobs:
           --output-dir helm-${{ matrix.release }}
 
       # We use --no-warnings in this step to reduce output to critical errors
+      # Continue the workflow if this step fails so we also see verification output
       - name: Linting chart for ${{ matrix.release }}
+        continue-on-error: true
         run: |
           yamllint -d scripts/yamllint-config.yaml --no-warnings helm-${{ matrix.release }}
 
