@@ -15,15 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - release: staging
-            k8s_version: 1.15.11
-          - release: prod
-            k8s_version: 1.15.11
-          - release: ovh
-            k8s_version: 1.16
-          - release: turing
-            k8s_version: 1.16.9
+        release: ["staging", "prod", "ovh", "turing"]
 
     steps:
       - name: Checkout repo
@@ -80,4 +72,4 @@ jobs:
       # Use --ignore-missing-schemas to avoid failure of CRDs
       - name: Validate k8s resources with kubeval
         run: |
-          kubeval --strict --ignore-missing-schemas -v ${{ matrix.k8s_version }} -d helm-${{ matrix.release }}
+          kubeval --strict --ignore-missing-schemas -d helm-${{ matrix.release }}
