@@ -47,16 +47,23 @@ jobs:
           helm init --client-only
           helm dep up
 
-      - name: Make output directory for helm template
-        run: |
-          mkdir helm-${{ matrix.release }}
-
       - name: Unlock git-crypt secrets
         uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
-      - name: Template helm chart for ${{ matrix.release }}
+      - name: Run helm lint for ${{ matrix.release }}
+        run: |
+          helm lint --debug mybinder \
+          -f config/${{ matrix.release }} \
+          -f secrets/config/common.yaml \
+          -f secrets/config/${{ matrix.release }}
+
+      - name: Make output directory for helm template
+        run: |
+          mkdir helm-${{ matrix.release }}
+
+      - name: Run helm template for ${{ matrix.release }}
         run: |
           helm template mybinder \
           -f secrets/config/common.yaml \
@@ -65,11 +72,11 @@ jobs:
           --output-dir helm-${{ matrix.release }}
 
       # We use --no-warnings in this step to reduce output to critical errors
-      - name: Linting chart for ${{ matrix.release }}
+      - name: Run yamllint on ${{ matrix.release }} chart
         run: |
           yamllint -d scripts/yamllint-config.yaml --no-warnings helm-${{ matrix.release }}
 
       # Use --ignore-missing-schemas to avoid failure of CRDs
-      - name: Validate k8s resources with kubeval
+      - name: Validate k8s resources for ${{ matrix.release}}
         run: |
           kubeval --strict --ignore-missing-schemas -d helm-${{ matrix.release }}
