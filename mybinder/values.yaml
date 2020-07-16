@@ -63,24 +63,28 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1518
-        - pattern: ^zfit/PyHEP2020.*
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1522
+        - pattern: ^henryiii/bh-talk-pyhep-2020.*
           config:
             quota: 300
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1504
-        - pattern: ^SModelS/pyhep2020.*
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1519
+        - pattern: ^martinschwinzerl/pyhep2020-cxx-bindings.*
           config:
             quota: 300
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1513
-        - pattern: ^HDembinski/pyhep-2020-iminuit.*
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1520
+        - pattern: ^aoeftiger/pyhep2020.*
           config:
             quota: 300
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1503
-        - pattern: ^kropiv/MLforNIatPyHEP.*
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1517
+        - pattern: ^andrzejnovak/2020-07-17-pyhep2020-mplhep.*
           config:
-            quota: 200
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1507
-        - pattern: ^pyhf/tutorial-PyHEP-2020.*
+            quota: 300
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1502
+        - pattern: ^matt-komm/pyhep20_tfpipeline.*
+          config:
+            quota: 300
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1505
+        - pattern: ^prasanthcakewalk/ThickBrick-Tutorial-PyHEP-2020.*
           config:
             quota: 200
         # https://github.com/jupyterhub/mybinder.org-deploy/issues/1538
