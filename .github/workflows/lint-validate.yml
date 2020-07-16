@@ -55,9 +55,9 @@ jobs:
       - name: Run helm lint for ${{ matrix.release }}
         run: |
           helm lint --debug mybinder \
-          -f config/${{ matrix.release }} \
           -f secrets/config/common.yaml \
-          -f secrets/config/${{ matrix.release }}
+          -f config/${{ matrix.release }}.yaml \
+          -f secrets/config/${{ matrix.release }}.yaml
 
       - name: Make output directory for helm template
         run: |
