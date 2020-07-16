@@ -35,11 +35,12 @@ jobs:
       # have created. This keeps the repo clean for git-crypt.
       - name: Install kubeval
         run: |
-          wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
-          tar xf kubeval-linux-amd64.tar.gz
-          sudo mv kubeval /usr/local/bin
-          rm -rf kubeval-linux-amd64.tar.gz
-          git checkout -- .
+          curl -L https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
+          sudo mv ${HOME}/kubeval /usr/local/bin
+
+# tar xf kubeval-linux-amd64.tar.gz
+# rm -rf kubeval-linux-amd64.tar.gz
+# git checkout -- .
 
       - name: Install helm
         run: |
