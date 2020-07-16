@@ -1,4 +1,4 @@
-name: Lint YAML files
+name: Lint and Validate helm chart
 
 on:
   pull_request:
