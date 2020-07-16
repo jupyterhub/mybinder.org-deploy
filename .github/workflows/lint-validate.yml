@@ -31,6 +31,8 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install yamllint
 
+      # We run git checkout here to reverse any changes unpacking kubeval may
+      # have created. This keeps the repo clean for git-crypt.
       - name: Install kubeval
         run: |
           wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
