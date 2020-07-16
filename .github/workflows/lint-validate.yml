@@ -70,8 +70,6 @@ jobs:
           yamllint -d scripts/yamllint-config.yaml --no-warnings helm-${{ matrix.release }}
 
       # Use --ignore-missing-schemas to avoid failure of CRDs
-      # Always run this step even if previous step failed
       - name: Validate k8s resources with kubeval
-        if: always()
         run: |
           kubeval --strict --ignore-missing-schemas -d helm-${{ matrix.release }}
