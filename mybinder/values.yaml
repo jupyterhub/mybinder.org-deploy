@@ -83,6 +83,10 @@ binderhub:
         - pattern: ^pyhf/tutorial-PyHEP-2020.*
           config:
             quota: 200
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1538
+        - pattern: ^Microsoft/QuantumKatas.*
+          config:
+            quota: 400
 
     GitRepoProvider:
       banned_specs:
