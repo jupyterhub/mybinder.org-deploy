@@ -58,12 +58,12 @@ jobs:
         run: |
           chartpress
 
-      - name: Run helm lint for ${{ matrix.release }}
-        run: |
-          helm lint --debug mybinder \
-          -f secrets/config/common.yaml \
-          -f config/${{ matrix.release }}.yaml \
-          -f secrets/config/${{ matrix.release }}.yaml
+      # - name: Run helm lint for ${{ matrix.release }}
+      #   run: |
+      #     helm lint --debug mybinder \
+      #     -f secrets/config/common.yaml \
+      #     -f config/${{ matrix.release }}.yaml \
+      #     -f secrets/config/${{ matrix.release }}.yaml
 
       - name: Make output directory for helm template
         run: |
