@@ -7,7 +7,7 @@ tags:
 binderhub:
   config:
     BinderHub:
-      pod_quota: 55
+      pod_quota: 60
       hub_url: https://hub-binder.mybinder.ovh
       badge_base_url: https://mybinder.org
       sticky_builds: true
