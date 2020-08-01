@@ -440,11 +440,6 @@ federationRedirect:
       health: https://gke.mybinder.org/health
       versions: https://gke.mybinder.org/versions
       prime: true
-    ovh:
-      url: https://ovh.mybinder.org
-      weight: 19
-      health: https://ovh.mybinder.org/health
-      versions: https://ovh.mybinder.org/versions
     gesis:
       url: https://gesis.mybinder.org
       weight: 15
