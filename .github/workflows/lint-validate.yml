@@ -35,9 +35,10 @@ jobs:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
       # We use --no-warnings in this step to reduce output to critical errors
-      - name: Run yamllint on config/ and secrets/config
+      - name: Run yamllint on config/, mybinder/, and secrets/config
         run: |
           yamllint -d scripts/yamllint-config.yaml --no-warnings config/
+          yamllint -d scripts/yamllint-config.yaml --no-warnings mybinder/
           yamllint -d scripts/yamllint-config.yaml --no-warnings secrets/config/
 
   yamllint-templates:
@@ -87,13 +88,6 @@ jobs:
       - name: Run chartpress
         run: |
           chartpress
-
-      # - name: Run helm lint for ${{ matrix.release }}
-      #   run: |
-      #     helm lint --debug mybinder \
-      #     -f secrets/config/common.yaml \
-      #     -f config/${{ matrix.release }}.yaml \
-      #     -f secrets/config/${{ matrix.release }}.yaml
 
       - name: Make output directory for helm template
         run: |
