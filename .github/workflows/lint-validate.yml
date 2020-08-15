@@ -35,10 +35,9 @@ jobs:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
       # We use --no-warnings in this step to reduce output to critical errors
-      - name: Run yamllint on config/, mybinder/, and secrets/config
+      - name: Run yamllint on config/ and secrets/config
         run: |
           yamllint -d scripts/yamllint-config.yaml --no-warnings config/
-          yamllint -d scripts/yamllint-config.yaml --no-warnings mybinder/
           yamllint -d scripts/yamllint-config.yaml --no-warnings secrets/config/
 
   yamllint-templates:
