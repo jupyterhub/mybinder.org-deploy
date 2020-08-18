@@ -1,0 +1,19 @@
+# Use a more tolerant config
+# Indentation, line length, extra spaces, blank lines are raised as warnings - not errors
+#
+# https://yamllint.readthedocs.io/en/stable/configuration.html#default-configuration
+extends: relaxed
+
+# Because we can't be responsible for linting
+# the JupyterHub helm chart too
+ignore: |
+  **/jupyterhub/**
+
+# Ignore common but non-critical errors
+rules:
+  trailing-spaces:
+    ignore:
+      /**
+  new-line-at-end-of-file:
+    ignore:
+      /**
