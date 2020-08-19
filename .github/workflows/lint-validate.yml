@@ -6,7 +6,7 @@ env:
   HELM_VERSION: "v2.16.3"
 
 jobs:
-  test:
+  set-env-var:
     runs-on: ubuntu-16.04
     steps:
       - name: Set fork status as an environment variable
@@ -16,50 +16,42 @@ jobs:
         env:
           PAYLOAD: ${{ toJSON(github.event) }}
 
-      - name: Test fork env variable
+  yamllint-raw:
+    needs: set-env-var
+    runs-on: ubuntu-16.04
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+
+      - name: Install dependencies
         run: |
-          echo "${fork}"
-          echo ${{ env.fork }}
+          python -m pip install --upgrade pip
+          python -m pip install yamllint
 
-      - name: run if true
-        if: env.fork == 'true'
-        run: echo "fork is true!"
+      # We use --no-warnings in this step to reduce output to critical errors
+      - name: Run yamllint on config/
+        run: |
+          yamllint -d scripts/yamllint-config.yaml --no-warnings config/
 
-  # yamllint-raw:
-  #   runs-on: ubuntu-16.04
+      - name: Unlock git-crypt secrets
+        if: env.fork == 'false'
+        uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
-  #   steps:
-  #     - name: Checkout repo
-  #       uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: 0
-
-  #     - name: Set up Python 3.7
-  #       uses: actions/setup-python@v1
-  #       with:
-  #         python-version: 3.7
-
-  #     - name: Install dependencies
-  #       run: |
-  #         python -m pip install --upgrade pip
-  #         python -m pip install yamllint
-
-  #     # We use --no-warnings in this step to reduce output to critical errors
-  #     - name: Run yamllint on config/
-  #       run: |
-  #         yamllint -d scripts/yamllint-config.yaml --no-warnings config/
-
-  #     - name: Unlock git-crypt secrets
-  #       if: github.repository == 'jupyterhub/mybinder.org-deploy'
-  #       uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
-  #       env:
-  #         GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
-
-  #     # We use --no-warnings in this step to reduce output to critical errors
-  #     - name: Run yamllint on secrets/config
-  #       if: github.repository == 'jupyterhub/mybinder.org-deploy'
-  #       run: |
-  #         yamllint -d scripts/yamllint-config.yaml --no-warnings secrets/config/
+      # We use --no-warnings in this step to reduce output to critical errors
+      - name: Run yamllint on secrets/config
+        if: env.fork == 'false'
+        run: |
+          yamllint -d scripts/yamllint-config.yaml --no-warnings secrets/config/
 
   # yamllint-templates:
   #   if: github.repository == 'jupyterhub/mybinder.org-deploy'
