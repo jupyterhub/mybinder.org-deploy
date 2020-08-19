@@ -11,6 +11,12 @@ jobs:
     steps:
      - run: echo ${{ github.repository_owner}}
 
+     - name: see payload
+      run: |
+        echo "$PAYLOAD"
+      env:
+        PAYLOAD: ${{ toJSON(github.event) }}
+
   # yamllint-raw:
   #   runs-on: ubuntu-16.04
 
