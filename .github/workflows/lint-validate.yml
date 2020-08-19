@@ -12,15 +12,9 @@ jobs:
       - run: echo ${{ github.repository_owner}}
 
       - name: see payload
-        run: echo "${PAYLOAD}" | jq .pull_request.head.repo.fork
+        run: echo "::set-env name=FORK::$($PAYLOAD | jq .pull_request.head.repo.fork")
         env:
           PAYLOAD: ${{ toJSON(github.event) }}
-
-      - name: store payload
-        uses: actions/upload-artifact@v2
-        with:
-          name: payload.json
-          path: ${{ github.event_path }}
 
   # yamllint-raw:
   #   runs-on: ubuntu-16.04
