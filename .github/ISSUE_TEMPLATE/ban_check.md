@@ -16,4 +16,6 @@ Use this form to check if a repository may be liable for banning.
 
 ### A link to the repository
 
-### Why are you concerned this repository maybe liable for banning? (For example, does it make a lot of API calls, create a lot of IO traffic?)
+### Why are you concerned this repository maybe liable for banning?
+
+For example: it will have lots of users, it makes a lot of API calls, creates a lot of network traffic?
