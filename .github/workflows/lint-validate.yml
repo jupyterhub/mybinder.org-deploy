@@ -1,10 +1,6 @@
 name: Lint and Validate helm chart
 
-on:
-  push:
-    paths:
-      - "**/*.yaml"
-      - "**/*.yml"
+on: [push]
 
 env:
   HELM_VERSION: "v2.16.3"
