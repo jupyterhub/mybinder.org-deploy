@@ -13,7 +13,7 @@ jobs:
   test-repo:
     runs-on: ubuntu-16.04
     steps:
-      - run: echo ${{ github.repository }}
+      - run: echo ${{ github.base_ref }}
 
   # yamllint-raw:
   #   runs-on: ubuntu-16.04
