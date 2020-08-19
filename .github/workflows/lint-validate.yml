@@ -10,11 +10,13 @@ jobs:
     runs-on: ubuntu-16.04
     steps:
       - name: Set fork status as an environment variable
-        run: echo "::set-env name=fork::$($PAYLOAD | jq .pull_request.head.repo.fork)"
+        run: |
+          STATUS="$( ${PAYLOAD} | jq .pull_request.head.repo.fork )"
+          echo "::set-env name=fork::${STATUS}"
         env:
           PAYLOAD: ${{ toJSON(github.event) }}
 
-      - name: Test fork env variables
+      - name: Test fork env variable
         run: |
           echo "${fork}"
           echo ${{ env.fork }}
