@@ -9,12 +9,17 @@ jobs:
   test:
     runs-on: ubuntu-16.04
     steps:
-      - run: echo ${{ github.repository_owner}}
-
-      - name: see payload
+      - name: Set fork status as an environment variable
         run: echo "::set-env name=FORK::$($PAYLOAD | jq .pull_request.head.repo.fork)"
         env:
           PAYLOAD: ${{ toJSON(github.event) }}
+
+      - name: Test fork env variables
+        run: echo ${{ env.FORK }}
+
+      - name: run if true
+        if: env.FORK == 'true'
+        run: echo "fork is true!"
 
   # yamllint-raw:
   #   runs-on: ubuntu-16.04
