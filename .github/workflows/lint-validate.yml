@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Set fork status as an environment variable
         run: |
-          STATUS="$( ${PAYLOAD} | jq .pull_request.head.repo.fork )"
+          STATUS="$( echo ${PAYLOAD} | jq .pull_request.head.repo.fork )"
           echo "::set-env name=fork::${STATUS}"
         env:
           PAYLOAD: ${{ toJSON(github.event) }}
