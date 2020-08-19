@@ -9,7 +9,7 @@ jobs:
   test:
     runs-on: ubuntu-16.04
     steps:
-     - run: echo ${{ github.respository_owner}}
+     - run: echo ${{ github.repository_owner}}
 
   # yamllint-raw:
   #   runs-on: ubuntu-16.04
