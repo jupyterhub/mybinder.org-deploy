@@ -1,9 +1,10 @@
 name: Lint and Validate helm chart
 
-# This trigger only runs when PRs are 'opened', 'synchronized' or 'reopened'
-# It runs in the context of the base repository so allows easier sharing of secrets
-# Docs: https://docs.github.com/en/actions/reference/events-that-trigger-workflows#pull_request_target
-on: [pull_request_target]
+on:
+  push:
+    paths:
+      - "**/*.yaml"
+      - "**/*.yml"
 
 env:
   HELM_VERSION: "v2.16.3"
