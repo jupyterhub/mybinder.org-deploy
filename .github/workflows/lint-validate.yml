@@ -10,16 +10,6 @@ env:
   HELM_VERSION: "v2.16.3"
 
 jobs:
-  set-env-var:
-    runs-on: ubuntu-16.04
-    steps:
-      - name: Set fork status as an environment variable
-        run: |
-          STATUS="$( echo ${PAYLOAD} | jq .pull_request.head.repo.fork )"
-          echo "::set-env name=fork::${STATUS}"
-        env:
-          PAYLOAD: ${{ toJSON(github.event) }}
-
   yamllint-raw:
     needs: set-env-var
     runs-on: ubuntu-16.04
@@ -46,19 +36,19 @@ jobs:
           yamllint -d scripts/yamllint-config.yaml --no-warnings config/
 
       - name: Unlock git-crypt secrets
-        if: env.fork == 'false'
+        if: github.event.pull_request.head.repo.fork == 'false'
         uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
       # We use --no-warnings in this step to reduce output to critical errors
       - name: Run yamllint on secrets/config
-        if: env.fork == 'false'
+        if: github.event.pull_request.head.repo.fork == 'false'
         run: |
           yamllint -d scripts/yamllint-config.yaml --no-warnings secrets/config/
 
   yamllint-templates:
-    needs: set-env-var
+    if: github.event.pull_request.head.repo.fork == 'false'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -67,60 +57,50 @@ jobs:
 
     steps:
       - name: Checkout repo
-        if: env.fork == 'false'
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
       - name: Set up Python 3.7
-        if: env.fork == 'false'
         uses: actions/setup-python@v1
         with:
           python-version: 3.7
 
       - name: Install dependencies
-        if: env.fork == 'false'
         run: |
           python -m pip install --upgrade pip
           python -m pip install yamllint chartpress
 
       - name: Install kubeval
-        if: env.fork == 'false'
         run: |
           curl -L https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           sudo mv ${HOME}/kubeval /usr/local/bin
 
       - name: Install helm
-        if: env.fork == 'false'
         run: |
           curl -L https://storage.googleapis.com/kubernetes-helm/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
 
       - name: Install local charts
-        if: env.fork == 'false'
         working-directory: mybinder
         run: |
           helm init --client-only
           helm dep up
 
       - name: Unlock git-crypt secrets
-        if: env.fork == 'false'
         uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
       - name: Run chartpress
-        if: env.fork == 'false'
         run: |
           chartpress
 
       - name: Make output directory for helm template
-        if: env.fork == 'false'
         run: |
           mkdir helm-${{ matrix.release }}
 
       - name: Run helm template for ${{ matrix.release }}
-        if: env.fork == 'false'
         run: |
           helm template mybinder \
           -f secrets/config/common.yaml \
@@ -130,12 +110,10 @@ jobs:
 
       # We use --no-warnings in this step to reduce output to critical errors
       - name: Run yamllint on ${{ matrix.release }} chart
-        if: env.fork == 'false'
         run: |
           yamllint -d scripts/yamllint-config.yaml --no-warnings helm-${{ matrix.release }}
 
       # Use --ignore-missing-schemas to avoid failure of CRDs
       - name: Validate k8s resources for ${{ matrix.release}}
-        if: env.fork == 'false'
         run: |
           kubeval --strict --ignore-missing-schemas -d helm-${{ matrix.release }}
