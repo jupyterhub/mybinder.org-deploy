@@ -12,7 +12,7 @@ jobs:
      - run: echo ${{ github.repository_owner}}
 
      - name: see payload
-       run: echo "${PAYLOAD}"
+       run: echo "${PAYLOAD}" | jq .head.fork
        env:
          PAYLOAD: ${{ toJSON(github.event) }}
 
