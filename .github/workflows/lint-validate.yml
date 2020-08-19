@@ -12,8 +12,9 @@ env:
 jobs:
   test-repo:
     runs-on: ubuntu-16.04
-    run: echo ${{ github.repository }}
-    
+    steps:
+      - run: echo ${{ github.repository }}
+
   # yamllint-raw:
   #   runs-on: ubuntu-16.04
 
