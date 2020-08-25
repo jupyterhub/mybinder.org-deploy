@@ -11,6 +11,16 @@ binderhub:
       badge_base_url: https://staging.mybinder.org
       image_prefix: gcr.io/binder-staging/r2d-72d7634-
       sticky_builds: true
+      build_memory_limit: 1Gi
+
+  dind:
+    resources:
+      requests:
+        cpu: "0"
+        memory: 1Gi
+      limits:
+        cpu: "1"
+        memory: 2Gi
 
   ingress:
     hosts:
