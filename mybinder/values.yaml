@@ -63,10 +63,6 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1546
-        - pattern: ^carpentries-incubator/introduction-to-conda-for-data-scientists.*
-          config:
-            quota: 300
 
     GitRepoProvider:
       banned_specs:
