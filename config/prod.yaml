@@ -27,7 +27,7 @@ binderhub:
     resources:
       requests:
         cpu: "2"
-        memory: 8Gi
+        memory: 1Gi
       limits:
         cpu: "5"
         memory: 12Gi
