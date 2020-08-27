@@ -11,7 +11,7 @@ binderhub:
       badge_base_url: https://staging.mybinder.org
       image_prefix: gcr.io/binder-staging/r2d-72d7634-
       sticky_builds: true
-      build_memory_limit: 1Gi
+      build_memory_limit: "1G"
 
   dind:
     resources:
