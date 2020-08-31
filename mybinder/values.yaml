@@ -63,11 +63,6 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1560
-        # Remove 2020-08-31
-        - pattern: ^hannari-python/tutorial.*
-          config:
-            quota: 300
 
     GitRepoProvider:
       banned_specs:
