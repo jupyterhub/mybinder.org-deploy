@@ -225,8 +225,6 @@ gcsProxy:
 
 
 cert-manager:
-  webhook:
-    enabled: false
   ingressShim:
     defaultIssuerName: "letsencrypt-prod"
     defaultIssuerKind: "ClusterIssuer"

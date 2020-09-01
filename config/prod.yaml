@@ -220,8 +220,6 @@ gcsProxy:
       host: archive.analytics.mybinder.org
 
 cert-manager:
-  webhook:
-    enabled: false
   ingressShim:
     defaultIssuerName: "letsencrypt-prod"
     defaultIssuerKind: "ClusterIssuer"
