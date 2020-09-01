@@ -1,6 +1,6 @@
 dependencies:
  - name: nginx-ingress
-   version: 0.20.0
+   version: 1.41.3
    repository: https://kubernetes-charts.storage.googleapis.com
  - name: prometheus
    version: 11.0.2
@@ -14,7 +14,9 @@ dependencies:
    tags:
      - kubelego
  - name: cert-manager
-   version: v0.12.0
+   # note: due to https://cert-manager.io/docs/installation/upgrading/upgrading-0.15-0.16
+   # we should not upgrade to v0.16 until we are on kubernetes >= 1.16.14
+   version: v0.15.2
    repository: https://charts.jetstack.io
    tags:
      - certmanager
