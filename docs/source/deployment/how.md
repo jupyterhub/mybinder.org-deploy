@@ -182,7 +182,11 @@ master.
    Currently you cannot deploy changes to `mybinder/requirements.yaml` only to staging.
 ```
 Sometimes you want to test out a deployment live before you make a deployment
-to `prod`. This is possible by editing `staging`-only config files. To deploy
+to `prod`.
+
+This simplest way to achieve this is to apply the `test-staging` label to an open PR. This will trigger GitHub Actions to deploy the changes in the PR to the staging cluster **only**.
+
+Another way to achieve this is by editing `staging`-only config files. To deploy
 to staging only, follow these steps:
 
 1. Make changes to [`config/staging.yaml`](https://github.com/jupyterhub/mybinder.org-deploy/blob/master/config/staging.yaml)
