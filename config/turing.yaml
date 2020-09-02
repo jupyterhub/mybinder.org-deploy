@@ -205,9 +205,3 @@ gcsProxy:
   buckets:
     - name: mybinder-staging-events-archive
       host: archive-analytics-staging-mybinder.turing.10.0.0.1.xip.io
-
-cert-manager:
-  ingressShim:
-    defaultIssuerName: "letsencrypt-prod"
-    defaultIssuerKind: "ClusterIssuer"
-    defaultACMEChallengeType: "http01"

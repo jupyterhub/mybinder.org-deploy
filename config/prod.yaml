@@ -219,11 +219,5 @@ gcsProxy:
     - name: mybinder-events-archive
       host: archive.analytics.mybinder.org
 
-cert-manager:
-  ingressShim:
-    defaultIssuerName: "letsencrypt-prod"
-    defaultIssuerKind: "ClusterIssuer"
-    defaultACMEChallengeType: "http01"
-
 federationRedirect:
   enabled: true

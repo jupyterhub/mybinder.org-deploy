@@ -223,9 +223,3 @@ gcsProxy:
     - name: mybinder-staging-events-archive
       host: archive-analytics-staging-mybinder.mybinder.ovh
 
-
-cert-manager:
-  ingressShim:
-    defaultIssuerName: "letsencrypt-prod"
-    defaultIssuerKind: "ClusterIssuer"
-    defaultACMEChallengeType: "http01"

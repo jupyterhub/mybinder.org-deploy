@@ -122,12 +122,6 @@ gcsProxy:
     - name: mybinder-staging-events-archive
       host: archive.analytics.staging.mybinder.org
 
-cert-manager:
-  ingressShim:
-    defaultIssuerName: "letsencrypt-prod"
-    defaultIssuerKind: "ClusterIssuer"
-    defaultACMEChallengeType: "http01"
-
 federationRedirect:
   host: staging.mybinder.org
   enabled: true

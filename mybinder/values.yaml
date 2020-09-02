@@ -462,8 +462,7 @@ federationRedirect:
       health: https://turing.mybinder.org/health
       versions: https://turing.mybinder.org/versions
 
-certmanager:
+cert-manager:
   ingressShim:
-    defaultIssuerName: letsencrypt-production
+    defaultIssuerName: letsencrypt-prod
     defaultIssuerKind: ClusterIssuer
-    defaultIssuerGroup: cert-manager.io
