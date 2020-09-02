@@ -1,0 +1,12 @@
+name: test
+
+on: [pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: |
+          echo ${{ github.event.pull_request.head.repo.fork }}
+          echo ${{ toJson(github.event) }}
