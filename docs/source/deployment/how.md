@@ -188,7 +188,7 @@ This simplest way to achieve this is to apply the `test-staging` label to an ope
 
 ```eval_rst
 .. note::
-   If you need to _re-deploy_ the changes in a PR to staging only, then the label will need to be removed and then re-added.
+   If you need to re-deploy the changes in a PR to staging only, then the label will need to be removed and then re-added.
 ```
 
 Another way to achieve this is by editing `staging`-only config files. To deploy
