@@ -1,9 +1,5 @@
 projectName: ovh
 
-tags:
-  kubelego: false
-  certmanager: true
-
 binderhub:
   config:
     BinderHub:

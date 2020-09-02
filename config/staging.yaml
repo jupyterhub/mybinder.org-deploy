@@ -1,9 +1,5 @@
 projectName: binder-staging
 
-tags:
-  kubelego: false
-  certmanager: true
-
 binderhub:
   config:
     BinderHub:

@@ -1,8 +1,6 @@
 projectName: turing
 
 tags:
-  kubelego: false
-  certmanager: true
 
 letsencrypt:
   contactEmail: drsarahlgibson@gmail.com

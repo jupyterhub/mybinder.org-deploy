@@ -1,9 +1,5 @@
 projectName: binder-prod
 
-tags:
-  kubelego: false
-  certmanager: true
-
 userNodeSelector: &userNodeSelector
   mybinder.org/pool-type: users
 coreNodeSelector: &coreNodeSelector
@@ -124,9 +120,6 @@ grafana:
           access: direct
           isDefault: true
           editable: false
-
-kube-lego:
-  nodeSelector: *coreNodeSelector
 
 prometheus:
   server:

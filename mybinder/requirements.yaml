@@ -8,18 +8,11 @@ dependencies:
  - name: grafana
    version: 3.10.1
    repository: https://kubernetes-charts.storage.googleapis.com
- - name: kube-lego
-   version: 0.4.2
-   repository: https://kubernetes-charts.storage.googleapis.com
-   tags:
-     - kubelego
  - name: cert-manager
    # note: due to https://cert-manager.io/docs/installation/upgrading/upgrading-0.15-0.16
-   # we should not upgrade to v0.16 until we are on kubernetes >= 1.16.14
+   # we should not upgrade to v0.16 until we are on kubernetes >= 1.16.14 everywhere
    version: v0.15.2
    repository: https://charts.jetstack.io
-   tags:
-     - certmanager
  - name: binderhub
    version: 0.2.0-n215.h9447e17
    repository: https://jupyterhub.github.io/helm-chart
