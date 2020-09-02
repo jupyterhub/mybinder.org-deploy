@@ -186,6 +186,11 @@ to `prod`.
 
 This simplest way to achieve this is to apply the `test-staging` label to an open PR. This will trigger GitHub Actions to deploy the changes in the PR to the staging cluster **only**.
 
+```eval_rst
+.. note::
+   If you need to _re-deploy_ the changes in a PR to staging only, then the label will need to be removed and then re-added.
+```
+
 Another way to achieve this is by editing `staging`-only config files. To deploy
 to staging only, follow these steps:
 
