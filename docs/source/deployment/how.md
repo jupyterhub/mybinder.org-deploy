@@ -11,6 +11,13 @@ change deployed to mybinder.org.
 The first two sections of this page cover how to upgrade either `repo2docker` or
 `BinderHub`.
 
+```eval_rst
+.. note::
+   Currently upgrades to BinderHub and repo2docker are automatically managed
+   by the fantastic `henchbot <https://github.com/henchbot/mybinder.org-upgrades>`_ and manual intervention is rarely required.
+   However, we have left the manual steps here for provenance or in case of emergency.
+```
+
 ## Deployment policy
 
 Deployments to mybinder.org should be:
