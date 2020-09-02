@@ -1,0 +1,14 @@
+name: test
+
+on: [pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo This is NOT a fork
+        if: github.event.pull_request.head.repo.fork == false
+
+      - run: echo This IS a fork
+        if: github.event.pull_request.head.repo.fork != false
