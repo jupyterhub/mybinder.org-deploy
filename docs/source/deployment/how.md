@@ -161,12 +161,12 @@ master.
 
           https://github.com/jupyterhub/<REPO-NAME>/compare/<OLD-HASH>...<NEW-HASH>
 
-5. Review, accept, and merge this PR. This will make Travis deploy the changes
+5. Review, accept, and merge this PR. This will make GitHub Actions deploy the changes
    to [staging.mybinder.org](https://staging.mybinder.org), and run tests in the `tests/`
    directory against it. **In this case, you can merge your own PR**. Note that if the
-   PR is a large change to the Kubernetes setup, this may take some time, and Travis may
+   PR is a large change to the Kubernetes setup, this may take some time, and GitHub Actions may
    time-out in the process. If this happens and you _expect_ it to happen, you can restart
-   travis a few times.
+   the build a few times.
 6. If the tests succeed, the change will be deployed to mybinder.org.
 7. If the tests fail, the change will *not* be deployed to mybinder.org.
    You must then investigate why it failed. **If you can
@@ -194,7 +194,7 @@ to staging only, follow these steps:
    whatever is in `mybinder/values.yaml`.
 2. Make a PR to the `master` branch, and review, accept, and merge this PR.
    **In this case, you can merge your own PR**.
-   This will make Travis deploy the changes
+   This will make GitHub Actions deploy the changes
    to [staging.mybinder.org](https://staging.mybinder.org), and run tests in the `tests/`
    directory against it. Because we've only edited `staging.yaml`, **it will not
    be deployed to `prod`**.
