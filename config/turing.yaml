@@ -158,12 +158,10 @@ prometheus:
           secretName: turing-prometheus-tls-crt
 
 
-nginx-ingress:
+ingress-nginx:
   controller:
     service:
       loadBalancerIP: 51.105.120.231
-    config:
-      proxy-body-size: 64m
 
 
 static:

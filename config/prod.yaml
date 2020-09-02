@@ -144,7 +144,7 @@ prometheus:
             - prometheus.mybinder.org
           secretName: kubelego-tls-prometheus
 
-nginx-ingress:
+ingress-nginx:
   controller:
     service:
       loadBalancerIP: 35.202.202.188

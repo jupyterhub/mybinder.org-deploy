@@ -256,16 +256,14 @@ binderhub:
               add:
                 - NET_ADMIN
 
-nginx-ingress:
+ingress-nginx:
   rbac:
     create: true
   defaultBackend:
+    enabled: true
     minAvailable: 0
-  statsExporter:
-    service:
-      annotations:
-        prometheus.io/scrape: 'true'
-        prometheus.io/port: '10254'
+  admissionWebhooks:
+    enabled: false
   controller:
     resources:
       requests:
@@ -286,11 +284,11 @@ nginx-ingress:
           podAffinityTerm:
             labelSelector:
               matchExpressions:
-              - key: app
+              - key: app.kubernetes.io/name
                 operator: In
                 values:
-                - nginx-ingress
-              - key: component
+                - ingress
+              - key: app.kubernetes.io/component
                 operator: In
                 values:
                 - controller

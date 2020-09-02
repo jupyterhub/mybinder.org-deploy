@@ -154,7 +154,7 @@ prometheus:
           secretName: tls-crt
 
 
-nginx-ingress:
+ingress-nginx:
   controller:
     hostNetwork: true
     replicaCount: 1
