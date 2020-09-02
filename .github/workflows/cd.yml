@@ -7,11 +7,14 @@
 
 name: Continuous Deployment
 
-# Only trigger the workflow when pushing to master
+# Only trigger the workflow when pushing to master or a label is applied to a
+# Pull Request
 on:
   push:
     branches:
       - master
+  pull_request:
+    types: [labeled]
 
 # Global environment variables
 env:
@@ -26,6 +29,12 @@ env:
 jobs:
   # Job to upgrade staging
   staging-deploy:
+    # Only run the job if the 'test-staging' label is present OR if the event
+    # is a push to master
+    if: |
+      (github.event.label.name == 'test-staging') ||
+      ((github.event_name == 'push') &&
+      (github.ref == 'refs/heads/master'))
     runs-on: ubuntu-18.04
     steps:
       # Action Repo: https://github.com/actions/checkout
@@ -128,6 +137,8 @@ jobs:
     # Previous job must have successfully completed for this job to execute
     # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idneeds
     needs: staging-deploy
+    # Only run job if the event is a push to master
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-18.04
     # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategy
     strategy:
