@@ -262,9 +262,9 @@ ingress-nginx:
   defaultBackend:
     enabled: true
     minAvailable: 0
-  admissionWebhooks:
-    enabled: false
   controller:
+    admissionWebhooks:
+      enabled: false
     resources:
       requests:
         cpu: 0.5
