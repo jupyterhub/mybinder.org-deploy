@@ -240,37 +240,78 @@ def deploy(release):
             '--watch', d
         ])
 
+    remove_certmanager()
+
+def remove_certmanager():
+    """Remove certmanager"""
+    version = os.environ["CERT_MANAGER_VERSION"]
+
+    manifest_url = f"https://github.com/jetstack/cert-manager/releases/download/{version}/cert-manager.yaml"
+    print(BOLD + GREEN + f"Deleting cert-manager {version}" + NC, flush=True)
+
+    subprocess.check_call(
+        ["kubectl", "delete", "-f", manifest_url]
+    )
+
 
 def setup_certmanager():
-    """Install cert-manager CRDs"""
+    """Install cert-manager separately
+
+    cert-manager docs and CRD assumptions say that cert-manager must never be a sub-chart,
+    always installed on its own in a cert-manager namespace
+    """
+    # FIXME: remove after deployment is fixed
+    # this patch helps avoid hangs while deleting things that aren't used anymore
+    # due to webhook being undeployed
+    subprocess.call([
+        "kubectl",
+        "patch",
+        "crd",
+        "challenges.acme.cert-manager.io",
+        "-p",
+        '{"metadata":{"finalizers": []}}',
+        "--type=merge",
+    ])
+    return
+
 
     # TODO: cert-manager chart >= 0.15
-    # has `installCRDs` option, which should elimnate this step
+    # has `installCRDs` option, which should eliminate the separate CRD step
     # however, upgrade notes say this *must not* be used
     # when upgrading, only for fresh deployments,
     # and requires helm >=3.3.1 and kubernetes >=1.16.14
 
-    requirements_yaml = os.path.join(ABSOLUTE_HERE, "mybinder", "requirements.yaml")
-    with open(requirements_yaml, "r") as f:
-        requirements = yaml.safe_load(f)
+    version = os.environ["CERT_MANAGER_VERSION"]
 
-    for dep in requirements["dependencies"]:
-        if dep["name"] == "cert-manager":
-            cert_manager = dep
-            break
-    else:
-        raise ValueError(f"cert-manager dependency not found in {requirements_yaml}")
-    version = cert_manager["version"]
     manifest_url = f"https://github.com/jetstack/cert-manager/releases/download/{version}/cert-manager.crds.yaml"
-    print(BOLD + GREEN + f"Applying cert-manager {version} CRDs" + NC, flush=True)
+    print(BOLD + GREEN + f"Installing cert-manager CRDs {version}" + NC, flush=True)
 
-    subprocess.check_call([
-        'kubectl',
-        'apply',
-        '--validate=false',
-        '-f',
-        manifest_url,
-    ])
+    subprocess.check_call(
+        ["kubectl", "apply", "-f", manifest_url]
+    )
+
+    print(BOLD + GREEN + f"Installing cert-manager {version}" + NC, flush=True)
+    subprocess.check_call(
+        ["helm", "repo", "add", "jetstack", "https://charts.jetstack.io"]
+    )
+    subprocess.check_call(
+        ["helm", "repo", "update", "jetstack"]
+    )
+    subprocess.check_call(
+        [
+            "helm",
+            "upgrade",
+            "--install",
+            "--namespace",
+            "cert-manager",
+            "cert-manager",
+            "jetstack/cert-manager",
+            "--version",
+            version,
+            "-f",
+            "config/cert-manager.yaml",
+        ]
+    )
 
 
 def main():
