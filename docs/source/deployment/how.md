@@ -11,6 +11,13 @@ change deployed to mybinder.org.
 The first two sections of this page cover how to upgrade either `repo2docker` or
 `BinderHub`.
 
+```eval_rst
+.. note::
+   Currently upgrades to BinderHub and repo2docker are automatically managed
+   by the fantastic `henchbot <https://github.com/henchbot/mybinder.org-upgrades>`_ and manual intervention is rarely required.
+   However, we have left the manual steps here for provenance or in case of emergency.
+```
+
 ## Deployment policy
 
 Deployments to mybinder.org should be:
@@ -154,12 +161,12 @@ master.
 
           https://github.com/jupyterhub/<REPO-NAME>/compare/<OLD-HASH>...<NEW-HASH>
 
-5. Review, accept, and merge this PR. This will make Travis deploy the changes
+5. Review, accept, and merge this PR. This will make GitHub Actions deploy the changes
    to [staging.mybinder.org](https://staging.mybinder.org), and run tests in the `tests/`
    directory against it. **In this case, you can merge your own PR**. Note that if the
-   PR is a large change to the Kubernetes setup, this may take some time, and Travis may
+   PR is a large change to the Kubernetes setup, this may take some time, and GitHub Actions may
    time-out in the process. If this happens and you _expect_ it to happen, you can restart
-   travis a few times.
+   the build a few times.
 6. If the tests succeed, the change will be deployed to mybinder.org.
 7. If the tests fail, the change will *not* be deployed to mybinder.org.
    You must then investigate why it failed. **If you can
@@ -175,7 +182,16 @@ master.
    Currently you cannot deploy changes to `mybinder/requirements.yaml` only to staging.
 ```
 Sometimes you want to test out a deployment live before you make a deployment
-to `prod`. This is possible by editing `staging`-only config files. To deploy
+to `prod`.
+
+This simplest way to achieve this is to apply the `test-staging` label to an open PR. This will trigger GitHub Actions to deploy the changes in the PR to the staging cluster **only**.
+
+```eval_rst
+.. note::
+   If you need to re-deploy the changes in a PR to staging only, then the label will need to be removed and then re-added.
+```
+
+Another way to achieve this is by editing `staging`-only config files. To deploy
 to staging only, follow these steps:
 
 1. Make changes to [`config/staging.yaml`](https://github.com/jupyterhub/mybinder.org-deploy/blob/master/config/staging.yaml)
@@ -183,7 +199,7 @@ to staging only, follow these steps:
    whatever is in `mybinder/values.yaml`.
 2. Make a PR to the `master` branch, and review, accept, and merge this PR.
    **In this case, you can merge your own PR**.
-   This will make Travis deploy the changes
+   This will make GitHub Actions deploy the changes
    to [staging.mybinder.org](https://staging.mybinder.org), and run tests in the `tests/`
    directory against it. Because we've only edited `staging.yaml`, **it will not
    be deployed to `prod`**.
