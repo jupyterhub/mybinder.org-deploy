@@ -263,7 +263,7 @@ def setup_certmanager():
     # FIXME: remove after deployment is fixed
     # this patch helps avoid hangs while deleting things that aren't used anymore
     # due to webhook being undeployed
-    subprocess.check_call([
+    subprocess.call([
         "kubectl",
         "patch",
         "crd",
