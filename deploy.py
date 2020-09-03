@@ -205,6 +205,8 @@ def deploy(release):
             "secrets/ban.py",
         ])
 
+    setup_certmanager()
+
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
     helm = [
         'helm', 'upgrade', '--install',
@@ -326,8 +328,6 @@ def main():
             setup_auth_turing(args.cluster)
         else:
             setup_auth_gcloud(args.release, args.cluster)
-
-        setup_certmanager()
         setup_helm(args.release)
 
     deploy(args.release)
