@@ -205,7 +205,7 @@ def deploy(release):
             "secrets/ban.py",
         ])
 
-    # setup_certmanager()
+    setup_certmanager()
 
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
     helm = [
@@ -240,6 +240,19 @@ def deploy(release):
             '--watch', d
         ])
 
+    remove_certmanager()
+
+def remove_certmanager():
+    """Remove certmanager"""
+    version = os.environ["CERT_MANAGER_VERSION"]
+
+    manifest_url = f"https://github.com/jetstack/cert-manager/releases/download/{version}/cert-manager.yaml"
+    print(BOLD + GREEN + f"Deleting cert-manager {version}" + NC, flush=True)
+
+    subprocess.check_call(
+        ["kubectl", "delete", "-f", manifest_url]
+    )
+
 
 def setup_certmanager():
     """Install cert-manager separately
@@ -247,6 +260,20 @@ def setup_certmanager():
     cert-manager docs and CRD assumptions say that cert-manager must never be a sub-chart,
     always installed on its own in a cert-manager namespace
     """
+    # FIXME: remove after deployment is fixed
+    # this patch helps avoid hangs while deleting things that aren't used anymore
+    # due to webhook being undeployed
+    subprocess.check_call([
+        "kubectl",
+        "patch",
+        "crd",
+        "challenges.acme.cert-manager.io",
+        "-p",
+        '{"metadata":{"finalizers": []}}',
+        "--type=merge",
+    ])
+    return
+
 
     # TODO: cert-manager chart >= 0.15
     # has `installCRDs` option, which should eliminate the separate CRD step
