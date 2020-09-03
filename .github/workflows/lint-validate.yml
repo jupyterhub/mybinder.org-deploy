@@ -7,7 +7,7 @@ on:
       - "**/*.yml"
 
 env:
-  HELM_VERSION: "v2.16.3"
+  HELM_VERSION: "v2.16.10"
 
 jobs:
   yamllint-raw:
