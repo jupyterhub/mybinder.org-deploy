@@ -1,8 +1,5 @@
 projectName: turing
 
-tags:
-  kubelego: false
-  certmanager: true
 
 letsencrypt:
   contactEmail: drsarahlgibson@gmail.com
@@ -160,12 +157,10 @@ prometheus:
           secretName: turing-prometheus-tls-crt
 
 
-nginx-ingress:
+ingress-nginx:
   controller:
     service:
       loadBalancerIP: 51.105.120.231
-    config:
-      proxy-body-size: 64m
 
 
 static:
@@ -205,11 +200,3 @@ gcsProxy:
   buckets:
     - name: mybinder-staging-events-archive
       host: archive-analytics-staging-mybinder.turing.10.0.0.1.xip.io
-
-cert-manager:
-  webhook:
-    enabled: false
-  ingressShim:
-    defaultIssuerName: "letsencrypt-prod"
-    defaultIssuerKind: "ClusterIssuer"
-    defaultACMEChallengeType: "http01"

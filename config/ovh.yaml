@@ -1,9 +1,5 @@
 projectName: ovh
 
-tags:
-  kubelego: false
-  certmanager: true
-
 binderhub:
   config:
     BinderHub:
@@ -158,7 +154,7 @@ prometheus:
           secretName: tls-crt
 
 
-nginx-ingress:
+ingress-nginx:
   controller:
     hostNetwork: true
     replicaCount: 1
@@ -223,11 +219,3 @@ gcsProxy:
     - name: mybinder-staging-events-archive
       host: archive-analytics-staging-mybinder.mybinder.ovh
 
-
-cert-manager:
-  webhook:
-    enabled: false
-  ingressShim:
-    defaultIssuerName: "letsencrypt-prod"
-    defaultIssuerKind: "ClusterIssuer"
-    defaultACMEChallengeType: "http01"

@@ -205,6 +205,8 @@ def deploy(release):
             "secrets/ban.py",
         ])
 
+    setup_certmanager()
+
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
     helm = [
         'helm', 'upgrade', '--install',
@@ -239,10 +241,39 @@ def deploy(release):
         ])
 
 
-def main():
-    # Get current working directory
-    cwd = os.getcwd()
+def setup_certmanager():
+    """Install cert-manager CRDs"""
 
+    # TODO: cert-manager chart >= 0.15
+    # has `installCRDs` option, which should elimnate this step
+    # however, upgrade notes say this *must not* be used
+    # when upgrading, only for fresh deployments,
+    # and requires helm >=3.3.1 and kubernetes >=1.16.14
+
+    requirements_yaml = os.path.join(ABSOLUTE_HERE, "mybinder", "requirements.yaml")
+    with open(requirements_yaml, "r") as f:
+        requirements = yaml.safe_load(f)
+
+    for dep in requirements["dependencies"]:
+        if dep["name"] == "cert-manager":
+            cert_manager = dep
+            break
+    else:
+        raise ValueError(f"cert-manager dependency not found in {requirements_yaml}")
+    version = cert_manager["version"]
+    manifest_url = f"https://github.com/jetstack/cert-manager/releases/download/{version}/cert-manager.yaml"
+    print(BOLD + GREEN + f"Applying cert-manager {version} CRDs" + NC, flush=True)
+
+    subprocess.check_call([
+        'kubectl',
+        'apply',
+        '--validate=false',
+        '-f',
+        manifest_url,
+    ])
+
+
+def main():
     # parse command line args
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
@@ -297,7 +328,6 @@ def main():
             setup_auth_turing(args.cluster)
         else:
             setup_auth_gcloud(args.release, args.cluster)
-
         setup_helm(args.release)
 
     deploy(args.release)

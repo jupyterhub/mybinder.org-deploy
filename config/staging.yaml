@@ -1,9 +1,5 @@
 projectName: binder-staging
 
-tags:
-  kubelego: false
-  certmanager: true
-
 binderhub:
   config:
     BinderHub:
@@ -76,7 +72,7 @@ prometheus:
             - prometheus.staging.mybinder.org
           secretName: kubelego-tls-prometheus
 
-nginx-ingress:
+ingress-nginx:
   controller:
     service:
       loadBalancerIP: 104.197.11.66
@@ -121,14 +117,6 @@ gcsProxy:
   buckets:
     - name: mybinder-staging-events-archive
       host: archive.analytics.staging.mybinder.org
-
-cert-manager:
-  webhook:
-    enabled: false
-  ingressShim:
-    defaultIssuerName: "letsencrypt-prod"
-    defaultIssuerKind: "ClusterIssuer"
-    defaultACMEChallengeType: "http01"
 
 federationRedirect:
   host: staging.mybinder.org

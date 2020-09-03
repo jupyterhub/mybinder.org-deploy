@@ -1,9 +1,5 @@
 projectName: binder-prod
 
-tags:
-  kubelego: false
-  certmanager: true
-
 userNodeSelector: &userNodeSelector
   mybinder.org/pool-type: users
 coreNodeSelector: &coreNodeSelector
@@ -125,9 +121,6 @@ grafana:
           isDefault: true
           editable: false
 
-kube-lego:
-  nodeSelector: *coreNodeSelector
-
 prometheus:
   server:
     nodeSelector: *coreNodeSelector
@@ -151,7 +144,7 @@ prometheus:
             - prometheus.mybinder.org
           secretName: kubelego-tls-prometheus
 
-nginx-ingress:
+ingress-nginx:
   controller:
     service:
       loadBalancerIP: 35.202.202.188
@@ -218,14 +211,6 @@ gcsProxy:
   buckets:
     - name: mybinder-events-archive
       host: archive.analytics.mybinder.org
-
-cert-manager:
-  webhook:
-    enabled: false
-  ingressShim:
-    defaultIssuerName: "letsencrypt-prod"
-    defaultIssuerKind: "ClusterIssuer"
-    defaultACMEChallengeType: "http01"
 
 federationRedirect:
   enabled: true

@@ -1,6 +1,4 @@
-tags:
-  kubelego: true
-  certmanager: false
+tags: {}
 
 etcJupyter:
   jupyter_notebook_config.json:
@@ -258,16 +256,14 @@ binderhub:
               add:
                 - NET_ADMIN
 
-nginx-ingress:
+ingress-nginx:
   rbac:
     create: true
   defaultBackend:
+    enabled: true
     minAvailable: 0
-  statsExporter:
-    service:
-      annotations:
-        prometheus.io/scrape: 'true'
-        prometheus.io/port: '10254'
+  admissionWebhooks:
+    enabled: false
   controller:
     resources:
       requests:
@@ -288,11 +284,11 @@ nginx-ingress:
           podAffinityTerm:
             labelSelector:
               matchExpressions:
-              - key: app
+              - key: app.kubernetes.io/name
                 operator: In
                 values:
-                - nginx-ingress
-              - key: component
+                - ingress
+              - key: app.kubernetes.io/component
                 operator: In
                 values:
                 - controller
@@ -335,15 +331,6 @@ static:
       kubernetes.io/tls-acme: 'true'
     tls:
       secretName: kubelego-tls-static
-
-kube-lego:
-  config:
-    LEGO_EMAIL: yuvipanda@gmail.com
-    LEGO_URL: https://acme-v01.api.letsencrypt.org/directory
-  rbac:
-    create: true
-  image:
-    tag: 0.1.7
 
 grafana:
   ingress:
@@ -462,8 +449,7 @@ federationRedirect:
       health: https://turing.mybinder.org/health
       versions: https://turing.mybinder.org/versions
 
-certmanager:
+cert-manager:
   ingressShim:
-    defaultIssuerName: letsencrypt-production
+    defaultIssuerName: letsencrypt-prod
     defaultIssuerKind: ClusterIssuer
-    defaultIssuerGroup: cert-manager.io
