@@ -261,7 +261,7 @@ def setup_certmanager():
     else:
         raise ValueError(f"cert-manager dependency not found in {requirements_yaml}")
     version = cert_manager["version"]
-    manifest_url = f"https://github.com/jetstack/cert-manager/releases/download/{version}/cert-manager.yaml"
+    manifest_url = f"https://github.com/jetstack/cert-manager/releases/download/{version}/cert-manager.crds.yaml"
     print(BOLD + GREEN + f"Applying cert-manager {version} CRDs" + NC, flush=True)
 
     subprocess.check_call([
