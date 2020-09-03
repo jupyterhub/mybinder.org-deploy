@@ -1,0 +1,4 @@
+ingressShim:
+  # our default ClusterIssuer is in mybinder/templates/cluster-issuer.yaml
+  defaultIssuerName: letsencrypt-prod
+  defaultIssuerKind: ClusterIssuer
