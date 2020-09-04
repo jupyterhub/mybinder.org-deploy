@@ -11,7 +11,7 @@ env:
 
 jobs:
   yamllint-raw:
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repo
@@ -35,19 +35,19 @@ jobs:
           yamllint -d scripts/yamllint-config.yaml --no-warnings config/
 
       - name: Unlock git-crypt secrets
-        if: github.event.pull_request.head.repo.fork == 'false'
+        if: github.event.pull_request.head.repo.fork == false
         uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
       # We use --no-warnings in this step to reduce output to critical errors
       - name: Run yamllint on secrets/config
-        if: github.event.pull_request.head.repo.fork == 'false'
+        if: github.event.pull_request.head.repo.fork == false
         run: |
           yamllint -d scripts/yamllint-config.yaml --no-warnings secrets/config/
 
   yamllint-templates:
-    if: github.event.pull_request.head.repo.fork == 'false'
+    if: github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
