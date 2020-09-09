@@ -10,7 +10,7 @@ env:
   HELM_VERSION: "v2.16.10"
 
 jobs:
-  yamllint-raw:
+  lint-config:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,9 +30,9 @@ jobs:
           python -m pip install yamllint
 
       # We use --no-warnings in this step to reduce output to critical errors
-      - name: Run yamllint on config/
+      - name: Run yamllint on everything but secrets
         run: |
-          yamllint -d scripts/yamllint-config.yaml --no-warnings config/
+          yamllint -d scripts/yamllint-no-secrets.yaml --no-warnings .
 
       - name: Unlock git-crypt secrets
         if: github.event.pull_request.head.repo.fork == false
@@ -41,10 +41,10 @@ jobs:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
       # We use --no-warnings in this step to reduce output to critical errors
-      - name: Run yamllint on secrets/config
+      - name: Run yamllint on secrets
         if: github.event.pull_request.head.repo.fork == false
         run: |
-          yamllint -d scripts/yamllint-config.yaml --no-warnings secrets/config/
+          yamllint -d scripts/yamllint-config.yaml --no-warnings secrets/
 
   lint-helm:
     if: github.event.pull_request.head.repo.fork == false
