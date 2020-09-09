@@ -53,6 +53,7 @@ jobs:
       fail-fast: false
       matrix:
         release: ["staging", "prod", "ovh", "turing"]
+        kube_version: ["1.15", "1.18"]
 
     steps:
       - name: Checkout repo
@@ -113,6 +114,6 @@ jobs:
           yamllint -d scripts/yamllint-config.yaml --no-warnings helm-${{ matrix.release }}
 
       # Use --ignore-missing-schemas to avoid failure of CRDs
-      - name: Validate k8s resources for ${{ matrix.release}}
+      - name: Validate k8s resources for ${{ matrix.release }} kube-${{ matrix.kube_version }}
         run: |
-          kubeval --strict --ignore-missing-schemas -d helm-${{ matrix.release }}
+          kubeval --kubernetes-version ${{ matrix.kube_version }} --strict --ignore-missing-schemas -d helm-${{ matrix.release }}
