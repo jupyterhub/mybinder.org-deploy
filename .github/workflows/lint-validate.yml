@@ -59,16 +59,20 @@ jobs:
       fail-fast: false
       matrix:
         include:
+        # versions must be available
+        # at https://github.com/instrumenta/kubernetes-json-schema
+        # in the form v${version}-standalone-strict
+        # this does *not* include all kubernetes versions!
         - release: staging
-          kube_version: "1.15"
+          kube_version: "1.15.7"
         - release: prod
-          kube_version: "1.15"
+          kube_version: "1.15.7"
         - release: prod
-          kube_version: "1.18"
+          kube_version: "1.18.1"
         - release: ovh
-          kube_version: "1.15"
+          kube_version: "1.15.7"
         - release: turing
-          kube_version: "1.16"
+          kube_version: "1.16.4"
 
     steps:
       - name: Checkout repo
