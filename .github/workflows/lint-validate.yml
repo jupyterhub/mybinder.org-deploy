@@ -29,31 +29,46 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install yamllint
 
-      # We use --no-warnings in this step to reduce output to critical errors
-      - name: Run yamllint on everything but secrets
-        run: |
-          yamllint -d scripts/yamllint-no-secrets.yaml --no-warnings .
-
       - name: Unlock git-crypt secrets
         if: github.event.pull_request.head.repo.fork == false
         uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
-      # We use --no-warnings in this step to reduce output to critical errors
-      - name: Run yamllint on secrets
-        if: github.event.pull_request.head.repo.fork == false
+      # pick yamllint config based on whether we have access to secrets or not
+      - name: Select yamllint config
         run: |
-          yamllint -d scripts/yamllint-config.yaml --no-warnings secrets/
+          if [[ "${{ github.event.pull_request.head.repo.fork }}" == "false" ]]; then
+            echo "linting secrets"
+            export YAMLLINT_CONFIG=scripts/yamllint-config.yaml
+          else
+            echo "not linting secrets"
+            export YAMLLINT_CONFIG=scripts/yamllint-no-secrets.yaml
+          fi
+          # persist env for the next step
+          echo "::set-env name=YAMLLINT_CONFIG::$YAMLLINT_CONFIG"
+
+      # We use --no-warnings in this step to reduce output to critical errors
+      - name: Run yamllint
+        run: |
+          yamllint -d ${YAMLLINT_CONFIG} --no-warnings .
 
   lint-helm:
-    if: github.event.pull_request.head.repo.fork == false
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        release: ["staging", "prod", "ovh", "turing"]
-        kube_version: ["1.15", "1.18"]
+        include:
+        - release: staging
+          kube_version: "1.15"
+        - release: prod
+          kube_version: "1.15"
+        - release: prod
+          kube_version: "1.18"
+        - release: ovh
+          kube_version: "1.15"
+        - release: turing
+          kube_version: "1.16"
 
     steps:
       - name: Checkout repo
@@ -76,18 +91,14 @@ jobs:
           curl -L https://storage.googleapis.com/kubernetes-helm/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
 
-      - name: Install helm kubeval plugin
-        run: |
-          helm plugin install https://github.com/instrumenta/helm-kubeval
-
-      - name: Install local charts
-        working-directory: mybinder
+      - name: Setup helm
         run: |
           helm init --client-only
-          helm dep up
+          helm dep up mybinder
           helm plugin install https://github.com/instrumenta/helm-kubeval
 
       - name: Unlock git-crypt secrets
+        if: github.event.pull_request.head.repo.fork == false
         uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
@@ -96,13 +107,23 @@ jobs:
         run: |
           chartpress
 
+      - name: Select secret config
+        run: |
+          if [[ "${{ github.event.pull_request.head.repo.fork }}" == "false" ]]; then
+            export SECRET_CONFIG="-f secrets/config/common.yaml -f config/${{ matrix.release }}.yaml"
+          else
+            export SECRET_CONFIG="-f config/test-secrets.yaml"
+          fi
+          echo "linting with secret config ${SECRET_CONFIG}"
+          # persist env for the next step
+          echo "::set-env name=SECRET_CONFIG::$SECRET_CONFIG"
+
       - name: Run helm kubeval for ${{ matrix.release }} with kube-${{ matrix.kube_version }}
         run: |
           helm kubeval \
           --kubernetes-version ${{ matrix.kube_version }} \
           --strict \
           --ignore-missing-schemas \
-          -f secrets/config/common.yaml \
           -f config/${{ matrix.release }}.yaml \
-          -f secrets/config/${{ matrix.release }}.yaml
+          ${SECRET_CONFIG} \
           mybinder
