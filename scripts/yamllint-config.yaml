@@ -8,6 +8,7 @@ extends: relaxed
 # the JupyterHub helm chart too
 ignore: |
   **/jupyterhub/**
+  mybinder/templates
 
 # Ignore common but non-critical errors
 rules:

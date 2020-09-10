@@ -10,7 +10,7 @@ env:
   HELM_VERSION: "v2.16.10"
 
 jobs:
-  yamllint-raw:
+  lint-config:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,30 +29,50 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install yamllint
 
-      # We use --no-warnings in this step to reduce output to critical errors
-      - name: Run yamllint on config/
-        run: |
-          yamllint -d scripts/yamllint-config.yaml --no-warnings config/
-
       - name: Unlock git-crypt secrets
         if: github.event.pull_request.head.repo.fork == false
         uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
-      # We use --no-warnings in this step to reduce output to critical errors
-      - name: Run yamllint on secrets/config
-        if: github.event.pull_request.head.repo.fork == false
+      # pick yamllint config based on whether we have access to secrets or not
+      - name: Select yamllint config
         run: |
-          yamllint -d scripts/yamllint-config.yaml --no-warnings secrets/config/
+          if [[ "${{ github.event.pull_request.head.repo.fork }}" == "false" ]]; then
+            echo "linting secrets"
+            export YAMLLINT_CONFIG=scripts/yamllint-config.yaml
+          else
+            echo "not linting secrets"
+            export YAMLLINT_CONFIG=scripts/yamllint-no-secrets.yaml
+          fi
+          # persist env for the next step
+          echo "::set-env name=YAMLLINT_CONFIG::$YAMLLINT_CONFIG"
 
-  yamllint-templates:
-    if: github.event.pull_request.head.repo.fork == false
+      # We use --no-warnings in this step to reduce output to critical errors
+      - name: Run yamllint
+        run: |
+          yamllint -d ${YAMLLINT_CONFIG} --no-warnings .
+
+  lint-helm:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        release: ["staging", "prod", "ovh", "turing"]
+        include:
+        # versions must be available
+        # at https://github.com/instrumenta/kubernetes-json-schema
+        # in the form v${version}-standalone-strict
+        # this does *not* include all kubernetes versions!
+        - release: staging
+          kube_version: "1.15.7"
+        - release: prod
+          kube_version: "1.15.7"
+        - release: prod
+          kube_version: "1.18.1"
+        - release: ovh
+          kube_version: "1.15.7"
+        - release: turing
+          kube_version: "1.16.4"
 
     steps:
       - name: Checkout repo
@@ -68,25 +88,21 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install yamllint chartpress
-
-      - name: Install kubeval
-        run: |
-          curl -L https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
-          sudo mv ${HOME}/kubeval /usr/local/bin
+          python -m pip install chartpress
 
       - name: Install helm
         run: |
           curl -L https://storage.googleapis.com/kubernetes-helm/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
 
-      - name: Install local charts
-        working-directory: mybinder
+      - name: Setup helm
         run: |
           helm init --client-only
-          helm dep up
+          helm dep up mybinder
+          helm plugin install https://github.com/instrumenta/helm-kubeval
 
       - name: Unlock git-crypt secrets
+        if: github.event.pull_request.head.repo.fork == false
         uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
@@ -95,24 +111,23 @@ jobs:
         run: |
           chartpress
 
-      - name: Make output directory for helm template
+      - name: Select secret config
         run: |
-          mkdir helm-${{ matrix.release }}
+          if [[ "${{ github.event.pull_request.head.repo.fork }}" == "false" ]]; then
+            export SECRET_CONFIG="-f secrets/config/common.yaml -f config/${{ matrix.release }}.yaml"
+          else
+            export SECRET_CONFIG="-f config/test-secrets.yaml"
+          fi
+          echo "linting with secret config ${SECRET_CONFIG}"
+          # persist env for the next step
+          echo "::set-env name=SECRET_CONFIG::$SECRET_CONFIG"
 
-      - name: Run helm template for ${{ matrix.release }}
+      - name: Run helm kubeval for ${{ matrix.release }} with kube-${{ matrix.kube_version }}
         run: |
-          helm template mybinder \
-          -f secrets/config/common.yaml \
+          helm kubeval \
+          --kubernetes-version ${{ matrix.kube_version }} \
+          --strict \
+          --ignore-missing-schemas \
           -f config/${{ matrix.release }}.yaml \
-          -f secrets/config/${{ matrix.release }}.yaml \
-          --output-dir helm-${{ matrix.release }}
-
-      # We use --no-warnings in this step to reduce output to critical errors
-      - name: Run yamllint on ${{ matrix.release }} chart
-        run: |
-          yamllint -d scripts/yamllint-config.yaml --no-warnings helm-${{ matrix.release }}
-
-      # Use --ignore-missing-schemas to avoid failure of CRDs
-      - name: Validate k8s resources for ${{ matrix.release}}
-        run: |
-          kubeval --strict --ignore-missing-schemas -d helm-${{ matrix.release }}
+          ${SECRET_CONFIG} \
+          mybinder
