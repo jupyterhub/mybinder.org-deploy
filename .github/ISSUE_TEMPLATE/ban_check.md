@@ -1,5 +1,5 @@
 ---
-name: "U+2705 Repo Check"
+name: "\U00002705 Repo Check"
 about: "If you're concerned about banning, we can check your repo"
 labels: question
 
