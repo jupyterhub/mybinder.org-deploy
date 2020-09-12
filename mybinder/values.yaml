@@ -61,6 +61,9 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
+        - pattern: ^jupyter-api-2dgit.*
+          config:
+            quota: 20
 
     GitRepoProvider:
       banned_specs:
