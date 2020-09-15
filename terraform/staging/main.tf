@@ -35,6 +35,12 @@ resource "google_container_node_pool" "pool" {
     machine_type = "n1-standard-4"
     disk_size_gb = 500
     disk_type    = "pd-standard"
+    # https://www.terraform.io/docs/providers/google/r/container_cluster.html#oauth_scopes-1
+    oauth_scopes = [
+      "storage-ro",
+      "logging-write",
+      "monitoring",
+    ]
 
     metadata = {
       disable-legacy-endpoints = "true"
