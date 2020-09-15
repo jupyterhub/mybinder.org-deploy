@@ -6,25 +6,30 @@ terraform {
 }
 
 provider "google" {
+  version = "~> 3.39"
   project = "binderhub-288415"
   region  = "us-central1"
   zone    = "us-central1-a"
 }
 
-resource "google_container_cluster" "staging" {
-  name = "staging"
-
-  min_master_version = "1.16"
-
-  # terraform recommends removing the default node pool
-  remove_default_node_pool = true
-  initial_node_count       = 1
+locals {
+  gke_version = "1.16.13-gke.401"
 }
 
+module "mybinder" {
+  source = "../modules/mybinder"
+
+  name               = "staging"
+  gke_master_version = local.gke_version
+}
+
+# define node pools here, too hard to encode with variables
 resource "google_container_node_pool" "pool" {
   name       = "pool-2020-09"
-  cluster    = google_container_cluster.staging.name
+  cluster    = module.mybinder.cluster_name
   node_count = 2
+
+  version = local.gke_version
 
   node_config {
     machine_type = "n1-standard-4"
@@ -37,11 +42,13 @@ resource "google_container_node_pool" "pool" {
   }
 }
 
-resource "google_compute_global_address" "staging" {
-  name        = "staging"
-  description = "public ip for the staging cluster"
+output "public_ip" {
+  value       = module.mybinder.public_ip
+  description = "store in ingress-nginx.controller.service.loadBalancerIP"
 }
 
-output "public_ip" {
-  value = google_compute_global_address.staging.address
+output "private_keys" {
+  value       = module.mybinder.private_keys
+  description = "GCP serice account keys"
+  sensitive   = true
 }
