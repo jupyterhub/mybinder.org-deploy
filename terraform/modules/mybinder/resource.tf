@@ -5,6 +5,8 @@ provider "google" {
   zone    = "us-central1-a"
 }
 
+data "google_client_config" "provider" {}
+
 locals {
   service_accounts = {
     deployer = {
@@ -94,4 +96,30 @@ output "private_keys" {
     sa_name => base64decode(google_service_account_key.keys[sa_name].private_key)
   }
   sensitive = true
+}
+
+# create analytics buckets, one for raw-event export, one for the public archive
+
+resource "google_storage_bucket" "archive" {
+  name                        = "binder-${var.name}-events-archive"
+  location                    = "US"
+  uniform_bucket_level_access = true
+}
+
+resource "google_storage_bucket_iam_member" "archive-read-all" {
+  bucket = google_storage_bucket.archive.name
+  role   = "roles/storage.objectViewer"
+  member = "allUsers"
+}
+
+resource "google_storage_bucket" "raw-export" {
+  name                        = "binder-${var.name}-events-raw-export"
+  location                    = "US"
+  uniform_bucket_level_access = true
+}
+
+resource "google_logging_project_sink" "events-archive" {
+  name        = "binderhub-${var.name}-events-raw-text"
+  filter      = "resource.type=\"global\" AND logName=\"projects/${data.google_client_config.provider.project}/logs/binderhub-events-text\""
+  destination = "storage.googleapis.com/${google_storage_bucket.raw-export.name}"
 }

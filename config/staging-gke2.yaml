@@ -100,17 +100,17 @@ matomo:
 
 analyticsPublisher:
   project: binderhub-288415
-  destinationBucket: mybinder-staging-events-archive
+  destinationBucket: binder-staging-events-archive
   events:
-    sourceBucket: mybinder-staging-events-raw-export
+    sourceBucket: binder-staging-events-raw-export
 
 gcsProxy:
   buckets:
-    - name: mybinder-staging-events-archive
+    - name: binder-staging-events-archive
       host: archive.analytics.gke2.staging.mybinder.org
 
 federationRedirect:
-  host: gke2.staging.mybinder.org
+  host: staging2.mybinder.org
   enabled: true
   hosts:
     gke:

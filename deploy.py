@@ -415,8 +415,6 @@ def main():
             setup_auth_gcloud(args.cluster)
         setup_helm(args.release)
 
-    setup_helm(args.release)
-
     deploy(args.release, args.name)
 
 
