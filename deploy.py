@@ -25,6 +25,14 @@ HELM_VERSION = os.getenv("HELM_VERSION", None)
 if HELM_VERSION is None:
     raise Exception("HELM_VERSION environment variable must be set")
 
+
+GCP_PROJECTS = {
+    "staging": "binder-staging",
+    "prod": "binder-prod",
+    "staging-gke2": "binderhub-288415",
+}
+
+
 def setup_auth_turing(cluster):
     """
     Set up authentication with Turing k8s cluster on Azure.
@@ -98,23 +106,55 @@ def setup_auth_gcloud(release, cluster):
         f"--key-file=secrets/gke-auth-key-{release}.json"
     ])
 
+    if not cluster:
+        cluster = release
+
+    project = GCP_PROJECTS[release]
+
     # Use gcloud to populate ~/.kube/config, which kubectl / helm can use
-    subprocess.check_call([
-        "gcloud", "container", "clusters", "get-credentials",
-        cluster, "--zone=us-central1-a", f"--project=binder-{release}"
-    ])
+    subprocess.check_call(
+        [
+            "gcloud",
+            "container",
+            "clusters",
+            "get-credentials",
+            cluster,
+            "--zone=us-central1-a",
+            f"--project={project}",
+        ]
+    )
 
 
 def setup_helm(release):
     """ensure helm is up to date"""
     # First check the helm client and server versions
     client_helm_cmd = ["helm", "version", "-c", "--short"]
-    client_version = subprocess.check_output(client_helm_cmd
-        ).decode('utf-8').split(":")[1].split("+")[0].strip()
+    client_version = (
+        subprocess.check_output(client_helm_cmd)
+        .decode("utf-8")
+        .split(":")[1]
+        .split("+")[0]
+        .strip()
+    )
 
     server_helm_cmd = ["helm", "version", "-s", "--short"]
-    server_version = subprocess.check_output(server_helm_cmd
-        ).decode('utf-8').split(":")[1].split("+")[0].strip()
+    try:
+        server_version = (
+            subprocess.check_output(server_helm_cmd)
+            .decode("utf-8")
+            .split(":")[1]
+            .split("+")[0]
+            .strip()
+        )
+    except subprocess.CalledProcessError:
+        server_version = None
+
+    # TODO: fresh cluster needs these run once:
+    # not yet automated, not needed once we move to helm 3
+    # kubectl --namespace kube-system create serviceaccount tiller
+    # kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+    # helm init --service-account tiller --history-max 100 --wait
+    # kubectl patch deployment tiller-deploy --namespace=kube-system --type=json --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
 
     print(BOLD + GREEN +
         f"Client version: {client_version}, Server version: {server_version}" +
@@ -190,15 +230,15 @@ def setup_helm(release):
     ])
 
 
-def deploy(release):
+def deploy(release, name=None):
     """Deploy jupyterhub"""
     print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
-    if release == 'turing' or release == 'ovh':
-        subprocess.check_call([
-            "python3",
-            "secrets/ban.py",
-            release,
-        ])
+    if not name:
+        name = release
+    if release == "turing" or release == "ovh":
+        subprocess.check_call(
+            ["python3", "secrets/ban.py", release,]
+        )
     else:
         subprocess.check_call([
             "python3",
@@ -209,36 +249,65 @@ def deploy(release):
 
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
     helm = [
-        'helm', 'upgrade', '--install',
-        '--namespace', release,
-        release,
-        'mybinder',
-        '--force',
-        '--cleanup-on-fail',
-        '-f', os.path.join('config', release + '.yaml'),
-        '-f', os.path.join('secrets', 'config', 'common.yaml'),
-        '-f', os.path.join('secrets', 'config', release + '.yaml'),
+        "helm",
+        "upgrade",
+        "--install",
+        "--namespace",
+        name,
+        name,
+        "mybinder",
+        "--force",
+        "--cleanup-on-fail",
+        "-f",
+        os.path.join("config", release + ".yaml"),
+        "-f",
+        os.path.join("secrets", "config", "common.yaml"),
+        "-f",
+        os.path.join("secrets", "config", release + ".yaml"),
     ]
 
     subprocess.check_call(helm)
     print(BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC, flush=True)
 
     # Explicitly wait for all deployments and daemonsets to be fully rolled out
-    print(BOLD + GREEN + f"Waiting for all deployments and daemonsets in {release} to be ready" + NC, flush=True)
-    deployments_and_daemonsets = subprocess.check_output([
-        'kubectl',
-        '--namespace', release,
-        'get', 'deployments,daemonsets',
-        '-o', 'name'
-    ]).decode().strip().split('\n')
+    print(
+        BOLD
+        + GREEN
+        + f"Waiting for all deployments and daemonsets in {name} to be ready"
+        + NC,
+        flush=True,
+    )
+    deployments_and_daemonsets = (
+        subprocess.check_output(
+            [
+                "kubectl",
+                "--namespace",
+                name,
+                "get",
+                "deployments,daemonsets",
+                "-o",
+                "name",
+            ]
+        )
+        .decode()
+        .strip()
+        .split("\n")
+    )
 
     for d in deployments_and_daemonsets:
-        subprocess.check_call([
-            'kubectl', 'rollout', 'status',
-            '--namespace', release,
-            '--timeout', '5m',
-            '--watch', d
-        ])
+        subprocess.check_call(
+            [
+                "kubectl",
+                "rollout",
+                "status",
+                "--namespace",
+                name,
+                "--timeout",
+                "5m",
+                "--watch",
+                d,
+            ]
+        )
 
 
 def setup_certmanager():
@@ -293,11 +362,13 @@ def main():
     argparser.add_argument(
         'release',
         help="Release to deploy",
-        choices=['staging', 'prod', 'ovh', 'turing']
+        choices=["staging", "staging-gke2", "prod", "ovh", "turing"],
     )
     argparser.add_argument(
-        'cluster',
-        help='Cluster to do the deployment in'
+        "--name", help="Override helm release name, if different from RELEASE",
+    )
+    argparser.add_argument(
+        "cluster", help="Cluster to do the deployment in", nargs="?", type=str,
     )
     argparser.add_argument(
         '--local',
@@ -341,10 +412,12 @@ def main():
         elif args.cluster == 'turing':
             setup_auth_turing(args.cluster)
         else:
-            setup_auth_gcloud(args.release, args.cluster)
+            setup_auth_gcloud(args.cluster)
         setup_helm(args.release)
 
-    deploy(args.release)
+    setup_helm(args.release)
+
+    deploy(args.release, args.name)
 
 
 if __name__ == '__main__':
