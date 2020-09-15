@@ -48,10 +48,10 @@ resource "google_container_node_pool" "pool" {
   }
 }
 
-output "public_ip" {
-  value       = module.mybinder.public_ip
-  description = "store in ingress-nginx.controller.service.loadBalancerIP"
-}
+# output "public_ip" {
+#   value       = module.mybinder.public_ip
+#   description = "store in ingress-nginx.controller.service.loadBalancerIP"
+# }
 
 output "private_keys" {
   value       = module.mybinder.private_keys

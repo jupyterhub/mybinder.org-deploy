@@ -45,9 +45,11 @@ resource "google_compute_global_address" "cluster_ip" {
   description = "public ip for the ${var.name} cluster"
 }
 
-output "public_ip" {
-  value = google_compute_global_address.cluster_ip.address
-}
+# static ip doesn't work ?!
+# have to reserve static ips via cloud console
+# output "public_ip" {
+#   value = google_compute_global_address.cluster_ip.address
+# }
 
 resource "google_sql_database_instance" "matomo" {
   name             = "matomo-${var.name}"
