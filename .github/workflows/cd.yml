@@ -47,6 +47,8 @@ jobs:
           - federation_member: staging-gke2
             binder_url: https://gke2.staging.mybinder.org
             hub_url: https://hub.gke2.staging.mybinder.ovh
+            # TODO: move this to image-prefix in chartpress.yaml
+            # it's here while we need two places to push
             chartpress_args: "--image-prefix=gcr.io/binderhub-288415/mybinder-tool-"
     steps:
       # Action Repo: https://github.com/actions/checkout
@@ -104,7 +106,9 @@ jobs:
         with:
           login-server: "https://gcr.io"
           username: "_json_key"
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          # TODO: conditional for DOCKER_PASSWORD while we have two places to push
+          # GCR_KEY is the new one, DOCKER_PASSWORD is old
+          password: ${{ (federation_member == "staging" && secrets.DOCKER_PASSWORD) || secrets.GCR_KEY }}
 
       - name: "Stage 2: Setup helm"
         working-directory: mybinder
