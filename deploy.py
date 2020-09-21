@@ -360,7 +360,7 @@ def main():
     # parse command line args
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
-        'release',
+        "release",
         help="Release to deploy",
         choices=["staging", "staging-gke2", "prod", "ovh", "turing"],
     )
@@ -410,9 +410,9 @@ def main():
         if args.cluster == 'ovh':
             setup_auth_ovh(args.release, args.cluster)
         elif args.cluster == 'turing':
-            setup_auth_turing(args.cluster)
+            setup_auth_turing(args.release)
         else:
-            setup_auth_gcloud(args.cluster)
+            setup_auth_gcloud(args.release)
         setup_helm(args.release)
 
     deploy(args.release, args.name)
