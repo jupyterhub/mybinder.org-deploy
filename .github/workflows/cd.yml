@@ -121,11 +121,11 @@ jobs:
 
       - name: "Stage 3: Build images (if required)"
         run: |
-          chartpress --push ${matrix.chartpress_args}
+          chartpress --push ${{ matrix.chartpress_args }}
 
       - name: "Stage 4: Deploy to staging"
         run: |
-          python ./deploy.py ${matrix.federation_member} --name ${matrix.name || matrix.federation_member}
+          python ./deploy.py ${{ matrix.federation_member }} --name ${{ matrix.name || matrix.federation_member }}
         env:
           TERM: xterm
 
@@ -135,7 +135,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: py.test -vx -n 2 --binder-url=${matrix.binder_url} --hub-url=${matrix.hub_url}
+          command: py.test -vx -n 2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matrix.hub_url }}
 
       - name: "Stage 5: Post message to Grafana that deployment to production has started"
         run: |
