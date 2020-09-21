@@ -9,7 +9,13 @@ variable "name" {
 variable "gke_master_version" {
   type        = string
   description = "GKE min master version"
-  default     = "1.16"
+  default     = "1.17"
+}
+
+variable "gke_location" {
+  type        = string
+  description = "GKE location for cluster if different, e.g. us-central1 for regional cluster"
+  default     = null
 }
 
 variable "sql_tier" {

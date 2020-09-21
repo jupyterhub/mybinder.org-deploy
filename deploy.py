@@ -30,6 +30,7 @@ GCP_PROJECTS = {
     "staging": "binder-staging",
     "prod": "binder-prod",
     "staging-gke2": "binderhub-288415",
+    "prod-gke2": "binderhub-288415",
 }
 
 
@@ -362,7 +363,7 @@ def main():
     argparser.add_argument(
         "release",
         help="Release to deploy",
-        choices=["staging", "staging-gke2", "prod", "ovh", "turing"],
+        choices=["staging", "staging-gke2", "prod-gke2", "prod", "ovh", "turing"],
     )
     argparser.add_argument(
         "--name", help="Override helm release name, if different from RELEASE",

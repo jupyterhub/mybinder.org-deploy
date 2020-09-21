@@ -5,6 +5,10 @@ provider "google" {
   zone    = "us-central1-a"
 }
 
+provider "random" {
+  version = "~> 2.3"
+}
+
 data "google_client_config" "provider" {}
 
 locals {
@@ -26,10 +30,15 @@ locals {
       role         = "roles/storage.admin",
     },
   }
+  # add -staging to events prefix, but don't include 'prod' in prod events
+  events_prefix = var.name == "prod" ? "binder" : "binder-${var.name}"
+  # add -staging to events log name, but don't include 'prod' in prod events
+  events_log_prefix = var.name == "prod" ? "binderhub" : "binderhub-${var.name}"
 }
 
 resource "google_container_cluster" "cluster" {
-  name = var.name
+  name     = var.name
+  location = var.gke_location != null ? var.gke_location : data.google_client_config.provider.zone
 
   min_master_version = var.gke_master_version
 
@@ -53,13 +62,13 @@ output "cluster_name" {
   value = google_container_cluster.cluster.name
 }
 
-resource "google_compute_global_address" "cluster_ip" {
-  name        = var.name
-  description = "public ip for the ${var.name} cluster"
-}
-
 # static ip doesn't work ?!
 # have to reserve static ips via cloud console
+# resource "google_compute_global_address" "cluster_ip" {
+#   name        = var.name
+#   description = "public ip for the ${var.name} cluster"
+# }
+
 # output "public_ip" {
 #   value = google_compute_global_address.cluster_ip.address
 # }
@@ -70,7 +79,37 @@ resource "google_sql_database_instance" "matomo" {
 
   settings {
     tier = var.sql_tier
+    backup_configuration {
+      enabled = true
+    }
   }
+}
+
+resource "random_id" "sql_root_password" {
+  byte_length = 16
+}
+
+resource "random_id" "matomo_password" {
+  byte_length = 16
+}
+
+resource "google_sql_user" "root" {
+  name     = "root"
+  host     = "%"
+  instance = google_sql_database_instance.matomo.name
+  password = random_id.sql_root_password.hex
+}
+
+resource "google_sql_user" "matomo" {
+  name     = "matomo"
+  host     = "%"
+  instance = google_sql_database_instance.matomo.name
+  password = random_id.matomo_password.hex
+}
+
+output "matomo_password" {
+  value     = google_sql_user.matomo.password
+  sensitive = true
 }
 
 # CI deployer custom role
@@ -118,7 +157,7 @@ output "private_keys" {
 # create analytics buckets, one for raw-event export, one for the public archive
 
 resource "google_storage_bucket" "archive" {
-  name                        = "binder-${var.name}-events-archive"
+  name                        = "${local.events_prefix}-events-archive"
   location                    = "US"
   uniform_bucket_level_access = true
 }
@@ -130,13 +169,13 @@ resource "google_storage_bucket_iam_member" "archive-read-all" {
 }
 
 resource "google_storage_bucket" "raw-export" {
-  name                        = "binder-${var.name}-events-raw-export"
+  name                        = "${local.events_prefix}-events-raw-export"
   location                    = "US"
   uniform_bucket_level_access = true
 }
 
 resource "google_logging_project_sink" "events-archive" {
   name        = "binderhub-${var.name}-events-raw-text"
-  filter      = "resource.type=\"global\" AND logName=\"projects/${data.google_client_config.provider.project}/logs/binderhub-events-text\""
+  filter      = "resource.type=\"global\" AND logName=\"projects/${data.google_client_config.provider.project}/logs/${local.events_log_prefix}-events-text\""
   destination = "storage.googleapis.com/${google_storage_bucket.raw-export.name}"
 }

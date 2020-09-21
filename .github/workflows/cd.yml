@@ -165,6 +165,12 @@ jobs:
             binder_url: https://gke.mybinder.org
             hub_url: https://hub.gke.mybinder.org
             cluster_name: prod-a
+          - federation_member: prod-gke2
+            binder_url: https://gke2.mybinder.org
+            hub_url: https://hub.gke2.mybinder.org
+            cluster_name: prod
+            release_name: prod
+            chartpress_args: "--image-prefix=gcr.io/binderhub-288415/mybinder-tool-"
           # - federation_member: turing
           #   binder_url: https://turing.mybinder.org
           #   hub_url: https://hub.mybinder.turing.ac.uk
@@ -198,7 +204,7 @@ jobs:
 
       # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idif
       - name: "Stage 1: Install gcloud SDK"
-        if: matrix.federation_member == 'prod'
+        if: matrix.federation_member == 'prod' || matrix.federation_member == 'prod-gke2'
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           version: ${{ env.GCLOUD_SDK_VERION }}
@@ -234,11 +240,11 @@ jobs:
 
       - name: "Stage 3: Set image tag in chart"
         run: |
-          chartpress --skip-build
+          chartpress --skip-build ${{ matrix.chartpress_args }}
 
       - name: "Stage 4: Deploy to ${{ matrix.federation_member }}"
         run: |
-          python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.cluster_name || matrix.federation_member }}
+          python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.cluster_name || matrix.federation_member }} --name ${{ matrix.release_name || matrix.federation_member }}
         env:
           TERM: xterm
 
