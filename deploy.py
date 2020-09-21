@@ -412,7 +412,7 @@ def main():
         elif args.cluster == 'turing':
             setup_auth_turing(args.release)
         else:
-            setup_auth_gcloud(args.release)
+            setup_auth_gcloud(args.release, args.cluster)
         setup_helm(args.release)
 
     deploy(args.release, args.name)
