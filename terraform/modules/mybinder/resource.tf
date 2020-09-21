@@ -84,6 +84,12 @@ resource "google_project_iam_member" "iam" {
   member = "serviceAccount:${google_service_account.sa[each.key].email}"
 }
 
+resource "google_project_iam_member" "deploy-pusher" {
+  # deployer also gets storage admin
+  role   = "roles/storage.admin"
+  member = "serviceAccount:${google_service_account.sa["deployer"].email}"
+}
+
 # create keys for each service account
 resource "google_service_account_key" "keys" {
   for_each           = local.service_accounts
