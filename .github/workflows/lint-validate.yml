@@ -66,7 +66,7 @@ jobs:
         - release: staging
           kube_version: "1.15.7"
         - release: staging-gke2
-          kube_version: "1.16.4"
+          kube_version: "1.17.4"
         - release: prod
           kube_version: "1.15.7"
         - release: prod
