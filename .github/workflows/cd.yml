@@ -108,7 +108,7 @@ jobs:
           username: "_json_key"
           # TODO: conditional for DOCKER_PASSWORD while we have two places to push
           # GCR_KEY is the new one, DOCKER_PASSWORD is old
-          password: ${{ (federation_member == "staging" && secrets.DOCKER_PASSWORD) || secrets.GCR_KEY }}
+          password: ${{ (matrix.federation_member == "staging" && secrets.DOCKER_PASSWORD) || secrets.GCR_KEY }}
 
       - name: "Stage 2: Setup helm"
         working-directory: mybinder
