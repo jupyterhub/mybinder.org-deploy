@@ -125,7 +125,7 @@ jobs:
 
       - name: "Stage 4: Deploy to staging"
         run: |
-          python ./deploy.py ${{ matrix.federation_member }} staging --name ${{ matrix.name || matrix.federation_member }}
+          python ./deploy.py ${{ matrix.federation_member }} staging --name staging
         env:
           TERM: xterm
 
