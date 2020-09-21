@@ -36,6 +36,17 @@ resource "google_container_cluster" "cluster" {
   # terraform recommends removing the default node pool
   remove_default_node_pool = true
   initial_node_count       = 1
+
+  network_policy {
+    enabled  = true
+    provider = "CALICO"
+  }
+
+  addons_config {
+    network_policy_config {
+      disabled = false
+    }
+  }
 }
 
 output "cluster_name" {

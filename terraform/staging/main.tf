@@ -13,7 +13,7 @@ provider "google" {
 }
 
 locals {
-  gke_version = "1.16.13-gke.401"
+  gke_version = "1.17.9-gke.1504"
 }
 
 module "mybinder" {
@@ -25,9 +25,13 @@ module "mybinder" {
 
 # define node pools here, too hard to encode with variables
 resource "google_container_node_pool" "pool" {
-  name       = "pool-2020-09"
-  cluster    = module.mybinder.cluster_name
-  node_count = 2
+  name    = "pool-2020-09"
+  cluster = module.mybinder.cluster_name
+
+  autoscaling {
+    min_node_count = 1
+    max_node_count = 4
+  }
 
   version = local.gke_version
 
