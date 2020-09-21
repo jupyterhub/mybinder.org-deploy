@@ -96,7 +96,7 @@ def setup_ovh_ingress_link(release):
     print(stdout.decode('utf8'))
 
 
-def setup_auth_gcloud(release, cluster):
+def setup_auth_gcloud(release, cluster=None):
     """
     Set up GCloud + Kubectl authentication for talking to a given cluster
     """
