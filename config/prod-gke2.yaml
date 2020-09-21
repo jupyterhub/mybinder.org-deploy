@@ -193,7 +193,7 @@ matomo:
   replicas: 3
   nodeSelector: *coreNodeSelector
   db:
-    instanceName: binder-288415:us-central1:matomo-prod
+    instanceName: binderhub-288415:us-central1:matomo-prod
   trustedHosts:
     - mybinder.org
     - gke2.mybinder.org
