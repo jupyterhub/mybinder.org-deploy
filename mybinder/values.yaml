@@ -110,6 +110,7 @@ binderhub:
     # permission to write to StackDriver by default. We don't block access
     # to cloud metadata in binderhub pod, so this should 'just work'.
     01-eventlog: |
+      import os
       import google.cloud.logging
       import google.cloud.logging.handlers
       # importing google cloud configures a root log handler,
@@ -126,7 +127,7 @@ binderhub:
           client = google.cloud.logging.Client()
           # These events are not parsed as JSON in stackdriver, so give it a different name
           # for now. Should be fixed in https://github.com/googleapis/google-cloud-python/pull/6293
-          return [JSONCloudLoggingHandler(client, name='binderhub-events-text')]
+          return [JSONCloudLoggingHandler(client, name=os.environ.get("EVENT_LOG_NAME") or "binderhub-events-text")]
       c.EventLog.handlers_maker = _make_eventsink_handler
 
   registry:

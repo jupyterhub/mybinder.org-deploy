@@ -62,3 +62,9 @@ output "private_keys" {
   description = "GCP serice account keys"
   sensitive   = true
 }
+
+output "matomo_password" {
+  value     = module.mybinder.matomo_password
+  sensitive = true
+}
+

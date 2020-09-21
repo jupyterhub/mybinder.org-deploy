@@ -49,3 +49,6 @@ with key names: "events-archiver", "matomo", and "binderhub-builder" and paste t
 - requesting previously-allocated static ip via loadBalancerIP did not work.
   Had to manually mark LB IP as static via cloud console.
 
+- sql admin API needed to be manually enabled [here](https://console.developers.google.com/apis/library/sqladmin.googleapis.com)
+- matomo sql data was manually imported/exported via sql dashboard and gsutil in cloud console
+- events archive history was manually migrated via `gsutil -m rsync` in cloud console

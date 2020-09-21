@@ -8,6 +8,9 @@ binderhub:
       image_prefix: gcr.io/binderhub-288415/r2d-staging-72d7634-
       sticky_builds: true
       build_memory_limit: "2G"
+  extraEnv:
+    - name: EVENT_LOG_NAME
+      value: "binderhub-staging-events-text"
 
   dind:
     resources:
@@ -99,10 +102,16 @@ matomo:
       - gke2.staging.mybinder.org
 
 analyticsPublisher:
+  enabled: true
   project: binderhub-288415
   destinationBucket: binder-staging-events-archive
   events:
+    logName: binderhub-staging-events-text
     sourceBucket: binder-staging-events-raw-export
+
+  # TODO: copy to values
+  cloudCosts:
+    sourceBucket: binder-billing-archive
 
 gcsProxy:
   buckets:

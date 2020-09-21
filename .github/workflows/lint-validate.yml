@@ -69,6 +69,8 @@ jobs:
           kube_version: "1.17.4"
         - release: prod
           kube_version: "1.15.7"
+        - release: prod-gke2
+          kube_version: "1.17.4"
         - release: prod
           kube_version: "1.18.1"
         - release: ovh
