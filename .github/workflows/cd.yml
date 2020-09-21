@@ -46,7 +46,7 @@ jobs:
             hub_url: https://hub.gke.mybinder.org
           - federation_member: staging-gke2
             binder_url: https://gke2.staging.mybinder.org
-            hub_url: https://hub.gke2.staging.mybinder.ovh
+            hub_url: https://hub.gke2.staging.mybinder.org
             # TODO: move this to image-prefix in chartpress.yaml
             # it's here while we need two places to push
             chartpress_args: "--image-prefix=gcr.io/binderhub-288415/mybinder-tool-"
