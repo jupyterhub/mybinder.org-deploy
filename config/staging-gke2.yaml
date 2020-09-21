@@ -1,0 +1,120 @@
+projectName: binderhub-288415
+
+binderhub:
+  config:
+    BinderHub:
+      hub_url: https://hub.gke2.staging.mybinder.org
+      badge_base_url: https://staging.mybinder.org
+      image_prefix: gcr.io/binderhub-288415/r2d-staging-72d7634-
+      sticky_builds: true
+      build_memory_limit: "2G"
+
+  dind:
+    resources:
+      requests:
+        cpu: "0"
+        memory: 1Gi
+      limits:
+        cpu: "1"
+        memory: 2.5Gi
+
+  ingress:
+    hosts:
+      - gke2.staging.mybinder.org
+
+  jupyterhub:
+    singleuser:
+      memory:
+        guarantee: 256M
+        limit: 256M
+      cpu:
+        guarantee: 0.1
+        limit: 0.5
+    ingress:
+      hosts:
+        - hub.gke2.staging.mybinder.org
+      tls:
+        - secretName: kubelego-tls-jupyterhub-staging
+          hosts:
+            - hub.gke2.staging.mybinder.org
+    scheduling:
+      userPlaceholder:
+        replicas: 2
+
+grafana:
+  ingress:
+    hosts:
+      - grafana.gke2.staging.mybinder.org
+    tls:
+      - hosts:
+          - grafana.gke2.staging.mybinder.org
+        secretName: kubelego-tls-grafana
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: prometheus
+          orgId: 1
+          type: prometheus
+          url: https://prometheus.gke2.staging.mybinder.org
+          access: direct
+          isDefault: true
+          editable: false
+
+prometheus:
+  server:
+    ingress:
+      hosts:
+        - prometheus.gke2.staging.mybinder.org
+      tls:
+        - hosts:
+            - prometheus.gke2.staging.mybinder.org
+          secretName: kubelego-tls-prometheus
+
+ingress-nginx:
+  controller:
+    service:
+      loadBalancerIP: 35.222.35.25
+
+static:
+  ingress:
+    hosts:
+      - static.gke2.staging.mybinder.org
+
+redirector:
+  redirects:
+    - type: host
+      host:
+        from: docs.gke2.staging.mybinder.org
+        to: mybinder.readthedocs.io
+
+matomo:
+  enabled: true
+  db:
+    instanceName: binderhub-288415:us-central1:matomo-staging
+  trustedHosts:
+    - gke2.staging.mybinder.org
+  ingress:
+    hosts:
+      - gke2.staging.mybinder.org
+
+analyticsPublisher:
+  project: binderhub-288415
+  destinationBucket: binder-staging-events-archive
+  events:
+    sourceBucket: binder-staging-events-raw-export
+
+gcsProxy:
+  buckets:
+    - name: binder-staging-events-archive
+      host: archive.analytics.gke2.staging.mybinder.org
+
+federationRedirect:
+  host: staging2.mybinder.org
+  enabled: true
+  hosts:
+    gke:
+      url: https://gke2.staging.mybinder.org
+      weight: 4
+      health: https://gke2.staging.mybinder.org/health
+      versions: https://gke2.staging.mybinder.org/versions

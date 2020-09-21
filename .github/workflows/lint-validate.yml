@@ -65,6 +65,8 @@ jobs:
         # this does *not* include all kubernetes versions!
         - release: staging
           kube_version: "1.15.7"
+        - release: staging-gke2
+          kube_version: "1.16.4"
         - release: prod
           kube_version: "1.15.7"
         - release: prod
