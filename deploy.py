@@ -33,6 +33,13 @@ GCP_PROJECTS = {
     "prod-gke2": "binderhub-288415",
 }
 
+GCP_ZONES = {
+    "staging": "us-central1-a",
+    "prod": "us-central1-a",
+    "staging-gke2": "us-central1-a",
+    "prod-gke2": "us-central1",
+}
+
 
 def setup_auth_turing(cluster):
     """
@@ -111,6 +118,7 @@ def setup_auth_gcloud(release, cluster=None):
         cluster = release
 
     project = GCP_PROJECTS[release]
+    zone = GCP_ZONES[release]
 
     # Use gcloud to populate ~/.kube/config, which kubectl / helm can use
     subprocess.check_call(
@@ -120,7 +128,7 @@ def setup_auth_gcloud(release, cluster=None):
             "clusters",
             "get-credentials",
             cluster,
-            "--zone=us-central1-a",
+            f"--zone={zone}",
             f"--project={project}",
         ]
     )
