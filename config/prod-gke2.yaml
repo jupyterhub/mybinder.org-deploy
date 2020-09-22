@@ -8,6 +8,8 @@ coreNodeSelector: &coreNodeSelector
 binderhub:
   config:
     BinderHub:
+      # TODO: start small! remove limit  when we seem stable
+      pod_quota: 10
       build_node_selector: *userNodeSelector
       hub_url: https://hub.gke2.mybinder.org
       badge_base_url: https://mybinder.org
