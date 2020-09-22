@@ -470,6 +470,11 @@ federationRedirect:
       health: https://gke.mybinder.org/health
       versions: https://gke.mybinder.org/versions
       prime: true
+    gke2:
+      url: https://gke2.mybinder.org
+      weight: 10
+      health: https://gke2.mybinder.org/health
+      versions: https://gke2.mybinder.org/versions
     gesis:
       url: https://gesis.mybinder.org
       weight: 15
