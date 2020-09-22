@@ -11,6 +11,9 @@ binderhub:
   extraEnv:
     - name: EVENT_LOG_NAME
       value: "binderhub-staging-events-text"
+  resources:
+    requests:
+      memory: 512Mi
 
   dind:
     resources:
@@ -26,6 +29,11 @@ binderhub:
       - gke2.staging.mybinder.org
 
   jupyterhub:
+    hub:
+      resources:
+        requests:
+          memory: 512Mi
+          cpu: null
     singleuser:
       memory:
         guarantee: 256M
