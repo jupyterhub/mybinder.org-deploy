@@ -391,6 +391,8 @@ grafana:
       enabled: true
     smtp:
       enabled: true
+    security:
+      allow_embedding: true
 
 prometheus:
   nodeExporter:
