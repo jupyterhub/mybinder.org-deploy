@@ -169,9 +169,11 @@ resource "google_storage_bucket_iam_member" "archive-read-all" {
 }
 
 resource "google_storage_bucket" "raw-export" {
-  name                        = "${local.events_prefix}-events-raw-export"
-  location                    = "US"
-  uniform_bucket_level_access = true
+  name     = "${local.events_prefix}-events-raw-export"
+  location = "US"
+  # log sync doesn't support uniform access
+  # ref: https://cloud.google.com/storage/docs/uniform-bucket-level-access#should-you-use
+  uniform_bucket_level_access = false
 }
 
 resource "google_logging_project_sink" "events-archive" {

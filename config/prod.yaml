@@ -16,6 +16,19 @@ binderhub:
       google_analytics_domain: "mybinder.org"
       sticky_builds: true
 
+  # publish events to new events-archive
+  extraVolumes:
+    - name: event-secret
+      secret:
+        secretName: events-archiver-secret
+  extraVolumeMounts:
+    - name: event-secret
+      mountPath: /event-secret
+      readOnly: true
+  extraEnv:
+    - name: GOOGLE_APPLICATION_CREDENTIALS
+      value: /event-secret/service-account.json
+
   nodeSelector: *coreNodeSelector
 
   dind:
