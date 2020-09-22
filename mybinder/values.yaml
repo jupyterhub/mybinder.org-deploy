@@ -79,7 +79,7 @@ binderhub:
       build_image: jupyter/repo2docker:0.11.0-159.g35e6e7e
       per_repo_quota: 100
       per_repo_quota_higher: 200
-      build_memory_limit: "2G"
+      build_memory_limit: "3G"
       build_memory_request: "1G"
 
       banner_message: |
