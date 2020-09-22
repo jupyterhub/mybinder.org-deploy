@@ -169,13 +169,25 @@ resource "google_storage_bucket_iam_member" "archive-read-all" {
 }
 
 resource "google_storage_bucket" "raw-export" {
-  name                        = "${local.events_prefix}-events-raw-export"
-  location                    = "US"
-  uniform_bucket_level_access = true
+  name     = "${local.events_prefix}-events-raw-export"
+  location = "US"
+  # log sink doesn't support uniform access
+  # ref: https://cloud.google.com/storage/docs/uniform-bucket-level-access#should-you-use
+  uniform_bucket_level_access = false
 }
 
 resource "google_logging_project_sink" "events-archive" {
-  name        = "binderhub-${var.name}-events-raw-text"
-  filter      = "resource.type=\"global\" AND logName=\"projects/${data.google_client_config.provider.project}/logs/${local.events_log_prefix}-events-text\""
-  destination = "storage.googleapis.com/${google_storage_bucket.raw-export.name}"
+  name                   = "binderhub-${var.name}-events-raw-text"
+  filter                 = "resource.type=\"global\" AND logName=\"projects/${data.google_client_config.provider.project}/logs/${local.events_log_prefix}-events-text\""
+  destination            = "storage.googleapis.com/${google_storage_bucket.raw-export.name}"
+  unique_writer_identity = true
+}
+
+# grant log sink writer write-access to the raw-export bucket
+resource "google_storage_bucket_iam_binding" "event-log-sink" {
+  bucket = google_storage_bucket.raw-export.name
+  role   = "roles/storage.objectCreator"
+  members = [
+    google_logging_project_sink.events-archive.writer_identity
+  ]
 }
