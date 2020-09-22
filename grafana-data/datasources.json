@@ -1,0 +1,94 @@
+[
+ {
+  "access": "proxy",
+  "basicAuth": true,
+  "database": "",
+  "id": 3,
+  "isDefault": false,
+  "jsonData": {
+   "httpMethod": "GET",
+   "keepCookies": []
+  },
+  "name": "GESIS",
+  "orgId": 1,
+  "password": "",
+  "readOnly": false,
+  "type": "prometheus",
+  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+  "url": "https://notebooks.gesis.org/prometheus",
+  "user": ""
+ },
+ {
+  "access": "proxy",
+  "basicAuth": false,
+  "database": "",
+  "id": 5,
+  "isDefault": false,
+  "jsonData": {
+   "httpMethod": "GET",
+   "keepCookies": []
+  },
+  "name": "GKE2",
+  "orgId": 1,
+  "password": "",
+  "readOnly": false,
+  "type": "prometheus",
+  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+  "url": "https://prometheus.gke2.mybinder.org",
+  "user": ""
+ },
+ {
+  "access": "proxy",
+  "basicAuth": false,
+  "database": "",
+  "id": 2,
+  "isDefault": false,
+  "jsonData": {
+   "httpMethod": "GET",
+   "keepCookies": []
+  },
+  "name": "OVH",
+  "orgId": 1,
+  "password": "",
+  "readOnly": false,
+  "type": "prometheus",
+  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+  "url": "https://prometheus-mybinder.mybinder.ovh/",
+  "user": ""
+ },
+ {
+  "access": "direct",
+  "basicAuth": false,
+  "database": "",
+  "id": 1,
+  "isDefault": true,
+  "jsonData": {},
+  "name": "prometheus",
+  "orgId": 1,
+  "password": "",
+  "readOnly": true,
+  "type": "prometheus",
+  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+  "url": "https://prometheus.mybinder.org",
+  "user": ""
+ },
+ {
+  "access": "proxy",
+  "basicAuth": false,
+  "database": "",
+  "id": 4,
+  "isDefault": false,
+  "jsonData": {
+   "httpMethod": "GET",
+   "keepCookies": []
+  },
+  "name": "Turing",
+  "orgId": 1,
+  "password": "",
+  "readOnly": false,
+  "type": "prometheus",
+  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+  "url": "https://prometheus.turing.mybinder.org",
+  "user": ""
+ }
+]

@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""
+Export grafana data to a folder
+
+Also import data from that folder
+"""
+
+import json
+import logging
+import os
+import pathlib
+
+
+import requests
+
+log = logging.getLogger("grafana-export")
+
+grafana_user = os.environ.get("GRAFANA_USER", "admin")
+grafana_password = os.environ.get("GRAFANA_PASSWORD")
+
+session = requests.Session()
+
+
+def save_dashboard(host, dashboard_result, dashboard_dir):
+    dashboard_dir.mkdir(exist_ok=True)
+    uid = str(dashboard_result["uid"])
+    dest = dashboard_dir.joinpath(f"{uid}.json")
+    log.info(f"Downloading {dashboard_result['title']} to {dest}")
+    r = session.get(host + f"/api/dashboards/uid/{uid}")
+    r.raise_for_status()
+    dashboard = r.json()
+    with dashboard_dir.joinpath(f"{uid}.json").open("w") as f:
+        json.dump(dashboard, f, sort_keys=True, indent=1)
+
+
+def export_grafana(host, data_dir, confirm=True):
+    """export grafana data from host to data_dir"""
+    output_dir = pathlib.Path(data_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    dashboard_dir = output_dir.joinpath("dashboards")
+
+    # download dashboards
+    r = requests.get(host + "/api/search?limit=1000")
+    r.raise_for_status()
+    for result in r.json():
+        if result["type"] == "dash-db":
+            save_dashboard(host, result, dashboard_dir)
+
+    # TODO: save folders (we don't have any)
+
+    # data sources
+    datasources_json = output_dir.joinpath("datasources.json")
+    log.info(f"Downloading data sources to {datasources_json}")
+    r = session.get(host + "/api/datasources")
+    r.raise_for_status()
+    datasources = r.json()
+    with datasources_json.open("w") as f:
+        json.dump(datasources, f, sort_keys=True, indent=1)
+
+
+def import_grafana(host, data_dir, confirm=True):
+    """Import grafana data created by export"""
+    data_dir = pathlib.Path(data_dir)
+    if not data_dir.is_dir():
+        raise FileExistsError(f"No such directory: {data_dir}")
+    if confirm:
+        ans = input(f"Import data from {data_dir} to {host}? [y/N]")
+        if not ans.lower().startswith("y"):
+            print("Exiting")
+            return
+    log.info(f"Importing data from {data_dir} to {host}")
+    datasources_json = data_dir.joinpath("datasources.json")
+    log.info(f"Creating data sources from {datasources_json}")
+    with datasources_json.open() as f:
+        datasources = json.load(f)
+
+    r = session.get(host + "/api/datasources")
+    r.raise_for_status()
+    existing = {s["name"]: s for s in r.json()}
+    log.info(f"Already have data sources: {list(existing)}")
+    for source in datasources:
+        if source["name"] in existing:
+            log.info(f"Already have data source {source['name']}")
+            continue
+        log.info(f"Adding data source {source['name']}: {source['url']}")
+        request_data = {}
+        for key in ("name", "url", "access", "type"):
+            request_data[key] = source[key]
+        r = session.post(
+            host + "/api/datasources",
+            data=json.dumps(request_data),
+            headers={"content-type": "application/json"},
+        )
+        r.raise_for_status()
+
+    dashboards_dir = data_dir.joinpath("dashboards")
+    for dashboard_json in dashboards_dir.glob("*.json"):
+        with dashboard_json.open() as f:
+            dashboard = json.load(f)
+
+        # can't preserve integer id on upload,
+        # stable uid is preserved, though
+        dashboard["dashboard"].pop("id")
+        # do not upload metadata
+        meta = dashboard.pop("meta")
+        dashboard["folderId"] = meta["folderId"]
+        dashboard["overwrite"] = True
+        log.info(
+            f"Uploading dashboard {dashboard['dashboard']['uid']}: {dashboard['dashboard']['title']}"
+        )
+        r = session.post(
+            host + "/api/dashboards/db",
+            data=json.dumps(dashboard),
+            headers={"content-type": "application/json"},
+        )
+        r.raise_for_status()
+
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--host",
+        default="https://grafana.mybinder.org",
+        help="The Grafana host to export from.",
+    )
+    parser.add_argument(
+        "-d",
+        "--data-dir",
+        default="./grafana-data",
+        help="Directory in which to store grafana export data",
+    )
+    parser.add_argument(
+        "--import",
+        dest="action",
+        action="store_const",
+        const=import_grafana,
+        default=export_grafana,
+        help="Import grafana data instead of exporting",
+    )
+    parser.add_argument(
+        "-y", "--no-confirm", action="store_true", help="Skip prompts for confirmation"
+    )
+    logging.basicConfig(level=logging.INFO)
+
+    if grafana_password:
+        session.auth = (grafana_user, grafana_password)
+    else:
+        log.warning("Without authentication, data source export will fail")
+    opts = parser.parse_args()
+    opts.action(opts.host, opts.data_dir, confirm=(not opts.no_confirm))

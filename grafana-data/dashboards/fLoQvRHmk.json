@@ -1,0 +1,548 @@
+{
+ "dashboard": {
+  "annotations": {
+   "list": [
+    {
+     "builtIn": 1,
+     "datasource": "-- Grafana --",
+     "enable": false,
+     "hide": false,
+     "iconColor": "rgba(0, 211, 255, 1)",
+     "limit": 100,
+     "name": "Annotations & Alerts",
+     "showIn": 0,
+     "tags": [],
+     "type": "tags"
+    }
+   ]
+  },
+  "description": "A dashboard to hold plots for status.mybinder.org",
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 9,
+  "links": [],
+  "panels": [
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "prometheus",
+    "description": "The number of outstanding requests waiting on a pending build or launch",
+    "fill": 0,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 7,
+     "w": 12,
+     "x": 0,
+     "y": 0
+    },
+    "id": 8,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [
+     {
+      "alias": "/.*build.*/",
+      "fill": 3,
+      "yaxis": 2
+     }
+    ],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(binderhub_inprogress_builds)",
+      "legendFormat": "builds",
+      "refId": "A"
+     },
+     {
+      "expr": "sum(binderhub_inprogress_launches)",
+      "legendFormat": "launches",
+      "refId": "B"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "Requests waiting on launches/builds",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "decimals": 0,
+      "format": "none",
+      "label": "Launches",
+      "logBase": 1,
+      "max": null,
+      "min": "0",
+      "show": true
+     },
+     {
+      "decimals": 0,
+      "format": "short",
+      "label": "Builds",
+      "logBase": 1,
+      "max": null,
+      "min": "0",
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "-- Mixed --",
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 9,
+     "w": 12,
+     "x": 12,
+     "y": 0
+    },
+    "id": 6,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 3,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": true,
+    "steppedLine": false,
+    "targets": [
+     {
+      "datasource": "prometheus",
+      "expr": "sum(kube_pod_status_phase{pod=~\"jupyter-.*\", phase=\"Running\"}) by (phase)",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "GKE",
+      "refId": "A"
+     },
+     {
+      "datasource": "GESIS",
+      "expr": "sum(kube_pod_status_phase{pod=~\"^jupyter-.*\", phase=\"Running\", kubernetes_namespace!=\"jhub-ns\"})",
+      "legendFormat": "Gesis",
+      "refId": "B"
+     },
+     {
+      "datasource": "OVH",
+      "expr": "sum(kube_pod_status_phase{pod=~\"jupyter-.*\", phase=\"Running\"}) by (phase)",
+      "legendFormat": "OVH",
+      "refId": "C"
+     },
+     {
+      "datasource": "Turing",
+      "expr": "sum(kube_pod_status_phase{pod=~\"^jupyter-.*\", phase=\"Running\"})",
+      "hide": true,
+      "legendFormat": "Turing",
+      "refId": "D"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "User pods running, last hour",
+    "tooltip": {
+     "shared": true,
+     "sort": 2,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "short",
+      "label": "Total pods",
+      "logBase": 1,
+      "max": null,
+      "min": "0",
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": null,
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 9,
+     "w": 12,
+     "x": 0,
+     "y": 7
+    },
+    "id": 2,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 3,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "100 * (sum(delta(binderhub_launch_time_seconds_count{status=\"success\", kubernetes_namespace!=\"jhub-ns\"}[10m])) / sum(delta(binderhub_launch_time_seconds_count{status!=\"retry\", kubernetes_namespace!=\"jhub-ns\"}[10m])))",
+      "format": "time_series",
+      "intervalFactor": 1,
+      "legendFormat": "Launch success (GKE)",
+      "refId": "A"
+     },
+     {
+      "expr": "",
+      "format": "time_series",
+      "intervalFactor": 1,
+      "refId": "B"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "Launch success %, last hour",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "decimals": null,
+      "format": "percent",
+      "label": null,
+      "logBase": 1,
+      "max": "105",
+      "min": "0",
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {
+     "10th-percentile-failure": "#ef843c",
+     "10th-percentile-success": "#b7dbab",
+     "25th-percentile-failure": "#99440a",
+     "25th-percentile-success": "#7eb26d",
+     "50th-percentile-failure": "#ea6460",
+     "50th-percentile-success": "#7eb26d",
+     "75th-percentile-failure": "#bf1b00",
+     "75th-percentile-success": "#508642",
+     "90th-percentile-failure": "#58140c",
+     "90th-percentile-success": "#3f6833"
+    },
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "prometheus",
+    "fill": 0,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 6,
+     "w": 12,
+     "x": 12,
+     "y": 9
+    },
+    "id": 4,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 3,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [
+     {
+      "alias": "10th-percentile",
+      "color": "#508642"
+     },
+     {
+      "alias": "25th-percentile",
+      "color": "#9ac48a"
+     },
+     {
+      "alias": "50th-percentile",
+      "color": "#e0f9d7"
+     },
+     {
+      "alias": "75th-percentile",
+      "color": "#f9934e"
+     },
+     {
+      "alias": "90th-percentile",
+      "color": "#bf1b00"
+     }
+    ],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "histogram_quantile(0.1, sum(rate(binderhub_launch_time_seconds_bucket{status=\"success\"}[5m])) without (instance, repo, provider)) > 0",
+      "format": "time_series",
+      "intervalFactor": 10,
+      "legendFormat": "10th-percentile",
+      "refId": "A"
+     },
+     {
+      "expr": "histogram_quantile(0.25, sum(rate(binderhub_launch_time_seconds_bucket{status=\"success\"}[5m])) without (instance, repo, provider)) > 0",
+      "format": "time_series",
+      "hide": false,
+      "intervalFactor": 10,
+      "legendFormat": "25th-percentile",
+      "refId": "B"
+     },
+     {
+      "expr": "histogram_quantile(0.5, sum(rate(binderhub_launch_time_seconds_bucket{status=\"success\"}[5m])) without (instance, repo, provider)) > 0",
+      "format": "time_series",
+      "hide": false,
+      "intervalFactor": 10,
+      "legendFormat": "50th-percentile",
+      "refId": "C"
+     },
+     {
+      "expr": "histogram_quantile(0.75, sum(rate(binderhub_launch_time_seconds_bucket{status=\"success\"}[5m])) without (instance, repo, provider)) > 0",
+      "format": "time_series",
+      "hide": false,
+      "intervalFactor": 10,
+      "legendFormat": "75th-percentile",
+      "refId": "D"
+     },
+     {
+      "expr": "histogram_quantile(0.9, sum(rate(binderhub_launch_time_seconds_bucket{status=\"success\"}[5m])) without (instance, repo, provider)) > 0",
+      "format": "time_series",
+      "intervalFactor": 10,
+      "legendFormat": "90th-percentile",
+      "refId": "E"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "Launch time percentiles, last hour",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "s",
+      "label": null,
+      "logBase": 10,
+      "max": null,
+      "min": null,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 20,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+   "list": []
+  },
+  "time": {
+   "from": "now-1h",
+   "to": "now"
+  },
+  "timepicker": {
+   "refresh_intervals": [
+    "5s",
+    "10s",
+    "30s",
+    "1m",
+    "5m",
+    "15m",
+    "30m",
+    "1h",
+    "2h",
+    "1d"
+   ],
+   "time_options": [
+    "5m",
+    "15m",
+    "1h",
+    "6h",
+    "12h",
+    "24h",
+    "2d",
+    "7d",
+    "30d"
+   ]
+  },
+  "timezone": "",
+  "title": "status",
+  "uid": "fLoQvRHmk",
+  "version": 14
+ },
+ "meta": {
+  "canAdmin": true,
+  "canEdit": true,
+  "canSave": true,
+  "canStar": true,
+  "created": "2018-06-13T21:41:23Z",
+  "createdBy": "admin",
+  "expires": "0001-01-01T00:00:00Z",
+  "folderId": 0,
+  "folderTitle": "General",
+  "folderUrl": "",
+  "hasAcl": false,
+  "isFolder": false,
+  "provisioned": false,
+  "provisionedExternalId": "",
+  "slug": "status",
+  "type": "db",
+  "updated": "2020-07-15T09:24:03Z",
+  "updatedBy": "admin",
+  "url": "/d/fLoQvRHmk/status",
+  "version": 14
+ }
+}
