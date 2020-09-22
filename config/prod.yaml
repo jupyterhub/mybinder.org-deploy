@@ -20,7 +20,7 @@ binderhub:
   extraVolumes:
     - name: event-secret
       secret:
-        secretName: events-archiver-secret
+        secretName: events-archiver-secrets
   extraVolumeMounts:
     - name: event-secret
       mountPath: /event-secret
