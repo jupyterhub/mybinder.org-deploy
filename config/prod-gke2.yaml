@@ -35,51 +35,15 @@ binderhub:
       # - gke.mybinder.org
       - gke2.mybinder.org
 
-  resources:
-    requests:
-      cpu: "0.25"
-      memory: 1Gi
-    limits:
-      cpu: "2"
-      memory: 1Gi
 
   jupyterhub:
     singleuser:
       nodeSelector: *userNodeSelector
-      memory:
-        guarantee: 450M
-        limit: 2G
-      cpu:
-        guarantee: 0.01
-        limit: 1
     hub:
       nodeSelector: *coreNodeSelector
-      resources:
-        requests:
-          cpu: "0.25"
-          memory: 1Gi
-        limits:
-          cpu: "2"
-          memory: 1Gi
 
     proxy:
       nodeSelector: *coreNodeSelector
-      chp:
-        resources:
-          requests:
-            memory: 320Mi
-            cpu: "0.1"
-          limits:
-            memory: 320Mi
-            cpu: "0.5"
-      nginx:
-        resources:
-          requests:
-            memory: 512Mi
-            cpu: "0.25"
-          limits:
-            memory: 512Mi
-            cpu: 1
     ingress:
       hosts:
         # - hub.mybinder.org
