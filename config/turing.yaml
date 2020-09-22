@@ -17,14 +17,6 @@ binderhub:
 
   replicas: 1
 
-  resources:
-    requests:
-      cpu: "0.25"
-      memory: 1Gi
-    limits:
-      cpu: "2"
-      memory: 1Gi
-
   ingress:
     enabled: true
     hosts:
@@ -54,39 +46,6 @@ binderhub:
       value: /event-secret/service-account.json
 
   jupyterhub:
-    hub:
-      resources:
-        requests:
-          cpu: "0.25"
-          memory: 1Gi
-        limits:
-          cpu: "2"
-          memory: 1Gi
-    singleuser:
-      memory:
-        guarantee: 550M
-        limit: 2G
-      cpu:
-        guarantee: 0.01
-        limit: 1
-    proxy:
-      chp:
-        resources:
-          requests:
-            memory: 320Mi
-            cpu: "0.1"
-          limits:
-            memory: 320Mi
-            cpu: "0.5"
-      nginx:
-        resources:
-          requests:
-            memory: 512Mi
-            cpu: "0.25"
-          limits:
-            memory: 512Mi
-            cpu: 1
-
     ingress:
       enabled: true
       annotations:

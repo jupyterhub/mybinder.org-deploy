@@ -29,6 +29,15 @@ binderhub:
   pdb:
     minAvailable: 1
 
+  resources:
+    requests:
+      cpu: "0.25"
+      memory: 1Gi
+    limits:
+      cpu: "2"
+      memory: 1Gi
+
+
   networkPolicy:
     enabled: true
     egress:
@@ -179,6 +188,13 @@ binderhub:
     hub:
       networkPolicy:
         enabled: true
+      resources:
+        requests:
+          cpu: "0.25"
+          memory: 1Gi
+        limits:
+          cpu: "2"
+          memory: 1Gi
       pdb:
         minAvailable: 0
       extraConfig:
@@ -198,6 +214,13 @@ binderhub:
       service:
         type: ClusterIP
       chp:
+        resources:
+          requests:
+            memory: 320Mi
+            cpu: "0.1"
+          limits:
+            memory: 320Mi
+            cpu: "0.5"
         cmd:
           - configurable-http-proxy
           - --ip=0.0.0.0
@@ -207,6 +230,14 @@ binderhub:
           - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
           - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)/hub/error
           - --log-level=error
+      nginx:
+        resources:
+          requests:
+            memory: 512Mi
+            cpu: "0.25"
+          limits:
+            memory: 512Mi
+            cpu: 1
     ingress:
       enabled: true
       annotations:
@@ -226,6 +257,12 @@ binderhub:
       networkPolicy:
         enabled: true
         egress: []
+      memory:
+        guarantee: 450M
+        limit: 2G
+      cpu:
+        guarantee: 0.01
+        limit: 1
       storage:
         extraVolumes:
           - name: etc-jupyter
@@ -281,19 +318,19 @@ ingress-nginx:
     affinity:
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
-              matchExpressions:
-              - key: app.kubernetes.io/name
-                operator: In
-                values:
-                - ingress
-              - key: app.kubernetes.io/component
-                operator: In
-                values:
-                - controller
-            topologyKey: kubernetes.io/hostname
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - ingress
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                      - controller
+              topologyKey: kubernetes.io/hostname
     replicaCount: 3
     scope:
       enabled: true
