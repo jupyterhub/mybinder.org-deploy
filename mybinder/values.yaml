@@ -467,10 +467,10 @@ federationRedirect:
   load_balancer: "rendezvous"
   hosts:
     gke:
-      url: https://gke.mybinder.org
+      url: https://gke1.mybinder.org
       weight: 65
-      health: https://gke.mybinder.org/health
-      versions: https://gke.mybinder.org/versions
+      health: https://gke1.mybinder.org/health
+      versions: https://gke1.mybinder.org/versions
       prime: true
     gke2:
       url: https://gke2.mybinder.org
