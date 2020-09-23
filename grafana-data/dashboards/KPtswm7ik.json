@@ -1,0 +1,389 @@
+{
+ "dashboard": {
+  "annotations": {
+   "list": [
+    {
+     "datasource": "-- Grafana --",
+     "enable": true,
+     "hide": false,
+     "iconColor": "#e5ac0e",
+     "limit": 100,
+     "name": "Deployments",
+     "showIn": 0,
+     "tags": [
+      "deployment-start"
+     ],
+     "type": "tags"
+    },
+    {
+     "builtIn": 1,
+     "datasource": "-- Grafana --",
+     "enable": true,
+     "hide": true,
+     "iconColor": "rgba(0, 211, 255, 1)",
+     "limit": 100,
+     "name": "Annotations & Alerts",
+     "showIn": 0,
+     "type": "dashboard"
+    }
+   ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 7,
+  "links": [],
+  "panels": [
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "prometheus",
+    "fill": 1,
+    "gridPos": {
+     "h": 7,
+     "w": 24,
+     "x": 0,
+     "y": 0
+    },
+    "id": 3,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "100* (sum(delta(binderhub_launch_time_seconds_count{status=\"success\"}[6h])) / sum(delta(binderhub_launch_time_seconds_count{status!=\"retry\"}[6h])))",
+      "format": "time_series",
+      "interval": "30m",
+      "intervalFactor": 2,
+      "legendFormat": "Launches",
+      "refId": "C"
+     },
+     {
+      "expr": "100 * sum(delta(binderhub_build_time_seconds_count{status=\"success\"}[6h])) / sum(delta(binderhub_build_time_seconds_count[6h]))",
+      "format": "time_series",
+      "hide": false,
+      "instant": false,
+      "interval": "30m",
+      "intervalFactor": 2,
+      "legendFormat": "Builds",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "Success Rates (6h lookback window)",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "decimals": null,
+      "format": "percent",
+      "label": null,
+      "logBase": 1,
+      "max": "100",
+      "min": "0",
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     }
+    ]
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "prometheus",
+    "fill": 1,
+    "gridPos": {
+     "h": 7,
+     "w": 24,
+     "x": 0,
+     "y": 7
+    },
+    "id": 4,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [
+     {
+      "alias": "Builds",
+      "yaxis": 2
+     }
+    ],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(delta(binderhub_launch_time_seconds_count[6h]))",
+      "format": "time_series",
+      "interval": "30m",
+      "intervalFactor": 2,
+      "legendFormat": "Launches",
+      "refId": "C"
+     },
+     {
+      "expr": "sum(delta(binderhub_build_time_seconds_count[6h]))",
+      "format": "time_series",
+      "hide": false,
+      "instant": false,
+      "interval": "30m",
+      "intervalFactor": 2,
+      "legendFormat": "Builds",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "Build/Launch Attempts (6h lookback window)",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "decimals": null,
+      "format": "none",
+      "label": "Launches",
+      "logBase": 1,
+      "max": null,
+      "min": "0",
+      "show": true
+     },
+     {
+      "decimals": null,
+      "format": "short",
+      "label": "Builds",
+      "logBase": 1,
+      "max": null,
+      "min": "0",
+      "show": true
+     }
+    ]
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "prometheus",
+    "fill": 1,
+    "gridPos": {
+     "h": 7,
+     "w": 24,
+     "x": 0,
+     "y": 14
+    },
+    "id": 5,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [
+     {
+      "alias": "Builds",
+      "yaxis": 2
+     }
+    ],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": true,
+    "targets": [
+     {
+      "expr": "sum(delta(binderhub_launch_time_seconds_count[24h]))",
+      "format": "time_series",
+      "interval": "24h",
+      "intervalFactor": 2,
+      "legendFormat": "Launches",
+      "refId": "C"
+     },
+     {
+      "expr": "sum(delta(binderhub_build_time_seconds_count[24h]))",
+      "format": "time_series",
+      "hide": false,
+      "instant": false,
+      "interval": "24h",
+      "intervalFactor": 2,
+      "legendFormat": "Builds",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "Build/Launch Attempts (daily)",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "decimals": null,
+      "format": "none",
+      "label": "Launches",
+      "logBase": 1,
+      "max": null,
+      "min": "0",
+      "show": true
+     },
+     {
+      "decimals": null,
+      "format": "short",
+      "label": "Builds",
+      "logBase": 1,
+      "max": null,
+      "min": "0",
+      "show": true
+     }
+    ]
+   }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 16,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+   "list": []
+  },
+  "time": {
+   "from": "now-7d",
+   "to": "now"
+  },
+  "timepicker": {
+   "refresh_intervals": [
+    "5s",
+    "10s",
+    "30s",
+    "1m",
+    "5m",
+    "15m",
+    "30m",
+    "1h",
+    "2h",
+    "1d"
+   ],
+   "time_options": [
+    "5m",
+    "15m",
+    "1h",
+    "6h",
+    "12h",
+    "24h",
+    "2d",
+    "7d",
+    "30d"
+   ]
+  },
+  "timezone": "",
+  "title": "Service Level Objectives",
+  "uid": "KPtswm7ik",
+  "version": 7
+ },
+ "meta": {
+  "canAdmin": true,
+  "canEdit": true,
+  "canSave": true,
+  "canStar": true,
+  "created": "2018-05-08T14:11:16Z",
+  "createdBy": "admin",
+  "expires": "0001-01-01T00:00:00Z",
+  "folderId": 0,
+  "folderTitle": "General",
+  "folderUrl": "",
+  "hasAcl": false,
+  "isFolder": false,
+  "provisioned": false,
+  "provisionedExternalId": "",
+  "slug": "service-level-objectives",
+  "type": "db",
+  "updated": "2018-07-12T19:05:27Z",
+  "updatedBy": "admin",
+  "url": "/d/KPtswm7ik/service-level-objectives",
+  "version": 7
+ }
+}

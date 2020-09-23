@@ -1,0 +1,271 @@
+{
+ "dashboard": {
+  "annotations": {
+   "list": [
+    {
+     "builtIn": 1,
+     "datasource": "-- Grafana --",
+     "enable": true,
+     "hide": true,
+     "iconColor": "rgba(0, 211, 255, 1)",
+     "name": "Annotations & Alerts",
+     "type": "dashboard"
+    }
+   ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 11,
+  "links": [],
+  "panels": [
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$cluster",
+    "fill": 1,
+    "gridPos": {
+     "h": 9,
+     "w": 12,
+     "x": 0,
+     "y": 0
+    },
+    "id": 2,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(increase(apiserver_request_count{client=~'.*python$'}[2m])) by (resource, verb)",
+      "format": "time_series",
+      "interval": "",
+      "intervalFactor": 1,
+      "legendFormat": "{{verb}} {{resource}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "k8s API calls from JupyterHub / BinderHub [2m]",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": "0",
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$cluster",
+    "fill": 1,
+    "gridPos": {
+     "h": 9,
+     "w": 12,
+     "x": 12,
+     "y": 0
+    },
+    "id": 4,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "kube_pod_container_status_restarts_total{pod=~\"hub-.*\"}",
+      "format": "time_series",
+      "intervalFactor": 1,
+      "legendFormat": "{{ pod }}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "Hub Pod Restart count",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 16,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+   "list": [
+    {
+     "current": {
+      "text": "OVH Prometheus",
+      "value": "OVH Prometheus"
+     },
+     "hide": 0,
+     "label": null,
+     "name": "cluster",
+     "options": [],
+     "query": "prometheus",
+     "refresh": 1,
+     "regex": "",
+     "skipUrlSync": false,
+     "type": "datasource"
+    }
+   ]
+  },
+  "time": {
+   "from": "now-6h",
+   "to": "now"
+  },
+  "timepicker": {
+   "refresh_intervals": [
+    "5s",
+    "10s",
+    "30s",
+    "1m",
+    "5m",
+    "15m",
+    "30m",
+    "1h",
+    "2h",
+    "1d"
+   ],
+   "time_options": [
+    "5m",
+    "15m",
+    "1h",
+    "6h",
+    "12h",
+    "24h",
+    "2d",
+    "7d",
+    "30d"
+   ]
+  },
+  "timezone": "",
+  "title": "Kubernetes API health",
+  "uid": "4QOBFHdiz",
+  "version": 10
+ },
+ "meta": {
+  "canAdmin": true,
+  "canEdit": true,
+  "canSave": true,
+  "canStar": true,
+  "created": "2018-07-11T21:18:51Z",
+  "createdBy": "admin",
+  "expires": "0001-01-01T00:00:00Z",
+  "folderId": 0,
+  "folderTitle": "General",
+  "folderUrl": "",
+  "hasAcl": false,
+  "isFolder": false,
+  "provisioned": false,
+  "provisionedExternalId": "",
+  "slug": "kubernetes-api-health",
+  "type": "db",
+  "updated": "2019-08-28T19:11:54Z",
+  "updatedBy": "admin",
+  "url": "/d/4QOBFHdiz/kubernetes-api-health",
+  "version": 10
+ }
+}
