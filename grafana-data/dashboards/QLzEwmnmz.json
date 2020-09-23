@@ -1,0 +1,3226 @@
+{
+ "dashboard": {
+  "annotations": {
+   "list": [
+    {
+     "builtIn": 1,
+     "datasource": "-- Grafana --",
+     "enable": true,
+     "hide": true,
+     "iconColor": "rgba(0, 211, 255, 1)",
+     "name": "Annotations & Alerts",
+     "type": "dashboard"
+    }
+   ]
+  },
+  "description": "https://grafana.com/dashboards/3119 - Monitors Kubernetes cluster using Prometheus. Shows overall cluster CPU / Memory / Filesystem usage as well as individual pod, containers, control plane (as deployed by kops) statistics. Uses cAdvisor metrics only.\r\nTweaked from original https://grafana.com/dashboards/315 to add templating for:\r\n- adaptable $interval (instead of hardcoded 1m)\r\n- selectable $datasource (very useful to have a single dashboard tackling several prometheis )",
+  "editable": true,
+  "gnetId": 3119,
+  "graphTooltip": 0,
+  "id": 3,
+  "iteration": 1556696453318,
+  "links": [],
+  "panels": [
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 0
+    },
+    "id": 33,
+    "panels": [],
+    "repeat": null,
+    "title": "Network I/O pressure",
+    "type": "row"
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$datasource",
+    "decimals": 2,
+    "editable": true,
+    "error": false,
+    "fill": 1,
+    "grid": {},
+    "gridPos": {
+     "h": 5,
+     "w": 24,
+     "x": 0,
+     "y": 1
+    },
+    "height": "200px",
+    "id": 32,
+    "legend": {
+     "alignAsTable": false,
+     "avg": true,
+     "current": true,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": false,
+     "sideWidth": 200,
+     "sort": "current",
+     "sortDesc": true,
+     "total": false,
+     "values": true
+    },
+    "lines": true,
+    "linewidth": 2,
+    "links": [],
+    "nullPointMode": "connected",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum (rate (container_network_receive_bytes_total{kubernetes_io_hostname=~\"^$Node$\"}[$interval]))",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "Received",
+      "metric": "network",
+      "refId": "A",
+      "step": 10
+     },
+     {
+      "expr": "- sum (rate (container_network_transmit_bytes_total{kubernetes_io_hostname=~\"^$Node$\"}[$interval]))",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "Sent",
+      "metric": "network",
+      "refId": "B",
+      "step": 10
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "Network I/O pressure",
+    "tooltip": {
+     "msResolution": false,
+     "shared": true,
+     "sort": 0,
+     "value_type": "cumulative"
+    },
+    "transparent": false,
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "Bps",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     },
+     {
+      "format": "Bps",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": false
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 6
+    },
+    "id": 34,
+    "panels": [],
+    "repeat": null,
+    "title": "Total usage",
+    "type": "row"
+   },
+   {
+    "cacheTimeout": null,
+    "colorBackground": false,
+    "colorValue": true,
+    "colors": [
+     "rgba(50, 172, 45, 0.97)",
+     "rgba(237, 129, 40, 0.89)",
+     "rgba(245, 54, 54, 0.9)"
+    ],
+    "datasource": "$datasource",
+    "editable": true,
+    "error": false,
+    "format": "percent",
+    "gauge": {
+     "maxValue": 100,
+     "minValue": 0,
+     "show": true,
+     "thresholdLabels": false,
+     "thresholdMarkers": true
+    },
+    "gridPos": {
+     "h": 5,
+     "w": 8,
+     "x": 0,
+     "y": 7
+    },
+    "height": "180px",
+    "id": 4,
+    "interval": null,
+    "links": [],
+    "mappingType": 1,
+    "mappingTypes": [
+     {
+      "name": "value to text",
+      "value": 1
+     },
+     {
+      "name": "range to text",
+      "value": 2
+     }
+    ],
+    "maxDataPoints": 100,
+    "nullPointMode": "connected",
+    "nullText": null,
+    "postfix": "",
+    "postfixFontSize": "50%",
+    "prefix": "",
+    "prefixFontSize": "50%",
+    "rangeMaps": [
+     {
+      "from": "null",
+      "text": "N/A",
+      "to": "null"
+     }
+    ],
+    "sparkline": {
+     "fillColor": "rgba(31, 118, 189, 0.18)",
+     "full": false,
+     "lineColor": "rgb(31, 120, 193)",
+     "show": false
+    },
+    "tableColumn": "",
+    "targets": [
+     {
+      "expr": "sum (container_memory_working_set_bytes{id=\"/\",kubernetes_io_hostname=~\"^$Node$\"}) / sum (machine_memory_bytes{kubernetes_io_hostname=~\"^$Node$\"}) * 100",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": "65, 90",
+    "title": "Cluster memory usage",
+    "transparent": false,
+    "type": "singlestat",
+    "valueFontSize": "80%",
+    "valueMaps": [
+     {
+      "op": "=",
+      "text": "N/A",
+      "value": "null"
+     }
+    ],
+    "valueName": "current"
+   },
+   {
+    "cacheTimeout": null,
+    "colorBackground": false,
+    "colorValue": true,
+    "colors": [
+     "rgba(50, 172, 45, 0.97)",
+     "rgba(237, 129, 40, 0.89)",
+     "rgba(245, 54, 54, 0.9)"
+    ],
+    "datasource": "$datasource",
+    "decimals": 2,
+    "editable": true,
+    "error": false,
+    "format": "percent",
+    "gauge": {
+     "maxValue": 100,
+     "minValue": 0,
+     "show": true,
+     "thresholdLabels": false,
+     "thresholdMarkers": true
+    },
+    "gridPos": {
+     "h": 5,
+     "w": 8,
+     "x": 8,
+     "y": 7
+    },
+    "height": "180px",
+    "id": 6,
+    "interval": null,
+    "links": [],
+    "mappingType": 1,
+    "mappingTypes": [
+     {
+      "name": "value to text",
+      "value": 1
+     },
+     {
+      "name": "range to text",
+      "value": 2
+     }
+    ],
+    "maxDataPoints": 100,
+    "nullPointMode": "connected",
+    "nullText": null,
+    "postfix": "",
+    "postfixFontSize": "50%",
+    "prefix": "",
+    "prefixFontSize": "50%",
+    "rangeMaps": [
+     {
+      "from": "null",
+      "text": "N/A",
+      "to": "null"
+     }
+    ],
+    "sparkline": {
+     "fillColor": "rgba(31, 118, 189, 0.18)",
+     "full": false,
+     "lineColor": "rgb(31, 120, 193)",
+     "show": false
+    },
+    "tableColumn": "",
+    "targets": [
+     {
+      "expr": "sum (rate (container_cpu_usage_seconds_total{id=\"/\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) / sum (machine_cpu_cores{kubernetes_io_hostname=~\"^$Node$\"}) * 100",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "",
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": "65, 90",
+    "title": "Cluster CPU usage ($interval avg)",
+    "type": "singlestat",
+    "valueFontSize": "80%",
+    "valueMaps": [
+     {
+      "op": "=",
+      "text": "N/A",
+      "value": "null"
+     }
+    ],
+    "valueName": "current"
+   },
+   {
+    "cacheTimeout": null,
+    "colorBackground": false,
+    "colorValue": true,
+    "colors": [
+     "rgba(50, 172, 45, 0.97)",
+     "rgba(237, 129, 40, 0.89)",
+     "rgba(245, 54, 54, 0.9)"
+    ],
+    "datasource": "$datasource",
+    "decimals": 2,
+    "editable": true,
+    "error": false,
+    "format": "percent",
+    "gauge": {
+     "maxValue": 100,
+     "minValue": 0,
+     "show": true,
+     "thresholdLabels": false,
+     "thresholdMarkers": true
+    },
+    "gridPos": {
+     "h": 5,
+     "w": 8,
+     "x": 16,
+     "y": 7
+    },
+    "height": "180px",
+    "id": 7,
+    "interval": null,
+    "links": [],
+    "mappingType": 1,
+    "mappingTypes": [
+     {
+      "name": "value to text",
+      "value": 1
+     },
+     {
+      "name": "range to text",
+      "value": 2
+     }
+    ],
+    "maxDataPoints": 100,
+    "nullPointMode": "connected",
+    "nullText": null,
+    "postfix": "",
+    "postfixFontSize": "50%",
+    "prefix": "",
+    "prefixFontSize": "50%",
+    "rangeMaps": [
+     {
+      "from": "null",
+      "text": "N/A",
+      "to": "null"
+     }
+    ],
+    "sparkline": {
+     "fillColor": "rgba(31, 118, 189, 0.18)",
+     "full": false,
+     "lineColor": "rgb(31, 120, 193)",
+     "show": false
+    },
+    "tableColumn": "",
+    "targets": [
+     {
+      "expr": "sum (container_fs_usage_bytes{device=~\"^/dev/xvda.$\",id=\"/\",kubernetes_io_hostname=~\"^$Node$\"}) / sum (container_fs_limit_bytes{device=~\"^/dev/xvda.$\",id=\"/\",kubernetes_io_hostname=~\"^$Node$\"}) * 100",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "",
+      "metric": "",
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": "65, 90",
+    "title": "Cluster filesystem usage",
+    "type": "singlestat",
+    "valueFontSize": "80%",
+    "valueMaps": [
+     {
+      "op": "=",
+      "text": "N/A",
+      "value": "null"
+     }
+    ],
+    "valueName": "current"
+   },
+   {
+    "cacheTimeout": null,
+    "colorBackground": false,
+    "colorValue": false,
+    "colors": [
+     "rgba(50, 172, 45, 0.97)",
+     "rgba(237, 129, 40, 0.89)",
+     "rgba(245, 54, 54, 0.9)"
+    ],
+    "datasource": "$datasource",
+    "decimals": 2,
+    "editable": true,
+    "error": false,
+    "format": "bytes",
+    "gauge": {
+     "maxValue": 100,
+     "minValue": 0,
+     "show": false,
+     "thresholdLabels": false,
+     "thresholdMarkers": true
+    },
+    "gridPos": {
+     "h": 3,
+     "w": 4,
+     "x": 0,
+     "y": 12
+    },
+    "height": "1px",
+    "id": 9,
+    "interval": null,
+    "links": [],
+    "mappingType": 1,
+    "mappingTypes": [
+     {
+      "name": "value to text",
+      "value": 1
+     },
+     {
+      "name": "range to text",
+      "value": 2
+     }
+    ],
+    "maxDataPoints": 100,
+    "nullPointMode": "connected",
+    "nullText": null,
+    "postfix": "",
+    "postfixFontSize": "20%",
+    "prefix": "",
+    "prefixFontSize": "20%",
+    "rangeMaps": [
+     {
+      "from": "null",
+      "text": "N/A",
+      "to": "null"
+     }
+    ],
+    "sparkline": {
+     "fillColor": "rgba(31, 118, 189, 0.18)",
+     "full": false,
+     "lineColor": "rgb(31, 120, 193)",
+     "show": false
+    },
+    "tableColumn": "",
+    "targets": [
+     {
+      "expr": "sum (container_memory_working_set_bytes{id=\"/\",kubernetes_io_hostname=~\"^$Node$\"})",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": "",
+    "title": "Used",
+    "type": "singlestat",
+    "valueFontSize": "50%",
+    "valueMaps": [
+     {
+      "op": "=",
+      "text": "N/A",
+      "value": "null"
+     }
+    ],
+    "valueName": "current"
+   },
+   {
+    "cacheTimeout": null,
+    "colorBackground": false,
+    "colorValue": false,
+    "colors": [
+     "rgba(50, 172, 45, 0.97)",
+     "rgba(237, 129, 40, 0.89)",
+     "rgba(245, 54, 54, 0.9)"
+    ],
+    "datasource": "$datasource",
+    "decimals": 2,
+    "editable": true,
+    "error": false,
+    "format": "bytes",
+    "gauge": {
+     "maxValue": 100,
+     "minValue": 0,
+     "show": false,
+     "thresholdLabels": false,
+     "thresholdMarkers": true
+    },
+    "gridPos": {
+     "h": 3,
+     "w": 4,
+     "x": 4,
+     "y": 12
+    },
+    "height": "1px",
+    "id": 10,
+    "interval": null,
+    "links": [],
+    "mappingType": 1,
+    "mappingTypes": [
+     {
+      "name": "value to text",
+      "value": 1
+     },
+     {
+      "name": "range to text",
+      "value": 2
+     }
+    ],
+    "maxDataPoints": 100,
+    "nullPointMode": "connected",
+    "nullText": null,
+    "postfix": "",
+    "postfixFontSize": "50%",
+    "prefix": "",
+    "prefixFontSize": "50%",
+    "rangeMaps": [
+     {
+      "from": "null",
+      "text": "N/A",
+      "to": "null"
+     }
+    ],
+    "sparkline": {
+     "fillColor": "rgba(31, 118, 189, 0.18)",
+     "full": false,
+     "lineColor": "rgb(31, 120, 193)",
+     "show": false
+    },
+    "tableColumn": "",
+    "targets": [
+     {
+      "expr": "sum (machine_memory_bytes{kubernetes_io_hostname=~\"^$Node$\"})",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": "",
+    "title": "Total",
+    "type": "singlestat",
+    "valueFontSize": "50%",
+    "valueMaps": [
+     {
+      "op": "=",
+      "text": "N/A",
+      "value": "null"
+     }
+    ],
+    "valueName": "current"
+   },
+   {
+    "cacheTimeout": null,
+    "colorBackground": false,
+    "colorValue": false,
+    "colors": [
+     "rgba(50, 172, 45, 0.97)",
+     "rgba(237, 129, 40, 0.89)",
+     "rgba(245, 54, 54, 0.9)"
+    ],
+    "datasource": "$datasource",
+    "decimals": 2,
+    "editable": true,
+    "error": false,
+    "format": "none",
+    "gauge": {
+     "maxValue": 100,
+     "minValue": 0,
+     "show": false,
+     "thresholdLabels": false,
+     "thresholdMarkers": true
+    },
+    "gridPos": {
+     "h": 3,
+     "w": 4,
+     "x": 8,
+     "y": 12
+    },
+    "height": "1px",
+    "id": 11,
+    "interval": null,
+    "links": [],
+    "mappingType": 1,
+    "mappingTypes": [
+     {
+      "name": "value to text",
+      "value": 1
+     },
+     {
+      "name": "range to text",
+      "value": 2
+     }
+    ],
+    "maxDataPoints": 100,
+    "nullPointMode": "connected",
+    "nullText": null,
+    "postfix": " cores",
+    "postfixFontSize": "30%",
+    "prefix": "",
+    "prefixFontSize": "50%",
+    "rangeMaps": [
+     {
+      "from": "null",
+      "text": "N/A",
+      "to": "null"
+     }
+    ],
+    "sparkline": {
+     "fillColor": "rgba(31, 118, 189, 0.18)",
+     "full": false,
+     "lineColor": "rgb(31, 120, 193)",
+     "show": false
+    },
+    "tableColumn": "",
+    "targets": [
+     {
+      "expr": "sum (rate (container_cpu_usage_seconds_total{id=\"/\",kubernetes_io_hostname=~\"^$Node$\"}[$interval]))",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "",
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": "",
+    "title": "Used",
+    "type": "singlestat",
+    "valueFontSize": "50%",
+    "valueMaps": [
+     {
+      "op": "=",
+      "text": "N/A",
+      "value": "null"
+     }
+    ],
+    "valueName": "current"
+   },
+   {
+    "cacheTimeout": null,
+    "colorBackground": false,
+    "colorValue": false,
+    "colors": [
+     "rgba(50, 172, 45, 0.97)",
+     "rgba(237, 129, 40, 0.89)",
+     "rgba(245, 54, 54, 0.9)"
+    ],
+    "datasource": "$datasource",
+    "decimals": 2,
+    "editable": true,
+    "error": false,
+    "format": "none",
+    "gauge": {
+     "maxValue": 100,
+     "minValue": 0,
+     "show": false,
+     "thresholdLabels": false,
+     "thresholdMarkers": true
+    },
+    "gridPos": {
+     "h": 3,
+     "w": 4,
+     "x": 12,
+     "y": 12
+    },
+    "height": "1px",
+    "id": 12,
+    "interval": null,
+    "links": [],
+    "mappingType": 1,
+    "mappingTypes": [
+     {
+      "name": "value to text",
+      "value": 1
+     },
+     {
+      "name": "range to text",
+      "value": 2
+     }
+    ],
+    "maxDataPoints": 100,
+    "nullPointMode": "connected",
+    "nullText": null,
+    "postfix": " cores",
+    "postfixFontSize": "30%",
+    "prefix": "",
+    "prefixFontSize": "50%",
+    "rangeMaps": [
+     {
+      "from": "null",
+      "text": "N/A",
+      "to": "null"
+     }
+    ],
+    "sparkline": {
+     "fillColor": "rgba(31, 118, 189, 0.18)",
+     "full": false,
+     "lineColor": "rgb(31, 120, 193)",
+     "show": false
+    },
+    "tableColumn": "",
+    "targets": [
+     {
+      "expr": "sum (machine_cpu_cores{kubernetes_io_hostname=~\"^$Node$\"})",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": "",
+    "title": "Total",
+    "type": "singlestat",
+    "valueFontSize": "50%",
+    "valueMaps": [
+     {
+      "op": "=",
+      "text": "N/A",
+      "value": "null"
+     }
+    ],
+    "valueName": "current"
+   },
+   {
+    "cacheTimeout": null,
+    "colorBackground": false,
+    "colorValue": false,
+    "colors": [
+     "rgba(50, 172, 45, 0.97)",
+     "rgba(237, 129, 40, 0.89)",
+     "rgba(245, 54, 54, 0.9)"
+    ],
+    "datasource": "$datasource",
+    "decimals": 2,
+    "editable": true,
+    "error": false,
+    "format": "bytes",
+    "gauge": {
+     "maxValue": 100,
+     "minValue": 0,
+     "show": false,
+     "thresholdLabels": false,
+     "thresholdMarkers": true
+    },
+    "gridPos": {
+     "h": 3,
+     "w": 4,
+     "x": 16,
+     "y": 12
+    },
+    "height": "1px",
+    "id": 13,
+    "interval": null,
+    "links": [],
+    "mappingType": 1,
+    "mappingTypes": [
+     {
+      "name": "value to text",
+      "value": 1
+     },
+     {
+      "name": "range to text",
+      "value": 2
+     }
+    ],
+    "maxDataPoints": 100,
+    "nullPointMode": "connected",
+    "nullText": null,
+    "postfix": "",
+    "postfixFontSize": "50%",
+    "prefix": "",
+    "prefixFontSize": "50%",
+    "rangeMaps": [
+     {
+      "from": "null",
+      "text": "N/A",
+      "to": "null"
+     }
+    ],
+    "sparkline": {
+     "fillColor": "rgba(31, 118, 189, 0.18)",
+     "full": false,
+     "lineColor": "rgb(31, 120, 193)",
+     "show": false
+    },
+    "tableColumn": "",
+    "targets": [
+     {
+      "expr": "sum (container_fs_usage_bytes{device=~\"^/dev/xvda.$\",id=\"/\",kubernetes_io_hostname=~\"^$Node$\"})",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "",
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": "",
+    "title": "Used",
+    "type": "singlestat",
+    "valueFontSize": "50%",
+    "valueMaps": [
+     {
+      "op": "=",
+      "text": "N/A",
+      "value": "null"
+     }
+    ],
+    "valueName": "current"
+   },
+   {
+    "cacheTimeout": null,
+    "colorBackground": false,
+    "colorValue": false,
+    "colors": [
+     "rgba(50, 172, 45, 0.97)",
+     "rgba(237, 129, 40, 0.89)",
+     "rgba(245, 54, 54, 0.9)"
+    ],
+    "datasource": "$datasource",
+    "decimals": 2,
+    "editable": true,
+    "error": false,
+    "format": "bytes",
+    "gauge": {
+     "maxValue": 100,
+     "minValue": 0,
+     "show": false,
+     "thresholdLabels": false,
+     "thresholdMarkers": true
+    },
+    "gridPos": {
+     "h": 3,
+     "w": 4,
+     "x": 20,
+     "y": 12
+    },
+    "height": "1px",
+    "id": 14,
+    "interval": null,
+    "links": [],
+    "mappingType": 1,
+    "mappingTypes": [
+     {
+      "name": "value to text",
+      "value": 1
+     },
+     {
+      "name": "range to text",
+      "value": 2
+     }
+    ],
+    "maxDataPoints": 100,
+    "nullPointMode": "connected",
+    "nullText": null,
+    "postfix": "",
+    "postfixFontSize": "50%",
+    "prefix": "",
+    "prefixFontSize": "50%",
+    "rangeMaps": [
+     {
+      "from": "null",
+      "text": "N/A",
+      "to": "null"
+     }
+    ],
+    "sparkline": {
+     "fillColor": "rgba(31, 118, 189, 0.18)",
+     "full": false,
+     "lineColor": "rgb(31, 120, 193)",
+     "show": false
+    },
+    "tableColumn": "",
+    "targets": [
+     {
+      "expr": "sum (container_fs_limit_bytes{device=~\"^/dev/xvda.$\",id=\"/\",kubernetes_io_hostname=~\"^$Node$\"})",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "",
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": "",
+    "title": "Total",
+    "type": "singlestat",
+    "valueFontSize": "50%",
+    "valueMaps": [
+     {
+      "op": "=",
+      "text": "N/A",
+      "value": "null"
+     }
+    ],
+    "valueName": "current"
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$datasource",
+    "decimals": 3,
+    "editable": true,
+    "error": false,
+    "fill": 0,
+    "grid": {},
+    "gridPos": {
+     "h": 7,
+     "w": 24,
+     "x": 0,
+     "y": 15
+    },
+    "height": "",
+    "id": 47,
+    "legend": {
+     "alignAsTable": true,
+     "avg": true,
+     "current": true,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sort": "avg",
+     "sortDesc": true,
+     "total": false,
+     "values": true
+    },
+    "lines": true,
+    "linewidth": 2,
+    "links": [],
+    "nullPointMode": "connected",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": true,
+    "targets": [
+     {
+      "expr": "sum(rate(container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname)",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "{{ kubernetes_io_hostname }}",
+      "metric": "container_cpu",
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "CPU usage per node ($interval avg)",
+    "tooltip": {
+     "msResolution": true,
+     "shared": false,
+     "sort": 2,
+     "value_type": "cumulative"
+    },
+    "transparent": false,
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "none",
+      "label": "cores",
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": false
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$datasource",
+    "decimals": 3,
+    "editable": true,
+    "error": false,
+    "fill": 0,
+    "grid": {},
+    "gridPos": {
+     "h": 7,
+     "w": 24,
+     "x": 0,
+     "y": 22
+    },
+    "height": "",
+    "id": 50,
+    "legend": {
+     "alignAsTable": true,
+     "avg": true,
+     "current": true,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sort": "avg",
+     "sortDesc": true,
+     "total": false,
+     "values": true
+    },
+    "lines": true,
+    "linewidth": 2,
+    "links": [],
+    "nullPointMode": "connected",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": true,
+    "targets": [
+     {
+      "expr": "sum(container_memory_working_set_bytes{image!=\"\",name=~\"^k8s_.*\",kubernetes_io_hostname=~\"^$Node$\"}) by (kubernetes_io_hostname)",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "{{ kubernetes_io_hostname }}",
+      "metric": "container_cpu",
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "RAM usage per node",
+    "tooltip": {
+     "msResolution": true,
+     "shared": false,
+     "sort": 2,
+     "value_type": "cumulative"
+    },
+    "transparent": false,
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "bytes",
+      "label": "Memory",
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": false
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 29
+    },
+    "id": 35,
+    "panels": [],
+    "repeat": null,
+    "title": "Pods CPU usage",
+    "type": "row"
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$datasource",
+    "decimals": 3,
+    "editable": true,
+    "error": false,
+    "fill": 0,
+    "grid": {},
+    "gridPos": {
+     "h": 7,
+     "w": 24,
+     "x": 0,
+     "y": 30
+    },
+    "height": "",
+    "id": 17,
+    "legend": {
+     "alignAsTable": true,
+     "avg": true,
+     "current": true,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sort": "avg",
+     "sortDesc": true,
+     "total": false,
+     "values": true
+    },
+    "lines": true,
+    "linewidth": 2,
+    "links": [],
+    "nullPointMode": "connected",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": true,
+    "targets": [
+     {
+      "expr": "topk(5, sum (rate (container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\", pod_name=~\"build-.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname))",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "{{ kubernetes_io_hostname }}",
+      "metric": "container_cpu",
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "Build Pod CPU usage per node ($interval avg)",
+    "tooltip": {
+     "msResolution": true,
+     "shared": false,
+     "sort": 2,
+     "value_type": "cumulative"
+    },
+    "transparent": false,
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "none",
+      "label": "cores",
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": false
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$datasource",
+    "decimals": 3,
+    "editable": true,
+    "error": false,
+    "fill": 0,
+    "grid": {},
+    "gridPos": {
+     "h": 9,
+     "w": 24,
+     "x": 0,
+     "y": 37
+    },
+    "height": "",
+    "id": 48,
+    "legend": {
+     "alignAsTable": true,
+     "avg": true,
+     "current": true,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sort": "avg",
+     "sortDesc": true,
+     "total": false,
+     "values": true
+    },
+    "lines": true,
+    "linewidth": 2,
+    "links": [],
+    "nullPointMode": "connected",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": true,
+    "targets": [
+     {
+      "expr": "rate(container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\", pod_name=~\"build-.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "{{ pod_name }}",
+      "metric": "container_cpu",
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "Build Pod Name ($interval avg)",
+    "tooltip": {
+     "msResolution": true,
+     "shared": false,
+     "sort": 2,
+     "value_type": "cumulative"
+    },
+    "transparent": false,
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "none",
+      "label": "cores",
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": false
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$datasource",
+    "decimals": 3,
+    "editable": true,
+    "error": false,
+    "fill": 0,
+    "grid": {},
+    "gridPos": {
+     "h": 7,
+     "w": 24,
+     "x": 0,
+     "y": 46
+    },
+    "height": "",
+    "id": 52,
+    "legend": {
+     "alignAsTable": true,
+     "avg": true,
+     "current": true,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sort": "avg",
+     "sortDesc": true,
+     "total": false,
+     "values": true
+    },
+    "lines": true,
+    "linewidth": 2,
+    "links": [],
+    "nullPointMode": "connected",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": true,
+    "targets": [
+     {
+      "expr": "sum(rate(container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\", pod_name=~\"jupyter-.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname)",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "{{ kubernetes_io_hostname }}",
+      "metric": "container_cpu",
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "User Pods CPU usage per node ($interval avg)",
+    "tooltip": {
+     "msResolution": true,
+     "shared": false,
+     "sort": 2,
+     "value_type": "cumulative"
+    },
+    "transparent": false,
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "none",
+      "label": "cores",
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": false
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$datasource",
+    "decimals": 3,
+    "editable": true,
+    "error": false,
+    "fill": 0,
+    "grid": {},
+    "gridPos": {
+     "h": 7,
+     "w": 24,
+     "x": 0,
+     "y": 53
+    },
+    "height": "",
+    "id": 53,
+    "legend": {
+     "alignAsTable": true,
+     "avg": true,
+     "current": true,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sort": "avg",
+     "sortDesc": true,
+     "total": false,
+     "values": true
+    },
+    "lines": true,
+    "linewidth": 2,
+    "links": [],
+    "nullPointMode": "connected",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": true,
+    "targets": [
+     {
+      "expr": "sum(container_memory_working_set_bytes{image!=\"\",name=~\"^k8s_.*\", pod_name=~\"jupyter-.*\",kubernetes_io_hostname=~\"^$Node$\"}) by (kubernetes_io_hostname)",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "{{ kubernetes_io_hostname }}",
+      "metric": "container_cpu",
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "User Pods RAM usage per node",
+    "tooltip": {
+     "msResolution": true,
+     "shared": false,
+     "sort": 2,
+     "value_type": "cumulative"
+    },
+    "transparent": false,
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "bytes",
+      "label": "Memory",
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": false
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$datasource",
+    "decimals": 3,
+    "editable": true,
+    "error": false,
+    "fill": 0,
+    "grid": {},
+    "gridPos": {
+     "h": 7,
+     "w": 24,
+     "x": 0,
+     "y": 60
+    },
+    "height": "",
+    "id": 49,
+    "legend": {
+     "alignAsTable": true,
+     "avg": true,
+     "current": true,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sort": "avg",
+     "sortDesc": true,
+     "total": false,
+     "values": true
+    },
+    "lines": true,
+    "linewidth": 2,
+    "links": [],
+    "nullPointMode": "connected",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": true,
+    "targets": [
+     {
+      "expr": "sum (rate (container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\", pod_name=~\"prod-dind.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname)",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "{{ kubernetes_io_hostname }}",
+      "metric": "container_cpu",
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "DIND Pod CPU usage per node ($interval avg)",
+    "tooltip": {
+     "msResolution": true,
+     "shared": false,
+     "sort": 2,
+     "value_type": "cumulative"
+    },
+    "transparent": false,
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "none",
+      "label": "cores",
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": false
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$datasource",
+    "decimals": 3,
+    "editable": true,
+    "error": false,
+    "fill": 0,
+    "grid": {},
+    "gridPos": {
+     "h": 7,
+     "w": 24,
+     "x": 0,
+     "y": 67
+    },
+    "height": "",
+    "id": 51,
+    "legend": {
+     "alignAsTable": true,
+     "avg": true,
+     "current": true,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sort": "avg",
+     "sortDesc": true,
+     "total": false,
+     "values": true
+    },
+    "lines": true,
+    "linewidth": 2,
+    "links": [],
+    "nullPointMode": "connected",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": true,
+    "targets": [
+     {
+      "expr": "sum(container_memory_working_set_bytes{image!=\"\",name=~\"^k8s_.*\", pod_name=~\"prod-dind-.*\",kubernetes_io_hostname=~\"^$Node$\"}) by (kubernetes_io_hostname)",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "{{ kubernetes_io_hostname }}",
+      "metric": "container_cpu",
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "DIND Pods RAM usage per node",
+    "tooltip": {
+     "msResolution": true,
+     "shared": false,
+     "sort": 2,
+     "value_type": "cumulative"
+    },
+    "transparent": false,
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "bytes",
+      "label": "Memory",
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": false
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$datasource",
+    "decimals": 3,
+    "editable": true,
+    "error": false,
+    "fill": 0,
+    "grid": {},
+    "gridPos": {
+     "h": 7,
+     "w": 24,
+     "x": 0,
+     "y": 74
+    },
+    "height": "",
+    "id": 46,
+    "legend": {
+     "alignAsTable": true,
+     "avg": true,
+     "current": true,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sort": "avg",
+     "sortDesc": true,
+     "total": false,
+     "values": true
+    },
+    "lines": true,
+    "linewidth": 2,
+    "links": [],
+    "nullPointMode": "connected",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": true,
+    "targets": [
+     {
+      "expr": "topk(10, sum (rate (container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (pod_name))",
+      "format": "time_series",
+      "interval": "10s",
+      "intervalFactor": 1,
+      "legendFormat": "{{ pod_name }}",
+      "metric": "container_cpu",
+      "refId": "A",
+      "step": 10
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "Per Pod CPU usage ($interval avg)",
+    "tooltip": {
+     "msResolution": true,
+     "shared": false,
+     "sort": 2,
+     "value_type": "cumulative"
+    },
+    "transparent": false,
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "none",
+      "label": "cores",
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": null,
+      "show": false
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "collapsed": true,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 81
+    },
+    "id": 36,
+    "panels": [
+     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "decimals": 3,
+      "editable": true,
+      "error": false,
+      "fill": 0,
+      "grid": {},
+      "gridPos": {
+       "h": 7,
+       "w": 24,
+       "x": 0,
+       "y": 23
+      },
+      "height": "",
+      "id": 23,
+      "legend": {
+       "alignAsTable": true,
+       "avg": true,
+       "current": true,
+       "max": false,
+       "min": false,
+       "rightSide": true,
+       "show": true,
+       "sort": "current",
+       "sortDesc": true,
+       "total": false,
+       "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+       {
+        "expr": "sum (rate (container_cpu_usage_seconds_total{kubernetes_io_role=\"master\",pod_name!=\"\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (container_name)",
+        "format": "time_series",
+        "hide": false,
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "{{ container_name }}",
+        "metric": "container_cpu",
+        "refId": "A",
+        "step": 10
+       }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "System services CPU usage ($interval avg)",
+      "tooltip": {
+       "msResolution": true,
+       "shared": true,
+       "sort": 2,
+       "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+       "buckets": null,
+       "mode": "time",
+       "name": null,
+       "show": true,
+       "values": []
+      },
+      "yaxes": [
+       {
+        "format": "none",
+        "label": "cores",
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": true
+       },
+       {
+        "format": "short",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": false
+       }
+      ]
+     }
+    ],
+    "repeat": null,
+    "title": "System services CPU usage",
+    "type": "row"
+   },
+   {
+    "collapsed": true,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 82
+    },
+    "id": 37,
+    "panels": [
+     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "decimals": 3,
+      "editable": true,
+      "error": false,
+      "fill": 0,
+      "grid": {},
+      "gridPos": {
+       "h": 7,
+       "w": 24,
+       "x": 0,
+       "y": 55
+      },
+      "height": "",
+      "id": 24,
+      "legend": {
+       "alignAsTable": true,
+       "avg": true,
+       "current": true,
+       "hideEmpty": false,
+       "hideZero": false,
+       "max": false,
+       "min": false,
+       "rightSide": false,
+       "show": true,
+       "sideWidth": null,
+       "sort": "current",
+       "sortDesc": true,
+       "total": false,
+       "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+       {
+        "expr": "sum (rate (container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\",container_name!=\"POD\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (container_name, pod_name)",
+        "format": "time_series",
+        "hide": false,
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "pod: {{ pod_name }} | {{ container_name }}",
+        "metric": "container_cpu",
+        "refId": "A",
+        "step": 10
+       },
+       {
+        "expr": "sum (rate (container_cpu_usage_seconds_total{image!=\"\",name!~\"^k8s_.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname, name, image)",
+        "format": "time_series",
+        "hide": false,
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "docker: {{ kubernetes_io_hostname }} | {{ image }} ({{ name }})",
+        "metric": "container_cpu",
+        "refId": "B",
+        "step": 10
+       },
+       {
+        "expr": "sum (rate (container_cpu_usage_seconds_total{rkt_container_name!=\"\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname, rkt_container_name)",
+        "format": "time_series",
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "rkt: {{ kubernetes_io_hostname }} | {{ rkt_container_name }}",
+        "metric": "container_cpu",
+        "refId": "C",
+        "step": 10
+       }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Containers CPU usage ($interval avg)",
+      "tooltip": {
+       "msResolution": true,
+       "shared": false,
+       "sort": 2,
+       "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+       "buckets": null,
+       "mode": "time",
+       "name": null,
+       "show": true,
+       "values": []
+      },
+      "yaxes": [
+       {
+        "format": "none",
+        "label": "cores",
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": true
+       },
+       {
+        "format": "short",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": false
+       }
+      ],
+      "yaxis": {
+       "align": false,
+       "alignLevel": null
+      }
+     }
+    ],
+    "repeat": null,
+    "title": "Containers CPU usage",
+    "type": "row"
+   },
+   {
+    "collapsed": true,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 83
+    },
+    "id": 38,
+    "panels": [
+     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "decimals": 3,
+      "editable": true,
+      "error": false,
+      "fill": 0,
+      "grid": {},
+      "gridPos": {
+       "h": 13,
+       "w": 24,
+       "x": 0,
+       "y": 32
+      },
+      "id": 20,
+      "legend": {
+       "alignAsTable": true,
+       "avg": true,
+       "current": true,
+       "max": false,
+       "min": false,
+       "rightSide": false,
+       "show": true,
+       "sort": "current",
+       "sortDesc": true,
+       "total": false,
+       "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+       {
+        "expr": "sum (rate (container_cpu_usage_seconds_total{id!=\"/\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (id)",
+        "format": "time_series",
+        "hide": false,
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "{{ id }}",
+        "metric": "container_cpu",
+        "refId": "A",
+        "step": 10
+       }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "All processes CPU usage ($interval avg)",
+      "tooltip": {
+       "msResolution": true,
+       "shared": true,
+       "sort": 2,
+       "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+       "buckets": null,
+       "mode": "time",
+       "name": null,
+       "show": true,
+       "values": []
+      },
+      "yaxes": [
+       {
+        "format": "none",
+        "label": "cores",
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": true
+       },
+       {
+        "format": "short",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": false
+       }
+      ]
+     }
+    ],
+    "repeat": null,
+    "title": "All processes CPU usage",
+    "type": "row"
+   },
+   {
+    "collapsed": true,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 84
+    },
+    "id": 39,
+    "panels": [
+     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "decimals": 2,
+      "editable": true,
+      "error": false,
+      "fill": 0,
+      "grid": {},
+      "gridPos": {
+       "h": 7,
+       "w": 24,
+       "x": 0,
+       "y": 71
+      },
+      "id": 25,
+      "legend": {
+       "alignAsTable": true,
+       "avg": true,
+       "current": true,
+       "max": false,
+       "min": false,
+       "rightSide": false,
+       "show": true,
+       "sideWidth": 200,
+       "sort": "avg",
+       "sortDesc": true,
+       "total": false,
+       "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+       {
+        "expr": "sum (container_memory_working_set_bytes{image!=\"\",name=~\"^k8s_.*\",kubernetes_io_hostname=~\"^$Node$\"}) by (pod_name)",
+        "format": "time_series",
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "{{ pod_name }}",
+        "metric": "container_memory_usage:sort_desc",
+        "refId": "A",
+        "step": 10
+       }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Pods memory usage",
+      "tooltip": {
+       "msResolution": false,
+       "shared": false,
+       "sort": 2,
+       "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+       "buckets": null,
+       "mode": "time",
+       "name": null,
+       "show": true,
+       "values": []
+      },
+      "yaxes": [
+       {
+        "format": "bytes",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": true
+       },
+       {
+        "format": "short",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": false
+       }
+      ],
+      "yaxis": {
+       "align": false,
+       "alignLevel": null
+      }
+     }
+    ],
+    "repeat": null,
+    "title": "Pods memory usage",
+    "type": "row"
+   },
+   {
+    "collapsed": true,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 85
+    },
+    "id": 40,
+    "panels": [
+     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "decimals": 2,
+      "editable": true,
+      "error": false,
+      "fill": 0,
+      "grid": {},
+      "gridPos": {
+       "h": 7,
+       "w": 24,
+       "x": 0,
+       "y": 41
+      },
+      "id": 26,
+      "legend": {
+       "alignAsTable": true,
+       "avg": true,
+       "current": true,
+       "max": false,
+       "min": false,
+       "rightSide": true,
+       "show": true,
+       "sideWidth": 200,
+       "sort": "current",
+       "sortDesc": true,
+       "total": false,
+       "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+       {
+        "expr": "sum (container_memory_working_set_bytes{kubernetes_io_role=\"master\",pod_name!=\"\",kubernetes_io_hostname=~\"^$Node$\"}) by (container_name)",
+        "format": "time_series",
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "{{ container_name }}",
+        "metric": "container_memory_usage:sort_desc",
+        "refId": "A",
+        "step": 10
+       }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "System services memory usage",
+      "tooltip": {
+       "msResolution": false,
+       "shared": true,
+       "sort": 2,
+       "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+       "buckets": null,
+       "mode": "time",
+       "name": null,
+       "show": true,
+       "values": []
+      },
+      "yaxes": [
+       {
+        "format": "bytes",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": true
+       },
+       {
+        "format": "short",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": false
+       }
+      ]
+     }
+    ],
+    "repeat": null,
+    "title": "System services memory usage",
+    "type": "row"
+   },
+   {
+    "collapsed": true,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 86
+    },
+    "id": 41,
+    "panels": [
+     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "decimals": 2,
+      "editable": true,
+      "error": false,
+      "fill": 0,
+      "grid": {},
+      "gridPos": {
+       "h": 7,
+       "w": 24,
+       "x": 0,
+       "y": 42
+      },
+      "id": 27,
+      "legend": {
+       "alignAsTable": true,
+       "avg": true,
+       "current": true,
+       "max": false,
+       "min": false,
+       "rightSide": true,
+       "show": true,
+       "sideWidth": 200,
+       "sort": "current",
+       "sortDesc": true,
+       "total": false,
+       "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+       {
+        "expr": "sum (container_memory_working_set_bytes{image!=\"\",name=~\"^k8s_.*\",container_name!=\"POD\",kubernetes_io_hostname=~\"^$Node$\"}) by (container_name, pod_name)",
+        "format": "time_series",
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "pod: {{ pod_name }} | {{ container_name }}",
+        "metric": "container_memory_usage:sort_desc",
+        "refId": "A",
+        "step": 10
+       },
+       {
+        "expr": "sum (container_memory_working_set_bytes{image!=\"\",name!~\"^k8s_.*\",kubernetes_io_hostname=~\"^$Node$\"}) by (kubernetes_io_hostname, name, image)",
+        "format": "time_series",
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "docker: {{ kubernetes_io_hostname }} | {{ image }} ({{ name }})",
+        "metric": "container_memory_usage:sort_desc",
+        "refId": "B",
+        "step": 10
+       },
+       {
+        "expr": "sum (container_memory_working_set_bytes{rkt_container_name!=\"\",kubernetes_io_hostname=~\"^$Node$\"}) by (kubernetes_io_hostname, rkt_container_name)",
+        "format": "time_series",
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "rkt: {{ kubernetes_io_hostname }} | {{ rkt_container_name }}",
+        "metric": "container_memory_usage:sort_desc",
+        "refId": "C",
+        "step": 10
+       }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Containers memory usage",
+      "tooltip": {
+       "msResolution": false,
+       "shared": true,
+       "sort": 2,
+       "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+       "buckets": null,
+       "mode": "time",
+       "name": null,
+       "show": true,
+       "values": []
+      },
+      "yaxes": [
+       {
+        "format": "bytes",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": true
+       },
+       {
+        "format": "short",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": false
+       }
+      ]
+     }
+    ],
+    "repeat": null,
+    "title": "Containers memory usage",
+    "type": "row"
+   },
+   {
+    "collapsed": true,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 87
+    },
+    "id": 42,
+    "panels": [
+     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "decimals": 2,
+      "editable": true,
+      "error": false,
+      "fill": 0,
+      "grid": {},
+      "gridPos": {
+       "h": 13,
+       "w": 24,
+       "x": 0,
+       "y": 43
+      },
+      "id": 28,
+      "legend": {
+       "alignAsTable": true,
+       "avg": true,
+       "current": true,
+       "max": false,
+       "min": false,
+       "rightSide": false,
+       "show": true,
+       "sideWidth": 200,
+       "sort": "current",
+       "sortDesc": true,
+       "total": false,
+       "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": true,
+      "targets": [
+       {
+        "expr": "sum (container_memory_working_set_bytes{id!=\"/\",kubernetes_io_hostname=~\"^$Node$\"}) by (id)",
+        "format": "time_series",
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "{{ id }}",
+        "metric": "container_memory_usage:sort_desc",
+        "refId": "A",
+        "step": 10
+       }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "All processes memory usage",
+      "tooltip": {
+       "msResolution": false,
+       "shared": true,
+       "sort": 2,
+       "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+       "buckets": null,
+       "mode": "time",
+       "name": null,
+       "show": true,
+       "values": []
+      },
+      "yaxes": [
+       {
+        "format": "bytes",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": true
+       },
+       {
+        "format": "short",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": false
+       }
+      ]
+     }
+    ],
+    "repeat": null,
+    "title": "All processes memory usage",
+    "type": "row"
+   },
+   {
+    "collapsed": true,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 88
+    },
+    "id": 43,
+    "panels": [
+     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "decimals": 2,
+      "editable": true,
+      "error": false,
+      "fill": 1,
+      "grid": {},
+      "gridPos": {
+       "h": 7,
+       "w": 24,
+       "x": 0,
+       "y": 44
+      },
+      "id": 16,
+      "legend": {
+       "alignAsTable": true,
+       "avg": true,
+       "current": true,
+       "max": false,
+       "min": false,
+       "rightSide": true,
+       "show": true,
+       "sideWidth": 200,
+       "sort": "current",
+       "sortDesc": true,
+       "total": false,
+       "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+       {
+        "expr": "sum (rate (container_network_receive_bytes_total{image!=\"\",name=~\"^k8s_.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (pod_name)",
+        "format": "time_series",
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "-> {{ pod_name }}",
+        "metric": "network",
+        "refId": "A",
+        "step": 10
+       },
+       {
+        "expr": "- sum (rate (container_network_transmit_bytes_total{image!=\"\",name=~\"^k8s_.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (pod_name)",
+        "format": "time_series",
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "<- {{ pod_name }}",
+        "metric": "network",
+        "refId": "B",
+        "step": 10
+       }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Pods network I/O ($interval avg)",
+      "tooltip": {
+       "msResolution": false,
+       "shared": false,
+       "sort": 2,
+       "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+       "buckets": null,
+       "mode": "time",
+       "name": null,
+       "show": true,
+       "values": []
+      },
+      "yaxes": [
+       {
+        "format": "Bps",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": true
+       },
+       {
+        "format": "short",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": false
+       }
+      ]
+     }
+    ],
+    "repeat": null,
+    "title": "Pods network I/O",
+    "type": "row"
+   },
+   {
+    "collapsed": true,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 89
+    },
+    "id": 44,
+    "panels": [
+     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "decimals": 2,
+      "editable": true,
+      "error": false,
+      "fill": 1,
+      "grid": {},
+      "gridPos": {
+       "h": 7,
+       "w": 24,
+       "x": 0,
+       "y": 45
+      },
+      "id": 30,
+      "legend": {
+       "alignAsTable": true,
+       "avg": true,
+       "current": true,
+       "max": false,
+       "min": false,
+       "rightSide": true,
+       "show": true,
+       "sideWidth": 200,
+       "sort": "current",
+       "sortDesc": true,
+       "total": false,
+       "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+       {
+        "expr": "sum (rate (container_network_receive_bytes_total{image!=\"\",name=~\"^k8s_.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (container_name, pod_name)",
+        "format": "time_series",
+        "hide": false,
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "-> pod: {{ pod_name }} | {{ container_name }}",
+        "metric": "network",
+        "refId": "B",
+        "step": 10
+       },
+       {
+        "expr": "- sum (rate (container_network_transmit_bytes_total{image!=\"\",name=~\"^k8s_.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (container_name, pod_name)",
+        "format": "time_series",
+        "hide": false,
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "<- pod: {{ pod_name }} | {{ container_name }}",
+        "metric": "network",
+        "refId": "D",
+        "step": 10
+       },
+       {
+        "expr": "sum (rate (container_network_receive_bytes_total{image!=\"\",name!~\"^k8s_.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname, name, image)",
+        "format": "time_series",
+        "hide": false,
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "-> docker: {{ kubernetes_io_hostname }} | {{ image }} ({{ name }})",
+        "metric": "network",
+        "refId": "A",
+        "step": 10
+       },
+       {
+        "expr": "- sum (rate (container_network_transmit_bytes_total{image!=\"\",name!~\"^k8s_.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname, name, image)",
+        "format": "time_series",
+        "hide": false,
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "<- docker: {{ kubernetes_io_hostname }} | {{ image }} ({{ name }})",
+        "metric": "network",
+        "refId": "C",
+        "step": 10
+       },
+       {
+        "expr": "sum (rate (container_network_transmit_bytes_total{rkt_container_name!=\"\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname, rkt_container_name)",
+        "format": "time_series",
+        "hide": false,
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "-> rkt: {{ kubernetes_io_hostname }} | {{ rkt_container_name }}",
+        "metric": "network",
+        "refId": "E",
+        "step": 10
+       },
+       {
+        "expr": "- sum (rate (container_network_transmit_bytes_total{rkt_container_name!=\"\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname, rkt_container_name)",
+        "format": "time_series",
+        "hide": false,
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "<- rkt: {{ kubernetes_io_hostname }} | {{ rkt_container_name }}",
+        "metric": "network",
+        "refId": "F",
+        "step": 10
+       }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Containers network I/O ($interval avg)",
+      "tooltip": {
+       "msResolution": false,
+       "shared": true,
+       "sort": 2,
+       "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+       "buckets": null,
+       "mode": "time",
+       "name": null,
+       "show": true,
+       "values": []
+      },
+      "yaxes": [
+       {
+        "format": "Bps",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": true
+       },
+       {
+        "format": "short",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": false
+       }
+      ]
+     }
+    ],
+    "repeat": null,
+    "title": "Containers network I/O",
+    "type": "row"
+   },
+   {
+    "collapsed": true,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 90
+    },
+    "id": 45,
+    "panels": [
+     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "$datasource",
+      "decimals": 2,
+      "editable": true,
+      "error": false,
+      "fill": 1,
+      "grid": {},
+      "gridPos": {
+       "h": 13,
+       "w": 24,
+       "x": 0,
+       "y": 46
+      },
+      "id": 29,
+      "legend": {
+       "alignAsTable": true,
+       "avg": true,
+       "current": true,
+       "max": false,
+       "min": false,
+       "rightSide": false,
+       "show": true,
+       "sideWidth": 200,
+       "sort": "current",
+       "sortDesc": true,
+       "total": false,
+       "values": true
+      },
+      "lines": true,
+      "linewidth": 2,
+      "links": [],
+      "nullPointMode": "connected",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+       {
+        "expr": "sum (rate (container_network_receive_bytes_total{id!=\"/\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (id)",
+        "format": "time_series",
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "-> {{ id }}",
+        "metric": "network",
+        "refId": "A",
+        "step": 10
+       },
+       {
+        "expr": "- sum (rate (container_network_transmit_bytes_total{id!=\"/\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (id)",
+        "format": "time_series",
+        "interval": "10s",
+        "intervalFactor": 1,
+        "legendFormat": "<- {{ id }}",
+        "metric": "network",
+        "refId": "B",
+        "step": 10
+       }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "All processes network I/O ($interval avg)",
+      "tooltip": {
+       "msResolution": false,
+       "shared": true,
+       "sort": 2,
+       "value_type": "cumulative"
+      },
+      "type": "graph",
+      "xaxis": {
+       "buckets": null,
+       "mode": "time",
+       "name": null,
+       "show": true,
+       "values": []
+      },
+      "yaxes": [
+       {
+        "format": "Bps",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": true
+       },
+       {
+        "format": "short",
+        "label": null,
+        "logBase": 1,
+        "max": null,
+        "min": null,
+        "show": false
+       }
+      ]
+     }
+    ],
+    "repeat": null,
+    "title": "All processes network I/O",
+    "type": "row"
+   }
+  ],
+  "refresh": false,
+  "schemaVersion": 16,
+  "style": "dark",
+  "tags": [
+   "kubernetes"
+  ],
+  "templating": {
+   "list": [
+    {
+     "auto": true,
+     "auto_count": 20,
+     "auto_min": "2m",
+     "current": {
+      "text": "auto",
+      "value": "$__auto_interval_interval"
+     },
+     "hide": 2,
+     "label": null,
+     "name": "interval",
+     "options": [
+      {
+       "selected": true,
+       "text": "auto",
+       "value": "$__auto_interval_interval"
+      },
+      {
+       "selected": false,
+       "text": "1m",
+       "value": "1m"
+      },
+      {
+       "selected": false,
+       "text": "10m",
+       "value": "10m"
+      },
+      {
+       "selected": false,
+       "text": "30m",
+       "value": "30m"
+      },
+      {
+       "selected": false,
+       "text": "1h",
+       "value": "1h"
+      },
+      {
+       "selected": false,
+       "text": "6h",
+       "value": "6h"
+      },
+      {
+       "selected": false,
+       "text": "12h",
+       "value": "12h"
+      },
+      {
+       "selected": false,
+       "text": "1d",
+       "value": "1d"
+      },
+      {
+       "selected": false,
+       "text": "7d",
+       "value": "7d"
+      },
+      {
+       "selected": false,
+       "text": "14d",
+       "value": "14d"
+      },
+      {
+       "selected": false,
+       "text": "30d",
+       "value": "30d"
+      }
+     ],
+     "query": "1m,10m,30m,1h,6h,12h,1d,7d,14d,30d",
+     "refresh": 2,
+     "skipUrlSync": false,
+     "type": "interval"
+    },
+    {
+     "current": {
+      "text": "default",
+      "value": "default"
+     },
+     "hide": 0,
+     "label": null,
+     "name": "datasource",
+     "options": [],
+     "query": "prometheus",
+     "refresh": 1,
+     "regex": "",
+     "skipUrlSync": false,
+     "type": "datasource"
+    },
+    {
+     "allValue": ".*",
+     "current": {
+      "text": "All",
+      "value": "$__all"
+     },
+     "datasource": "$datasource",
+     "hide": 0,
+     "includeAll": true,
+     "label": null,
+     "multi": false,
+     "name": "Node",
+     "options": [],
+     "query": "label_values(kubernetes_io_hostname)",
+     "refresh": 1,
+     "regex": "",
+     "skipUrlSync": false,
+     "sort": 0,
+     "tagValuesQuery": "",
+     "tags": [],
+     "tagsQuery": "",
+     "type": "query",
+     "useTags": false
+    }
+   ]
+  },
+  "time": {
+   "from": "now-3h",
+   "to": "now"
+  },
+  "timepicker": {
+   "refresh_intervals": [
+    "5s",
+    "10s",
+    "30s",
+    "1m",
+    "5m",
+    "15m",
+    "30m",
+    "1h",
+    "2h",
+    "1d"
+   ],
+   "time_options": [
+    "5m",
+    "15m",
+    "1h",
+    "6h",
+    "12h",
+    "24h",
+    "2d",
+    "7d",
+    "30d"
+   ]
+  },
+  "timezone": "browser",
+  "title": "Kubernetes cluster monitoring (binder-prod)",
+  "uid": "QLzEwmnmz",
+  "version": 18
+ },
+ "meta": {
+  "canAdmin": true,
+  "canEdit": true,
+  "canSave": true,
+  "canStar": true,
+  "created": "2018-05-08T14:10:31Z",
+  "createdBy": "admin",
+  "expires": "0001-01-01T00:00:00Z",
+  "folderId": 0,
+  "folderTitle": "General",
+  "folderUrl": "",
+  "hasAcl": false,
+  "isFolder": false,
+  "provisioned": false,
+  "provisionedExternalId": "",
+  "slug": "kubernetes-cluster-monitoring-binder-prod",
+  "type": "db",
+  "updated": "2019-05-01T07:58:39Z",
+  "updatedBy": "admin",
+  "url": "/d/QLzEwmnmz/kubernetes-cluster-monitoring-binder-prod",
+  "version": 18
+ }
+}

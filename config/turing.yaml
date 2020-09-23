@@ -17,14 +17,6 @@ binderhub:
 
   replicas: 1
 
-  resources:
-    requests:
-      cpu: "0.25"
-      memory: 1Gi
-    limits:
-      cpu: "2"
-      memory: 1Gi
-
   ingress:
     enabled: true
     hosts:
@@ -44,7 +36,7 @@ binderhub:
   extraVolumes:
     - name: event-secret
       secret:
-        secretName: events-archiver-secret
+        secretName: events-archiver-secrets
   extraVolumeMounts:
     - name: event-secret
       mountPath: /event-secret
@@ -54,39 +46,6 @@ binderhub:
       value: /event-secret/service-account.json
 
   jupyterhub:
-    hub:
-      resources:
-        requests:
-          cpu: "0.25"
-          memory: 1Gi
-        limits:
-          cpu: "2"
-          memory: 1Gi
-    singleuser:
-      memory:
-        guarantee: 550M
-        limit: 2G
-      cpu:
-        guarantee: 0.01
-        limit: 1
-    proxy:
-      chp:
-        resources:
-          requests:
-            memory: 320Mi
-            cpu: "0.1"
-          limits:
-            memory: 320Mi
-            cpu: "0.5"
-      nginx:
-        resources:
-          requests:
-            memory: 512Mi
-            cpu: "0.25"
-          limits:
-            memory: 512Mi
-            cpu: 1
-
     ingress:
       enabled: true
       annotations:
@@ -179,24 +138,9 @@ redirector:
 
 matomo:
   enabled: false
-  db:
-    instanceName: binder-staging:us-central1:matomo
-    serviceAccountKey: ""
-  trustedHosts:
-    - staging-mybinder.turing.10.0.0.1.xip.io
-  ingress:
-    hosts:
-      - staging-mybinder.turing.10.0.0.1.xip.io
 
 analyticsPublisher:
   enabled: false
-  project: binder-turing
-  events:
-    sourceBucket: mybinder-staging-events-raw-export
-    destinationBucket: mybinder-staging-events-archive
 
 gcsProxy:
   enabled: false
-  buckets:
-    - name: mybinder-staging-events-archive
-      host: archive-analytics-staging-mybinder.turing.10.0.0.1.xip.io

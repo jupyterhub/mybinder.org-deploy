@@ -1,4 +1,4 @@
-projectName: binder-prod
+projectName: binderhub-288415
 
 userNodeSelector: &userNodeSelector
   mybinder.org/pool-type: users
@@ -9,25 +9,12 @@ binderhub:
   config:
     BinderHub:
       build_node_selector: *userNodeSelector
-      hub_url: https://hub.gke1.mybinder.org
+      hub_url: https://hub.gke2.mybinder.org
       badge_base_url: https://mybinder.org
-      image_prefix: gcr.io/binder-prod/r2d-f18835fd-
+      image_prefix: gcr.io/binderhub-288415/r2d-staging-72d7634-
       google_analytics_code: "UA-101904940-1"
       google_analytics_domain: "mybinder.org"
       sticky_builds: true
-
-  # publish events to new events-archive
-  extraVolumes:
-    - name: event-secret
-      secret:
-        secretName: events-archiver-secrets
-  extraVolumeMounts:
-    - name: event-secret
-      mountPath: /event-secret
-      readOnly: true
-  extraEnv:
-    - name: GOOGLE_APPLICATION_CREDENTIALS
-      value: /event-secret/service-account.json
 
   nodeSelector: *coreNodeSelector
 
@@ -43,8 +30,9 @@ binderhub:
 
   ingress:
     hosts:
-      - gke.mybinder.org
-      - gke1.mybinder.org
+      # - gke.mybinder.org
+      - gke2.mybinder.org
+
 
   jupyterhub:
     singleuser:
@@ -56,15 +44,15 @@ binderhub:
       nodeSelector: *coreNodeSelector
     ingress:
       hosts:
-        - hub.mybinder.org
-        - hub.gke.mybinder.org
-        - hub.gke1.mybinder.org
+        # - hub.mybinder.org
+        # - hub.gke.mybinder.org
+        - hub.gke2.mybinder.org
       tls:
         - secretName: kubelego-tls-jupyterhub-prod
           hosts:
-            - hub.mybinder.org
-            - hub.gke.mybinder.org
-            - hub.gke1.mybinder.org
+            # - hub.mybinder.org
+            # - hub.gke.mybinder.org
+            - hub.gke2.mybinder.org
     scheduling:
       userPlaceholder:
         replicas: 75
@@ -83,10 +71,12 @@ grafana:
       memory: 128Mi
   ingress:
     hosts:
-      - grafana.mybinder.org
+      # - grafana.mybinder.org
+      - grafana.gke2.mybinder.org
     tls:
       - hosts:
-          - grafana.mybinder.org
+          # - grafana.mybinder.org
+          - grafana.gke2.mybinder.org
         secretName: kubelego-tls-grafana
   datasources:
     datasources.yaml:
@@ -117,23 +107,24 @@ prometheus:
     retention: 60d
     ingress:
       hosts:
-        - prometheus.mybinder.org
-        - prometheus.gke1.mybinder.org
+        # - prometheus.mybinder.org
+        - prometheus.gke2.mybinder.org
       tls:
         - hosts:
-            - prometheus.mybinder.org
-            - prometheus.gke1.mybinder.org
+            # - prometheus.mybinder.org
+            - prometheus.gke2.mybinder.org
           secretName: kubelego-tls-prometheus
 
 ingress-nginx:
   controller:
     service:
-      loadBalancerIP: 35.202.202.188
+      loadBalancerIP: 35.239.125.45
 
 static:
   ingress:
     hosts:
-      - static.mybinder.org
+      # - static.mybinder.org
+      - static.gke2.mybinder.org
 
 proxyPatches:
   nodeSelector: *coreNodeSelector
@@ -166,12 +157,14 @@ matomo:
   replicas: 3
   nodeSelector: *coreNodeSelector
   db:
-    instanceName: binder-prod:us-central1:matomo
+    instanceName: binderhub-288415:us-central1:matomo-prod
   trustedHosts:
     - mybinder.org
+    - gke2.mybinder.org
   ingress:
     hosts:
-      - mybinder.org
+      # - mybinder.org
+      - gke2.mybinder.org
   resources:
     requests:
       cpu: 0.1
@@ -181,17 +174,17 @@ matomo:
       memory: 1Gi
 
 analyticsPublisher:
-  project: binder-prod
-  destinationBucket: mybinder-events-archive
+  project: binderhub-288415
+  destinationBucket: binder-events-archive
   events:
-    sourceBucket: mybinder-events-raw-export
-  billing:
-    sourceBucket: binder-billing
+    sourceBucket: binder-events-raw-export
+  cloudCosts:
+    sourceBucket: binder-billing-archive
 
 gcsProxy:
   buckets:
-    - name: mybinder-events-archive
-      host: archive.analytics.mybinder.org
+    - name: binder-events-archive
+      host: archive.analytics.gke2.mybinder.org
 
 federationRedirect:
   enabled: true

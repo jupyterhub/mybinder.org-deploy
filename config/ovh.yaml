@@ -13,14 +13,6 @@ binderhub:
 
   replicas: 1
 
-  resources:
-    requests:
-      cpu: "0.25"
-      memory: 1Gi
-    limits:
-      cpu: "2"
-      memory: 1Gi
-
   extraVolumes:
     - name: secrets
       secret:
@@ -49,45 +41,17 @@ binderhub:
           - binder.mybinder.ovh
 
   jupyterhub:
-    hub:
-      resources:
-        requests:
-          cpu: "0.25"
-          memory: 1Gi
-        limits:
-          cpu: "2"
-          memory: 1Gi
     singleuser:
       imagePullSecret:
         enabled: true
         registry: dlqpwel7.gra5.container-registry.ovh.net
         username: cLxohgOONW
         email:
-      memory:
-        guarantee: 550M
-        limit: 2G
-      cpu:
-        guarantee: 0.01
-        limit: 1
+
     proxy:
       https:
         type: offload
-      chp:
-        resources:
-          requests:
-            memory: 320Mi
-            cpu: "0.1"
-          limits:
-            memory: 320Mi
-            cpu: "0.5"
-      nginx:
-        resources:
-          requests:
-            memory: 512Mi
-            cpu: "0.25"
-          limits:
-            memory: 512Mi
-            cpu: 1
+
 
     ingress:
       annotations:
@@ -198,24 +162,10 @@ redirector:
 
 matomo:
   enabled: false
-  db:
-    instanceName: binder-staging:us-central1:matomo
-  trustedHosts:
-    - staging-mybinder.mybinder.ovh
-  ingress:
-    hosts:
-      - staging-mybinder.mybinder.ovh
 
 analyticsPublisher:
   enabled: false
-  project: binder-ovh
-  events:
-    sourceBucket: mybinder-staging-events-raw-export
-    destinationBucket: mybinder-staging-events-archive
 
 gcsProxy:
   enabled: false
-  buckets:
-    - name: mybinder-staging-events-archive
-      host: archive-analytics-staging-mybinder.mybinder.ovh
 

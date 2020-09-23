@@ -19,7 +19,7 @@ on:
 # Global environment variables
 env:
   GCLOUD_SDK_VERION: "290.0.1"
-  HELM_VERSION: "v2.16.3"
+  HELM_VERSION: "v2.16.10"
   KUBECTL_VERSION: "v1.18.0"
   CERT_MANAGER_VERSION: "v0.15.2"
   GIT_COMMITTER_EMAIL: ci-user@github.local
@@ -37,6 +37,16 @@ jobs:
       ((github.event_name == 'push') &&
       (github.ref == 'refs/heads/master'))
     runs-on: ubuntu-18.04
+    strategy:
+      fail-fast: false  # Do not cancel all jobs if one fails
+      matrix:
+        include:
+          - federation_member: staging
+            binder_url: https://gke2.staging.mybinder.org
+            hub_url: https://hub.gke2.staging.mybinder.org
+            # TODO: move this to image-prefix in chartpress.yaml
+            # it's here while we need two places to push
+            chartpress_args: "--image-prefix=gcr.io/binderhub-288415/mybinder-tool-"
     steps:
       # Action Repo: https://github.com/actions/checkout
       - name: "Stage 0: Checkout repo"
@@ -93,7 +103,7 @@ jobs:
         with:
           login-server: "https://gcr.io"
           username: "_json_key"
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          password: ${{ secrets.GCR_KEY }}
 
       - name: "Stage 2: Setup helm"
         working-directory: mybinder
@@ -106,11 +116,11 @@ jobs:
 
       - name: "Stage 3: Build images (if required)"
         run: |
-          chartpress --push
+          chartpress --push ${{ matrix.chartpress_args }}
 
       - name: "Stage 4: Deploy to staging"
         run: |
-          python ./deploy.py staging staging
+          python ./deploy.py ${{ matrix.federation_member }}
         env:
           TERM: xterm
 
@@ -120,7 +130,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: py.test -vx -n 2 --binder-url=https://gke.staging.mybinder.org --hub-url=https://hub.gke.staging.mybinder.org
+          command: py.test -vx -n 2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matrix.hub_url }}
 
       - name: "Stage 5: Post message to Grafana that deployment to production has started"
         run: |
@@ -147,9 +157,15 @@ jobs:
       matrix:
         include:
           - federation_member: prod
-            binder_url: https://gke.mybinder.org
-            hub_url: https://hub.gke.mybinder.org
+            binder_url: https://gke1.mybinder.org
+            hub_url: https://hub.gke1.mybinder.org
             cluster_name: prod-a
+          - federation_member: prod-gke2
+            binder_url: https://gke2.mybinder.org
+            hub_url: https://hub.gke2.mybinder.org
+            cluster_name: prod
+            release_name: prod
+            chartpress_args: "--image-prefix=gcr.io/binderhub-288415/mybinder-tool-"
           - federation_member: turing
             binder_url: https://turing.mybinder.org
             hub_url: https://hub.mybinder.turing.ac.uk
@@ -183,7 +199,7 @@ jobs:
 
       # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idif
       - name: "Stage 1: Install gcloud SDK"
-        if: matrix.federation_member == 'prod'
+        if: matrix.federation_member == 'prod' || matrix.federation_member == 'prod-gke2'
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           version: ${{ env.GCLOUD_SDK_VERION }}
@@ -219,11 +235,11 @@ jobs:
 
       - name: "Stage 3: Set image tag in chart"
         run: |
-          chartpress --skip-build
+          chartpress --skip-build ${{ matrix.chartpress_args }}
 
       - name: "Stage 4: Deploy to ${{ matrix.federation_member }}"
         run: |
-          python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.cluster_name || matrix.federation_member }}
+          python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.cluster_name || matrix.federation_member }} --name ${{ matrix.release_name || matrix.federation_member }}
         env:
           TERM: xterm
 

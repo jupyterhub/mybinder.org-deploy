@@ -1,13 +1,19 @@
-projectName: binder-staging
+projectName: binderhub-288415
 
 binderhub:
   config:
     BinderHub:
-      hub_url: https://hub.gke.staging.mybinder.org
+      hub_url: https://hub.gke2.staging.mybinder.org
       badge_base_url: https://staging.mybinder.org
-      image_prefix: gcr.io/binder-staging/r2d-72d7634-
+      image_prefix: gcr.io/binderhub-288415/r2d-staging-72d7634-
       sticky_builds: true
       build_memory_limit: "2G"
+  extraEnv:
+    - name: EVENT_LOG_NAME
+      value: "binderhub-staging-events-text"
+  resources:
+    requests:
+      memory: 512Mi
 
   dind:
     resources:
@@ -22,9 +28,13 @@ binderhub:
     hosts:
       - gke.staging.mybinder.org
       - gke2.staging.mybinder.org
-      - cert-manager-test.staging.mybinder.org
 
   jupyterhub:
+    hub:
+      resources:
+        requests:
+          memory: 512Mi
+          cpu: null
     singleuser:
       memory:
         guarantee: 256M
@@ -35,10 +45,12 @@ binderhub:
     ingress:
       hosts:
         - hub.gke.staging.mybinder.org
+        - hub.gke2.staging.mybinder.org
       tls:
         - secretName: kubelego-tls-jupyterhub-staging
           hosts:
             - hub.gke.staging.mybinder.org
+            - hub.gke2.staging.mybinder.org
     scheduling:
       userPlaceholder:
         replicas: 2
@@ -47,9 +59,11 @@ grafana:
   ingress:
     hosts:
       - grafana.staging.mybinder.org
+      - grafana.gke2.staging.mybinder.org
     tls:
       - hosts:
           - grafana.staging.mybinder.org
+          - grafana.gke2.staging.mybinder.org
         secretName: kubelego-tls-grafana
   datasources:
     datasources.yaml:
@@ -68,55 +82,60 @@ prometheus:
     ingress:
       hosts:
         - prometheus.staging.mybinder.org
+        - prometheus.gke2.staging.mybinder.org
       tls:
         - hosts:
             - prometheus.staging.mybinder.org
+            - prometheus.gke2.staging.mybinder.org
           secretName: kubelego-tls-prometheus
 
 ingress-nginx:
   controller:
     service:
-      loadBalancerIP: 104.197.11.66
+      loadBalancerIP: 35.222.35.25
 
 static:
   ingress:
     hosts:
       - static.staging.mybinder.org
+      - static.gke2.staging.mybinder.org
 
 redirector:
   redirects:
     - type: host
       host:
-        from: beta.staging.mybinder.org
-        to: staging.mybinder.org
-    - type: host
-      host:
         from: docs.staging.mybinder.org
         to: mybinder.readthedocs.io
-    - type: host
-      host:
-        from: playground.staging.mybinder.org
-        to: play.nteract.io
 
 matomo:
   enabled: true
   db:
-    instanceName: binder-staging:us-central1:matomo
+    instanceName: binderhub-288415:us-central1:matomo-staging
   trustedHosts:
     - staging.mybinder.org
+    - gke2.staging.mybinder.org
   ingress:
     hosts:
       - staging.mybinder.org
+      - gke2.staging.mybinder.org
 
 analyticsPublisher:
-  project: binder-staging
-  destinationBucket: mybinder-staging-events-archive
+  enabled: true
+  project: binderhub-288415
+  destinationBucket: binder-staging-events-archive
   events:
-    sourceBucket: mybinder-staging-events-raw-export
+    logName: binderhub-staging-events-text
+    sourceBucket: binder-staging-events-raw-export
+
+  # TODO: copy to values
+  cloudCosts:
+    sourceBucket: binder-billing-archive
 
 gcsProxy:
   buckets:
-    - name: mybinder-staging-events-archive
+    - name: binder-staging-events-archive
+      host: archive.analytics.gke2.staging.mybinder.org
+    - name: binder-staging-events-archive
       host: archive.analytics.staging.mybinder.org
 
 federationRedirect:
@@ -124,20 +143,16 @@ federationRedirect:
   enabled: true
   hosts:
     gke:
-      url: https://gke.staging.mybinder.org
-      weight: 4
-      health: https://gke.staging.mybinder.org/health
-      versions: https://gke.staging.mybinder.org/versions
-    ovh:
       url: https://gke2.staging.mybinder.org
-      weight: 1
+      weight: 4
       health: https://gke2.staging.mybinder.org/health
       versions: https://gke2.staging.mybinder.org/versions
-    # unset the gesis and turing entries
-    turing:
-      url: https://turing.mybinder.org
+    # unset the rest of the federation
+    gke2:
       weight: 0
-      health: https://turing.mybinder.org/health
-      versions: https://turing.mybinder.org/versions
     gesis:
+      weight: 0
+    ovh:
+      weight: 0
+    turing:
       weight: 0
