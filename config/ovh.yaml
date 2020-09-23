@@ -162,24 +162,10 @@ redirector:
 
 matomo:
   enabled: false
-  db:
-    instanceName: binder-staging:us-central1:matomo
-  trustedHosts:
-    - staging-mybinder.mybinder.ovh
-  ingress:
-    hosts:
-      - staging-mybinder.mybinder.ovh
 
 analyticsPublisher:
   enabled: false
-  project: binder-ovh
-  events:
-    sourceBucket: mybinder-staging-events-raw-export
-    destinationBucket: mybinder-staging-events-archive
 
 gcsProxy:
   enabled: false
-  buckets:
-    - name: mybinder-staging-events-archive
-      host: archive-analytics-staging-mybinder.mybinder.ovh
 

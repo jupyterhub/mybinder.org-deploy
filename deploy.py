@@ -27,16 +27,14 @@ if HELM_VERSION is None:
 
 
 GCP_PROJECTS = {
-    "staging": "binder-staging",
     "prod": "binder-prod",
-    "staging-gke2": "binderhub-288415",
+    "staging": "binderhub-288415",
     "prod-gke2": "binderhub-288415",
 }
 
 GCP_ZONES = {
     "staging": "us-central1-a",
     "prod": "us-central1-a",
-    "staging-gke2": "us-central1-a",
     "prod-gke2": "us-central1",
 }
 

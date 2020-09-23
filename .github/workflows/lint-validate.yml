@@ -64,8 +64,6 @@ jobs:
         # in the form v${version}-standalone-strict
         # this does *not* include all kubernetes versions!
         - release: staging
-          kube_version: "1.15.7"
-        - release: staging-gke2
           kube_version: "1.17.4"
         - release: prod
           kube_version: "1.15.7"
