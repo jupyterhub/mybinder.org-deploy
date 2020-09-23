@@ -44,6 +44,7 @@ binderhub:
   ingress:
     hosts:
       - gke.mybinder.org
+      - gke1.mybinder.org
 
   jupyterhub:
     singleuser:
@@ -57,11 +58,13 @@ binderhub:
       hosts:
         - hub.mybinder.org
         - hub.gke.mybinder.org
+        - hub.gke1.mybinder.org
       tls:
         - secretName: kubelego-tls-jupyterhub-prod
           hosts:
             - hub.mybinder.org
             - hub.gke.mybinder.org
+            - hub.gke1.mybinder.org
     scheduling:
       userPlaceholder:
         replicas: 75
@@ -115,9 +118,11 @@ prometheus:
     ingress:
       hosts:
         - prometheus.mybinder.org
+        - prometheus.gke1.mybinder.org
       tls:
         - hosts:
             - prometheus.mybinder.org
+            - prometheus.gke1.mybinder.org
           secretName: kubelego-tls-prometheus
 
 ingress-nginx:
