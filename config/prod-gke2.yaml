@@ -87,7 +87,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.gke2.mybinder.org
+          url: https://prometheus.mybinder.org
           access: direct
           isDefault: true
           editable: false
