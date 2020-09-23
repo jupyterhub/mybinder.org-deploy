@@ -32,7 +32,7 @@ binderhub:
 
   ingress:
     hosts:
-      # - gke.mybinder.org
+      - gke.mybinder.org
       - gke2.mybinder.org
 
 
@@ -46,14 +46,14 @@ binderhub:
       nodeSelector: *coreNodeSelector
     ingress:
       hosts:
-        # - hub.mybinder.org
-        # - hub.gke.mybinder.org
+        - hub.mybinder.org
+        - hub.gke.mybinder.org
         - hub.gke2.mybinder.org
       tls:
         - secretName: kubelego-tls-jupyterhub-prod
           hosts:
-            # - hub.mybinder.org
-            # - hub.gke.mybinder.org
+            - hub.mybinder.org
+            - hub.gke.mybinder.org
             - hub.gke2.mybinder.org
     scheduling:
       userPlaceholder:
@@ -73,11 +73,13 @@ grafana:
       memory: 128Mi
   ingress:
     hosts:
-      # - grafana.mybinder.org
+      - grafana.mybinder.org
+      - grafana.gke.mybinder.org
       - grafana.gke2.mybinder.org
     tls:
       - hosts:
-          # - grafana.mybinder.org
+          - grafana.mybinder.org
+          - grafana.gke.mybinder.org
           - grafana.gke2.mybinder.org
         secretName: kubelego-tls-grafana
   datasources:
@@ -109,11 +111,13 @@ prometheus:
     retention: 60d
     ingress:
       hosts:
-        # - prometheus.mybinder.org
+        - prometheus.mybinder.org
+        - prometheus.gke.mybinder.org
         - prometheus.gke2.mybinder.org
       tls:
         - hosts:
-            # - prometheus.mybinder.org
+            - prometheus.mybinder.org
+            - prometheus.gke.mybinder.org
             - prometheus.gke2.mybinder.org
           secretName: kubelego-tls-prometheus
 
@@ -125,7 +129,8 @@ ingress-nginx:
 static:
   ingress:
     hosts:
-      # - static.mybinder.org
+      - static.mybinder.org
+      - static.gke.mybinder.org
       - static.gke2.mybinder.org
 
 proxyPatches:
@@ -162,10 +167,12 @@ matomo:
     instanceName: binderhub-288415:us-central1:matomo-prod
   trustedHosts:
     - mybinder.org
+    - gke.mybinder.org
     - gke2.mybinder.org
   ingress:
     hosts:
-      # - mybinder.org
+      - mybinder.org
+      - gke.mybinder.org
       - gke2.mybinder.org
   resources:
     requests:
@@ -185,6 +192,8 @@ analyticsPublisher:
 
 gcsProxy:
   buckets:
+    - name: binder-events-archive
+      host: archive.analytics.mybinder.org
     - name: binder-events-archive
       host: archive.analytics.gke2.mybinder.org
 
