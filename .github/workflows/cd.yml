@@ -42,9 +42,6 @@ jobs:
       matrix:
         include:
           - federation_member: staging
-            binder_url: https://staging.mybinder.org
-            hub_url: https://hub.gke.mybinder.org
-          - federation_member: staging-gke2
             binder_url: https://gke2.staging.mybinder.org
             hub_url: https://hub.gke2.staging.mybinder.org
             # TODO: move this to image-prefix in chartpress.yaml
@@ -106,9 +103,7 @@ jobs:
         with:
           login-server: "https://gcr.io"
           username: "_json_key"
-          # TODO: conditional for DOCKER_PASSWORD while we have two places to push
-          # GCR_KEY is the new one, DOCKER_PASSWORD is old
-          password: ${{ ((matrix.federation_member == 'staging') && secrets.DOCKER_PASSWORD) || secrets.GCR_KEY }}
+          password: ${{ secrets.GCR_KEY }}
 
       - name: "Stage 2: Setup helm"
         working-directory: mybinder
@@ -125,7 +120,7 @@ jobs:
 
       - name: "Stage 4: Deploy to staging"
         run: |
-          python ./deploy.py ${{ matrix.federation_member }} staging --name staging
+          python ./deploy.py ${{ matrix.federation_member }}
         env:
           TERM: xterm
 

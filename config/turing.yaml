@@ -138,24 +138,9 @@ redirector:
 
 matomo:
   enabled: false
-  db:
-    instanceName: binder-staging:us-central1:matomo
-    serviceAccountKey: ""
-  trustedHosts:
-    - staging-mybinder.turing.10.0.0.1.xip.io
-  ingress:
-    hosts:
-      - staging-mybinder.turing.10.0.0.1.xip.io
 
 analyticsPublisher:
   enabled: false
-  project: binder-turing
-  events:
-    sourceBucket: mybinder-staging-events-raw-export
-    destinationBucket: mybinder-staging-events-archive
 
 gcsProxy:
   enabled: false
-  buckets:
-    - name: mybinder-staging-events-archive
-      host: archive-analytics-staging-mybinder.turing.10.0.0.1.xip.io
