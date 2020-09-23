@@ -9,7 +9,7 @@ binderhub:
   config:
     BinderHub:
       build_node_selector: *userNodeSelector
-      hub_url: https://hub.gke.mybinder.org
+      hub_url: https://hub.gke1.mybinder.org
       badge_base_url: https://mybinder.org
       image_prefix: gcr.io/binder-prod/r2d-f18835fd-
       google_analytics_code: "UA-101904940-1"

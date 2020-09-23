@@ -157,8 +157,8 @@ jobs:
       matrix:
         include:
           - federation_member: prod
-            binder_url: https://gke.mybinder.org
-            hub_url: https://hub.gke.mybinder.org
+            binder_url: https://gke1.mybinder.org
+            hub_url: https://hub.gke1.mybinder.org
             cluster_name: prod-a
           - federation_member: prod-gke2
             binder_url: https://gke2.mybinder.org
