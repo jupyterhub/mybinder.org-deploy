@@ -1,5 +1,6 @@
 import asyncio
 import json
+import math
 import os
 import random
 import sys
@@ -26,7 +27,7 @@ CONFIG = {
     "hosts": {
         "gke": dict(
             url="https://gke.mybinder.org",
-            weight=1,
+            weight=100,
             health="https://gke.mybinder.org/health",
             versions="https://gke.mybinder.org/versions",
             prime=True,
@@ -40,7 +41,7 @@ CONFIG = {
         ),
         "gesis": dict(
             url="https://gesis.mybinder.org",
-            weight=1,
+            weight=200,
             health="https://gesis.mybinder.org/health",
             versions="https://gesis.mybinder.org/versions",
         ),
@@ -98,13 +99,12 @@ def rendezvous_rank(buckets, key):
     all buckets, sorted in decreasing order (highest ranked first).
     """
     ranking = []
-    for bucket in buckets:
+    for (bucket, weight) in buckets:
         # The particular hash function doesn't matter a lot, as long as it is
         # one that maps the key to a fixed sized value and distributes the keys
         # uniformly across the output space
-        score = blake2b_hash_as_int(
-            b"%s-%s" % (str(key).encode(), str(bucket).encode())
-        )
+        hash = blake2b_hash_as_int(b"%s-%s" % (str(key).encode(), str(bucket).encode()))
+        score = weight * (1.0 / -math.log(hash / 0xFFFFFFFFFFFFFFFF))
         ranking.append((score, bucket))
 
     return [b for (s, b) in sorted(ranking, reverse=True)]
@@ -182,6 +182,9 @@ class RedirectHandler(RequestHandler):
         self.host_names = [c["url"] for c in hosts.values() if c["weight"] > 0]
         self.host_weights = [c["weight"] for c in hosts.values() if c["weight"] > 0]
 
+        # Combine hostnames and weights into one list
+        self.names_and_weights = list(zip(self.host_names, self.host_weights))
+
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.set_header("Access-control-allow-headers", "cache-control")
@@ -194,7 +197,7 @@ class RedirectHandler(RequestHandler):
         # make sure the host is a valid choice and considered healthy
         if host_name not in self.host_names:
             if self.load_balancer == "rendezvous":
-                host_name = rendezvous_rank(self.host_names, cache_key(path))[0]
+                host_name = rendezvous_rank(self.names_and_weights, cache_key(path))[0]
             # "random" is our default or fall-back
             else:
                 host_name = random.choices(self.host_names, self.host_weights)[0]
@@ -204,7 +207,7 @@ class RedirectHandler(RequestHandler):
         # do we sometimes want to add this url param? Not for build urls, at least
         # redirect = url_concat(host_name + uri, {'binder_launch_host': 'https://mybinder.org/'})
         redirect = host_name + uri
-        app_log.info('Redirecting {} to {}'.format(path, host_name))
+        app_log.info("Redirecting {} to {}".format(path, host_name))
         self.redirect(redirect, status=307)
 
 
