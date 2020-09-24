@@ -465,30 +465,31 @@ federationRedirect:
     retries: 5
     timeout: 2
   load_balancer: "rendezvous"
+  # note: rendezvous load-balancer ignores weights
+  # the only weights that matter are 0 (disabled) and >= 1 (enabled)
   hosts:
     gke:
       url: https://gke1.mybinder.org
-      weight: 65
+      weight: 1
       health: https://gke1.mybinder.org/health
       versions: https://gke1.mybinder.org/versions
-      prime: true
     gke2:
+      prime: true
       url: https://gke2.mybinder.org
-      weight: 10
+      weight: 1
       health: https://gke2.mybinder.org/health
       versions: https://gke2.mybinder.org/versions
     gesis:
       url: https://gesis.mybinder.org
-      weight: 15
+      weight: 1
       health: https://gesis.mybinder.org/health
       versions: https://gesis.mybinder.org/versions
     ovh:
       url: https://ovh.mybinder.org
-      weight: 19
+      weight: 1
       health: https://ovh.mybinder.org/health
       versions: https://ovh.mybinder.org/versions
     turing:
-      turing:
       url: https://turing.mybinder.org
       weight: 1
       health: https://turing.mybinder.org/health
