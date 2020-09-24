@@ -8,7 +8,7 @@ coreNodeSelector: &coreNodeSelector
 binderhub:
   config:
     BinderHub:
-      pod_quota: 200
+      pod_quota: 100
       build_node_selector: *userNodeSelector
       hub_url: https://hub.gke1.mybinder.org
       badge_base_url: https://mybinder.org
