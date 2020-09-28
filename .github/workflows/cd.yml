@@ -156,13 +156,9 @@ jobs:
       fail-fast: false  # Do not cancel all jobs if one fails
       matrix:
         include:
-          - federation_member: prod
-            binder_url: https://gke1.mybinder.org
-            hub_url: https://hub.gke1.mybinder.org
-            cluster_name: prod-a
           - federation_member: prod-gke2
-            binder_url: https://gke2.mybinder.org
-            hub_url: https://hub.gke2.mybinder.org
+            binder_url: https://gke.mybinder.org
+            hub_url: https://hub.gke.mybinder.org
             cluster_name: prod
             release_name: prod
             chartpress_args: "--image-prefix=gcr.io/binderhub-288415/mybinder-tool-"
