@@ -44,9 +44,6 @@ jobs:
           - federation_member: staging
             binder_url: https://gke2.staging.mybinder.org
             hub_url: https://hub.gke2.staging.mybinder.org
-            # TODO: move this to image-prefix in chartpress.yaml
-            # it's here while we need two places to push
-            chartpress_args: "--image-prefix=gcr.io/binderhub-288415/mybinder-tool-"
     steps:
       # Action Repo: https://github.com/actions/checkout
       - name: "Stage 0: Checkout repo"
@@ -156,12 +153,9 @@ jobs:
       fail-fast: false  # Do not cancel all jobs if one fails
       matrix:
         include:
-          - federation_member: prod-gke2
+          - federation_member: prod
             binder_url: https://gke.mybinder.org
             hub_url: https://hub.gke.mybinder.org
-            cluster_name: prod
-            release_name: prod
-            chartpress_args: "--image-prefix=gcr.io/binderhub-288415/mybinder-tool-"
           - federation_member: turing
             binder_url: https://turing.mybinder.org
             hub_url: https://hub.mybinder.turing.ac.uk
@@ -195,7 +189,7 @@ jobs:
 
       # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idif
       - name: "Stage 1: Install gcloud SDK"
-        if: matrix.federation_member == 'prod' || matrix.federation_member == 'prod-gke2'
+        if: matrix.federation_member == 'prod'
         uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
         with:
           version: ${{ env.GCLOUD_SDK_VERION }}

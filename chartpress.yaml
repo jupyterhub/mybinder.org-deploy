@@ -1,6 +1,6 @@
 charts:
   - name: mybinder
-    imagePrefix: gcr.io/binder-prod/mybinder-tool-
+    imagePrefix: gcr.io/binderhub-288415/mybinder-tool-
     images:
       analytics-publisher:
         valuesPath: analyticsPublisher.image
