@@ -148,8 +148,6 @@ federationRedirect:
       health: https://gke2.staging.mybinder.org/health
       versions: https://gke2.staging.mybinder.org/versions
     # unset the rest of the federation
-    gke2:
-      weight: 0
     gesis:
       weight: 0
     ovh:
