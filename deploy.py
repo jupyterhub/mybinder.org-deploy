@@ -27,15 +27,13 @@ if HELM_VERSION is None:
 
 
 GCP_PROJECTS = {
-    "prod": "binder-prod",
     "staging": "binderhub-288415",
-    "prod-gke2": "binderhub-288415",
+    "prod": "binderhub-288415",
 }
 
 GCP_ZONES = {
     "staging": "us-central1-a",
-    "prod": "us-central1-a",
-    "prod-gke2": "us-central1",
+    "prod": "us-central1",
 }
 
 
@@ -369,7 +367,7 @@ def main():
     argparser.add_argument(
         "release",
         help="Release to deploy",
-        choices=["staging", "staging-gke2", "prod-gke2", "prod", "ovh", "turing"],
+        choices=["staging", "prod", "ovh", "turing"],
     )
     argparser.add_argument(
         "--name", help="Override helm release name, if different from RELEASE",
