@@ -1,6 +1,5 @@
 import notebook
 import os
-import hashlib
 
 from distutils.version import LooseVersion as V
 
