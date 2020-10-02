@@ -1,3 +1,4 @@
+import asyncio
 import json
 import os
 import random
@@ -9,13 +10,12 @@ import tornado
 import tornado.ioloop
 import tornado.web
 import tornado.options
-from tornado.gen import sleep
 from tornado.ioloop import IOLoop
 from tornado.log import app_log
 from tornado import options
 
 from tornado.httpclient import AsyncHTTPClient, HTTPError, HTTPRequest
-from tornado.httputil import HTTPHeaders, url_concat
+from tornado.httputil import HTTPHeaders
 from tornado.web import RequestHandler
 
 
@@ -76,6 +76,13 @@ if os.path.exists(CONFIG_PATH):
 else:
     app_log.warning("Using default config!")
 
+
+class FailedCheck(Exception):
+    """Exception class for health checks not being satisfied
+
+    These checks are considered failures and not retried
+    until the next interval.
+    """
 
 def blake2b_hash_as_int(b):
     """Compute digest of the bytes `b` using the Blake2 hash function.
@@ -231,7 +238,7 @@ async def health_check(host, active_hosts):
                     # pod quota is a soft check
                     if check["service"] == "Pod quota":
                         if not check["ok"]:
-                            raise Exception(
+                            raise FailedCheck(
                                 "{} is over its quota: {}".format(host, check)
                             )
                         break
@@ -242,31 +249,34 @@ async def health_check(host, active_hosts):
                 versions = json.loads(response.body)
                 # if this is the prime host store the versions so we can compare to them later
                 if all_hosts[host].get("prime", False):
-                    all_hosts["versions"] = versions
+                    CONFIG["versions"] = versions
                 # check if this cluster is on the same versions as the prime
                 # w/o information about the prime's version we allow each
                 # cluster to be on its own versions
-                if versions != all_hosts.get("versions", versions):
-                    raise Exception(
+                if versions != CONFIG.get("versions", versions):
+                    raise FailedCheck(
                         "{} has different versions ({}) than prime ({})".format(
-                            host, versions, all_hosts["versions"]
+                            host, versions, CONFIG["versions"]
                         )
                     )
+            except FailedCheck:
+                # don't retry failures such as quotas/version checks
+                # those aren't likely to change in 1s
+                raise
             except Exception as e:
+                # retry check on unhandled errors (e.g. connection failure)
                 app_log.warning(
-                    "{} failed, attempt {} of {}".format(
-                        host, n + 1, check_config["retries"]
-                    )
+                    f"{host} health check failed, attempt {n + 1} of {check_config['retries']}: {e}"
                 )
                 # raise the exception on the last attempt
-                if n == check_config["retries"] - 1:
+                if n + 1 == check_config["retries"]:
                     raise
                 else:
-                    await sleep(1)
+                    await asyncio.sleep(1)
 
     # any kind of exception means the host is unhealthy
     except Exception as e:
-        app_log.warning("{} is unhealthy".format(host))
+        app_log.warning(f"{host} is unhealthy: {e}")
         if host in active_hosts:
             # prime hosts are never removed, they always get traffic and users
             # will see what ever healthy or unhealthy state they are in
@@ -282,9 +292,7 @@ async def health_check(host, active_hosts):
             else:
                 # remove the host from the rotation for a while
                 active_hosts.pop(host)
-                app_log.warning(
-                    "{} has been removed from the rotation ({})".format(host, str(e))
-                )
+                app_log.warning(f"{host} has been removed from the rotation")
 
         # wait longer than usual to check unhealthy host again
         jitter = check_config["jitter"] * (0.5 - random.random())
@@ -341,7 +349,6 @@ def make_app():
             (r".*", ProxyHandler, {"host": prime_host}),
         ],
         hosts=hosts,
-        cookie_secret="get-me-dynamically",
         debug=False,
     )
 
