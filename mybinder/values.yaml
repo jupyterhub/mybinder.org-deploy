@@ -70,6 +70,9 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
+        - pattern: ^michaelJwilson/DESI-HighSchool.*
+          config:
+            quota: 200
 
     GitRepoProvider:
       banned_specs:
