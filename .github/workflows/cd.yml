@@ -19,7 +19,6 @@ on:
 # Global environment variables
 env:
   GCLOUD_SDK_VERION: "290.0.1"
-  HELM_VERSION: "v2.16.10"
   KUBECTL_VERSION: "v1.18.0"
   CERT_MANAGER_VERSION: "v0.15.2"
   GIT_COMMITTER_EMAIL: ci-user@github.local
@@ -37,6 +36,9 @@ jobs:
       ((github.event_name == 'push') &&
       (github.ref == 'refs/heads/master'))
     runs-on: ubuntu-18.04
+    # Set helm version for this job
+    env:
+      HELM_VERSION: "v3.3.4"
     strategy:
       fail-fast: false  # Do not cancel all jobs if one fails
       matrix:
@@ -148,6 +150,9 @@ jobs:
     # Only run job if the event is a push to master
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-18.04
+    # Set helm version for this job
+    env:
+      HELM_VERSION: "v2.16.10"
     # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategy
     strategy:
       fail-fast: false  # Do not cancel all jobs if one fails
