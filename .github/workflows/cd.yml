@@ -87,7 +87,7 @@ jobs:
 
       - name: "Stage 1: Install helm"
         run: |
-          curl -L https://storage.googleapis.com/kubernetes-helm/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
+          curl -L https://get.helm.sh/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
 
       # Action Repo: https://github.com/sliteteam/github-action-git-crypt-unlock
