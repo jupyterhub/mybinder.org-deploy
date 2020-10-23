@@ -135,7 +135,7 @@ def setup_helm(release):
     # Only compare helm versions for release not running helm3
     if release == "staging":
         helm_version_major = HELM_VERSION.split(".")[0]
-        
+
         if helm_version_major == "v3":
             print(BOLD + GREEN + "You are running helm3!" + NC, flush=True)
         else:
@@ -272,7 +272,6 @@ def deploy(release, name=None):
         name,
         name,
         "mybinder",
-        "--force",
         "--cleanup-on-fail",
         "-f",
         os.path.join("config", release + ".yaml"),
@@ -281,6 +280,11 @@ def deploy(release, name=None):
         "-f",
         os.path.join("secrets", "config", release + ".yaml"),
     ]
+
+    if release == "staging":
+        helm.extend(["--create-namespace"])
+    else:
+        helm.extend(["--force"])
 
     subprocess.check_call(helm)
     print(BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC, flush=True)
