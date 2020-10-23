@@ -133,8 +133,18 @@ def setup_auth_gcloud(release, cluster=None):
 def setup_helm(release):
     """ensure helm is up to date"""
     # Only compare helm versions for release not running helm3
+    # First check the helm client and server versions
+    client_helm_cmd = ["helm", "version", "-c", "--short"]
+    client_version = (
+        subprocess.check_output(client_helm_cmd)
+        .decode("utf-8")
+        .split(":")[1]
+        .split("+")[0]
+        .strip()
+    )
+
     if release == "staging":
-        helm_version_major = HELM_VERSION.split(".")[0]
+        helm_version_major = client_version.split(".")[0]
 
         if helm_version_major == "v3":
             print(BOLD + GREEN + "You are running helm3!" + NC, flush=True)
@@ -143,16 +153,6 @@ def setup_helm(release):
                 f"Upgrading {release} requires helm3 to be installed. Please check your installation."
             )
     else:
-        # First check the helm client and server versions
-        client_helm_cmd = ["helm", "version", "-c", "--short"]
-        client_version = (
-            subprocess.check_output(client_helm_cmd)
-            .decode("utf-8")
-            .split(":")[1]
-            .split("+")[0]
-            .strip()
-        )
-
         server_helm_cmd = ["helm", "version", "-s", "--short"]
         try:
             server_version = (
