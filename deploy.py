@@ -140,10 +140,11 @@ def get_helm_major_version():
     client_version = (
         subprocess.check_output(client_helm_cmd)
         .decode("utf-8")
-        .split(":")[1]
-        .split("+")[0]
-        .strip()
+        # .split(":")[1]
+        # .split("+")[0]
+        # .strip()
     )
+    print(client_version)
 
     helm_version_major = client_version.split(".")[0]
 
