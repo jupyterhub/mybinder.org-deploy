@@ -408,6 +408,7 @@ def main():
     args = argparser.parse_args()
 
     helm_major_version = get_helm_major_version()
+    print(helm_major_version)
 
     # Check if the local flag is set
     if not args.local:
