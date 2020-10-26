@@ -31,6 +31,7 @@ variable "deployer_permissions" {
     "container.apiServices.delete",
     "container.apiServices.get",
     "container.apiServices.list",
+    "container.clusterRoleBindings.get",
     "container.clusterRoles.get",
     "container.clusters.create",
     "container.clusters.get",
