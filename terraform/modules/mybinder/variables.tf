@@ -50,6 +50,7 @@ variable "deployer_permissions" {
     "container.deployments.get",
     "container.deployments.list",
     "container.deployments.update",
+    "container.mutatingWebhookConfigurations.get",
     "container.pods.get",
     "container.pods.list",
     "container.pods.portForward",
