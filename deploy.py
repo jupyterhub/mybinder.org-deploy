@@ -143,6 +143,9 @@ def get_helm_major_version():
 
     helm_version_major = client_version.split(".")[0]
 
+    if "Client:" in helm_version_major:
+        helm_version_major = helm_version_major.split(":").split("+").strip()
+
     return helm_version_major
 
 
