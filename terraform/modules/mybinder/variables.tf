@@ -56,6 +56,7 @@ variable "deployer_permissions" {
     "container.secrets.get",
     "container.secrets.list",
     "container.secrets.update",
+    "container.serviceAccounts.get",
     "container.services.get",
   ]
 }
