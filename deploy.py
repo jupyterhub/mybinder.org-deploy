@@ -130,6 +130,26 @@ def setup_auth_gcloud(release, cluster=None):
     )
 
 
+def get_helm_major_version():
+    """Get the major version of helm
+
+    Returns:
+        helm_major_version (str): Either "v2" or "v3"
+    """
+    client_helm_cmd = ["helm", "version", "-c", "--short"]
+    client_version = (
+        subprocess.check_output(client_helm_cmd)
+        .decode("utf-8")
+        .split(":")[1]
+        .split("+")[0]
+        .strip()
+    )
+
+    helm_version_major = client_version.split(".")[0]
+
+    return helm_version_major
+
+
 def setup_helm(release):
     """ensure helm is up to date"""
     # First check the helm client and server versions
@@ -153,13 +173,6 @@ def setup_helm(release):
         )
     except subprocess.CalledProcessError:
         server_version = None
-
-    # TODO: fresh cluster needs these run once:
-    # not yet automated, not needed once we move to helm 3
-    # kubectl --namespace kube-system create serviceaccount tiller
-    # kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
-    # helm init --service-account tiller --history-max 100 --wait
-    # kubectl patch deployment tiller-deploy --namespace=kube-system --type=json --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
 
     print(BOLD + GREEN +
         f"Client version: {client_version}, Server version: {server_version}" +
@@ -187,6 +200,13 @@ def setup_helm(release):
     else:
         # This is a catch-all exception. Hopefully this doesn't execute!
         raise Exception("Please check your helm installation.")
+
+    # TODO: fresh cluster needs these run once:
+    # not yet automated, not needed once we move to helm 3
+    # kubectl --namespace kube-system create serviceaccount tiller
+    # kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
+    # helm init --service-account tiller --history-max 100 --wait
+    # kubectl patch deployment tiller-deploy --namespace=kube-system --type=json --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
 
     deployment = json.loads(subprocess.check_output([
         'kubectl',
@@ -235,7 +255,7 @@ def setup_helm(release):
     ])
 
 
-def deploy(release, name=None):
+def deploy(release, helm_version, name=None):
     """Deploy jupyterhub"""
     print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
     if not name:
@@ -261,7 +281,6 @@ def deploy(release, name=None):
         name,
         name,
         "mybinder",
-        "--force",
         "--cleanup-on-fail",
         "-f",
         os.path.join("config", release + ".yaml"),
@@ -270,6 +289,11 @@ def deploy(release, name=None):
         "-f",
         os.path.join("secrets", "config", release + ".yaml"),
     ]
+
+    if helm_version == "v3":
+        helm.extend(["--create-namespace"])
+    else:
+        helm.extend(["--force"])
 
     subprocess.check_call(helm)
     print(BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC, flush=True)
@@ -383,6 +407,8 @@ def main():
 
     args = argparser.parse_args()
 
+    helm_major_version = get_helm_major_version()
+
     # Check if the local flag is set
     if not args.local:
         # Check if the script is being run on CI
@@ -418,9 +444,11 @@ def main():
             setup_auth_turing(args.release)
         else:
             setup_auth_gcloud(args.release, args.cluster)
-        setup_helm(args.release)
 
-    deploy(args.release, args.name)
+        if helm_major_version == "v2":
+            setup_helm(args.release)
+
+    deploy(args.release, helm_major_version, args.name)
 
 
 if __name__ == '__main__':

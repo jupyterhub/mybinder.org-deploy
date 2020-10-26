@@ -19,7 +19,6 @@ on:
 # Global environment variables
 env:
   GCLOUD_SDK_VERION: "290.0.1"
-  HELM_VERSION: "v2.16.10"
   KUBECTL_VERSION: "v1.18.0"
   CERT_MANAGER_VERSION: "v0.15.2"
   GIT_COMMITTER_EMAIL: ci-user@github.local
@@ -37,6 +36,9 @@ jobs:
       ((github.event_name == 'push') &&
       (github.ref == 'refs/heads/master'))
     runs-on: ubuntu-18.04
+    # Set helm version for this job
+    env:
+      HELM_VERSION: "v3.3.4"
     strategy:
       fail-fast: false  # Do not cancel all jobs if one fails
       matrix:
@@ -85,7 +87,7 @@ jobs:
 
       - name: "Stage 1: Install helm"
         run: |
-          curl -L https://storage.googleapis.com/kubernetes-helm/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
+          curl -L https://get.helm.sh/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
 
       # Action Repo: https://github.com/sliteteam/github-action-git-crypt-unlock
@@ -105,7 +107,7 @@ jobs:
       - name: "Stage 2: Setup helm"
         working-directory: mybinder
         run: |
-          helm init --client-only
+          helm repo add stable https://charts.helm.sh/stable
           helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
           helm repo add jetstack https://charts.jetstack.io
           helm repo update
@@ -148,6 +150,9 @@ jobs:
     # Only run job if the event is a push to master
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-18.04
+    # Set helm version for this job
+    env:
+      HELM_VERSION: "v2.16.10"
     # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategy
     strategy:
       fail-fast: false  # Do not cancel all jobs if one fails
