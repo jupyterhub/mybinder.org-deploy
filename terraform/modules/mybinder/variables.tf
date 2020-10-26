@@ -51,6 +51,11 @@ variable "deployer_permissions" {
     "container.pods.get",
     "container.pods.list",
     "container.pods.portForward",
+    "container.secrets.create",
+    "container.secrets.delete",
+    "container.secrets.get",
+    "container.secrets.list",
+    "container.secrets.update",
     "container.services.get",
   ]
 }
