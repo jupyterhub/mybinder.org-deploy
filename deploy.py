@@ -130,9 +130,28 @@ def setup_auth_gcloud(release, cluster=None):
     )
 
 
+def get_helm_major_version():
+    """Get the major version of helm
+
+    Returns:
+        helm_major_version (str): Either "v2" or "v3"
+    """
+    client_helm_cmd = ["helm", "version", "-c", "--short"]
+    client_version = (
+        subprocess.check_output(client_helm_cmd)
+        .decode("utf-8")
+        .split(":")[1]
+        .split("+")[0]
+        .strip()
+    )
+
+    helm_version_major = client_version.split(".")[0]
+
+    return helm_version_major
+
+
 def setup_helm(release):
     """ensure helm is up to date"""
-    # Only compare helm versions for release not running helm3
     # First check the helm client and server versions
     client_helm_cmd = ["helm", "version", "-c", "--short"]
     client_version = (
@@ -143,54 +162,44 @@ def setup_helm(release):
         .strip()
     )
 
-    if release == "staging":
-        helm_version_major = client_version.split(".")[0]
-
-        if helm_version_major == "v3":
-            print(BOLD + GREEN + "You are running helm3!" + NC, flush=True)
-        else:
-            raise Exception(
-                f"Upgrading {release} requires helm3 to be installed. Please check your installation."
-            )
-    else:
-        server_helm_cmd = ["helm", "version", "-s", "--short"]
-        try:
-            server_version = (
-                subprocess.check_output(server_helm_cmd)
-                .decode("utf-8")
-                .split(":")[1]
-                .split("+")[0]
-                .strip()
-            )
-        except subprocess.CalledProcessError:
-            server_version = None
-
-        print(BOLD + GREEN +
-            f"Client version: {client_version}, Server version: {server_version}" +
-            NC,
-            flush=True
+    server_helm_cmd = ["helm", "version", "-s", "--short"]
+    try:
+        server_version = (
+            subprocess.check_output(server_helm_cmd)
+            .decode("utf-8")
+            .split(":")[1]
+            .split("+")[0]
+            .strip()
         )
+    except subprocess.CalledProcessError:
+        server_version = None
 
-        # Now check if the version of helm matches that which CI is expecting
-        if client_version != HELM_VERSION:
-            # The local helm version is not what was expected - user needs to change the installation
-            raise Exception(
-                f"You are not running helm {HELM_VERSION} which is the version our continuous deployment system uses.\n" +
-                "Please change your installation and try again.\n"
-            )
-        elif (client_version == HELM_VERSION) and (client_version != server_version):
-            # The correct local version of helm is installed, but the server side
-            # has previously accidentally been upgraded. Perform a force-upgrade
-            # to bring the server side back to matching version
-            print(f"Upgrading helm from {server_version} to {HELM_VERSION}")
-            subprocess.check_call(['helm', 'init', '--upgrade', '--force-upgrade'])
-        elif (client_version == HELM_VERSION) and (client_version == server_version):
-            # All is good! Perform normal helm init command.
-            # We use the --client-only flag so that the Tiller installation is not affected.
-            subprocess.check_call(['helm', 'init', '--client-only'])
-        else:
-            # This is a catch-all exception. Hopefully this doesn't execute!
-            raise Exception("Please check your helm installation.")
+    print(BOLD + GREEN +
+        f"Client version: {client_version}, Server version: {server_version}" +
+        NC,
+        flush=True
+    )
+
+    # Now check if the version of helm matches that which CI is expecting
+    if client_version != HELM_VERSION:
+        # The local helm version is not what was expected - user needs to change the installation
+        raise Exception(
+            f"You are not running helm {HELM_VERSION} which is the version our continuous deployment system uses.\n" +
+            "Please change your installation and try again.\n"
+        )
+    elif (client_version == HELM_VERSION) and (client_version != server_version):
+        # The correct local version of helm is installed, but the server side
+        # has previously accidentally been upgraded. Perform a force-upgrade
+        # to bring the server side back to matching version
+        print(f"Upgrading helm from {server_version} to {HELM_VERSION}")
+        subprocess.check_call(['helm', 'init', '--upgrade', '--force-upgrade'])
+    elif (client_version == HELM_VERSION) and (client_version == server_version):
+        # All is good! Perform normal helm init command.
+        # We use the --client-only flag so that the Tiller installation is not affected.
+        subprocess.check_call(['helm', 'init', '--client-only'])
+    else:
+        # This is a catch-all exception. Hopefully this doesn't execute!
+        raise Exception("Please check your helm installation.")
 
     # TODO: fresh cluster needs these run once:
     # not yet automated, not needed once we move to helm 3
@@ -246,7 +255,7 @@ def setup_helm(release):
     ])
 
 
-def deploy(release, name=None):
+def deploy(release, helm_version, name=None):
     """Deploy jupyterhub"""
     print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
     if not name:
@@ -281,7 +290,7 @@ def deploy(release, name=None):
         os.path.join("secrets", "config", release + ".yaml"),
     ]
 
-    if release == "staging":
+    if helm_version == "v3":
         helm.extend(["--create-namespace"])
     else:
         helm.extend(["--force"])
@@ -398,6 +407,8 @@ def main():
 
     args = argparser.parse_args()
 
+    helm_major_version = get_helm_major_version()
+
     # Check if the local flag is set
     if not args.local:
         # Check if the script is being run on CI
@@ -433,9 +444,11 @@ def main():
             setup_auth_turing(args.release)
         else:
             setup_auth_gcloud(args.release, args.cluster)
-        setup_helm(args.release)
 
-    deploy(args.release, args.name)
+        if helm_major_version == "v2":
+            setup_helm(args.release)
+
+    deploy(args.release, helm_major_version, args.name)
 
 
 if __name__ == '__main__':
