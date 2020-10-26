@@ -266,7 +266,7 @@ def deploy(release, helm_version, name=None):
             "secrets/ban.py",
         ])
 
-    setup_certmanager()
+    setup_certmanager(helm_version)
 
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
     helm = [
@@ -335,7 +335,7 @@ def deploy(release, helm_version, name=None):
         )
 
 
-def setup_certmanager():
+def setup_certmanager(helm_version):
     """Install cert-manager separately
 
     cert-manager docs and CRD assumptions say that cert-manager must never be a sub-chart,
@@ -361,11 +361,17 @@ def setup_certmanager():
     subprocess.check_call(
         ["helm", "repo", "add", "jetstack", "https://charts.jetstack.io"]
     )
-    subprocess.check_call(
-        ["helm", "repo", "update", "jetstack"]
-    )
-    subprocess.check_call(
-        [
+
+    if helm_version == "v2":
+        subprocess.check_call(
+            ["helm", "repo", "update", "jetstack"]
+        )
+    else:
+        subprocess.check_call(
+            ["helm", "repo", "update"]
+        )
+
+    helm_upgrade = [
             "helm",
             "upgrade",
             "--install",
@@ -378,7 +384,11 @@ def setup_certmanager():
             "-f",
             "config/cert-manager.yaml",
         ]
-    )
+
+    if helm_version == "v3":
+        helm_upgrade.append("--create-namespace")
+
+    subprocess.check_call(helm_upgrade)
 
 
 def main():
