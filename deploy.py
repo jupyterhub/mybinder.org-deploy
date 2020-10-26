@@ -138,13 +138,8 @@ def get_helm_major_version():
     """
     client_helm_cmd = ["helm", "version", "-c", "--short"]
     client_version = (
-        subprocess.check_output(client_helm_cmd)
-        .decode("utf-8")
-        # .split(":")[1]
-        # .split("+")[0]
-        # .strip()
+        subprocess.check_output(client_helm_cmd).decode("utf-8")
     )
-    print(client_version)
 
     helm_version_major = client_version.split(".")[0]
 
@@ -409,7 +404,6 @@ def main():
     args = argparser.parse_args()
 
     helm_major_version = get_helm_major_version()
-    print(helm_major_version)
 
     # Check if the local flag is set
     if not args.local:
