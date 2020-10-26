@@ -63,5 +63,6 @@ variable "deployer_permissions" {
     "container.secrets.update",
     "container.serviceAccounts.get",
     "container.services.get",
+    "container.validatingWebhookConfigurations.get",
   ]
 }
