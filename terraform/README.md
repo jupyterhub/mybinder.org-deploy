@@ -9,7 +9,13 @@ per-deployment config in $deployment/main.tf
 
 Variables declared in mybinder/variables.tf can be overridden in $deployment/main.tf
 
-To deploy e.g. staging:
+First you must login to `gcloud` to gain application credentials:
+
+```bash
+gcloud auth application-default login
+```
+
+Then, to deploy e.g. staging:
 
 ```bash
 cd staging
@@ -19,7 +25,6 @@ terraform apply
 which will create a plan and prompt for confirmation.
 
 Review the proposed changes and if they look right, type 'yes' to apply the changes.
-
 
 ## Getting secrets out
 
