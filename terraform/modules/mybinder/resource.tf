@@ -15,7 +15,7 @@ locals {
   service_accounts = {
     deployer = {
       display_name = "Deployment account for ${var.name}",
-      role         = null,
+      role         = "roles/container.admin",
     },
     matomo = {
       display_name = "SQL account for ${var.name} Matomo",
@@ -112,14 +112,6 @@ output "matomo_password" {
   sensitive = true
 }
 
-# CI deployer custom role
-resource "google_project_iam_custom_role" "deployer" {
-  role_id     = "${var.name}Deployer"
-  title       = "${var.name} Deployer"
-  description = "Role for deploying to ${var.name} from CI"
-  permissions = var.deployer_permissions
-}
-
 # create mapping of service accounts
 resource "google_service_account" "sa" {
   for_each     = local.service_accounts
@@ -129,9 +121,8 @@ resource "google_service_account" "sa" {
 
 resource "google_project_iam_member" "iam" {
   for_each = local.service_accounts
-  # special-case deployer id
-  role   = each.key == "deployer" ? google_project_iam_custom_role.deployer.id : each.value.role
-  member = "serviceAccount:${google_service_account.sa[each.key].email}"
+  role     = each.value.role
+  member   = "serviceAccount:${google_service_account.sa[each.key].email}"
 }
 
 resource "google_project_iam_member" "deploy-pusher" {
