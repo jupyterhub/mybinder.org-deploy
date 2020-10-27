@@ -87,7 +87,6 @@ grafana:
       - secretName: turing-grafana-tls-crt
         hosts:
           - grafana.mybinder.turing.ac.uk
-
   datasources:
     datasources.yaml:
       apiVersion: 1
@@ -99,6 +98,8 @@ grafana:
           access: direct
           isDefault: true
           editable: false
+  persistence:
+    storageClassName: default
 
 prometheus:
   server:
