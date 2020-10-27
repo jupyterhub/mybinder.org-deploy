@@ -12,7 +12,6 @@ spec:
   selector:
     matchLabels:
       release: {{ .Release.Name }}
-      heritage: {{ .Release.Service }}
       app: gcs-proxy
       component: nginx
 {{- end }}
