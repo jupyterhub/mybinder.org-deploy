@@ -12,6 +12,5 @@ spec:
   selector:
     matchLabels:
       release: {{ .Release.Name }}
-      heritage: {{ .Release.Service }}
       app: analytics-publisher
 {{- end }}

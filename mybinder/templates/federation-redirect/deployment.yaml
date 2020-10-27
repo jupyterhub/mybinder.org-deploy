@@ -12,13 +12,11 @@ spec:
   selector:
     matchLabels:
       app: federation-redirect
-      heritage: {{ .Release.Service }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
         app: federation-redirect
-        heritage: {{ .Release.Service }}
         release: {{ .Release.Name }}
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/federation-redirect/configmap.yaml") . | sha256sum }}

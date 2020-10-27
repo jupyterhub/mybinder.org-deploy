@@ -13,7 +13,6 @@ spec:
     matchLabels:
       app: gcs-proxy
       component: nginx
-      heritage: {{ .Release.Service }}
       release: {{ .Release.Name }}
   replicas: {{ .Values.gcsProxy.replicas }}
   template:
@@ -23,7 +22,6 @@ spec:
       labels:
         app: gcs-proxy
         component: nginx
-        heritage: {{ .Release.Service }}
         release: {{ .Release.Name }}
     spec:
       nodeSelector: {{ toJson .Values.gcsProxy.nodeSelector }}

@@ -14,13 +14,11 @@ spec:
   selector:
     matchLabels:
       app: analytics-publisher
-      heritage: {{ .Release.Service }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
         app: analytics-publisher
-        heritage: {{ .Release.Service }}
         release: {{ .Release.Name }}
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/analytics-publisher/configmap.yaml") . | sha256sum }}

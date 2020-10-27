@@ -13,6 +13,5 @@ spec:
     targetPort: 8080
   selector:
     app: federation-redirect
-    heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 {{- end }}
