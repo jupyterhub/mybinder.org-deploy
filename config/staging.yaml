@@ -76,6 +76,8 @@ grafana:
           access: direct
           isDefault: true
           editable: false
+  persistence:
+    storageClassName: standard
 
 prometheus:
   server:
