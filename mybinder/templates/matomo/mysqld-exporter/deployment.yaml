@@ -13,7 +13,6 @@ spec:
   selector:
     matchLabels:
       app: matomo
-      heritage: {{ .Release.Service }}
       release: {{ .Release.Name }}
       component: mysqld-exporter
   template:
@@ -25,7 +24,6 @@ spec:
         prometheus.io/port: "9104"
       labels:
         app: matomo
-        heritage: {{ .Release.Service }}
         release: {{ .Release.Name }}
         component: mysqld-exporter
     spec:
