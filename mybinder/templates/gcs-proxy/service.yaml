@@ -6,7 +6,6 @@ metadata:
   labels:
     app: gcs-proxy
     component: nginx
-    heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 spec:
   ports:
@@ -15,6 +14,5 @@ spec:
   selector:
     app: gcs-proxy
     component: nginx
-    heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 {{- end }}
