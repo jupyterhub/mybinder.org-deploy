@@ -6,7 +6,6 @@ terraform {
 }
 
 provider "google" {
-  version = "~> 3.39"
   project = "binderhub-288415"
   region  = "us-central1"
   zone    = "us-central1-a"
