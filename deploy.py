@@ -281,7 +281,6 @@ def deploy(release, helm_version, name=None):
         name,
         "mybinder",
         "--cleanup-on-fail",
-        "--force",
         "-f",
         os.path.join("config", release + ".yaml"),
         "-f",
@@ -291,7 +290,9 @@ def deploy(release, helm_version, name=None):
     ]
 
     if helm_version == "v3":
-        helm.append("--create-namespace")
+        helm.extend(["--create-namespace"])
+    else:
+        helm.extend(["--force"])
 
     subprocess.check_call(helm)
     print(BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC, flush=True)
