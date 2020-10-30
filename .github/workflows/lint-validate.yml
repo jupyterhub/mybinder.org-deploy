@@ -46,7 +46,7 @@ jobs:
             export YAMLLINT_CONFIG=scripts/yamllint-no-secrets.yaml
           fi
           # persist env for the next step
-          echo "::set-env name=YAMLLINT_CONFIG::$YAMLLINT_CONFIG"
+          echo "YAMLLINT_CONFIG=$YAMLLINT_CONFIG" >> "$GITHUB_ENV"
 
       # We use --no-warnings in this step to reduce output to critical errors
       - name: Run yamllint
@@ -120,7 +120,7 @@ jobs:
           fi
           echo "linting with secret config ${SECRET_CONFIG}"
           # persist env for the next step
-          echo "::set-env name=SECRET_CONFIG::$SECRET_CONFIG"
+          echo "SECRET_CONFIG=$SECRET_CONFIG" >> "$GITHUB_ENV"
 
       - name: Run helm kubeval for ${{ matrix.release }} with kube-${{ matrix.kube_version }}
         run: |
