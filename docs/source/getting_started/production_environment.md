@@ -112,7 +112,7 @@ create a file called `requirements.yaml` and put the following in it:
 dependencies:
 - name: prometheus
   version: 4.6.16
-  repository: https://kubernetes-charts.storage.googleapis.com
+  repository: https://charts.helm.sh/stable
 ```
 
 This also allows us to pin a *version* of Prometheus, which improves
