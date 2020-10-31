@@ -114,7 +114,7 @@ jobs:
       - name: Select secret config
         run: |
           if [[ "${{ github.event.pull_request.head.repo.fork }}" == "false" ]]; then
-            export SECRET_CONFIG="-f secrets/config/common.yaml -f config/${{ matrix.release }}.yaml"
+            export SECRET_CONFIG="-f secrets/config/common.yaml -f secrets/config/${{ matrix.release }}.yaml"
           else
             export SECRET_CONFIG="-f config/test-secrets.yaml"
           fi
