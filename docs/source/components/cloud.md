@@ -35,12 +35,12 @@ can be used to provide the same service.
 
 ## Projects
 
-We have two major [projects](https://cloud.google.com/storage/docs/projects)
-that run on Google Cloud.
+We have a [project](https://cloud.google.com/storage/docs/projects)
+that runs on Google Cloud: `binderhub`. It contains the following two clusters:
 
-1. `binder-prod`, runs production - `mybinder.org` and all resources
+1. `prod`, runs production - `mybinder.org` and all resources
    needed for it.
-2. `binder-staging` runs staging - `staging.mybinder.org` and all resources
+2. `staging` runs staging - `staging.mybinder.org` and all resources
    needed for it.
 
 We try to make staging and prod be as similar as possible. Staging should
@@ -56,7 +56,7 @@ as Open Source, and does not have much in the way of proprietary enhancements.
 
 ### Cluster
 
-In production, the cluster is called `prod-a`. In staging, it is called `staging`.
+In production, the cluster is called `prod`. In staging, it is called `staging`.
 
 ### Node Pools
 
@@ -68,7 +68,7 @@ current NodePool.
 
 ### Machine sizes
 
-The `prod-a` cluster currently uses `n1-highmem-32` machines. These have
+The `prod` cluster currently uses `n1-highmem-32` machines. These have
 32 CPU cores and 208 GB of Memory. We use the `highmem` machines (with more Memory per CPU)
 as opposed to `standard` machines for the following reasons:
 
@@ -89,7 +89,7 @@ down.
 
 ### Boot disk sizes
 
-In `prod-a`, we use 1000 GB SSD disks as boot disks. On Google Cloud, the size of
+In `prod`, we use 1000 GB SSD disks as boot disks. On Google Cloud, the size of
 the disk [controls the performance](https://cloud.google.com/compute/docs/disks/performance) - larger the disk, the faster it is. Our disks need to be fast since we
 are doing a lot of I/O operations during docker build / push / pull / run, so we
 use SSDs.
