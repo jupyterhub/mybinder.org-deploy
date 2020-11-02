@@ -11,10 +11,12 @@ def pytest_addoption(parser):
         help="Fully qualified URL to the hub installation"
     )
 
+
 @pytest.fixture
 def binder_url(request):
-    return request.config.getoption('--binder-url')
+    return request.config.getoption("--binder-url").rstrip("/")
+
 
 @pytest.fixture
 def hub_url(request):
-    return request.config.getoption('--hub-url')
+    return request.config.getoption("--hub-url").rstrip("/")

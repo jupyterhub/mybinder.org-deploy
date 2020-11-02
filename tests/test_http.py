@@ -1,5 +1,9 @@
-import requests
+"""Basic HTTP tests to make sure things are running"""
+import pprint
+
 import pytest
+import requests
+
 
 def test_binder_up(binder_url):
     """
@@ -18,6 +22,20 @@ def test_hub_up(hub_url):
     # 403 is expected since we are using nullauthenticator
     # FIXME: Have a dedicated health check endpoint for the hub
     assert resp.status_code == 403
+
+
+def test_hub_health(hub_url):
+    """check JupyterHubHub health endpoint"""
+    resp = requests.get(hub_url + "/hub/health")
+    print(resp.text)
+    assert resp.status_code == 200
+
+
+def test_binder_health(binder_url):
+    """check BinderHub health endpoint"""
+    resp = requests.get(binder_url + "/health")
+    pprint.pprint(resp.json())
+    assert resp.status_code == 200
 
 
 # the proxy-patches pod can take up to 30 seconds
