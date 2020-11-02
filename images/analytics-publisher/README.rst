@@ -26,7 +26,7 @@ You can test events archiver locally with:
    python3 images/analytics-publisher/archiver.py \
            --debug \
            --dry-run \
-           binder-prod binderhub-events-text  \
+           binderhub binderhub-events-text  \
            mybinder-events-raw-export mybinder-events-archive
 
 The ``--debug`` and ``--dry-run`` options tell the script to print output

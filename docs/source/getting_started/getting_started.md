@@ -5,7 +5,7 @@ maintain the BinderHub deployment at `mybinder.org`.
 
 ## Make sure you have access on the Google Cloud project
 
-Go to `console.cloud.google.com` and see if you have `binder-prod` listed
+Go to `console.cloud.google.com` and see if you have `binderhub` listed
 in your projects. If not, message one of the Binder devs on the [Gitter Channel](https://gitter.im/jupyterhub/binder)
 to get access.
 
@@ -20,7 +20,7 @@ out the [Zero to JupyterHub Google SDK section](https://zero-to-jupyterhub.readt
 When you run `gcloud init` for the first time, it'll ask you to authenticate
 and to choose a project / default region. You should authenticate with
 the email that's been given privileges to work on `mybinder.org`, choose
-the project `binder-prod`, and use the region `us-central1-a`.
+the project `binderhub`, and use the region `us-central1`.
 
 We recommend enabling [`kubectl` autocompletion](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)
 as well.
@@ -31,7 +31,7 @@ Once you have `kubectl` installed, you can connect it with `mybinder.org`.
 To do so, run the following command:
 
 ```
-gcloud container clusters get-credentials prod-a --zone us-central1-a --project binder-prod
+gcloud container clusters get-credentials prod --zone us-central1 --project binderhub
 ```
 
 This will open a log-in page in your browser. If you've got access, you'll
@@ -52,7 +52,7 @@ Now that you're connected to prod it's time to connect to staging. To do so,
 pull the staging credentials on to your local machine:
 
 ```
-gcloud container clusters get-credentials staging --zone us-central1-a --project binder-staging
+gcloud container clusters get-credentials staging --zone us-central1-a --project binderhub
 ```
 
 You can now switch between the `prod` and `staging` deployments by changing your
