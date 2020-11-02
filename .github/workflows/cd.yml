@@ -85,7 +85,7 @@ jobs:
         with:
           version: ${{ env.KUBECTL_VERSION }}
 
-      - name: "Stage 1: Install helm"
+      - name: "Stage 1: Install helm ${{ env.HELM_VERSION }}"
         run: |
           curl -L https://get.helm.sh/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
@@ -209,7 +209,7 @@ jobs:
         with:
           version: ${{ env.KUBECTL_VERSION }}
 
-      - name: "Stage 1: Install helm"
+      - name: "Stage 1: Install helm ${{ env.HELM_VERSION }}"
         run: |
           curl -L https://storage.googleapis.com/kubernetes-helm/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
           sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
