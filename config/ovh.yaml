@@ -44,9 +44,9 @@ binderhub:
     singleuser:
       imagePullSecret:
         enabled: true
-        registry: dlqpwel7.gra5.container-registry.ovh.net
-        username: cLxohgOONW
-        email:
+        registry: https://index.docker.io/v1/
+        username: binderhubovh
+        email: betatim+ovhhub@gmail.com
 
     proxy:
       https:
@@ -169,4 +169,3 @@ analyticsPublisher:
 
 gcsProxy:
   enabled: false
-
