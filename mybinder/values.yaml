@@ -73,9 +73,6 @@ binderhub:
         - pattern: ^michaelJwilson/DESI-HighSchool.*
           config:
             quota: 200
-        - pattern: ^dawn-ico/dusk-dawn-notebook.*
-          config:
-            quota: 128
 
     GitRepoProvider:
       banned_specs:
