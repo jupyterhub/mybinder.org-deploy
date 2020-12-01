@@ -70,6 +70,10 @@ binderhub:
         enabled: true
         replicas: 5
 
+    singleuser:
+      networkPolicy:
+        enabled: false
+
   imageCleaner:
     # Use 40GB as upper limit, size is given in bytes
     imageGCThresholdHigh: 40e9
