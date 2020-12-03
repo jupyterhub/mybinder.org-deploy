@@ -7,4 +7,4 @@ pytest-timeout
 pytest-xdist
 requests
 kubernetes
-chartpress==1.0.*
+chartpress<1.0.0
