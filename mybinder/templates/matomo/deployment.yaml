@@ -13,7 +13,6 @@ spec:
   selector:
     matchLabels:
       app: matomo
-      heritage: {{ .Release.Service }}
       release: {{ .Release.Name }}
       component: matomo
   template:
