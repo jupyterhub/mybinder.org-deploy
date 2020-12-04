@@ -21,6 +21,7 @@ spec:
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/federation-redirect/configmap.yaml") . | sha256sum }}
     spec:
+      nodeSelector: {{ .Values.federationRedirect.nodeSelector | toJson }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:

@@ -28,6 +28,7 @@ spec:
         component: mysqld-exporter
     spec:
       automountServiceAccountToken: false
+      nodeSelector: {{ .Values.matomo.nodeSelector | toJson }}
       volumes:
       - name: cloudsql-instance-credentials
         secret:

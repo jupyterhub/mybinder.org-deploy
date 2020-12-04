@@ -452,6 +452,7 @@ analyticsPublisher:
     sourceBucket: binder-billing
     fileName: cloud-costs.jsonl
     kind: csv
+  nodeSelector: {}
 
 # this is defined in secrets/ for the OVH cluster
 eventsArchiver:
@@ -493,3 +494,4 @@ federationRedirect:
       weight: 1
       health: https://turing.mybinder.org/health
       versions: https://turing.mybinder.org/versions
+  nodeSelector: {}
