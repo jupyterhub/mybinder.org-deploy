@@ -183,6 +183,7 @@ matomo:
       memory: 1Gi
 
 analyticsPublisher:
+  nodeSelector: *coreNodeSelector
   project: binderhub-288415
   destinationBucket: binder-events-archive
   events:
@@ -191,6 +192,7 @@ analyticsPublisher:
     sourceBucket: binder-billing-archive
 
 gcsProxy:
+  nodeSelector: *coreNodeSelector
   buckets:
     - name: binder-events-archive
       host: archive.analytics.mybinder.org
@@ -198,4 +200,5 @@ gcsProxy:
       host: archive.analytics.gke2.mybinder.org
 
 federationRedirect:
+  nodeSelector: *coreNodeSelector
   enabled: true
