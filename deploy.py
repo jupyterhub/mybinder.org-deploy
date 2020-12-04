@@ -331,7 +331,7 @@ def deploy(release, helm_version, name=None):
                 "--namespace",
                 name,
                 "--timeout",
-                "5m",
+                "10m",
                 "--watch",
                 d,
             ]
