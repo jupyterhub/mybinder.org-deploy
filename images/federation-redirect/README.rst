@@ -24,3 +24,12 @@ health they are automatically added back to the list of viable targets.
 The redirect response contains a short lived cookie that is used to remember
 the choice of target. This means that subsequent visits from the same user
 agent will be directed to the same target.
+
+
+-------------
+Running tests
+-------------
+
+To run the automated tests for the redirector change to this directory in
+your terminal and run ``pytest``. This should find the tests in
+``test_rendezvous.py``.
