@@ -7,11 +7,11 @@ on:
       - "**/*.yml"
 
 env:
-  HELM_VERSION: "v2.16.10"
+  HELM_VERSION: "v3.4.1"
 
 jobs:
   lint-config:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Checkout repo
@@ -19,10 +19,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python 3.7
+      - name: Set up Python 3.8
         uses: actions/setup-python@v1
         with:
-          python-version: 3.7
+          python-version: 3.8
 
       - name: Install dependencies
         run: |
@@ -54,7 +54,7 @@ jobs:
           yamllint -d ${YAMLLINT_CONFIG} --no-warnings .
 
   lint-helm:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
@@ -80,25 +80,20 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python 3.7
+      - name: Set up Python 3.8
         uses: actions/setup-python@v1
         with:
-          python-version: 3.7
+          python-version: 3.8
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          python -m pip install "chartpress<1.0.0"
+          python -m pip install "chartpress==1.0.*"
 
-      - name: Install helm
+      - name: Install and setup helm ${{ env.HELM_VERSION }}
         run: |
-          curl -L https://storage.googleapis.com/kubernetes-helm/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
-          sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
-
-      - name: Setup helm
-        run: |
-          helm init --client-only
-          helm dep up mybinder
+          curl -sf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
+          helm dependency update ./mybinder
           helm plugin install https://github.com/instrumenta/helm-kubeval
 
       - name: Unlock git-crypt secrets
@@ -107,9 +102,9 @@ jobs:
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
-      - name: Run chartpress
+      - name: Run chartpress to update values.yaml
         run: |
-          chartpress
+          chartpress --skip-build
 
       - name: Select secret config
         run: |
@@ -125,9 +120,9 @@ jobs:
       - name: Run helm kubeval for ${{ matrix.release }} with kube-${{ matrix.kube_version }}
         run: |
           helm kubeval \
-          --kubernetes-version ${{ matrix.kube_version }} \
-          --strict \
-          --ignore-missing-schemas \
-          -f config/${{ matrix.release }}.yaml \
-          ${SECRET_CONFIG} \
-          mybinder
+            --kubernetes-version ${{ matrix.kube_version }} \
+            --strict \
+            --ignore-missing-schemas \
+            -f config/${{ matrix.release }}.yaml \
+            ${SECRET_CONFIG} \
+            mybinder
