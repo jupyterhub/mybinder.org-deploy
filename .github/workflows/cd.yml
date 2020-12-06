@@ -54,10 +54,10 @@ jobs:
           fetch-depth: 0
 
       # Action Repo: https://github.com/actions/setup-python
-      - name: "Stage 0: Setup Python 3.6"
+      - name: "Stage 0: Setup Python 3.8"
         uses: actions/setup-python@v1
         with:
-          python-version: 3.6
+          python-version: 3.8
 
       # Action Repo: https://github.com/actions/cache
       - name: "Stage 0: Cache pip dependencies"
@@ -162,10 +162,10 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: "Stage 0: Setup Python 3.6"
+      - name: "Stage 0: Setup Python 3.8"
         uses: actions/setup-python@v1
         with:
-          python-version: 3.6
+          python-version: 3.8
 
       - name: "Stage 0: Cache pip dependencies"
         uses: actions/cache@v2
