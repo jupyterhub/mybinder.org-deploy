@@ -21,7 +21,7 @@ dependencies:
  #       chart v12 requires Helm 3
  - name: prometheus
    version: 11.0.2
-   repository: https://charts.helm.sh/stable
+   repository: https://prometheus-community.github.io/helm-charts
 
  # Grafana for dashboarding of metrics.
  # Source code:   https://github.com/grafana/helm-charts/tree/main/charts/grafana
@@ -34,7 +34,7 @@ dependencies:
  #       chart v6 requires Helm 3
  - name: grafana
    version: 3.10.1
-   repository: https://charts.helm.sh/stable
+   repository: https://grafana.github.io/helm-charts
 
  - name: binderhub
    version: 0.2.0-n451.h6a2b398
