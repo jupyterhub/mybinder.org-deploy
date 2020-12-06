@@ -100,8 +100,8 @@ The following secrets are present in encrypted form in the repository:
    called `travis-deployer` that gives them *just* the permissions needed to do
    deployments.
 3. A [GitHub deploy key](https://developer.github.com/v3/guides/managing-deploy-keys/)
-   for the [binderhub-ci-repos/requirements](https://github.com/binderhub-ci-repos/requirements)
-   repo (as `secrets/binderhub-ci-key`). This is used in our tests to force the 
+   for the [binderhub-ci-repos/cached-minimal-dockerfile](https://github.com/binderhub-ci-repos/cached-minimal-dockerfile)
+   repo (as `secrets/binderhub-ci-repos-deploy-key`). This is used in our tests to force the 
    deployed binderhub to do a build + launch, rather than just a launch (via
    `tests/test_build.py`)
  

@@ -54,9 +54,9 @@ def test_build_binder(binder_url):
     We can launch an image that we know hasn't been built
     """
     branch = str(time.time())
-    repo = 'binderhub-ci-repos/requirements'
+    repo = 'binderhub-ci-repos/cached-minimal-dockerfile'
 
-    with push_dummy_gh_branch(f'git@github.com:/{repo}.git', branch, os.path.abspath('secrets/binderhub-ci-key')):
+    with push_dummy_gh_branch(f'git@github.com:/{repo}.git', branch, os.path.abspath('secrets/binderhub-ci-repos-deploy-key')):
         build_url = binder_url + f'/build/gh/{repo}/{branch}'
         print(f"building {build_url}")
         r = requests.get(build_url, stream=True)
