@@ -36,7 +36,7 @@ jobs:
       (github.event.label.name == 'test-staging') ||
       ((github.event_name == 'push') &&
       (github.ref == 'refs/heads/master'))
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false  # Do not cancel all jobs if one fails
       matrix:
@@ -138,7 +138,7 @@ jobs:
     needs: staging-deploy
     # Only run job if the event is a push to master
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategy
     strategy:
       fail-fast: false  # Do not cancel all jobs if one fails
