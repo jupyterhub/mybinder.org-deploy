@@ -4,6 +4,9 @@ kind: NetworkPolicy
 metadata:
   name: binder-users
   labels:
+
+
+
     app: binderhub
     component: user-netpol
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
