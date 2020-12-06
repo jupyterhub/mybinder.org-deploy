@@ -97,11 +97,6 @@ grafana:
 prometheus:
   server:
     nodeSelector: *coreNodeSelector
-    strategy:
-      # RollingUpdate fails because the attached storage can only be mounted on
-      # one pod, so we need to use Recreate that first shut down the pod and
-      # then starts it up during updates.
-      type: Recreate
     resources:
       requests:
         cpu: "2"

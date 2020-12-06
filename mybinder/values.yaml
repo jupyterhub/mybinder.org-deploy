@@ -409,6 +409,11 @@ prometheus:
   rbac:
     create: true
   server:
+    strategy:
+      # The default of RollingUpdate fail because attached storage can only be
+      # mounted on one pod, so we need to use Recreate that first shut down the
+      # pod and then starts it up during updates.
+      type: Recreate
     ingress:
       enabled: true
       annotations:
