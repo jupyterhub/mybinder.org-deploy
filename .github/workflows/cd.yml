@@ -161,7 +161,7 @@ jobs:
           - federation_member: prod
             binder_url: https://gke.mybinder.org
             hub_url: https://hub.gke.mybinder.org
-            helm_version: "v2.16.10"
+            helm_version: "v3.3.4"
           - federation_member: turing
             binder_url: https://turing.mybinder.org
             hub_url: https://hub.mybinder.turing.ac.uk
