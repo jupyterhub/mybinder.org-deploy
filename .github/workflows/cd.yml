@@ -85,7 +85,7 @@ jobs:
         with:
           version: ${{ env.KUBECTL_VERSION }}
 
-      - name: "Stage 1: Install and setup helm"
+      - name: "Stage 1: Install and setup helm ${{ env.HELM_VERSION }}"
         run: |
           curl -sf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
           helm dependency update ./mybinder
@@ -197,7 +197,7 @@ jobs:
         with:
           version: ${{ env.KUBECTL_VERSION }}
 
-      - name: "Stage 1: Install and setup helm"
+      - name: "Stage 1: Install and setup helm ${{ env.HELM_VERSION }}"
         run: |
           curl -sf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
           helm dependency update ./mybinder
