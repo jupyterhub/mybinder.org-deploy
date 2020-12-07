@@ -1,24 +1,29 @@
 {{- if .Values.binderhub.networkPolicy.enabled -}}
+{{- $root := . }}
+{{- range $component := tuple "singleuser-server" "dind" -}}
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: binder-users
+  name: binder-users-{{ $component }}
   labels:
     app: binderhub
     component: user-netpol
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    release: {{ .Release.Name }}
+    chart: {{ $root.Chart.Name }}-{{ $root.Chart.Version | replace "+" "_" }}
+    release: {{ $root.Release.Name }}
 spec:
   podSelector:
     # apply this to both places user code runs: dind and singleuser-server
-    matchExpressions:
-      - key: component
-        operator: In
-        values:
-          - singleuser-server
-          - dind
+    # note: Azure NPM doesn't support matchExpressions, so we use a $range
+    # matchExpressions is the right thing to use here, though
+    # matchExpressions:
+    #   - key: component
+    #     operator: In
+    #     values:
+    #       - singleuser-server
+    #       - dind
     matchLabels:
-      release: {{ .Release.Name }}
+      release: {{ $root.Release.Name }}
+      component: {{ $component }}
   policyTypes:
     - Ingress
     - Egress
@@ -39,17 +44,17 @@ spec:
     # allow access to the world,
     # but not the cluster
     - ports:
-        {{ range $port := .Values.binderhub.networkPolicy.egress.tcpPorts }}
+        {{ range $port := $root.Values.binderhub.networkPolicy.egress.tcpPorts }}
         - port: {{ $port }}
           protocol: TCP
         {{ end }}
       to:
       - ipBlock:
-          cidr: {{ .Values.binderhub.networkPolicy.egress.cidr }}
+          cidr: {{ $root.Values.binderhub.networkPolicy.egress.cidr }}
           except:
             - 169.254.169.254/32
             - 10.0.0.0/8
-          {{- range $ipOrCidr := .Values.binderhub.networkPolicy.egress.bannedIps }}
+          {{- range $ipOrCidr := $root.Values.binderhub.networkPolicy.egress.bannedIps }}
             {{- if (contains $ipOrCidr "/") }}
             - {{ $ipOrCidr }}
             {{- else }}
@@ -67,5 +72,6 @@ spec:
             matchLabels:
               app: nginx-ingress
               component: controller
-
+---
+{{- end }}
 {{- end }}
