@@ -20,12 +20,6 @@ else:
 HERE = os.path.dirname(__file__)
 ABSOLUTE_HERE = os.path.dirname(os.path.realpath(__file__))
 
-# Get helm version environment variable
-HELM_VERSION = os.getenv("HELM_VERSION", None)
-if HELM_VERSION is None:
-    raise Exception("HELM_VERSION environment variable must be set")
-
-
 GCP_PROJECTS = {
     "staging": "binderhub-288415",
     "prod": "binderhub-288415",
@@ -130,13 +124,19 @@ def setup_auth_gcloud(release, cluster=None):
     )
 
 
-def get_helm_major_version():
-    """Get the major version of helm
-
-    Returns:
-        helm_major_version (str): Either "v2" or "v3"
+def check_helm_major_version():
+    """Gets the major version of helm and checks it's what we're expecting
     """
-    client_helm_cmd = ["helm", "version", "-c", "--short"]
+    try:
+        client_helm_cmd = ["helm", "version", "--short"]
+    except subprocess.CalledProcessError as err:
+        raise Exception(
+            "\n".join[
+                "Failed to get correct Helm version. Expected version >=3.*.*.",
+                err,
+            ]
+        )
+
     client_version = (
         subprocess.check_output(client_helm_cmd).decode("utf-8")
     )
@@ -146,115 +146,10 @@ def get_helm_major_version():
     if "Client:" in helm_version_major:
         helm_version_major = helm_version_major.split(":")[-1].strip()
 
-    return helm_version_major
+    assert helm_version_major == "v3"
 
 
-def setup_helm(release):
-    """ensure helm is up to date"""
-    # First check the helm client and server versions
-    client_helm_cmd = ["helm", "version", "-c", "--short"]
-    client_version = (
-        subprocess.check_output(client_helm_cmd)
-        .decode("utf-8")
-        .split(":")[1]
-        .split("+")[0]
-        .strip()
-    )
-
-    server_helm_cmd = ["helm", "version", "-s", "--short"]
-    try:
-        server_version = (
-            subprocess.check_output(server_helm_cmd)
-            .decode("utf-8")
-            .split(":")[1]
-            .split("+")[0]
-            .strip()
-        )
-    except subprocess.CalledProcessError:
-        server_version = None
-
-    print(BOLD + GREEN +
-        f"Client version: {client_version}, Server version: {server_version}" +
-        NC,
-        flush=True
-    )
-
-    # Now check if the version of helm matches that which CI is expecting
-    if client_version != HELM_VERSION:
-        # The local helm version is not what was expected - user needs to change the installation
-        raise Exception(
-            f"You are not running helm {HELM_VERSION} which is the version our continuous deployment system uses.\n" +
-            "Please change your installation and try again.\n"
-        )
-    elif (client_version == HELM_VERSION) and (client_version != server_version):
-        # The correct local version of helm is installed, but the server side
-        # has previously accidentally been upgraded. Perform a force-upgrade
-        # to bring the server side back to matching version
-        print(f"Upgrading helm from {server_version} to {HELM_VERSION}")
-        subprocess.check_call(['helm', 'init', '--upgrade', '--force-upgrade'])
-    elif (client_version == HELM_VERSION) and (client_version == server_version):
-        # All is good! Perform normal helm init command.
-        # We use the --client-only flag so that the Tiller installation is not affected.
-        subprocess.check_call(['helm', 'init', '--client-only'])
-    else:
-        # This is a catch-all exception. Hopefully this doesn't execute!
-        raise Exception("Please check your helm installation.")
-
-    # TODO: fresh cluster needs these run once:
-    # not yet automated, not needed once we move to helm 3
-    # kubectl --namespace kube-system create serviceaccount tiller
-    # kubectl create clusterrolebinding tiller --clusterrole cluster-admin --serviceaccount=kube-system:tiller
-    # helm init --service-account tiller --history-max 100 --wait
-    # kubectl patch deployment tiller-deploy --namespace=kube-system --type=json --patch='[{"op": "add", "path": "/spec/template/spec/containers/0/command", "value": ["/tiller", "--listen=localhost:44134"]}]'
-
-    deployment = json.loads(subprocess.check_output([
-        'kubectl',
-        '--namespace=kube-system',
-        'get',
-        'deployment',
-        'tiller-deploy',
-        '-o', 'json',
-    ]).decode('utf8'))
-    # patch tiller nodeSelector
-    # helm init can set this with `--node-selectors`,
-    # but it cannot be applied after upgrade
-    # https://github.com/helm/helm/issues/4063
-    with open(os.path.join(HERE, 'config', release + '.yaml')) as f:
-        config = yaml.safe_load(f)
-    node_selector = config.get('coreNodeSelector', None)
-    current_node_selector = deployment['spec']['template']['spec'].get('nodeSelector')
-
-    if current_node_selector != node_selector:
-        patch = {'path': '/spec/template/spec/nodeSelector'}
-        if not node_selector:
-            patch['op'] = 'remove'
-        if not current_node_selector:
-            patch['op'] = 'add'
-            patch['value'] = node_selector
-        else:
-            patch['op'] = 'replace'
-            patch['value'] = node_selector
-        subprocess.check_call([
-            'kubectl',
-            'patch',
-            '--namespace',
-            'kube-system',
-            'deployment',
-            'tiller-deploy',
-            '--type=json',
-            '-p',
-            json.dumps([patch]),
-        ])
-
-    # wait for tiller to come up
-    subprocess.check_call([
-        'kubectl', 'rollout', 'status',
-        '--namespace', 'kube-system',
-        '--watch', 'deployment', 'tiller-deploy',
-    ])
-
-
-def deploy(release, helm_version, name=None):
+def deploy(release, name=None):
     """Deploy jupyterhub"""
     print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
     if not name:
@@ -269,7 +164,7 @@ def deploy(release, helm_version, name=None):
             "secrets/ban.py",
         ])
 
-    setup_certmanager(helm_version)
+    setup_certmanager()
 
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
     helm = [
@@ -281,6 +176,7 @@ def deploy(release, helm_version, name=None):
         name,
         "mybinder",
         "--cleanup-on-fail",
+        "--create-namespace",
         "-f",
         os.path.join("config", release + ".yaml"),
         "-f",
@@ -288,11 +184,6 @@ def deploy(release, helm_version, name=None):
         "-f",
         os.path.join("secrets", "config", release + ".yaml"),
     ]
-
-    if helm_version == "v3":
-        helm.extend(["--create-namespace"])
-    else:
-        helm.extend(["--force"])
 
     subprocess.check_call(helm)
     print(BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC, flush=True)
@@ -338,7 +229,7 @@ def deploy(release, helm_version, name=None):
         )
 
 
-def setup_certmanager(helm_version):
+def setup_certmanager():
     """Install cert-manager separately
 
     cert-manager docs and CRD assumptions say that cert-manager must never be a sub-chart,
@@ -365,31 +256,24 @@ def setup_certmanager(helm_version):
         ["helm", "repo", "add", "jetstack", "https://charts.jetstack.io"]
     )
 
-    if helm_version == "v2":
-        subprocess.check_call(
-            ["helm", "repo", "update", "jetstack"]
-        )
-    else:
-        subprocess.check_call(
-            ["helm", "repo", "update"]
-        )
+    subprocess.check_call(
+        ["helm", "repo", "update"]
+    )
 
     helm_upgrade = [
-            "helm",
-            "upgrade",
-            "--install",
-            "--namespace",
-            "cert-manager",
-            "cert-manager",
-            "jetstack/cert-manager",
-            "--version",
-            version,
-            "-f",
-            "config/cert-manager.yaml",
-        ]
-
-    if helm_version == "v3":
-        helm_upgrade.append("--create-namespace")
+        "helm",
+        "upgrade",
+        "--install",
+        "--create-namespace",
+        "--namespace",
+        "cert-manager",
+        "cert-manager",
+        "jetstack/cert-manager",
+        "--version",
+        version,
+        "-f",
+        "config/cert-manager.yaml",
+    ]
 
     subprocess.check_call(helm_upgrade)
 
@@ -411,12 +295,12 @@ def main():
     argparser.add_argument(
         '--local',
         action='store_true',
-        help="If the script is running locally, skip auth and helm steps."
+        help="If the script is running locally, skip auth step"
     )
 
     args = argparser.parse_args()
 
-    helm_major_version = get_helm_major_version()
+    check_helm_major_version()
 
     # Check if the local flag is set
     if not args.local:
@@ -454,10 +338,7 @@ def main():
         else:
             setup_auth_gcloud(args.release, args.cluster)
 
-        if helm_major_version == "v2":
-            setup_helm(args.release)
-
-    deploy(args.release, helm_major_version, args.name)
+    deploy(args.release, args.name)
 
 
 if __name__ == '__main__':
