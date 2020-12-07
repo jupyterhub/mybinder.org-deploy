@@ -28,7 +28,8 @@ env:
   GIT_AUTHOR_NAME: CI User
 
 jobs:
-  # Job to upgrade staging
+  # In this dedicated job to deploy our staging environment we build and push
+  # images that the jobs to deploy to the production environments depend on.
   staging-deploy:
     # Only run the job if the 'test-staging' label is present OR if the event
     # is a push to master
@@ -138,9 +139,13 @@ jobs:
     # Previous job must have successfully completed for this job to execute
     # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idneeds
     needs: staging-deploy
+
     # Only run job if the event is a push to master
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+
     runs-on: ubuntu-20.04
+
+    # We run this job multiple times with different parameters
     # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategy
     strategy:
       fail-fast: false  # Do not cancel all jobs if one fails
