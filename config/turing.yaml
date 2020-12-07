@@ -119,7 +119,8 @@ prometheus:
             - prometheus.mybinder.turing.ac.uk
             - prometheus.turing.mybinder.org
           secretName: turing-prometheus-tls-crt
-
+    persistentVolume:
+      size: 16Gi
 
 ingress-nginx:
   controller:
