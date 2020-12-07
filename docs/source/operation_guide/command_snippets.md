@@ -86,7 +86,7 @@ kubectl cordon $node
 > Note: You can run `kubectl get nodes -n <NAMESPACE>` to see a list of the current nodes.
 
 Test that launches succeed on the new nodes by visiting
-[https://staging.mybinder.org/v2/gh/binderhub-ci-repos/requirements/master](https://staging.mybinder.org/v2/gh/binderhub-ci-repos/requirements/master)
+[https://staging.mybinder.org/v2/gh/binderhub-ci-repos/cached-minimal-dockerfile/master](https://staging.mybinder.org/v2/gh/binderhub-ci-repos/cached-minimal-dockerfile/master)
 
 > Note: You might have to restart one of the ingress pods named `staging-nginx-ingress-controller-*` as they will both be on cordoned nodes and hence not receiving traffic. The symptom of this is that https://staging.mybinder.org does not load anymore.
 
@@ -202,7 +202,7 @@ we can cordon the rest of the old pool.
 
 At each point, especially after the old pool is fully cordoned,
 verify that launches work on the new nodes by visiting
-[https://mybinder.org/v2/gh/binderhub-ci-repos/requirements/master](https://mybinder.org/v2/gh/binderhub-ci-repos/requirements/master)
+[https://mybinder.org/v2/gh/binderhub-ci-repos/cached-minimal-dockerfile/master](https://mybinder.org/v2/gh/binderhub-ci-repos/cached-minimal-dockerfile/master)
 
 ```bash
 # for each node in node pool
