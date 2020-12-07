@@ -75,13 +75,13 @@ jobs:
           pip install --upgrade -r requirements.txt
 
       # Action Repo: https://github.com/google-github-actions/setup-gcloud
-      - name: "Stage 1: Install gcloud"
+      - name: "Stage 1: Install gcloud ${{ env.GCLOUD_SDK_VERION }}"
         uses: google-github-actions/setup-gcloud@master
         with:
           version: ${{ env.GCLOUD_SDK_VERION }}
 
       # Action Repo: https://github.com/Azure/setup-kubectl
-      - name: "Stage 1: Install kubectl"
+      - name: "Stage 1: Install kubectl ${{ env.KUBECTL_VERSION }}"
         uses: azure/setup-kubectl@v1
         with:
           version: ${{ env.KUBECTL_VERSION }}
@@ -186,7 +186,7 @@ jobs:
           pip install --upgrade -r requirements.txt
 
       # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idif
-      - name: "Stage 1: Install gcloud"
+      - name: "Stage 1: Install gcloud ${{ env.GCLOUD_SDK_VERION }}"
         if: matrix.federation_member == 'prod'
         uses: google-github-actions/setup-gcloud@master
         with:
@@ -197,7 +197,7 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install ca-certificates curl apt-transport-https lsb-release gnupg && curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null && AZ_REPO=$(lsb_release -cs) && echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | sudo tee /etc/apt/sources.list.d/azure-cli.list && sudo apt-get update && sudo apt-get install azure-cli
 
-      - name: "Stage 1: Install kubectl"
+      - name: "Stage 1: Install kubectl ${{ env.KUBECTL_VERSION }}"
         uses: azure/setup-kubectl@v1
         with:
           version: ${{ env.KUBECTL_VERSION }}
