@@ -127,7 +127,16 @@ def setup_auth_gcloud(release, cluster=None):
 def check_helm_major_version():
     """Gets the major version of helm and checks it's what we're expecting
     """
-    client_helm_cmd = ["helm", "version", "--short"]
+    try:
+        client_helm_cmd = ["helm", "version", "--short"]
+    except subprocess.CalledProcessError as err:
+        raise Exception(
+            "\n".join[
+                "Failed to get correct Helm version. Expected version >=3.*.*.",
+                err,
+            ]
+        )
+
     client_version = (
         subprocess.check_output(client_helm_cmd).decode("utf-8")
     )
