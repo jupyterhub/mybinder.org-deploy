@@ -286,7 +286,7 @@ def main():
     argparser.add_argument(
         '--local',
         action='store_true',
-        help="If the script is running locally, skip auth and helm steps."
+        help="If the script is running locally, skip auth step"
     )
 
     args = argparser.parse_args()
