@@ -80,7 +80,7 @@ binderhub:
         - ^https%3A%2F%2Fjovian.ml%2Fapi%2Fgit%2F.*
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:0.11.0-190.gf3229c1
+      build_image: jupyter/repo2docker:0.11.0-172.g80b91eb
       per_repo_quota: 100
       per_repo_quota_higher: 200
       build_memory_limit: "3G"
