@@ -72,7 +72,7 @@ jobs:
         - release: ovh
           kube_version: "1.15.7"
         - release: turing
-          kube_version: "1.16.4"
+          kube_version: "1.18.1"
 
     steps:
       - name: Checkout repo
