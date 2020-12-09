@@ -121,7 +121,7 @@ prometheus:
 ingress-nginx:
   controller:
     service:
-      loadBalancerIP: 51.105.120.231
+      loadBalancerIP: 20.76.57.82
 
 
 static:
