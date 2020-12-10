@@ -78,6 +78,11 @@ binderhub:
       banned_specs:
         - ^https%3A%2F%2Fbitbucket.org%2Fnikiubel%2Fnikiubel.bitbucket.io.git/.*
         - ^https%3A%2F%2Fjovian.ml%2Fapi%2Fgit%2F.*
+      spec_config:
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/1717
+        - pattern: ^https%3A%2F%2Fgitlab.kwant-project.org%2Fkwant%2Fminicourse.git/.*
+          config:
+            quota: 400
     BinderHub:
       use_registry: true
       build_image: jupyter/repo2docker:0.11.0-193.g560b1d9
