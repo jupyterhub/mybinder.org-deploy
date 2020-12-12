@@ -20,6 +20,7 @@ on:
 env:
   GCLOUD_SDK_VERION: "290.0.1"
   KUBECTL_VERSION: "v1.18.0"
+  HELM_VERSION: "v3.4.1"
   CERT_MANAGER_VERSION: "v0.15.2"
   GIT_COMMITTER_EMAIL: ci-user@github.local
   GIT_COMMITTER_NAME: CI User
@@ -27,7 +28,8 @@ env:
   GIT_AUTHOR_NAME: CI User
 
 jobs:
-  # Job to upgrade staging
+  # In this dedicated job to deploy our staging environment we build and push
+  # images that the jobs to deploy to the production environments depend on.
   staging-deploy:
     # Only run the job if the 'test-staging' label is present OR if the event
     # is a push to master
@@ -35,18 +37,33 @@ jobs:
       (github.event.label.name == 'test-staging') ||
       ((github.event_name == 'push') &&
       (github.ref == 'refs/heads/master'))
-    runs-on: ubuntu-18.04
-    # Set helm version for this job
-    env:
-      HELM_VERSION: "v3.3.4"
+    runs-on: ubuntu-20.04
+
     strategy:
       fail-fast: false  # Do not cancel all jobs if one fails
       matrix:
         include:
+          # Now we have only one staging environment, but we have had two when
+          # we transitioned from one k8s cluster to another.
+          # - The domain name staging.mybinder.org currently refers to
+          #   gke2.staging.mybinder.org through a CNAME but during the
+          #   transition they were separate.
+          # - When we have two separate staging environments it can be useful to
+          #   pass --image-prefix to override the chartpress.yaml configuration
+          #   for one of the environments.
           - federation_member: staging
             binder_url: https://gke2.staging.mybinder.org
             hub_url: https://hub.gke2.staging.mybinder.org
+            chartpress_args: ""
+            helm_version: ""
+
     steps:
+      - name: "Stage 0: Update env vars based on job matrix arguments"
+        run: |
+          if [ -n "${{ matrix.helm_version }}" ]; then
+              echo "HELM_VERSION=${{ matrix.helm_version }}" >> $GITHUB_ENV
+          fi
+
       # Action Repo: https://github.com/actions/checkout
       - name: "Stage 0: Checkout repo"
         uses: actions/checkout@v2
@@ -54,10 +71,10 @@ jobs:
           fetch-depth: 0
 
       # Action Repo: https://github.com/actions/setup-python
-      - name: "Stage 0: Setup Python 3.6"
+      - name: "Stage 0: Setup Python 3.8"
         uses: actions/setup-python@v1
         with:
-          python-version: 3.6
+          python-version: 3.8
 
       # Action Repo: https://github.com/actions/cache
       - name: "Stage 0: Cache pip dependencies"
@@ -74,21 +91,21 @@ jobs:
           pip install --upgrade -r requirements.txt
 
       # Action Repo: https://github.com/google-github-actions/setup-gcloud
-      - name: "Stage 1: Install gcloud SDK"
+      - name: "Stage 1: Install gcloud ${{ env.GCLOUD_SDK_VERION }}"
         uses: google-github-actions/setup-gcloud@master
         with:
           version: ${{ env.GCLOUD_SDK_VERION }}
 
       # Action Repo: https://github.com/Azure/setup-kubectl
-      - name: "Stage 1: Install kubectl"
+      - name: "Stage 1: Install kubectl ${{ env.KUBECTL_VERSION }}"
         uses: azure/setup-kubectl@v1
         with:
           version: ${{ env.KUBECTL_VERSION }}
 
-      - name: "Stage 1: Install helm ${{ env.HELM_VERSION }}"
+      - name: "Stage 1: Install and setup helm ${{ env.HELM_VERSION }}"
         run: |
-          curl -L https://get.helm.sh/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
-          sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
+          curl -sf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
+          helm dependency update ./mybinder
 
       # Action Repo: https://github.com/sliteteam/github-action-git-crypt-unlock
       - name: "Stage 2: Unlock git-crypt secrets"
@@ -104,16 +121,7 @@ jobs:
           username: "_json_key"
           password: ${{ secrets.GCR_KEY }}
 
-      - name: "Stage 2: Setup helm"
-        working-directory: mybinder
-        run: |
-          helm repo add stable https://charts.helm.sh/stable
-          helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
-          helm repo add jetstack https://charts.jetstack.io
-          helm repo update
-          helm dep up
-
-      - name: "Stage 3: Build images (if required)"
+      - name: "Stage 3: Run chartpress to build/push images and updates values.yaml"
         run: |
           chartpress --push ${{ matrix.chartpress_args }}
 
@@ -129,7 +137,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: py.test -vx -n 2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matrix.hub_url }} tests/
+          command: pytest -vx --numprocesses=2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matrix.hub_url }} tests/
 
       - name: "Stage 5: Post message to Grafana that deployment to production has started"
         run: |
@@ -137,7 +145,7 @@ jobs:
           export PULL_REQUEST_ID=$(git log -1 --pretty=%B | head -n1 | sed 's/^.*#\([0-9]*\).*/\1/')
           export AUTHOR_NAME="$(git log  -1 --pretty=%aN)"
           export PULL_REQUEST_TITLE="$(git log --pretty=%B -1 | tail -n+3)"
-          python3 post-grafana-annotation.py  \
+          python post-grafana-annotation.py  \
             --grafana-url https://grafana.mybinder.org \
             --tag deployment-start \
             "$(echo -en ${PULL_REQUEST_TITLE}\\n\\n${AUTHOR_NAME}: https://github.com/${{ github.repository }}/pull/${PULL_REQUEST_ID})" \
@@ -147,12 +155,13 @@ jobs:
     # Previous job must have successfully completed for this job to execute
     # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idneeds
     needs: staging-deploy
+
     # Only run job if the event is a push to master
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    runs-on: ubuntu-18.04
-    # Set helm version for this job
-    env:
-      HELM_VERSION: "v2.16.10"
+
+    runs-on: ubuntu-20.04
+
+    # We run this job multiple times with different parameters
     # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategy
     strategy:
       fail-fast: false  # Do not cancel all jobs if one fails
@@ -161,26 +170,35 @@ jobs:
           - federation_member: prod
             binder_url: https://gke.mybinder.org
             hub_url: https://hub.gke.mybinder.org
-            helm_version: "v3.3.4"
+            chartpress_args: ""
+            helm_version: ""
           - federation_member: turing
             binder_url: https://turing.mybinder.org
             hub_url: https://hub.mybinder.turing.ac.uk
-            helm_version: "v3.3.4"
+            chartpress_args: ""
+            helm_version: ""
           - federation_member: ovh
             binder_url: https://ovh.mybinder.org
             hub_url: https://hub-binder.mybinder.ovh
-            helm_version: "v3.3.4"
+            chartpress_args: ""
+            helm_version: ""
 
     steps:
+      - name: "Stage 0: Update env vars based on job matrix arguments"
+        run: |
+          if [ -n "${{ matrix.helm_version }}" ]; then
+              echo "HELM_VERSION=${{ matrix.helm_version }}" >> $GITHUB_ENV
+          fi
+
       - name: "Stage 0: Checkout repo"
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: "Stage 0: Setup Python 3.6"
+      - name: "Stage 0: Setup Python 3.8"
         uses: actions/setup-python@v1
         with:
-          python-version: 3.6
+          python-version: 3.8
 
       - name: "Stage 0: Cache pip dependencies"
         uses: actions/cache@v2
@@ -196,7 +214,7 @@ jobs:
           pip install --upgrade -r requirements.txt
 
       # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idif
-      - name: "Stage 1: Install gcloud SDK"
+      - name: "Stage 1: Install gcloud ${{ env.GCLOUD_SDK_VERION }}"
         if: matrix.federation_member == 'prod'
         uses: google-github-actions/setup-gcloud@master
         with:
@@ -207,49 +225,22 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install ca-certificates curl apt-transport-https lsb-release gnupg && curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null && AZ_REPO=$(lsb_release -cs) && echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | sudo tee /etc/apt/sources.list.d/azure-cli.list && sudo apt-get update && sudo apt-get install azure-cli
 
-      - name: "Stage 1: Install kubectl"
+      - name: "Stage 1: Install kubectl ${{ env.KUBECTL_VERSION }}"
         uses: azure/setup-kubectl@v1
         with:
           version: ${{ env.KUBECTL_VERSION }}
 
-      - name: "Stage 1: Install helm ${{ env.HELM_VERSION }}"
-        if: matrix.helm_version == env.HELM_VERSION
+      - name: "Stage 1: Install and setup helm ${{ env.HELM_VERSION }}"
         run: |
-          curl -L https://storage.googleapis.com/kubernetes-helm/helm-${{ env.HELM_VERSION }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
-          sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
-
-      - name: "Stage 1: Install helm ${{ matrix.helm_version }}"
-        if: matrix.helm_version != env.HELM_VERSION
-        run: |
-          curl -L https://get.helm.sh/helm-${{ matrix.helm_version }}-linux-amd64.tar.gz | tar --directory ${HOME} --extract --gzip --file -
-          sudo mv ${HOME}/linux-amd64/helm /usr/local/bin/helm
+          curl -sf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
+          helm dependency update ./mybinder
 
       - name: "Stage 2: Unlock git-crypt secrets"
         uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
-      - name: "Stage 2: Setup helm ${{ env.HELM_VERSION }}"
-        if: matrix.helm_version == env.HELM_VERSION
-        working-directory: mybinder
-        run: |
-          helm init --client-only
-          helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
-          helm repo add jetstack https://charts.jetstack.io
-          helm repo update
-          helm dep up
-
-      - name: "Stage 2: Setup helm ${{ matrix.helm_version }}"
-        if: matrix.helm_version != env.HELM_VERSION
-        working-directory: mybinder
-        run: |
-          helm repo add stable https://charts.helm.sh/stable
-          helm repo add jupyterhub https://jupyterhub.github.io/helm-chart
-          helm repo add jetstack https://charts.jetstack.io
-          helm repo update
-          helm dep up
-
-      - name: "Stage 3: Set image tag in chart"
+      - name: "Stage 3: Run chartpress to update values.yaml"
         run: |
           chartpress --skip-build ${{ matrix.chartpress_args }}
 
@@ -264,4 +255,4 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: py.test -vx -n 2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matrix.hub_url }} tests/
+          command: pytest -vx --numprocesses=2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matrix.hub_url }} tests/
