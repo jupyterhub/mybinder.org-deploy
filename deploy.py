@@ -139,7 +139,15 @@ def assert_helm_v3():
 
 
 def deploy(release, name=None):
-    """Deploy jupyterhub"""
+    """Deploys a federation member to a k8s cluster.
+
+    The deployment is done in the following steps:
+
+        1. Run secrets/ban.py to update network bans
+        2. Deploy cert-manager
+        3. Deploy mybinder helm chart
+        4. Await deployed deployment and daemonsets to become Ready
+    """
     print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
     if not name:
         name = release
