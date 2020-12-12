@@ -17,7 +17,7 @@ dependencies:
  # App changelog: https://github.com/prometheus/prometheus/blob/master/CHANGELOG.md
  #
  # NOTE: chart v11.0.2 maps to app v2.16.0   - 2020-07-10
- #       chart v11.16.9 maps to app v2.21.0
+ #       chart v11.16.9 maps to app v2.21.0  - 2020-12-06
  #       chart v12 requires Helm 3
  - name: prometheus
    version: 11.16.9
@@ -28,8 +28,7 @@ dependencies:
  # App changelog: https://github.com/grafana/grafana/blob/master/CHANGELOG.md
  #
  # NOTE: chart v3.10.1 maps to app v6.4.2   - 2019-11-22
- #       chart v5 upgrade requires helm2 --force
- #       chart v5.0.26 maps to app v6.7.3
+ #       chart v5.0.26 maps to app v6.7.3   - 2020-12-06
  #       chart v5.1.2 maps to app v7.0.1
  #       chart v6 requires Helm 3
  - name: grafana
