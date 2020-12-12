@@ -150,7 +150,7 @@ To set up helm to do the deployment, we do the following:
 2. Set up the JupyterHub charts repository for use with this helm installation,
    and fetch the latest chart definitions.
 3. Fetch all the dependencies of the `mybinder` deployment chart with the versions
-   specified in `mybinder/requirements.yaml`, and store them locally to ready them
+   specified in `mybinder/Chart.yaml`, and store them locally to ready them
    for deployment.
    
 At the end of this step, `helm` has been fully configured to do deployment of our
@@ -158,12 +158,12 @@ charts.
 
 #### What could go wrong?
 
-1. Invalid version for a dependency in `mybinder/requirements.yaml`
+1. Invalid version for a dependency in `mybinder/Chart.yaml`
 
    This manifests as an error from `helm dep up` that looks like the following:
    
    ```
-   Error: Can't get a valid version for repositories <dependency>. Try changing the version constraint in requirements.yaml
+   Error: Can't get a valid version for repositories <dependency>. Try changing the version constraint in Chart.yaml
    ```
    
    `<dependency>` in the above error message should point to the erroring dependency

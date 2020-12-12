@@ -15,8 +15,8 @@ document to know more about its structure.
 ## Dependent charts
 
 The core of the meta-chart pattern is to install a bunch of [dependent charts](https://docs.helm.sh/developing_charts/#chart-dependencies),
-specified in `mybinder/requirements.yaml`. This contains both support
-charts like nginx-ingress & kube-lego, but also the core application chart
+specified in `mybinder/Chart.yaml`. This contains both support
+charts like nginx-ingress, grafana, prometheus, but also the core application chart
 `binderhub`. Everything is version pinned here.
 
 ## Configuration values
@@ -106,13 +106,14 @@ These dependencies are specified with a Helm "Meta Chart".
 For example, let's say that you'd like to begin using Prometheus in your
 Kubernetes deployment. Since Prometheus has a helm chart for deploying it
 on Kubernetes, we can add it as a dependency in a Helm Meta Chart. We'd
-create a file called `requirements.yaml` and put the following in it:
+create a section called `dependencies` in `mybinder/Chart.yaml` and put the
+following in it:
 
 ```yaml
 dependencies:
-- name: prometheus
-  version: 4.6.16
-  repository: https://charts.helm.sh/stable
+  - name: prometheus
+    version: 11.16.9
+    repository: https://prometheus-community.github.io/helm-charts
 ```
 
 This also allows us to pin a *version* of Prometheus, which improves
@@ -133,7 +134,7 @@ configuration for each dependency of BinderHub without needing a separate
 file for each, and we can deploy them all at the same time.
 
 For more information, we recommend investigating the structure of the
-[Binder Helm Meta Chart](https://github.com/jupyterhub/mybinder.org-deploy/blob/staging/mybinder/requirements.yaml). In addition, the Kubernetes
+[Binder Helm Meta Chart](https://github.com/jupyterhub/mybinder.org-deploy/blob/staging/mybinder/Chart.yaml). In addition, the Kubernetes
 organization keeps a [curated list of Helm Charts](https://github.com/kubernetes/charts) that you can specify in
 your Meta Chart in order to deploy different types of applications.
 
