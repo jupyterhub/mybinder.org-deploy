@@ -135,7 +135,7 @@ def assert_helm_v3():
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
     )
-    assert c.returncode == 0 and "v3." in c.stdout, "Helm 3 is required, but another something else seem to be installed!"
+    assert c.returncode == 0 and "v3." in c.stdout, "Helm 3 is required, but a different version seem to be installed!"
 
 
 def deploy(release, name=None):
