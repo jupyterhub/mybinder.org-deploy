@@ -124,33 +124,30 @@ def setup_auth_gcloud(release, cluster=None):
     )
 
 
-def check_helm_major_version():
-    """Gets the major version of helm and checks it's what we're expecting
-    """
-    try:
-        client_helm_cmd = ["helm", "version", "--short"]
-    except subprocess.CalledProcessError as err:
-        raise Exception(
-            "\n".join[
-                "Failed to get correct Helm version. Expected version >=3.*.*.",
-                err,
-            ]
-        )
+def assert_helm_v3():
+    """Asserts helm is available at all and of the required major version."""
+    c = subprocess.run(["helm", "--help"])
+    assert c.returncode == 0, "Helm 3 is required, but helm doesn't seem to be installed!"
 
-    client_version = (
-        subprocess.check_output(client_helm_cmd).decode("utf-8")
+    c = subprocess.run(
+        ["helm", "version", "--short"],
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
     )
-
-    helm_version_major = client_version.split(".")[0]
-
-    if "Client:" in helm_version_major:
-        helm_version_major = helm_version_major.split(":")[-1].strip()
-
-    assert helm_version_major == "v3"
+    assert c.returncode == 0 and "v3." in c.stdout, "Helm 3 is required, but a different version seem to be installed!"
 
 
 def deploy(release, name=None):
-    """Deploy jupyterhub"""
+    """Deploys a federation member to a k8s cluster.
+
+    The deployment is done in the following steps:
+
+        1. Run secrets/ban.py to update network bans
+        2. Deploy cert-manager
+        3. Deploy mybinder helm chart
+        4. Await deployed deployment and daemonsets to become Ready
+    """
     print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
     if not name:
         name = release
@@ -300,7 +297,7 @@ def main():
 
     args = argparser.parse_args()
 
-    check_helm_major_version()
+    assert_helm_v3()
 
     # Check if the local flag is set
     if not args.local:
