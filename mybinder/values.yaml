@@ -211,13 +211,13 @@ binderhub:
           prometheus.io/scrape: 'true'
           prometheus.io/path: '/hub/metrics'
     proxy:
-      networkPolicy:
-        enabled: true
       pdb:
         minAvailable: 0
       service:
         type: ClusterIP
       chp:
+        networkPolicy:
+          enabled: true
         resources:
           requests:
             memory: 320Mi
