@@ -37,5 +37,5 @@ dependencies:
    repository: https://grafana.github.io/helm-charts
 
  - name: binderhub
-   version: 0.2.0-n465.hb35ec4e
+   version: 0.2.0-n471.hf76e37e
    repository: https://jupyterhub.github.io/helm-chart
