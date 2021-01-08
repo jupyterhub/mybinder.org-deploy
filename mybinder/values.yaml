@@ -61,6 +61,7 @@ binderhub:
         - ^hmharshit/cn-ait.*
         - ^shishirchoudharygic/mltraining.*
         - ^hmharshit/mltraining.*
+        - ^FDesnoyer/MathExp.*
       high_quota_specs:
         - ^jupyterlab/.*
         - ^jupyter/.*
