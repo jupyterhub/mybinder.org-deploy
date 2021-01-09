@@ -23,6 +23,7 @@ spec:
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/analytics-publisher/configmap.yaml") . | sha256sum }}
     spec:
+      nodeSelector: {{ .Values.analyticsPublisher.nodeSelector | toJson }}
       volumes:
       - name: secrets
         secret:
