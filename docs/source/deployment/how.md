@@ -40,11 +40,10 @@ but recognize that work and life may get in the way of doing this perfectly.
 This section explains how to upgrade the mybinder.org deployment after
 merging a PR in the BinderHub repo.
 
-BinderHub is deployed via a helm chart that is tied to a particular commit on the
-BinderHub repository. BinderHub is a "requirement" for this mybinder.org deployment,
-which is why it is specified in `mybinder/requirements.yaml`. Upgrading the version of BinderHub
-that is used in mybinder.org corresponds to updating the BinderHub helm chart version,
-which we step through below.
+BinderHub, the Helm chart, is a dependency for the local `mybinder` Helm chart.
+The version of the BinderHub Helm chart is declared in `mybinder/Chart.yaml`.
+Upgrading the version of BinderHub that is used in mybinder.org corresponds to
+updating the BinderHub Helm chart version, which we step through below.
 
 1. Merge changes to BinderHub.
 2. Open the [branches page for the BinderHub travis account](https://travis-ci.org/jupyterhub/binderhub/branches).
@@ -67,23 +66,24 @@ which we step through below.
    We'll now update the config to refer to this image.
 
 5. In your fork of the [mybinder.org-deploy](https://github.com/jupyterhub/mybinder.org-deploy)
-   repository, open `mybinder/requirements.yaml`.
+   repository, open `mybinder/Chart.yaml`.
 6. Toward the end of the file, you will see lines similar to:
 
       - name: binderhub
-        version: 0.1.0-9692255
+        version: 0.2.0-n454.h97fb8c3
         repository: https://jupyterhub.github.io/helm-chart
 
-   Where `9692255` is the same value printed in `<OLD-HASH>` above.
+   Where `97fb8c3` following `.h`, a prefix for hash, is the same value printed
+   in `<OLD-HASH>` above.
 
    Replace this hash with the text in `<NEW-HASH>` above. For example, in the
    above case, we'll replace it with the new hash.
 
       - name: binderhub
-        version: 0.1.0-fbf6e5a
+        version: 0.2.0-n457.hdc3df7f
         repository: https://jupyterhub.github.io/helm-chart
 
-7. Merge this change to `mybinder/requirements.yaml` into the mybinder.org-deploy
+7. Merge this change to `mybinder/Chart.yaml` into the mybinder.org-deploy
    repository following the steps in the [Deploying a change](#deploying-a-change) section
    to deploy the change.
 
@@ -179,7 +179,7 @@ master.
 
 ```eval_rst
 .. note::
-   Currently you cannot deploy changes to `mybinder/requirements.yaml` only to staging.
+   Currently you cannot deploy changes to `mybinder/Chart.yaml` only to staging.
 ```
 Sometimes you want to test out a deployment live before you make a deployment
 to `prod`.

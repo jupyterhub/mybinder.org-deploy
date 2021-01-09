@@ -4,7 +4,7 @@ import requests
 print('Fetching the SHA for live BinderHub and repo2docker...')
 
 # Load master requirements
-url_requirements = "https://raw.githubusercontent.com/jupyterhub/mybinder.org-deploy/master/mybinder/requirements.yaml"
+url_requirements = "https://raw.githubusercontent.com/jupyterhub/mybinder.org-deploy/master/mybinder/Chart.yaml"
 requirements = load(requests.get(url_requirements).text)
 binderhub_dep = [ii for ii in requirements['dependencies'] if ii['name'] == 'binderhub'][0]
 bhub_live = binderhub_dep['version'].split('-')[-1]
