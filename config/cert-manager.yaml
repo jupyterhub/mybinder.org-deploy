@@ -1,4 +1,26 @@
+# References:
+# Note that 0.15 is hardcoded in these links as it was the version currently in use.
+# - Cert-manager docs: https://cert-manager.io/v0.15-docs/concepts/webhook/
+# - Default values: https://github.com/jetstack/cert-manager/blob/release-0.15/deploy/charts/cert-manager/values.yaml
+#
 ingressShim:
   # our default ClusterIssuer is in mybinder/templates/cluster-issuer.yaml
   defaultIssuerName: letsencrypt-prod
   defaultIssuerKind: ClusterIssuer
+
+# Added to protect against being starved of CPU and failing to respond, which
+# can cause helm upgrade failures.
+resources:
+  requests:
+    cpu: 15m
+    memory: 48Mi
+webhook:
+  resources:
+    requests:
+      cpu: 15m
+      memory: 48Mi
+cainjector:
+  resources:
+  requests:
+    cpu: 15m
+    memory: 48Mi
