@@ -62,6 +62,7 @@ binderhub:
         - ^shishirchoudharygic/mltraining.*
         - ^hmharshit/mltraining.*
         - ^FDesnoyer/MathExp.*
+        - ^GuitarsAI/.*
       high_quota_specs:
         - ^jupyterlab/.*
         - ^jupyter/.*
