@@ -48,6 +48,7 @@ binderhub:
         - 873 # rsync
         - 1094 # xroot
         - 1095 # xroot
+        - 16286 # Wolfram Engine on-demand licensing
       cidr: 0.0.0.0/0
 
   config:
