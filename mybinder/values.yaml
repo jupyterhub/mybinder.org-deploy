@@ -84,7 +84,7 @@ binderhub:
         - ^https%3A%2F%2Fframagit.org%2FCecGhesq%2Flic_mdf_nsi_1.*
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:0.11.0-197.gb464a5e
+      build_image: jupyter/repo2docker:0.11.0-199.gc75b5ab
       per_repo_quota: 100
       per_repo_quota_higher: 200
       build_memory_limit: "3G"
