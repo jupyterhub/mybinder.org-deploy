@@ -64,6 +64,9 @@ binderhub:
         - ^hmharshit/mltraining.*
         - ^FDesnoyer/MathExp.*
         - ^GuitarsAI/.*
+        # ferarussia is clearly a fake GitHub account created by GuitarsAI to get around ban
+        # it was created the day GuitarsAI was blocked and does the same thing
+        - ^ferarussia/.*
       high_quota_specs:
         - ^jupyterlab/.*
         - ^jupyter/.*
