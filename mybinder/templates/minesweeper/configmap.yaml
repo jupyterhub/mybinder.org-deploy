@@ -1,0 +1,26 @@
+{{- /* configmap for minesweeper source files */ -}}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: minesweeper-src
+  labels:
+    app: binder
+    component: minesweeper-src
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  {{- (.Files.Glob "files/minesweeper/*").AsConfig | nindent 2 }}
+  {{- (.Files.Glob "files/minesweeper/secrets/*").AsConfig | nindent 2 }}
+---
+{{- /* configmap for minesweeper configuration from values */ -}}
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: minesweeper-config
+  labels:
+    app: binder
+    component: minesweeper-config
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  "minesweeper.json": {{ toJson .Values.minesweeper | quote }}

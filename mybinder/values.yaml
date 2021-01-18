@@ -507,3 +507,6 @@ federationRedirect:
       health: https://turing.mybinder.org/health
       versions: https://turing.mybinder.org/versions
   nodeSelector: {}
+
+minesweeper:
+  enabled: true
