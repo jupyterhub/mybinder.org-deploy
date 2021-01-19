@@ -20,16 +20,16 @@ import re
 import socket
 import sys
 import threading
-from dataclasses import dataclass
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 from operator import attrgetter
-from subprocess import check_output
 from textwrap import indent
 
 import kubernetes.client
 import kubernetes.config
 from kubernetes.stream import stream
+
+import psutil
 
 # herorat located in secrets/minesweeper/
 import herorat
@@ -48,7 +48,25 @@ default_config = {
     "threads": 8,
     "interval": 300,
     "namespace": os.environ.get("NAMESPACE", "default"),
+    "pod_selectors": {
+        "label_selector": "component=singleuser-server",
+    },
     "log_tail_lines": 100,
+    # process attributes to retrieve
+    # see psutil.as_dict docs for available fields:
+    # https://psutil.readthedocs.io/en/latest/#psutil.Process.as_dict
+    "proc_attrs": [
+        "cmdline",
+        "cpu_percent",
+        "cpu_times",
+        "exe",
+        "memory_info",
+        "name",
+        "pid",
+        "ppid",
+        "status",
+        "uids",
+    ],
 }
 
 default_config.update(herorat.default_config)
@@ -64,120 +82,52 @@ def get_kube():
     return local.kube
 
 
-def get_output(cmd, **kwargs):
-    """Wrapper for check_output that returns text"""
-    return check_output(cmd, **kwargs).decode("utf8", "replace")
+class Proc(dict):
+    """Proc is a dict subclass with attribute-access for keys"""
 
+    def __init__(self, **kwargs):
+        kwargs.setdefault("suspicious", False)
+        kwargs.setdefault("should_terminate", False)
+        super().__init__(**kwargs)
 
-@dataclass
-class Proc:
-    """Class for containing information about a process"""
+        # secondary derived fields
+        self["cmd"] = " ".join(self["cmdline"])
 
-    # from parsing ps output
-    # required fields
-    uid: int
-    pid: int
-    state: str
-    cmd: str
-    # default fields
-    cpu: int = 0
-    ppid: int = 0
-    vsz: int = 0
-    rss: int = 0
-    stime: float = 0
-    time: float = 0
+    def __repr__(self):
+        key_fields = ", ".join(
+            [
+                f"{key}={self.get(key)}"
+                for key in [
+                    "pid",
+                    "status",
+                    "suspicious",
+                    "should_terminate",
+                ]
+            ]
+        )
+        return f"{self.__class__.__name__}({key_fields})"
 
-    # derived fields from inspection with herorat
-    suspicious: bool = False
-    should_terminate: bool = False
+    def __getattr__(self, key):
+        return self[key]
 
-    # class attributes:
-
-    # ps columns:
-    # should be a corresponding attribute on the dataclass for each
-    ps_columns = [
-        "uid",
-        "pid",
-        "ppid",
-        "c",
-        "vsz",
-        "rss",
-        "stat",
-        "stime",
-        "time",
-        # cmd *must* be last
-        "cmd",
-    ]
-
-    # map ps column names to dataclass attributes
-    # only for fields where we want them to differ
-    _ps_column_map = {
-        "c": "cpu",
-        "stat": "state",
-    }
-
-    @classmethod
-    def attr_for_column(cls, key):
-        """Map a ps column to an attribute name
-
-        default: use column name
-        """
-        return cls._ps_column_map.get(key, key)
-
-
-def parse_t(timestring):
-    """Parse a [HH:]MM:SS time string into a float of seconds (inf if unparseable)"""
-    if ":" not in timestring:
-        return float("inf")
-
-    if "-" in timestring:
-        print("Weird time: %s" % timestring)
-        return float("inf")
-
-    parts = [int(part) for part in timestring.split(":")]
-    seconds = parts[-1]
-    seconds += 60 * parts[-2]
-    if len(parts) == 3:
-        seconds += 3600 * parts[-3]
-    return seconds
-
-
-def parse_ps(out):
-    """parse ps output into Proc objects"""
-    column_names = Proc.ps_columns
-    n_columns = len(column_names)
-
-    for line in out.splitlines()[1:]:
-        fields = line.split(None, n_columns - 1)
-        kwargs = {}
-        for col, value in zip(column_names, fields):
-            key = Proc.attr_for_column(col)
-            if key in {"stime", "time"}:
-                try:
-                    value = parse_t(value)
-                except Exception as e:
-                    print(e)
-                    print(line)
-                    raise
-            elif Proc.__annotations__[key] is int:
-                # cast int fields
-                value = int(value)
-            kwargs[key] = value
-
-        if "Z" in kwargs["state"]:
-            # ignore zombie processes
-            continue
-
-        yield Proc(**kwargs)
+    def __setattr__(self, key, value):
+        self[key] = value
 
 
 def get_procs(userid):
     """Get all container processes running with a given user id"""
     procs = []
-    columns = ",".join(Proc.ps_columns)
-    for proc in parse_ps(get_output(["ps", f"-o{columns}", f"-u{userid}"])):
-        procs.append(inspect_process(proc))
-    procs = sorted(procs, key=attrgetter("cpu"), reverse=True)
+    for p in psutil.process_iter(attrs=config["proc_attrs"]):
+        if not p.info["exe"]:
+            # ignore empty commands, e.g. kernel processes
+            continue
+        if p.info["uids"].real != userid:
+            continue
+
+        proc = inspect_process(Proc(**p.info))
+        procs.append(proc)
+
+    procs = sorted(procs, key=attrgetter("cpu_percent"), reverse=True)
     return procs
 
 
@@ -186,7 +136,11 @@ def get_pods():
     kube = get_kube()
     namespace = config["namespace"]
     # _preload_content=False doesn't even json-parse list results??
-    resp = kube.list_namespaced_pod(namespace, _preload_content=False)
+    resp = kube.list_namespaced_pod(
+        namespace,
+        _preload_content=False,
+        **config["pod_selectors"],
+    )
     return json.loads(resp.read().decode("utf8"))["items"]
 
 
@@ -197,9 +151,6 @@ def pods_by_uid(pods):
 
 def get_pod_for_proc(proc, pods):
     """Identify the pod for a process"""
-    if "defunct" in proc.cmd:
-        return
-
     try:
         with open(f"/proc/{proc.pid}/cgroup") as f:
             cgroups = f.read()
