@@ -488,22 +488,22 @@ federationRedirect:
     gke:
       prime: true
       url: https://gke.mybinder.org
-      weight: 1
+      weight: 100
       health: https://gke.mybinder.org/health
       versions: https://gke.mybinder.org/versions
     gesis:
       url: https://gesis.mybinder.org
-      weight: 1
+      weight: 100
       health: https://gesis.mybinder.org/health
       versions: https://gesis.mybinder.org/versions
     ovh:
       url: https://ovh.mybinder.org
-      weight: 0
+      weight: 10
       health: https://ovh.mybinder.org/health
       versions: https://ovh.mybinder.org/versions
     turing:
       url: https://turing.mybinder.org
-      weight: 1
+      weight: 100
       health: https://turing.mybinder.org/health
       versions: https://turing.mybinder.org/versions
   nodeSelector: {}
