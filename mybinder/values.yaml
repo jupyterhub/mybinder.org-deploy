@@ -291,6 +291,7 @@ binderhub:
       initContainers:
         - name: tc-init
           image: minrk/tc-init:0.0.4
+          imagePullPolicy: IfNotPresent
           env:
             - name: WHITELIST_CIDR
               value: 10.0.0.0/8
@@ -482,8 +483,6 @@ federationRedirect:
     retries: 5
     timeout: 2
   load_balancer: "rendezvous"
-  # note: rendezvous load-balancer ignores weights
-  # the only weights that matter are 0 (disabled) and >= 1 (enabled)
   hosts:
     gke:
       prime: true
