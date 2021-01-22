@@ -22,7 +22,13 @@ spec:
     spec:
       hostPID: true
       securityContext:
-        runAsUser: 0
+        # run as same uid as user pods to limit privileges
+        # we may need to run as root in the future
+        # to access certain fields.
+        # we could limit further with runAsUser: nobody
+        # but that takes away some fields we use
+        runAsUser: 1000
+        # root group gets us read-only access to what we want for now
         runAsGroup: 0
       tolerations:
       - effect: NoSchedule
@@ -38,7 +44,10 @@ spec:
       - name: minesweeper
         image: {{ .Values.minesweeper.image }}
         securityContext:
-          privileged: true
+          # we are running with hostPID, but want extremely limited capabilities
+          capabilities:
+            drop:
+              - all
         {{- with .Values.minesweeper.resources }}
         resources: {{ toJson . }}
         {{- end }}
