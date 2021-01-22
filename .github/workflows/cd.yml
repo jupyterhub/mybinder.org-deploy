@@ -117,9 +117,8 @@ jobs:
       - name: "Stage 2: Login to Docker"
         uses: azure/docker-login@v1
         with:
-          login-server: "https://gcr.io"
-          username: "_json_key"
-          password: ${{ secrets.GCR_KEY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: "Stage 3: Run chartpress to build/push images and updates values.yaml"
         run: |

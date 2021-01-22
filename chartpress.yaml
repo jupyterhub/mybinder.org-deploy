@@ -1,8 +1,10 @@
 charts:
   - name: mybinder
-    imagePrefix: gcr.io/binderhub-288415/mybinder-tool-
+    imagePrefix: jupyterhub/mybinder.org-
     images:
       analytics-publisher:
         valuesPath: analyticsPublisher.image
       federation-redirect:
         valuesPath: federationRedirect.image
+      minesweeper:
+        valuesPath: minesweeper.image

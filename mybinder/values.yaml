@@ -456,8 +456,8 @@ analyticsPublisher:
   events:
     logName: binderhub-events-text
   image:
-    name:
-    tag:
+    name: jupyterhub/mybinder.org-analytics-publisher
+    tag: 'set-by-chartpress'
   cloudCosts:
     # All billing info goes into same bucket in prod, to which staging has access
     enabled: true
@@ -474,8 +474,8 @@ federationRedirect:
   host: mybinder.org
   enabled: false
   image:
-    name: set-by-chartpress
-    tag: set-by-chartpress
+    name: jupyterhub/mybinder.org-federation-redirect
+    tag: 'set-by-chartpress'
   check:
     period: 10
     jitter: 0.1
@@ -510,3 +510,4 @@ federationRedirect:
 
 minesweeper:
   enabled: true
+  image: jupyterhub/mybinder.org-minesweeper:set-by-chartpress
