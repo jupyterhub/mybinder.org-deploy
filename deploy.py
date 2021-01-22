@@ -126,7 +126,7 @@ def setup_auth_gcloud(release, cluster=None):
 
 def assert_helm_v3():
     """Asserts helm is available at all and of the required major version."""
-    c = subprocess.run(["helm", "--help"])
+    c = subprocess.run(["helm", "--help"], capture_output=True)
     assert c.returncode == 0, "Helm 3 is required, but helm doesn't seem to be installed!"
 
     c = subprocess.run(
