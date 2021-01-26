@@ -85,6 +85,7 @@ class FailedCheck(Exception):
     until the next interval.
     """
 
+
 def blake2b_hash_as_int(b):
     """Compute digest of the bytes `b` using the Blake2 hash function.
     Returns a unsigned 64bit integer.
@@ -365,7 +366,9 @@ def make_app():
 
 
 def main():
-    AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
+    AsyncHTTPClient.configure(
+        "tornado.curl_httpclient.CurlAsyncHTTPClient", max_clients=32
+    )
     options.define("port", default=8080, help="port to listen on")
     options.parse_command_line()
 
