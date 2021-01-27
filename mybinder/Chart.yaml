@@ -1,7 +1,7 @@
 apiVersion: v2
 description: A meta-chart for the binderhub deployment on mybinder.org
 name: mybinder
-version: 0.1.0
+version: 0.0.1-set.by.chartpress
 kubeVersion: ">= 1.15.0-0"
 dependencies:
   # Ingress-Nginx to route network traffic according to Ingress resources using

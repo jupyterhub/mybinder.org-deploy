@@ -1,0 +1,79 @@
+{{- if .Values.minesweeper.enabled -}}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: minesweeper
+spec:
+  selector:
+    matchLabels:
+      name:  minesweeper
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        name: minesweeper
+        app: binder
+        component: minesweeper
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/minesweeper/configmap.yaml") . | sha256sum }}
+
+    spec:
+      hostPID: true
+      securityContext:
+        # run as same uid as user pods to limit privileges
+        # we may need to run as root in the future
+        # to access certain fields.
+        # we could limit further with runAsUser: nobody
+        # but that takes away some fields we use
+        runAsUser: 1000
+        # root group gets us read-only access to what we want for now
+        runAsGroup: 0
+      tolerations:
+      - effect: NoSchedule
+        key: hub.jupyter.org/dedicated
+        operator: Equal
+        value: user
+      - effect: NoSchedule
+        key: hub.jupyter.org_dedicated
+        operator: Equal
+        value: user
+      serviceAccountName: minesweeper
+      containers:
+      - name: minesweeper
+        image: {{ .Values.minesweeper.image }}
+        securityContext:
+          # we are running with hostPID, but want extremely limited capabilities
+          capabilities:
+            drop:
+              - all
+        {{- with .Values.minesweeper.resources }}
+        resources: {{ toJson . }}
+        {{- end }}
+        volumeMounts:
+        - name: config
+          mountPath: /etc/minesweeper
+          readOnly: true
+        - name: src
+          mountPath: /srv/minesweeper
+          readOnly: true
+        command:
+        - python3
+        - /srv/minesweeper/minesweeper.py
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: NAMESPACE
+          value: {{ .Release.Namespace }}
+      terminationGracePeriodSeconds: 0
+      volumes:
+      - name: src
+        configMap:
+          name: minesweeper-src
+      - name: config
+        configMap:
+          name: minesweeper-config
+{{- end }}
