@@ -35,6 +35,18 @@ resource "google_container_cluster" "cluster" {
   remove_default_node_pool = true
   initial_node_count       = 1
 
+  maintenance_policy {
+    # times are UTC
+    # allow maintenance only on weekends,
+    # from late Western Friday night (10pm Honolulu UTC-10)
+    # to early Eastern Monday AM (4am Sydney UTC+11)
+    recurring_window {
+      start_time = "2021-01-02T08:00:00Z"
+      end_time   = "2021-01-03T17:00:00Z"
+      recurrence = "FREQ=WEEKLY;BYDAY=SA"
+    }
+  }
+
   network_policy {
     enabled  = true
     provider = "CALICO"

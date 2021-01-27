@@ -12,7 +12,7 @@ provider "google" {
 }
 
 locals {
-  gke_version = "1.17.9-gke.1504"
+  gke_version = "1.17.14-gke.400"
 }
 
 module "mybinder" {
