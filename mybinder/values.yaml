@@ -79,6 +79,9 @@ binderhub:
         - pattern: ^michaelJwilson/DESI-HighSchool.*
           config:
             quota: 200
+        - pattern: ^LTSQueens/Let-s-Talk-Astrophysics.*
+          config:
+            quota: 200
 
     GitRepoProvider:
       banned_specs:
