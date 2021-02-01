@@ -1,6 +1,6 @@
-FROM python:3.6-alpine
+FROM python:3.8-alpine
 ADD requirements.txt /tmp/requirements.txt
 RUN pip install --no-cache -r /tmp/requirements.txt
-ADD proxy-help /usr/local/bin/proxy-help
+ADD proxy-patches /usr/local/bin/proxy-patches
 USER nobody
-CMD /usr/local/bin/proxy-help
+CMD /usr/local/bin/proxy-patches
