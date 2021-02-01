@@ -1,0 +1,22 @@
+# Copy of pod.yaml without file extension for test
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod
+spec:
+  initContainers:
+  - name: tc-init
+    image: minrk/tc-init
+    env:
+    - name: EGRESS_BANDWIDTH
+      value: 1mbit
+    # ingress doesn't seem to work
+    # - name: INGRESS_BANDWIDTH
+    #   value: 4mbit
+    securityContext:
+      capabilities:
+        add:
+        - NET_ADMIN
+  containers:
+  - name: main
+    image: jupyter/minimal-notebook:e89b2fe9974b
