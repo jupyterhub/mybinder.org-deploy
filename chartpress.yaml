@@ -8,3 +8,7 @@ charts:
         valuesPath: federationRedirect.image
       minesweeper:
         valuesPath: minesweeper.image
+      proxy-patches:
+        valuesPath: proxyPatches.image
+      tc-init:
+        valuesPath: binderhub.jupyterhub.singleuser.initContainers.0.image

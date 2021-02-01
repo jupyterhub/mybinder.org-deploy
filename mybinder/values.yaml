@@ -290,7 +290,7 @@ binderhub:
 
       initContainers:
         - name: tc-init
-          image: minrk/tc-init:0.0.4
+          image: jupyterhub/mybinder.org-tc-init:set-by-chartpress
           imagePullPolicy: IfNotPresent
           env:
             - name: WHITELIST_CIDR
@@ -429,6 +429,7 @@ prometheus:
         kubernetes.io/tls-acme: 'true'
 
 proxyPatches:
+  image: "jupyterhub/mybinder.org-proxy-patches:set-by-chartpress"
   nodeSelector: {}
   enabled: true
   interval: 60
