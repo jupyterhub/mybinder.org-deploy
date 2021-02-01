@@ -13,6 +13,7 @@ to identify processes that could be considered for termination:
 """
 
 import asyncio
+import copy
 import json
 import os
 import pprint
@@ -328,6 +329,7 @@ def load_config():
     may change during run, so reload from file each time
     """
     global config
+    prior_config = copy.deepcopy(config)
     config.update(default_config)
     config_file = "/etc/minesweeper/minesweeper.json"
     if os.path.isfile(config_file):
@@ -336,10 +338,12 @@ def load_config():
         config.update(file_config)
         # sync global config with herorat
         herorat.config = config
-        print("Loaded config:")
-        pprint.pprint(config)
     else:
         print(f"No such file: {config_file}")
+
+    if config != prior_config:
+        print("Loaded config:")
+        pprint.pprint(config)
 
     return config
 
