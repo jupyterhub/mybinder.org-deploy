@@ -35,7 +35,7 @@ For example:
 spec:
   initContainers:
   - name: tc-init
-    image: minrk/tc-init
+    image: jupyterhub/mybinder.org-tc-init
     env:
     - name: EGRESS_BANDWIDTH
       value: 1mbit
