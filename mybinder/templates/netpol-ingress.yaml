@@ -11,9 +11,9 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: nginx-ingress
-      component: controller
-      release: {{ .Release.Name }}
+      app.kubernetes.io/name: ingress-nginx
+      app.kubernetes.io/component: controller
+      app.kubernetes.io/instance: {{ .Release.Name }}
   policyTypes:
     - Ingress
   # block ingress from banned client ips
