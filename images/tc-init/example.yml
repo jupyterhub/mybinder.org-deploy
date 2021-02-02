@@ -6,7 +6,7 @@ metadata:
 spec:
   initContainers:
   - name: tc-init
-    image: minrk/tc-init
+    image: jupyterhub/mybinder.org-tc-init:set-by-chartpress
     env:
     - name: EGRESS_BANDWIDTH
       value: 1mbit
