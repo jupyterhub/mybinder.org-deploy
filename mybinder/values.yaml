@@ -82,6 +82,10 @@ binderhub:
         - pattern: ^LTSQueens/Let-s-Talk-Astrophysics.*
           config:
             quota: 200
+        - pattern: ^Beremi/SKOMAM.*
+          # 2021-02-04...2021-02-05 16:00 CET.
+          config:
+            quota: 300
 
     GitRepoProvider:
       banned_specs:
