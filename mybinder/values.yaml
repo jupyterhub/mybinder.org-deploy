@@ -218,6 +218,8 @@ binderhub:
       extraConfig:
         neverRestart: |
           c.KubeSpawner.extra_pod_config.update({'restart_policy': 'Never'})
+        noPrivilegeEscalation: |
+          c.KubeSpawner.allow_privilege_escalation = False
         noAuthMetrics: |
           c.JupyterHub.authenticate_prometheus = False
       service:
