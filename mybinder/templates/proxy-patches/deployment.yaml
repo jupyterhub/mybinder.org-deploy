@@ -37,6 +37,12 @@ spec:
         - name: proxy-help-config
           configMap:
             name: proxy-help-config
+
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- . | toYaml | nindent 8 }}
+      {{- end }}
+
       containers:
       - name: nginx
         image: nginx:1.13.6
