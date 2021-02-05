@@ -97,10 +97,10 @@ on.
 There are 3 main files you may wish to edit in order to remove a cluster from
 the Federation:
 
-#. *Required.* Set the ```binderhub.config.BinderHub.pod_quota``` key to ```0``` in the
+#. *Required.* Set the ``binderhub.config.BinderHub.pod_quota`` key to ``0`` in the
    cluster's config file under the `config <https://github.com/jupyterhub/mybinder.org-deploy/tree/master/config>`_
    directory
-#. *Recommended.* Set the ```weight``` key for the cluster to ```0``` in the
+#. *Recommended.* Set the ``weight`` key for the cluster to ``0`` in the
    `helm chart values file <https://github.com/jupyterhub/mybinder.org-deploy/blob/4f42d791f92dcb3156e7c4ea92a236246bbf9135/mybinder/values.yaml#L494>`_
    in order to remove it from the redirector's pool
 #. *Optional.* Comment out the cluster from the
