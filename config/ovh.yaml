@@ -7,9 +7,8 @@ binderhub:
       hub_url: https://hub-binder.mybinder.ovh
       badge_base_url: https://mybinder.org
       sticky_builds: true
-      # docker hub registry for OVH
       use_registry: true
-      image_prefix: binderhubovh/ovhbhub-
+      image_prefix: ovhbhub-
 
   replicas: 1
 
@@ -43,8 +42,8 @@ binderhub:
   jupyterhub:
     imagePullSecret:
       enabled: true
-      registry: https://index.docker.io/v1/
-      username: binderhubovh
+      registry: https://3i2li627.gra7.container-registry.ovh.net/binder/
+      username: ENqslXzUyF
       email: betatim+ovhhub@gmail.com
     
     hub:
