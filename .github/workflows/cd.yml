@@ -179,7 +179,8 @@ jobs:
           - federation_member: ovh
             binder_url: https://ovh.mybinder.org
             hub_url: https://hub-binder.mybinder.ovh
-            chartpress_args: ""
+            # image-prefix should match ovh registry config in secrets/config/ovh.yaml
+            chartpress_args: "--push --image-prefix=3i2li627.gra7.container-registry.ovh.net/binder/ovhbhub-"
             helm_version: ""
 
     steps:
@@ -239,9 +240,18 @@ jobs:
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
+      # Action Repo: https://github.com/Azure/docker-login
+      - name: "Stage 3: Login to Docker regstry (OVH)"
+        if: matrix.federation_member == 'ovh'
+        uses: azure/docker-login@v1
+        with:
+          login-server: 3i2li627.gra7.container-registry.ovh.net
+          username: ${{ secrets.DOCKER_USERNAME_OVH }}
+          password: ${{ secrets.DOCKER_PASSWORD_OVH }}
+
       - name: "Stage 3: Run chartpress to update values.yaml"
         run: |
-          chartpress --skip-build ${{ matrix.chartpress_args }}
+          chartpress ${{ matrix.chartpress_args || '--skip-build' }}
 
       - name: "Stage 4: Deploy to ${{ matrix.federation_member }}"
         run: |

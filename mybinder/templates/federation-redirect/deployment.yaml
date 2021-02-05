@@ -39,9 +39,15 @@ spec:
         configMap:
           name: federation-redirect
       automountServiceAccountToken: false
+
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- . | toYaml | nindent 8 }}
+      {{- end }}
+
       containers:
       - name: federation-redirect
-        image: {{ .Values.federationRedirect.image.name}}:{{ .Values.federationRedirect.image.tag }}
+        image: {{ .Values.federationRedirect.image.name }}:{{ .Values.federationRedirect.image.tag }}
         volumeMounts:
           - name: config
             mountPath: /etc/federation-redirect
