@@ -9,8 +9,10 @@ binderhub:
       sticky_builds: true
       use_registry: true
       image_prefix: 3i2li627.gra7.container-registry.ovh.net/binder/ovhbhub-
-      # auth config in secrets/config
-
+    DockerRegistry:
+      # Docker Registry uses harbor
+      # ref: https://github.com/goharbor/harbor/wiki/Harbor-FAQs#api
+      token_url: "https://3i2li627.gra7.container-registry.ovh.net/service/token?service=harbor-registry"
 
   replicas: 1
 
