@@ -215,8 +215,6 @@ binderhub:
         limits:
           cpu: "2"
           memory: 1Gi
-      pdb:
-        minAvailable: 0
       extraConfig:
         neverRestart: |
           c.KubeSpawner.extra_pod_config.update({'restart_policy': 'Never'})
@@ -227,8 +225,6 @@ binderhub:
           prometheus.io/scrape: 'true'
           prometheus.io/path: '/hub/metrics'
     proxy:
-      pdb:
-        minAvailable: 0
       service:
         type: ClusterIP
       chp:
