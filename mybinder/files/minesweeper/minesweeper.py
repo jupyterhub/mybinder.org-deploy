@@ -7,13 +7,14 @@ to identify processes that could be considered for termination:
 
 - determine which processes are "suspicious" (see herorat.py)
 - produce report on suspicious pods:
-    - show running processes (`ps -f -u$uid`)
+    - show running processes (`ps aux`)
     - tail pod logs
 - automatically terminate pods likely to be abuse, etc.
 """
 
 import asyncio
 import copy
+import glob
 import json
 import os
 import pprint
@@ -46,11 +47,13 @@ hostname = os.environ.get("NODE_NAME", socket.gethostname())
 
 default_config = {
     "userid": 1000,
+    "inspect_procs_without_pod": False,
     "threads": 8,
     "interval": 300,
     "namespace": os.environ.get("NAMESPACE", "default"),
     "pod_selectors": {
         "label_selector": "component=singleuser-server",
+        "field_selector": f"spec.nodeName={hostname}",
     },
     "log_tail_lines": 100,
     # process attributes to retrieve
@@ -84,7 +87,12 @@ def get_kube():
 
 
 class Proc(dict):
-    """Proc is a dict subclass with attribute-access for keys"""
+    """Proc is a dict subclass with attribute-access for keys
+
+    suspicious and should_terminate are added via inspection.
+    They can be booleans or truthy strings explaining
+    why they are suspicious or should be terminated.
+    """
 
     def __init__(self, **kwargs):
         kwargs.setdefault("suspicious", False)
@@ -92,7 +100,10 @@ class Proc(dict):
         super().__init__(**kwargs)
 
         # secondary derived fields
+        # cmd is the command-line as a single string
         self["cmd"] = " ".join(self["cmdline"])
+        # cpu_total is the sum of cpu times (user, system, children, etc.)
+        self["cpu_total"] = sum(kwargs.get("cpu_times", []))
 
     def __repr__(self):
         key_fields = ", ".join(
@@ -103,7 +114,9 @@ class Proc(dict):
                     "status",
                     "suspicious",
                     "should_terminate",
+                    "cmd",
                 ]
+                if self.get(key) is not None
             ]
         )
         return f"{self.__class__.__name__}({key_fields})"
@@ -119,13 +132,17 @@ def get_procs(userid):
     """Get all container processes running with a given user id"""
     procs = []
     for p in psutil.process_iter(attrs=config["proc_attrs"]):
-        if not p.info["exe"]:
+        # TODO: should we filter to userid?
+        # For now: skip userid filtering, because we
+        # want to catch all processes in pods, even if they
+        # ran setuid
+        # if p.info["uids"].real != userid:
+        #     continue
+        if not p.info["cmdline"]:
             # ignore empty commands, e.g. kernel processes
             continue
-        if p.info["uids"].real != userid:
-            continue
 
-        proc = inspect_process(Proc(**p.info))
+        proc = Proc(**p.info)
         procs.append(proc)
 
     procs = sorted(procs, key=attrgetter("cpu_percent"), reverse=True)
@@ -150,29 +167,27 @@ def pods_by_uid(pods):
     return {pod["metadata"]["uid"]: pod for pod in pods}
 
 
-def get_pod_for_proc(proc, pods):
-    """Identify the pod for a process"""
-    try:
-        with open(f"/proc/{proc.pid}/cgroup") as f:
-            cgroups = f.read()
-    except Exception:
-        if proc.suspicious:
-            print(f"Couldn't find pod for {proc}\n", end="")
-        return
+def get_all_pod_uids():
+    """Return mapping of pid to pod uid"""
 
-    m = re.search("/pod([^/]+)", cgroups)
-    if m is None:
-        if proc.suspicious:
-            print(f"Couldn't find pod for {proc}: {cgroups}\n", end="")
-        return
+    pod_uids = {}
+    for cgroup_file in glob.glob("/proc/[0-9]*/cgroup"):
+        pid = int(cgroup_file.split("/")[-2])
 
-    pod_uid = m.group(1)
+        try:
+            with open(cgroup_file) as f:
+                cgroups = f.read()
 
-    pod = pods.get(pod_uid)
-    if not pod:
-        if proc.suspicious:
-            print(f"Couldn't find pod for {proc}: {pod_uid}\n", end="")
-    return pod
+        except FileNotFoundError:
+            # process deleted, ignore
+            continue
+
+        m = re.search("/pod([^/]+)", cgroups)
+        if m is None:
+            # not a pod proc
+            continue
+        pod_uids[pid] = m.group(1)
+    return pod_uids
 
 
 def associate_pods_procs(pods, procs):
@@ -186,8 +201,10 @@ def associate_pods_procs(pods, procs):
             "procs": [],
         }
     procs_without_pods = []
+    pod_uids = get_all_pod_uids()
     for proc in procs:
-        pod = get_pod_for_proc(proc, pods)
+        pod_uid = pod_uids.get(proc.pid)
+        pod = pods.get(pod_uid)
         if not pod:
             procs_without_pods.append(proc)
         else:
@@ -204,7 +221,7 @@ def ps_pod(pod, userid=1000):
             kube.connect_get_namespaced_pod_exec,
             pod["metadata"]["name"],
             namespace=pod["metadata"]["namespace"],
-            command=["ps", "-f", f"-u{userid}"],
+            command=["ps", "aux"],
             stderr=True,
             stdin=False,
             stdout=True,
@@ -272,11 +289,18 @@ async def node_report(pods=None, userid=1000):
     procs = await in_pool(lambda: get_procs(userid))
     print(f"Total processes for {hostname}: {len(procs)}\n", end="")
     pods, procs_without_pod = associate_pods_procs(pods, procs)
+
+    # inspect all procs in our pods
+    user_procs = []
+    for pod in pods.values():
+        user_procs.extend(pod["minesweeper"]["procs"])
+        pod["minesweeper"]["procs"] = [
+            inspect_process(p) for p in pod["minesweeper"]["procs"]
+        ]
+    print(f"Total user pods for {hostname}: {len(pods)}\n", end="")
+    print(f"Total user processes for {hostname}: {len(user_procs)}\n", end="")
     suspicious_pods = [pod for pod in pods.values() if inspect_pod(pod)["suspicious"]]
-    suspicious_procs_without_pod = [p for p in procs_without_pod if p.suspicious]
-    # filter to only suspicious processes
-    procs = [p for p in procs if p.suspicious]
-    print(f"Processes of interest for {hostname}: {len(procs)}")
+
     print(f"Pods of interest for {hostname}: {len(suspicious_pods)}")
 
     # report on all suspicious pods
@@ -287,6 +311,11 @@ async def node_report(pods=None, userid=1000):
         await asyncio.sleep(0)
 
     # report on suspicious processes with no matching pod
+    suspicious_procs_without_pod = []
+    if config["inspect_procs_without_pod"]:
+        procs_without_pod = [inspect_process(p) for p in procs_without_pod]
+        suspicious_procs_without_pod = [p for p in procs_without_pod if p.suspicious]
+
     if suspicious_procs_without_pod:
         print(
             f"No pods found for {len(suspicious_procs_without_pod)} suspicious processes on {hostname}:"
