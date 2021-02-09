@@ -94,6 +94,7 @@ binderhub:
         - ^https%3A%2F%2Fbitbucket.org%2Fnikiubel%2Fnikiubel.bitbucket.io.git/.*
         - ^https%3A%2F%2Fjovian.ml%2Fapi%2Fgit%2F.*
         - ^https%3A%2F%2Fframagit.org%2FCecGhesq%2Flic_mdf_nsi_1.*
+        - ^(git|https?)%3A%2F%2Fnotabug.org%2FulslcuRux3Y%2F.*
     BinderHub:
       use_registry: true
       build_image: jupyter/repo2docker:2021.01.0-16.gcb4621f
