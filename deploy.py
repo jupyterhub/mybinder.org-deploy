@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 import argparse
+import glob
 import json
 import os
 import subprocess
 import re
 import sys
 
-import yaml
 
 # Color codes for colored output!
 if os.environ.get("TERM"):
@@ -148,18 +148,15 @@ def deploy(release, name=None):
         3. Deploy mybinder helm chart
         4. Await deployed deployment and daemonsets to become Ready
     """
-    print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
     if not name:
         name = release
-    if release == "turing" or release == "ovh":
-        subprocess.check_call(
-            ["python3", "secrets/ban.py", release,]
-        )
-    else:
-        subprocess.check_call([
-            "python3",
-            "secrets/ban.py",
-        ])
+
+    print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
+    ban_command = [sys.executable, "secrets/ban.py"]
+    if release in {"turing", "ovh"}:
+        ban_command.append(release)
+
+    subprocess.check_call(ban_command)
 
     setup_certmanager()
 
@@ -174,13 +171,17 @@ def deploy(release, name=None):
         "mybinder",
         "--cleanup-on-fail",
         "--create-namespace",
-        "-f",
-        os.path.join("config", release + ".yaml"),
-        "-f",
-        os.path.join("secrets", "config", "common.yaml"),
-        "-f",
-        os.path.join("secrets", "config", release + ".yaml"),
     ]
+
+    # common config files
+    config_files = glob.glob(os.path.join("config", "common", "*.yaml"))
+    config_files.append(os.path.join("secrets", "config", "common.yaml"))
+    # release-specific config files
+    for config_dir in ("config", "secrets/config"):
+        config_files.append(os.path.join(config_dir, release + ".yaml"))
+    # add config files to helm command
+    for config_file in config_files:
+        helm.extend(["-f", config_file])
 
     subprocess.check_call(helm)
     print(BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC, flush=True)

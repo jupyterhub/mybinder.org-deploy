@@ -107,6 +107,10 @@ jobs:
           curl -sf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
           helm dependency update ./mybinder
 
+      - name: Collect datacenter addresses
+        run: |
+          python scripts/datacenters.py
+
       # Action Repo: https://github.com/sliteteam/github-action-git-crypt-unlock
       - name: "Stage 2: Unlock git-crypt secrets"
         uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
@@ -234,6 +238,10 @@ jobs:
         run: |
           curl -sf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
           helm dependency update ./mybinder
+
+      - name: Collect datacenter addresses
+        run: |
+          python scripts/datacenters.py
 
       - name: "Stage 2: Unlock git-crypt secrets"
         uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b

@@ -22,11 +22,20 @@ spec:
         - ipBlock:
             cidr: 0.0.0.0/0
             except:
+            # manual ip bans
             {{- range $ipOrCidr := .Values.binderhub.networkPolicy.ingress.bannedIps }}
               {{- if (contains $ipOrCidr "/") }}
               - {{ $ipOrCidr }}
               {{- else }}
-              - {{ $ipOrCidr}}/32
+              - {{ $ipOrCidr }}/32
+              {{- end }}
+            {{- end }}
+            # ban ingress traffic from known datacenters
+            {{- range $name, $cfg := .Values.datacenters }}
+              {{- if $cfg.enabled }}
+                {{- range $cidr := $cfg.cidrs }}
+              - {{ $cidr }}
+                {{- end }}
               {{- end }}
             {{- end }}
 {{- end }}
