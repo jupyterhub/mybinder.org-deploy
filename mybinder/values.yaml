@@ -97,7 +97,7 @@ binderhub:
         - ^(git|https?)%3A%2F%2Fnotabug.org%2FulslcuRux3Y%2F.*
     BinderHub:
       use_registry: true
-      build_image: jupyter/repo2docker:2021.01.0-16.gcb4621f
+      build_image: jupyter/repo2docker:2021.01.0-18.g8582d44
       per_repo_quota: 100
       per_repo_quota_higher: 200
       build_memory_limit: "3G"
