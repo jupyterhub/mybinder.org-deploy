@@ -83,9 +83,18 @@ def cidrs_azure():
 
 
 datacenters = {
-    "aws": cidrs_aws,
-    "gcp": cidrs_gcp,
-    "azure": cidrs_azure,
+    "aws": {
+        "message": "AWS",
+        "get_cidrs": cidrs_aws,
+    },
+    "gcp": {
+        "message": "Google Cloud",
+        "get_cidrs": cidrs_gcp,
+    },
+    "azure": {
+        "message": "Azure",
+        "get_cidrs": cidrs_azure,
+    },
 }
 
 
@@ -97,10 +106,12 @@ def generate_files():
     config_common = os.path.join("config", "common")
     os.makedirs(config_common, exist_ok=True)
 
-    for name, get_cidrs in sorted(datacenters.items()):
+    for name, cfg in sorted(datacenters.items()):
+        message = cfg["message"]
+        get_cidrs = cfg["get_cidrs"]
         # filter to unique values
         raw_cidrs = get_cidrs()
-        print(f"Collected {len(raw_cidrs)} CIDRs for {name}")
+        print(f"Collected {len(raw_cidrs)} CIDRs for {message}")
         # Collapse overlapping CIDRs.
         # Azure in particular is reduced by a factor of 20 from 32k to ~1800
         # because of how they organize the data.
@@ -111,8 +122,20 @@ def generate_files():
 
         dest_file = os.path.join(config_common, f"datacenter-{name}.yaml")
         print(f"Writing {len(cidrs)} CIDRs to {dest_file}")
+        ban_networks = {cidr: message for cidr in cidrs}
         with open(dest_file, "w") as f:
-            yaml.dump({"datacenters": {name: {"cidrs": cidrs}}}, f)
+            yaml.dump(
+                {
+                    "binderhub": {
+                        "config": {
+                            "BinderHub": {
+                                "ban_networks": ban_networks,
+                            },
+                        }
+                    }
+                },
+                f,
+            )
 
 
 if __name__ == "__main__":

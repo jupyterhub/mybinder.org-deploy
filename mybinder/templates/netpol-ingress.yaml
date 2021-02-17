@@ -30,12 +30,4 @@ spec:
               - {{ $ipOrCidr }}/32
               {{- end }}
             {{- end }}
-            # ban ingress traffic from known datacenters
-            {{- range $name, $cfg := .Values.datacenters }}
-              {{- if $cfg.enabled }}
-                {{- range $cidr := $cfg.cidrs }}
-              - {{ $cidr }}
-                {{- end }}
-              {{- end }}
-            {{- end }}
 {{- end }}
