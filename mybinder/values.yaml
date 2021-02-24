@@ -88,6 +88,10 @@ binderhub:
           # 2021-02-17
           config:
             quota: 200
+        - pattern: ^jireland88/Data_Science_in_Pro_Bono_Consulting.*
+          # 2021-02-28
+          config:
+            quota: 200
 
     GitRepoProvider:
       banned_specs:
