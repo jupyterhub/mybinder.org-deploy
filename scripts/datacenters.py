@@ -22,7 +22,7 @@ def cidrs_aws():
     url = "https://ip-ranges.amazonaws.com/ip-ranges.json"
     r = requests.get(url)
     r.raise_for_status()
-    #
+ 
     return [prefix["ip_prefix"] for prefix in r.json()["prefixes"]]
 
 
