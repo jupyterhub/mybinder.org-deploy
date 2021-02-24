@@ -107,6 +107,12 @@ def generate_files():
     os.makedirs(config_common, exist_ok=True)
 
     for name, cfg in sorted(datacenters.items()):
+        if name == "azure":
+            # FIXME: skip azure until we work out
+            # how to authorize test requests.
+            # GitHub Actions run on Azure.
+            continue
+
         message = cfg["message"]
         get_cidrs = cfg["get_cidrs"]
         # filter to unique values
