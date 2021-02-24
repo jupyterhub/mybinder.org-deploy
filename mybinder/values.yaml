@@ -52,6 +52,8 @@ binderhub:
         - 1095 # xroot
         - 16286 # Wolfram Engine on-demand licensing
       cidr: 0.0.0.0/0
+    ingress:
+      bannedIps: []
 
   config:
     GitHubRepoProvider:

@@ -5,6 +5,7 @@ __pycache__
 .cache
 .pytest_cache
 
+config/common/datacenter-*.yaml
 mybinder/charts
 mybinder/requirements.lock
 
