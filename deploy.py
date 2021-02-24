@@ -152,6 +152,9 @@ def deploy(release, name=None):
         name = release
 
     print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
+
+    # some members have special logic in ban.py,
+    # in which case they must be specified on the command-line
     ban_command = [sys.executable, "secrets/ban.py"]
     if release in {"turing", "ovh"}:
         ban_command.append(release)
