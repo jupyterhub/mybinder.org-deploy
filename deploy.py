@@ -174,7 +174,7 @@ def deploy(release, name=None):
     ]
 
     # common config files
-    config_files = glob.glob(os.path.join("config", "common", "*.yaml"))
+    config_files = sorted(glob.glob(os.path.join("config", "common", "*.yaml")))
     config_files.append(os.path.join("secrets", "config", "common.yaml"))
     # release-specific config files
     for config_dir in ("config", "secrets/config"):
