@@ -84,6 +84,10 @@ binderhub:
           # 2020-02-21
           config:
             quota: 200
+        - pattern: ^olaiya/zboson-exercise.*
+          # 2020-03-02
+          config:
+            quota: 300
         - pattern: ^krisrs1128/mappingvis.$
           # 2021-02-17
           config:
