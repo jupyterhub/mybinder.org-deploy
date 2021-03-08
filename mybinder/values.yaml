@@ -239,6 +239,10 @@ binderhub:
       service:
         type: ClusterIP
       chp:
+        # FIXME: remove when hub chart dependency is bumped
+        # to include https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2081
+        image:
+          tag: 4.3.1
         networkPolicy:
           enabled: true
         resources:
@@ -248,14 +252,14 @@ binderhub:
           limits:
             memory: 320Mi
             cpu: "0.5"
-        cmd:
-          - configurable-http-proxy
-          - --ip=0.0.0.0
-          - --port=8000
-          - --api-ip=0.0.0.0
-          - --api-port=8001
-          - --default-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)
-          - --error-target=http://$(HUB_SERVICE_HOST):$(HUB_SERVICE_PORT)/hub/error
+        # FIXME: move to errorTarget/defaultTarget when hub chart dependency is bumped
+        # to include https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2079
+        # this still works, though, as repeatedly specifying CLI flags overrides earlier values
+        extraCommandLineFlags:
+          # defaultTarget needs to wait for jupyterhub 1.4
+          # https://github.com/jupyterhub/jupyterhub/pull/3373
+          # - --default-target=http://$(PROXY_PATCHES_SERVICE_HOST):$(PROXY_PATCHES_SERVICE_PORT)
+          - --error-target=http://$(PROXY_PATCHES_SERVICE_HOST):$(PROXY_PATCHES_SERVICE_PORT)/hub/error
           - --log-level=error
       nginx:
         resources:
@@ -451,6 +455,10 @@ proxyPatches:
   interval: 60
   routes:
     /user: service:proxy-patches
+    # limit hub to only api requests and health checks
+    /hub/api: service:hub
+    /hub/health: service:hub
+    /hub: service:proxy-patches
 
 matomo:
   enabled: true
