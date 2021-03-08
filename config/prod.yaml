@@ -42,6 +42,12 @@ binderhub:
 
     proxy:
       nodeSelector: *coreNodeSelector
+      chp:
+        resources:
+          requests:
+            cpu: "1"
+          limits:
+            cpu: "1"
     ingress:
       hosts:
         - hub.mybinder.org
