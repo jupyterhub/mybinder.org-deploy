@@ -1,0 +1,19 @@
+{{- if .Values.binderhub.hpa.enabled }}
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: binder
+  labels:
+    app: binder
+    component: binderhub
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: binder
+  minReplicas: {{ .Values.binderhub.hpa.minReplicas }}
+  maxReplicas: {{ .Values.binderhub.hpa.maxReplicas }}
+  targetCPUUtilizationPercentage: {{ .Values.binderhub.hpa.targetCPU }}
+{{- end }}

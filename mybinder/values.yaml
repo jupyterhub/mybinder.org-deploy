@@ -39,6 +39,11 @@ binderhub:
       cpu: "2"
       memory: 1Gi
 
+  hpa:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 1
+    targetCPU: 100 # this is in percent of requests.cpu
 
   networkPolicy:
     enabled: true
