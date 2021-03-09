@@ -17,6 +17,16 @@ binderhub:
       sticky_builds: true
 
   nodeSelector: *coreNodeSelector
+  
+  resources:
+    requests:
+      cpu: 0.5
+
+  hpa:
+    enabled: true
+    maxReplicas: 4
+    minReplicas: 2
+    targetCPU: 100 # 100% of cpu request, so 0.5 CPU
 
   dind:
     hostLibDir: /mnt/disks/ssd0/dind
@@ -32,7 +42,6 @@ binderhub:
     hosts:
       - gke.mybinder.org
       - gke2.mybinder.org
-
 
   jupyterhub:
     singleuser:

@@ -11,9 +11,17 @@ binderhub:
   extraEnv:
     - name: EVENT_LOG_NAME
       value: "binderhub-staging-events-text"
+
   resources:
     requests:
+      cpu: 0.25
       memory: 512Mi
+
+  hpa:
+    enabled: true
+    maxReplicas: 3
+    minReplicas: 1
+    targetCPU: 50 # 50% of cpu request, so 0.125 CPU
 
   dind:
     resources:
