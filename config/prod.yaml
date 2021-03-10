@@ -23,7 +23,7 @@ binderhub:
       cpu: 0.5
 
   hpa:
-    enabled: true
+    enabled: false
     maxReplicas: 4
     minReplicas: 2
     targetCPU: 100 # 100% of cpu request, so 0.5 CPU
