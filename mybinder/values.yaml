@@ -101,6 +101,10 @@ binderhub:
           # 2021-02-28
           config:
             quota: 200
+        - pattern: ^JoelForamitti/agentpy_workshop.*
+          # 2021-03-16
+          config:
+            quota: 300
 
     GitRepoProvider:
       banned_specs:
