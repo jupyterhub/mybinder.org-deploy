@@ -294,6 +294,9 @@ binderhub:
         enabled: true
         # replicas set in config/<deployment>
     singleuser:
+      cloudMetadata:
+        # we do this in our own network policy
+        blockWithIptables: false
       networkPolicy:
         enabled: true
         egress: []
