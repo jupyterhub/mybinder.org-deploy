@@ -47,7 +47,7 @@ binderhub:
     imagePullSecret:
       enabled: true
       # config in secrets/config
-    
+
     hub:
       image:
         pullPolicy: IfNotPresent
@@ -79,7 +79,7 @@ binderhub:
       userPlaceholder:
         enabled: true
         replicas: 5
-    
+
     singleuser:
       image:
         pullPolicy: IfNotPresent
@@ -121,6 +121,9 @@ grafana:
 
 prometheus:
   server:
+    persistentVolume:
+      size: 20Gi
+    retention: 60d
     ingress:
       annotations:
         kubernetes.io/ingress.class: nginx
