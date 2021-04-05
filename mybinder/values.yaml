@@ -105,6 +105,10 @@ binderhub:
           # 2021-03-16
           config:
             quota: 350
+        - pattern: ^tcNickolas/QuantumKatas.*
+          # 2021-04-05
+          config:
+            quota: 200
 
     GitRepoProvider:
       banned_specs:
