@@ -7,6 +7,11 @@
 
 name: Continuous Deployment
 
+# only allow one deploy workflow to be running at a time
+# serializes multiple outstanding deploys if PRs are merged before the last deploy finishes
+# ref: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
+concurrency: deploy
+
 # Only trigger the workflow when pushing to master or a label is applied to a
 # Pull Request
 on:
