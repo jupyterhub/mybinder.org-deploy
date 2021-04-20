@@ -543,7 +543,7 @@ federationRedirect:
       versions: https://ovh.mybinder.org/versions
     turing:
       url: https://turing.mybinder.org
-      weight: 100
+      weight: 0
       health: https://turing.mybinder.org/health
       versions: https://turing.mybinder.org/versions
   nodeSelector: {}
