@@ -7,7 +7,7 @@ letsencrypt:
 binderhub:
   config:
     BinderHub:
-      pod_quota: 80
+      pod_quota: 0
       hub_url: https://hub.mybinder.turing.ac.uk
       badge_base_url: https://mybinder.org
       sticky_builds: true
