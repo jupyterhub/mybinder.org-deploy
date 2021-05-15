@@ -122,7 +122,7 @@ grafana:
 prometheus:
   server:
     persistentVolume:
-      size: 20Gi
+      size: 50Gi
     retention: 60d
     ingress:
       annotations:
