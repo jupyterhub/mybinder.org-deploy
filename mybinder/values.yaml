@@ -277,14 +277,6 @@ binderhub:
           # - --default-target=http://$(PROXY_PATCHES_SERVICE_HOST):$(PROXY_PATCHES_SERVICE_PORT)
           - --error-target=http://$(PROXY_PATCHES_SERVICE_HOST):$(PROXY_PATCHES_SERVICE_PORT)/hub/error
           - --log-level=error
-      traefik:
-        resources:
-          requests:
-            memory: 512Mi
-            cpu: "0.25"
-          limits:
-            memory: 512Mi
-            cpu: 1
     ingress:
       enabled: true
       annotations:
