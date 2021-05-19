@@ -8,6 +8,7 @@ __pycache__
 config/common/datacenter-*.yaml
 mybinder/charts
 mybinder/requirements.lock
+mybinder/Chart.lock
 
 .ipynb_checkpoints
 
