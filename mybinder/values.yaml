@@ -109,6 +109,10 @@ binderhub:
           # 2021-04-05
           config:
             quota: 200
+        - pattern: ^carpentries-incubator/SDC-BIDS.*
+          # 2021-05-28 and 2021-06-04
+          config:
+            quota: 200
 
     GitRepoProvider:
       banned_specs:
