@@ -1,4 +1,4 @@
-sphinx>=3.0.1
-recommonmark
+sphinx==4.0.1
+recommonmark==0.7.1
 pydata-sphinx-theme==0.1.1
-docutils<0.17 # pin for https://github.com/readthedocs/recommonmark/issues/220
+docutils==0.16 # 0.17 breaks https://github.com/readthedocs/recommonmark/issues/220
