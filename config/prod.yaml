@@ -119,7 +119,8 @@ prometheus:
         memory: 20Gi
       limits:
         cpu: "2"
-        memory: 20Gi
+        # 20Gi isn't enough to rebuild WAL on startup
+        memory: 23Gi
     persistentVolume:
       # Use a large SSD Volume in production
       size: 2000Gi
