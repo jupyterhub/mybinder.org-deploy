@@ -85,34 +85,10 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
-        - pattern: ^LTSQueens/Let-s-Talk-Astrophysics.*
-          # 2020-02-21
-          config:
-            quota: 200
-        - pattern: ^olaiya/zboson-exercise.*
-          # 2020-03-02
-          config:
-            quota: 300
-        - pattern: ^krisrs1128/mappingvis.$
-          # 2021-02-17
-          config:
-            quota: 200
-        - pattern: ^jireland88/Data_Science_in_Pro_Bono_Consulting.*
-          # 2021-02-28
-          config:
-            quota: 200
-        - pattern: ^JoelForamitti/agentpy_workshop.*
-          # 2021-03-16
-          config:
-            quota: 350
-        - pattern: ^tcNickolas/QuantumKatas.*
-          # 2021-04-05
-          config:
-            quota: 200
-        - pattern: ^carpentries-incubator/SDC-BIDS.*
-          # 2021-05-28 and 2021-06-04
-          config:
-            quota: 200
+      # - pattern: ^github-owner/github-repo-prefix.*
+      #   # YYYY-MM-DD of workshop
+      #   config:
+      #     quota: 123
 
     GitRepoProvider:
       banned_specs:
