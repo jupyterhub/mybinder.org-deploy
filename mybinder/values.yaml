@@ -85,6 +85,11 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
+        - pattern: ^henryiii/level-up-your-python.*
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/1975
+          # 2021-07-05 PyHEP 2021 https://indico.cern.ch/event/1019958/timetable/#53-level-up-your-python-part-i
+          config:
+            quota: 500
       # - pattern: ^github-owner/github-repo-prefix.*
       #   # YYYY-MM-DD of workshop
       #   config:
