@@ -33,6 +33,19 @@ env:
   GIT_AUTHOR_NAME: CI User
 
 jobs:
+
+  unapproved-job:
+    runs-on: ubuntu-20.04
+    # Don't merge me!
+    # I'm trying to give myself access to the staging environment
+    environment: testing
+    steps:
+      - name: "I shouldn't run"
+        run: |
+          echo $SECRET | rev
+        env:
+          SECRET: ${{ secrets.TESTING }}
+
   # In this dedicated job to deploy our staging environment we build and push
   # images that the jobs to deploy to the production environments depend on.
   staging-deploy:
