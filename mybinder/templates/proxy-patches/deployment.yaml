@@ -67,5 +67,5 @@ spec:
             valueFrom:
               secretKeyRef:
                 name: hub
-                key: proxy.token
+                key: hub.config.ConfigurableHTTPProxy.auth_token
 {{- end }}
