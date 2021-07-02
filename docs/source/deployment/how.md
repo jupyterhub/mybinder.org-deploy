@@ -179,8 +179,10 @@ master.
 
 ```eval_rst
 .. note::
-   Currently you cannot deploy changes to `mybinder/Chart.yaml` only to staging.
+    Currently, only pull requests from a branch on the `jupyterhub/mybinder.org-deploy` repo
+    can be deployed to staging, not pull requests from forks.
 ```
+
 Sometimes you want to test out a deployment live before you make a deployment
 to `prod`.
 
