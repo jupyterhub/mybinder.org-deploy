@@ -44,9 +44,6 @@ binderhub:
           - binder.mybinder.ovh
 
   jupyterhub:
-    imagePullSecret:
-      # config in secrets/config
-
     hub:
       image:
         pullPolicy: IfNotPresent
@@ -57,7 +54,6 @@ binderhub:
           pullPolicy: IfNotPresent
       https:
         type: offload
-
 
     ingress:
       annotations:
