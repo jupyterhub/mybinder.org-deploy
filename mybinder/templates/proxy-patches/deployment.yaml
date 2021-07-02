@@ -34,6 +34,9 @@ spec:
         - name: nginx-files
           configMap:
             name: proxy-html-files
+        - name: proxy-help-config
+          configMap:
+            name: proxy-help-config
 
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -50,4 +53,19 @@ spec:
             name: nginx-config
           - mountPath: /srv/proxy-patches/
             name: nginx-files
+      - name: proxy-help
+        image: {{ .Values.proxyPatches.image }}
+        volumeMounts:
+          - mountPath: /etc/proxy
+            name: proxy-help-config
+        env:
+          - name: PYTHONUNBUFFERED
+            value: "1"
+          - name: CHECK_PROXY_INTERVAL
+            value: {{ .Values.proxyPatches.interval | quote }}
+          - name: CONFIGPROXY_AUTH_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: hub
+                key: hub.config.ConfigurableHTTPProxy.auth_token
 {{- end }}
