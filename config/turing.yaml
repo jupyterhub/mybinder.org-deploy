@@ -24,9 +24,6 @@ binderhub:
       - turing.mybinder.org
     annotations:
       kubernetes.io/ingress.class: nginx
-      https:
-        enabled: true
-        type: nginx
     tls:
       - secretName: turing-binder-tls-crt
         hosts:
@@ -51,9 +48,6 @@ binderhub:
       annotations:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
-        https:
-          enabled: true
-          type: nginx
       hosts:
         - hub.mybinder.turing.ac.uk
       tls:
