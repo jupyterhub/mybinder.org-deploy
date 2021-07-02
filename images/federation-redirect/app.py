@@ -132,7 +132,6 @@ class ProxyHandler(RequestHandler):
         target_url = self.host + uri
 
         headers = self.request.headers.copy()
-        headers["Host"] = self.host[8:]
         headers["X-Binder-Launch-Host"] = "https://mybinder.org/"
 
         body = self.request.body
