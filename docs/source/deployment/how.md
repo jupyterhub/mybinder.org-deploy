@@ -177,6 +177,12 @@ master.
 
 ### Deploying to *only* `staging`
 
+```eval_rst
+.. note::
+    Currently, only pull requests from a branch on the `jupyterhub/mybinder.org-deploy` repo
+    can be deployed to staging, not pull requests from forks.
+```
+
 Sometimes you want to test out a deployment live before you make a deployment
 to `prod`.
 
