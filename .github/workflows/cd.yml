@@ -36,6 +36,9 @@ jobs:
   # In this dedicated job to deploy our staging environment we build and push
   # images that the jobs to deploy to the production environments depend on.
   staging-deploy:
+    # Run this job in the staging environment
+    # This means that PRs from forks can be tested on staging before being merged
+    environment: staging
     # Only run the job if the 'test-staging' label is present OR if the event
     # is a push to master
     if: |
