@@ -61,4 +61,11 @@ data:
     </p>
     <h4><a href="{{ $rootUrl }}">Binder home page</a></h4>
     </body>
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: proxy-help-config
+data:
+  routes.json: {{ toJson .Values.proxyPatches.routes | quote }}
 {{- end }}
