@@ -428,6 +428,9 @@ prometheus:
   rbac:
     create: true
   server:
+    podLabels:
+      # needs access to the Hub API
+      hub.jupyter.org/network-access-hub: "true"
     strategy:
       # The default of RollingUpdate fail because attached storage can only be
       # mounted on one pod, so we need to use Recreate that first shut down the
