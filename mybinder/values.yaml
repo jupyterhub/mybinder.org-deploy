@@ -208,6 +208,15 @@ binderhub:
       # maxAge is 6 hours: 6 * 3600 = 21600
       maxAge: 21600
     hub:
+      config:
+        Proxy:
+          extra_routes:
+            /user: http://proxy-patches
+
+            /hub/api: "http://hub:8081"
+            /hub/health: "http://hub:8081"
+            # limit hub to only api requests and health checks
+            /hub: http://proxy-patches
       networkPolicy:
         enabled: true
       resources:
@@ -443,16 +452,8 @@ prometheus:
         kubernetes.io/tls-acme: 'true'
 
 proxyPatches:
-  image: "jupyterhub/mybinder.org-proxy-patches:set-by-chartpress"
   nodeSelector: {}
   enabled: true
-  interval: 60
-  routes:
-    /user: service:proxy-patches
-    # limit hub to only api requests and health checks
-    /hub/api: service:hub
-    /hub/health: service:hub
-    /hub: service:proxy-patches
 
 matomo:
   enabled: true
