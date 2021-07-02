@@ -50,8 +50,8 @@ binderhub:
       nodeSelector: *coreNodeSelector
 
     proxy:
-      nodeSelector: *coreNodeSelector
       chp:
+        nodeSelector: *coreNodeSelector
         resources:
           requests:
             cpu: "1"
