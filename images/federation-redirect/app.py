@@ -132,6 +132,17 @@ class ProxyHandler(RequestHandler):
         target_url = self.host + uri
 
         headers = self.request.headers.copy()
+        # don't override Host, which kubernetes uses for routing,
+        # otherwise this will be an infinite loop proxying to ourself
+        # Host will be set to the target Host by the request below.
+        current_host = headers.pop("Host", None)
+        if current_host:
+            # set proxy host header
+            headers.setdefault("X-Forwarded-Host", current_host)
+            # preserve original Host in Origin so this looks like a cross-origin request
+            # even though it's proxied
+            headers["Origin"] = f"https://{current_host}"
+
         headers["X-Binder-Launch-Host"] = "https://mybinder.org/"
 
         body = self.request.body
