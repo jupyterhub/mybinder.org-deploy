@@ -45,7 +45,7 @@ binderhub:
 
   jupyterhub:
     imagePullSecret:
-      enabled: true
+      create: true
       # config in secrets/config
 
     hub:
