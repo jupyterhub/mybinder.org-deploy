@@ -177,10 +177,6 @@ master.
 
 ### Deploying to *only* `staging`
 
-```eval_rst
-.. note::
-   Currently you cannot deploy changes to `mybinder/Chart.yaml` only to staging.
-```
 Sometimes you want to test out a deployment live before you make a deployment
 to `prod`.
 
