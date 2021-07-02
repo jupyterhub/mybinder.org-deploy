@@ -44,5 +44,5 @@ dependencies:
   # Source code:    https://github.com/jupyterhub/binderhub/tree/master/helm-chart
   # App changelog:  https://github.com/jupyterhub/binderhub/blob/master/CHANGES.md
   - name: binderhub
-    version: 0.2.0-n577.h14cc6c7
+    version: 0.2.0-n590.h9f942c5
     repository: https://jupyterhub.github.io/helm-chart
