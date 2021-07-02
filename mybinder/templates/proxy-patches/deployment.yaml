@@ -66,6 +66,6 @@ spec:
           - name: CONFIGPROXY_AUTH_TOKEN
             valueFrom:
               secretKeyRef:
-                name: hub-secret
+                name: hub
                 key: proxy.token
 {{- end }}
