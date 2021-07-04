@@ -85,11 +85,64 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 128
+        # 2021-07-05
         - pattern: ^henryiii/level-up-your-python.*
           # https://github.com/jupyterhub/mybinder.org-deploy/issues/1975
           # 2021-07-05 PyHEP 2021 https://indico.cern.ch/event/1019958/timetable/#53-level-up-your-python-part-i
           config:
             quota: 500
+        # 2021-07-06
+        - pattern: ^b-fontana/PyHEP21BokehPresentation.*
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/1972
+          # 2021-07-06 PyHEP 2021 https://indico.cern.ch/event/1019958/contributions/4420290/
+          config:
+            quota: 300
+        - pattern: ^pyhf/pyhep-2021-notebook-talk.*
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/1950
+          # 2021-07-06 PyHEP 2021 https://indico.cern.ch/event/1019958/timetable/#24-distributed-statistical-inf
+          config:
+            quota: 300
+        - pattern: ^alexander-held/PyHEP-2021-cabinetry.*
+          # 2021-07-06 PyHEP 2021 https://indico.cern.ch/event/1019958/contributions/4421868/
+          config:
+            quota: 300
+        - pattern: ^jpivarski-talks/2021-07-06-pyhep-uproot-awkward-tutorial.*
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/1948
+          # 2021-07-06 PyHEP 2021 https://indico.cern.ch/event/1019958/timetable/#58-uproot-and-awkward-array-tu
+          config:
+            quota: 300
+        - pattern: ^GilesStrong/talk_pyhep21_pytorch_inferno.*
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/1949
+          # 2021-07-06 PyHEP 2021 https://indico.cern.ch/event/1019958/timetable/#21-pytorch-inferno
+          config:
+            quota: 300
+        # 2021-07-07
+        - pattern: ^zfit/PyHEP2021.*
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/1974
+          # 2021-07-07 PyHEP 2021 https://indico.cern.ch/event/1019958/timetable/#10-zfit-introduction-minimizat
+          config:
+            quota: 300
+        - pattern: ^lovaslin/pyHEP-notebook-talk.*
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/1973
+          # 2021-07-07 PyHEP 2021 https://indico.cern.ch/event/1019958/timetable/#6-pybumphunter-a-model-agnosti
+          config:
+            quota: 300
+        - pattern: ^AndreScaffidi/Natpy_pyhep_2021.*
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/1970
+          # 2021-07-07 PyHEP 2021 https://indico.cern.ch/event/1019958/timetable/#25-introduing-natpy-a-simple-a
+          config:
+            quota: 300
+        # 2021-07-08
+        - pattern: ^dnicotra/pyhep2021-qml4jet.*
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/1971
+          # 20201-07-08 PyHEP 2021 https://indico.cern.ch/event/1019958/timetable/#5-quantum-machine-learning-for
+          config:
+            quota: 300
+        - pattern: ^irinaespejo/excursion.*
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/1947
+          # 20201-07-08 PyHEP 2021 https://indico.cern.ch/event/1019958/timetable/#14-active-learning-for-level-s
+          config:
+            quota: 300
       # - pattern: ^github-owner/github-repo-prefix.*
       #   # YYYY-MM-DD of workshop
       #   config:
