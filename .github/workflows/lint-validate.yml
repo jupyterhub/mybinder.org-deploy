@@ -102,10 +102,6 @@ jobs:
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
 
-      - name: Collect datacenter addresses
-        run: |
-          python scripts/datacenters.py
-
       - name: Run chartpress to update values.yaml
         run: |
           chartpress --skip-build
