@@ -232,13 +232,6 @@ binderhub:
       service:
         type: ClusterIP
       chp:
-        # FIXME: remove when hub chart dependency is bumped
-        # to include https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2081
-        #
-        # This is when we update to a binderhub that reference z2jh 1.0.0 instead of z2jh 0.11.1.
-        #
-        image:
-          tag: 4.3.1
         networkPolicy:
           enabled: true
         resources:
