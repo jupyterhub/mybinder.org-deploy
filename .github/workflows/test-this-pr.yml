@@ -1,0 +1,21 @@
+name: Test a Pull Request from a fork
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  test-this-pr:
+    runs-on: ubuntu-latest
+    if: |
+      (github.event.issue.pull_request != null) &&
+      contains(github.event.comment.body, '/test-this-pr') &&
+      contains(
+        github.event.comment.author_association,
+        ['OWNER', 'COLLABORATOR', 'MEMBER']
+      )
+
+    steps:
+      - uses: sgibson91/thest-this-pr-action@main
+        with:
+          access-token: ${{ secrets.ACCESS_TOKEN }}
