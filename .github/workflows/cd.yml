@@ -41,10 +41,8 @@ jobs:
     # is a push to master
     if: |
       (github.event.label.name == 'test-staging') ||
-      ((github.event_name == 'push') &&
-      (github.ref == 'refs/heads/master')) ||
-      ((github.event_name == 'push') &&
-      contains(github.ref, 'test-this-pr'))
+      ((github.event_name == 'push') && (github.ref == 'refs/heads/master')) ||
+      ((github.event_name == 'push') && contains(github.ref, 'test-this-pr'))
     runs-on: ubuntu-20.04
 
     strategy:
@@ -273,3 +271,70 @@ jobs:
           timeout_minutes: 10
           max_attempts: 3
           command: pytest -vx --numprocesses=2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matrix.hub_url }} tests/
+
+  report-status:
+    # This job will wait for staging-deploy to finish and report its status
+    #
+    # This job will only run on push events made to test-this-pr/** branches
+    if: github.event_name == 'push' && contains(github.ref, 'test-this-pr')
+    runs-on: ubuntu-latest
+    steps:
+      # Poll the GitHub REST API and wait for staging-deploy job to finish
+      - name: Wait for staging-deploy completion
+        id: staging-deploy-status
+        shell: bash
+        run: |
+          STATUS=""
+          CONCLUSION=""
+
+          while [ "$STATUS" != "completed" ]; do
+            RESPONSE=$(curl --silent --request GET \
+              --url 'https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs' \
+              --header 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
+              --header 'Accept: application/vnd.github.v3+json')
+
+            STATUS=$(echo $RESPONSE | jq -r '.jobs[] | select(.name=="staging-deploy") | .status')
+            echo "Status: $STATUS"
+
+            if [[ "$STATUS" == "completed" ]]; then
+              CONCLUSION=$(echo $RESPONSE | jq -r '.jobs[] | select(.name=="staging-deploy") | .conclusion')
+              echo "Conclusion: $CONCLUSION"
+            else
+              sleep 30s
+            fi
+          done
+
+          echo "::set-output name=status::$STATUS"
+          echo "::set-output name=conclusion::$CONCLUSION"
+
+      - name: Set PR number as variable
+        id: get-pr-number
+        shell: bash
+        run: |
+          PR_NUM=$(echo ${{ github.ref }} | awk -F'/' '{print $NF}')
+          echo "::set-output name=prnum::$PR_NUM"
+
+      - name: Comment on PR with Job Status and delete the test branch
+        if: ${{ steps.staging-deploy-status.outputs.status }} == 'completed'
+        uses: actions/github-script@v4.0.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            var JOB_STATUS = process.env.JOB_STATUS;
+            var PR_NUMBER = process.env.PR_NUMBER;
+
+            github.git.deleteRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: `heads/test-this-pr/${PR_NUMBER}`
+            })
+
+            github.issues.createComment({
+              issue_number: PR_NUMBER,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `**Job status:** ${JOB_STATUS}\nBranch 'test-this-pr/${PR_NUMBER}' has been deleted`
+            })
+        env:
+          JOB_STATUS: ${{ steps.staging-deploy-status.outputs.conclusion }}
+          PR_NUMBER: ${{ steps.get-pr-number.outputs.prnum }}
