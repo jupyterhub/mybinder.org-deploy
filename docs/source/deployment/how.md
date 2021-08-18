@@ -177,23 +177,26 @@ master.
 
 ### Deploying to *only* `staging`
 
-```eval_rst
-.. note::
-    Currently, only pull requests from a branch on the `jupyterhub/mybinder.org-deploy` repo
-    can be deployed to staging, not pull requests from forks.
-```
+Sometimes you want to test out a deployment live before you make a deployment to `prod`.
+There are a few ways we can achieve this.
 
-Sometimes you want to test out a deployment live before you make a deployment
-to `prod`.
+#### Testing Pull Requests from **branches** of `mybinder.org-deploy`
 
-This simplest way to achieve this is to apply the `test-staging` label to an open PR. This will trigger GitHub Actions to deploy the changes in the PR to the staging cluster **only**.
+This simplest way to deploy a PR to staging only is to apply the `test-staging` label to an open PR. This will trigger GitHub Actions to deploy the changes in the PR to the staging cluster **only**.
 
 ```eval_rst
 .. note::
    If you need to re-deploy the changes in a PR to staging only, then the label will need to be removed and then re-added.
 ```
 
-Another way to achieve this is by editing `staging`-only config files. To deploy
+#### Testing Pull Requests from **forks** of `mybinder.org-deploy`
+
+If the PR has been made from a fork of the repo, the labelling approach discussed in the previous section will fail due to a lack of access to secrets.
+In this scenario, a user with `OWNER`, `COLLABORATOR` or `MEMBER` association with the `mybinder.org-deploy` repo can leave a `/test-this-pr` comment on the PR to trigger a deploy to staging.
+
+#### Editing staging config directly
+
+The final option to deploy to staging only is by editing `staging`-only config files. To deploy
 to staging only, follow these steps:
 
 1. Make changes to [`config/staging.yaml`](https://github.com/jupyterhub/mybinder.org-deploy/blob/master/config/staging.yaml)
@@ -216,8 +219,6 @@ to staging only, follow these steps:
 
 The [what](./what.html) document has more details on common ways deployments can go
 wrong, and how to debug them.
-
-
 ## Changing the mybinder.org infrastructure
 
 Sometimes we need to make changes to the mybinder.org core infrastructure.
