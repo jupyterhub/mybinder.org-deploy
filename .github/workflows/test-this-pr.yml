@@ -6,6 +6,8 @@ on:
 
 jobs:
   run-test-this-pr:
+    # Run this job in an env where the token with elevated permissions is stored
+    environment: test-this-pr-env
     runs-on: ubuntu-latest
     if: |
       (github.event.issue.pull_request != null) &&
@@ -17,4 +19,4 @@ jobs:
     steps:
       - uses: sgibson91/test-this-pr-action@main
         with:
-          access_token: ${{ secrets.ACCESS_TOKEN }}
+          access_token: ${{ secrets.TEST_THIS_PR_ACCESS_TOKEN }}
