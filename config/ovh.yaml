@@ -8,7 +8,7 @@ binderhub:
       badge_base_url: https://mybinder.org
       sticky_builds: true
       use_registry: true
-      image_prefix: 3i2li627.gra7.container-registry.ovh.net/binder/ovhbhub-
+      image_prefix: 3i2li627.gra7.container-registry.ovh.net/binder/ovhbhub-r2d-g5b5b759
     DockerRegistry:
       # Docker Registry uses harbor
       # ref: https://github.com/goharbor/harbor/wiki/Harbor-FAQs#api
