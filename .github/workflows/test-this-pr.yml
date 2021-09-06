@@ -1,0 +1,22 @@
+name: Run test-this-pr action
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  run-test-this-pr:
+    # Run this job in an env where the token with elevated permissions is stored
+    environment: test-this-pr-env
+    runs-on: ubuntu-latest
+    if: |
+      (github.event.issue.pull_request != null) &&
+      contains(github.event.comment.body, '/test-this-pr') &&
+      contains(
+        github.event.comment.author_association,
+        ['OWNER', 'COLLABORATOR', 'MEMBER']
+      )
+    steps:
+      - uses: sgibson91/test-this-pr-action@main
+        with:
+          access_token: ${{ secrets.TEST_THIS_PR_ACCESS_TOKEN }}
