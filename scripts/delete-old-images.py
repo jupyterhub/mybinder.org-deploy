@@ -7,7 +7,7 @@ as well as old builds of the binderhub-ci-repos.
 
 Requires aiohttp and tqdm:
 
-    pip3 install aiohttp aiodns tqdm
+    python3 -m pip install aiohttp aiodns tqdm aiohttp-client-cache aiosqlite
 
 Usage:
 
@@ -19,17 +19,30 @@ import asyncio
 import os
 import time
 from collections import defaultdict
+from datetime import datetime, timedelta
 from functools import partial
 from pprint import pformat
 
+from dateutil.parser import parse as parse_date
+
+from aiohttp_client_cache import CachedSession, SQLiteBackend
 import aiohttp
 import tqdm
+import tqdm.asyncio
 import yaml
 
 HERE = os.path.dirname(__file__)
 
 # delete builds used for CI, as well
 CI_STRINGS = ["binderhub-ci-repos-", "binderhub-2dci-2drepos-"]
+
+# don't delete images that *don't* appear to be r2d builds
+# (image repository could have other images in it!)
+R2D_STRINGS = ["r2d-"]
+
+TODAY = datetime.now()
+FIVE_YEARS_AGO = TODAY - timedelta(days=5 * 365)
+TOMORROW = TODAY + timedelta(days=1)
 
 
 class RequestFailed(Exception):
@@ -49,9 +62,11 @@ class RequestFailed(Exception):
         )
 
 
-async def raise_for_status(r, action=""):
+async def raise_for_status(r, action="", allowed_errors=None):
     """raise an informative error on failed requests"""
     if r.status < 400:
+        return
+    if allowed_errors and r.status in allowed_errors:
         return
     if r.headers.get("Content-Type") == "application/json":
         # try to parse json error messages
@@ -68,17 +83,47 @@ async def raise_for_status(r, action=""):
     raise RequestFailed(r.status, r.request_info.method, r.request_info.url, content)
 
 
-async def list_images(session, project):
+def list_images(session, image_prefix):
+    if image_prefix.count("/") == 1:
+        # docker hub, can't use catalog endpoint
+        docker_hub_user = image_prefix.split("/", 1)[0]
+        return list_images_docker_hub(session, docker_hub_user)
+    elif image_prefix.count("/") == 2:
+        registry_host = image_prefix.split("/", 1)[0]
+        registry_url = f"https://{registry_host}"
+        return list_images_catalog(session, registry_url)
+
+
+async def list_images_docker_hub(session, docker_hub_user):
     """List the images for a project"""
-    url = "https://gcr.io/v2/_catalog"
+    url = f"https://hub.docker.com/v2/repositories/{docker_hub_user}/?page_size=100"
+    while url:
+        async with session.get(url) as r:
+            await raise_for_status(r, "listing images")
+            resp = await r.json()
+        for image in resp["results"]:
+            # filter-out not our images??
+            yield f"{image['user']}/{image['name']}"
+        url = resp.get("next")
+
+
+async def list_images_catalog(session, registry_host):
+    """List the images for a project"""
+    url = f"{registry_host}/v2/_catalog"
     while url:
         async with session.get(url) as r:
             await raise_for_status(r, "listing images")
             resp = await r.json()
         for image in resp["repositories"]:
-            if image.startswith(project + "/"):
-                yield image
-        url = resp.get("next")
+            # filter-out not our images??
+            yield image
+        if "next" in resp:
+            url = resp["next"]
+        elif "next" in r.links:
+            url = r.links["next"]["url"]
+        else:
+            url = None
+
 
 
 async def get_manifest(session, image):
@@ -113,22 +158,34 @@ async def delete_image(session, image, digest, tags, dry_run=False):
     # delete tags first (required)
     for tag in tags:
         async with fetch(f"{manifests}/{tag}") as r:
-            await raise_for_status(r, f"{verb} tag {image}@{tag}")
+            # allow 404 because previous delete  may have been cached
+            await raise_for_status(r, f"{verb} tag {image}@{tag}", allowed_errors=[404])
 
     # this is the actual deletion
     async with fetch(f"{manifests}/{digest}") as r:
-        await raise_for_status(r, f"{verb} image {image}@{digest}")
+        # allow 404 because previous delete  may have been cached
+        await raise_for_status(
+            r, f"{verb} image {image}@{digest}", allowed_errors=[404]
+        )
 
 
-async def main(release="staging", project=None, concurrency=20, dry_run=True):
+async def main(
+    release="staging", project=None, concurrency=20, delete_before=None, dry_run=True
+):
     if dry_run:
         print("THIS IS A DRY RUN.  NO IMAGES WILL BE DELETED.")
         to_be = "to be "
     else:
         to_be = ""
 
+    if delete_before:
+        # docker uses millisecond integer timestamps
+        delete_before_ms = int(delete_before.timestamp()) * 1e3
+    else:
+        delete_before_ms = float("inf")
+
     if not project:
-        project = f"binder-{release}"
+        project = "binderhub-288415"
     with open(os.path.join(HERE, os.pardir, "config", release + ".yaml")) as f:
         config = yaml.safe_load(f)
 
@@ -140,6 +197,7 @@ async def main(release="staging", project=None, concurrency=20, dry_run=True):
         config = yaml.safe_load(f)
 
     password = config["binderhub"]["registry"]["password"]
+    username = config["binderhub"]["registry"].get("username", "_json_key")
 
     start = time.perf_counter()
     semaphores = defaultdict(lambda: asyncio.BoundedSemaphore(concurrency))
@@ -162,48 +220,126 @@ async def main(release="staging", project=None, concurrency=20, dry_run=True):
         async with semaphores[f]:
             return await f(*args, **kwargs)
 
-    async with aiohttp.ClientSession(
-        auth=aiohttp.BasicAuth("_json_key", password),
+    # TODO: basic auth is only sufficient for gcr
+    # need to request a token for non-gcr endpoints (ovh, turing on docker hub)
+    # e.g.
+    auth_kwargs = {}
+    print(prefix)
+    if prefix.startswith("gcr.io"):
+        auth_kwargs["auth"] = aiohttp.BasicAuth(username, password)
+    else:
+        # get bearer token
+        if prefix.count("/") == 2:
+            # ovh
+            registry_host = prefix.split("/", 1)[0]
+            token_url = f"https://{registry_host}/service/token?service=harbor-registry&scope=registry:catalog:*"
+        else:
+            # turing
+            raise NotImplementedError("Can't get docker hub creds yet")
+
+        async with aiohttp.ClientSession(
+            auth=aiohttp.BasicAuth(username, password)
+        ) as session:
+            response = await session.get(token_url)
+            token_info = await response.json()
+        auth_kwargs["headers"] = {"Authorization": f"Bearer {token_info['token']}"}
+
+    async with CachedSession(
         connector=aiohttp.TCPConnector(limit=2 * concurrency),
+        cache=SQLiteBackend(expire_after=24 * 3600),
+        **auth_kwargs,
     ) as session:
 
         print("Fetching images")
         tag_futures = []
         matches = 0
-        total_images = 0
-        async for image in list_images(session, project):
-            total_images += 1
+        repos_to_keep = 0
+        repos_to_delete = 0
+
+        def should_delete_repository(image):
+            """Whether we should delete the whole repository"""
             if f"gcr.io/{image}".startswith(prefix) and not any(
                 ci_string in image for ci_string in CI_STRINGS
             ):
-                matches += 1
-                continue
-            # don't call ensure_future here
-            # because we don't want to kick off everything before
-            tag_futures.append(
-                asyncio.ensure_future(bounded(get_manifest, session, image))
-            )
-        if not matches:
+                return False
+
+        def should_fetch_repository(image):
+            if not any(substring in image for substring in R2D_STRINGS):
+                # ignore non-r2d builds
+                return False
+            if delete_before or should_delete_repository(image):
+                # if delete_before, we are deleting old builds of images we are keeping,
+                # otherwise, only delete builds that don't match our image prefix
+                return True
+            else:
+                return False
+
+        async for image in tqdm.asyncio.tqdm(
+            list_images(session, prefix),
+            unit_scale=True,
+            desc="listing images",
+        ):
+            if should_fetch_repository(image):
+                if should_delete_repository(image):
+                    repos_to_delete += 1
+                else:
+                    repos_to_keep += 1
+                tag_futures.append(
+                    asyncio.ensure_future(bounded(get_manifest, session, image))
+                )
+            else:
+                repos_to_keep += 1
+
+        if not repos_to_keep:
             raise RuntimeError(
                 f"No images matching prefix {prefix}. Would delete all images!"
             )
-        print(f"Not deleting {matches} images starting with {prefix}")
+        print(f"Not deleting {repos_to_keep} images starting with {prefix}")
         if not tag_futures:
             print("Nothing to delete")
             return
         print(f"{len(tag_futures)} images to delete (not counting tags)")
 
         delete_futures = set()
+        done = set()
         print("Fetching tags")
         delete_progress = tqdm.tqdm(
-            total=len(tag_futures),
+            total=repos_to_delete,
             position=2,
             unit_scale=True,
             desc=f"builds {to_be}deleted",
         )
         delete_byte_progress = tqdm.tqdm(
-            total=0, position=3, unit="B", unit_scale=True, desc=f"bytes {to_be}deleted"
+            total=0,
+            position=3,
+            unit="B",
+            unit_scale=True,
+            desc=f"bytes {to_be}deleted",
         )
+
+        def should_delete_tag(image, info):
+            if should_delete_repository(image):
+                return True
+            if not delete_before:
+                # no date cutoff
+                return False
+
+            # check cutoff
+            image_ms = int(info["timeCreatedMs"])
+            image_datetime = datetime.fromtimestamp(image_ms / 1e3)
+            # sanity check timestamps
+            if image_datetime < FIVE_YEARS_AGO or image_datetime > TOMORROW:
+                raise RuntimeError(
+                    f"Not deleting image with weird date: {image}, {info}, {image_datetime}"
+                )
+            if delete_before_ms > image_ms:
+                # if dry_run:
+                #     print(
+                #         f"\nWould delete {image}:{','.join(info['tag'])} {image_datetime.isoformat()}"
+                #     )
+                return True
+            else:
+                return False
 
         try:
             for f in tqdm.tqdm(
@@ -214,9 +350,15 @@ async def main(release="staging", project=None, concurrency=20, dry_run=True):
             ):
                 manifest = await f
                 image = manifest["name"]
-                if len(manifest["manifest"]) > 1:
+                delete_whole_repo = should_delete_repository(image)
+                if delete_whole_repo and len(manifest["manifest"]) > 1:
                     delete_progress.total += len(manifest["manifest"]) - 1
                 for digest, info in manifest["manifest"].items():
+                    if not should_delete_tag(image, info):
+                        continue
+                    if not delete_whole_repo:
+                        # not counted yet
+                        delete_progress.total += 1
                     nbytes = int(info["imageSizeBytes"])
                     delete_byte_progress.total += nbytes
                     f = asyncio.ensure_future(
@@ -238,7 +380,8 @@ async def main(release="staging", project=None, concurrency=20, dry_run=True):
                             nbytes,
                         )
                     )
-                done, delete_futures = await asyncio.wait(delete_futures, timeout=0)
+                if delete_futures:
+                    done, delete_futures = await asyncio.wait(delete_futures, timeout=0)
                 if done:
                     # collect possible errors
                     await asyncio.gather(*done)
@@ -274,6 +417,12 @@ if __name__ == "__main__":
         help="The gcloud project to use; only needed if not of the form `binder-{release}`.",
     )
     parser.add_argument(
+        "--delete-before",
+        type=lambda s: s and parse_date(s),
+        default="",
+        help="Delete any images older than this date. If unspecified, do not use date cutoff.",
+    )
+    parser.add_argument(
         "-j",
         "--concurrency",
         type=int,
@@ -288,5 +437,11 @@ if __name__ == "__main__":
     )
     opts = parser.parse_args()
     asyncio.get_event_loop().run_until_complete(
-        main(opts.release, opts.project, opts.concurrency, dry_run=opts.dry_run)
+        main(
+            opts.release,
+            opts.project,
+            opts.concurrency,
+            delete_before=opts.delete_before,
+            dry_run=opts.dry_run,
+        )
     )
