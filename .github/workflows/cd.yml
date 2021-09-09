@@ -277,6 +277,7 @@ jobs:
     #
     # This job will only run on push events made to test-this-pr/** branches
     if: github.event_name == 'push' && contains(github.ref, 'test-this-pr')
+    environment: test-this-pr-env
     runs-on: ubuntu-latest
     steps:
       # Poll the GitHub REST API and wait for staging-deploy job to finish
@@ -290,7 +291,7 @@ jobs:
           while [ "$STATUS" != "completed" ]; do
             RESPONSE=$(curl --silent --request GET \
               --url 'https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs' \
-              --header 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
+              --header 'Authorization: token ${{ secrets.TEST_THIS_PR_ACCESS_TOKEN }}' \
               --header 'Accept: application/vnd.github.v3+json')
 
             STATUS=$(echo $RESPONSE | jq -r '.jobs[] | select(.name | startswith("staging-deploy")) | .status')
@@ -318,7 +319,7 @@ jobs:
         if: ${{ steps.staging-deploy-status.outputs.status }} == 'completed'
         uses: actions/github-script@v4.0.2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.TEST_THIS_PR_ACCESS_TOKEN }}
           script: |
             var JOB_STATUS = process.env.JOB_STATUS;
             var PR_NUMBER = process.env.PR_NUMBER;
