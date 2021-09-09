@@ -293,11 +293,11 @@ jobs:
               --header 'Authorization: token ${{ secrets.GITHUB_TOKEN }}' \
               --header 'Accept: application/vnd.github.v3+json')
 
-            STATUS=$(echo $RESPONSE | jq -r '.jobs[] | select(.name=="staging-deploy") | .status')
+            STATUS=$(echo $RESPONSE | jq -r '.jobs[] | select(.name | startswith("staging-deploy")) | .status')
             echo "Status: $STATUS"
 
             if [[ "$STATUS" == "completed" ]]; then
-              CONCLUSION=$(echo $RESPONSE | jq -r '.jobs[] | select(.name=="staging-deploy") | .conclusion')
+              CONCLUSION=$(echo $RESPONSE | jq -r '.jobs[] | select(.name | startswith("staging-deploy")) | .conclusion')
               echo "Conclusion: $CONCLUSION"
             else
               sleep 30s
