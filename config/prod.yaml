@@ -11,7 +11,7 @@ binderhub:
       build_node_selector: *userNodeSelector
       hub_url: https://hub.gke2.mybinder.org
       badge_base_url: https://mybinder.org
-      image_prefix: gcr.io/binderhub-288415/r2d-staging-72d7634-
+      image_prefix: gcr.io/binderhub-288415/r2d-staging-g5b5b759-
       google_analytics_code: "UA-101904940-1"
       google_analytics_domain: "mybinder.org"
       sticky_builds: true
