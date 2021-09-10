@@ -23,13 +23,13 @@ from datetime import datetime, timedelta
 from functools import partial
 from pprint import pformat
 
-from dateutil.parser import parse as parse_date
-
-from aiohttp_client_cache import CachedSession, SQLiteBackend
 import aiohttp
+import pandas as pd
 import tqdm
 import tqdm.asyncio
 import yaml
+from aiohttp_client_cache import CachedSession, SQLiteBackend
+from dateutil.parser import parse as parse_date
 
 HERE = os.path.dirname(__file__)
 
@@ -125,7 +125,6 @@ async def list_images_catalog(session, registry_host):
             url = None
 
 
-
 async def get_manifest(session, image):
     """List the tags for an image
 
@@ -150,6 +149,7 @@ async def delete_image(session, image, digest, tags, dry_run=False):
     if dry_run:
         fetch = session.get
         verb = "Checking"
+        return
     else:
         fetch = session.delete
         verb = "Deleting"
@@ -216,7 +216,6 @@ async def main(
 
         This avoids the two separate queues contending with each other for slots.
         """
-
         async with semaphores[f]:
             return await f(*args, **kwargs)
 
@@ -246,13 +245,12 @@ async def main(
 
     async with CachedSession(
         connector=aiohttp.TCPConnector(limit=2 * concurrency),
-        cache=SQLiteBackend(expire_after=24 * 3600),
+        cache=SQLiteBackend(expire_after=72 * 3600),
         **auth_kwargs,
     ) as session:
 
         print("Fetching images")
         tag_futures = []
-        matches = 0
         repos_to_keep = 0
         repos_to_delete = 0
 
@@ -262,6 +260,8 @@ async def main(
                 ci_string in image for ci_string in CI_STRINGS
             ):
                 return False
+            else:
+                return True
 
         def should_fetch_repository(image):
             if not any(substring in image for substring in R2D_STRINGS):
@@ -294,11 +294,11 @@ async def main(
             raise RuntimeError(
                 f"No images matching prefix {prefix}. Would delete all images!"
             )
-        print(f"Not deleting {repos_to_keep} images starting with {prefix}")
+        print(f"Not deleting {repos_to_keep} repos starting with {prefix}")
         if not tag_futures:
             print("Nothing to delete")
             return
-        print(f"{len(tag_futures)} images to delete (not counting tags)")
+        print(f"{len(tag_futures)} repos to consider for deletion (not counting tags)")
 
         delete_futures = set()
         done = set()
@@ -325,7 +325,7 @@ async def main(
                 return False
 
             # check cutoff
-            image_ms = int(info["timeCreatedMs"])
+            image_ms = int(info["timeUploadedMs"])
             image_datetime = datetime.fromtimestamp(image_ms / 1e3)
             # sanity check timestamps
             if image_datetime < FIVE_YEARS_AGO or image_datetime > TOMORROW:
@@ -333,33 +333,59 @@ async def main(
                     f"Not deleting image with weird date: {image}, {info}, {image_datetime}"
                 )
             if delete_before_ms > image_ms:
-                # if dry_run:
-                #     print(
-                #         f"\nWould delete {image}:{','.join(info['tag'])} {image_datetime.isoformat()}"
-                #     )
                 return True
             else:
                 return False
 
+        def save_stats():
+            df = pd.DataFrame(
+                rows,
+                columns=[
+                    "image",
+                    "digest",
+                    "tags",
+                    "size",
+                    "date",
+                ],
+            )
+            today = datetime.today()
+            fname = f"registry-{release}-{today.strftime('%Y-%m-%d')}.pkl"
+            df.to_pickle(fname)
+
+        rows = []
         try:
             for f in tqdm.tqdm(
                 asyncio.as_completed(tag_futures),
                 total=len(tag_futures),
                 position=1,
-                desc="images retrieved",
+                desc="repos retrieved",
             ):
                 manifest = await f
                 image = manifest["name"]
                 delete_whole_repo = should_delete_repository(image)
                 if delete_whole_repo and len(manifest["manifest"]) > 1:
                     delete_progress.total += len(manifest["manifest"]) - 1
+
                 for digest, info in manifest["manifest"].items():
+                    image_ms = int(info["timeUploadedMs"])
+                    image_datetime = datetime.fromtimestamp(image_ms / 1e3)
+                    nbytes = int(info["imageSizeBytes"])
+                    rows.append(
+                        (
+                            image,
+                            digest,
+                            ",".join(info["tag"]),
+                            nbytes,
+                            image_datetime,
+                        )
+                    )
+                    if len(rows) % 100 == 0:
+                        save_stats()
                     if not should_delete_tag(image, info):
                         continue
                     if not delete_whole_repo:
                         # not counted yet
                         delete_progress.total += 1
-                    nbytes = int(info["imageSizeBytes"])
                     delete_byte_progress.total += nbytes
                     f = asyncio.ensure_future(
                         bounded(
@@ -389,6 +415,8 @@ async def main(
             if delete_futures:
                 await asyncio.gather(*delete_futures)
         finally:
+            save_stats()
+
             delete_progress.close()
             delete_byte_progress.close()
             print("\n\n\n\n")
