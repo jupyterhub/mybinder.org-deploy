@@ -5,7 +5,7 @@ binderhub:
     BinderHub:
       hub_url: https://hub.gke2.staging.mybinder.org
       badge_base_url: https://staging.mybinder.org
-      image_prefix: gcr.io/binderhub-288415/r2d-staging-72d7634-
+      image_prefix: gcr.io/binderhub-288415/r2d-staging-g5b5b759-
       sticky_builds: true
       build_memory_limit: "2G"
   extraEnv:

@@ -13,7 +13,7 @@ binderhub:
       sticky_builds: true
       # Docker Hub registry for Turing
       use_registry: true
-      image_prefix: turingmybinder/binder-prod-
+      image_prefix: turingmybinder/binder-prod-r2d-g5b5b759-
 
   replicas: 1
 
