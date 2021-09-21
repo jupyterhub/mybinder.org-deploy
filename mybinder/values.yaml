@@ -265,6 +265,29 @@ binderhub:
         enabled: true
         # replicas set in config/<deployment>
     singleuser:
+      cmd:
+        - python3
+        - "-c"
+        - |
+          import os
+          import sys
+
+          try:
+              import jupyterlab
+              major = int(jupyterlab.__version__.split(".", 1)[0])
+          except Exception:
+              have_lab = False
+          else:
+              have_lab = major >= 3
+
+          if have_lab:
+              # if recent-enough lab is available, make it the default UI
+              sys.argv.insert(1, "--NotebookApp.default_url=/lab/")
+
+          # launch the notebook server
+          os.execvp("jupyter-notebook", sys.argv)
+      # clear singleuser.defaultUrl config from chart
+      defaultUrl:
       cloudMetadata:
         # we do this in our own network policy
         blockWithIptables: false
