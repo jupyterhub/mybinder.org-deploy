@@ -49,11 +49,13 @@ spec:
           except:
             - 169.254.169.254/32
             - 10.0.0.0/8
-          {{- range $ipOrCidr := .Values.binderhub.networkPolicy.egress.bannedIps }}
-            {{- if (contains $ipOrCidr "/") }}
+          {{- range $_name, $banList := .Values.binderhub.networkPolicy.egress.bannedIps }}
+            {{- range $ipOrCidr := $banList }}
+              {{- if (contains $ipOrCidr "/") }}
             - {{ $ipOrCidr }}
-            {{- else }}
+              {{- else }}
             - {{ $ipOrCidr}}/32
+              {{- end }}
             {{- end }}
           {{- end }}
     # allow https access to the ingress controller

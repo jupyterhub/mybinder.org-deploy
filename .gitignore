@@ -6,6 +6,8 @@ __pycache__
 .pytest_cache
 
 config/common/datacenter-*.yaml
+secrets/banned_hosts.txt
+secrets/config/common/bans.yaml
 mybinder/charts
 mybinder/requirements.lock
 mybinder/Chart.lock
