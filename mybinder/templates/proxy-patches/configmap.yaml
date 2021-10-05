@@ -8,15 +8,15 @@ data:
     server {
       listen 80;
 
-      # Return 404 for anything that comes here
+      # Return 424 for anything that comes here
       # serve an informative error about stopped pods
-      error_page 404 /404.html;
-      location /404.html {
+      error_page 424 /424.html;
+      location /424.html {
         root /srv/proxy-patches;
         internal;
       }
       location / {
-        return 404;
+        return 424;
       }
     }
 
@@ -26,7 +26,7 @@ apiVersion: v1
 metadata:
   name: proxy-html-files
 data:
-  404.html: >
+  424.html: >
     <html>
     <head>
     <title>Binder not found</title>
@@ -37,7 +37,7 @@ data:
     <div class="container">
     <h2 class="text-center">Oops!</h2>
     <h3 class="text-center">We can't seem to find the Binder page you are looking for.</h3>
-    <h4>404 error</h4>
+    <h4>424 error</h4>
     <p>
     Here are some helpful tips.
     </p>
