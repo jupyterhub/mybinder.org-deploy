@@ -223,6 +223,13 @@ binderhub:
       config:
         BinderSpawner:
           cors_allow_origin: "*"
+        JupyterHub:
+          # only serve the hub's API, not full UI
+          hub_routespec: "/hub/api/"
+        Proxy:
+          # default-route to our nginx "Binder not found" service
+          extra_routes:
+            "/": "http://proxy-patches"
       service:
         annotations:
           prometheus.io/scrape: 'true'
@@ -458,16 +465,8 @@ prometheus:
         kubernetes.io/tls-acme: 'true'
 
 proxyPatches:
-  image: "jupyterhub/mybinder.org-proxy-patches:set-by-chartpress"
-  nodeSelector: {}
   enabled: true
-  interval: 60
-  routes:
-    /user: service:proxy-patches
-    # limit hub to only api requests and health checks
-    /hub/api: service:hub
-    /hub/health: service:hub
-    /hub: service:proxy-patches
+  nodeSelector: {}
 
 matomo:
   enabled: true
