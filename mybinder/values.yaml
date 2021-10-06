@@ -82,9 +82,10 @@ binderhub:
         - ^jupyterhub/.*
         - ^jupyter-widgets/.*
       spec_config:
-        - pattern: ^ipython/ipython-in-depth.*
+        - pattern: ^cteplovs/rossplustech-python.*
+          # 2021-10-06
           config:
-            quota: 128
+            quota: 200
       # - pattern: ^github-owner/github-repo-prefix.*
       #   # YYYY-MM-DD of workshop
       #   config:
