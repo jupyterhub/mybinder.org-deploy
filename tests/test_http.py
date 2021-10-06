@@ -35,5 +35,9 @@ def test_hub_user_redirect(hub_url):
     """Requesting a Hub URL for a non-running user"""
     # this should *not* redirect for now,
     resp = requests.get(hub_url + "/user/doesntexist")
-    assert resp.status_code == 503
+    assert resp.status_code == 424
+    assert "Binder not found" in resp.text
+
+    resp = requests.get(hub_url + "/other/doesntexist")
+    assert resp.status_code == 404
     assert "Binder not found" in resp.text
