@@ -28,8 +28,6 @@ etcJupyter:
 binderhub:
 
   replicas: 2
-  pdb:
-    minAvailable: 1
 
   resources:
     requests:
