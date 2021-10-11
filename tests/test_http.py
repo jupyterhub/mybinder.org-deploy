@@ -16,7 +16,7 @@ def test_binder_up(binder_url):
 
 def test_hub_health(hub_url):
     """check JupyterHubHub health endpoint"""
-    resp = requests.get(hub_url + "/hub/health")
+    resp = requests.get(hub_url + "/hub/api/health")
     print(resp.text)
     assert resp.status_code == 200
 
