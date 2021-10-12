@@ -142,7 +142,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: pytest -vx --numprocesses=2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matrix.hub_url }} tests/
+          command: pytest -vx --color=yes --numprocesses=2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matrix.hub_url }} tests/
 
       - name: "Stage 5: Post message to Grafana that deployment to production has started"
         run: |
@@ -270,7 +270,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: pytest -vx --numprocesses=2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matrix.hub_url }} tests/
+          command: pytest -vx --color=yes --numprocesses=2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matrix.hub_url }} tests/
 
   report-status:
     # This job will wait for staging-deploy to finish and report its status
