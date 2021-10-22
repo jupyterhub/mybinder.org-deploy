@@ -3,7 +3,7 @@
   "access": "proxy",
   "basicAuth": true,
   "database": "",
-  "id": 3,
+  "id": 2,
   "isDefault": false,
   "jsonData": {
    "httpMethod": "GET",
@@ -22,31 +22,9 @@
   "access": "proxy",
   "basicAuth": false,
   "database": "",
-  "id": 5,
+  "id": 4,
   "isDefault": false,
-  "jsonData": {
-   "httpMethod": "GET",
-   "keepCookies": []
-  },
-  "name": "GKE2",
-  "orgId": 1,
-  "password": "",
-  "readOnly": false,
-  "type": "prometheus",
-  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
-  "url": "https://prometheus.gke2.mybinder.org",
-  "user": ""
- },
- {
-  "access": "proxy",
-  "basicAuth": false,
-  "database": "",
-  "id": 2,
-  "isDefault": false,
-  "jsonData": {
-   "httpMethod": "GET",
-   "keepCookies": []
-  },
+  "jsonData": {},
   "name": "OVH",
   "orgId": 1,
   "password": "",
@@ -76,12 +54,9 @@
   "access": "proxy",
   "basicAuth": false,
   "database": "",
-  "id": 4,
+  "id": 5,
   "isDefault": false,
-  "jsonData": {
-   "httpMethod": "GET",
-   "keepCookies": []
-  },
+  "jsonData": {},
   "name": "Turing",
   "orgId": 1,
   "password": "",

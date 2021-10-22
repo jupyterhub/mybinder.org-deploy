@@ -16,7 +16,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 11,
+  "id": 4,
   "links": [],
   "panels": [
    {
@@ -244,14 +244,14 @@
   "timezone": "",
   "title": "Kubernetes API health",
   "uid": "4QOBFHdiz",
-  "version": 10
+  "version": 2
  },
  "meta": {
   "canAdmin": true,
   "canEdit": true,
   "canSave": true,
   "canStar": true,
-  "created": "2018-07-11T21:18:51Z",
+  "created": "2020-09-22T09:29:52Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 0,
@@ -263,9 +263,9 @@
   "provisionedExternalId": "",
   "slug": "kubernetes-api-health",
   "type": "db",
-  "updated": "2019-08-28T19:11:54Z",
+  "updated": "2020-09-22T09:29:57Z",
   "updatedBy": "admin",
   "url": "/d/4QOBFHdiz/kubernetes-api-health",
-  "version": 10
+  "version": 2
  }
 }

@@ -41,7 +41,7 @@ def export_grafana(host, data_dir, confirm=True):
     dashboard_dir = output_dir.joinpath("dashboards")
 
     # download dashboards
-    r = requests.get(host + "/api/search?limit=1000")
+    r = session.get(host + "/api/search?limit=1000")
     r.raise_for_status()
     for result in r.json():
         if result["type"] == "dash-db":

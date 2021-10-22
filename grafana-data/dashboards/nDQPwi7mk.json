@@ -3,6 +3,7 @@
   "annotations": {
    "list": [
     {
+     "$$hashKey": "object:10",
      "builtIn": 1,
      "datasource": "-- Grafana --",
      "enable": true,
@@ -12,6 +13,7 @@
      "type": "dashboard"
     },
     {
+     "$$hashKey": "object:11",
      "datasource": "-- Grafana --",
      "enable": true,
      "hide": false,
@@ -25,6 +27,7 @@
      "type": "tags"
     },
     {
+     "$$hashKey": "object:12",
      "datasource": "-- Grafana --",
      "enable": true,
      "hide": false,
@@ -43,8 +46,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 5,
-  "iteration": 1594884217119,
+  "id": 8,
+  "iteration": 1622699337607,
   "links": [],
   "panels": [
    {
@@ -61,6 +64,7 @@
      "x": 0,
      "y": 0
     },
+    "hiddenSeries": false,
     "id": 43,
     "legend": {
      "avg": false,
@@ -152,6 +156,7 @@
      "x": 12,
      "y": 0
     },
+    "hiddenSeries": false,
     "id": 26,
     "legend": {
      "avg": false,
@@ -265,6 +270,7 @@
      "x": 0,
      "y": 6
     },
+    "hiddenSeries": false,
     "id": 40,
     "legend": {
      "avg": false,
@@ -361,6 +367,7 @@
      "x": 12,
      "y": 6
     },
+    "hiddenSeries": false,
     "id": 44,
     "legend": {
      "avg": false,
@@ -475,6 +482,7 @@
      "x": 0,
      "y": 12
     },
+    "hiddenSeries": false,
     "id": 29,
     "legend": {
      "avg": false,
@@ -577,6 +585,7 @@
      "x": 12,
      "y": 12
     },
+    "hiddenSeries": false,
     "id": 8,
     "legend": {
      "avg": false,
@@ -667,6 +676,7 @@
      "x": 0,
      "y": 18
     },
+    "hiddenSeries": false,
     "id": 7,
     "legend": {
      "avg": false,
@@ -757,6 +767,7 @@
      "x": 12,
      "y": 18
     },
+    "hiddenSeries": false,
     "id": 28,
     "legend": {
      "avg": false,
@@ -847,6 +858,7 @@
      "x": 0,
      "y": 24
     },
+    "hiddenSeries": false,
     "id": 27,
     "legend": {
      "avg": false,
@@ -936,6 +948,7 @@
      "x": 12,
      "y": 25
     },
+    "hiddenSeries": false,
     "id": 36,
     "legend": {
      "avg": false,
@@ -1379,7 +1392,7 @@
    }
   ],
   "refresh": false,
-  "schemaVersion": 20,
+  "schemaVersion": 22,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -1405,7 +1418,7 @@
    ]
   },
   "time": {
-   "from": "now-24h",
+   "from": "now-1h",
    "to": "now"
   },
   "timepicker": {
@@ -1436,14 +1449,17 @@
   "timezone": "",
   "title": "Node Activity",
   "uid": "nDQPwi7mk",
-  "version": 59
+  "variables": {
+   "list": []
+  },
+  "version": 5
  },
  "meta": {
   "canAdmin": true,
   "canEdit": true,
   "canSave": true,
   "canStar": true,
-  "created": "2018-05-08T14:10:55Z",
+  "created": "2020-09-22T09:29:52Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 0,
@@ -1455,9 +1471,9 @@
   "provisionedExternalId": "",
   "slug": "node-activity",
   "type": "db",
-  "updated": "2020-07-16T07:23:47Z",
+  "updated": "2021-06-03T05:49:06Z",
   "updatedBy": "admin",
   "url": "/d/nDQPwi7mk/node-activity",
-  "version": 59
+  "version": 5
  }
 }

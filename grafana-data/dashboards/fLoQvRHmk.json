@@ -20,7 +20,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 9,
+  "id": 10,
   "links": [],
   "panels": [
    {
@@ -140,18 +140,21 @@
     },
     "id": 6,
     "legend": {
-     "avg": false,
+     "alignAsTable": true,
+     "avg": true,
      "current": false,
-     "max": false,
+     "hideEmpty": true,
+     "max": true,
      "min": false,
+     "rightSide": false,
      "show": true,
      "total": false,
-     "values": false
+     "values": true
     },
     "lines": true,
     "linewidth": 3,
     "links": [],
-    "nullPointMode": "null",
+    "nullPointMode": "null as zero",
     "options": {
      "dataLinks": []
     },
@@ -187,7 +190,7 @@
      {
       "datasource": "Turing",
       "expr": "sum(kube_pod_status_phase{pod=~\"^jupyter-.*\", phase=\"Running\"})",
-      "hide": true,
+      "hide": false,
       "legendFormat": "Turing",
       "refId": "D"
      }
@@ -225,7 +228,7 @@
       "logBase": 1,
       "max": null,
       "min": null,
-      "show": true
+      "show": false
      }
     ],
     "yaxis": {
@@ -402,14 +405,14 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "histogram_quantile(0.1, sum(rate(binderhub_launch_time_seconds_bucket{status=\"success\"}[5m])) without (instance, repo, provider)) > 0",
+      "expr": "histogram_quantile(0.1, sum(rate(binderhub_launch_time_seconds_bucket{status=\"success\"}[5m])) without (instance, repo, provider, retries)) > 0",
       "format": "time_series",
       "intervalFactor": 10,
-      "legendFormat": "10th-percentile",
+      "legendFormat": "10th-percential",
       "refId": "A"
      },
      {
-      "expr": "histogram_quantile(0.25, sum(rate(binderhub_launch_time_seconds_bucket{status=\"success\"}[5m])) without (instance, repo, provider)) > 0",
+      "expr": "histogram_quantile(0.25, sum(rate(binderhub_launch_time_seconds_bucket{status=\"success\"}[5m])) without (instance, repo, provider, retries)) > 0",
       "format": "time_series",
       "hide": false,
       "intervalFactor": 10,
@@ -417,7 +420,7 @@
       "refId": "B"
      },
      {
-      "expr": "histogram_quantile(0.5, sum(rate(binderhub_launch_time_seconds_bucket{status=\"success\"}[5m])) without (instance, repo, provider)) > 0",
+      "expr": "histogram_quantile(0.5, sum(rate(binderhub_launch_time_seconds_bucket{status=\"success\"}[5m])) without (instance, repo, provider, retries)) > 0",
       "format": "time_series",
       "hide": false,
       "intervalFactor": 10,
@@ -425,7 +428,7 @@
       "refId": "C"
      },
      {
-      "expr": "histogram_quantile(0.75, sum(rate(binderhub_launch_time_seconds_bucket{status=\"success\"}[5m])) without (instance, repo, provider)) > 0",
+      "expr": "histogram_quantile(0.75, sum(rate(binderhub_launch_time_seconds_bucket{status=\"success\"}[5m])) without (instance, repo, provider, retries)) > 0",
       "format": "time_series",
       "hide": false,
       "intervalFactor": 10,
@@ -433,7 +436,7 @@
       "refId": "D"
      },
      {
-      "expr": "histogram_quantile(0.9, sum(rate(binderhub_launch_time_seconds_bucket{status=\"success\"}[5m])) without (instance, repo, provider)) > 0",
+      "expr": "histogram_quantile(0.9, sum(rate(binderhub_launch_time_seconds_bucket{status=\"success\"}[5m])) without (instance, repo, provider, retries)) > 0",
       "format": "time_series",
       "intervalFactor": 10,
       "legendFormat": "90th-percentile",
@@ -521,14 +524,14 @@
   "timezone": "",
   "title": "status",
   "uid": "fLoQvRHmk",
-  "version": 14
+  "version": 10
  },
  "meta": {
   "canAdmin": true,
   "canEdit": true,
   "canSave": true,
   "canStar": true,
-  "created": "2018-06-13T21:41:23Z",
+  "created": "2020-09-22T09:29:53Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 0,
@@ -540,9 +543,9 @@
   "provisionedExternalId": "",
   "slug": "status",
   "type": "db",
-  "updated": "2020-07-15T09:24:03Z",
+  "updated": "2020-09-29T09:00:59Z",
   "updatedBy": "admin",
   "url": "/d/fLoQvRHmk/status",
-  "version": 14
+  "version": 10
  }
 }

@@ -3,6 +3,7 @@
   "annotations": {
    "list": [
     {
+     "$$hashKey": "object:440",
      "builtIn": 1,
      "datasource": "-- Grafana --",
      "enable": true,
@@ -12,6 +13,7 @@
      "type": "dashboard"
     },
     {
+     "$$hashKey": "object:441",
      "datasource": "-- Grafana --",
      "enable": true,
      "hide": false,
@@ -29,8 +31,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 6,
-  "iteration": 1594800981635,
+  "id": 5,
+  "iteration": 1631538226915,
   "links": [],
   "panels": [
    {
@@ -45,7 +47,6 @@
     },
     "id": 2,
     "links": [],
-    "options": {},
     "pageSize": 50,
     "scroll": true,
     "showHeader": true,
@@ -56,12 +57,14 @@
     "styles": [
      {
       "alias": "Time",
+      "align": "auto",
       "dateFormat": "YYYY-MM-DD HH:mm:ss",
       "pattern": "Time",
       "type": "hidden"
      },
      {
       "alias": "Launches this hour",
+      "align": "auto",
       "colorMode": null,
       "colors": [
        "rgba(245, 54, 54, 0.9)",
@@ -77,6 +80,7 @@
      },
      {
       "alias": "",
+      "align": "auto",
       "colorMode": null,
       "colors": [
        "rgba(245, 54, 54, 0.9)",
@@ -118,6 +122,7 @@
      "x": 12,
      "y": 0
     },
+    "hiddenSeries": false,
     "id": 3,
     "legend": {
      "avg": false,
@@ -207,6 +212,7 @@
      "x": 0,
      "y": 9
     },
+    "hiddenSeries": false,
     "id": 1,
     "legend": {
      "avg": false,
@@ -296,6 +302,7 @@
      "x": 0,
      "y": 16
     },
+    "hiddenSeries": false,
     "id": 14,
     "legend": {
      "avg": false,
@@ -350,19 +357,21 @@
     },
     "yaxes": [
      {
+      "$$hashKey": "object:1321",
       "format": "short",
       "label": null,
       "logBase": 1,
       "max": null,
-      "min": null,
+      "min": "0",
       "show": true
      },
      {
+      "$$hashKey": "object:1322",
       "format": "short",
       "label": null,
       "logBase": 1,
       "max": null,
-      "min": null,
+      "min": "0",
       "show": true
      }
     ],
@@ -385,6 +394,7 @@
      "x": 0,
      "y": 23
     },
+    "hiddenSeries": false,
     "id": 15,
     "legend": {
      "avg": false,
@@ -475,6 +485,7 @@
      "x": 0,
      "y": 30
     },
+    "hiddenSeries": false,
     "id": 4,
     "legend": {
      "avg": false,
@@ -589,6 +600,7 @@
      "x": 12,
      "y": 30
     },
+    "hiddenSeries": false,
     "id": 5,
     "legend": {
      "avg": false,
@@ -682,6 +694,7 @@
      "x": 0,
      "y": 39
     },
+    "hiddenSeries": false,
     "id": 6,
     "legend": {
      "avg": false,
@@ -793,12 +806,13 @@
     "fillGradient": 0,
     "grid": {},
     "gridPos": {
-     "h": 7,
+     "h": 10,
      "w": 24,
      "x": 0,
      "y": 46
     },
     "height": "",
+    "hiddenSeries": false,
     "id": 11,
     "legend": {
      "alignAsTable": true,
@@ -830,10 +844,11 @@
     "steppedLine": true,
     "targets": [
      {
-      "expr": "topk(5, sum (rate (container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\"}[2m])) by (pod_name))",
+      "expr": "topk(5, sum(rate(container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\"}[2m])) by (pod))",
       "format": "time_series",
+      "interval": "",
       "intervalFactor": 1,
-      "legendFormat": "{{ pod_name }}",
+      "legendFormat": "{{ pod }}",
       "metric": "container_cpu",
       "refId": "A",
       "step": 10
@@ -893,8 +908,9 @@
      "h": 7,
      "w": 12,
      "x": 0,
-     "y": 53
+     "y": 56
     },
+    "hiddenSeries": false,
     "id": 7,
     "legend": {
      "avg": false,
@@ -972,50 +988,60 @@
    },
    {
     "aliasColors": {},
-    "bars": false,
+    "bars": true,
     "dashLength": 10,
     "dashes": false,
     "datasource": "$cluster",
+    "decimals": 0,
     "fill": 0,
     "fillGradient": 0,
     "gridPos": {
      "h": 7,
      "w": 12,
      "x": 12,
-     "y": 53
+     "y": 56
     },
+    "hiddenSeries": false,
     "id": 8,
     "legend": {
+     "alignAsTable": true,
      "avg": false,
      "current": false,
+     "hideEmpty": true,
+     "hideZero": true,
      "max": false,
      "min": false,
+     "rightSide": false,
      "show": true,
-     "total": false,
-     "values": false
+     "sort": "total",
+     "sortDesc": true,
+     "total": true,
+     "values": true
     },
-    "lines": true,
+    "lines": false,
     "linewidth": 1,
     "links": [],
-    "nullPointMode": "null",
+    "nullPointMode": "null as zero",
     "options": {
      "dataLinks": []
     },
     "percentage": false,
+    "pluginVersion": "6.7.3",
     "pointradius": 3,
-    "points": true,
+    "points": false,
     "renderer": "flot",
     "seriesOverrides": [],
     "spaceLength": 10,
-    "stack": false,
+    "stack": true,
     "steppedLine": false,
     "targets": [
      {
-      "expr": "delta(binderhub_build_count_total{status=\"failure\"}[10m]) > 0",
+      "expr": "max(floor(increase(binderhub_build_count_total{status=\"failure\"}[$__interval]))) by (repo) > 0",
       "format": "time_series",
-      "interval": "1m",
-      "intervalFactor": 2,
-      "legendFormat": "{{repo}}",
+      "instant": false,
+      "interval": "10m",
+      "intervalFactor": 1,
+      "legendFormat": "{{ repo }}",
       "refId": "A"
      }
     ],
@@ -1025,8 +1051,8 @@
     "timeShift": null,
     "title": "Build Failing Repositories",
     "tooltip": {
-     "shared": false,
-     "sort": 0,
+     "shared": true,
+     "sort": 2,
      "value_type": "individual"
     },
     "type": "graph",
@@ -1039,6 +1065,7 @@
     },
     "yaxes": [
      {
+      "$$hashKey": "object:64",
       "format": "short",
       "label": null,
       "logBase": 1,
@@ -1047,6 +1074,7 @@
       "show": true
      },
      {
+      "$$hashKey": "object:65",
       "format": "short",
       "label": null,
       "logBase": 1,
@@ -1066,20 +1094,23 @@
     "dashLength": 10,
     "dashes": false,
     "datasource": "$cluster",
-    "fill": 1,
+    "fill": 0,
     "fillGradient": 0,
     "gridPos": {
-     "h": 9,
+     "h": 8,
      "w": 12,
      "x": 0,
-     "y": 60
+     "y": 63
     },
-    "id": 9,
+    "hiddenSeries": false,
+    "id": 18,
+    "interval": "",
     "legend": {
+     "alignAsTable": false,
      "avg": false,
      "current": false,
-     "hideEmpty": false,
-     "hideZero": false,
+     "hideEmpty": true,
+     "hideZero": true,
      "max": false,
      "min": false,
      "show": true,
@@ -1088,23 +1119,29 @@
     },
     "lines": true,
     "linewidth": 1,
-    "links": [],
     "nullPointMode": "null",
     "options": {
      "dataLinks": []
     },
     "percentage": false,
-    "pointradius": 5,
+    "pointradius": 2,
     "points": false,
     "renderer": "flot",
     "seriesOverrides": [
      {
-      "alias": "Launch attempt",
+      "$$hashKey": "object:169",
+      "alias": "/total cpu.*/",
+      "fill": 1,
+      "linewidth": 0,
+      "stack": true,
       "yaxis": 2
      },
      {
-      "alias": "Launch attempts",
-      "yaxis": 2
+      "$$hashKey": "object:474",
+      "alias": "/total cpu.*/"
+     },
+     {
+      "$$hashKey": "object:562"
      }
     ],
     "spaceLength": 10,
@@ -1112,35 +1149,28 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(delta(binderhub_launch_count_total{status=\"success\"}[5m])) / sum(delta(binderhub_launch_count_total{status!=\"retry\"}[5m]))",
-      "format": "time_series",
-      "intervalFactor": 2,
-      "legendFormat": "Launch success",
+      "expr": "max(topk(10, container_cpu_usage_seconds_total{pod=~\"jupyter-.*\", container=\"notebook\"}) > 1800) by (pod)",
+      "hide": false,
+      "interval": "",
+      "intervalFactor": 1,
+      "legendFormat": "{{pod}}",
       "refId": "A"
      },
      {
-      "expr": "sum(delta(binderhub_launch_count_total[5m]))",
-      "format": "time_series",
-      "intervalFactor": 1,
-      "legendFormat": "Launch attempts",
+      "expr": "count(1800 < container_cpu_usage_seconds_total{pod=~\"jupyter-.*\", container=\"notebook\"})",
+      "interval": "",
+      "legendFormat": "total cpu > 30m",
       "refId": "B"
-     },
-     {
-      "expr": "sum(delta(binderhub_launch_count_total{status=\"success\",retries!=\"0\",retries!=\"\"}[5m])) / sum(delta(binderhub_launch_count_total{status!=\"retry\"}[5m]))",
-      "format": "time_series",
-      "intervalFactor": 1,
-      "legendFormat": "Retry rate",
-      "refId": "C"
      }
     ],
     "thresholds": [],
     "timeFrom": null,
     "timeRegions": [],
     "timeShift": null,
-    "title": "Launch success rate [5m]",
+    "title": "Pods with sustained CPU usage",
     "tooltip": {
      "shared": true,
-     "sort": 0,
+     "sort": 2,
      "value_type": "individual"
     },
     "type": "graph",
@@ -1153,19 +1183,23 @@
     },
     "yaxes": [
      {
-      "format": "percentunit",
-      "label": null,
+      "$$hashKey": "object:130",
+      "decimals": null,
+      "format": "dtdurations",
+      "label": "total cpu time",
       "logBase": 1,
-      "max": "1",
+      "max": null,
       "min": "0",
       "show": true
      },
      {
+      "$$hashKey": "object:131",
+      "decimals": 0,
       "format": "short",
-      "label": null,
+      "label": "number of pods",
       "logBase": 1,
       "max": null,
-      "min": null,
+      "min": "0",
       "show": true
      }
     ],
@@ -1192,8 +1226,9 @@
      "h": 9,
      "w": 12,
      "x": 12,
-     "y": 60
+     "y": 63
     },
+    "hiddenSeries": false,
     "id": 13,
     "legend": {
      "avg": false,
@@ -1223,36 +1258,41 @@
      {
       "expr": "quantile(.05, (time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60)",
       "format": "time_series",
+      "interval": "",
       "intervalFactor": 1,
-      "legendFormat": ".05",
+      "legendFormat": "5%",
       "refId": "A"
      },
      {
       "expr": "quantile(.25, (time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60)",
       "format": "time_series",
+      "interval": "",
       "intervalFactor": 1,
-      "legendFormat": ".25",
+      "legendFormat": "25%",
       "refId": "D"
      },
      {
       "expr": "quantile(.5, (time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60)",
       "format": "time_series",
+      "interval": "",
       "intervalFactor": 1,
-      "legendFormat": ".5",
+      "legendFormat": "50%",
       "refId": "B"
      },
      {
       "expr": "quantile(.75, (time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60)",
       "format": "time_series",
+      "interval": "",
       "intervalFactor": 1,
-      "legendFormat": ".75",
+      "legendFormat": "75%",
       "refId": "E"
      },
      {
       "expr": "quantile(.95, (time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60)",
       "format": "time_series",
+      "interval": "",
       "intervalFactor": 1,
-      "legendFormat": ".95",
+      "legendFormat": "95%",
       "refId": "C"
      }
     ],
@@ -1298,6 +1338,128 @@
     }
    },
    {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$cluster",
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 9,
+     "w": 12,
+     "x": 0,
+     "y": 71
+    },
+    "hiddenSeries": false,
+    "id": 9,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "hideEmpty": false,
+     "hideZero": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [
+     {
+      "$$hashKey": "object:1212",
+      "alias": "Launch attempt",
+      "yaxis": 2
+     },
+     {
+      "$$hashKey": "object:1213",
+      "alias": "Launch attempts",
+      "yaxis": 2
+     }
+    ],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(increase(binderhub_launch_count_total{status=\"success\"}[5m])) / sum(increase(binderhub_launch_count_total{status!=\"retry\"}[5m]))",
+      "format": "time_series",
+      "interval": "",
+      "intervalFactor": 2,
+      "legendFormat": "Launch success",
+      "refId": "A"
+     },
+     {
+      "expr": "sum(increase(binderhub_launch_count_total[5m]))",
+      "format": "time_series",
+      "interval": "",
+      "intervalFactor": 1,
+      "legendFormat": "Launch attempts",
+      "refId": "B"
+     },
+     {
+      "expr": "sum(increase(binderhub_launch_count_total{status=\"success\",retries!=\"0\",retries!=\"\"}[5m])) / sum(increase(binderhub_launch_count_total{status!=\"retry\"}[5m]))",
+      "format": "time_series",
+      "interval": "",
+      "intervalFactor": 1,
+      "legendFormat": "Retry rate",
+      "refId": "C"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "Launch success rate [5m]",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "$$hashKey": "object:1232",
+      "format": "percentunit",
+      "label": null,
+      "logBase": 1,
+      "max": "1",
+      "min": "0",
+      "show": true
+     },
+     {
+      "$$hashKey": "object:1233",
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": "0",
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
     "aliasColors": {
      ".05": "#3f6833",
      ".25": "#629e51",
@@ -1315,8 +1477,9 @@
      "h": 9,
      "w": 12,
      "x": 12,
-     "y": 69
+     "y": 72
     },
+    "hiddenSeries": false,
     "id": 16,
     "legend": {
      "avg": false,
@@ -1394,7 +1557,7 @@
    }
   ],
   "refresh": "1m",
-  "schemaVersion": 20,
+  "schemaVersion": 22,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -1420,7 +1583,7 @@
    ]
   },
   "time": {
-   "from": "now-24h",
+   "from": "now-3h",
    "to": "now"
   },
   "timepicker": {
@@ -1451,14 +1614,17 @@
   "timezone": "",
   "title": "Pod Activity",
   "uid": "fZWsQmnmz",
-  "version": 44
+  "variables": {
+   "list": []
+  },
+  "version": 17
  },
  "meta": {
   "canAdmin": true,
   "canEdit": true,
   "canSave": true,
   "canStar": true,
-  "created": "2018-05-08T14:11:05Z",
+  "created": "2020-09-22T09:29:52Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 0,
@@ -1470,9 +1636,9 @@
   "provisionedExternalId": "",
   "slug": "pod-activity",
   "type": "db",
-  "updated": "2020-07-15T08:17:48Z",
+  "updated": "2021-09-13T13:08:57Z",
   "updatedBy": "admin",
   "url": "/d/fZWsQmnmz/pod-activity",
-  "version": 44
+  "version": 17
  }
 }

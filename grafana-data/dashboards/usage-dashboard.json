@@ -1,106 +1,71 @@
 {
  "dashboard": {
+  "__inputs": [],
+  "__requires": [],
   "annotations": {
-   "list": [
-    {
-     "$$hashKey": "object:1369",
-     "datasource": "-- Grafana --",
-     "enable": true,
-     "hide": false,
-     "iconColor": "#e5ac0e",
-     "limit": 100,
-     "name": "Deployments",
-     "showIn": 0,
-     "tags": [
-      "deployment-start"
-     ],
-     "type": "tags"
-    },
-    {
-     "$$hashKey": "object:1370",
-     "builtIn": 1,
-     "datasource": "-- Grafana --",
-     "enable": true,
-     "hide": true,
-     "iconColor": "rgba(0, 211, 255, 1)",
-     "limit": 100,
-     "name": "Annotations & Alerts",
-     "showIn": 0,
-     "type": "dashboard"
-    }
-   ]
+   "list": []
   },
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 7,
+  "hideControls": false,
+  "id": 17,
   "links": [],
   "panels": [
    {
     "aliasColors": {},
-    "bars": false,
+    "bars": true,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "prometheus",
+    "datasource": null,
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
-     "h": 7,
-     "w": 24,
+     "h": 10,
+     "w": 12,
      "x": 0,
      "y": 0
     },
-    "hiddenSeries": false,
-    "id": 3,
+    "id": 2,
     "legend": {
+     "alignAsTable": false,
      "avg": false,
      "current": false,
      "max": false,
      "min": false,
+     "rightSide": false,
      "show": true,
+     "sideWidth": null,
      "total": false,
      "values": false
     },
-    "lines": true,
+    "lines": false,
     "linewidth": 1,
     "links": [],
     "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
     "percentage": false,
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
+    "repeat": null,
     "seriesOverrides": [],
     "spaceLength": 10,
     "stack": false,
     "steppedLine": false,
     "targets": [
      {
-      "expr": "100* (sum(delta(binderhub_launch_time_seconds_count{status=\"success\"}[6h])) / sum(delta(binderhub_launch_time_seconds_count{status!=\"retry\"}[6h])))",
+      "expr": "count(\n  sum(\n    min_over_time(\n      kube_pod_labels{\n        label_app=\"jupyterhub\",\n        label_component=\"singleuser-server\",\n        label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\",\n      }[30d]\n    )\n  ) by (pod)\n)\n",
       "format": "time_series",
-      "interval": "30m",
+      "interval": "30d",
       "intervalFactor": 2,
-      "legendFormat": "Launches",
-      "refId": "C"
-     },
-     {
-      "expr": "100 * sum(delta(binderhub_build_time_seconds_count{status=\"success\"}[6h])) / sum(delta(binderhub_build_time_seconds_count[6h]))",
-      "format": "time_series",
-      "hide": false,
-      "instant": false,
-      "interval": "30m",
-      "intervalFactor": 2,
-      "legendFormat": "Builds",
+      "legendFormat": "Active Users",
       "refId": "A"
      }
     ],
     "thresholds": [],
     "timeFrom": null,
-    "timeRegions": [],
     "timeShift": null,
-    "title": "Success Rates (6h lookback window)",
+    "title": "Active users (over 30 days)",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -116,12 +81,11 @@
     },
     "yaxes": [
      {
-      "decimals": null,
-      "format": "percent",
+      "format": "short",
       "label": null,
       "logBase": 1,
-      "max": "100",
-      "min": "0",
+      "max": null,
+      "min": 0,
       "show": true
      },
      {
@@ -129,85 +93,65 @@
       "label": null,
       "logBase": 1,
       "max": null,
-      "min": null,
+      "min": 0,
       "show": true
      }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
+    ]
    },
    {
     "aliasColors": {},
-    "bars": false,
+    "bars": true,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "prometheus",
+    "datasource": null,
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
-     "h": 7,
-     "w": 24,
-     "x": 0,
-     "y": 7
+     "h": 10,
+     "w": 12,
+     "x": 12,
+     "y": 10
     },
-    "hiddenSeries": false,
-    "id": 4,
+    "id": 3,
     "legend": {
+     "alignAsTable": false,
      "avg": false,
      "current": false,
      "max": false,
      "min": false,
+     "rightSide": false,
      "show": true,
+     "sideWidth": null,
      "total": false,
      "values": false
     },
-    "lines": true,
+    "lines": false,
     "linewidth": 1,
     "links": [],
     "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
     "percentage": false,
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
-    "seriesOverrides": [
-     {
-      "alias": "Builds",
-      "yaxis": 2
-     }
-    ],
+    "repeat": null,
+    "seriesOverrides": [],
     "spaceLength": 10,
     "stack": false,
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(delta(binderhub_launch_time_seconds_count[6h]))",
+      "expr": "count(\n  sum(\n    min_over_time(\n      kube_pod_labels{\n        label_app=\"jupyterhub\",\n        label_component=\"singleuser-server\",\n        label_hub_jupyter_org_username!~\"(service|perf|hubtraf)-\",\n      }[1d]\n    )\n  ) by (pod)\n)\n",
       "format": "time_series",
-      "interval": "30m",
+      "interval": "1d",
       "intervalFactor": 2,
-      "legendFormat": "Launches",
-      "refId": "C"
-     },
-     {
-      "expr": "sum(delta(binderhub_build_time_seconds_count[6h]))",
-      "format": "time_series",
-      "hide": false,
-      "instant": false,
-      "interval": "30m",
-      "intervalFactor": 2,
-      "legendFormat": "Builds",
+      "legendFormat": "Active Users",
       "refId": "A"
      }
     ],
     "thresholds": [],
     "timeFrom": null,
-    "timeRegions": [],
     "timeShift": null,
-    "title": "Build/Launch Attempts (6h lookback window)",
+    "title": "Active users (over 24 hours)",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -223,51 +167,47 @@
     },
     "yaxes": [
      {
-      "decimals": null,
-      "format": "none",
-      "label": "Launches",
+      "format": "short",
+      "label": null,
       "logBase": 1,
       "max": null,
-      "min": "0",
+      "min": 0,
       "show": true
      },
      {
-      "decimals": null,
       "format": "short",
-      "label": "Builds",
+      "label": null,
       "logBase": 1,
       "max": null,
-      "min": "0",
+      "min": 0,
       "show": true
      }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
+    ]
    },
    {
     "aliasColors": {},
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "prometheus",
+    "datasource": null,
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
-     "h": 7,
-     "w": 24,
+     "h": 10,
+     "w": 12,
      "x": 0,
-     "y": 14
+     "y": 20
     },
-    "hiddenSeries": false,
-    "id": 5,
+    "id": 4,
     "legend": {
+     "alignAsTable": false,
      "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
+     "current": true,
+     "max": true,
+     "min": true,
+     "rightSide": false,
      "show": true,
+     "sideWidth": null,
      "total": false,
      "values": false
     },
@@ -275,47 +215,28 @@
     "linewidth": 1,
     "links": [],
     "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
     "percentage": false,
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
-    "seriesOverrides": [
-     {
-      "alias": "Builds",
-      "yaxis": 2
-     }
-    ],
+    "repeat": null,
+    "seriesOverrides": [],
     "spaceLength": 10,
     "stack": false,
-    "steppedLine": true,
+    "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(delta(binderhub_launch_time_seconds_count[24h]))",
+      "expr": "sum(\n  kube_pod_status_phase{phase=\"Running\"}\n  * on(pod, namespace) kube_pod_labels{label_app=\"jupyterhub\", label_component=\"singleuser-server\"}\n)\n",
       "format": "time_series",
-      "interval": "24h",
       "intervalFactor": 2,
-      "legendFormat": "Launches",
-      "refId": "C"
-     },
-     {
-      "expr": "sum(delta(binderhub_build_time_seconds_count[24h]))",
-      "format": "time_series",
-      "hide": false,
-      "instant": false,
-      "interval": "24h",
-      "intervalFactor": 2,
-      "legendFormat": "Builds",
+      "legendFormat": "Users",
       "refId": "A"
      }
     ],
     "thresholds": [],
     "timeFrom": null,
-    "timeRegions": [],
     "timeShift": null,
-    "title": "Build/Launch Attempts (daily)",
+    "title": "Current running users",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -331,39 +252,36 @@
     },
     "yaxes": [
      {
-      "decimals": null,
-      "format": "none",
-      "label": "Launches",
+      "format": "short",
+      "label": null,
       "logBase": 1,
       "max": null,
-      "min": "0",
+      "min": 0,
       "show": true
      },
      {
-      "decimals": null,
       "format": "short",
-      "label": "Builds",
+      "label": null,
       "logBase": 1,
       "max": null,
-      "min": "0",
+      "min": 0,
       "show": true
      }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
+    ]
    }
   ],
-  "refresh": "1m",
-  "schemaVersion": 22,
+  "refresh": "",
+  "rows": [],
+  "schemaVersion": 14,
   "style": "dark",
-  "tags": [],
+  "tags": [
+   "jupyterhub"
+  ],
   "templating": {
    "list": []
   },
   "time": {
-   "from": "now-3h",
+   "from": "now-30d",
    "to": "now"
   },
   "timepicker": {
@@ -391,34 +309,31 @@
     "30d"
    ]
   },
-  "timezone": "",
-  "title": "Service Level Objectives",
-  "uid": "KPtswm7ik",
-  "variables": {
-   "list": []
-  },
-  "version": 3
+  "timezone": "browser",
+  "title": "Usage Dashboard",
+  "uid": "usage-dashboard",
+  "version": 5
  },
  "meta": {
   "canAdmin": true,
   "canEdit": true,
   "canSave": true,
   "canStar": true,
-  "created": "2020-09-22T09:29:52Z",
-  "createdBy": "admin",
+  "created": "2021-06-28T08:38:59Z",
+  "createdBy": "Anonymous",
   "expires": "0001-01-01T00:00:00Z",
-  "folderId": 0,
-  "folderTitle": "General",
-  "folderUrl": "",
+  "folderId": 15,
+  "folderTitle": "JupyterHub Default Dashboards",
+  "folderUrl": "/dashboards/f/70E5EE84-1217-4021-A89E-1E3DE0566D93/jupyterhub-default-dashboards",
   "hasAcl": false,
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
-  "slug": "service-level-objectives",
+  "slug": "usage-dashboard",
   "type": "db",
-  "updated": "2021-06-02T20:40:13Z",
-  "updatedBy": "admin",
-  "url": "/d/KPtswm7ik/service-level-objectives",
-  "version": 3
+  "updated": "2021-06-28T09:54:55Z",
+  "updatedBy": "Anonymous",
+  "url": "/d/usage-dashboard/usage-dashboard",
+  "version": 5
  }
 }

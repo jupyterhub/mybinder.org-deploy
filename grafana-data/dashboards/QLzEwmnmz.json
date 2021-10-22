@@ -3,6 +3,7 @@
   "annotations": {
    "list": [
     {
+     "$$hashKey": "object:1516",
      "builtIn": 1,
      "datasource": "-- Grafana --",
      "enable": true,
@@ -17,12 +18,13 @@
   "editable": true,
   "gnetId": 3119,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1556696453318,
+  "id": 2,
+  "iteration": 1610214932513,
   "links": [],
   "panels": [
    {
     "collapsed": false,
+    "datasource": null,
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -45,6 +47,7 @@
     "editable": true,
     "error": false,
     "fill": 1,
+    "fillGradient": 0,
     "grid": {},
     "gridPos": {
      "h": 5,
@@ -53,6 +56,7 @@
      "y": 1
     },
     "height": "200px",
+    "hiddenSeries": false,
     "id": 32,
     "legend": {
      "alignAsTable": false,
@@ -72,6 +76,9 @@
     "linewidth": 2,
     "links": [],
     "nullPointMode": "connected",
+    "options": {
+     "dataLinks": []
+    },
     "percentage": false,
     "pointradius": 5,
     "points": false,
@@ -104,6 +111,7 @@
     ],
     "thresholds": [],
     "timeFrom": null,
+    "timeRegions": [],
     "timeShift": null,
     "title": "Network I/O pressure",
     "tooltip": {
@@ -112,7 +120,6 @@
      "sort": 0,
      "value_type": "cumulative"
     },
-    "transparent": false,
     "type": "graph",
     "xaxis": {
      "buckets": null,
@@ -146,6 +153,7 @@
    },
    {
     "collapsed": false,
+    "datasource": null,
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -232,7 +240,6 @@
     ],
     "thresholds": "65, 90",
     "title": "Cluster memory usage",
-    "transparent": false,
     "type": "singlestat",
     "valueFontSize": "80%",
     "valueMaps": [
@@ -948,6 +955,7 @@
     "editable": true,
     "error": false,
     "fill": 0,
+    "fillGradient": 0,
     "grid": {},
     "gridPos": {
      "h": 7,
@@ -956,6 +964,7 @@
      "y": 15
     },
     "height": "",
+    "hiddenSeries": false,
     "id": 47,
     "legend": {
      "alignAsTable": true,
@@ -974,6 +983,9 @@
     "linewidth": 2,
     "links": [],
     "nullPointMode": "connected",
+    "options": {
+     "dataLinks": []
+    },
     "percentage": false,
     "pointradius": 5,
     "points": false,
@@ -996,6 +1008,7 @@
     ],
     "thresholds": [],
     "timeFrom": null,
+    "timeRegions": [],
     "timeShift": null,
     "title": "CPU usage per node ($interval avg)",
     "tooltip": {
@@ -1004,7 +1017,6 @@
      "sort": 2,
      "value_type": "cumulative"
     },
-    "transparent": false,
     "type": "graph",
     "xaxis": {
      "buckets": null,
@@ -1046,6 +1058,7 @@
     "editable": true,
     "error": false,
     "fill": 0,
+    "fillGradient": 0,
     "grid": {},
     "gridPos": {
      "h": 7,
@@ -1054,6 +1067,7 @@
      "y": 22
     },
     "height": "",
+    "hiddenSeries": false,
     "id": 50,
     "legend": {
      "alignAsTable": true,
@@ -1072,6 +1086,9 @@
     "linewidth": 2,
     "links": [],
     "nullPointMode": "connected",
+    "options": {
+     "dataLinks": []
+    },
     "percentage": false,
     "pointradius": 5,
     "points": false,
@@ -1094,6 +1111,7 @@
     ],
     "thresholds": [],
     "timeFrom": null,
+    "timeRegions": [],
     "timeShift": null,
     "title": "RAM usage per node",
     "tooltip": {
@@ -1102,7 +1120,6 @@
      "sort": 2,
      "value_type": "cumulative"
     },
-    "transparent": false,
     "type": "graph",
     "xaxis": {
      "buckets": null,
@@ -1136,6 +1153,7 @@
    },
    {
     "collapsed": false,
+    "datasource": null,
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -1158,6 +1176,7 @@
     "editable": true,
     "error": false,
     "fill": 0,
+    "fillGradient": 0,
     "grid": {},
     "gridPos": {
      "h": 7,
@@ -1166,6 +1185,7 @@
      "y": 30
     },
     "height": "",
+    "hiddenSeries": false,
     "id": 17,
     "legend": {
      "alignAsTable": true,
@@ -1184,6 +1204,9 @@
     "linewidth": 2,
     "links": [],
     "nullPointMode": "connected",
+    "options": {
+     "dataLinks": []
+    },
     "percentage": false,
     "pointradius": 5,
     "points": false,
@@ -1194,7 +1217,7 @@
     "steppedLine": true,
     "targets": [
      {
-      "expr": "topk(5, sum (rate (container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\", pod_name=~\"build-.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname))",
+      "expr": "topk(5, sum (rate (container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\", pod=~\"build-.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname))",
       "format": "time_series",
       "interval": "10s",
       "intervalFactor": 1,
@@ -1206,6 +1229,7 @@
     ],
     "thresholds": [],
     "timeFrom": null,
+    "timeRegions": [],
     "timeShift": null,
     "title": "Build Pod CPU usage per node ($interval avg)",
     "tooltip": {
@@ -1214,7 +1238,6 @@
      "sort": 2,
      "value_type": "cumulative"
     },
-    "transparent": false,
     "type": "graph",
     "xaxis": {
      "buckets": null,
@@ -1256,6 +1279,7 @@
     "editable": true,
     "error": false,
     "fill": 0,
+    "fillGradient": 0,
     "grid": {},
     "gridPos": {
      "h": 9,
@@ -1264,6 +1288,7 @@
      "y": 37
     },
     "height": "",
+    "hiddenSeries": false,
     "id": 48,
     "legend": {
      "alignAsTable": true,
@@ -1282,6 +1307,9 @@
     "linewidth": 2,
     "links": [],
     "nullPointMode": "connected",
+    "options": {
+     "dataLinks": []
+    },
     "percentage": false,
     "pointradius": 5,
     "points": false,
@@ -1292,7 +1320,7 @@
     "steppedLine": true,
     "targets": [
      {
-      "expr": "rate(container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\", pod_name=~\"build-.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])",
+      "expr": "rate(container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\", pod=~\"build-.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])",
       "format": "time_series",
       "interval": "10s",
       "intervalFactor": 1,
@@ -1304,6 +1332,7 @@
     ],
     "thresholds": [],
     "timeFrom": null,
+    "timeRegions": [],
     "timeShift": null,
     "title": "Build Pod Name ($interval avg)",
     "tooltip": {
@@ -1312,7 +1341,6 @@
      "sort": 2,
      "value_type": "cumulative"
     },
-    "transparent": false,
     "type": "graph",
     "xaxis": {
      "buckets": null,
@@ -1354,6 +1382,7 @@
     "editable": true,
     "error": false,
     "fill": 0,
+    "fillGradient": 0,
     "grid": {},
     "gridPos": {
      "h": 7,
@@ -1362,6 +1391,7 @@
      "y": 46
     },
     "height": "",
+    "hiddenSeries": false,
     "id": 52,
     "legend": {
      "alignAsTable": true,
@@ -1380,6 +1410,9 @@
     "linewidth": 2,
     "links": [],
     "nullPointMode": "connected",
+    "options": {
+     "dataLinks": []
+    },
     "percentage": false,
     "pointradius": 5,
     "points": false,
@@ -1390,7 +1423,7 @@
     "steppedLine": true,
     "targets": [
      {
-      "expr": "sum(rate(container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\", pod_name=~\"jupyter-.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname)",
+      "expr": "sum(rate(container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\", pod=~\"jupyter-.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname)",
       "format": "time_series",
       "interval": "10s",
       "intervalFactor": 1,
@@ -1402,6 +1435,7 @@
     ],
     "thresholds": [],
     "timeFrom": null,
+    "timeRegions": [],
     "timeShift": null,
     "title": "User Pods CPU usage per node ($interval avg)",
     "tooltip": {
@@ -1410,7 +1444,6 @@
      "sort": 2,
      "value_type": "cumulative"
     },
-    "transparent": false,
     "type": "graph",
     "xaxis": {
      "buckets": null,
@@ -1452,6 +1485,7 @@
     "editable": true,
     "error": false,
     "fill": 0,
+    "fillGradient": 0,
     "grid": {},
     "gridPos": {
      "h": 7,
@@ -1460,6 +1494,7 @@
      "y": 53
     },
     "height": "",
+    "hiddenSeries": false,
     "id": 53,
     "legend": {
      "alignAsTable": true,
@@ -1478,6 +1513,9 @@
     "linewidth": 2,
     "links": [],
     "nullPointMode": "connected",
+    "options": {
+     "dataLinks": []
+    },
     "percentage": false,
     "pointradius": 5,
     "points": false,
@@ -1488,7 +1526,7 @@
     "steppedLine": true,
     "targets": [
      {
-      "expr": "sum(container_memory_working_set_bytes{image!=\"\",name=~\"^k8s_.*\", pod_name=~\"jupyter-.*\",kubernetes_io_hostname=~\"^$Node$\"}) by (kubernetes_io_hostname)",
+      "expr": "sum(container_memory_working_set_bytes{image!=\"\",name=~\"^k8s_.*\", pod=~\"jupyter-.*\",kubernetes_io_hostname=~\"^$Node$\"}) by (kubernetes_io_hostname)",
       "format": "time_series",
       "interval": "10s",
       "intervalFactor": 1,
@@ -1500,6 +1538,7 @@
     ],
     "thresholds": [],
     "timeFrom": null,
+    "timeRegions": [],
     "timeShift": null,
     "title": "User Pods RAM usage per node",
     "tooltip": {
@@ -1508,7 +1547,6 @@
      "sort": 2,
      "value_type": "cumulative"
     },
-    "transparent": false,
     "type": "graph",
     "xaxis": {
      "buckets": null,
@@ -1550,6 +1588,7 @@
     "editable": true,
     "error": false,
     "fill": 0,
+    "fillGradient": 0,
     "grid": {},
     "gridPos": {
      "h": 7,
@@ -1558,6 +1597,7 @@
      "y": 60
     },
     "height": "",
+    "hiddenSeries": false,
     "id": 49,
     "legend": {
      "alignAsTable": true,
@@ -1576,6 +1616,9 @@
     "linewidth": 2,
     "links": [],
     "nullPointMode": "connected",
+    "options": {
+     "dataLinks": []
+    },
     "percentage": false,
     "pointradius": 5,
     "points": false,
@@ -1586,7 +1629,7 @@
     "steppedLine": true,
     "targets": [
      {
-      "expr": "sum (rate (container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\", pod_name=~\"prod-dind.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname)",
+      "expr": "sum (rate (container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\", pod=~\"prod-dind.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (kubernetes_io_hostname)",
       "format": "time_series",
       "interval": "10s",
       "intervalFactor": 1,
@@ -1598,6 +1641,7 @@
     ],
     "thresholds": [],
     "timeFrom": null,
+    "timeRegions": [],
     "timeShift": null,
     "title": "DIND Pod CPU usage per node ($interval avg)",
     "tooltip": {
@@ -1606,7 +1650,6 @@
      "sort": 2,
      "value_type": "cumulative"
     },
-    "transparent": false,
     "type": "graph",
     "xaxis": {
      "buckets": null,
@@ -1648,6 +1691,7 @@
     "editable": true,
     "error": false,
     "fill": 0,
+    "fillGradient": 0,
     "grid": {},
     "gridPos": {
      "h": 7,
@@ -1656,6 +1700,7 @@
      "y": 67
     },
     "height": "",
+    "hiddenSeries": false,
     "id": 51,
     "legend": {
      "alignAsTable": true,
@@ -1674,6 +1719,9 @@
     "linewidth": 2,
     "links": [],
     "nullPointMode": "connected",
+    "options": {
+     "dataLinks": []
+    },
     "percentage": false,
     "pointradius": 5,
     "points": false,
@@ -1684,7 +1732,7 @@
     "steppedLine": true,
     "targets": [
      {
-      "expr": "sum(container_memory_working_set_bytes{image!=\"\",name=~\"^k8s_.*\", pod_name=~\"prod-dind-.*\",kubernetes_io_hostname=~\"^$Node$\"}) by (kubernetes_io_hostname)",
+      "expr": "sum(container_memory_working_set_bytes{image!=\"\",name=~\"^k8s_.*\", pod=~\"prod-dind-.*\",kubernetes_io_hostname=~\"^$Node$\"}) by (kubernetes_io_hostname)",
       "format": "time_series",
       "interval": "10s",
       "intervalFactor": 1,
@@ -1696,6 +1744,7 @@
     ],
     "thresholds": [],
     "timeFrom": null,
+    "timeRegions": [],
     "timeShift": null,
     "title": "DIND Pods RAM usage per node",
     "tooltip": {
@@ -1704,7 +1753,6 @@
      "sort": 2,
      "value_type": "cumulative"
     },
-    "transparent": false,
     "type": "graph",
     "xaxis": {
      "buckets": null,
@@ -1746,6 +1794,7 @@
     "editable": true,
     "error": false,
     "fill": 0,
+    "fillGradient": 0,
     "grid": {},
     "gridPos": {
      "h": 7,
@@ -1754,6 +1803,7 @@
      "y": 74
     },
     "height": "",
+    "hiddenSeries": false,
     "id": 46,
     "legend": {
      "alignAsTable": true,
@@ -1772,6 +1822,9 @@
     "linewidth": 2,
     "links": [],
     "nullPointMode": "connected",
+    "options": {
+     "dataLinks": []
+    },
     "percentage": false,
     "pointradius": 5,
     "points": false,
@@ -1782,11 +1835,11 @@
     "steppedLine": true,
     "targets": [
      {
-      "expr": "topk(10, sum (rate (container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (pod_name))",
+      "expr": "topk(10, sum (rate (container_cpu_usage_seconds_total{image!=\"\",name=~\"^k8s_.*\",kubernetes_io_hostname=~\"^$Node$\"}[$interval])) by (pod))",
       "format": "time_series",
       "interval": "10s",
       "intervalFactor": 1,
-      "legendFormat": "{{ pod_name }}",
+      "legendFormat": "{{ pod }}",
       "metric": "container_cpu",
       "refId": "A",
       "step": 10
@@ -1794,6 +1847,7 @@
     ],
     "thresholds": [],
     "timeFrom": null,
+    "timeRegions": [],
     "timeShift": null,
     "title": "Per Pod CPU usage ($interval avg)",
     "tooltip": {
@@ -1802,7 +1856,6 @@
      "sort": 2,
      "value_type": "cumulative"
     },
-    "transparent": false,
     "type": "graph",
     "xaxis": {
      "buckets": null,
@@ -1836,6 +1889,7 @@
    },
    {
     "collapsed": true,
+    "datasource": null,
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -1945,6 +1999,7 @@
    },
    {
     "collapsed": true,
+    "datasource": null,
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -2082,6 +2137,7 @@
    },
    {
     "collapsed": true,
+    "datasource": null,
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -2190,6 +2246,7 @@
    },
    {
     "collapsed": true,
+    "datasource": null,
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -2302,6 +2359,7 @@
    },
    {
     "collapsed": true,
+    "datasource": null,
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -2410,6 +2468,7 @@
    },
    {
     "collapsed": true,
+    "datasource": null,
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -2538,6 +2597,7 @@
    },
    {
     "collapsed": true,
+    "datasource": null,
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -2646,6 +2706,7 @@
    },
    {
     "collapsed": true,
+    "datasource": null,
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -2764,6 +2825,7 @@
    },
    {
     "collapsed": true,
+    "datasource": null,
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -2928,6 +2990,7 @@
    },
    {
     "collapsed": true,
+    "datasource": null,
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -3046,7 +3109,7 @@
    }
   ],
   "refresh": false,
-  "schemaVersion": 16,
+  "schemaVersion": 22,
   "style": "dark",
   "tags": [
    "kubernetes"
@@ -3132,7 +3195,9 @@
       "value": "default"
      },
      "hide": 0,
+     "includeAll": false,
      "label": null,
+     "multi": false,
      "name": "datasource",
      "options": [],
      "query": "prometheus",
@@ -3148,8 +3213,10 @@
       "value": "$__all"
      },
      "datasource": "$datasource",
+     "definition": "",
      "hide": 0,
      "includeAll": true,
+     "index": -1,
      "label": null,
      "multi": false,
      "name": "Node",
@@ -3199,14 +3266,17 @@
   "timezone": "browser",
   "title": "Kubernetes cluster monitoring (binder-prod)",
   "uid": "QLzEwmnmz",
-  "version": 18
+  "variables": {
+   "list": []
+  },
+  "version": 4
  },
  "meta": {
   "canAdmin": true,
   "canEdit": true,
   "canSave": true,
   "canStar": true,
-  "created": "2018-05-08T14:10:31Z",
+  "created": "2020-09-22T09:29:51Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 0,
@@ -3218,9 +3288,9 @@
   "provisionedExternalId": "",
   "slug": "kubernetes-cluster-monitoring-binder-prod",
   "type": "db",
-  "updated": "2019-05-01T07:58:39Z",
+  "updated": "2021-01-09T17:59:37Z",
   "updatedBy": "admin",
   "url": "/d/QLzEwmnmz/kubernetes-cluster-monitoring-binder-prod",
-  "version": 18
+  "version": 4
  }
 }
