@@ -3,6 +3,7 @@
   "annotations": {
    "list": [
     {
+     "$$hashKey": "object:782",
      "builtIn": 1,
      "datasource": "-- Grafana --",
      "enable": true,
@@ -12,6 +13,7 @@
      "type": "dashboard"
     },
     {
+     "$$hashKey": "object:783",
      "datasource": "-- Grafana --",
      "enable": true,
      "hide": false,
@@ -25,6 +27,7 @@
      "type": "tags"
     },
     {
+     "$$hashKey": "object:784",
      "datasource": "-- Grafana --",
      "enable": true,
      "hide": false,
@@ -43,8 +46,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 1,
-  "iteration": 1600760214706,
+  "id": 9,
+  "iteration": 1631271878252,
   "links": [],
   "panels": [
    {
@@ -61,6 +64,7 @@
      "x": 0,
      "y": 0
     },
+    "hiddenSeries": false,
     "id": 17,
     "legend": {
      "avg": false,
@@ -173,6 +177,7 @@
      "x": 12,
      "y": 0
     },
+    "hiddenSeries": false,
     "id": 31,
     "legend": {
      "avg": false,
@@ -221,15 +226,9 @@
      {
       "datasource": "Turing",
       "expr": "sum(kube_pod_status_phase{pod=~\"^jupyter-.*\", phase=\"Running\"})",
-      "hide": true,
+      "hide": false,
       "legendFormat": "Turing",
       "refId": "D"
-     },
-     {
-      "datasource": "GKE2",
-      "expr": "sum(kube_pod_status_phase{pod=~\"^jupyter-.*\", phase=\"Running\"})",
-      "legendFormat": "GKE2",
-      "refId": "E"
      }
     ],
     "thresholds": [],
@@ -252,14 +251,16 @@
     },
     "yaxes": [
      {
+      "$$hashKey": "object:252",
       "format": "short",
       "label": null,
       "logBase": 1,
       "max": null,
-      "min": null,
+      "min": "0",
       "show": true
      },
      {
+      "$$hashKey": "object:253",
       "format": "short",
       "label": null,
       "logBase": 1,
@@ -288,6 +289,7 @@
      "x": 0,
      "y": 7
     },
+    "hiddenSeries": false,
     "id": 34,
     "legend": {
      "avg": false,
@@ -393,6 +395,7 @@
      "x": 12,
      "y": 9
     },
+    "hiddenSeries": false,
     "id": 26,
     "legend": {
      "avg": false,
@@ -504,6 +507,7 @@
      "x": 0,
      "y": 14
     },
+    "hiddenSeries": false,
     "id": 16,
     "legend": {
      "avg": false,
@@ -624,6 +628,7 @@
      "x": 12,
      "y": 19
     },
+    "hiddenSeries": false,
     "id": 33,
     "legend": {
      "avg": false,
@@ -651,8 +656,8 @@
     "scopedVars": {
      "cluster": {
       "selected": true,
-      "text": "GKE2",
-      "value": "GKE2"
+      "text": "prometheus",
+      "value": "prometheus"
      }
     },
     "seriesOverrides": [
@@ -683,7 +688,7 @@
      {
       "datasource": "Turing",
       "expr": "sum(kube_node_spec_unschedulable)",
-      "hide": true,
+      "hide": false,
       "legendFormat": "Turing",
       "refId": "D"
      }
@@ -754,6 +759,7 @@
      "x": 0,
      "y": 21
     },
+    "hiddenSeries": false,
     "id": 28,
     "legend": {
      "avg": false,
@@ -901,7 +907,6 @@
      "show": true
     },
     "links": [],
-    "options": {},
     "reverseYBuckets": false,
     "targets": [
      {
@@ -961,6 +966,7 @@
      "x": 0,
      "y": 29
     },
+    "hiddenSeries": false,
     "id": 27,
     "legend": {
      "avg": false,
@@ -1095,7 +1101,6 @@
      "show": true
     },
     "links": [],
-    "options": {},
     "reverseYBuckets": false,
     "targets": [
      {
@@ -1160,14 +1165,14 @@
      "show": true
     },
     "links": [],
-    "options": {},
     "reverseYBuckets": false,
     "targets": [
      {
       "expr": "(time() - kube_pod_created{pod=~\"^build-.*\"}) / 60",
       "format": "time_series",
-      "interval": "30m",
+      "interval": "",
       "intervalFactor": 2,
+      "legendFormat": "",
       "refId": "A"
      }
     ],
@@ -1196,8 +1201,8 @@
     "yBucketSize": 5
    }
   ],
-  "refresh": false,
-  "schemaVersion": 20,
+  "refresh": "1m",
+  "schemaVersion": 22,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -1223,7 +1228,7 @@
    ]
   },
   "time": {
-   "from": "now-24h",
+   "from": "now-3h",
    "to": "now"
   },
   "timepicker": {
@@ -1254,14 +1259,17 @@
   "timezone": "",
   "title": "1. Overview",
   "uid": "3SpLQinmk",
-  "version": 53
+  "variables": {
+   "list": []
+  },
+  "version": 11
  },
  "meta": {
   "canAdmin": true,
   "canEdit": true,
   "canSave": true,
   "canStar": true,
-  "created": "2018-05-08T14:10:10Z",
+  "created": "2020-09-22T09:29:52Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 0,
@@ -1269,14 +1277,13 @@
   "folderUrl": "",
   "hasAcl": false,
   "isFolder": false,
-  "isStarred": true,
   "provisioned": false,
   "provisionedExternalId": "",
   "slug": "1-overview",
   "type": "db",
-  "updated": "2020-09-22T07:38:34Z",
+  "updated": "2021-09-10T11:08:22Z",
   "updatedBy": "admin",
   "url": "/d/3SpLQinmk/1-overview",
-  "version": 53
+  "version": 11
  }
 }

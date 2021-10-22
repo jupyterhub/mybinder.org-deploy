@@ -16,7 +16,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 12,
+  "id": 11,
   "links": [],
   "panels": [
    {
@@ -300,14 +300,14 @@
   "timezone": "",
   "title": "Matomo",
   "uid": "j6478uAmz",
-  "version": 5
+  "version": 2
  },
  "meta": {
   "canAdmin": true,
   "canEdit": true,
   "canSave": true,
   "canStar": true,
-  "created": "2018-10-01T23:37:32Z",
+  "created": "2020-09-22T09:29:53Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 0,
@@ -319,9 +319,9 @@
   "provisionedExternalId": "",
   "slug": "matomo",
   "type": "db",
-  "updated": "2018-10-02T04:48:24Z",
+  "updated": "2020-09-22T09:29:59Z",
   "updatedBy": "admin",
   "url": "/d/j6478uAmz/matomo",
-  "version": 5
+  "version": 2
  }
 }

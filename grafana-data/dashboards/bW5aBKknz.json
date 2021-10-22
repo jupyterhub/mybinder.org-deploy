@@ -3,7 +3,7 @@
   "annotations": {
    "list": [
     {
-     "$$hashKey": "object:58",
+     "$$hashKey": "object:134",
      "builtIn": 1,
      "datasource": "-- Grafana --",
      "enable": true,
@@ -11,252 +11,62 @@
      "iconColor": "rgba(0, 211, 255, 1)",
      "name": "Annotations & Alerts",
      "type": "dashboard"
-    },
-    {
-     "$$hashKey": "object:59",
-     "datasource": "-- Grafana --",
-     "enable": true,
-     "hide": false,
-     "iconColor": "rgba(255, 96, 96, 1)",
-     "limit": 100,
-     "name": "Deployments",
-     "showIn": 0,
-     "tags": [
-      "deployment-start"
-     ],
-     "type": "tags"
     }
    ]
   },
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 6,
-  "iteration": 1622666494848,
+  "id": 16,
   "links": [],
   "panels": [
    {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 1,
-    "fillGradient": 0,
+    "collapse": false,
+    "collapsed": false,
+    "datasource": null,
     "gridPos": {
-     "h": 7,
-     "w": 8,
+     "h": 1,
+     "w": 24,
      "x": 0,
      "y": 0
     },
-    "hiddenSeries": false,
-    "id": 4,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": false,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "expr": "sum(irate(container_cpu_usage_seconds_total{pod=~\"hub-.*\", container!=\"\"}[2m])) by (pod)",
-      "format": "time_series",
-      "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "cpu usage",
-      "refId": "A"
-     }
-    ],
-    "thresholds": [
-     {
-      "colorMode": "warning",
-      "fill": true,
-      "line": true,
-      "op": "gt",
-      "value": 1
-     }
-    ],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "JupyterHub CPU Usage",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "percentunit",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
-   },
-   {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 1,
-    "fillGradient": 0,
-    "gridPos": {
-     "h": 7,
-     "w": 8,
-     "x": 8,
-     "y": 0
-    },
-    "hiddenSeries": false,
     "id": 2,
-    "legend": {
-     "avg": true,
-     "current": true,
-     "max": true,
-     "min": true,
-     "show": false,
-     "total": false,
-     "values": true
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"binder-.*\", container!=\"\"}[2m])) by (pod)",
-      "format": "time_series",
-      "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "{{ pod }}",
-      "refId": "A"
-     }
-    ],
-    "thresholds": [
-     {
-      "colorMode": "warning",
-      "fill": true,
-      "line": true,
-      "op": "gt",
-      "value": 1.5
-     }
-    ],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "BinderHub CPU Usage (per pod)",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "percentunit",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
+    "panels": [],
+    "repeat": null,
+    "repeatIteration": null,
+    "repeatRowId": null,
+    "showTitle": true,
+    "title": "Cluster Stats",
+    "titleSize": "h6",
+    "type": "row"
    },
    {
     "aliasColors": {},
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": null,
+    "decimals": 0,
+    "description": "Count of running users, grouped by namespace\n",
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
-     "h": 7,
-     "w": 8,
-     "x": 16,
-     "y": 0
+     "h": 10,
+     "w": 24,
+     "x": 0,
+     "y": 1
     },
     "hiddenSeries": false,
     "id": 3,
     "legend": {
+     "alignAsTable": false,
      "avg": false,
      "current": false,
-     "hideEmpty": true,
-     "hideZero": true,
      "max": false,
      "min": false,
+     "rightSide": false,
      "show": true,
+     "sideWidth": null,
      "total": false,
      "values": false
     },
@@ -271,311 +81,17 @@
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"proxy-.*\", container!=\"\"}[2m])) by (container)",
-      "format": "time_series",
-      "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "{{ container }}",
-      "refId": "A"
-     }
-    ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "Proxy CPU usage",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "$$hashKey": "object:116",
-      "format": "percentunit",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     },
-     {
-      "$$hashKey": "object:117",
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
-   },
-   {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 1,
-    "fillGradient": 0,
-    "gridPos": {
-     "h": 7,
-     "w": 8,
-     "x": 0,
-     "y": 7
-    },
-    "hiddenSeries": false,
-    "id": 1,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": false,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "expr": "sum(container_memory_rss{pod=~\"hub-.*\",container!=\"\"})",
-      "format": "time_series",
-      "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "Memory usage",
-      "refId": "A"
-     }
-    ],
-    "thresholds": [
-     {
-      "colorMode": "warning",
-      "fill": true,
-      "line": true,
-      "op": "gt",
-      "value": 1000000000
-     }
-    ],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "JupyterHub Memory usage",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "bytes",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
-   },
-   {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 1,
-    "fillGradient": 0,
-    "gridPos": {
-     "h": 7,
-     "w": 8,
-     "x": 8,
-     "y": 7
-    },
-    "hiddenSeries": false,
-    "id": 6,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": false,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "expr": "sum(container_memory_rss{pod=~\"binder-.*\",container!=\"\"}) by (pod)",
-      "format": "time_series",
-      "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "{{ pod }}",
-      "refId": "A"
-     }
-    ],
-    "thresholds": [
-     {
-      "colorMode": "warning",
-      "fill": true,
-      "line": true,
-      "op": "gt",
-      "value": 1500000000,
-      "yaxis": "left"
-     }
-    ],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "Binder Memory usage",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "bytes",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
-   },
-   {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 1,
-    "fillGradient": 0,
-    "gridPos": {
-     "h": 7,
-     "w": 8,
-     "x": 16,
-     "y": 7
-    },
-    "hiddenSeries": false,
-    "id": 5,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "hideEmpty": true,
-     "hideZero": true,
-     "max": false,
-     "min": false,
-     "show": true,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
+    "repeat": null,
     "seriesOverrides": [],
     "spaceLength": 10,
     "stack": true,
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(container_memory_rss{pod=~\"proxy-.*\", container!=\"\"}) by (container)",
+      "expr": "sum(\n  kube_pod_status_phase{phase=\"Running\"}\n  * on (namespace, pod) group_right() kube_pod_labels{label_app=\"jupyterhub\", label_component=\"singleuser-server\" }\n) by (namespace)\n",
       "format": "time_series",
-      "interval": "",
       "intervalFactor": 2,
-      "legendFormat": "{{ container }}",
+      "legendFormat": "{{namespace}}",
       "refId": "A"
      }
     ],
@@ -583,7 +99,7 @@
     "timeFrom": null,
     "timeRegions": [],
     "timeShift": null,
-    "title": "Proxy Memory usage",
+    "title": "Running Users",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -599,19 +115,21 @@
     },
     "yaxes": [
      {
-      "format": "bytes",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     },
-     {
+      "decimals": 0,
       "format": "short",
       "label": null,
       "logBase": 1,
       "max": null,
-      "min": null,
+      "min": 0,
+      "show": true
+     },
+     {
+      "decimals": 0,
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
       "show": true
      }
     ],
@@ -625,23 +143,27 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": null,
+    "description": "% of total memory in the cluster currently requested by to non-placeholder pods.\n\nIf autoscaling is efficient, this should be a fairly constant, high number (>70%).\n",
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
-     "h": 7,
-     "w": 8,
+     "h": 10,
+     "w": 12,
      "x": 0,
-     "y": 14
+     "y": 11
     },
     "hiddenSeries": false,
-    "id": 7,
+    "id": 4,
     "legend": {
+     "alignAsTable": false,
      "avg": false,
      "current": false,
      "max": false,
      "min": false,
+     "rightSide": false,
      "show": true,
+     "sideWidth": null,
      "total": false,
      "values": false
     },
@@ -656,17 +178,17 @@
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
+    "repeat": null,
     "seriesOverrides": [],
     "spaceLength": 10,
     "stack": false,
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(container_memory_rss{pod=~\"prod-dind-.*\",container!=\"\"}) by (instance)",
+      "expr": "sum(\n  (\n    # Get individual container memory requests\n    kube_pod_container_resource_requests_memory_bytes\n    # Add node pool name as label\n    * on(node) group_left(label_cloud_google_com_gke_nodepool) kube_node_labels{}\n  )\n  # Ignore containers from pods that aren't currently running or scheduled\n  # FIXME: This isn't the best metric here, evaluate what is.\n  and on (pod) kube_pod_status_scheduled{condition='true'}\n  # Ignore user and node placeholder pods\n  and on (pod) kube_pod_labels{label_component!~'user-placeholder|node-placeholder'}\n) by (label_cloud_google_com_gke_nodepool)\n/\nsum(\n  # Total allocatable memory on a node\n  kube_node_status_allocatable_memory_bytes\n  # Add nodepool name as label\n  * on(node) group_left(label_cloud_google_com_gke_nodepool) kube_node_labels{}\n) by (label_cloud_google_com_gke_nodepool)\n",
       "format": "time_series",
-      "interval": "",
       "intervalFactor": 2,
-      "legendFormat": "{{instance}}",
+      "legendFormat": "{{label_cloud_google_com_gke_nodepool}}",
       "refId": "A"
      }
     ],
@@ -674,280 +196,7 @@
     "timeFrom": null,
     "timeRegions": [],
     "timeShift": null,
-    "title": "DinD builder Memory usage",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "bytes",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
-   },
-   {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 1,
-    "fillGradient": 0,
-    "gridPos": {
-     "h": 7,
-     "w": 8,
-     "x": 8,
-     "y": 14
-    },
-    "hiddenSeries": false,
-    "id": 8,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": false,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "expr": "sum(container_memory_rss{pod=~\"[[:alnum:]]+-grafana-.*\",container!=\"\"})",
-      "format": "time_series",
-      "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "{{instance}}",
-      "refId": "A"
-     }
-    ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "Grafana Memory usage",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "bytes",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
-   },
-   {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 1,
-    "fillGradient": 0,
-    "gridPos": {
-     "h": 7,
-     "w": 8,
-     "x": 16,
-     "y": 14
-    },
-    "hiddenSeries": false,
-    "id": 9,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": false,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "expr": "sum(container_memory_rss{pod=~\"[[:alnum:]]+-prometheus-server-.*\",container!=\"\"}) ",
-      "format": "time_series",
-      "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "{{instance}}",
-      "refId": "A"
-     }
-    ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "Prometheus Memory usage",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "bytes",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
-   },
-   {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 1,
-    "fillGradient": 0,
-    "gridPos": {
-     "h": 7,
-     "w": 8,
-     "x": 0,
-     "y": 21
-    },
-    "hiddenSeries": false,
-    "id": 10,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": true,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"prod-dind-.*\",container!=\"\"}[2m])) by (instance)",
-      "format": "time_series",
-      "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "{{instance}}",
-      "refId": "A"
-     }
-    ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "DinD builders CPU Usage",
+    "title": "Memory commitment %",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -966,16 +215,16 @@
       "format": "percentunit",
       "label": null,
       "logBase": 1,
-      "max": null,
-      "min": "0",
+      "max": 1,
+      "min": 0,
       "show": true
      },
      {
       "format": "short",
       "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
+      "max": 1,
+      "min": 0,
       "show": true
      }
     ],
@@ -989,23 +238,27 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": null,
+    "description": "% of total CPU in the cluster currently requested by to non-placeholder pods.\n\nJupyterHub users mostly are capped by memory, so this is not super useful.\n",
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
-     "h": 7,
-     "w": 8,
-     "x": 8,
-     "y": 21
+     "h": 10,
+     "w": 12,
+     "x": 12,
+     "y": 11
     },
     "hiddenSeries": false,
-    "id": 11,
+    "id": 5,
     "legend": {
+     "alignAsTable": false,
      "avg": false,
      "current": false,
      "max": false,
      "min": false,
-     "show": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
      "total": false,
      "values": false
     },
@@ -1020,15 +273,1422 @@
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
+    "repeat": null,
     "seriesOverrides": [],
     "spaceLength": 10,
     "stack": false,
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"[[:alnum:]]+-grafana-.*\",container!=\"\"}[2m]))",
+      "expr": "sum(\n  (\n    # Get individual container memory requests\n    kube_pod_container_resource_requests_cpu_cores\n    # Add node pool name as label\n    * on(node) group_left(label_cloud_google_com_gke_nodepool) kube_node_labels{}\n  )\n  # Ignore containers from pods that aren't currently running or scheduled\n  # FIXME: This isn't the best metric here, evaluate what is.\n  and on (pod) kube_pod_status_scheduled{condition='true'}\n  # Ignore user and node placeholder pods\n  and on (pod) kube_pod_labels{label_component!~'user-placeholder|node-placeholder'}\n) by (label_cloud_google_com_gke_nodepool)\n/\nsum(\n  # Total allocatable memory on a node\n  kube_node_status_allocatable_cpu_cores\n  # Add nodepool name as label\n  * on(node) group_left(label_cloud_google_com_gke_nodepool) kube_node_labels{}\n) by (label_cloud_google_com_gke_nodepool)\n",
       "format": "time_series",
-      "interval": "",
+      "intervalFactor": 2,
+      "legendFormat": "{{label_cloud_google_com_gke_nodepool}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "CPU commitment %",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "percentunit",
+      "label": null,
+      "logBase": 1,
+      "max": 1,
+      "min": 0,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": 1,
+      "min": 0,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": null,
+    "decimals": 0,
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 0,
+     "y": 21
+    },
+    "hiddenSeries": false,
+    "id": 6,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(kube_node_labels) by (label_cloud_google_com_gke_nodepool)",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "{{label_cloud_google_com_gke_nodepool}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "Node Count",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "decimals": 0,
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     },
+     {
+      "decimals": 0,
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": null,
+    "decimals": 0,
+    "description": "Pods in states other than 'Running'.\n\nIn a functional clusters, pods should not be in non-Running states for long.\n",
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 12,
+     "y": 21
+    },
+    "hiddenSeries": false,
+    "id": 7,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "hideZero": true,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(kube_pod_status_phase{phase!=\"Running\"}) by (phase)",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "{{phase}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "Non Running Pods",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "decimals": 0,
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     },
+     {
+      "decimals": 0,
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "collapse": false,
+    "collapsed": false,
+    "datasource": null,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 31
+    },
+    "id": 8,
+    "panels": [],
+    "repeat": null,
+    "repeatIteration": null,
+    "repeatRowId": null,
+    "showTitle": true,
+    "title": "Node Stats",
+    "titleSize": "h6",
+    "type": "row"
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": null,
+    "description": "% of available CPUs currently in use\n",
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 0,
+     "y": 32
+    },
+    "hiddenSeries": false,
+    "id": 9,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(rate(node_cpu_seconds_total{mode!=\"idle\"}[5m])) by (kubernetes_node)\n/\nsum(\n  # Rename 'node' label to 'kubernetes_node', since kube-state-metrics to match metric from\n  # kube-state-metrics to prometheus node exporter\n  label_replace(kube_node_status_capacity_cpu_cores, \"kubernetes_node\", \"$1\", \"node\", \"(.*)\")\n) by (kubernetes_node)\n",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "{{kubernetes_node}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "Node CPU Utilization %",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "percentunit",
+      "label": null,
+      "logBase": 1,
+      "max": 1,
+      "min": 0,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": 1,
+      "min": 0,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": null,
+    "description": "% of available Memory currently in use\n",
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 12,
+     "y": 32
+    },
+    "hiddenSeries": false,
+    "id": 10,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "1 - (\n  sum (\n    # Memory that can be allocated to processes when they need\n    node_memory_MemFree_bytes + # Unused bytes\n    node_memory_Cached_bytes + # Shared memory + temporary disk cache\n    node_memory_Buffers_bytes # Very temporary buffer memory cache for disk i/o\n  ) by (kubernetes_node)\n  /\n  sum(node_memory_MemTotal_bytes) by (kubernetes_node)\n)\n",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "{{kubernetes_node}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "Node Memory Utilization %",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "percentunit",
+      "label": null,
+      "logBase": 1,
+      "max": 1,
+      "min": 0,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": 1,
+      "min": 0,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": null,
+    "description": "% of each node guaranteed to pods on it\n",
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 0,
+     "y": 42
+    },
+    "hiddenSeries": false,
+    "id": 11,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(\n  # Get individual container memory limits\n  kube_pod_container_resource_requests_cpu_cores\n  # Ignore containers from pods that aren't currently running or scheduled\n  # FIXME: This isn't the best metric here, evaluate what is.\n  and on (pod) kube_pod_status_scheduled{condition='true'}\n  # Ignore user and node placeholder pods\n  and on (pod) kube_pod_labels{label_component!~'user-placeholder|node-placeholder'}\n) by (node)\n/\nsum(\n  # Get individual container memory requests\n  kube_node_status_allocatable_cpu_cores\n) by (node)\n",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "{{node}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "Node CPU Commit %",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "percentunit",
+      "label": null,
+      "logBase": 1,
+      "max": 1,
+      "min": 0,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": 1,
+      "min": 0,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": null,
+    "description": "% of each node guaranteed to pods on it\n",
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 12,
+     "y": 42
+    },
+    "hiddenSeries": false,
+    "id": 12,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(\n  # Get individual container memory limits\n  kube_pod_container_resource_requests_memory_bytes\n  # Ignore containers from pods that aren't currently running or scheduled\n  # FIXME: This isn't the best metric here, evaluate what is.\n  and on (pod) kube_pod_status_scheduled{condition='true'}\n  # Ignore user and node placeholder pods\n  and on (pod) kube_pod_labels{label_component!~'user-placeholder|node-placeholder'}\n) by (node)\n/\nsum(\n  # Get individual container memory requests\n  kube_node_status_allocatable_memory_bytes\n) by (node)\n",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "{{node}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "Node Memory Commit %",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "percentunit",
+      "label": null,
+      "logBase": 1,
+      "max": 1,
+      "min": 0,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": 1,
+      "min": 0,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "collapse": false,
+    "collapsed": false,
+    "datasource": null,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 52
+    },
+    "id": 13,
+    "panels": [],
+    "repeat": null,
+    "repeatIteration": null,
+    "repeatRowId": null,
+    "showTitle": true,
+    "title": "NFS diagnostics",
+    "titleSize": "h6",
+    "type": "row"
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": null,
+    "decimals": 0,
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 0,
+     "y": 53
+    },
+    "hiddenSeries": false,
+    "id": 14,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(rate(node_nfs_requests_total[5m])) by (kubernetes_node) > 0",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "{{kubernetes_node}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "User Nodes NFS Ops",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "decimals": 0,
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     },
+     {
+      "decimals": 0,
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": null,
+    "decimals": 0,
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 12,
+     "y": 53
+    },
+    "hiddenSeries": false,
+    "id": 15,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(rate(node_nfs_requests_total[5m])) by (kubernetes_node)",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "{{kubernetes_node}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "iowait % on each node",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "decimals": 0,
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     },
+     {
+      "decimals": 0,
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": null,
+    "decimals": 0,
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 0,
+     "y": 63
+    },
+    "hiddenSeries": false,
+    "id": 16,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(rate(node_nfs_requests_total[5m])) by (method) > 0",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "{{method}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "NFS Operation Types on user nodes",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "decimals": 0,
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     },
+     {
+      "decimals": 0,
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": null,
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 12,
+     "y": 63
+    },
+    "hiddenSeries": false,
+    "id": 17,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "avg(rate(node_cpu_seconds_total{job=\"prometheus-nfsd-server\", mode!=\"idle\"}[2m])) by (mode)",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "{{mode}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "NFS Server CPU",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": null,
+    "decimals": 0,
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 0,
+     "y": 73
+    },
+    "hiddenSeries": false,
+    "id": 18,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(rate(node_nfsd_disk_bytes_read_total[5m]))",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "Read",
+      "refId": "A"
+     },
+     {
+      "expr": "sum(rate(node_nfsd_disk_bytes_written_total[5m]))",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "Write",
+      "refId": "B"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "NFS Server Disk ops",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "decimals": 0,
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     },
+     {
+      "decimals": 0,
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": null,
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 12,
+     "y": 73
+    },
+    "hiddenSeries": false,
+    "id": 19,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(rate(node_disk_write_time_seconds_total{job=\"prometheus-nfsd-server\"}[5m])) by (device) / sum(rate(node_disk_writes_completed_total{job=\"prometheus-nfsd-server\"}[5m])) by (device)",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "{{device}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "NFS Server disk write latency",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": null,
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 0,
+     "y": 83
+    },
+    "hiddenSeries": false,
+    "id": 20,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(rate(node_disk_read_time_seconds_total{job=\"prometheus-nfsd-server\"}[5m])) by (device) / sum(rate(node_disk_reads_completed_total{job=\"prometheus-nfsd-server\"}[5m])) by (device)",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "{{device}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeRegions": [],
+    "timeShift": null,
+    "title": "NFS Server disk read latency",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false,
+     "alignLevel": null
+    }
+   },
+   {
+    "collapse": false,
+    "collapsed": false,
+    "datasource": null,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 93
+    },
+    "id": 21,
+    "panels": [],
+    "repeat": null,
+    "repeatIteration": null,
+    "repeatRowId": null,
+    "showTitle": true,
+    "title": "Support system diagnostics",
+    "titleSize": "h6",
+    "type": "row"
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": null,
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 0,
+     "y": 94
+    },
+    "hiddenSeries": false,
+    "id": 22,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "dataLinks": []
+    },
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"support-prometheus-server-.*\",namespace=\"support\"}[5m]))",
+      "format": "time_series",
       "intervalFactor": 2,
       "legendFormat": "",
       "refId": "A"
@@ -1038,7 +1698,7 @@
     "timeFrom": null,
     "timeRegions": [],
     "timeShift": null,
-    "title": "Grafana CPU Usage",
+    "title": "Prometheus CPU",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -1054,11 +1714,11 @@
     },
     "yaxes": [
      {
-      "format": "percentunit",
+      "format": "short",
       "label": null,
       "logBase": 1,
       "max": null,
-      "min": null,
+      "min": 0,
       "show": true
      },
      {
@@ -1066,7 +1726,7 @@
       "label": null,
       "logBase": 1,
       "max": null,
-      "min": null,
+      "min": 0,
       "show": true
      }
     ],
@@ -1080,114 +1740,26 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": null,
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
-     "h": 7,
-     "w": 8,
-     "x": 16,
-     "y": 21
-    },
-    "hiddenSeries": false,
-    "id": 12,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": true,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"[[:alnum:]]+-prometheus-server-.*\",container!=\"\"}[2m]))",
-      "format": "time_series",
-      "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "cpu usage",
-      "refId": "A"
-     }
-    ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "Prometheus Server CPU Usage",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "percentunit",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
-   },
-   {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 1,
-    "fillGradient": 0,
-    "gridPos": {
-     "h": 7,
+     "h": 10,
      "w": 12,
-     "x": 0,
-     "y": 28
+     "x": 12,
+     "y": 94
     },
     "hiddenSeries": false,
-    "id": 13,
+    "id": 23,
     "legend": {
+     "alignAsTable": false,
      "avg": false,
      "current": false,
      "max": false,
      "min": false,
+     "rightSide": false,
      "show": true,
+     "sideWidth": null,
      "total": false,
      "values": false
     },
@@ -1200,111 +1772,19 @@
     },
     "percentage": false,
     "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "expr": "sum(irate(container_cpu_usage_seconds_total{pod=~\"[[:alnum:]-]+-ingress[[:alnum:]-]+controller-.*\",container!=\"\"}[2m])) by (pod)",
-      "format": "time_series",
-      "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "{{pod}}",
-      "refId": "A"
-     }
-    ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "nginx Ingress CPU usage",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "percentunit",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
-   },
-   {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "description": "The amount of storage being used by prometheus\n\nadjust prometheus storage size and retention to avoid filling up",
-    "fill": 1,
-    "fillGradient": 0,
-    "gridPos": {
-     "h": 7,
-     "w": 8,
-     "x": 16,
-     "y": 28
-    },
-    "hiddenSeries": false,
-    "id": 18,
-    "interval": "",
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": true,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 2,
     "points": false,
     "renderer": "flot",
     "repeat": null,
-    "repeatDirection": null,
     "seriesOverrides": [],
     "spaceLength": 10,
     "stack": false,
     "steppedLine": false,
     "targets": [
      {
-      "expr": "prometheus_tsdb_storage_blocks_bytes",
-      "interval": "",
-      "legendFormat": "prometheus storage",
+      "expr": "sum(container_memory_working_set_bytes{pod=~\"support-prometheus-server-.*\", namespace=\"support\"})",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "",
       "refId": "A"
      }
     ],
@@ -1312,7 +1792,7 @@
     "timeFrom": null,
     "timeRegions": [],
     "timeShift": null,
-    "title": "Prometheus storage",
+    "title": "Prometheus Memory (Working Set)",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -1328,21 +1808,19 @@
     },
     "yaxes": [
      {
-      "$$hashKey": "object:178",
-      "format": "decbytes",
+      "format": "bytes",
       "label": null,
       "logBase": 1,
       "max": null,
-      "min": "0",
+      "min": 0,
       "show": true
      },
      {
-      "$$hashKey": "object:179",
       "format": "short",
       "label": null,
       "logBase": 1,
       "max": null,
-      "min": null,
+      "min": 0,
       "show": true
      }
     ],
@@ -1356,23 +1834,26 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": null,
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
-     "h": 7,
+     "h": 10,
      "w": 12,
      "x": 0,
-     "y": 35
+     "y": 104
     },
     "hiddenSeries": false,
-    "id": 15,
+    "id": 24,
     "legend": {
+     "alignAsTable": false,
      "avg": false,
      "current": false,
      "max": false,
      "min": false,
+     "rightSide": false,
      "show": true,
+     "sideWidth": null,
      "total": false,
      "values": false
     },
@@ -1387,17 +1868,17 @@
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
+    "repeat": null,
     "seriesOverrides": [],
     "spaceLength": 10,
     "stack": false,
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(irate(container_cpu_usage_seconds_total{pod=~\"user-scheduler-.*\",container!=\"\"}[2m])) by (pod)",
+      "expr": "sum(kubelet_volume_stats_available_bytes{namespace=\"support\",persistentvolumeclaim=\"support-prometheus-server\"})",
       "format": "time_series",
-      "interval": "",
       "intervalFactor": 2,
-      "legendFormat": "{{ pod }}",
+      "legendFormat": "",
       "refId": "A"
      }
     ],
@@ -1405,98 +1886,7 @@
     "timeFrom": null,
     "timeRegions": [],
     "timeShift": null,
-    "title": "user scheduler CPU usage",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "percentunit",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
-   },
-   {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 1,
-    "fillGradient": 0,
-    "gridPos": {
-     "h": 7,
-     "w": 12,
-     "x": 12,
-     "y": 35
-    },
-    "hiddenSeries": false,
-    "id": 14,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": true,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "expr": "sum(container_memory_rss{pod=~\"[[:alnum:]-]+-ingress[[:alnum:]-]+controller-.*\",container!=\"\"}) by (pod)",
-      "format": "time_series",
-      "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "{{pod}}",
-      "refId": "A"
-     }
-    ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "nginx Ingress Memory usage",
+    "title": "Prometheus Free Disk space",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -1516,7 +1906,7 @@
       "label": null,
       "logBase": 1,
       "max": null,
-      "min": "0",
+      "min": 0,
       "show": true
      },
      {
@@ -1524,7 +1914,7 @@
       "label": null,
       "logBase": 1,
       "max": null,
-      "min": null,
+      "min": 0,
       "show": true
      }
     ],
@@ -1538,23 +1928,27 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": null,
+    "decimals": 0,
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
-     "h": 7,
+     "h": 10,
      "w": 12,
      "x": 12,
-     "y": 42
+     "y": 104
     },
     "hiddenSeries": false,
-    "id": 16,
+    "id": 25,
     "legend": {
+     "alignAsTable": false,
      "avg": false,
      "current": false,
      "max": false,
      "min": false,
+     "rightSide": false,
      "show": true,
+     "sideWidth": null,
      "total": false,
      "values": false
     },
@@ -1569,25 +1963,32 @@
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
+    "repeat": null,
     "seriesOverrides": [],
     "spaceLength": 10,
     "stack": false,
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(container_memory_rss{pod=~\"user-scheduler-.*\",container!=\"\"}) by (pod)",
+      "expr": "sum(rate(container_network_receive_bytes_total{pod=~\"support-prometheus-server-.*\",namespace=\"support\"}[5m]))",
       "format": "time_series",
-      "interval": "",
       "intervalFactor": 2,
-      "legendFormat": "{{ pod }}",
+      "legendFormat": "receive",
       "refId": "A"
+     },
+     {
+      "expr": "sum(rate(container_network_send_bytes_total{pod=~\"support-prometheus-server-.*\",namespace=\"support\"}[5m]))",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "send",
+      "refId": "B"
      }
     ],
     "thresholds": [],
     "timeFrom": null,
     "timeRegions": [],
     "timeShift": null,
-    "title": "user scheduler Memory usage",
+    "title": "Prometheus Network Usage",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -1603,19 +2004,21 @@
     },
     "yaxes": [
      {
+      "decimals": 0,
       "format": "bytes",
       "label": null,
       "logBase": 1,
       "max": null,
-      "min": "0",
+      "min": 0,
       "show": true
      },
      {
+      "decimals": 0,
       "format": "short",
       "label": null,
       "logBase": 1,
       "max": null,
-      "min": null,
+      "min": 0,
       "show": true
      }
     ],
@@ -1625,34 +2028,18 @@
     }
    }
   ],
-  "refresh": "1m",
+  "refresh": "",
   "schemaVersion": 22,
   "style": "dark",
-  "tags": [],
+  "tags": [
+   "jupyterhub",
+   "kubernetes"
+  ],
   "templating": {
-   "list": [
-    {
-     "current": {
-      "tags": [],
-      "text": "prometheus",
-      "value": "prometheus"
-     },
-     "hide": 0,
-     "includeAll": false,
-     "label": null,
-     "multi": false,
-     "name": "cluster",
-     "options": [],
-     "query": "prometheus",
-     "refresh": 1,
-     "regex": "",
-     "skipUrlSync": false,
-     "type": "datasource"
-    }
-   ]
+   "list": []
   },
   "time": {
-   "from": "now-1h",
+   "from": "now-6h",
    "to": "now"
   },
   "timepicker": {
@@ -1680,34 +2067,34 @@
     "30d"
    ]
   },
-  "timezone": "",
-  "title": "Components Resource Metrics",
-  "uid": "GYEYQm7ik",
+  "timezone": "browser",
+  "title": "Cluster Information",
+  "uid": "bW5aBKknz",
   "variables": {
    "list": []
   },
-  "version": 14
+  "version": 6
  },
  "meta": {
   "canAdmin": true,
   "canEdit": true,
   "canSave": true,
   "canStar": true,
-  "created": "2020-09-22T09:29:52Z",
-  "createdBy": "admin",
+  "created": "2021-06-28T08:38:58Z",
+  "createdBy": "Anonymous",
   "expires": "0001-01-01T00:00:00Z",
-  "folderId": 0,
-  "folderTitle": "General",
-  "folderUrl": "",
+  "folderId": 15,
+  "folderTitle": "JupyterHub Default Dashboards",
+  "folderUrl": "/dashboards/f/70E5EE84-1217-4021-A89E-1E3DE0566D93/jupyterhub-default-dashboards",
   "hasAcl": false,
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
-  "slug": "components-resource-metrics",
+  "slug": "cluster-information",
   "type": "db",
-  "updated": "2021-06-02T20:51:10Z",
+  "updated": "2021-06-28T09:57:09Z",
   "updatedBy": "admin",
-  "url": "/d/GYEYQm7ik/components-resource-metrics",
-  "version": 14
+  "url": "/d/bW5aBKknz/cluster-information",
+  "version": 6
  }
 }
