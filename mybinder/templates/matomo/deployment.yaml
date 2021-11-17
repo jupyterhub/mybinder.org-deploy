@@ -55,7 +55,7 @@ spec:
             mountPath: /etc/matomo-config-rw
       containers:
       - name: matomo
-        image: matomo:3.5.1-apache
+        image: matomo:3.14.1-apache
         volumeMounts:
           - name: matomo-config-rw
             mountPath: /var/www/html/config/
