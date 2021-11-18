@@ -54,6 +54,7 @@ binderhub:
         - 1094 # xroot
         - 1095 # xroot
         - 16286 # Wolfram Engine on-demand licensing
+        - 4001 # IPFS
       cidr: 0.0.0.0/0
     ingress:
       bannedIps: []
