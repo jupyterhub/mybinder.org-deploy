@@ -116,7 +116,7 @@ binderhub:
 
     BinderHub:
       use_registry: true
-      build_image: quay.io/jupyterhub/repo2docker:2021.08.0-24.g4da2e1e
+      build_image: quay.io/jupyterhub/repo2docker:2021.08.0-35.g00769c0
       per_repo_quota: 100
       per_repo_quota_higher: 200
       build_memory_limit: "3G"
