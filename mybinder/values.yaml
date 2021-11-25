@@ -113,6 +113,12 @@ binderhub:
           # 2021-11-23
           config:
             quota: 500
+      spec_config:
+        - pattern: ^inchinn1/Hill-fiiting-to-spike-data-21-22.*
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/2061
+          # 2021-11-23
+          config:
+            quota: 300
 
     BinderHub:
       use_registry: true
