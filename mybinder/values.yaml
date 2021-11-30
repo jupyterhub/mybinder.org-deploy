@@ -98,6 +98,11 @@ binderhub:
           # 2021-11-24
           config:
             quota: 500
+        - pattern: ^inchinn1/hill-fiiting-to-spike-data-21-22.*
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/2079
+          # 2021-12-03,07
+          config:
+            quota: 400
 
     GitRepoProvider:
       banned_specs:
