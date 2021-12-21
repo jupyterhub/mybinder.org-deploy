@@ -24,6 +24,7 @@ from tornado.web import RequestHandler
 CONFIG = {
     "check": {"period": 10, "jitter": 0.1, "retries": 5, "timeout": 2},
     "load_balancer": "rendezvous",  # or "random"
+    "pod_headroom": 10,  # number of available slots to consider a member 'available'
     "hosts": {
         "gke": dict(
             url="https://gke.mybinder.org",
@@ -248,12 +249,22 @@ async def health_check(host, active_hosts):
                 )
                 health = json.loads(response.body)
                 for check in health["checks"]:
-                    # pod quota is a soft check
-                    if check["service"] == "Pod quota":
-                        if not check["ok"]:
+                    if not check["ok"]:
+                        raise FailedCheck(f"{host} unhealthy: {check}")
+                    if (
+                        check["service"] == "Pod quota"
+                        and check["quota"] is not None
+                        and CONFIG["pod_headroom"]
+                    ):
+                        # apply headroom so we don't hit the hard pod limit after redirecting
+                        if (
+                            check["total_pods"] + CONFIG["pod_headroom"]
+                            >= check["quota"]
+                        ):
                             raise FailedCheck(
-                                "{} is over its quota: {}".format(host, check)
+                                f"{host} is approaching pod quota: {check['total_pods']}/{check['quota']}"
                             )
+
                         break
                 # check versions
                 response = await client.fetch(
