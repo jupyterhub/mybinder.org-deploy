@@ -75,34 +75,20 @@ binderhub:
         # ferarussia is clearly a fake GitHub account created by GuitarsAI to get around ban
         # it was created the day GuitarsAI was blocked and does the same thing
         - ^ferarussia/.*
-      high_quota_specs:
-        - ^jupyterlab/.*
-        - ^jupyter/.*
-        - ^jupyterhub/.*
-        - ^jupyter-widgets/.*
+      high_quota_specs: []
+        # - ^jupyterlab/.*
+        # - ^jupyter/.*
+        # - ^jupyterhub/.*
+        # - ^jupyter-widgets/.*
       spec_config:
         - pattern: ^ipython/ipython-in-depth.*
           config:
-            quota: 128
+            quota: 100
       # - pattern: ^github-owner/github-repo-prefix.*
       #   # YYYY-MM-DD of workshop
       #   config:
       #     quota: 123
-        - pattern: ^andwatson/interseismic_practical.*
-          # https://github.com/jupyterhub/mybinder.org-deploy/issues/2061
-          # 2021-11-24
-          config:
-            quota: 500
-        - pattern: ^matthew-gaddes/insar_workshop.*
-          # https://github.com/jupyterhub/mybinder.org-deploy/issues/2061
-          # 2021-11-24
-          config:
-            quota: 500
-        - pattern: ^inchinn1/hill-fiiting-to-spike-data-21-22.*
-          # https://github.com/jupyterhub/mybinder.org-deploy/issues/2079
-          # 2021-12-03,07
-          config:
-            quota: 400
+
 
     GitRepoProvider:
       banned_specs:
