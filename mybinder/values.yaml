@@ -539,6 +539,7 @@ federationRedirect:
     retries: 5
     timeout: 2
   load_balancer: "rendezvous"
+  pod_headroom: 10
   hosts:
     gke:
       prime: true
