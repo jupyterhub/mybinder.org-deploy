@@ -3,6 +3,7 @@ projectName: binderhub-288415
 binderhub:
   config:
     BinderHub:
+      pod_quota: 20
       hub_url: https://hub.gke2.staging.mybinder.org
       badge_base_url: https://staging.mybinder.org
       image_prefix: gcr.io/binderhub-288415/r2d-staging-g5b5b759-
