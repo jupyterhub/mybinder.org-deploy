@@ -1,4 +1,4 @@
 sphinx==4.3.2
 recommonmark==0.7.1
-pydata-sphinx-theme==0.7.2
+pydata-sphinx-theme==0.8.0
 docutils==0.16 # 0.17 breaks https://github.com/readthedocs/recommonmark/issues/220
