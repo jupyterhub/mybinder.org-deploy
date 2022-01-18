@@ -12,7 +12,7 @@ provider "google" {
 }
 
 locals {
-  gke_version        = "1.17.14-gke.400"
+  gke_version        = "1.19.14-gke.1900"
   location           = "us-central1" # for regional clusters
   federation_members = ["gke-old", "gesis", "turing", "ovh"]
 }
@@ -61,6 +61,14 @@ resource "google_container_node_pool" "core" {
       disable-legacy-endpoints = "true"
     }
   }
+
+  # do not recreate pools that have been auto-upgraded
+
+  lifecycle {
+    ignore_changes = [
+        version
+    ]
+  }
 }
 
 resource "google_container_node_pool" "user" {
@@ -96,6 +104,14 @@ resource "google_container_node_pool" "user" {
     metadata = {
       disable-legacy-endpoints = "true"
     }
+  }
+
+  # do not recreate pools that have been auto-upgraded
+
+  lifecycle {
+    ignore_changes = [
+        version
+    ]
   }
 }
 
