@@ -66,7 +66,7 @@ resource "google_container_node_pool" "core" {
 
   lifecycle {
     ignore_changes = [
-        version
+      version
     ]
   }
 }
@@ -80,8 +80,8 @@ resource "google_container_node_pool" "user" {
   version        = local.gke_version
 
   autoscaling {
-    min_node_count = 2
-    max_node_count = 12
+    min_node_count = 0
+    max_node_count = 1
   }
 
 
@@ -110,7 +110,51 @@ resource "google_container_node_pool" "user" {
 
   lifecycle {
     ignore_changes = [
-        version
+      version
+    ]
+  }
+}
+
+resource "google_container_node_pool" "user1" {
+  name     = "user-202201"
+  cluster  = module.mybinder.cluster_name
+  location = local.location # location of *cluster*
+  # node_locations lets us specify a single-zone regional cluster:
+  node_locations = ["${local.location}-a"]
+  version        = local.gke_version
+
+  autoscaling {
+    min_node_count = 2
+    max_node_count = 12
+  }
+
+
+  node_config {
+    machine_type    = "n1-highmem-8"
+    disk_size_gb    = 500
+    disk_type       = "pd-ssd"
+    local_ssd_count = 1
+
+    labels = {
+      "mybinder.org/pool-type" = "users"
+    }
+    # https://www.terraform.io/docs/providers/google/r/container_cluster.html#oauth_scopes-1
+    oauth_scopes = [
+      "storage-ro",
+      "logging-write",
+      "monitoring",
+    ]
+
+    metadata = {
+      disable-legacy-endpoints = "true"
+    }
+  }
+
+  # do not recreate pools that have been auto-upgraded
+
+  lifecycle {
+    ignore_changes = [
+      version
     ]
   }
 }
