@@ -12,7 +12,7 @@ provider "google" {
 }
 
 locals {
-  gke_version        = "1.17.14-gke.400"
+  gke_version        = "1.19.14-gke.1900"
   location           = "us-central1" # for regional clusters
   federation_members = ["gke-old", "gesis", "turing", "ovh"]
 }
@@ -28,6 +28,14 @@ module "mybinder" {
 }
 
 # define node pools here, too hard to encode with variables
+# note: when upgrading a node pool:
+# 1. copy the pool to be upgraded and change the name
+# 2. make the planned changes
+# 3. deploy them with terraform
+# 4. drain old pools (takes a while for user pools)
+# 5. once drained, remove old pool(s) here
+# 6. deploy again to remove old pool
+
 resource "google_container_node_pool" "core" {
   name     = "core-202009"
   cluster  = module.mybinder.cluster_name
@@ -36,8 +44,8 @@ resource "google_container_node_pool" "core" {
   node_locations = ["${local.location}-a"]
 
   autoscaling {
-    min_node_count = 1
-    max_node_count = 4
+    min_node_count = 0
+    max_node_count = 1
   }
 
   version = local.gke_version
@@ -61,6 +69,57 @@ resource "google_container_node_pool" "core" {
       disable-legacy-endpoints = "true"
     }
   }
+
+  # do not recreate pools that have been auto-upgraded
+
+  lifecycle {
+    ignore_changes = [
+      version
+    ]
+  }
+}
+
+resource "google_container_node_pool" "core1" {
+  name     = "core-202201"
+  cluster  = module.mybinder.cluster_name
+  location = local.location # location of *cluster*
+  # node_locations lets us specify a single-zone regional cluster:
+  node_locations = ["${local.location}-a"]
+
+  autoscaling {
+    min_node_count = 1
+    max_node_count = 4
+  }
+
+  version = local.gke_version
+
+  node_config {
+    machine_type = "n1-highmem-4"
+    disk_size_gb = 250
+    disk_type    = "pd-balanced"
+
+    labels = {
+      "mybinder.org/pool-type" = "core"
+    }
+    # https://www.terraform.io/docs/providers/google/r/container_cluster.html#oauth_scopes-1
+    oauth_scopes = [
+      "storage-ro",
+      "logging-write",
+      "monitoring",
+    ]
+
+    metadata = {
+      disable-legacy-endpoints = "true"
+    }
+  }
+
+  # do not recreate pools that have been auto-upgraded
+
+  lifecycle {
+    ignore_changes = [
+      version
+    ]
+  }
 }
 
 resource "google_container_node_pool" "user" {
@@ -72,8 +131,8 @@ resource "google_container_node_pool" "user" {
   version        = local.gke_version
 
   autoscaling {
-    min_node_count = 2
-    max_node_count = 12
+    min_node_count = 0
+    max_node_count = 1
   }
 
 
@@ -96,6 +155,58 @@ resource "google_container_node_pool" "user" {
     metadata = {
       disable-legacy-endpoints = "true"
     }
+  }
+
+  # do not recreate pools that have been auto-upgraded
+
+  lifecycle {
+    ignore_changes = [
+      version
+    ]
+  }
+}
+
+resource "google_container_node_pool" "user1" {
+  name     = "user-202201"
+  cluster  = module.mybinder.cluster_name
+  location = local.location # location of *cluster*
+  # node_locations lets us specify a single-zone regional cluster:
+  node_locations = ["${local.location}-a"]
+  version        = local.gke_version
+
+  autoscaling {
+    min_node_count = 2
+    max_node_count = 12
+  }
+
+
+  node_config {
+    machine_type    = "n1-highmem-8"
+    disk_size_gb    = 800
+    disk_type       = "pd-balanced"
+    local_ssd_count = 1
+
+    labels = {
+      "mybinder.org/pool-type" = "users"
+    }
+    # https://www.terraform.io/docs/providers/google/r/container_cluster.html#oauth_scopes-1
+    oauth_scopes = [
+      "storage-ro",
+      "logging-write",
+      "monitoring",
+    ]
+
+    metadata = {
+      disable-legacy-endpoints = "true"
+    }
+  }
+
+  # do not recreate pools that have been auto-upgraded
+
+  lifecycle {
+    ignore_changes = [
+      version
+    ]
   }
 }
 
