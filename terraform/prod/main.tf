@@ -86,6 +86,7 @@ resource "google_container_node_pool" "core1" {
   # node_locations lets us specify a single-zone regional cluster:
   node_locations = ["${local.location}-a"]
 
+  initial_node_count = 1
   autoscaling {
     min_node_count = 1
     max_node_count = 4
@@ -117,7 +118,8 @@ resource "google_container_node_pool" "core1" {
 
   lifecycle {
     ignore_changes = [
-      version
+      version,
+      initial_node_count,
     ]
   }
 }
@@ -174,6 +176,7 @@ resource "google_container_node_pool" "user1" {
   node_locations = ["${local.location}-a"]
   version        = local.gke_version
 
+  initial_node_count = 2
   autoscaling {
     min_node_count = 2
     max_node_count = 12
@@ -205,7 +208,8 @@ resource "google_container_node_pool" "user1" {
 
   lifecycle {
     ignore_changes = [
-      version
+      version,
+      initial_node_count,
     ]
   }
 }
