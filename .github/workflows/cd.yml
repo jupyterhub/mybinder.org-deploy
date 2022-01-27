@@ -98,7 +98,7 @@ jobs:
 
       # Action Repo: https://github.com/google-github-actions/setup-gcloud
       - name: "Stage 1: Install gcloud ${{ env.GCLOUD_SDK_VERION }}"
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@v0
         with:
           version: ${{ env.GCLOUD_SDK_VERION }}
 
