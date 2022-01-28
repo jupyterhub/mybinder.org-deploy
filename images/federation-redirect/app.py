@@ -254,7 +254,10 @@ async def health_check(host, active_hosts):
                 versions = json.loads(response.body)
                 # if this is the prime host store the versions so we can compare to them later
                 if all_hosts[host].get("prime", False):
-                    CONFIG["versions"] = versions
+                    old_versions = CONFIG.get("versions", None)
+                    if old_versions != versions:
+                        app_log.info(f"Updating prime versions {old_versions}->{versions}")
+                        CONFIG["versions"] = versions
                 # check if this cluster is on the same versions as the prime
                 # w/o information about the prime's version we allow each
                 # cluster to be on its own versions
