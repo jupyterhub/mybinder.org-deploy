@@ -244,6 +244,31 @@ async def health_check(host, active_hosts):
                 # TODO we could use `asyncio.gather()` and fetch health and versions in parallel
                 # raises an `HTTPError` if the request returned a non-200 response code
                 # health url returns 503 if a (hard check) service is unhealthy
+
+                # check versions
+                # run this first, because it updates the prime version to check against,
+                # and we don't want to skip that if the prime cluster is otherwise unhealthy
+                response = await client.fetch(
+                    all_hosts[host]["versions"], request_timeout=check_config["timeout"]
+                )
+                versions = json.loads(response.body)
+                # if this is the prime host store the versions so we can compare to them later
+                if all_hosts[host].get("prime", False):
+                    old_versions = CONFIG.get("versions", None)
+                    if old_versions != versions:
+                        app_log.info(f"Updating prime versions {old_versions}->{versions}")
+                        CONFIG["versions"] = versions
+                # check if this cluster is on the same versions as the prime
+                # w/o information about the prime's version we allow each
+                # cluster to be on its own versions
+                if versions != CONFIG.get("versions", versions):
+                    raise FailedCheck(
+                        "{} has different versions ({}) than prime ({})".format(
+                            host, versions, CONFIG["versions"]
+                        )
+                    )
+
+                # check health
                 response = await client.fetch(
                     all_hosts[host]["health"], request_timeout=check_config["timeout"]
                 )
@@ -266,23 +291,6 @@ async def health_check(host, active_hosts):
                             )
 
                         break
-                # check versions
-                response = await client.fetch(
-                    all_hosts[host]["versions"], request_timeout=check_config["timeout"]
-                )
-                versions = json.loads(response.body)
-                # if this is the prime host store the versions so we can compare to them later
-                if all_hosts[host].get("prime", False):
-                    CONFIG["versions"] = versions
-                # check if this cluster is on the same versions as the prime
-                # w/o information about the prime's version we allow each
-                # cluster to be on its own versions
-                if versions != CONFIG.get("versions", versions):
-                    raise FailedCheck(
-                        "{} has different versions ({}) than prime ({})".format(
-                            host, versions, CONFIG["versions"]
-                        )
-                    )
             except FailedCheck:
                 # don't retry failures such as quotas/version checks
                 # those aren't likely to change in 1s
