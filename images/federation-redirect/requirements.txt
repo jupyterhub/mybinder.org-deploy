@@ -4,6 +4,8 @@
 #
 #    pip-compile
 #
+prometheus-client==0.13.1
+    # via -r requirements.in
 pycurl==7.44.1
     # via -r requirements.in
 tornado==6.1
