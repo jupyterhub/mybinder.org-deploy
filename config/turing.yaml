@@ -97,7 +97,7 @@ grafana:
 
 prometheus:
   server:
-    retention: 30d
+    retention: 21d
     ingress:
       annotations:
         kubernetes.io/ingress.class: nginx
@@ -111,7 +111,7 @@ prometheus:
             - prometheus.turing.mybinder.org
           secretName: turing-prometheus-tls-crt
     persistentVolume:
-      size: 32Gi
+      size: 64Gi
 
 ingress-nginx:
   controller:
