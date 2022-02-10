@@ -49,6 +49,8 @@ spec:
         image: {{ .Values.minesweeper.image }}
         securityContext:
           # we are running with hostPID, but want extremely limited capabilities
+          # adding CAP_KILL doesn't seem to work without `privileged`, too
+          privileged: true
           capabilities:
             drop:
               - all
