@@ -98,10 +98,12 @@ binderhub:
         - ^https%3A%2F%2Fframagit.org%2FCecGhesq%2Flic_mdf_nsi_1.*
         - ^(git|https?)%3A%2F%2Fnotabug.org%2FulslcuRux3Y%2F.*
         - ^(git|https?)%3A%2F%2Fgitlab.com%2Fjasmt507%2F.*
+        - ^(git|https?)%3A%2F%2Fgitlab.com%2Fh4j3s1978%2F.*
         - .*%2Fabooz.*
 
     GitLabRepoProvider:
       banned_specs:
+        - ^h4j3s1978%2F.*
         - ^jasmt507%2F.*
         - .*%2Fabooz.*
       spec_config:
