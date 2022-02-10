@@ -222,7 +222,7 @@ jobs:
       # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idif
       - name: "Stage 1: Install gcloud ${{ env.GCLOUD_SDK_VERION }}"
         if: matrix.federation_member == 'prod'
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@v0
         with:
           version: ${{ env.GCLOUD_SDK_VERION }}
 
