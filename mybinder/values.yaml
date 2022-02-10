@@ -66,8 +66,6 @@ binderhub:
       banned_specs:
         # e.g. '^org/repo.*'
         - ^imhajes/.*
-        - .*(2F|/)jasmt.*
-        - .*(2F|/)abooz.*
         - ^ines/spacy-binder.*
         - ^soft4voip/rak.*
         - ^hmharshit/cn-ait.*
@@ -99,8 +97,13 @@ binderhub:
         - ^https%3A%2F%2Fjovian.ml%2Fapi%2Fgit%2F.*
         - ^https%3A%2F%2Fframagit.org%2FCecGhesq%2Flic_mdf_nsi_1.*
         - ^(git|https?)%3A%2F%2Fnotabug.org%2FulslcuRux3Y%2F.*
+        - ^(git|https?)%3A%2F%2Fgitlab.com%2Fjasmt507%2F.*
+        - .*%2Fabooz.*
 
     GitLabRepoProvider:
+      banned_specs:
+        - ^jasmt507%2F.*
+        - .*%2Fabooz.*
       spec_config:
         - pattern: ^comet_licsar/licsbas.*
           # https://github.com/jupyterhub/mybinder.org-deploy/issues/2061
