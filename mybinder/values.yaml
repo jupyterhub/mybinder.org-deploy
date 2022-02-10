@@ -66,8 +66,8 @@ binderhub:
       banned_specs:
         # e.g. '^org/repo.*'
         - ^imhajes/.*
-        - .*/jasmt.*
-        - .*/abooz.*
+        - .*(2F|/)jasmt.*
+        - .*(2F|/)abooz.*
         - ^ines/spacy-binder.*
         - ^soft4voip/rak.*
         - ^hmharshit/cn-ait.*
