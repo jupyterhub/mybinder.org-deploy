@@ -19,6 +19,7 @@ import json
 import os
 import pprint
 import re
+import signal
 import socket
 import sys
 import threading
@@ -48,6 +49,7 @@ hostname = os.environ.get("NODE_NAME", socket.gethostname())
 default_config = {
     "userid": 1000,
     "inspect_procs_without_pod": False,
+    "inspect_dind": True,
     "threads": 8,
     "interval": 300,
     "namespace": os.environ.get("NAMESPACE", "default"),
@@ -190,6 +192,40 @@ def get_all_pod_uids():
     return pod_uids
 
 
+def get_dind_procs():
+    """Return list of dind container processes
+
+    Identified by cgroup
+    """
+
+    procs = []
+    for cgroup_file in glob.glob("/proc/[0-9]*/cgroup"):
+        pid = int(cgroup_file.split("/")[-2])
+
+        try:
+            with open(cgroup_file) as f:
+                cgroups = f.read()
+
+        except FileNotFoundError:
+            # process deleted, ignore
+            continue
+        # the dind-created cgroups for build containers
+        # are nested under an extra /docker/ level below the dind pod's own cgroup
+        # dind pod itself: /kubepods/burstable/pod{u-u-i-d}/{abc123}
+        # container run by dind: {dind_pod_cgroup}/docker/{def456}
+        m = re.search("/pod[^/]+/[^/]+/docker/(.+)", cgroups)
+        if m is None:
+            # not a dind proc
+            continue
+
+        try:
+            proc_dict = psutil.Process(pid).as_dict(config["proc_attrs"])
+        except psutil.NoSuchProcess:
+            pass
+        procs.append(Proc(**proc_dict))
+    return procs
+
+
 def associate_pods_procs(pods, procs):
     """Associate pods and processes
     For all pods, defines pod["minesweeper"]["procs"] = list_of_procs_in_pod
@@ -322,6 +358,23 @@ async def node_report(pods=None, userid=1000):
         )
         for proc in suspicious_procs_without_pod:
             print(f"  {proc.pid}: {proc.cmd}")
+
+    # report on suspicious dind processes
+    if config["inspect_dind"]:
+        dind_procs = [inspect_process(p) for p in get_dind_procs()]
+        print(f"Total dind processes for {hostname}: {len(dind_procs)}")
+        for proc in dind_procs:
+            if proc.should_terminate:
+                print(f"dind process should terminate: {proc}")
+                try:
+                    os.kill(proc.pid, signal.SIGKILL)
+                except OSError as e:
+                    print(f"Failed to kill {proc}: {e}")
+            elif proc.suspicious:
+                print(f"dind process is suspicious: {proc}")
+        suspicious_dind_procs_without_pod = [
+            p for p in procs_without_pod if p.suspicious
+        ]
 
     if report_futures:
         await asyncio.gather(*report_futures)
