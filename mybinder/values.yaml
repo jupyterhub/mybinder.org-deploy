@@ -143,6 +143,11 @@ binderhub:
           console.log("Loading Matomo tracking, since Do Not Track is off");
             var _paq = _paq || [];
             /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+            // this is matomo's own respect-DoNotTrack
+            // should be redundant, but good to be extra explicit
+            _paq.push(["setDoNotTrack", true]);
+            // disable tracking cookies
+            _paq.push(["disableCookies"]);
             _paq.push(['trackPageView']);
             (function() {
               var u="//" + window.location.hostname + "/matomo/";
