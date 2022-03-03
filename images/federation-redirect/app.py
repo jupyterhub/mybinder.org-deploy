@@ -193,7 +193,7 @@ class RedirectHandler(RequestHandler):
         if not hosts:
             # no healthy hosts, allow routing to unhealthy 'prime' host only
             hosts = {key: host for key, host in CONFIG["hosts"].items() if host.get("prime")}
-            self.log.warning(f"Using unhealthy prime host(s) {list(hosts)} because zero hosts are healthy")
+            app_log.warning(f"Using unhealthy prime host(s) {list(hosts)} because zero hosts are healthy")
         self.host_names = [c["url"] for c in hosts.values() if c["weight"] > 0]
         self.host_weights = [c["weight"] for c in hosts.values() if c["weight"] > 0]
 
