@@ -190,6 +190,10 @@ class RedirectHandler(RequestHandler):
     def prepare(self):
         # copy hosts config in case it changes while we are iterating over it
         hosts = dict(self.settings["hosts"])
+        if not hosts:
+            # no healthy hosts, allow routing to unhealthy 'prime' host only
+            hosts = {key: host for key, host in CONFIG["hosts"].items() if host.get("prime")}
+            self.log.warning(f"Using unhealthy prime host(s) {list(hosts)} because zero hosts are healthy")
         self.host_names = [c["url"] for c in hosts.values() if c["weight"] > 0]
         self.host_weights = [c["weight"] for c in hosts.values() if c["weight"] > 0]
 
@@ -310,21 +314,11 @@ async def health_check(host, active_hosts):
     except Exception as e:
         app_log.warning(f"{host} is unhealthy: {e}")
         if host in active_hosts:
-            # prime hosts are never removed, they always get traffic and users
-            # will see what ever healthy or unhealthy state they are in
-            # this protects us from the federation ending up with zero active
-            # hosts because of a glitch somewhere in the health checks
-            if all_hosts[host].get("prime", False):
-                app_log.warning(
-                    "{} has NOT been removed because it is a prime ({})".format(
-                        host, str(e)
-                    )
-                )
-
-            else:
-                # remove the host from the rotation for a while
-                active_hosts.pop(host)
-                app_log.warning(f"{host} has been removed from the rotation")
+            # remove the host from the rotation for a while
+            # prime hosts may still receive traffic when unhealthy
+            # _if_ all other hosts are also unhealthy
+            active_hosts.pop(host)
+            app_log.warning(f"{host} has been removed from the rotation")
 
         # wait longer than usual to check unhealthy host again
         jitter = check_config["jitter"] * (0.5 - random.random())
