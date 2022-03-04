@@ -26,6 +26,7 @@ Incident history
 .. toctree::
    :maxdepth: 1
 
+   2022-01-27-prime-version.md
    2020-07-09-simultaneous-launches-scipy.md
    2019-04-03-ingress-cordoned
    2019-03-24-r2d-upgrade
