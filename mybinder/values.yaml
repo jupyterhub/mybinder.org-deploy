@@ -85,6 +85,9 @@ binderhub:
         - pattern: ^ipython/ipython-in-depth.*
           config:
             quota: 100
+        - pattern: ^petlja/.*
+          config:
+            quota: 50
       # - pattern: ^github-owner/github-repo-prefix.*
       #   # YYYY-MM-DD of workshop
       #   config:
