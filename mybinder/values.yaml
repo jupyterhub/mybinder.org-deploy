@@ -539,7 +539,7 @@ federationRedirect:
     period: 10
     jitter: 0.1
     retries: 5
-    timeout: 2
+    timeout: 5
   load_balancer: "rendezvous"
   pod_headroom: 10
   hosts:
