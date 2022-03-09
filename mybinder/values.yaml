@@ -536,11 +536,11 @@ federationRedirect:
     name: jupyterhub/mybinder.org-federation-redirect
     tag: 'set-by-chartpress'
   check:
-    period: 10
+    period: 15
     jitter: 0.1
     retries: 5
     timeout: 5
-    failed_period: 300
+    failed_period: 90
   load_balancer: "rendezvous"
   pod_headroom: 10
   hosts:

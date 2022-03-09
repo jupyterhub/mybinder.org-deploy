@@ -64,6 +64,11 @@ def get_config(config_path):
     with open(config_path) as f:
         config = json.load(f)
 
+    # merge default config
+    config.setdefault("check", CONFIG["check"])
+    for key in CONFIG["check"]:
+        config["check"].setdefault(key, CONFIG["check"][key])
+
     for h in list(config["hosts"].keys()):
         # Remove empty entries from CONFIG["hosts"], these can happen because we
         # can't remove keys in our helm templates/config files. All we can do is
