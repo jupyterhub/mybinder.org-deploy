@@ -1,6 +1,6 @@
 ARG DIST=buster
 # build in non-slim image, which has compilation dependencies
-FROM python:3.8-$DIST as builder
+FROM python:3.9-$DIST as builder
 
 # RUN apt-get -y update
 
@@ -8,7 +8,7 @@ COPY requirements.txt requirements.txt
 
 RUN python3 -m pip wheel -r requirements.txt -w /wheelhouse
 
-FROM python:3.8-slim-$DIST
+FROM python:3.9-slim-$DIST
 
 # pycurl requires libcurl
 RUN apt-get -y update \

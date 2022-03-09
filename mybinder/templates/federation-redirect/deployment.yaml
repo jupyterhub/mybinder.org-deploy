@@ -20,6 +20,8 @@ spec:
         release: {{ .Release.Name }}
       annotations:
         checksum/configmap: {{ include (print $.Template.BasePath "/federation-redirect/configmap.yaml") . | sha256sum }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
     spec:
       nodeSelector: {{ .Values.federationRedirect.nodeSelector | toJson }}
       affinity:
