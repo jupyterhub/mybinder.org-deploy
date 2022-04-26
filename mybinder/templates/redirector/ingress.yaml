@@ -1,4 +1,4 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: redirector
@@ -15,9 +15,12 @@ spec:
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: redirector
-              servicePort: 80
+              service:
+                name: redirector
+                port:
+                  number: 80
     {{ end }}
   tls:
     - secretName: {{ .Values.redirector.ingress.tls.secretName }}
