@@ -365,6 +365,7 @@ binderhub:
                 - NET_ADMIN
 
 ingress-nginx:
+  enabled: true
   rbac:
     create: true
   defaultBackend:
@@ -441,6 +442,7 @@ static:
       secretName: kubelego-tls-static
 
 grafana:
+  enabled: true
   ingress:
     enabled: true
     annotations:
@@ -465,6 +467,7 @@ grafana:
       allow_embedding: true
 
 prometheus:
+  enabled: true
   nodeExporter:
     updateStrategy:
       type: RollingUpdate

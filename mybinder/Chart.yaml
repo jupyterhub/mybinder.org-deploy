@@ -16,6 +16,7 @@ dependencies:
   - name: ingress-nginx
     version: 2.13.0
     repository: https://kubernetes.github.io/ingress-nginx
+    condition: ingress-nginx.enabled
 
   # Prometheus for collection of metrics.
   # Source code:   https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus
@@ -27,6 +28,7 @@ dependencies:
   - name: prometheus
     version: 11.16.9
     repository: https://prometheus-community.github.io/helm-charts
+    condition: prometheus.enabled
 
   # Grafana for dashboarding of metrics.
   # Source code:   https://github.com/grafana/helm-charts/tree/main/charts/grafana
@@ -40,6 +42,7 @@ dependencies:
   - name: grafana
     version: 6.17.1
     repository: https://grafana.github.io/helm-charts
+    condition: grafana.enabled
 
   # BinderHub
   # Source code:    https://github.com/jupyterhub/binderhub/tree/master/helm-chart
