@@ -177,11 +177,11 @@ jobs:
             hub_url: https://hub.gke.mybinder.org
             chartpress_args: ""
             helm_version: ""
-           - federation_member: turing
-             binder_url: https://turing.mybinder.org
-             hub_url: https://hub.mybinder.turing.ac.uk
-             chartpress_args: ""
-             helm_version: ""
+          - federation_member: turing
+            binder_url: https://turing.mybinder.org
+            hub_url: https://hub.mybinder.turing.ac.uk
+            chartpress_args: ""
+            helm_version: ""
           - federation_member: ovh
             binder_url: https://ovh.mybinder.org
             hub_url: https://hub-binder.mybinder.ovh
