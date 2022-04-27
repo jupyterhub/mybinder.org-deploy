@@ -5,7 +5,12 @@
 #
 # This is a separate path-whitelisted ingress rather than just
 # a domain alias to prevent possible reflection attacks.
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
 apiVersion: networking.k8s.io/v1
+{{- else }}
+apiVersion: networking.k8s.io/v1beta1
+{{- end }}
+{{ $root := . }}
 kind: Ingress
 metadata:
   name: static
@@ -18,19 +23,24 @@ metadata:
     {{- end }}
 spec:
   rules:
-    {{ $root := . }}
     {{ range $host := .Values.static.ingress.hosts }}
     - host: {{ $host }}
       http:
         paths:
           {{ range $path := $root.Values.static.paths }}
           - path: {{ $path }}
+            {{- if $root.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
             pathType: Prefix
             backend:
               service:
                 name: binder
                 port:
                   number: 80
+            {{- else }}
+            backend:
+              serviceName: binder
+              servicePort: 80
+            {{- end }}
           {{ end }}
     {{ end }}
   tls:

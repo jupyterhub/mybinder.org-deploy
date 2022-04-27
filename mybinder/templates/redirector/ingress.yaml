@@ -1,4 +1,9 @@
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
 apiVersion: networking.k8s.io/v1
+{{- else }}
+apiVersion: networking.k8s.io/v1beta1
+{{- end }}
+{{ $root := . }}
 kind: Ingress
 metadata:
   name: redirector
@@ -15,12 +20,18 @@ spec:
       http:
         paths:
           - path: /
+            {{- if $root.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
             pathType: Prefix
             backend:
               service:
                 name: redirector
                 port:
                   number: 80
+            {{- else }}
+            backend:
+              serviceName: redirector
+              servicePort: 80
+            {{- end }}
     {{ end }}
   tls:
     - secretName: {{ .Values.redirector.ingress.tls.secretName }}
