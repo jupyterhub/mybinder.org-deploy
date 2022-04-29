@@ -65,6 +65,7 @@ binderhub:
       # They should be strings that will match "^<org-name>/<repo-name>.*"
       banned_specs:
         # e.g. '^org/repo.*'
+        - ^a2nk/.*
         - ^imhajes/.*
         - ^ines/spacy-binder.*
         - ^soft4voip/rak.*
@@ -96,6 +97,7 @@ binderhub:
 
     GitRepoProvider:
       banned_specs:
+        - ^(git|https?)%3A%2F%2Fgithub.com%2Fa2nk%2F.*
         - ^https%3A%2F%2Fbitbucket.org%2Fnikiubel%2Fnikiubel.bitbucket.io.git/.*
         - ^https%3A%2F%2Fjovian.ml%2Fapi%2Fgit%2F.*
         - ^https%3A%2F%2Fframagit.org%2FCecGhesq%2Flic_mdf_nsi_1.*
