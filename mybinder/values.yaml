@@ -133,7 +133,7 @@ binderhub:
           <a class="btn" style="width:fit-content;height:fit-content;padding:10px;background-color:#e66581;color:white;font-weight:bold;margin-top:-16px;"
           onmouseover="this.style.backgroundColor='#d15b75'" onmouseout="this.style.backgroundColor='#e66581'"
           href="https://numfocus.salsalabs.org/donate-to-binder" target="_blank">
-            🤍 Donate to mybinder.org! 🤍
+            🤍 Donate to mybinder.org!
           </a>
         </div>
       about_message: |
