@@ -2,7 +2,7 @@ projectName: turing
 
 
 letsencrypt:
-  contactEmail: drsarahlgibson@gmail.com
+  contactEmail: cmole@turing.ac.uk
 
 binderhub:
   config:
