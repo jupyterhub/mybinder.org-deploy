@@ -128,11 +128,11 @@ binderhub:
       cors_allow_origin: "*"
 
       banner_message: |
-        <div style="display:flex">
+        <div style="display:flex;align-items:center;">
           <div style="flex:1;text-align:center;">
             Thanks to <a href="https://cloud.google.com/">Google Cloud</a>, <a href="https://www.ovh.com/">OVH</a>, <a href="https://notebooks.gesis.org">GESIS Notebooks</a> and the <a href="https://turing.ac.uk">Turing Institute</a> for supporting us! 🎉
           </div>
-          <a class="btn" style="width:fit-content;height:fit-content;padding:10px;background-color:#e66581;color:white;font-weight:bold;margin-top:-16px;"
+          <a class="btn" style="width:fit-content;height:fit-content;padding:10px;background-color:#e66581;color:white;font-weight:bold;margin:-8px 0px;"
           onmouseover="this.style.backgroundColor='#d15b75'" onmouseout="this.style.backgroundColor='#e66581'"
           href="https://numfocus.salsalabs.org/donate-to-binder" target="_blank">
             🤍 Donate to mybinder.org!
