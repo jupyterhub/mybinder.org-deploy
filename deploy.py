@@ -30,6 +30,11 @@ GCP_ZONES = {
     "prod": "us-central1",
 }
 
+AZURE_RGs = {
+    "turing":"binder-prod",
+    "turing-staging":"binder-staging"
+}
+
 
 def setup_auth_turing(cluster):
     """
@@ -53,7 +58,7 @@ def setup_auth_turing(cluster):
     creds_cmd = [
         "az", "aks", "get-credentials",
         "--name", cluster,
-        "--resource-group", "binder-prod"
+        "--resource-group", AZURE_RGs[cluster]
 
     ]
     stdout = subprocess.check_output(creds_cmd)
@@ -156,7 +161,7 @@ def deploy(release, name=None):
     # some members have special logic in ban.py,
     # in which case they must be specified on the command-line
     ban_command = [sys.executable, "secrets/ban.py"]
-    if release in {"turing", "ovh"}:
+    if release in {"turing", "turing-staging", "ovh"}:
         ban_command.append(release)
 
     subprocess.check_call(ban_command)
@@ -285,7 +290,7 @@ def main():
     argparser.add_argument(
         "release",
         help="Release to deploy",
-        choices=["staging", "prod", "ovh", "turing"],
+        choices=["staging", "prod", "ovh", "turing", "turing-staging"],
     )
     argparser.add_argument(
         "--name", help="Override helm release name, if different from RELEASE",
@@ -334,7 +339,7 @@ def main():
         # script is running on CI, proceed with auth and helm setup
         if args.cluster == 'ovh':
             setup_auth_ovh(args.release, args.cluster)
-        elif args.cluster == 'turing':
+        elif args.cluster in list(AZURE_RGs.keys()):
             setup_auth_turing(args.release)
         else:
             setup_auth_gcloud(args.release, args.cluster)
