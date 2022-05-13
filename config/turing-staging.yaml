@@ -8,7 +8,7 @@ binderhub:
   config:
     BinderHub:
       pod_quota: 20
-      # hub_url: https://hub.mybinder.turing.ac.uk
+      hub_url: https://hub-staging.mybinder.turing.ac.uk
       badge_base_url: https://mybinder.org
       sticky_builds: true
       # Docker Hub registry for Turing
@@ -16,31 +16,31 @@ binderhub:
       image_prefix: turingmybinder/binder-staging-r2d-g5b5b759-
 
   replicas: 1
-  # ingress:
-  #   enabled: true
-  #   hosts:
-  #     - binder.mybinder.turing.ac.uk
-  #     - turing.mybinder.org
-  #   annotations:
-  #     kubernetes.io/ingress.class: nginx
-  #   tls:
-  #     - secretName: turing-binder-tls-crt
-  #       hosts:
-  #         - binder.mybinder.turing.ac.uk
-  #         - turing.mybinder.org
+  ingress:
+    enabled: true
+    hosts: 
+       - binder-staging.mybinder.turing.ac.uk
+       - staging.turing.mybinder.org
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    tls:
+      - secretName: turing-binder-tls-crt
+        hosts:
+          - binder-staging.mybinder.turing.ac.uk
+          - staging.turing.mybinder.org
 
   jupyterhub:
-    # ingress:
-    #   enabled: true
-    #   annotations:
-    #     kubernetes.io/ingress.class: nginx
-    #     kubernetes.io/tls-acme: "true"
-    #   hosts:
-    #     - hub.mybinder.turing.ac.uk
-    #   tls:
-    #     - secretName: turing-hub-tls-crt
-    #       hosts:
-    #         - hub.mybinder.turing.ac.uk
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+      hosts:
+        - hub-staging.mybinder.turing.ac.uk
+      tls:
+        - secretName: turing-staging-hub-tls-crt
+          hosts:
+            - hub-staging.mybinder.turing.ac.uk
 
     scheduling:
       userPlaceholder:
@@ -52,70 +52,70 @@ binderhub:
     imageGCThresholdLow: 30e9
     imageGCThresholdType: "absolute"
 
-# grafana:
-#   ingress:
-#     annotations:
-#       kubernetes.io/ingress.class: nginx
-#       kubernetes.io/tls-acme: 'true'
-#     hosts:
-#       - grafana.mybinder.turing.ac.uk
-#     tls:
-#       - secretName: turing-grafana-tls-crt
-#         hosts:
-#           - grafana.mybinder.turing.ac.uk
-#   datasources:
-#     datasources.yaml:
-#       apiVersion: 1
-#       datasources:
-#         - name: prometheus
-#           orgId: 1
-#           type: prometheus
-#           url: https://prometheus.mybinder.turing.ac.uk
-#           access: direct
-#           isDefault: true
-#           editable: false
-#   persistence:
-#     storageClassName: default
+grafana:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: 'true'
+    hosts:
+      - grafana-staging.mybinder.turing.ac.uk
+    tls:
+      - secretName: turing-staging-grafana-tls-crt
+        hosts:
+          - grafana-staging.mybinder.turing.ac.uk
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: prometheus
+          orgId: 1
+          type: prometheus
+          url: https://prometheus-staging.mybinder.turing.ac.uk
+          access: direct
+          isDefault: true
+          editable: false
+  persistence:
+    storageClassName: default
 
 prometheus:
   server:
     retention: 21d
-    # ingress:
-    #   annotations:
-    #     kubernetes.io/ingress.class: nginx
-    #     kubernetes.io/tls-acme: 'true'
-    #   hosts:
-    #     - prometheus.mybinder.turing.ac.uk
-    #     - prometheus.turing.mybinder.org
-    #   tls:
-    #     - hosts:
-    #         - prometheus.mybinder.turing.ac.uk
-    #         - prometheus.turing.mybinder.org
-    #       secretName: turing-prometheus-tls-crt
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: 'true'
+      hosts:
+        - prometheus-staging.mybinder.turing.ac.uk
+        - prometheus.staging.turing.mybinder.org
+      tls:
+        - hosts:
+            - prometheus-staging.mybinder.turing.ac.uk
+            - prometheus.staging.turing.mybinder.org
+          secretName: turing-staging-prometheus-tls-crt
     persistentVolume:
       size: 64Gi
 
 ingress-nginx:
   controller:
-    # service:
-    #   loadBalancerIP: 20.76.176.114
+    service:
+      loadBalancerIP: 20.82.24.96
     scope:
       enabled: true
 
 
-# static:
-  # ingress:
-  #   hosts:
-  #     - static.mybinder.turing.ac.uk
-  #   tls:
-  #     secretName: turing-static-tls-crt
+static:
+  ingress:
+    hosts:
+      - static-staging.mybinder.turing.ac.uk
+    tls:
+      secretName: turing-staging-static-tls-crt
 
-# redirector:
-#   redirects:
-#     - type: host
-#       host:
-#         from: docs-mybinder.turing.10.0.0.1.xip.io
-#         to: mybinder.readthedocs.io
+redirector:
+  redirects:
+    - type: host
+      host:
+        from: docs-mybinder.turing.10.0.0.1.xip.io
+        to: mybinder.readthedocs.io
 
 matomo:
   enabled: false
