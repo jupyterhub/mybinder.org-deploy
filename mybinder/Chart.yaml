@@ -56,3 +56,4 @@ dependencies:
   - name: cryptnono
     version: 0.0.1-n012.h3e298eb
     repository: https://yuvipanda.github.io/cryptnono/
+    condition: cryptono.enabled

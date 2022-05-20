@@ -1,4 +1,5 @@
 cryptnono:
+  enabled: true
   tolerations:
     # deploy anti-cryptomining cryptnono on all nodes
     - effect: NoSchedule
