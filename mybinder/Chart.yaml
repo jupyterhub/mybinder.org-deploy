@@ -50,3 +50,9 @@ dependencies:
   - name: binderhub
     version: 0.2.0-n919.he87e25a
     repository: https://jupyterhub.github.io/helm-chart
+
+  # cryptnono, counters crypto mining
+  # Source: https://github.com/yuvipanda/cryptnono/
+  - name: cryptnono
+    version: 0.0.1-n012.h3e298eb
+    repository: https://yuvipanda.github.io/cryptnono/
