@@ -1,6 +1,5 @@
 projectName: turing
 
-
 letsencrypt:
   contactEmail: drsarahlgibson@gmail.com
 
@@ -69,6 +68,9 @@ binderhub:
     imageGCThresholdHigh: 40e9
     imageGCThresholdLow: 30e9
     imageGCThresholdType: "absolute"
+
+cryptono:
+  enabled: false
 
 grafana:
   ingress:
