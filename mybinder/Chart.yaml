@@ -54,6 +54,6 @@ dependencies:
   # cryptnono, counters crypto mining
   # Source: https://github.com/yuvipanda/cryptnono/
   - name: cryptnono
-    version: 0.0.1-n012.h3e298eb
+    version: 0.0.1-n017.h6659c07
     repository: https://yuvipanda.github.io/cryptnono/
     condition: cryptnono.enabled
