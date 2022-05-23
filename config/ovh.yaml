@@ -89,7 +89,7 @@ binderhub:
     imageGCThresholdType: "absolute"
 
 cryptnono:
-  enabled: true
+  enabled: false
 
 grafana:
   ingress:
