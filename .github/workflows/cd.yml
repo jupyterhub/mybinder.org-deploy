@@ -186,7 +186,7 @@ jobs:
             binder_url: https://ovh.mybinder.org
             hub_url: https://hub-binder.mybinder.ovh
             # image-prefix should match ovh registry config in secrets/config/ovh.yaml
-            chartpress_args: "--push --image-prefix=3i2li627.gra7.container-registry.ovh.net/binder/ovhbhub-"
+            chartpress_args: "--push --image-prefix=3i2li627.gra7.container-registry.ovh.net/binder/mybinder-"
             helm_version: ""
 
     steps:
