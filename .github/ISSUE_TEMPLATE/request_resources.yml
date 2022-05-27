@@ -1,19 +1,17 @@
 name: \U0001F4C8 Request to bump resources for repo
 description: Answer some questions to help us make a decision about your request and set things up faster.
-labels: impact
+labels: ["impact"]
 body:
   - type: markdown
     attributes:
       value: |
-        🌟🌟🌟🌟🌟
-        Use this form to request a temporary increase in limits for a repository to help with running an event.
+        # Request a resource increase for mybinder.org
 
-        📅 Ideally open an issue two weeks before an event, though we will still consider requests up to 48 hours before the event 📅
+        Use this form to request a temporary increase in limits for a repository to help with running an event.
 
         👉 Please answer all these questions. The more information you provide the faster we'll be able to make a decision. Feel free to add additional information at the end❗
 
         😻 The information you provide also allows us to track our impact which will be useful when we report to those who fund mybinder.org or seek new funding 😻
-        🌟🌟🌟🌟🌟
 
   - type: textarea
     id: whoyouare
@@ -73,6 +71,18 @@ body:
     validations:
       required: true
 
+  - type: dropdown
+    id: runway
+    attributes:
+      label: More than 2 weeks before event
+      description: Is this event more than two weeks in the future? This is our recommended minimum time to open a resource request. However we may still consider requests up to 48 hours before and event.
+      multiple: false
+      options:
+        - Yes
+        - No
+    validations:
+      required: true
+
   - type: textarea
     id: support
     attributes:
@@ -80,3 +90,11 @@ body:
       description: Binder is a community-led project that sustains itself with donations. Some [suggestions for supporting the Binder Project are here](https://mybinder.readthedocs.io/en/latest/about/support.html). Please describe how you've considered supporting the Binder Project. It can be as simple as "we will credit Binder and say thanks during the event" to "we will make a donation to the project".
     validations:
       required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Extra information
+      description: Anything else you'd like to tell us?
+    validations:
+      required: false
