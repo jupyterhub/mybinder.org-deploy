@@ -86,12 +86,10 @@ jobs:
           committer: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
           branch: update-image-${{ matrix.name }}
           labels: maintenance,dependencies
-          commit-message: Update ${{ matrix.registry }}/${{ matrix.repository }} version from ${{ steps.local.outputs.tag }} to ${{ steps.latest.outputs.tag }}
-          title: Update ${{ matrix.registry }}/${{ matrix.repository }} version from ${{ steps.local.outputs.tag }} to ${{ steps.latest.outputs.tag }}
-          body: >-
-            A new ${{ matrix.registry }}/${{ matrix.repository }} image version
-            has been detected, version `${{ steps.latest.outputs.tag }}`.
-
+          commit-message: Update ${{ matrix.registry }}/${{ matrix.repository }} version to ${{ steps.latest.outputs.tag }}
+          title: Update ${{ matrix.registry }}/${{ matrix.repository }} version to ${{ steps.latest.outputs.tag }}
+          body: |
+            Updates mybinder to depend on the `${{ matrix.registry }}/${{ matrix.repository }}` image version `${{ steps.latest.outputs.tag }}` from version `${{ steps.local.outputs.tag }}`.
 
             ## Related
 
@@ -186,13 +184,10 @@ jobs:
           labels: dependencies
           commit-message: Updates ${{ matrix.chart_dep_name }} chart to ${{ steps.latest.outputs.version }}
           title: Updates ${{ matrix.chart_dep_name }} chart to ${{ steps.latest.outputs.version }}
-          body: >-
-            Updates mybinder to depend on the ${{ matrix.chart_dep_name }} chart
-            version `${{ steps.latest.outputs.version }}`.
-
+          body: |
+            Updates mybinder to depend on the ${{ matrix.chart_dep_name }} chart version `${{ steps.latest.outputs.version }}` from version `${{ steps.local.outputs.version }}`.
 
             ## Related
-
 
             - Chart source code: ${{ matrix.chart_dep_source_url }}
             - Chart changelog: ${{ matrix.chart_dep_chart_changelog_url }}
