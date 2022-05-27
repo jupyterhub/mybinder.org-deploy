@@ -78,8 +78,10 @@ jobs:
 
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
-        if: github.repository == 'jupyterhub/mybinder.org-deploy'
         uses: peter-evans/create-pull-request@v4.0.3
+        # Don't try open PRs in forks or when the job is triggered by a push to
+        # a branch other than the default branch.
+        if: github.repository == 'jupyterhub/mybinder.org-deploy' && (github.event_name != 'push' || github.ref == 'refs/heads/master')
         with:
           token: "${{ secrets.jupyterhub_bot_pat }}"
           author: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
@@ -177,11 +179,15 @@ jobs:
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
         uses: peter-evans/create-pull-request@v4.0.3
-        if: github.repository == 'jupyterhub/mybinder.org-deploy'
+        # Don't try open PRs in forks or when the job is triggered by a push to
+        # a branch other than the default branch.
+        if: github.repository == 'jupyterhub/mybinder.org-deploy' && (github.event_name != 'push' || github.ref == 'refs/heads/master')
         with:
           token: "${{ secrets.jupyterhub_bot_pat }}"
+          author: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
+          committer: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
           branch: update-chart-${{ matrix.chart_dep_name }}
-          labels: dependencies
+          labels: maintenance,dependencies
           commit-message: Updates ${{ matrix.chart_dep_name }} chart to ${{ steps.latest.outputs.version }}
           title: Updates ${{ matrix.chart_dep_name }} chart to ${{ steps.latest.outputs.version }}
           body: |
