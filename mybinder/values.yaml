@@ -477,6 +477,10 @@ grafana:
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: 'true'
+  # deploymentStrategy.type is set to Recreate as we have storage that can only
+  # be attached once, we can't have two replicas as RollingUpdate leads to.
+  deploymentStrategy:
+    type: Recreate
   persistence:
     enabled: true
     size: 1Gi
