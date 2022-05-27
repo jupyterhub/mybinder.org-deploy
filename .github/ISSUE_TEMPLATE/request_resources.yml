@@ -78,8 +78,8 @@ body:
       description: Is this event more than two weeks in the future? This is our recommended minimum time to open a resource request. However we may still consider requests up to 48 hours before and event.
       multiple: false
       options:
-        - Yes
-        - No
+        - "Yes"
+        - "No"
     validations:
       required: true
 
