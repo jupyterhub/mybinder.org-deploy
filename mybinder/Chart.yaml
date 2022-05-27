@@ -21,7 +21,7 @@ dependencies:
   #       chart v3.3.0 maps to app v0.35.0
   #       chart v3.12.0 requires Helm 3
   - name: ingress-nginx
-    version: "2.13.0"
+    version: "4.1.2"
     repository: https://kubernetes.github.io/ingress-nginx
     condition: ingress-nginx.enabled
 
