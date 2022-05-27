@@ -179,7 +179,7 @@ jobs:
         uses: peter-evans/create-pull-request@v4.0.3
         if: github.repository == 'jupyterhub/mybinder.org-deploy'
         with:
-          token: "${{ secrets.DASK_BOT_TOKEN }}"
+          token: "${{ secrets.jupyterhub_bot_pat }}"
           branch: update-chart-${{ matrix.chart_dep_name }}
           labels: dependencies
           commit-message: Updates ${{ matrix.chart_dep_name }} chart to ${{ steps.latest.outputs.version }}
