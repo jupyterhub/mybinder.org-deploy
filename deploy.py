@@ -231,18 +231,15 @@ def deploy(release, name=None):
 
 
 def setup_certmanager():
-    """Install cert-manager separately
-
-    cert-manager docs and CRD assumptions say that cert-manager must never be a sub-chart,
-    always installed on its own in a cert-manager namespace
     """
+    Install cert-manager separately into its own namespace and `kubectl apply`
+    its CRDs each time as helm won't attempt to handle changes to CRD resources.
 
-    # TODO: cert-manager chart >= 0.15
-    # has `installCRDs` option, which should eliminate the separate CRD step
-    # however, upgrade notes say this *must not* be used
-    # when upgrading, only for fresh deployments,
-    # and requires helm >=3.3.1 and kubernetes >=1.16.14
-
+    To `kubectl apply` the CRDs manually before `helm upgrade` is the typical
+    procedure recommended by cert-manager. Sometimes cert-manager provides
+    additional upgrade notes, see https://cert-manager.io/docs/release-notes/
+    before you upgrade to a new version.
+    """
     version = os.environ["CERT_MANAGER_VERSION"]
 
     manifest_url = f"https://github.com/jetstack/cert-manager/releases/download/{version}/cert-manager.crds.yaml"
@@ -253,27 +250,17 @@ def setup_certmanager():
     )
 
     print(BOLD + GREEN + f"Installing cert-manager {version}" + NC, flush=True)
-    subprocess.check_call(
-        ["helm", "repo", "add", "jetstack", "https://charts.jetstack.io"]
-    )
-
-    subprocess.check_call(
-        ["helm", "repo", "update"]
-    )
-
     helm_upgrade = [
         "helm",
         "upgrade",
         "--install",
         "--create-namespace",
-        "--namespace",
+        "--namespace=cert-manager",
+        "--repo=https://charts.jetstack.io",
         "cert-manager",
         "cert-manager",
-        "jetstack/cert-manager",
-        "--version",
-        version,
-        "-f",
-        "config/cert-manager.yaml",
+        f"--version={version}",
+        "--values=config/cert-manager.yaml",
     ]
 
     subprocess.check_call(helm_upgrade)
