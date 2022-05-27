@@ -253,27 +253,17 @@ def setup_certmanager():
     )
 
     print(BOLD + GREEN + f"Installing cert-manager {version}" + NC, flush=True)
-    subprocess.check_call(
-        ["helm", "repo", "add", "jetstack", "https://charts.jetstack.io"]
-    )
-
-    subprocess.check_call(
-        ["helm", "repo", "update"]
-    )
-
     helm_upgrade = [
         "helm",
         "upgrade",
         "--install",
         "--create-namespace",
-        "--namespace",
+        "--namespace=cert-manager",
+        "--repo=https://charts.jetstack.io",
         "cert-manager",
         "cert-manager",
-        "jetstack/cert-manager",
-        "--version",
-        version,
-        "-f",
-        "config/cert-manager.yaml",
+        f"--version={version}",
+        "--values=config/cert-manager.yaml",
     ]
 
     subprocess.check_call(helm_upgrade)
