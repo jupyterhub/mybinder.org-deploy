@@ -7,51 +7,22 @@ on:
       - "**/*.yml"
 
 env:
-  HELM_VERSION: "v3.6.2"
+  HELM_VERSION: "v3.9.0"
 
 jobs:
-  lint-config:
+  yamllint-config:
     runs-on: ubuntu-20.04
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
 
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.8
+      - name: Install yamllint
+        run: pip install yamllint
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install yamllint
-
-      - name: Unlock git-crypt secrets
-        if: github.event.pull_request.head.repo.fork == false
-        uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
-        env:
-          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
-
-      # pick yamllint config based on whether we have access to secrets or not
-      - name: Select yamllint config
-        run: |
-          if [[ "${{ github.event.pull_request.head.repo.fork }}" == "false" ]]; then
-            echo "linting secrets"
-            export YAMLLINT_CONFIG=scripts/yamllint-config.yaml
-          else
-            echo "not linting secrets"
-            export YAMLLINT_CONFIG=scripts/yamllint-no-secrets.yaml
-          fi
-          # persist env for the next step
-          echo "YAMLLINT_CONFIG=$YAMLLINT_CONFIG" >> "$GITHUB_ENV"
-
-      # We use --no-warnings in this step to reduce output to critical errors
+      # We use --no-warnings to reduce output to critical errors
       - name: Run yamllint
-        run: |
-          yamllint -d ${YAMLLINT_CONFIG} --no-warnings .
+        run: yamllint -d scripts/yamllint-no-secrets.yaml --no-warnings .
 
   lint-helm:
     runs-on: ubuntu-20.04
@@ -63,32 +34,25 @@ jobs:
         # at https://github.com/instrumenta/kubernetes-json-schema
         # in the form v${version}-standalone-strict
         # this does *not* include all kubernetes versions!
+        #
+        # FIXME: 1.18.1 was the latest, and now this project is stale. See
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/2206.
+        #
         - release: staging
-          kube_version: "1.17.4"
-        - release: prod
-          kube_version: "1.17.4"
+          kube_version: "1.18.1"
         - release: prod
           kube_version: "1.18.1"
         - release: ovh
-          kube_version: "1.15.7"
+          kube_version: "1.18.1"
         - release: turing
           kube_version: "1.18.1"
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.8
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Install and setup helm ${{ env.HELM_VERSION }}
         run: |
@@ -96,38 +60,19 @@ jobs:
           helm dependency update ./mybinder
           helm plugin install https://github.com/instrumenta/helm-kubeval
 
-      - name: Unlock git-crypt secrets
-        if: github.event.pull_request.head.repo.fork == false
-        uses: sliteteam/github-action-git-crypt-unlock@a09ea5079c1b0e1887d4c8d7a4b20f00b5c2d06b
-        env:
-          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
-
       - name: Run chartpress to update values.yaml
-        run: |
-          chartpress --skip-build
-
-      - name: Select secret config
-        run: |
-          if [[ "${{ github.event.pull_request.head.repo.fork }}" == "false" ]]; then
-            SECRET_CONFIG=$(ls secrets/config/common/*.yaml | awk '{print "-f " $1}')
-            export SECRET_CONFIG="$SECRET_CONFIG -f secrets/config/${{ matrix.release }}.yaml"
-          else
-            export SECRET_CONFIG="-f config/test-secrets.yaml"
-          fi
-          echo "linting with secret config ${SECRET_CONFIG}"
-          # persist env for the next step
-          echo "SECRET_CONFIG=$SECRET_CONFIG" >> "$GITHUB_ENV"
+        run: chartpress --skip-build
 
       - name: Run helm kubeval for ${{ matrix.release }} with kube-${{ matrix.kube_version }}
         run: |
-          # add `-f config/common/x.yaml -f config/common/y.yaml` etc.
+          # add `--values=config/common/x.yaml --values=config/common/y.yaml` etc.
           # to load all common config files
-          common_config=$(ls config/common/*.yaml | awk '{print "-f " $1}')
+          common_config=$(ls config/common/*.yaml | awk '{print "--values=" $1}')
           helm kubeval \
             --kubernetes-version ${{ matrix.kube_version }} \
             --strict \
             --ignore-missing-schemas \
             ${common_config} \
-            -f config/${{ matrix.release }}.yaml \
-            ${SECRET_CONFIG} \
+            --values=config/${{ matrix.release }}.yaml \
+            --values=config/test-secrets.yaml \
             mybinder
