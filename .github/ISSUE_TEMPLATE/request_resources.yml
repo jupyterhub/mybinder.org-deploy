@@ -31,15 +31,15 @@ body:
     validations:
       required: true
 
-  - type: textarea
+  - type: input
     id: money
     attributes:
-      label: Is any money changing hands?
+      label: Any money changing hands?
       description: For example, do attendees pay to attend? Are there speaker or submission fees?
     validations:
       required: true
 
-  - type: textarea
+  - type: input
     id: repository
     attributes:
       label: Repository link
@@ -52,12 +52,12 @@ body:
       label: Type of event
       multiple: false
       options:
-        - label: talk
-        - label: workshop
-        - label: lecture course
-        - label: training session
+        - talk
+        - workshop
+        - lecture course
+        - training session
 
-  - type: textarea
+  - type: input
     id: attendees
     attributes:
       label: Number of attendees
@@ -65,7 +65,7 @@ body:
     validations:
       required: true
 
-  - type: textarea
+  - type: input
     id: times
     attributes:
       label: Dates and times
