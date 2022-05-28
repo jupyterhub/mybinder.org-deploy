@@ -101,7 +101,7 @@ jobs:
 
       # Action Repo: https://github.com/actions/cache
       - name: "Stage 0: Cache pip dependencies"
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
@@ -224,7 +224,7 @@ jobs:
           python-version: 3.8
 
       - name: "Stage 0: Cache pip dependencies"
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
