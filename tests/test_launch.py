@@ -10,7 +10,7 @@ def test_launch_binder(binder_url):
     # Known good version of this repo
     repo = 'binder-examples/requirements'
     ref = 'fa84f12'
-    build_url = binder_url + '/build/gh/{repo}/{ref}'.format(repo=repo, ref=ref)
+    build_url = binder_url + f'/build/gh/{repo}/{ref}'
     r = requests.get(build_url, stream=True)
     r.raise_for_status()
     for line in r.iter_lines():
@@ -26,7 +26,7 @@ def test_launch_binder(binder_url):
         assert False
 
     headers = {
-        'Authorization': 'token {}'.format(token)
+        'Authorization': f'token {token}'
     }
     r = requests.get(notebook_url + '/api', headers=headers)
     assert r.status_code == 200

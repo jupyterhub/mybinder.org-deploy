@@ -51,7 +51,7 @@ while True:
             kind=config['cloudCosts']['kind']
         )
 
-        print("Uploaded cloud costs for {} days".format(len(cloud_costs)))
+        print(f"Uploaded cloud costs for {len(cloud_costs)} days")
 
     print("Generating index")
     index_events(project_name, config['destinationBucket'])

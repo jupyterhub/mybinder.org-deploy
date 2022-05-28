@@ -139,7 +139,7 @@ for node in nodes_to_drain:
     print(
         "  "
         + "\n  ".join(
-            "{} {}".format(pod.metadata.name, reason) for pod, reason in to_delete
+            f"{pod.metadata.name} {reason}" for pod, reason in to_delete
         )
     )
     if not args.answer_yes and not args.dry_run:

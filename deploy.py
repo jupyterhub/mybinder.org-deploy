@@ -37,7 +37,7 @@ def setup_auth_turing(cluster):
     """
     # Read in auth info
     azure_file = os.path.join(ABSOLUTE_HERE, "secrets", "turing-auth-key-prod.json")
-    with open(azure_file, "r") as stream:
+    with open(azure_file) as stream:
         azure = json.load(stream)
 
     # Login in to Azure
