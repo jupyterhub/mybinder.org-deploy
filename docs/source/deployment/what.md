@@ -32,7 +32,7 @@ need them on your local computer.
    and upgrading the various components running mybinder.org (BinderHub, JupyterHub,
    extra mybinder.org-specific services, etc)
 
-3. [`kubectl`](https://kubernetes.io/docs/reference/kubectl/overview/)
+3. [`kubectl`](https://kubernetes.io/docs/reference/kubectl/)
 
    `kubectl` is the canonical command line client for interacting with the Kubernetes
    API. We primarily use it to explicitly wait for our deployment to complete
@@ -136,9 +136,9 @@ are available in unencrypted form.
 
 #### Background
 
-We use [helm charts](https://github.com/kubernetes/helm/blob/master/docs/charts.md)
+We use _helm charts_
 to configure mybinder.org. We use charts both from the 
-[official kubernetes charts repository](https://github.com/kubernetes/charts),
+[official kubernetes charts repository](https://github.com/helm/charts),
 as well as the [JupyterHub charts repository](https://jupyterhub.github.io/helm-chart).
 
 #### What happens
@@ -176,7 +176,7 @@ charts.
 
 ### Step 3: Tell Grafana our deployment is starting
 
-We create an [annotation](http://docs.grafana.org/reference/annotations/)
+We create an [annotation](https://grafana.com/docs/grafana/latest/dashboards/annotations/)
 in Grafana, recording the fact that a deployment is starting.
 
 This is very useful when looking at dashboards, since you can see
@@ -198,7 +198,7 @@ following:
 1. Use the Google Cloud Service Accounts we decrypted in Stage 2, Step 1 to get
    a valid [~/.kube/config](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/)
    file. This file is used by both `helm` and `kubectl` to access the cluster.
-2. Use [`helm upgrade`](https://github.com/kubernetes/helm/blob/master/docs/helm/helm_upgrade.md)
+2. Use `helm upgrade`
    to actually do the deployment. This deploys whatever changes the commit has -
    new chart versions, changes to configuration, new repo2docker version, etc.
    We have a ten minute timeout here.
@@ -217,8 +217,7 @@ the helm deployment is complete!
    YAML syntax can be finnicky sometimes, and fail in non-obvious ways. The most common
    error is the presence of tab characters in YAML, which will make them always fail.
    
-   The Helm community has [some tips](https://github.com/kubernetes/helm/blob/master/docs/chart_template_guide/yaml_techniques.md)
-   on common YAML issues. Learn X in Y Minutes also has a nice [guide on YAML](https://learnxinyminutes.com/docs/yaml/).
+   Learn X in Y Minutes also has a nice [guide on YAML](https://learnxinyminutes.com/docs/yaml/).
    You can also use [yamllint](https://github.com/adrienverge/yamllint) locally to validate
    your YAML files.
    

@@ -34,23 +34,23 @@ to see what queries make up the dashboard, and how you can edit it.
 All the dashboard definitions are stored in an `sqlite` database on a
 disk attached to the running grafana instance.
 
-The [Grafana documentation](http://docs.grafana.org/guides/basic_concepts/)
+The [Grafana documentation](https://grafana.com/docs/grafana/latest/basics/)
 has more info on the various concepts in Grafana, and how you can use them.
 You can also create a new dashboard and play with it. Be careful before
 editing currently used dashboards!
 
 ## Installation & Configuration
 
-Grafana is installed with the [Grafana helm chart](https://github.com/kubernetes/charts/tree/master/stable/grafana).
+Grafana is installed with the [Grafana helm chart](https://github.com/helm/charts/tree/master/stable/grafana).
 You can see the options for configuring it documented in its
-[`values.yaml`](https://github.com/kubernetes/charts/blob/master/stable/grafana/values.yaml)
+[`values.yaml`](https://github.com/helm/charts/blob/master/stable/grafana/values.yaml)
 file. You can also see the specific ways we have configured it
 in the `grafana` section of `mybinder/values.yaml`, `config/prod.yaml`
 and `config/staging.yaml`.
 
 ## Annotations
 
-[Annotations](http://docs.grafana.org/reference/annotations/) are
+[Annotations](https://grafana.com/docs/grafana/latest/dashboards/annotations/) are
 a cool feature of Grafana that lets us add arbitrary markers tagged to
 all graphs marking an event that has happened. For example, you can
 create an annotation each time a deployment happens - this puts a

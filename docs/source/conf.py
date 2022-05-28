@@ -48,3 +48,19 @@ html_theme = 'pydata_sphinx_theme'
 html_static_path = ['_static']
 
 html_logo = '_static/images/logo.png'
+
+
+# -- Options for linkcheck builder -------------------------------------------
+# ref: https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-the-linkcheck-builder
+#
+linkcheck_ignore = [
+    r"(.*)github\.com(.*)#",  # javascript based anchors
+    r"(.*)/#%21(.*)/(.*)",  # /#!forum/jupyter - encoded anchor edge case
+    "https://grafana.mybinder.org", # likely no longer functional links from incident reports
+    "https://console.cloud.google.com",  # sign-in redirect noise
+    "https://console.developers.google.com",  # sign-in redirect noise
+]
+linkcheck_anchors_ignore = [
+    "/#!",
+    "/#%21",
+]

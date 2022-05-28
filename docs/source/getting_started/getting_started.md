@@ -14,7 +14,7 @@ to get access.
 The most important tool for keeping an eye on the Kubernetes deployment is
 `kubectl` and the `gcloud` SDK. These will let you run queries on the
 `mybinder.org` deployment from your command line. To set this up, check
-out the [Zero to JupyterHub Google SDK section](https://zero-to-jupyterhub.readthedocs.io/en/latest/create-k8s-cluster.html#setting-up-kubernetes-on-google-cloud).
+out the [Zero to JupyterHub Google SDK section](https://zero-to-jupyterhub.readthedocs.io/en/latest/kubernetes/google/step-zero-gcp.html).
 (everything before the part where you create a google cloud cluster).
 
 When you run `gcloud init` for the first time, it'll ask you to authenticate
@@ -22,7 +22,7 @@ and to choose a project / default region. You should authenticate with
 the email that's been given privileges to work on `mybinder.org`, choose
 the project `binderhub`, and use the region `us-central1`.
 
-We recommend enabling [`kubectl` autocompletion](https://kubernetes.io/docs/tasks/tools/install-kubectl/#enabling-shell-autocompletion)
+We recommend enabling [`kubectl` autocompletion](https://kubernetes.io/docs/tasks/tools/#kubectl)
 as well.
 
 ## Set up `kubectl` to connect to `mybinder.org`
@@ -56,8 +56,7 @@ gcloud container clusters get-credentials staging --zone us-central1-a --project
 ```
 
 You can now switch between the `prod` and `staging` deployments by changing your
-`kubectl` context. See the [Kubectl context documentation](https://kubernetes-v1-4.github.io/docs/user-guide/kubectl/kubectl_config_use-context/)
-for more information.
+`kubectl` context.
 
 ## Look at the project Grafana
 

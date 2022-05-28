@@ -26,7 +26,7 @@ If you wish to deploy your own Binder instance, please **do not use** these file
 Instead, you should review the [BinderHub documentation][] and the
 [`jupyterhub/binderhub`][] repo to set up your deployment.
 
-## Site Reliability Guide [![Documentation Status](http://readthedocs.org/projects/mybinder-sre/badge/?version=latest)](http://mybinder-sre.readthedocs.io/en/latest/?badge=latest)
+## Site Reliability Guide [![Documentation Status](https://readthedocs.org/projects/mybinder-sre/badge/?version=latest)](https://mybinder-sre.readthedocs.io/en/latest/?badge=latest)
 
 [Site Reliability Guide](https://mybinder-sre.readthedocs.io/en/latest/index.html), the collected wisdom of operating mybinder.org.
 

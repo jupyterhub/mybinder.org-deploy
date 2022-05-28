@@ -4,7 +4,7 @@ This document explains **how** to deploy a change to mybinder.org.
 For information on what exactly a deployment does, see [what](what).
 
 When a new change has landed in either [BinderHub](https://github.com/jupyterhub/binderhub)
-or [repo2docker](https://github.com/jupyter/repo2docker), they need to be explicitly
+or [repo2docker](https://github.com/jupyterhub/repo2docker), they need to be explicitly
 deployed to mybinder.org for users to benefit from them. This is the most common kind of
 change deployed to mybinder.org.
 
@@ -55,7 +55,7 @@ updating the BinderHub Helm chart version, which we step through below.
        ---------------------
 
        BinderHub: https://github.com/jupyterhub/binderhub/compare/<OLD-HASH>...<NEW-HASH>
-       repo2docker: https://github.com/jupyter/repo2docker/compare/<OLD-HASH>...<NEW-HASH>
+       repo2docker: https://github.com/jupyterhub/repo2docker/compare/<OLD-HASH>...<NEW-HASH>
        JupyterHub: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/<OLD-HASH>...<NEW-HASH>
 
        ---------------------
@@ -109,7 +109,7 @@ The following lines describe how to point mybinder.org to the new repo2docker im
        ---------------------
 
        BinderHub: https://github.com/jupyterhub/binderhub/compare/<OLD-HASH>...<NEW-HASH>
-       repo2docker: https://github.com/jupyter/repo2docker/compare/<OLD-HASH>...<NEW-HASH>
+       repo2docker: https://github.com/jupyterhub/repo2docker/compare/<OLD-HASH>...<NEW-HASH>
        JupyterHub: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/<OLD-HASH>...<NEW-HASH>
 
        ---------------------
@@ -170,7 +170,7 @@ master.
 7. If the tests fail, the change will *not* be deployed to mybinder.org.
    You must then investigate why it failed. **If you can
    not figure out a cause in about 10 minutes, revert the change.**
-   You can revert the change with [the GitHub UI](https://help.github.com/articles/reverting-a-pull-request/) and immediately
+   You can revert the change with [the GitHub UI](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/reverting-a-pull-request) and immediately
    merge the reversion PR that GitHub creates.
 8. Troubleshoot and make changes to your fork. Repeat the process from Step 1.
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script to post [Grafana Annotations](http://docs.grafana.org/reference/annotations/)
+Script to post [Grafana Annotations](https://grafana.com/docs/grafana/latest/dashboards/annotations/)
 
 This is primarily used to annotate deployments in Grafana,
 which can be very useful when displayed alongside various graphs.
@@ -8,7 +8,7 @@ which can be very useful when displayed alongside various graphs.
 This script requires:
 
 - An environment variable GRAFANA_API_KEY with a grafana
-  [API Key](http://docs.grafana.org/http_api/auth/#create-api-token)
+  [API Key](https://grafana.com/docs/grafana/latest/http_api/auth/#create-api-token)
   with at least Editor permissions
 - The requests library
 """
