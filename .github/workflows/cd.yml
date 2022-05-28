@@ -334,7 +334,7 @@ jobs:
 
       - name: Comment on PR with Job Status and delete the test branch
         if: ${{ steps.staging-deploy-status.outputs.status }} == 'completed'
-        uses: actions/github-script@v4.0.2
+        uses: actions/github-script@v6.1.0
         with:
           github-token: ${{ secrets.TEST_THIS_PR_ACCESS_TOKEN }}
           script: |
