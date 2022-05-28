@@ -34,7 +34,7 @@ This installs the following components:
 
 1. `nginx-ingress-controller` - keeps the HTTPS rules in sync with `Ingress`
    objects and serves the HTTPS requests. This also exports
-   [metrics](metrics.html) that are captured in prometheus.
+   [metrics](metrics) that are captured in prometheus.
 2. `nginx-ingress-default-backend` - simply returns a 404 error & is used
    by `nginx-ingress-controller` to serve any requests that don't match
    any rules.
@@ -68,7 +68,7 @@ The following ingress objects currently exist:
   `prometheus` in both `mybinder/values.yaml` and `config/prod.yaml`.
 * `grafana` - Directs traffic to `grafana.mybinder.org`. Configured under `grafana` in
    both `mybinder/values.yaml` and `config/prod.yaml`.
-* `kube-lego-nginx` - Used by [kube-lego](#https-with-kube-lego) for doing automatic
+* `kube-lego-nginx` - Used by kube-lego for doing automatic
    HTTPS certificate renewals.
 
 ## HTTPS certificates with kube-lego
@@ -77,11 +77,9 @@ We use [Let's Encrypt](https://letsencrypt.org/) for all our HTTPS certificates.
 [Kube Lego](https://github.com/jetstack/kube-lego) is used to automatically
 provision and maintain HTTPS certificates for us.
 
-```eval_rst
-.. note::
-
-   Kube-lego is deprecated, and we should move to
-   `cert-manager <https://github.com/jetstack/cert-manager/>`_ soon.
+```{note}
+Kube-lego is deprecated, and we should move to
+`cert-manager <https://github.com/jetstack/cert-manager/>`_ soon.
 ```
 
 ### Installation

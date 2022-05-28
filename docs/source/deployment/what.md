@@ -1,7 +1,7 @@
 # What does a MyBinder.org deployment do?
 
 This document tries to explain *what* is going on when a deployment
-to mybinder.org happens. For *how* to do a deploy, please see [how](how.html).
+to mybinder.org happens. For *how* to do a deploy, please see [how](how).
 
 The deployment happens in various **stages**, each of which comprise of
 a series of **steps**. Each step of the deployment is
@@ -263,8 +263,6 @@ If all the tests succeed, we can consider the staging deployment success!
    failing test to understand what it is was testing, and debug from there.
 
 ## Stage 4: Deploy to production
-
-#### What happens
 
 After deploying to `staging` and validating it with tests, we have a reasonable amount of confidence
 that it is safe to deploy to production. Production deploy has the exact same steps as

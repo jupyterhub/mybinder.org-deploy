@@ -1,7 +1,7 @@
 # How to deploy a change to mybinder.org?
 
 This document explains **how** to deploy a change to mybinder.org.
-For information on what exactly a deployment does, see [what](what.html).
+For information on what exactly a deployment does, see [what](what).
 
 When a new change has landed in either [BinderHub](https://github.com/jupyterhub/binderhub)
 or [repo2docker](https://github.com/jupyter/repo2docker), they need to be explicitly
@@ -11,11 +11,10 @@ change deployed to mybinder.org.
 The first two sections of this page cover how to upgrade either `repo2docker` or
 `BinderHub`.
 
-```eval_rst
-.. note::
-   Currently upgrades to BinderHub and repo2docker are automatically managed
-   by the fantastic `henchbot <https://github.com/henchbot/mybinder.org-upgrades>`_ and manual intervention is rarely required.
-   However, we have left the manual steps here for provenance or in case of emergency.
+```{note}
+Currently upgrades to BinderHub and repo2docker are automatically managed
+by the fantastic `henchbot <https://github.com/henchbot/mybinder.org-upgrades>`_ and manual intervention is rarely required.
+However, we have left the manual steps here for provenance or in case of emergency.
 ```
 
 ## Deployment policy
@@ -84,7 +83,7 @@ updating the BinderHub Helm chart version, which we step through below.
         repository: https://jupyterhub.github.io/helm-chart
 
 7. Merge this change to `mybinder/Chart.yaml` into the mybinder.org-deploy
-   repository following the steps in the [Deploying a change](#deploying-a-change) section
+   repository following the steps in the [Deploying a change](deploying-a-change) section
    to deploy the change.
 
 
@@ -136,10 +135,10 @@ The following lines describe how to point mybinder.org to the new repo2docker im
          build_image: jupyter/repo2docker:<NEW-HASH>
 
 8. Merge this change to `mybinder/values.yaml` into the mybinder.org-deploy
-   repository following the steps in the [Deploying a change](#deploying-a-change) section
+   repository following the steps in the [Deploying a change](deploying-a-change) section
    to deploy the change.
 
-
+(deploying-a-change)=
 ## Deploying a change
 
 ### Deploying to *both* `staging` then `prod`
@@ -184,9 +183,8 @@ There are a few ways we can achieve this.
 
 This simplest way to deploy a PR to staging only is to apply the `test-staging` label to an open PR. This will trigger GitHub Actions to deploy the changes in the PR to the staging cluster **only**.
 
-```eval_rst
-.. note::
-   If you need to re-deploy the changes in a PR to staging only, then the label will need to be removed and then re-added.
+```{note}
+If you need to re-deploy the changes in a PR to staging only, then the label will need to be removed and then re-added.
 ```
 
 #### Testing Pull Requests from **forks** of `mybinder.org-deploy`
@@ -217,7 +215,7 @@ to staging only, follow these steps:
    and **apply** those same changes to `mybinder/values.yaml`. Now follow the
    steps in the section above to deploy to **both** `staging` and `prod`.
 
-The [what](./what.html) document has more details on common ways deployments can go
+The [what](what) document has more details on common ways deployments can go
 wrong, and how to debug them.
 ## Changing the mybinder.org infrastructure
 

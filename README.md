@@ -31,9 +31,9 @@ Instead, you should review the [BinderHub documentation][] and the
 [Site Reliability Guide](https://mybinder-sre.readthedocs.io/en/latest/index.html), the collected wisdom of operating mybinder.org.
 
 Amongst other things the guide contains:
-- [How to do a deployment](http://mybinder-sre.readthedocs.io/en/latest/deployment/how.html)
-- [What happens during a deployment?](http://mybinder-sre.readthedocs.io/en/latest/deployment/what.html)
-- [Incident reports for past incidents](http://mybinder-sre.readthedocs.io/en/latest/incident-reports/incident_reports_toc.html)
+- [How to do a deployment](https://mybinder-sre.readthedocs.io/en/latest/deployment/how.html)
+- [What happens during a deployment?](https://mybinder-sre.readthedocs.io/en/latest/deployment/what.html)
+- [Incident reports for past incidents](https://mybinder-sre.readthedocs.io/en/latest/incident-reports/incident_reports_toc.html)
 - [Incident report template](https://github.com/jupyterhub/mybinder.org-deploy/blob/master/docs/source/incident-reports/template-incident-report.md)
 
 ## Key Links

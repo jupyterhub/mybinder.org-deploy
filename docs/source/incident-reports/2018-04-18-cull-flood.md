@@ -76,7 +76,7 @@ merging new pull requests into binderhub.
 
 Observing culler behavior is fixed, but memory and CPU growth continues.
 Reviewing further changes that were part of the revised deploy,
-[a new feature of kubespawner]() is suspected as the source of the leak.
+a new feature of kubespawner is suspected as the source of the leak.
 The process begins to deploy reverting this change.
 Since this is a zero-to-jupyterhub change, it will again take an hour to propagate to mybinder.org
 

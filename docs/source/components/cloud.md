@@ -185,8 +185,8 @@ We use [Google Stackdriver](https://cloud.google.com/stackdriver/) for logging
 activity on the Kubernetes deployment. This is useful for listing the raw
 logs coming out of BinderHub, though we don't use it for dashboarding (see below).
 
-We use [prometheus](metrics.html) for collecting more fine-grained metrics about
-what's happening on the deployment, and [grafana](dashboards.html) for generating
+We use [prometheus](metrics) for collecting more fine-grained metrics about
+what's happening on the deployment, and [grafana](dashboards) for generating
 dashboards using the data from prometheus.
 
 We use [Google Analytics](https://analytics.google.com/analytics/web) to keep

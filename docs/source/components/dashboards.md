@@ -1,20 +1,19 @@
 # Operational Dashboards with Grafana
 
 We use [Grafana](https://grafana.com/) for creating dashboards
-from our [metrics](../metrics.html). Dashboards are useful for
+from our [operational metrics](metrics). Dashboards are useful for
 understanding the current status of the system and all its components
 at a glance. They are also very useful to try and debug what
 is going wrong during / after an outage.
 
 ## What is it?
 
-```eval_rst
-.. image:: ../../_static/images/dashboard.png
+```{image} ../_static/images/dashboard.png
 ```
 
 A dashboard is a set of pre-defined graphs in a particular layout that
 provide an overview of a system. In our case, they provide an overview
-of the [operational metrics](../metrics.html) of the components that make
+of the [operational metrics](metrics) of the components that make
 up mybinder.org.
 
 ## Where is it?

@@ -119,7 +119,7 @@ dependencies:
 This also allows us to pin a *version* of Prometheus, which improves
 reliability of the site.
 
-```note::
+```{note}
 It is still possible to deploy each of these applications on their own *without*
 a Meta Helm Chart, this is simply a way of clustering dependencies together
 and simplifying the deployment structure.
@@ -293,7 +293,6 @@ Contact one of them if you need access to the git-crypt key.
 [mybinder.org]: https://mybinder.org
 [staging.mybinder.org]: https://staging.mybinder.org
 [staging]: https://staging.mybinder.org
-[BinderHub]: https://github.com/jupyterhub/binderhub
 [binderhub]: https://github.com/jupyterhub/binderhub
 [`jupyterhub/binderhub`]: https://github.com/jupyterhub/binderhub
 [BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
