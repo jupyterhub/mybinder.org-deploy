@@ -99,7 +99,6 @@ jobs:
             - Changelog: ${{ matrix.changelog_url }}
 
 
-
   update-chart-dependencies:
     # Don't schedule runs on forks, but allow the job to execute on push and
     # workflow_dispatch for CI development purposes.
