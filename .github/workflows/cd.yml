@@ -334,20 +334,20 @@ jobs:
 
       - name: Comment on PR with Job Status and delete the test branch
         if: ${{ steps.staging-deploy-status.outputs.status }} == 'completed'
-        uses: actions/github-script@v6.1.0
+        uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.TEST_THIS_PR_ACCESS_TOKEN }}
           script: |
             var JOB_STATUS = process.env.JOB_STATUS;
             var PR_NUMBER = process.env.PR_NUMBER;
 
-            github.git.deleteRef({
+            github.rest.git.deleteRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: `heads/test-this-pr/${PR_NUMBER}`
             })
 
-            github.issues.createComment({
+            github.rest.issues.createComment({
               issue_number: PR_NUMBER,
               owner: context.repo.owner,
               repo: context.repo.repo,
