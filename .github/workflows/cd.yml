@@ -95,7 +95,8 @@ jobs:
 
       # Action Repo: https://github.com/actions/setup-python
       - name: "Stage 0: Setup Python 3.8"
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v3
+        id: setup-python
         with:
           python-version: 3.8
 
@@ -104,9 +105,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          key: python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/*requirements.txt') }}
 
       - name: "Stage 1: Install dependencies"
         run: |
@@ -219,7 +218,8 @@ jobs:
           fetch-depth: 0
 
       - name: "Stage 0: Setup Python 3.8"
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v3
+        id: setup-python
         with:
           python-version: 3.8
 
@@ -227,9 +227,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          key: python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/*requirements.txt') }}
 
       - name: "Stage 1: Install dependencies"
         run: |
