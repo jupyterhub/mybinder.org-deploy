@@ -45,10 +45,13 @@ env:
   #
   CERT_MANAGER_VERSION: "v0.15.2"
 
-  GIT_COMMITTER_EMAIL: ci-user@github.local
-  GIT_COMMITTER_NAME: CI User
-  GIT_AUTHOR_EMAIL: ci-user@github.local
-  GIT_AUTHOR_NAME: CI User
+  # These variables influence git directly
+  # https://git-scm.com/book/en/v2/Git-Internals-Environment-Variables#_committing
+  #
+  GIT_AUTHOR_EMAIL: 105740858+jupyterhub-bot@users.noreply.github.com
+  GIT_COMMITTER_EMAIL: 105740858+jupyterhub-bot@users.noreply.github.com
+  GIT_AUTHOR_NAME: JupterHub Bot Account
+  GIT_COMMITTER_NAME: JupterHub Bot Account
 
 jobs:
   # In this dedicated job to deploy our staging environment we build and push
@@ -309,7 +312,7 @@ jobs:
           while [ "$STATUS" != "completed" ]; do
             RESPONSE=$(curl --silent --request GET \
               --url 'https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs' \
-              --header 'Authorization: token ${{ secrets.TEST_THIS_PR_ACCESS_TOKEN }}' \
+              --header 'Authorization: token ${{ secrets.jupyterhub_bot_pat }}' \
               --header 'Accept: application/vnd.github.v3+json')
 
             STATUS=$(echo $RESPONSE | jq -r '.jobs[] | select(.name | startswith("staging-deploy")) | .status')
@@ -336,7 +339,7 @@ jobs:
         if: ${{ steps.staging-deploy-status.outputs.status }} == 'completed'
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.TEST_THIS_PR_ACCESS_TOKEN }}
+          github-token: ${{ secrets.jupyterhub_bot_pat }}
           script: |
             var JOB_STATUS = process.env.JOB_STATUS;
             var PR_NUMBER = process.env.PR_NUMBER;
