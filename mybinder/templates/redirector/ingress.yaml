@@ -1,9 +1,4 @@
-{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
 apiVersion: networking.k8s.io/v1
-{{- else }}
-apiVersion: networking.k8s.io/v1beta1
-{{- end }}
-{{ $root := . }}
 kind: Ingress
 metadata:
   name: redirector
@@ -15,27 +10,21 @@ metadata:
     {{- end }}
 spec:
   rules:
-    {{ range $redirect := .Values.redirector.redirects }}
+    {{- range $redirect := .Values.redirector.redirects }}
     - host: {{ $redirect.host.from | quote }}
       http:
         paths:
           - path: /
-            {{- if $root.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
             pathType: Prefix
             backend:
               service:
                 name: redirector
                 port:
                   number: 80
-            {{- else }}
-            backend:
-              serviceName: redirector
-              servicePort: 80
-            {{- end }}
-    {{ end }}
+    {{- end }}
   tls:
     - secretName: {{ .Values.redirector.ingress.tls.secretName }}
       hosts:
-      {{- range $redirect := .Values.redirector.redirects }}
-      - {{ $redirect.host.from }}
-      {{- end }}
+        {{- range $redirect := .Values.redirector.redirects }}
+        - {{ $redirect.host.from }}
+        {{- end }}

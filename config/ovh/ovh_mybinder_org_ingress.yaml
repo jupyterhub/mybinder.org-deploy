@@ -1,19 +1,22 @@
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ovh-mybinder-org
   annotations:
-    kubernetes.io/tls-acme: "true"
     kubernetes.io/ingress.class: "nginx"
+    kubernetes.io/tls-acme: "true"
 spec:
   rules:
     - host: ovh.mybinder.org
       http:
         paths:
           - path: /
+            pathType: Prefix
             backend:
-              serviceName: binder
-              servicePort: 8585
+              service:
+                name: binder
+                port:
+                  number: 8585
   tls:
     - secretName: kubelego-tls-binder-ovh
       hosts:
