@@ -3,6 +3,12 @@
 #
 name: Test helm template --validate
 
+env:
+  # NOTE: Updates to CERT_MANAGER_VERSION should also be done in the cd.yaml
+  #       workflow.
+  #
+  CERT_MANAGER_VERSION: "v0.15.2"
+
 on:
   pull_request:
     paths:
@@ -57,6 +63,15 @@ jobs:
           metrics-enabled: false
           traefik-enabled: false
           docker-enabled: true
+
+      # The k8s api-server will not recognize custom resources unless we have
+      # installed the associated CRDs defining them first.
+      #
+      # At this point in time, the mybinder chart only includes custom resources
+      # from cert-manager.
+      #
+      - name: Install cert-manager CRDs
+        run: kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/${CERT_MANAGER_VERSION}/cert-manager.crds.yaml
 
       # Validate rendered helm templates against a k8s api-server with a
       # matching version of where we look to deploy.
