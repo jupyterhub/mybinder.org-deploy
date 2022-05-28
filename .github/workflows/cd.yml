@@ -87,13 +87,11 @@ jobs:
               echo "HELM_VERSION=${{ matrix.helm_version }}" >> $GITHUB_ENV
           fi
 
-      # Action Repo: https://github.com/actions/checkout
       - name: "Stage 0: Checkout repo"
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      # Action Repo: https://github.com/actions/setup-python
       - name: "Stage 0: Setup Python 3.8"
         uses: actions/setup-python@v3
         id: setup-python
@@ -108,6 +106,8 @@ jobs:
           key: python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/*requirements.txt') }}
 
       - name: "Stage 1: Install dependencies"
+        # --upgrade is important since we carry a cache and may risk grow very
+        # outdated otherwise.
         run: |
           pip install --upgrade setuptools pip
           pip install --upgrade -r requirements.txt
@@ -193,11 +193,13 @@ jobs:
             hub_url: https://hub.gke.mybinder.org
             chartpress_args: ""
             helm_version: ""
+
           - federation_member: turing
             binder_url: https://turing.mybinder.org
             hub_url: https://hub.mybinder.turing.ac.uk
             chartpress_args: ""
             helm_version: ""
+
           - federation_member: ovh
             binder_url: https://ovh.mybinder.org
             hub_url: https://hub-binder.mybinder.ovh
@@ -223,6 +225,7 @@ jobs:
         with:
           python-version: 3.8
 
+      # Action Repo: https://github.com/actions/cache
       - name: "Stage 0: Cache pip dependencies"
         uses: actions/cache@v3
         with:
@@ -230,11 +233,12 @@ jobs:
           key: python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/*requirements.txt') }}
 
       - name: "Stage 1: Install dependencies"
+        # --upgrade is important since we carry a cache and may risk grow very
+        # outdated otherwise.
         run: |
           pip install --upgrade setuptools pip
           pip install --upgrade -r requirements.txt
 
-      # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idif
       - name: "Stage 1: Install gcloud ${{ env.GCLOUD_SDK_VERION }}"
         if: matrix.federation_member == 'prod'
         uses: google-github-actions/setup-gcloud@v0
