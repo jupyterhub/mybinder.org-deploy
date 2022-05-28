@@ -154,20 +154,32 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Get Chart.yaml pinned version/appVersion of ${{ matrix.chart_dep_name }} chart
+      - name: Get Chart.yaml pinned version and fetch associated appVersion of ${{ matrix.chart_dep_name }} chart
         id: local
+        # Chart.yaml's dependencies pins a chart's version which ships with some
+        # appVersion. Due to that, we need to fetch the appVersion separately
+        # with `helm show chart --version=<declared-chart-version>`.
+        #
         run: |
           local_version=$(cat mybinder/Chart.yaml | yq e '.dependencies.${{ matrix.chart_dep_index }}.version' -)
           echo "::set-output name=version::$local_version"
-          local_app_version=$(cat mybinder/Chart.yaml | yq e '.dependencies.${{ matrix.chart_dep_index }}.appVersion' -)
+
+          chart_dep_repo=$(cat mybinder/Chart.yaml | yq e '.dependencies.${{ matrix.chart_dep_index }}.repository' -)
+          local_app_version=$(helm show chart --version=$local_version --repo=$chart_dep_repo ${{ matrix.chart_dep_name }} | yq e '.appVersion' -)
           echo "::set-output name=appVersion::$local_app_version"
 
-      - name: Get latest version/appVersion of ${{ matrix.chart_dep_name }} chart
+      - name: Fetch latest version/appVersion of ${{ matrix.chart_dep_name }} chart
         id: latest
+        # We need to fetch the version/appVersion with `helm show chart`, always
+        # getting the latest version directly from the helm chart repository,
+        # optionally passing `--devel` to get pre-releases as well.
+        #
         run: |
           chart_dep_repo=$(cat mybinder/Chart.yaml | yq e '.dependencies.${{ matrix.chart_dep_index }}.repository' -)
+
           latest_version=$(helm show chart ${{ matrix.chart_dep_devel_flag }} --repo=$chart_dep_repo ${{ matrix.chart_dep_name }} | yq e '.version' -)
           echo "::set-output name=version::$latest_version"
+
           latest_app_version=$(helm show chart ${{ matrix.chart_dep_devel_flag }} --repo=$chart_dep_repo ${{ matrix.chart_dep_name }} | yq e '.appVersion' -)
           echo "::set-output name=appVersion::$latest_app_version"
 
