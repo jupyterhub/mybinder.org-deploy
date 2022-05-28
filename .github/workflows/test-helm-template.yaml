@@ -27,6 +27,9 @@ on:
   workflow_dispatch:
 
 jobs:
+  # Validate rendered helm templates against a k8s api-server with a
+  # matching version of where we look to deploy.
+  #
   helm-template:
     runs-on: ubuntu-20.04
     strategy:
@@ -73,10 +76,16 @@ jobs:
       - name: Install cert-manager CRDs
         run: kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/${CERT_MANAGER_VERSION}/cert-manager.crds.yaml
 
-      # Validate rendered helm templates against a k8s api-server with a
-      # matching version of where we look to deploy.
-      #
-      - name: "helm template --validate"
+      - name: "helm template --validate (cert-manager chart)"
+        run: |
+          echo "cert-manager version: ${CERT_MANAGER_VERSION}"
+
+          helm template --validate cert-manager cert-manager \
+              --repo=https://charts.jetstack.io \
+              --version=${CERT_MANAGER_VERSION} \
+              --values=config/cert-manager.yaml
+
+      - name: "helm template --validate (mybinder chart)"
         run: |
           helm template --validate mybinder ./mybinder \
               --values=config/${{ matrix.release }}.yaml \
