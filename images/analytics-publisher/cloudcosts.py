@@ -5,11 +5,7 @@ import argparse
 import csv
 import io
 import json
-import subprocess
-import sys
-import tempfile
 
-from dateutil.parser import parse
 from google.cloud import storage
 
 

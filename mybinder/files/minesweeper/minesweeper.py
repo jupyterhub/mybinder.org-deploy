@@ -368,6 +368,8 @@ async def node_report(pods=None, userid=1000):
                     print(f"Failed to kill {proc}: {e}")
             elif proc.suspicious:
                 print(f"dind process is suspicious: {proc}")
+        # FIXME: flake8 detected suspicious_dind_procs_without_pod to not be
+        #        used, it seems like something partially implemented.
         suspicious_dind_procs_without_pod = [
             p for p in procs_without_pod if p.suspicious
         ]

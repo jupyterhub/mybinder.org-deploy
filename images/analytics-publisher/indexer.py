@@ -10,14 +10,12 @@ import argparse
 import json
 import mimetypes
 import os
-import sys
 import tempfile
 from datetime import datetime
 from glob import glob
 
 import jinja2
-from dateutil.parser import parse
-from google.cloud import logging, storage
+from google.cloud import storage
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 

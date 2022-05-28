@@ -70,8 +70,6 @@ async def raise_for_status(r, action=""):
 
 async def list_images(session, project):
     """List the images for a project"""
-    images = []
-    first = True
     url = "https://gcr.io/v2/_catalog"
     while url:
         async with session.get(url) as r:
@@ -169,7 +167,7 @@ async def main(release="staging", project=None, concurrency=20, dry_run=True):
         connector=aiohttp.TCPConnector(limit=2 * concurrency),
     ) as session:
 
-        print(f"Fetching images")
+        print("Fetching images")
         tag_futures = []
         matches = 0
         total_images = 0

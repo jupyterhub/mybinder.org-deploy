@@ -4,11 +4,10 @@ Read event logs from stackdriver & export them to Google Cloud Storage
 import argparse
 import json
 import tempfile
-import time
 from datetime import datetime
 
 from dateutil.parser import parse
-from google.cloud import logging, storage
+from google.cloud import storage
 
 
 def process_event(event):

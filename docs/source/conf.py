@@ -18,9 +18,6 @@
 
 from datetime import datetime
 
-# For conversion from markdown (.md) to html
-import recommonmark.parser
-
 # -- General configuration ------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.

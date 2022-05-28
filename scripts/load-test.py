@@ -1,6 +1,5 @@
 import argparse
 import json
-import pickle
 import random
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
