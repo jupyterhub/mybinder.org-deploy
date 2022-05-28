@@ -1,0 +1,83 @@
+# This is a GitHub workflow defining a set of jobs with a set of steps.
+# ref: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+#
+name: Test helm template --validate
+
+env:
+  # NOTE: Updates to CERT_MANAGER_VERSION should also be done in the cd.yaml
+  #       workflow.
+  #
+  CERT_MANAGER_VERSION: "v0.15.2"
+
+on:
+  pull_request:
+    paths:
+      - "mybinder/**"
+      - "config/**"
+      - ".github/workflows/test-helm-template.yaml"
+  push:
+    paths:
+      - "mybinder/**"
+      - "config/**"
+      - ".github/workflows/test-helm-template.yaml"
+    branches-ignore:
+      - "dependabot/**"
+      - "pre-commit-ci-update-config"
+      - "update-*"
+  workflow_dispatch:
+
+jobs:
+  helm-template:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # FIXME: The k3s-channel should preferably be deduced from the k8s
+          #        clusters control plane's version rather than hardcoded. See
+          #        https://github.com/jupyterhub/binderhub/issues/1495 about an
+          #        idea on how to get that version dynamically.
+          #
+          - release: staging
+            k3s-channel: "v1.21"
+          - release: prod
+            k3s-channel: "v1.21"
+          - release: ovh
+            k3s-channel: "v1.20"
+          - release: turing
+            k3s-channel: "v1.21"
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+
+      - run: helm dependency update ./mybinder
+
+      # Starts a k8s cluster with NetworkPolicy enforcement and installs both
+      # kubectl and helm.
+      #
+      # ref: https://github.com/jupyterhub/action-k3s-helm/
+      - uses: jupyterhub/action-k3s-helm@v2
+        with:
+          k3s-channel: ${{ matrix.k3s-channel }}
+          metrics-enabled: false
+          traefik-enabled: false
+          docker-enabled: true
+
+      # The k8s api-server will not recognize custom resources unless we have
+      # installed the associated CRDs defining them first.
+      #
+      # At this point in time, the mybinder chart only includes custom resources
+      # from cert-manager.
+      #
+      - name: Install cert-manager CRDs
+        run: kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/${CERT_MANAGER_VERSION}/cert-manager.crds.yaml
+
+      # Validate rendered helm templates against a k8s api-server with a
+      # matching version of where we look to deploy.
+      #
+      - name: "helm template --validate"
+        run: |
+          helm template --validate mybinder ./mybinder \
+              --values=config/${{ matrix.release }}.yaml \
+              --values=config/test-secrets.yaml
