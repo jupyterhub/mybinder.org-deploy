@@ -302,7 +302,6 @@ jobs:
       # Poll the GitHub REST API and wait for staging-deploy job to finish
       - name: Wait for staging-deploy completion
         id: staging-deploy-status
-        shell: bash
         run: |
           STATUS=""
           CONCLUSION=""
@@ -329,7 +328,6 @@ jobs:
 
       - name: Set PR number as variable
         id: get-pr-number
-        shell: bash
         run: |
           PR_NUM=$(echo ${{ github.ref }} | awk -F'/' '{print $NF}')
           echo "::set-output name=prnum::$PR_NUM"
