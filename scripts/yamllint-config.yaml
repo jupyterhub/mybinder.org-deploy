@@ -1,20 +1,25 @@
-# Use a more tolerant config
-# Indentation, line length, extra spaces, blank lines are raised as warnings - not errors
+# yamllint can be installed via `pip install yamllint`, and is used to verify
+# that the YAML files in this repo seems valid.
 #
-# https://yamllint.readthedocs.io/en/stable/configuration.html#default-configuration
+#   yamllint --config-data=scripts/yamllint-config.yaml .
+#
+# We rely on the "relaxed" base configuration where indentation, line length,
+# extra spaces, blank lines are raised as warnings - not errors. See
+# https://yamllint.readthedocs.io/en/stable/configuration.html#default-configuration.
+#
 extends: relaxed
 
-# Because we can't be responsible for linting
-# the JupyterHub helm chart too
+# Ignore any Helm chart templates as they are not pure YAML files.
+#
+# NOTE: If you make a change here, also update scripts/yamllint-no-secrets.yaml
+#       as that overrides this by appending secrets/** as well.
+#
 ignore: |
-  **/jupyterhub/**
-  mybinder/templates
+  .git/**
+  **/templates/**
 
-# Ignore common but non-critical errors
+# Ignore common warnings we don't want to bother with
 rules:
-  trailing-spaces:
-    ignore:
-      /**
-  new-line-at-end-of-file:
-    ignore:
-      /**
+  line-length: disable
+  trailing-spaces: disable
+  new-line-at-end-of-file: disable
