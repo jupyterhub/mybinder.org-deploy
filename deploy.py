@@ -3,10 +3,9 @@ import argparse
 import glob
 import json
 import os
-import subprocess
 import re
+import subprocess
 import sys
-
 
 # Color codes for colored output!
 if os.environ.get("TERM"):

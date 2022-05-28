@@ -16,7 +16,8 @@ autoscaler reclamation without disrupting user pods.
 
 import argparse
 import sys
-from kubernetes import config, client
+
+from kubernetes import client, config
 
 # Setup our parameters
 argparser = argparse.ArgumentParser(description=__doc__)

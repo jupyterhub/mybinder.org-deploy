@@ -1,5 +1,5 @@
-from yaml import safe_load as load
 import requests
+from yaml import safe_load as load
 
 print('Fetching the SHA for live BinderHub and repo2docker...')
 

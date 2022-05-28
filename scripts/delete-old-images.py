@@ -16,11 +16,11 @@ Usage:
 """
 
 import asyncio
+import os
+import time
 from collections import defaultdict
 from functools import partial
-import os
 from pprint import pformat
-import time
 
 import aiohttp
 import tqdm

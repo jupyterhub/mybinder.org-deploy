@@ -1,10 +1,8 @@
 import argparse
 import json
-import time
-import random
 import pickle
-import json
-
+import random
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import requests

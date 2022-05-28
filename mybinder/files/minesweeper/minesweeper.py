@@ -28,17 +28,13 @@ from functools import partial
 from operator import attrgetter
 from textwrap import indent
 
-import kubernetes.client
-import kubernetes.config
-from kubernetes.stream import stream
-
-import psutil
-
 # herorat located in secrets/minesweeper/
 import herorat
-from herorat import inspect_pod
-from herorat import inspect_process
-
+import kubernetes.client
+import kubernetes.config
+import psutil
+from herorat import inspect_pod, inspect_process
+from kubernetes.stream import stream
 
 kubernetes.config.load_incluster_config()
 kube = kubernetes.client.CoreV1Api()

@@ -13,9 +13,11 @@ This script requires:
 - The requests library
 """
 import argparse
-import requests
 import os
 import time
+
+import requests
+
 
 def create_annotation(grafana_url, grafana_api_key, tags, text):
     """

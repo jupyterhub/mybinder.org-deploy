@@ -7,20 +7,17 @@ import sys
 from hashlib import blake2b
 
 import prometheus_client
-from prometheus_client import Gauge
-
 import tornado
 import tornado.ioloop
-import tornado.web
 import tornado.options
-from tornado.ioloop import IOLoop
-from tornado.log import app_log
+import tornado.web
+from prometheus_client import Gauge
 from tornado import options
-
 from tornado.httpclient import AsyncHTTPClient, HTTPError, HTTPRequest
 from tornado.httputil import HTTPHeaders
+from tornado.ioloop import IOLoop
+from tornado.log import app_log
 from tornado.web import RequestHandler
-
 
 # Config for local testing
 CONFIG = {

@@ -1,10 +1,10 @@
-from contextlib import contextmanager
 import json
+import os
 import subprocess
+import sys
 import tempfile
 import time
-import os
-import sys
+from contextlib import contextmanager
 
 import pytest
 import requests

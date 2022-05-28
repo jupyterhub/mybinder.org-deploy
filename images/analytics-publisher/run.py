@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-from datetime import datetime, timedelta
-import time
-import os
 import json
+import os
+import time
+from datetime import datetime, timedelta
 
 from archiver import archive_events
-from indexer import index_events
 from cloudcosts import publish_daily_cost
+from indexer import index_events
 
 with open('/etc/analytics-publisher/analytics-publisher.json') as f:
     config = json.load(f)

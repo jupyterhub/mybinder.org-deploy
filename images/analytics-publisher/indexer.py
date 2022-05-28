@@ -6,17 +6,18 @@ This script reads the bucket containing archived events
 generating a human readable index.html & a machine readable
 index.jsonl.
 """
-import json
 import argparse
-import sys
-from dateutil.parser import parse
+import json
 import mimetypes
-from datetime import datetime
-import tempfile
-from google.cloud import logging, storage
-import jinja2
 import os
+import sys
+import tempfile
+from datetime import datetime
 from glob import glob
+
+import jinja2
+from dateutil.parser import parse
+from google.cloud import logging, storage
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
