@@ -1,10 +1,10 @@
-pyyaml
+chartpress==1.0.*,>=1.0.2
+kubernetes
 # pin pytest until rerunfailures gets an update:
 # https://github.com/pytest-dev/pytest-rerunfailures/issues/128
 pytest<6.1.0
 pytest-rerunfailures
 pytest-timeout
 pytest-xdist
+pyyaml
 requests
-kubernetes
-chartpress==1.0.*,>=1.0.2
