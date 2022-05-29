@@ -99,7 +99,7 @@ jobs:
         uses: actions/setup-python@v3
         id: setup-python
         with:
-          python-version: 3.8
+          python-version: "3.8"
 
       # Action Repo: https://github.com/actions/cache
       - name: "Stage 0: Cache pip dependencies"
@@ -226,7 +226,7 @@ jobs:
         uses: actions/setup-python@v3
         id: setup-python
         with:
-          python-version: 3.8
+          python-version: "3.8"
 
       # Action Repo: https://github.com/actions/cache
       - name: "Stage 0: Cache pip dependencies"
