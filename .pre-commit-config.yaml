@@ -8,6 +8,9 @@
 # - Run on all files:   pre-commit run --all-files
 # - Register git hooks: pre-commit install --install-hooks
 #
+
+# secrets files are encrypted and can't be checked
+exclude: "(.*/)?secrets/.*"
 repos:
   # Autoformat: Python code, syntax patterns are modernized
   - repo: https://github.com/asottile/pyupgrade
