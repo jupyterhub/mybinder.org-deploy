@@ -8,19 +8,30 @@ ingressShim:
   defaultIssuerName: letsencrypt-prod
   defaultIssuerKind: ClusterIssuer
 
-# Added to protect against being starved of CPU and failing to respond, which
-# can cause helm upgrade failures.
+# Explicit requests are to protect against being starved of CPU and failing to
+# respond, which can cause helm upgrade failures. Limits are declared to ensure
+# that a pod overhead isn't making the resources starved as well.
+#
 resources:
   requests:
     cpu: 15m
     memory: 48Mi
+  limits:
+    cpu: 45m
+    memory: 144Mi
 webhook:
   resources:
     requests:
       cpu: 15m
       memory: 48Mi
+    limits:
+      cpu: 45m
+      memory: 144Mi
 cainjector:
   resources:
-  requests:
-    cpu: 15m
-    memory: 48Mi
+    requests:
+      cpu: 15m
+      memory: 48Mi
+    limits:
+      cpu: 45m
+      memory: 144Mi
