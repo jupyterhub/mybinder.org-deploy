@@ -123,7 +123,7 @@ jobs:
 
       # Action Repo: https://github.com/Azure/setup-kubectl
       - name: "Stage 1: Install kubectl ${{ env.KUBECTL_VERSION }}"
-        uses: azure/setup-kubectl@v1
+        uses: azure/setup-kubectl@v2.1
         with:
           version: ${{ env.KUBECTL_VERSION }}
 
@@ -249,7 +249,7 @@ jobs:
           version: ${{ env.GCLOUD_SDK_VERION }}
 
       - name: "Stage 1: Install kubectl ${{ env.KUBECTL_VERSION }}"
-        uses: azure/setup-kubectl@v1
+        uses: azure/setup-kubectl@v2.1
         with:
           version: ${{ env.KUBECTL_VERSION }}
 
