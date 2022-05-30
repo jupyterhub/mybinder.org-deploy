@@ -43,7 +43,7 @@ env:
   # NOTE: Updates to CERT_MANAGER_VERSION should also be done in the
   #       test-helm-template.yaml workflow.
   #
-  CERT_MANAGER_VERSION: "v1.8.0"
+  CERT_MANAGER_VERSION: "v1.1.0"
 
   # These variables influence git directly
   # https://git-scm.com/book/en/v2/Git-Internals-Environment-Variables#_committing
