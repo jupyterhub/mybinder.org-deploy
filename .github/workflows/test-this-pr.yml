@@ -19,4 +19,4 @@ jobs:
     steps:
       - uses: sgibson91/test-this-pr-action@main
         with:
-          access_token: ${{ secrets.jupyterhub_bot_pat }}
+          access_token: ${{ secrets.TEST_THIS_PR_ACCESS_TOKEN }}
