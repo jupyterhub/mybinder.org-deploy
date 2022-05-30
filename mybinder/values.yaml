@@ -593,7 +593,7 @@ federationRedirect:
       versions: https://gesis.mybinder.org/versions
     ovh:
       url: https://ovh.mybinder.org
-      weight: 60
+      weight: 0
       health: https://ovh.mybinder.org/health
       versions: https://ovh.mybinder.org/versions
     turing:
