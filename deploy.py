@@ -244,9 +244,9 @@ def setup_certmanager():
     manifest_url = f"https://github.com/jetstack/cert-manager/releases/download/{version}/cert-manager.crds.yaml"
     print(BOLD + GREEN + f"Installing cert-manager CRDs {version}" + NC, flush=True)
 
-    subprocess.check_call(
-        ["kubectl", "apply", "-f", manifest_url]
-    )
+    # Sometimes 'replace' is needed for upgrade (e.g. 1.1->1.2)
+    # this should be equivalent to apply
+    subprocess.check_call(["kubectl", "replace", "-f", manifest_url])
 
     print(BOLD + GREEN + f"Installing cert-manager {version}" + NC, flush=True)
     helm_upgrade = [
