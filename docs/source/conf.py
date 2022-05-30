@@ -19,15 +19,15 @@ extensions = [
 ]
 
 # The suffix(es) of source filenames.
-source_suffix = ['.rst', '.md']
+source_suffix = [".rst", ".md"]
 
 # The root toctree document.
 root_doc = master_doc = "index"
 
 # General information about the project.
-project = 'Site Reliability Guide for mybinder.org'
-copyright = f'2017 - {datetime.now().year}, Binder Team'
-author = 'Binder Team'
+project = "Site Reliability Guide for mybinder.org"
+copyright = f"2017 - {datetime.now().year}, Binder Team"
+author = "Binder Team"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -61,7 +61,7 @@ html_favicon = "_static/images/favicon.ico"
 linkcheck_ignore = [
     r"(.*)github\.com(.*)#",  # javascript based anchors
     r"(.*)/#%21(.*)/(.*)",  # /#!forum/jupyter - encoded anchor edge case
-    "https://grafana.mybinder.org", # likely no longer functional links from incident reports
+    "https://grafana.mybinder.org",  # likely no longer functional links from incident reports
     "https://console.cloud.google.com",  # sign-in redirect noise
     "https://console.developers.google.com",  # sign-in redirect noise
 ]

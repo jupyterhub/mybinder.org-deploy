@@ -36,9 +36,9 @@ have a working knowledge of how to use helm. Detailed explanations are out of th
 scope of this repository, but [docs.helm.sh](https://docs.helm.sh) is an excellent
 source of information. At a minimum, you must at least understand:
 
-* [What is a chart?](https://helm.sh/docs/chart_template_guide/getting_started/#charts)
-* [What are values files?](https://helm.sh/docs/chart_template_guide/values_files/)
-* [How do chart dependencies work?](https://helm.sh/docs/chart_template_guide/subcharts_and_globals/)
+- [What is a chart?](https://helm.sh/docs/chart_template_guide/getting_started/#charts)
+- [What are values files?](https://helm.sh/docs/chart_template_guide/values_files/)
+- [How do chart dependencies work?](https://helm.sh/docs/chart_template_guide/subcharts_and_globals/)
 
 ## Travis
 

@@ -19,7 +19,6 @@ Upgrade of jupyterhub, binderhub charts is deployed. Tests pass and builds and l
 
 Launch success drops to zero.
 
-
 ### 14:29
 
 Binder outage is reported on Gitter by @jakamkon, investigation is started.
@@ -122,7 +121,6 @@ and everything is now up-to-date.
 It is observed that the memory leak does not recur,
 confirming that the kubespawner update is the root cause.
 
-
 ## Lessons learned
 
 - It takes about an hour to deploy a change to zero-to-jupyterhub all the way to
@@ -144,15 +142,14 @@ confirming that the kubespawner update is the root cause.
   Reverting a large deploy can result in significant downtime
   during the revert.
 - Three separate bugs were introduced and resolved in this process:
-    1. flood bug in updated culler
-    2. memory leak bug in updated kubespawner
-    3. failure-to-start bug in new image-cleaner
-  More granular continuous deployments would have allowed us to find and catch
-  each of these issues one at a time.
-  On the other hand, deploying at dedicated, less frequent times
-  would allow the team to be prepared to handle and respond to the update process,
-  rather than reacting to issues as they are deployed throughout the week.
-
+  1. flood bug in updated culler
+  2. memory leak bug in updated kubespawner
+  3. failure-to-start bug in new image-cleaner
+     More granular continuous deployments would have allowed us to find and catch
+     each of these issues one at a time.
+     On the other hand, deploying at dedicated, less frequent times
+     would allow the team to be prepared to handle and respond to the update process,
+     rather than reacting to issues as they are deployed throughout the week.
 
 ## Action items
 

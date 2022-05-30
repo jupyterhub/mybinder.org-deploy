@@ -5,7 +5,6 @@
 The JupyterLab [announcement post](https://blog.jupyter.org/jupyterlab-is-ready-for-users-5a6f039b8906) drove a great deal of traffic to mybinder.org.
 This caused several outages throughout the day from varying causes.
 
-
 We prepared for this by temporarily increasing the mininum number of nodes.
 
 After a deployment, most users were getting "Failed to create temporary user for gcr.io/binder-prod/" when attempting to launch their image. This was caused by a small bug that manifests only when large numbers of users are using Binder at the same time. The bug was identified and fixed, but due to logistical issues it caused mybinder to be unusable for about 1h50m, and unstable for ~1 day.
@@ -37,7 +36,6 @@ due to the per-repo limit. The rate limit is behaving as intended.
 
 [Action Item] launches that are rejected due to rate limiting are registered as a
 'failed launch' in our launch success metric. This should instead be its own label.
-
 
 ### 15:10
 
@@ -82,7 +80,7 @@ Grafana pod dies and is restarted multiple times. This time by Kubernetes withou
 
 ### 16:00
 
-JupyterLab has hit the 500 user limit and is  ?????
+JupyterLab has hit the 500 user limit and is ?????
 After returning to working order, ????
 
 ### 16:05
@@ -94,7 +92,6 @@ Launch success rate is at 0%. Something is wrong beyond load.
 Hub is restarted to attempt to clear out bad state via `kubectl delete pod`
 
 The hub comes back and promptly culls many inactive pods. However, there appears to be a problem in the culler itself. Every cull request fails due to 400 requests asking for an already-stopping server to stop again, resulting in the culler exiting. **The culler shouldn't exit when there is an error**
-
 
 ### 16:29
 
@@ -108,7 +105,6 @@ Everything's still failing. Binder requests to the Hub are failing with a timeou
 [W 180220 15:32:35 web:1588] 500 GET /build/gh/jupyterlab/jupyterlab-demo/18a9793b58ba86660b5ab964e1aeaf7324d667c8 (10.12.8.27): Failed to create temporary user for gcr.io/binder-prod/r2d-fd74043jupyterlab-jupyterlab-demo:18a9793b58ba86660b5ab964e1aeaf7324d667c8
 ```
 
-
 ### 16:33
 
 BinderHub is restarted, in case there is an issue in BinderHub itself.
@@ -117,10 +113,9 @@ After this restart, launches begin to succeed again. It appears that BinderHub w
 
 It could also have been a kubernetes networking issue where pod-networking is no longer working.
 
-
 ### 16:40
 
-Grafana pod restarted itself again. No indication as to why, but it could just be being reassigned to new nodes as the cluster resizes. 
+Grafana pod restarted itself again. No indication as to why, but it could just be being reassigned to new nodes as the cluster resizes.
 
 In hindsight, it is most likely because it only requests 100Mi of RAM and nothing more.
 
@@ -137,7 +132,6 @@ Since BinderHub is reaching a timeout after several requests to the hub have acc
 - cull jupyterlab pods older than 2 hours (103 pods)
 - install pycurl on binderhub, which has been known to fix some timeout issues on jupyterhub underload
 - revert per-repo limit back to 300 pods
-
 
 ### 18:10
 
@@ -164,7 +158,6 @@ due to networking failure on a node, but we don't know that yet.
 
 pycurl PR is reverted due to suspicion that it caused Service Unavailable errors.
 It turns out this is not the case, the Hub really was unavailable due to bad networking state on at least one node.
-
 
 Hub logs show:
 
@@ -283,23 +276,23 @@ hub. [Response codes for the hub](https://grafana.mybinder.org/render/dashboard-
 
 We have the idea to delete the routing table for the `hub-` pod so that it reduces the HTTP requests. This is done with the following commands.
 
-* First, enter the `hub-` pod and start a python session with:
-  
+- First, enter the `hub-` pod and start a python session with:
+
   `kubectl --namespace=prod exec -it hub-989cc9bd-5qdcb /bin/bash`
-  
+
   then
-  
+
   `python`
 
-* delete default HTTP route:
-   
+- delete default HTTP route:
+
   `requests.delete('http://proxy-api:8001/api/routes//', headers={'Authorization': 'token ' + os.environ['CONFIGPROXY_AUTH_TOKEN']})`
 
-* add route for /hub/api:
+- add route for /hub/api:
 
   `requests.post('http://proxy-api:8001/api/routes//hub/api', headers={'Authorization': 'token ' + os.environ['CONFIGPROXY_AUTH_TOKEN']}, json={'hub': True, 'target': 'http://10.15.251.161:8081', 'jupyterhub': True, 'last_activity': '2018-02-20T21:18:29.579Z'})`
 
-We decide to *not* experiment on live users right now. 
+We decide to _not_ experiment on live users right now.
 Everything has been stable once the 100-users-per-repo
 throttling had been re-established..
 
@@ -329,11 +322,11 @@ This high CPU usage in the Hub due to a flood of threads created by kubernetes-c
 
 ## Conclusions
 
-The ultimate cause of this incident was a bug in a specific version JupyterHub+KubeSpawner+kubernetes-client that causes unreasonably high load for a moderate load. This bug had been fixed weeks ago in the jupyterhub chart, and was present. BinderHub was using a development version of the jupyterhub chart *prior* to the latest stable release.
+The ultimate cause of this incident was a bug in a specific version JupyterHub+KubeSpawner+kubernetes-client that causes unreasonably high load for a moderate load. This bug had been fixed weeks ago in the jupyterhub chart, and was present. BinderHub was using a development version of the jupyterhub chart _prior_ to the latest stable release.
 
 1. deploying a capacity increase during heavy load may not be a recipe for success, but this is inconclusive.
 1. handling of slow shutdown needs work in jupyterhub
-1. there is a bug in jupyterhub causing it to attempt to delete routes from the proxy that are not there. The resulting 404 is already fixed in jupyterhub, but the bug causing the incorrect *attempt* is still undiagnosed.
+1. there is a bug in jupyterhub causing it to attempt to delete routes from the proxy that are not there. The resulting 404 is already fixed in jupyterhub, but the bug causing the incorrect _attempt_ is still undiagnosed.
 1. grafana is regularly being restarted, which causes the page to be down. Since deployments now notify grafana of a deploy, this can prevent deploy success. It is a harmless failure in this case because if the grafana annotation fails, no deploy stages are attempted, so a Travis retry is quite safe.
 1. culler has an issue where it exits if its request fails with 400
 1. culler shouldn't be making requests that fail with 400
@@ -342,15 +335,13 @@ The ultimate cause of this incident was a bug in a specific version JupyterHub+K
    new users not being created.
 1. Unclear if this instability was fixed by deleting `binder-`, or if this was just waiting for a
    change to propagate.
-   
 1. JupyterHub was basically getting swamped because it was handling more HTTP requests by an order of magnitude or more. This was because of a few factors:
-    1. The aforementioned big bump in usage
-    2. The "default" route points to the hub, so when a user's pod would get delete and they'd continue doing stuff, all resulting requests went to the hub.
-    3. We don't have a mechanism for throttling requests on the hub
-    4. We only have a single hub that's handling all HTTP requests
-    5. There were cascading effects going on where errors would generate more HTTP requests that would worsen the problem.
+   1. The aforementioned big bump in usage
+   2. The "default" route points to the hub, so when a user's pod would get delete and they'd continue doing stuff, all resulting requests went to the hub.
+   3. We don't have a mechanism for throttling requests on the hub
+   4. We only have a single hub that's handling all HTTP requests
+   5. There were cascading effects going on where errors would generate more HTTP requests that would worsen the problem.
 1. some issues may have been attributable to unhealthy nodes, but diagnosing unhealthy nodes is difficult.
-
 
 ## Action Items
 
@@ -360,7 +351,6 @@ The ultimate cause of this incident was a bug in a specific version JupyterHub+K
 - Improve handling of spawners that are slow to stop https://github.com/jupyterhub/jupyterhub/issues/1677
 - Investigating allowing deletion of users whose servers are slow to stop or fail to stop altogether https://github.com/jupyterhub/jupyterhub/issues/1677
 - implement API-only mode for use cases like Binder (https://github.com/jupyterhub/jupyterhub/issues/1675)
-
 
 ### Zero-to-JupyterHub
 
@@ -373,7 +363,7 @@ cull_idle_servers:
 
 - ensure pycurl is used, which is known to perform better with large numbers of requests than tornado's default SimpleAsyncHTTPClient (https://github.com/jupyterhub/binderhub/pull/460)
 - Investigate timeout issue, which may be due to lack of pycurl, too many concurrent requests, or purely the overloaded Hub (https://github.com/jupyterhub/binderhub/issues/464)
-- separate rejection code/metadata for launch failures due to repo limit vs. "regular" launch failures. Note: on investigation, we already do this so launch failures should *not* include rejected launches.
+- separate rejection code/metadata for launch failures due to repo limit vs. "regular" launch failures. Note: on investigation, we already do this so launch failures should _not_ include rejected launches.
 - Figure out if there's a way to reduce the number of HTTP requests that are going to the JupyterHub (this became a problem w/ high load) (https://github.com/jupyterhub/binderhub/pull/461)
 - Make it possible for Binder to launch multiple JupyterHubs and direct users through those hubs in a round-robin fashion (https://github.com/jupyterhub/binderhub/issues/465)
 

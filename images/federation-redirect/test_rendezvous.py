@@ -28,6 +28,6 @@ def test_100_0_split():
     # check that a bucket with zero weight never gets selected
     # the weight of bucket "a" doesn't matter
     result = Counter(
-        [rendezvous_rank([("a", 0.8), ("b", 0.)], "key-%i" % i)[0] for i in range(100)]
+        [rendezvous_rank([("a", 0.8), ("b", 0.0)], "key-%i" % i)[0] for i in range(100)]
     )
     assert Counter({"a": 100}) == result

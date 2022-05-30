@@ -7,7 +7,6 @@ resulting in constant growth of pods,
 eventually filling the cluster and new launches failing.
 Total service disruption for Binder lasted for approximately five hours on a Saturday evening.
 
-
 ## Timeline
 
 All times in CEST (UTC+2)
@@ -58,7 +57,7 @@ Shortly thereafter, pod deletion is skipped for pods that launch but are not in 
 [W 2018-07-07 16:38:35.506 JupyterHub spawner:1476] No pod jupyter-ipython-2dipython-2din-2ddepth-... to delete. Assuming already deleted.
 ```
 
-These pods *have* started, but aren't registered in the pod reflector,
+These pods _have_ started, but aren't registered in the pod reflector,
 so in aborting the launch, the pod is not deleted.
 This is the direct cause of the runaway pod growth,
 though the root cause is that the pod reflector has stopped updating.

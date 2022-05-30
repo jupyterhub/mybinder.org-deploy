@@ -72,8 +72,6 @@ resource.type="k8s_pod" resource.labels.cluster_name="prod"
 resource.labels.pod_name=~"^binder.*"
 ```
 
-
-
 ### 2022-01-28 10:00
 
 Underlying issue in federation-redirect is identified and [fixed][fix-pr].
@@ -84,7 +82,6 @@ Underlying issue in federation-redirect is identified and [fixed][fix-pr].
 
 1. Cluster healed itself when traffic dropped below the prime cluster's pod quota.
 2. federation-redirect logs clearly showed it was the version mismatch preventing traffic.
-
 
 ### What went wrong
 
@@ -102,7 +99,6 @@ Underlying issue in federation-redirect is identified and [fixed][fix-pr].
 
 [status]: https://mybinder.readthedocs.io/en/latest/about/status.html
 
-
 ### Where we got lucky
 
 1. Federation 'as a whole' handled the traffic okay,
@@ -117,13 +113,11 @@ Underlying issue in federation-redirect is identified and [fixed][fix-pr].
 
 1. Implement proactive alerts. This is a longstanding issue we have yet to address ([issue][alerting-issue]).
 
-
 ### Technical improvements
 
 1. Fix bug preventing prime cluster's version from being updated while it is full ([pull request][fix-pr])
 2. Add metrics for the federation-redirect service to improve visibility of federation health issues ([issue][metrics-issue])
 3. Consider allowing the prime cluster to stop accepting traffic when it is unhealthy ([issue][full-issue])
-
 
 [alerting-issue]: https://github.com/jupyterhub/mybinder.org-deploy/issues/611
 [metrics-issue]: https://github.com/jupyterhub/mybinder.org-deploy/issues/2114

@@ -27,19 +27,19 @@ suggesting that pods aren't being created.
 
 ### 11:22
 
-* Notice an SSL protocol error:
+- Notice an SSL protocol error:
 
   ```
   tornado.curl_httpclient.CurlError: HTTP 599: Unknown SSL protocol error in connection to gcr.io:443
   ```
 
-* Binder pod is deleted and launches return to normal.
+- Binder pod is deleted and launches return to normal.
 
 ### 12:19
 
-* Launches aren't working again, taking a very long time to start up
-* Deleted binder and hub pods
-* This resolved the issue a second time.
+- Launches aren't working again, taking a very long time to start up
+- Deleted binder and hub pods
+- This resolved the issue a second time.
 
 This is the utilization behavior seen:
 

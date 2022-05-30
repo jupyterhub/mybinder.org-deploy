@@ -3,14 +3,10 @@ import pytest
 
 def pytest_addoption(parser):
     parser.addoption(
-        "--binder-url",
-        help="Fully qualified URL to the binder installation"
+        "--binder-url", help="Fully qualified URL to the binder installation"
     )
 
-    parser.addoption(
-        "--hub-url",
-        help="Fully qualified URL to the hub installation"
-    )
+    parser.addoption("--hub-url", help="Fully qualified URL to the hub installation")
 
 
 @pytest.fixture

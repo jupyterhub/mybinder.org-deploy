@@ -9,9 +9,9 @@ import sys
 
 # Color codes for colored output!
 if os.environ.get("TERM"):
-    BOLD = subprocess.check_output(['tput', 'bold']).decode()
-    GREEN = subprocess.check_output(['tput', 'setaf', '2']).decode()
-    NC = subprocess.check_output(['tput', 'sgr0']).decode()
+    BOLD = subprocess.check_output(["tput", "bold"]).decode()
+    GREEN = subprocess.check_output(["tput", "setaf", "2"]).decode()
+    NC = subprocess.check_output(["tput", "sgr0"]).decode()
 else:
     # no term, no colors
     BOLD = GREEN = NC = ""
@@ -41,56 +41,56 @@ def setup_auth_turing(cluster):
 
     # Login in to Azure
     login_cmd = [
-        "az", "login", "--service-principal",
-        "--username", azure["sp-app-id"],
-        "--password", azure["sp-app-key"],
-        "--tenant", azure["tenant-id"]
+        "az",
+        "login",
+        "--service-principal",
+        "--username",
+        azure["sp-app-id"],
+        "--password",
+        azure["sp-app-key"],
+        "--tenant",
+        azure["tenant-id"],
     ]
     subprocess.check_output(login_cmd)
 
     # Set kubeconfig
     creds_cmd = [
-        "az", "aks", "get-credentials",
-        "--name", cluster,
-        "--resource-group", "binder-prod"
-
+        "az",
+        "aks",
+        "get-credentials",
+        "--name",
+        cluster,
+        "--resource-group",
+        "binder-prod",
     ]
     stdout = subprocess.check_output(creds_cmd)
-    print(stdout.decode('utf-8'))
+    print(stdout.decode("utf-8"))
 
 
 def setup_auth_ovh(release, cluster):
     """
     Set up authentication with 'ovh' K8S from the ovh-kubeconfig.yml
     """
-    print(f'Setup the OVH authentication for namespace {release}')
+    print(f"Setup the OVH authentication for namespace {release}")
 
-    ovh_kubeconfig = os.path.join(ABSOLUTE_HERE, 'secrets', 'ovh-kubeconfig.yml')
-    os.environ['KUBECONFIG'] = ovh_kubeconfig
-    print(f'Current KUBECONFIG=\'{ovh_kubeconfig}\'')
-    stdout = subprocess.check_output([
-        'kubectl',
-        'config',
-        'use-context',
-        cluster
-    ])
-    print(stdout.decode('utf8'))
+    ovh_kubeconfig = os.path.join(ABSOLUTE_HERE, "secrets", "ovh-kubeconfig.yml")
+    os.environ["KUBECONFIG"] = ovh_kubeconfig
+    print(f"Current KUBECONFIG='{ovh_kubeconfig}'")
+    stdout = subprocess.check_output(["kubectl", "config", "use-context", cluster])
+    print(stdout.decode("utf8"))
 
 
 def setup_ovh_ingress_link(release):
     """
     Setup the Ingress link ovh.mybinder.org -> binder.mybinder.ovh
     """
-    ovh_ingress_path = os.path.join(ABSOLUTE_HERE, 'config', 'ovh', 'ovh_mybinder_org_ingress.yaml')
-    stdout = subprocess.check_output([
-        'kubectl',
-        'apply',
-        '-f',
-        ovh_ingress_path,
-        '-n',
-        release
-    ])
-    print(stdout.decode('utf8'))
+    ovh_ingress_path = os.path.join(
+        ABSOLUTE_HERE, "config", "ovh", "ovh_mybinder_org_ingress.yaml"
+    )
+    stdout = subprocess.check_output(
+        ["kubectl", "apply", "-f", ovh_ingress_path, "-n", release]
+    )
+    print(stdout.decode("utf8"))
 
 
 def setup_auth_gcloud(release, cluster=None):
@@ -98,10 +98,14 @@ def setup_auth_gcloud(release, cluster=None):
     Set up GCloud + Kubectl authentication for talking to a given cluster
     """
     # Authenticate to GoogleCloud using a service account
-    subprocess.check_output([
-        "gcloud", "auth", "activate-service-account",
-        f"--key-file=secrets/gke-auth-key-{release}.json"
-    ])
+    subprocess.check_output(
+        [
+            "gcloud",
+            "auth",
+            "activate-service-account",
+            f"--key-file=secrets/gke-auth-key-{release}.json",
+        ]
+    )
 
     if not cluster:
         cluster = release
@@ -126,7 +130,9 @@ def setup_auth_gcloud(release, cluster=None):
 def assert_helm_v3():
     """Asserts helm is available at all and of the required major version."""
     c = subprocess.run(["helm", "--help"], capture_output=True)
-    assert c.returncode == 0, "Helm 3 is required, but helm doesn't seem to be installed!"
+    assert (
+        c.returncode == 0
+    ), "Helm 3 is required, but helm doesn't seem to be installed!"
 
     c = subprocess.run(
         ["helm", "version", "--short"],
@@ -134,7 +140,9 @@ def assert_helm_v3():
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
     )
-    assert c.returncode == 0 and "v3." in c.stdout, "Helm 3 is required, but a different version seem to be installed!"
+    assert (
+        c.returncode == 0 and "v3." in c.stdout
+    ), "Helm 3 is required, but a different version seem to be installed!"
 
 
 def deploy(release, name=None):
@@ -177,7 +185,9 @@ def deploy(release, name=None):
 
     # common config files
     config_files = sorted(glob.glob(os.path.join("config", "common", "*.yaml")))
-    config_files.extend(sorted(glob.glob(os.path.join("secrets", "config", "common", "*.yaml"))))
+    config_files.extend(
+        sorted(glob.glob(os.path.join("secrets", "config", "common", "*.yaml")))
+    )
     # release-specific config files
     for config_dir in ("config", "secrets/config"):
         config_files.append(os.path.join(config_dir, release + ".yaml"))
@@ -186,7 +196,9 @@ def deploy(release, name=None):
         helm.extend(["-f", config_file])
 
     subprocess.check_call(helm)
-    print(BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC, flush=True)
+    print(
+        BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC, flush=True
+    )
 
     # Explicitly wait for all deployments and daemonsets to be fully rolled out
     print(
@@ -273,15 +285,19 @@ def main():
         choices=["staging", "prod", "ovh", "turing"],
     )
     argparser.add_argument(
-        "--name", help="Override helm release name, if different from RELEASE",
+        "--name",
+        help="Override helm release name, if different from RELEASE",
     )
     argparser.add_argument(
-        "cluster", help="Cluster to do the deployment in", nargs="?", type=str,
+        "cluster",
+        help="Cluster to do the deployment in",
+        nargs="?",
+        type=str,
     )
     argparser.add_argument(
-        '--local',
-        action='store_true',
-        help="If the script is running locally, skip auth step"
+        "--local",
+        action="store_true",
+        help="If the script is running locally, skip auth step",
     )
 
     args = argparser.parse_args()
@@ -312,14 +328,12 @@ def main():
                 pass
             else:
                 # User wrote something that wasn't "yes" or "no"
-                raise ValueError(
-                    "Unrecognised input. Expecting either yes or no."
-                )
+                raise ValueError("Unrecognised input. Expecting either yes or no.")
 
         # script is running on CI, proceed with auth and helm setup
-        if args.cluster == 'ovh':
+        if args.cluster == "ovh":
             setup_auth_ovh(args.release, args.cluster)
-        elif args.cluster == 'turing':
+        elif args.cluster == "turing":
             setup_auth_turing(args.release)
         else:
             setup_auth_gcloud(args.release, args.cluster)
@@ -327,5 +341,5 @@ def main():
     deploy(args.release, args.name)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

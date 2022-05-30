@@ -57,7 +57,7 @@ cordoning that node should result in it being drained and reclaimed
 after the max-pod-age lifetime limit
 which often wouldn't happen without manual intervention.
 
-It is still *not quite true* that only user pods are running on the user nodes at this point.
+It is still _not quite true_ that only user pods are running on the user nodes at this point.
 There can be some pods such as heapster and kube-dns that may run on user nodes,
 and need to be manually removed from the pod after cordoning before the autoscaler will allow culling.
 
@@ -68,7 +68,6 @@ but we are not there yet.
 Users and core pods are assigned to their pools via a `nodeSelector` in `config/prod.yaml`.
 We use a custom label `mybinder.org/node-purpose = core | user`
 to select which node a pod should run on.
-
 
 ## mybinder.org specific extra software
 
@@ -116,7 +115,7 @@ dependencies:
     repository: https://prometheus-community.github.io/helm-charts
 ```
 
-This also allows us to pin a *version* of Prometheus, which improves
+This also allows us to pin a _version_ of Prometheus, which improves
 reliability of the site.
 
 ```{note}
@@ -136,7 +135,7 @@ file for each, and we can deploy them all at the same time.
 ## HTTPS configuration for `mybinder.org`
 
 Using HTTPS requires having a signed certificate. BinderHub uses [kube-lego](https://github.com/jetstack/kube-lego),
-a tool that obtains and deploys a free *Let's Encrypt* certificate automatically.
+a tool that obtains and deploys a free _Let's Encrypt_ certificate automatically.
 This section describes how to use `kube-lego` to configure and deploy HTTPS support.
 
 `kube-lego` provides 90 day SSL certificates for `mybinder.org` through
@@ -150,7 +149,7 @@ account to use for letsencrypt certification.
 
 Once we have a letsencrypt account set up, we need to attach the SSL
 certificate to a particular `ingress` object. This is a Kubernetes object
-that controls how traffic is routed *into* the deployment. This is also
+that controls how traffic is routed _into_ the deployment. This is also
 done with the `mybinder.org` Helm Chart ([see here for example](https://github.com/jupyterhub/mybinder.org-deploy/blob/5aa6dde60c9b5f3012686f9ba2b23b176c19b224/mybinder/values.yaml#L13)).
 
 Note that letsencrypt will send you an email if your SSL certificate is
@@ -177,7 +176,7 @@ Traffic for `ovh.mybinder.org` is redirected with a CNAME on `binder.mybinder.ov
 Since we use this repo for deployment, it needs credentials for things like our
 google cloud account, and secret tokens for our helm charts. Since this is a
 public repo, we don't want these credentials to be readable in public! To solve
-this, we use [git-crypt][] to store *encrypted* versions of files that should
+this, we use [git-crypt][] to store _encrypted_ versions of files that should
 be kept secret. These files are in the `secrets` folder. `git-crypt` uses a
 shared secret to encrypt and decrypt files. For automated deployments, Travis
 has access to the git-crypt secret in an encrypted environment variable. If you
@@ -186,9 +185,7 @@ or to see the contents of the secret files. When you clone, you will just have
 the opaque, encrypted files. If you need access to view or edit the encrypted
 files, you will need the git-crypt secret. See below for a procedure to share
 the secret. Once you have unlocked the repo with `git-crypt`, you will be able
-to view and edit the encrypted files as if they were any other file. `git-
-crypt` handles the encryption and decryption transparently via git filters.
-
+to view and edit the encrypted files as if they were any other file. `git- crypt` handles the encryption and decryption transparently via git filters.
 
 ### Sharing secrets
 
@@ -201,8 +198,7 @@ ssh-vault. On mac, these are both available from homebrew:
 
     brew install git-crypt ssh-vault
 
-To encrypt the key with ssh-vault, pipe the key file through `ssh-vault
-create`. Assuming you are in a mybinder.org-deploy directory that is already
+To encrypt the key with ssh-vault, pipe the key file through `ssh-vault create`. Assuming you are in a mybinder.org-deploy directory that is already
 setup with git-crypt:
 
 ```bash
@@ -263,7 +259,6 @@ creating files:
 [receiver] $ pbpaste | ssh-vault view | git-crypt unlock -
 ```
 
-
 ### Who has the keys?
 
 People who currently have the git-crypt secret include:
@@ -278,10 +273,9 @@ People who currently have the git-crypt secret include:
 - @arnim
 - @MridulS
 - @callummole
-- *add yourself here if you have it*
+- _add yourself here if you have it_
 
 Contact one of them if you need access to the git-crypt key.
-
 
 [mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
 [prod]: https://mybinder.org
@@ -290,7 +284,7 @@ Contact one of them if you need access to the git-crypt key.
 [staging]: https://staging.mybinder.org
 [binderhub]: https://github.com/jupyterhub/binderhub
 [`jupyterhub/binderhub`]: https://github.com/jupyterhub/binderhub
-[BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
+[binderhub documentation]: https://binderhub.readthedocs.io/en/latest/
 [repo2docker]: https://github.com/jupyterhub/repo2docker
 [git-crypt]: https://github.com/AGWA/git-crypt
 [ssh-vault]: https://github.com/ssh-vault/ssh-vault
