@@ -29,12 +29,12 @@ we decided to use nginx instead for the following reasons:
 
 ### Installation
 
-nginx-ingress is installed using the [nginx-ingress helm chart](https://github.com/kubernetes/charts/tree/master/stable/nginx-ingress).
+nginx-ingress is installed using the [nginx-ingress helm chart](https://github.com/helm/charts/tree/master/stable/nginx-ingress).
 This installs the following components:
 
 1. `nginx-ingress-controller` - keeps the HTTPS rules in sync with `Ingress`
    objects and serves the HTTPS requests. This also exports
-   [metrics](metrics.html) that are captured in prometheus.
+   [metrics](metrics) that are captured in prometheus.
 2. `nginx-ingress-default-backend` - simply returns a 404 error & is used
    by `nginx-ingress-controller` to serve any requests that don't match
    any rules.
@@ -53,7 +53,7 @@ present with `kubectl --namespace=prod get ingress`.
 The following ingress objects currently exist:
 
 * `jupyterhub` - Directs traffic to `hub.mybinder.org`.
-  The zero-to-jupyterhub guide has more [documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/advanced.html#ingress).
+  The zero-to-jupyterhub guide has more [documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/advanced.html#ingress).
 * `binderhub` - Directs traffic to `mybinder.org`. You can find more details
    about this in the [binderhub helm chart](https://github.com/jupyterhub/binderhub/tree/master/helm-chart).
 * `redirector` - Directs traffic to the HTTP redirector we run for `mybinder.org`.
@@ -68,7 +68,7 @@ The following ingress objects currently exist:
   `prometheus` in both `mybinder/values.yaml` and `config/prod.yaml`.
 * `grafana` - Directs traffic to `grafana.mybinder.org`. Configured under `grafana` in
    both `mybinder/values.yaml` and `config/prod.yaml`.
-* `kube-lego-nginx` - Used by [kube-lego](#https-with-kube-lego) for doing automatic
+* `kube-lego-nginx` - Used by kube-lego for doing automatic
    HTTPS certificate renewals.
 
 ## HTTPS certificates with kube-lego
@@ -77,16 +77,14 @@ We use [Let's Encrypt](https://letsencrypt.org/) for all our HTTPS certificates.
 [Kube Lego](https://github.com/jetstack/kube-lego) is used to automatically
 provision and maintain HTTPS certificates for us.
 
-```eval_rst
-.. note::
-
-   Kube-lego is deprecated, and we should move to
-   `cert-manager <https://github.com/jetstack/cert-manager/>`_ soon.
+```{note}
+Kube-lego is deprecated, and we should move to
+`cert-manager <https://github.com/jetstack/cert-manager/>`_ soon.
 ```
 
 ### Installation
 
-kube-lego is installed using the [kube-lego](https://github.com/kubernetes/charts/tree/master/stable/kube-lego).
+kube-lego is installed using the [kube-lego](https://github.com/helm/charts/tree/master/stable/kube-lego).
 
 ### Configuration
 

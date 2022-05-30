@@ -23,7 +23,7 @@ things when deployments fail.
 
 ## Kubernetes
 
-We heavily use [Kubernetes](https://k8s.io) for the mybinder.org deployment, and it is important you
+We heavily use [Kubernetes](https://kubernetes.io/) for the mybinder.org deployment, and it is important you
 have a working knowledge of how to use Kubernetes. Detailed explanations are out
 of the scope of this repository, but there is a good [list of tutorials](https://kubernetes.io/docs/tutorials/).
 Specifically, going through the [interactive tutorial](https://kubernetes.io/docs/tutorials/kubernetes-basics/)
@@ -36,13 +36,13 @@ have a working knowledge of how to use helm. Detailed explanations are out of th
 scope of this repository, but [docs.helm.sh](https://docs.helm.sh) is an excellent
 source of information. At a minimum, you must at least understand:
 
-* [What is a chart?](https://docs.helm.sh/developing_charts/#charts)
-* [What are values files?](https://docs.helm.sh/chart_template_guide/#values-files)
-* [How do chart dependencies work?](https://docs.helm.sh/developing_charts/#chart-dependencies)
+* [What is a chart?](https://helm.sh/docs/chart_template_guide/getting_started/#charts)
+* [What are values files?](https://helm.sh/docs/chart_template_guide/values_files/)
+* [How do chart dependencies work?](https://helm.sh/docs/chart_template_guide/subcharts_and_globals/)
 
 ## Travis
 
-We use [Travis CI](http://travis-ci.org/) for doing all our deployments. Our
+We use [Travis CI](https://travis-ci.org/) for doing all our deployments. Our
 `.travis.yml` file contains the entire configuration for our deployment. Travis CI
 has documentation on the [various components of the `.travis.yml` file](https://docs.travis-ci.com/user/customizing-the-build/).
 

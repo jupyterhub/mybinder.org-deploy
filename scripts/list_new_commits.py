@@ -37,7 +37,7 @@ for repo in ['binderhub', 'jupyterhub']:
     latest_hash[repo] = updates_sorted[-1]['version'].split('-')[-1]
 
 url_bhub = 'https://github.com/jupyterhub/binderhub/compare/{}...{}'.format(bhub_live, latest_hash['binderhub'])
-url_r2d = f'https://github.com/jupyter/repo2docker/compare/{r2d_live}...{r2d_master[:8]}'
+url_r2d = f'https://github.com/jupyterhub/repo2docker/compare/{r2d_live}...{r2d_master[:8]}'
 url_jhub = 'https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/{}...{}'.format(jhub_live, latest_hash['jupyterhub'])
 
 print('---------------------\n')

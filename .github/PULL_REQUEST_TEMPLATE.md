@@ -12,4 +12,4 @@ https://github.com/jupyterhub/binderhub/compare/<OLD-HASH>...<NEW-HASH>
 
 This is a repo2docker version bump. See the link below for a diff of new changes:
 
-https://github.com/jupyter/repo2docker/compare/<OLD-HASH>...<NEW-HASH>
+https://github.com/jupyterhub/repo2docker/compare/<OLD-HASH>...<NEW-HASH>
