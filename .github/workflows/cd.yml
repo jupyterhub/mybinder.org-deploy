@@ -95,7 +95,7 @@ jobs:
 
       # Action Repo: https://github.com/actions/setup-python
       - name: "Stage 0: Setup Python 3.8"
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v3
         with:
           python-version: 3.8
 
@@ -219,7 +219,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Stage 0: Setup Python 3.8"
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v3
         with:
           python-version: 3.8
 
