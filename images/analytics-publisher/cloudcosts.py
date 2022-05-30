@@ -2,14 +2,11 @@
 Produces daily summaries of GCP spending data.
 """
 import argparse
-import json
-import subprocess
 import csv
-import sys
-from google.cloud import storage
 import io
-import tempfile
-from dateutil.parser import parse
+import json
+
+from google.cloud import storage
 
 
 def totals_from_csv(file):

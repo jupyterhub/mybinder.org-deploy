@@ -1,10 +1,7 @@
 import argparse
 import json
-import time
 import random
-import pickle
-import json
-
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import requests
@@ -138,7 +135,7 @@ if __name__ == '__main__':
                 # save it for later
                 launches.append(launch)
             except Exception as exc:
-                print('%r generated an exception: %s' % (idx, exc))
+                print('{!r} generated an exception: {}'.format(idx, exc))
             else:
                 if launch['status'] == 'success':
                     print('Launch %r succeeded and took %is' %

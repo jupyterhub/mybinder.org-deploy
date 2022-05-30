@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # Deployment and SRE Guide documentation build configuration file
 #
@@ -17,8 +16,6 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('./../..'))
 
-# For conversion from markdown (.md) to html
-import recommonmark.parser
 from datetime import datetime
 
 # -- General configuration ------------------------------------------------
@@ -39,6 +36,8 @@ templates_path = ['_templates']
 
 # Use autostructify so we can get some rST in the markdown
 from recommonmark.transform import AutoStructify
+
+
 def setup(app):
     app.add_config_value('recommonmark_config', {
       'enable_eval_rst': True

@@ -7,20 +7,17 @@ import sys
 from hashlib import blake2b
 
 import prometheus_client
-from prometheus_client import Gauge
-
 import tornado
 import tornado.ioloop
-import tornado.web
 import tornado.options
-from tornado.ioloop import IOLoop
-from tornado.log import app_log
+import tornado.web
+from prometheus_client import Gauge
 from tornado import options
-
 from tornado.httpclient import AsyncHTTPClient, HTTPError, HTTPRequest
 from tornado.httputil import HTTPHeaders
+from tornado.ioloop import IOLoop
+from tornado.log import app_log
 from tornado.web import RequestHandler
-
 
 # Config for local testing
 CONFIG = {
@@ -59,7 +56,7 @@ CONFIG = {
 
 
 def get_config(config_path):
-    app_log.info("Using config from '{}'.".format(config_path))
+    app_log.info(f"Using config from '{config_path}'.")
 
     with open(config_path) as f:
         config = json.load(f)
@@ -283,7 +280,7 @@ class RedirectHandler(RequestHandler):
         # do we sometimes want to add this url param? Not for build urls, at least
         # redirect = url_concat(host_url + uri, {'binder_launch_host': 'https://mybinder.org/'})
         redirect = host_url + uri
-        app_log.info("Redirecting {} to {}".format(path, host_url))
+        app_log.info(f"Redirecting {path} to {host_url}")
         self.redirect(redirect, status=307)
 
 
@@ -300,7 +297,7 @@ class ActiveHostsHandler(RequestHandler):
 async def health_check(host, active_hosts):
     check_config = CONFIG["check"]
     all_hosts = CONFIG["hosts"]
-    app_log.info("Checking health of {}".format(host))
+    app_log.info(f"Checking health of {host}")
 
     client = AsyncHTTPClient()
     try:
@@ -404,7 +401,7 @@ async def health_check(host, active_hosts):
         HEALTH.labels(member=host, reason="").set(1)
         if host not in active_hosts:
             active_hosts[host] = all_hosts[host]
-            app_log.warning("{} has been added to the rotation".format(host))
+            app_log.warning(f"{host} has been added to the rotation")
         period = check_config["period"]
 
     # schedule ourselves to check again later
