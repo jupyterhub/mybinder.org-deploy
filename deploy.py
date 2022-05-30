@@ -245,8 +245,7 @@ def setup_certmanager():
     print(BOLD + GREEN + f"Installing cert-manager CRDs {version}" + NC, flush=True)
 
     # Sometimes 'replace' is needed for upgrade (e.g. 1.1->1.2)
-    # this should be equivalent to apply
-    subprocess.check_call(["kubectl", "replace", "-f", manifest_url])
+    subprocess.check_call(["kubectl", "apply", "-f", manifest_url])
 
     print(BOLD + GREEN + f"Installing cert-manager {version}" + NC, flush=True)
     helm_upgrade = [
