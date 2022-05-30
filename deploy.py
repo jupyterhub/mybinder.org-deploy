@@ -175,12 +175,11 @@ def deploy(release, name=None):
         "helm",
         "upgrade",
         "--install",
-        "--namespace",
-        name,
-        name,
-        "mybinder",
         "--cleanup-on-fail",
         "--create-namespace",
+        f"--namespace={name}",
+        name,
+        "mybinder",
     ]
 
     # common config files
@@ -212,12 +211,10 @@ def deploy(release, name=None):
         subprocess.check_output(
             [
                 "kubectl",
-                "--namespace",
-                name,
                 "get",
+                f"--namespace={name}",
+                "--output=name",
                 "deployments,daemonsets",
-                "-o",
-                "name",
             ]
         )
         .decode()
@@ -231,10 +228,8 @@ def deploy(release, name=None):
                 "kubectl",
                 "rollout",
                 "status",
-                "--namespace",
-                name,
-                "--timeout",
-                "10m",
+                f"--namespace={name}",
+                "--timeout=10m",
                 "--watch",
                 d,
             ]
