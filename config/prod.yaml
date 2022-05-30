@@ -73,7 +73,6 @@ binderhub:
       userScheduler:
         nodeSelector: *coreNodeSelector
 
-
 grafana:
   nodeSelector: *coreNodeSelector
   resources:

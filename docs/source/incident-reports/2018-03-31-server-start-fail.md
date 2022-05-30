@@ -14,14 +14,13 @@ All times in PST
 
 Problem is identified
 
-* Launch success rate drops quickly
-* Many pods stuck in "Terminating" and "ContainerCreating" state.
-* Hub pod is showing many timeout errors.
-
+- Launch success rate drops quickly
+- Many pods stuck in "Terminating" and "ContainerCreating" state.
+- Hub pod is showing many timeout errors.
 
 ### 16:11
 
-* Mount errors on build pods:
+- Mount errors on build pods:
 
 ```
 Events:
@@ -34,18 +33,16 @@ Events:
   Warning  FailedSync             55s (x24 over 5m)  kubelet, gke-prod-a-ssd-pool-32-134a959a-p2kz  Error syncing pod
 ```
 
-
 ### 17:21
 
-* Decided to increase cluster size to 4, wait for new nodes to come up, then cordon the two older nodes
-
+- Decided to increase cluster size to 4, wait for new nodes to come up, then cordon the two older nodes
 
 ### 17:30
 
-* New nodes are up, old nodes are drained
-* Hub / binder pods show up on new nodes
-* Launch success rate begins increasing
-* Launch rate goes back to 100%
+- New nodes are up, old nodes are drained
+- Hub / binder pods show up on new nodes
+- Launch success rate begins increasing
+- Launch rate goes back to 100%
 
 ## Lessons learnt
 
@@ -65,8 +62,8 @@ The outage seemed to come from the deletion of a node, but it seemed to be relat
 
 ### What went wrong
 
-* There was a major outage that we were unable to debug, there were not clear errors in the logs
-* There was only one person available to debug, which made it more difficult to know how to proceed withot any feedback
+- There was a major outage that we were unable to debug, there were not clear errors in the logs
+- There was only one person available to debug, which made it more difficult to know how to proceed withot any feedback
 
 ### Process improvements
 

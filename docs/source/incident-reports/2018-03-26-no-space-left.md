@@ -34,7 +34,6 @@ Both of the cordoned nodes were aged 5-6 days and were the oldest nodes in the c
 I suspect that node age is related to this, and we will see it every week or so as something accumulates on the nodes.
 The root cause is still unknown.
 
-
 ## Lessons learned
 
 ### What went well
@@ -48,7 +47,6 @@ The root cause is still unknown.
 
 - Binder was unavailable, but nobody was notified.
   Only proactive checking of Binder status on Grafana revealed the issue.
-
 
 ## Action items
 

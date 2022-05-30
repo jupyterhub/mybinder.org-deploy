@@ -9,6 +9,7 @@ is going wrong during / after an outage.
 ## What is it?
 
 ```{image} ../_static/images/dashboard.png
+
 ```
 
 A dashboard is a set of pre-defined graphs in a particular layout that

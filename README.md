@@ -31,6 +31,7 @@ Instead, you should review the [BinderHub documentation][] and the
 [Site Reliability Guide](https://mybinder-sre.readthedocs.io/en/latest/index.html), the collected wisdom of operating mybinder.org.
 
 Amongst other things the guide contains:
+
 - [How to do a deployment](https://mybinder-sre.readthedocs.io/en/latest/deployment/how.html)
 - [What happens during a deployment?](https://mybinder-sre.readthedocs.io/en/latest/deployment/what.html)
 - [Incident reports for past incidents](https://mybinder-sre.readthedocs.io/en/latest/incident-reports/incident_reports_toc.html)
@@ -38,20 +39,19 @@ Amongst other things the guide contains:
 
 ## Key Links
 
-|             | Staging | Production |
-| ----------- | ------- | ---------- |
-| Site     |[staging.mybinder.org](https://staging.mybinder.org) | [mybinder.org](https://mybinder.org) |
-| CI Deployment | [![Continuous Deployment](https://github.com/jupyterhub/mybinder.org-deploy/workflows/Continuous%20Deployment/badge.svg)](https://github.com/jupyterhub/mybinder.org-deploy/actions?query=workflow%3A%22Continuous+Deployment%22) (both) |
-| Deployment checklist | staging | prod |
-| Monitoring | staging | [prod](https://grafana.mybinder.org/dashboard/db/kubernetes-cluster-monitoring-binder-prod?refresh=60s&orgId=1) |
+|                      | Staging                                                                                                                                                                                                                                  | Production                                                                                                      |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Site                 | [staging.mybinder.org](https://staging.mybinder.org)                                                                                                                                                                                     | [mybinder.org](https://mybinder.org)                                                                            |
+| CI Deployment        | [![Continuous Deployment](https://github.com/jupyterhub/mybinder.org-deploy/workflows/Continuous%20Deployment/badge.svg)](https://github.com/jupyterhub/mybinder.org-deploy/actions?query=workflow%3A%22Continuous+Deployment%22) (both) |
+| Deployment checklist | staging                                                                                                                                                                                                                                  | prod                                                                                                            |
+| Monitoring           | staging                                                                                                                                                                                                                                  | [prod](https://grafana.mybinder.org/dashboard/db/kubernetes-cluster-monitoring-binder-prod?refresh=60s&orgId=1) |
 
-| Helm chart  | dev | stable |
-|-------------|-----|--------|
-| JupyterHub  | [dev](https://jupyterhub.github.io/helm-chart/#development-releases-jupyterhub) | [stable](https://jupyterhub.github.io/helm-chart/#stable-releases) |
-| BinderHub | [dev](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub)| - |
-
+| Helm chart | dev                                                                             | stable                                                             |
+| ---------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| JupyterHub | [dev](https://jupyterhub.github.io/helm-chart/#development-releases-jupyterhub) | [stable](https://jupyterhub.github.io/helm-chart/#stable-releases) |
+| BinderHub  | [dev](https://jupyterhub.github.io/helm-chart/#development-releases-binderhub)  | -                                                                  |
 
 [mybinder.org]: https://mybinder.org
 [staging.mybinder.org]: https://staging.mybinder.org
 [`jupyterhub/binderhub`]: https://github.com/jupyterhub/binderhub
-[BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
+[binderhub documentation]: https://binderhub.readthedocs.io/en/latest/

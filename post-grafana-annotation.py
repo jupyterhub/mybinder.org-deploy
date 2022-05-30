@@ -26,44 +26,36 @@ def create_annotation(grafana_url, grafana_api_key, tags, text):
     return requests.post(
         grafana_url + "/api/annotations",
         json={
-            'tags': tags,
-            'text': text,
-            'time': int(time.time() * 1000),
-            'isRegion': False
+            "tags": tags,
+            "text": text,
+            "time": int(time.time() * 1000),
+            "isRegion": False,
         },
-        headers={
-            'Authorization': f'Bearer {grafana_api_key}'
-        }
+        headers={"Authorization": f"Bearer {grafana_api_key}"},
     ).text
 
 
 def main():
     argparser = argparse.ArgumentParser()
-    argparser.add_argument(
-        '--grafana-url',
-        help='URL of the grafana instance to use'
-    )
+    argparser.add_argument("--grafana-url", help="URL of the grafana instance to use")
 
     argparser.add_argument(
-        '--tag',
-        help='Tags to add to the annotation',
+        "--tag",
+        help="Tags to add to the annotation",
         default=[],
-        action='append',
-        dest='tags'
+        action="append",
+        dest="tags",
     )
 
-    argparser.add_argument(
-        'text',
-        help='Text to use for the annotation'
-    )
+    argparser.add_argument("text", help="Text to use for the annotation")
 
     args = argparser.parse_args()
-    print(create_annotation(
-        args.grafana_url,
-        os.environ['GRAFANA_API_KEY'],
-        args.tags, 
-        args.text
-    ))
+    print(
+        create_annotation(
+            args.grafana_url, os.environ["GRAFANA_API_KEY"], args.tags, args.text
+        )
+    )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

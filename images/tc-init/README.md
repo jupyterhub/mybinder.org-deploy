@@ -9,13 +9,13 @@ Currently, only egress bandwidth limits work (sending data out of the container)
 ...if you don't have to!
 
 Kubernetes has [annotations](https://github.com/kubernetes/kubernetes/blob/v1.8.4/pkg/util/bandwidth/utils.go#L38)
-that *should* enable you to accomplish bandwidth limits without any help:
+that _should_ enable you to accomplish bandwidth limits without any help:
 
 ```yaml
 spec:
   annotations:
-  - kubernetes.io/egress-bandwidth: 1M
-  - kubernetes.io/ingress-bandwidth: 10M
+    - kubernetes.io/egress-bandwidth: 1M
+    - kubernetes.io/ingress-bandwidth: 10M
 ```
 
 Unfortunately, I've found that many network implementations do not respect these annotations (as of kubernetes 1.8, anyway),
@@ -34,13 +34,13 @@ For example:
 ```yaml
 spec:
   initContainers:
-  - name: tc-init
-    image: jupyterhub/mybinder.org-tc-init
-    env:
-    - name: EGRESS_BANDWIDTH
-      value: 1mbit
-    securityContext:
-      capabilities:
-        add:
-        - NET_ADMIN
+    - name: tc-init
+      image: jupyterhub/mybinder.org-tc-init
+      env:
+        - name: EGRESS_BANDWIDTH
+          value: 1mbit
+      securityContext:
+        capabilities:
+          add:
+            - NET_ADMIN
 ```

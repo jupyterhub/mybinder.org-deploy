@@ -11,7 +11,7 @@ def test_binder_up(binder_url):
     """
     resp = requests.get(binder_url)
     assert resp.status_code == 200
-    assert 'GitHub' in resp.text
+    assert "GitHub" in resp.text
 
 
 def test_hub_health(hub_url):

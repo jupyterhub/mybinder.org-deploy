@@ -52,24 +52,24 @@ present with `kubectl --namespace=prod get ingress`.
 
 The following ingress objects currently exist:
 
-* `jupyterhub` - Directs traffic to `hub.mybinder.org`.
+- `jupyterhub` - Directs traffic to `hub.mybinder.org`.
   The zero-to-jupyterhub guide has more [documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/advanced.html#ingress).
-* `binderhub` - Directs traffic to `mybinder.org`. You can find more details
-   about this in the [binderhub helm chart](https://github.com/jupyterhub/binderhub/tree/master/helm-chart).
-* `redirector` - Directs traffic to the HTTP redirector we run for `mybinder.org`.
-   This helps do redirects such as `docs.mybinder.org` or `beta.mybinder.org`.
-   The list of redirects is configured in `mybinder/values.yaml`. The code
-   for this is in `mybinder/templates/redirector` in this repo.
-* `static` - Directs traffic into `static.mybinder.org`. We serve the `mybinder.org`
-   badges from a different domain for [privacy reasons](https://github.com/jupyterhub/binderhub/issues/379).
-   This ingress lets us direct traffic only from `static.mybinder.org/badge.svg` to the
-   binder pod.
-* `prometheus-server` - Directs traffic to `prometheus.mybinder.org`. Configured under
+- `binderhub` - Directs traffic to `mybinder.org`. You can find more details
+  about this in the [binderhub helm chart](https://github.com/jupyterhub/binderhub/tree/master/helm-chart).
+- `redirector` - Directs traffic to the HTTP redirector we run for `mybinder.org`.
+  This helps do redirects such as `docs.mybinder.org` or `beta.mybinder.org`.
+  The list of redirects is configured in `mybinder/values.yaml`. The code
+  for this is in `mybinder/templates/redirector` in this repo.
+- `static` - Directs traffic into `static.mybinder.org`. We serve the `mybinder.org`
+  badges from a different domain for [privacy reasons](https://github.com/jupyterhub/binderhub/issues/379).
+  This ingress lets us direct traffic only from `static.mybinder.org/badge.svg` to the
+  binder pod.
+- `prometheus-server` - Directs traffic to `prometheus.mybinder.org`. Configured under
   `prometheus` in both `mybinder/values.yaml` and `config/prod.yaml`.
-* `grafana` - Directs traffic to `grafana.mybinder.org`. Configured under `grafana` in
-   both `mybinder/values.yaml` and `config/prod.yaml`.
-* `kube-lego-nginx` - Used by kube-lego for doing automatic
-   HTTPS certificate renewals.
+- `grafana` - Directs traffic to `grafana.mybinder.org`. Configured under `grafana` in
+  both `mybinder/values.yaml` and `config/prod.yaml`.
+- `kube-lego-nginx` - Used by kube-lego for doing automatic
+  HTTPS certificate renewals.
 
 ## HTTPS certificates with kube-lego
 

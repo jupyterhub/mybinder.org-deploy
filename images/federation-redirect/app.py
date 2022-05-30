@@ -158,8 +158,7 @@ HEALTH_CHECK = Gauge(
 
 REDIRECTS = Gauge(
     "federation_redirect_count",
-    "Number of requests routed to each member."
-    " 'member' is the federation member.",
+    "Number of requests routed to each member." " 'member' is the federation member.",
     ["member"],
 )
 
@@ -239,8 +238,12 @@ class RedirectHandler(RequestHandler):
         hosts = dict(self.settings["hosts"])  # make a copy
         if not hosts:
             # no healthy hosts, allow routing to unhealthy 'prime' host only
-            hosts = {key: host for key, host in CONFIG["hosts"].items() if host.get("prime")}
-            app_log.warning(f"Using unhealthy prime host(s) {list(hosts)} because zero hosts are healthy")
+            hosts = {
+                key: host for key, host in CONFIG["hosts"].items() if host.get("prime")
+            }
+            app_log.warning(
+                f"Using unhealthy prime host(s) {list(hosts)} because zero hosts are healthy"
+            )
         self.hosts = hosts
         self.hosts_by_url = {}  # dict of {"https://gke.mybinder.org": "gke"}
         self.host_names = []  # ordered list of ["gke"]
@@ -318,7 +321,9 @@ async def health_check(host, active_hosts):
                 if all_hosts[host].get("prime", False):
                     old_versions = CONFIG.get("versions", None)
                     if old_versions != versions:
-                        app_log.info(f"Updating prime versions {old_versions}->{versions}")
+                        app_log.info(
+                            f"Updating prime versions {old_versions}->{versions}"
+                        )
                         CONFIG["versions"] = versions
                 # check if this cluster is on the same versions as the prime
                 # w/o information about the prime's version we allow each

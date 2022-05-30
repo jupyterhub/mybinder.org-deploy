@@ -1,7 +1,9 @@
 # 2018-03-13, PVC for hub is locked
 
 ## Questions for follow up
-*
+
+-
+
 ## Summary
 
 After a few hours we noticed that JupyterHub wasn't
@@ -21,35 +23,33 @@ All times in CET
 
 Problem is identified
 
-* mybinder launch success rate has been at zero for several hours now [https://grafana.mybinder.org/dashboard/db/main-dashboard?refresh=1m&orgId=1&panelId=17&fullscreen&from=1520900905664&to=1520922505664](https://grafana.mybinder.org/dashboard/db/main-dashboard?refresh=1m&orgId=1&panelId=17&fullscreen&from=1520900905664&to=1520922505664)
-* lots of pods are in state "Unknown" and "NodeLost"
-* pods in weird states are on at least these nodes `10.128.0.7` `10.128.0.5`
+- mybinder launch success rate has been at zero for several hours now [https://grafana.mybinder.org/dashboard/db/main-dashboard?refresh=1m&orgId=1&panelId=17&fullscreen&from=1520900905664&to=1520922505664](https://grafana.mybinder.org/dashboard/db/main-dashboard?refresh=1m&orgId=1&panelId=17&fullscreen&from=1520900905664&to=1520922505664)
+- lots of pods are in state "Unknown" and "NodeLost"
+- pods in weird states are on at least these nodes `10.128.0.7` `10.128.0.5`
 
 ### 07:33
 
 Attempts to cordon bad nodes to see if this helps things.
 
-* `kubectl cordon gke-prod-a-ssd-pool-32-134a959a-n2sk` and `kubectl cordon gke-prod-a-ssd-pool-32-134a959a-6`hmq
-* the hub pod (`hub-65d9f46698-dj4jb`) was in state `Unknown` and a second hub pod (`hub-65d9f46698-dmlcv`) in `ContainerCreating` since 5h -> deleted both to see if this reschedules them on a healthy node
+- `kubectl cordon gke-prod-a-ssd-pool-32-134a959a-n2sk` and `kubectl cordon gke-prod-a-ssd-pool-32-134a959a-6`hmq
+- the hub pod (`hub-65d9f46698-dj4jb`) was in state `Unknown` and a second hub pod (`hub-65d9f46698-dmlcv`) in `ContainerCreating` since 5h -> deleted both to see if this reschedules them on a healthy node
 
 ### 07:39
 
-* bhub pod can't talk to the jhub pod, but it can connect to google.com and github.com
-* starting a new jhub pod is failing because the PVC is still claimed by another old pod, presumably that old pod is dead/lost in action and hence not releasing the claim
+- bhub pod can't talk to the jhub pod, but it can connect to google.com and github.com
+- starting a new jhub pod is failing because the PVC is still claimed by another old pod, presumably that old pod is dead/lost in action and hence not releasing the claim
 
 ### 07:59
 
-* manually deleted all pods on node `-n2sk`, will this help the node to release the PVC?
-    * (it does not)
-* manually reset `gke-prod-a-ssd-pool-32-134a959a-n2sk` in the hope that this will force the release of the PVC. This is done in the GCP web user-interface
-
+- manually deleted all pods on node `-n2sk`, will this help the node to release the PVC?
+  - (it does not)
+- manually reset `gke-prod-a-ssd-pool-32-134a959a-n2sk` in the hope that this will force the release of the PVC. This is done in the GCP web user-interface
 
 ### 08:05
 
-* `hub-65d9f46698-454cf` is now pulling its docker image, scheduled on `gke-prod-a-ssd-pool-32-134a959a-1j33`
-* pod successfully scheduled and launched. running again, and the `binder-examples/r` repo successfully launches
-* persistent plot of launch success rate dropping to zero https://grafana.mybinder.org/render/dashboard-solo/db/main-dashboard?refresh=1m&orgId=1&from=1520881680522&to=1520924880522&panelId=17&width=1000&height=500&tz=UTC%2B01%3A00
-
+- `hub-65d9f46698-454cf` is now pulling its docker image, scheduled on `gke-prod-a-ssd-pool-32-134a959a-1j33`
+- pod successfully scheduled and launched. running again, and the `binder-examples/r` repo successfully launches
+- persistent plot of launch success rate dropping to zero https://grafana.mybinder.org/render/dashboard-solo/db/main-dashboard?refresh=1m&orgId=1&from=1520881680522&to=1520924880522&panelId=17&width=1000&height=500&tz=UTC%2B01%3A00
 
 ### 08:11
 
@@ -57,8 +57,8 @@ General cleanup because many pods are not identified by k8s. Deleting all pods i
 
 ### 08:17
 
-* deleting pods in Unknown state does not seem to do anything. Pods remain listed.
-* we assume the reason the pod is marked as "Unknown" is because k8s can't find out anything about it, which explains why it can't delete it. We will have to investigate what to do about those pods. Restarting the node seems to remove them but that feels pretty heavy handed
+- deleting pods in Unknown state does not seem to do anything. Pods remain listed.
+- we assume the reason the pod is marked as "Unknown" is because k8s can't find out anything about it, which explains why it can't delete it. We will have to investigate what to do about those pods. Restarting the node seems to remove them but that feels pretty heavy handed
 
 ### 13:32
 
@@ -103,8 +103,8 @@ We discover that another node has entered "NodeLost" state. Grafana and Promethe
 
 Run:
 
-* `kubectl cordon gke-prod-a-ssd-pool-32-134a959a-bmsw`
-* `deleting all pods on the lost node, w/ state "NodeLost" or "Unknown"`
+- `kubectl cordon gke-prod-a-ssd-pool-32-134a959a-bmsw`
+- `deleting all pods on the lost node, w/ state "NodeLost" or "Unknown"`
 
 The grafana/prometheus pods that were _trying_ to start before still didn't (they had been in that state for many hours) so we deleted those pods to see if new ones worked.
 

@@ -6,7 +6,7 @@ This document lists the various cloud products we use, and how we use them.
 ## Philosophy
 
 We use **only** commodity cloud products - things that can be easily
-replicated in other clouds *and* bare-metal hardware. This gives us
+replicated in other clouds _and_ bare-metal hardware. This gives us
 several technical and social advantages:
 
 1. We avoid vendor lock-in, and can migrate providers if need be
@@ -72,8 +72,8 @@ The `prod` cluster currently uses `n1-highmem-32` machines. These have
 32 CPU cores and 208 GB of Memory. We use the `highmem` machines (with more Memory per CPU)
 as opposed to `standard` machines for the following reasons:
 
-1. Memory is an *incompressible* resource - once you give a process memory, you can
-   not take it away without killing the process. CPU is *compressible* - you can
+1. Memory is an _incompressible_ resource - once you give a process memory, you can
+   not take it away without killing the process. CPU is _compressible_ - you can
    take away how much CPU a process is using without killing it.
 2. Our users generally seem to be running not-very-cpu-intensive code, as can be
    witnessed from our generally low CPU usage.
@@ -81,8 +81,8 @@ as opposed to `standard` machines for the following reasons:
    pulling images leads to faster startup times for users. Using larger nodes
    increases the cache hit rate, so we use nodes with more rather than less RAM.
 
-*tl;dr: Using `highmem` machines saves us a lot of money, since we are not paying for CPU
-we are not using!*
+_tl;dr: Using `highmem` machines saves us a lot of money, since we are not paying for CPU
+we are not using!_
 
 The `staging` cluster uses much smaller machines than the production one, to keep costs
 down.
@@ -94,7 +94,7 @@ the disk [controls the performance](https://cloud.google.com/compute/docs/disks/
 are doing a lot of I/O operations during docker build / push / pull / run, so we
 use SSDs.
 
-Note that SSD boot disks are *not* a feature available on GKE to all customers -
+Note that SSD boot disks are _not_ a feature available on GKE to all customers -
 we have been given [early access](https://github.com/kubernetes/kubernetes/issues/36499)
 to this feature, since it makes a dramatic difference to our performance (and
 we knew where to ask!).
@@ -124,7 +124,6 @@ using a well-defined standard API.
 We use Google Cloud's hosted docker registry - [Google Container Registry (GCR)](https://cloud.google.com/container-registry/).
 This lets us use a standard mechanism for storing and retrieving docker images
 without having to run any of that infrastructure ourselves.
-
 
 ### Authentication
 
@@ -172,7 +171,7 @@ The code for generating the image name from repository information is
 in [binderhub's builder.py](https://github.com/jupyterhub/binderhub/blob/master/binderhub/builder.py),
 under `_generate_build_name`.
 
-Sometimes, we *do* want to invalidate all previously built images - for example,
+Sometimes, we _do_ want to invalidate all previously built images - for example,
 when we do a major notebook version bump. This will cause all repositories to be
 rebuilt the next time they are launched. There is a performance cost to this, so
 this invalidation has to be done judiciously. This is done by giving all the images
