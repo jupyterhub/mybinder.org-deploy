@@ -53,6 +53,7 @@ repos:
           - html
           - javascript
           - css
+        exclude: "grafana-data/.*"
 
   # Misc autoformatting and linting
   - repo: https://github.com/pre-commit/pre-commit-hooks
