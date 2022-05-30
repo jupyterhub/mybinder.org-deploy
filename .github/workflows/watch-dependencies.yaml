@@ -115,36 +115,31 @@ jobs:
           # creating a PRs when a new stable version is available in the Helm
           # chart repository.
           #
-          - chart_dep_index: "0"
-            chart_dep_name: binderhub
+          - chart_dep_name: binderhub
             chart_dep_chart_changelog_url: ""
             chart_dep_app_changelog_url: "https://github.com/jupyterhub/binderhub/blob/master/CHANGES.md"
             chart_dep_source_url: "https://github.com/jupyterhub/binderhub/tree/master/helm-chart"
             chart_dep_devel_flag: "--devel"
 
-          - chart_dep_index: "1"
-            chart_dep_name: ingress-nginx
+          - chart_dep_name: ingress-nginx
             chart_dep_chart_changelog_url: "https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx#upgrading-chart"
             chart_dep_app_changelog_url: "https://github.com/kubernetes/ingress-nginx/blob/master/Changelog.md"
             chart_dep_source_url: "https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx"
             chart_dep_devel_flag: ""
 
-          - chart_dep_index: "2"
-            chart_dep_name: prometheus
+          - chart_dep_name: prometheus
             chart_dep_chart_changelog_url: "https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus#upgrading-chart"
             chart_dep_app_changelog_url: "https://github.com/prometheus/prometheus/blob/master/CHANGELOG.md"
             chart_dep_source_url: https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus
             chart_dep_devel_flag: ""
 
-          - chart_dep_index: "3"
-            chart_dep_name: grafana
+          - chart_dep_name: grafana
             chart_dep_chart_changelog_url: "https://github.com/grafana/helm-charts/tree/main/charts/grafana#upgrading-an-existing-release-to-a-new-major-version"
             chart_dep_app_changelog_url: "https://github.com/grafana/grafana/blob/master/CHANGELOG.md"
             chart_dep_source_url: "https://github.com/grafana/helm-charts/tree/main/charts/grafana"
             chart_dep_devel_flag: ""
 
-          - chart_dep_index: "4"
-            chart_dep_name: cryptnono
+          - chart_dep_name: cryptnono
             chart_dep_chart_changelog_url: ""
             chart_dep_app_changelog_url: ""
             chart_dep_source_url: "https://github.com/yuvipanda/cryptnono/"
@@ -160,10 +155,10 @@ jobs:
         # with `helm show chart --version=<declared-chart-version>`.
         #
         run: |
-          local_version=$(cat mybinder/Chart.yaml | yq e '.dependencies.${{ matrix.chart_dep_index }}.version' -)
+          local_version=$(cat mybinder/Chart.yaml | yq e '.dependencies[] | select(.name == "${{ matrix.chart_dep_name }}") | .version' -)
           echo "::set-output name=version::$local_version"
 
-          chart_dep_repo=$(cat mybinder/Chart.yaml | yq e '.dependencies.${{ matrix.chart_dep_index }}.repository' -)
+          chart_dep_repo=$(cat mybinder/Chart.yaml | yq e '.dependencies[] | select(.name == "${{ matrix.chart_dep_name }}") | .repository' -)
           local_app_version=$(helm show chart --version=$local_version --repo=$chart_dep_repo ${{ matrix.chart_dep_name }} | yq e '.appVersion' -)
           echo "::set-output name=appVersion::$local_app_version"
 
@@ -174,7 +169,7 @@ jobs:
         # optionally passing `--devel` to get pre-releases as well.
         #
         run: |
-          chart_dep_repo=$(cat mybinder/Chart.yaml | yq e '.dependencies.${{ matrix.chart_dep_index }}.repository' -)
+          chart_dep_repo=$(cat mybinder/Chart.yaml | yq e '.dependencies[] | select(.name == "${{ matrix.chart_dep_name }}") | .repository' -)
 
           latest_version=$(helm show chart ${{ matrix.chart_dep_devel_flag }} --repo=$chart_dep_repo ${{ matrix.chart_dep_name }} | yq e '.version' -)
           echo "::set-output name=version::$latest_version"
