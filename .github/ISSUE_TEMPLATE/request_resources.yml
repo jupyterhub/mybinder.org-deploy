@@ -1,4 +1,4 @@
-name: \U0001F4C8 Request to bump resources for repo
+name: 📈 Request to bump resources for repo
 description: Answer some questions to help us make a decision about your request and set things up faster.
 labels: ["impact"]
 body:
