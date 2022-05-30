@@ -1,20 +1,19 @@
 # Operational Dashboards with Grafana
 
 We use [Grafana](https://grafana.com/) for creating dashboards
-from our [metrics](../metrics.html). Dashboards are useful for
+from our [operational metrics](metrics). Dashboards are useful for
 understanding the current status of the system and all its components
 at a glance. They are also very useful to try and debug what
 is going wrong during / after an outage.
 
 ## What is it?
 
-```eval_rst
-.. image:: ../../_static/images/dashboard.png
+```{image} ../_static/images/dashboard.png
 ```
 
 A dashboard is a set of pre-defined graphs in a particular layout that
 provide an overview of a system. In our case, they provide an overview
-of the [operational metrics](../metrics.html) of the components that make
+of the [operational metrics](metrics) of the components that make
 up mybinder.org.
 
 ## Where is it?
@@ -35,23 +34,23 @@ to see what queries make up the dashboard, and how you can edit it.
 All the dashboard definitions are stored in an `sqlite` database on a
 disk attached to the running grafana instance.
 
-The [Grafana documentation](http://docs.grafana.org/guides/basic_concepts/)
+The [Grafana documentation](https://grafana.com/docs/grafana/latest/basics/)
 has more info on the various concepts in Grafana, and how you can use them.
 You can also create a new dashboard and play with it. Be careful before
 editing currently used dashboards!
 
 ## Installation & Configuration
 
-Grafana is installed with the [Grafana helm chart](https://github.com/kubernetes/charts/tree/master/stable/grafana).
+Grafana is installed with the [Grafana helm chart](https://github.com/helm/charts/tree/master/stable/grafana).
 You can see the options for configuring it documented in its
-[`values.yaml`](https://github.com/kubernetes/charts/blob/master/stable/grafana/values.yaml)
+[`values.yaml`](https://github.com/helm/charts/blob/master/stable/grafana/values.yaml)
 file. You can also see the specific ways we have configured it
 in the `grafana` section of `mybinder/values.yaml`, `config/prod.yaml`
 and `config/staging.yaml`.
 
 ## Annotations
 
-[Annotations](http://docs.grafana.org/reference/annotations/) are
+[Annotations](https://grafana.com/docs/grafana/latest/dashboards/annotations/) are
 a cool feature of Grafana that lets us add arbitrary markers tagged to
 all graphs marking an event that has happened. For example, you can
 create an annotation each time a deployment happens - this puts a

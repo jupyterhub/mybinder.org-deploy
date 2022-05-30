@@ -16,8 +16,9 @@ is given, it will also *delete* those pods.
 You need the `kubernetes` python library installed for this to work.
 """
 import argparse
-from kubernetes import config, client
 from datetime import datetime, timedelta, timezone
+
+from kubernetes import client, config
 
 # Setup our parameters
 argparser = argparse.ArgumentParser()
@@ -51,10 +52,10 @@ for pod in pods.items:
             continue
         if args.delete:
             core_api.delete_namespaced_pod(pod.metadata.name, args.namespace, client.V1DeleteOptions())
-            print("Deleted {:.1f}h old pod {}".format(age.total_seconds() / 60 / 60, pod.metadata.name))
+            print(f"Deleted {age.total_seconds() / 60 / 60:.1f}h old pod {pod.metadata.name}")
             summary_text = 'Deleted {} pods'
         else:
-            print("Found {:.1f}h old pod {}".format(age.total_seconds() / 60 / 60, pod.metadata.name))
+            print(f"Found {age.total_seconds() / 60 / 60:.1f}h old pod {pod.metadata.name}")
             summary_text = 'Found {} pods'
 
         total_pods.append(pod.metadata.name)

@@ -10,13 +10,13 @@ incidents and incident reports. Remember, **incidents are opportunities to learn
 Principles and guidelines for incident reporting
 ------------------------------------------------
 
-- Inspiration for our guidelines: `Google SRE guide, Managing Incidents <https://landing.google.com/sre/book/chapters/managing-incidents.html>`_.
+- Inspiration for our guidelines: `Google SRE guide, Managing Incidents <https://sre.google/sre-book/managing-incidents/>`_.
 - Team management and takeaways from incidents: `Etsy Debriefing Facilitation Guide <https://extfiles.etsy.com/DebriefingFacilitationGuide.pdf>`_.
 
 Example template for incident report
 ------------------------------------
 
-- `Example template for incident report <template-incident-report.html>`_
+- :doc:`Example template for incident report <template-incident-report>`
 
 Incident history
 ----------------

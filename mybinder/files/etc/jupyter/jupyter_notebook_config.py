@@ -1,8 +1,7 @@
-import notebook
 import os
-
 from distutils.version import LooseVersion as V
 
+import notebook
 
 c.NotebookApp.extra_template_paths.append('/etc/jupyter/templates')
 

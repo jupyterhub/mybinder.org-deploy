@@ -45,10 +45,13 @@ env:
   #
   CERT_MANAGER_VERSION: "v0.15.2"
 
-  GIT_COMMITTER_EMAIL: ci-user@github.local
-  GIT_COMMITTER_NAME: CI User
-  GIT_AUTHOR_EMAIL: ci-user@github.local
-  GIT_AUTHOR_NAME: CI User
+  # These variables influence git directly
+  # https://git-scm.com/book/en/v2/Git-Internals-Environment-Variables#_committing
+  #
+  GIT_AUTHOR_EMAIL: 105740858+jupyterhub-bot@users.noreply.github.com
+  GIT_COMMITTER_EMAIL: 105740858+jupyterhub-bot@users.noreply.github.com
+  GIT_AUTHOR_NAME: JupterHub Bot Account
+  GIT_COMMITTER_NAME: JupterHub Bot Account
 
 jobs:
   # In this dedicated job to deploy our staging environment we build and push
@@ -87,28 +90,27 @@ jobs:
               echo "HELM_VERSION=${{ matrix.helm_version }}" >> $GITHUB_ENV
           fi
 
-      # Action Repo: https://github.com/actions/checkout
       - name: "Stage 0: Checkout repo"
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      # Action Repo: https://github.com/actions/setup-python
       - name: "Stage 0: Setup Python 3.8"
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v3
+        id: setup-python
         with:
-          python-version: 3.8
+          python-version: "3.8"
 
       # Action Repo: https://github.com/actions/cache
       - name: "Stage 0: Cache pip dependencies"
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          key: python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/*requirements.txt') }}
 
       - name: "Stage 1: Install dependencies"
+        # --upgrade is important since we carry a cache and may risk grow very
+        # outdated otherwise.
         run: |
           pip install --upgrade setuptools pip
           pip install --upgrade -r requirements.txt
@@ -194,11 +196,13 @@ jobs:
             hub_url: https://hub.gke.mybinder.org
             chartpress_args: ""
             helm_version: ""
+
           - federation_member: turing
             binder_url: https://turing.mybinder.org
             hub_url: https://hub.mybinder.turing.ac.uk
             chartpress_args: ""
             helm_version: ""
+
           - federation_member: ovh
             binder_url: https://ovh.mybinder.org
             hub_url: https://hub-binder.mybinder.ovh
@@ -219,24 +223,25 @@ jobs:
           fetch-depth: 0
 
       - name: "Stage 0: Setup Python 3.8"
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v3
+        id: setup-python
         with:
-          python-version: 3.8
+          python-version: "3.8"
 
+      # Action Repo: https://github.com/actions/cache
       - name: "Stage 0: Cache pip dependencies"
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+          key: python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/*requirements.txt') }}
 
       - name: "Stage 1: Install dependencies"
+        # --upgrade is important since we carry a cache and may risk grow very
+        # outdated otherwise.
         run: |
           pip install --upgrade setuptools pip
           pip install --upgrade -r requirements.txt
 
-      # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idif
       - name: "Stage 1: Install gcloud ${{ env.GCLOUD_SDK_VERION }}"
         if: matrix.federation_member == 'prod'
         uses: google-github-actions/setup-gcloud@v0
@@ -300,7 +305,6 @@ jobs:
       # Poll the GitHub REST API and wait for staging-deploy job to finish
       - name: Wait for staging-deploy completion
         id: staging-deploy-status
-        shell: bash
         run: |
           STATUS=""
           CONCLUSION=""
@@ -308,7 +312,7 @@ jobs:
           while [ "$STATUS" != "completed" ]; do
             RESPONSE=$(curl --silent --request GET \
               --url 'https://api.github.com/repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs' \
-              --header 'Authorization: token ${{ secrets.TEST_THIS_PR_ACCESS_TOKEN }}' \
+              --header 'Authorization: token ${{ secrets.jupyterhub_bot_pat }}' \
               --header 'Accept: application/vnd.github.v3+json')
 
             STATUS=$(echo $RESPONSE | jq -r '.jobs[] | select(.name | startswith("staging-deploy")) | .status')
@@ -327,7 +331,6 @@ jobs:
 
       - name: Set PR number as variable
         id: get-pr-number
-        shell: bash
         run: |
           PR_NUM=$(echo ${{ github.ref }} | awk -F'/' '{print $NF}')
           echo "::set-output name=prnum::$PR_NUM"
@@ -336,7 +339,7 @@ jobs:
         if: ${{ steps.staging-deploy-status.outputs.status }} == 'completed'
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.TEST_THIS_PR_ACCESS_TOKEN }}
+          github-token: ${{ secrets.jupyterhub_bot_pat }}
           script: |
             var JOB_STATUS = process.env.JOB_STATUS;
             var PR_NUMBER = process.env.PR_NUMBER;

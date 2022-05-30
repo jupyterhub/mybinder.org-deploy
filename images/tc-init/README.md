@@ -25,7 +25,7 @@ so test if these more official annotations work before adopting tc-init.
 
 Add tc-init to your containers as an initContainer.
 It will run `tc` and limit the egress bandwidth to EGRESS_BANDWIDTH.
-The value is passed to [tc](http://lartc.org/manpages/tc.txt),
+The value is passed to [tc](https://lartc.org/manpages/tc.txt),
 e.g `10mbit` for ten megabits per second,
 or `5mbps` for five mega*bytes* per second.
 

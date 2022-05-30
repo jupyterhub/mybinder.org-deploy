@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
-from datetime import datetime, timedelta
-import time
-import os
 import json
+import time
+from datetime import datetime, timedelta
 
 from archiver import archive_events
-from indexer import index_events
 from cloudcosts import publish_daily_cost
+from indexer import index_events
 
 with open('/etc/analytics-publisher/analytics-publisher.json') as f:
     config = json.load(f)
@@ -51,7 +50,7 @@ while True:
             kind=config['cloudCosts']['kind']
         )
 
-        print("Uploaded cloud costs for {} days".format(len(cloud_costs)))
+        print(f"Uploaded cloud costs for {len(cloud_costs)} days")
 
     print("Generating index")
     index_events(project_name, config['destinationBucket'])

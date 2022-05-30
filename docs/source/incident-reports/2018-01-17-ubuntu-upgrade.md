@@ -8,7 +8,7 @@ In the midst of a general Travis period of instability, we were slow to
 realize that Ubuntu had pulled several of its packages for "Zesty" from the
 repository we were using in the base image for repo2docker. This meant that
 most Binders would fail to build because those packages were no longer available.
-We had to [perform an emergency bump](https://github.com/jupyter/repo2docker/pull/197)
+We had to [perform an emergency bump](https://github.com/jupyterhub/repo2docker/pull/197)
 to the latest version of Ubuntu (artful).
 In the future we should keep bumping when ubuntu makes a new release *until*
 it makes a new LTS release, then we should pin repo2docker at that.
@@ -24,7 +24,7 @@ Binder deployment)
 ### 2018-01-16
 
 JupyterHub travis failures
-(https://github.com/jupyter/repo2docker/pull/197#issuecomment-358515334),
+(https://github.com/jupyterhub/repo2docker/pull/197#issuecomment-358515334),
 was dismissed as holdover from Travis failing on the 15th (since it was reported
 as 'no route to host' rather than 404).
 
@@ -53,12 +53,12 @@ Tweet + Email listserv announcing bump to Artful.
 ### Process
 
 * Note that Ubuntu non-LTS is on a ~9 month cycle, not the 1 year cycle we assumed.
-  Keep bumping Ubuntu versions until we hit LTS, then stop [Issue](https://github.com/jupyter/repo2docker/issues/198)
+  Keep bumping Ubuntu versions until we hit LTS, then stop [Issue](https://github.com/jupyterhub/repo2docker/issues/198)
 * Subscribe to the ubuntu-announce mailing list [Issue](https://github.com/jupyterhub/mybinder.org-deploy/issues/296)
 
 ### repo2docker
-* Separate python version from distro version [Issue](https://github.com/jupyter/repo2docker/issues/185)
-* Allow users to pin distros (with an apt.yaml) [PR](https://github.com/jupyter/repo2docker/pull/148)
+* Separate python version from distro version [Issue](https://github.com/jupyterhub/repo2docker/issues/185)
+* Allow users to pin distros (with an apt.yaml) [PR](https://github.com/jupyterhub/repo2docker/pull/148)
 
 ### Misc
 * Keep our own apt mirror [Issue](https://github.com/jupyterhub/mybinder.org-deploy/issues/295)

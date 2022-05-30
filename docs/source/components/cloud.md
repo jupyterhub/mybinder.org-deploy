@@ -117,8 +117,8 @@ of nodes.
 ## Google Container Registry
 
 A core part of mybinder.org is building, storing and then running docker images
-(built by [repo2docker](https://github.com/jupyter/repo2docker)). Docker images
-are generally stored in a [docker registry](https://github.com/docker/distribution),
+(built by [repo2docker](https://github.com/jupyterhub/repo2docker)). Docker images
+are generally stored in a [docker registry](https://github.com/distribution/distribution),
 using a well-defined standard API.
 
 We use Google Cloud's hosted docker registry - [Google Container Registry (GCR)](https://cloud.google.com/container-registry/).
@@ -131,7 +131,7 @@ without having to run any of that infrastructure ourselves.
 GCR is private by default, and can be only used from inside the Google Cloud project
 the registry is located in. When using GKE, the authentication for pulling images
 to run is already set up for us, so we do not need to do anything special. For pushing
-images, we authenticate via a [service account](https://cloud.google.com/container-registry/docs/advanced-authentication#using_a_json_key_file).
+images, we authenticate via a [service account](https://cloud.google.com/container-registry/docs/advanced-authentication#json-key).
 
 You can find this service account credential under `registry` in `secrets/config/prod.yaml`
 and `secrets/config/staging.yaml`.
@@ -156,7 +156,7 @@ We do not allow users to pull our images, for a few reasons:
    break other users who might depend on this.
 
 For users who want access to a docker image similar to how it is built with Binder,
-we recommend using [repo2docker](https://github.com/jupyter/repo2docker) to build
+we recommend using [repo2docker](https://github.com/jupyterhub/repo2docker) to build
 your own, and push it to a registry of your choice.
 
 ### Naming
@@ -181,12 +181,12 @@ Changing this prefix will invalidate all existing images.
 
 ## Logging, Metrics, and Dashboarding
 
-We use [Google Stackdriver](https://cloud.google.com/stackdriver/) for logging
+We use [Google Stackdriver](https://cloud.google.com/products/operations) for logging
 activity on the Kubernetes deployment. This is useful for listing the raw
 logs coming out of BinderHub, though we don't use it for dashboarding (see below).
 
-We use [prometheus](metrics.html) for collecting more fine-grained metrics about
-what's happening on the deployment, and [grafana](dashboards.html) for generating
+We use [prometheus](metrics) for collecting more fine-grained metrics about
+what's happening on the deployment, and [grafana](dashboards) for generating
 dashboards using the data from prometheus.
 
 We use [Google Analytics](https://analytics.google.com/analytics/web) to keep

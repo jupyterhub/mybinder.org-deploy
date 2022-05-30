@@ -3,7 +3,7 @@
 This section is an overview of the repositories, projects, and
 systems used in a mybinder.org production deployment.
 
-Reference: [Google SRE book section on Production Environment](https://landing.google.com/sre/book/chapters/production-environment.html)
+Reference: [Google SRE book section on Production Environment](https://sre.google/sre-book/production-environment/)
 
 ## Repository structure
 
@@ -119,7 +119,7 @@ dependencies:
 This also allows us to pin a *version* of Prometheus, which improves
 reliability of the site.
 
-```note::
+```{note}
 It is still possible to deploy each of these applications on their own *without*
 a Meta Helm Chart, this is simply a way of clustering dependencies together
 and simplifying the deployment structure.
@@ -127,16 +127,11 @@ and simplifying the deployment structure.
 
 Another benefit of Meta Charts is that you can use a single configuration
 file (`config.yaml`) with multiple Helm Charts. For example, look at the
-[BinderHub Helm Chart](https://github.com/jupyterhub/mybinder.org-deploy/blob/staging/mybinder/values.yaml). Note that there are multiple
+BinderHub Helm Chart. Note that there are multiple
 top-level sections (e.g., for [jupyterhub](https://github.com/jupyterhub/mybinder.org-deploy/blob/5aa6dde60c9b5f3012686f9ba2b23b176c19b224/mybinder/values.yaml#L53) and for [prometheus](https://github.com/jupyterhub/mybinder.org-deploy/blob/5aa6dde60c9b5f3012686f9ba2b23b176c19b224/mybinder/values.yaml#L204)) and that each section
 has a corresponding entry in the Helm Meta Chart. In this way, we can provide
 configuration for each dependency of BinderHub without needing a separate
 file for each, and we can deploy them all at the same time.
-
-For more information, we recommend investigating the structure of the
-[Binder Helm Meta Chart](https://github.com/jupyterhub/mybinder.org-deploy/blob/staging/mybinder/Chart.yaml). In addition, the Kubernetes
-organization keeps a [curated list of Helm Charts](https://github.com/kubernetes/charts) that you can specify in
-your Meta Chart in order to deploy different types of applications.
 
 ## HTTPS configuration for `mybinder.org`
 
@@ -293,10 +288,9 @@ Contact one of them if you need access to the git-crypt key.
 [mybinder.org]: https://mybinder.org
 [staging.mybinder.org]: https://staging.mybinder.org
 [staging]: https://staging.mybinder.org
-[BinderHub]: https://github.com/jupyterhub/binderhub
 [binderhub]: https://github.com/jupyterhub/binderhub
 [`jupyterhub/binderhub`]: https://github.com/jupyterhub/binderhub
 [BinderHub documentation]: https://binderhub.readthedocs.io/en/latest/
-[repo2docker]: https://github.com/jupyter/repo2docker
+[repo2docker]: https://github.com/jupyterhub/repo2docker
 [git-crypt]: https://github.com/AGWA/git-crypt
 [ssh-vault]: https://github.com/ssh-vault/ssh-vault
