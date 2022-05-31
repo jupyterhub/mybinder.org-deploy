@@ -127,24 +127,6 @@ def setup_auth_gcloud(release, cluster=None):
     )
 
 
-def assert_helm_v3():
-    """Asserts helm is available at all and of the required major version."""
-    c = subprocess.run(["helm", "--help"], capture_output=True)
-    assert (
-        c.returncode == 0
-    ), "Helm 3 is required, but helm doesn't seem to be installed!"
-
-    c = subprocess.run(
-        ["helm", "version", "--short"],
-        text=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-    )
-    assert (
-        c.returncode == 0 and "v3." in c.stdout
-    ), "Helm 3 is required, but a different version seem to be installed!"
-
-
 def deploy(release, name=None):
     """Deploys a federation member to a k8s cluster.
 
@@ -301,8 +283,6 @@ def main():
     )
 
     args = argparser.parse_args()
-
-    assert_helm_v3()
 
     # Check if the local flag is set
     if not args.local:
