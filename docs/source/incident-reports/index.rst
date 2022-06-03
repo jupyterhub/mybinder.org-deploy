@@ -28,5 +28,5 @@ Incident history
    :glob:
    :reversed:
 
-   ./2*.md
+   ./2*
    template-incident-report
