@@ -1,3 +1,4 @@
+{{- if .Values.redirector.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -28,3 +29,4 @@ spec:
         {{- range $redirect := .Values.redirector.redirects }}
         - {{ $redirect.host.from }}
         {{- end }}
+{{- end }}
