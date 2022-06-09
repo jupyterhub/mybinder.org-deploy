@@ -1,5 +1,10 @@
 projectName: turing
 
+userNodeSelector: &userNodeSelector
+  hub.jupyter.org/node-purpose: core
+coreNodeSelector: &coreNodeSelector
+  hub.jupyter.org/node-purpose: core
+
 letsencrypt:
   contactEmail: drsarahlgibson@gmail.com
 
@@ -9,11 +14,13 @@ binderhub:
       pod_quota: 200
       hub_url: https://hub.mybinder.turing.ac.uk
       badge_base_url: https://mybinder.org
+      build_node_selector: *userNodeSelector
       sticky_builds: true
       # Docker Hub registry for Turing
       use_registry: true
       image_prefix: turingmybinder/binder-prod-r2d-g5b5b759-
 
+  nodeSelector: *coreNodeSelector
   replicas: 1
 
   ingress:
@@ -42,6 +49,10 @@ binderhub:
       value: /event-secret/service-account.json
 
   jupyterhub:
+    singleuser:
+      nodeSelector: *userNodeSelector
+    hub:
+      nodeSelector: *coreNodeSelector
     ingress:
       enabled: true
       annotations:
@@ -54,6 +65,10 @@ binderhub:
           hosts:
             - hub.mybinder.turing.ac.uk
 
+    proxy:
+      chp:
+        nodeSelector: *coreNodeSelector
+
     scheduling:
       userScheduler:
         enabled: false
@@ -61,7 +76,7 @@ binderhub:
         enabled: true
       userPlaceholder:
         enabled: true
-        replicas: 5
+        replicas: 10
 
   imageCleaner:
     # Use 40GB as upper limit, size is given in bytes
@@ -73,6 +88,7 @@ cryptnono:
   enabled: false
 
 grafana:
+  nodeSelector: *coreNodeSelector
   ingress:
     annotations:
       kubernetes.io/ingress.class: nginx
