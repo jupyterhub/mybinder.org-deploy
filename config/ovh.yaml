@@ -49,7 +49,7 @@ binderhub:
       hosts:
         - hub-binder.mybinder.ovh
       tls:
-        - secretName: kubelego-tls-jupyterhub-ovh
+        - secretName: kubelego-tls-jupyterhub
           hosts:
             - hub-binder.mybinder.ovh
 
