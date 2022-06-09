@@ -31,6 +31,7 @@ binderhub:
   ingress:
     hosts:
       - binder.mybinder.ovh
+      - ovh.mybinder.org
 
   jupyterhub:
     hub:
