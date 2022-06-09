@@ -1,7 +1,7 @@
 projectName: turing
 
 userNodeSelector: &userNodeSelector
-  hub.jupyter.org/node-purpose: core
+  hub.jupyter.org/node-purpose: user
 coreNodeSelector: &coreNodeSelector
   hub.jupyter.org/node-purpose: core
 
