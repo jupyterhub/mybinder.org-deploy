@@ -29,19 +29,8 @@ binderhub:
       value: /secrets/service-account.json
 
   ingress:
-    enabled: true
-    https:
-      enabled: true
-      type: manual
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "false"
     hosts:
       - binder.mybinder.ovh
-    tls:
-      - secretName: tls-crt
-        hosts:
-          - binder.mybinder.ovh
 
   jupyterhub:
     hub:
@@ -56,13 +45,10 @@ binderhub:
         type: offload
 
     ingress:
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "false"
       hosts:
         - hub-binder.mybinder.ovh
       tls:
-        - secretName: tls-crt
+        - secretName: kubelego-tls-jupyterhub-ovh
           hosts:
             - hub-binder.mybinder.ovh
 
@@ -93,15 +79,12 @@ cryptnono:
 
 grafana:
   ingress:
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "false"
     hosts:
       - grafana-mybinder.mybinder.ovh
     tls:
       - hosts:
           - grafana-mybinder.mybinder.ovh
-        secretName: tls-crt
+        secretName: kubelego-tls-grafana
   datasources:
     datasources.yaml:
       apiVersion: 1
@@ -122,15 +105,12 @@ prometheus:
       size: 50Gi
     retention: 30d
     ingress:
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "false"
       hosts:
         - prometheus-mybinder.mybinder.ovh
       tls:
         - hosts:
             - prometheus-mybinder.mybinder.ovh
-          secretName: tls-crt
+          secretName: kubelego-tls-prometheus
 
 ingress-nginx:
   controller:
@@ -144,34 +124,13 @@ ingress-nginx:
 
 static:
   ingress:
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "false"
     hosts:
       - static-mybinder.mybinder.ovh
     tls:
-      secretName: tls-crt
+      secretName: kubelego-tls-static
 
 redirector:
-  ingress:
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "false"
-    tls:
-      secretName: tls-crt
-  redirects:
-    - type: host
-      host:
-        from: beta-binder.mybinder.ovh
-        to: binder.mybinder.ovh
-    - type: host
-      host:
-        from: docs-mybinder.mybinder.ovh
-        to: mybinder.readthedocs.io
-    - type: host
-      host:
-        from: playground-mybinder.mybinder.ovh
-        to: play.nteract.io
+  enabled: false
 
 matomo:
   enabled: false
