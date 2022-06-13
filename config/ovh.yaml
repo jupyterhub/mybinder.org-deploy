@@ -25,8 +25,7 @@ binderhub:
       mountPath: /secrets
       readOnly: true
   extraEnv:
-    - name: GOOGLE_APPLICATION_CREDENTIALS
-      value: /secrets/service-account.json
+    GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
 
   ingress:
     hosts:
@@ -129,15 +128,3 @@ static:
       - static-mybinder.mybinder.ovh
     tls:
       secretName: kubelego-tls-static
-
-redirector:
-  enabled: false
-
-matomo:
-  enabled: false
-
-analyticsPublisher:
-  enabled: false
-
-gcsProxy:
-  enabled: false

@@ -45,8 +45,7 @@ binderhub:
       mountPath: /event-secret
       readOnly: true
   extraEnv:
-    - name: GOOGLE_APPLICATION_CREDENTIALS
-      value: /event-secret/service-account.json
+    GOOGLE_APPLICATION_CREDENTIALS: /event-secret/service-account.json
 
   jupyterhub:
     singleuser:
@@ -144,19 +143,3 @@ static:
       - static.mybinder.turing.ac.uk
     tls:
       secretName: turing-static-tls-crt
-
-redirector:
-  redirects:
-    - type: host
-      host:
-        from: docs-mybinder.turing.10.0.0.1.xip.io
-        to: mybinder.readthedocs.io
-
-matomo:
-  enabled: false
-
-analyticsPublisher:
-  enabled: false
-
-gcsProxy:
-  enabled: false
