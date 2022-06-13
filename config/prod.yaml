@@ -152,6 +152,7 @@ proxyPatches:
   nodeSelector: *coreNodeSelector
 
 redirector:
+  enabled: true
   nodeSelector: *coreNodeSelector
   redirects:
     - type: host
@@ -176,6 +177,7 @@ redirector:
         to: mybinder.org/matomo/index.php
 
 matomo:
+  enabled: true
   replicas: 3
   nodeSelector: *coreNodeSelector
   db:
@@ -198,6 +200,7 @@ matomo:
       memory: 1Gi
 
 analyticsPublisher:
+  enabled: true
   project: binderhub-288415
   destinationBucket: binder-events-archive
   events:
@@ -206,6 +209,7 @@ analyticsPublisher:
     sourceBucket: binder-billing-archive
 
 gcsProxy:
+  enabled: true
   buckets:
     - name: binder-events-archive
       host: archive.analytics.mybinder.org

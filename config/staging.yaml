@@ -10,8 +10,7 @@ binderhub:
       sticky_builds: true
       build_memory_limit: "2G"
   extraEnv:
-    - name: EVENT_LOG_NAME
-      value: "binderhub-staging-events-text"
+    EVENT_LOG_NAME: "binderhub-staging-events-text"
 
   resources:
     requests:
@@ -112,6 +111,7 @@ static:
       - static.gke2.staging.mybinder.org
 
 redirector:
+  enabled: true
   redirects:
     - type: host
       host:
@@ -143,6 +143,7 @@ analyticsPublisher:
     sourceBucket: binder-billing-archive
 
 gcsProxy:
+  enabled: true
   buckets:
     - name: binder-staging-events-archive
       host: archive.analytics.gke2.staging.mybinder.org

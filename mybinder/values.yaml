@@ -449,7 +449,7 @@ ingress-nginx:
       externalTrafficPolicy: Local
 
 redirector:
-  enabled: true
+  enabled: false
   nodeSelector: {}
   redirects: []
   ingress:
@@ -530,7 +530,7 @@ proxyPatches:
   nodeSelector: {}
 
 matomo:
-  enabled: true
+  enabled: false
   nodeSelector: {}
   resources: {}
   replicas: 1
@@ -542,12 +542,12 @@ matomo:
     tables_prefix: matomo_
 
 gcsProxy:
-  enabled: true
+  enabled: false
   replicas: 1
   nodeSelector: {}
 
 analyticsPublisher:
-  enabled: true
+  enabled: false
   events:
     logName: binderhub-events-text
   image:
