@@ -115,7 +115,14 @@ prometheus:
 ingress-nginx:
   controller:
     hostNetwork: true
+    # host networking requires single instance
+    # with recreate to avoid new pods being unschedulable
+    # due to '1 node(s) didn't have free ports'
+    # Bumping the ingress causes downtime!
     replicaCount: 1
+    updateStrategy:
+      type: Recreate
+
     # OVH host-networking requires ingress controller on node-1
     nodeSelector:
       kubernetes.io/hostname: node-1
