@@ -525,6 +525,12 @@ prometheus:
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
 
+  # make sure we collect metrics on pods by app/component at least
+  kube-state-metrics:
+    metricLabelsAllowlist:
+      - pods=[app,component]
+      - nodes=[*]
+
 proxyPatches:
   enabled: true
   nodeSelector: {}
