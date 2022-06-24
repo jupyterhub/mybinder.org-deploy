@@ -45,7 +45,7 @@ dependencies:
   #       chart v6 requires Helm 3
   #       chart v6.17.1 gives us Grafana v8.2.1
   - name: grafana
-    version: "6.30.1"
+    version: "6.31.1"
     repository: https://grafana.github.io/helm-charts
     condition: grafana.enabled
 
