@@ -98,7 +98,7 @@ prometheus:
 ingress-nginx:
   controller:
     service:
-      loadBalancerIP: 20.82.24.96
+      loadBalancerIP: 
     scope:
       enabled: true
 
@@ -109,19 +109,3 @@ static:
       - static-staging.mybinder.turing.ac.uk
     tls:
       secretName: turing-staging-static-tls-crt
-
-redirector:
-  redirects:
-    - type: host
-      host:
-        from: docs-mybinder.turing.10.0.0.1.xip.io
-        to: mybinder.readthedocs.io
-
-matomo:
-  enabled: false
-
-analyticsPublisher:
-  enabled: false
-
-gcsProxy:
-  enabled: false
