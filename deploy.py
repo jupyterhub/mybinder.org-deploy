@@ -30,6 +30,10 @@ GCP_ZONES = {
     "prod": "us-central1",
 }
 
+AZURE_RGs = {
+    "turing-prod":"binder-prod",
+    "turing-staging":"binder-staging"
+}
 
 def setup_auth_turing(cluster):
     """
@@ -53,7 +57,7 @@ def setup_auth_turing(cluster):
     creds_cmd = [
         "az", "aks", "get-credentials",
         "--name", cluster,
-        "--resource-group", "binder-prod"
+        "--resource-group", AZURE_RGs[cluster]
 
     ]
     stdout = subprocess.check_output(creds_cmd)
@@ -334,7 +338,7 @@ def main():
         # script is running on CI, proceed with auth and helm setup
         if args.cluster == 'ovh':
             setup_auth_ovh(args.release, args.cluster)
-        elif args.cluster == 'turing':
+        elif args.cluster in AZURE_RGs:
             setup_auth_turing(args.release)
         else:
             setup_auth_gcloud(args.release, args.cluster)
