@@ -29,10 +29,8 @@ GCP_ZONES = {
     "prod": "us-central1",
 }
 
-AZURE_RGs = {
-    "turing-prod":"binder-prod",
-    "turing-staging":"binder-staging"
-}
+AZURE_RGs = {"turing-prod": "binder-prod", "turing-staging": "binder-staging"}
+
 
 def setup_auth_turing(cluster):
     """
@@ -59,10 +57,13 @@ def setup_auth_turing(cluster):
 
     # Set kubeconfig
     creds_cmd = [
-        "az", "aks", "get-credentials",
-        "--name", cluster,
-        "--resource-group", AZURE_RGs[cluster]
-
+        "az",
+        "aks",
+        "get-credentials",
+        "--name",
+        cluster,
+        "--resource-group",
+        AZURE_RGs[cluster],
     ]
     stdout = subprocess.check_output(creds_cmd)
     print(stdout.decode("utf-8"))
