@@ -2,7 +2,7 @@ projectName: turing
 
 
 letsencrypt:
-  contactEmail: drsarahlgibson@gmail.com
+  contactEmail: cmole@turing.ac.uk
 
 binderhub:
   config:
@@ -56,12 +56,7 @@ binderhub:
             - hub.mybinder.turing.ac.uk
 
     scheduling:
-      userScheduler:
-        enabled: false
-      podPriority:
-        enabled: true
       userPlaceholder:
-        enabled: true
         replicas: 5
 
   imageCleaner:
@@ -116,7 +111,7 @@ prometheus:
 ingress-nginx:
   controller:
     service:
-      loadBalancerIP: 20.76.176.114
+      loadBalancerIP: 20.108.202.113
     scope:
       enabled: true
 
