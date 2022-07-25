@@ -10,7 +10,7 @@ be useful in understanding and maintaining the ``mybinder.org`` deployment.
 "cordoning" a node
 ------------------
 
-`Kubernetes page on cordoning <https://kubernetes-v1-4.github.io/docs/user-guide/kubectl/kubectl_cordon/>`_.
+`Kubernetes page on cordoning <https://kubernetes.io/docs/concepts/architecture/nodes/#manual-node-administration>`_.
 
 Sometimes you want to ensure that **no new pods** will be started on a given
 node. Usually this is because you suspect the node has a problem with it, or

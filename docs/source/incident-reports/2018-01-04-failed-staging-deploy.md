@@ -1,4 +1,3 @@
-
 # 2018-01-04, Failed deploy to staging
 
 ## Summary
@@ -19,11 +18,11 @@ PR [#254](https://github.com/jupyterhub/mybinder.org-deploy/pull/254) failed to 
 
 [Travis CI](https://travis-ci.org/jupyterhub/mybinder.org-deploy/builds/325095814) errored and displayed that the deploy to staging failed.
 
-PR #254 was generated using the first set of instructions in the `README`, [Deploying a Change](https://github.com/jupyterhub/mybinder.org-deploy#deploying-a-change). *Note: User error was made here by assuming the SHA used in the BinderHub helm-chart (binderhub-0.1.0-441f5ea) was the same as the PR in the BinderHub merge commit (4e3bafb). The assumption was that Travis would deploy the binderhub change to the helm-chart repo using the merge commit hash. The Documentation in the `README `'s [BinderHub](https://github.com/jupyterhub/mybinder.org-deploy#binderhub) section has this correct, but the user didn't think to scroll down as they had done the deployment process before but not on a regular basis.*
+PR #254 was generated using the first set of instructions in the `README`, [Deploying a Change](https://github.com/jupyterhub/mybinder.org-deploy#deploying-a-change). _Note: User error was made here by assuming the SHA used in the BinderHub helm-chart (binderhub-0.1.0-441f5ea) was the same as the PR in the BinderHub merge commit (4e3bafb). The assumption was that Travis would deploy the binderhub change to the helm-chart repo using the merge commit hash. The Documentation in the `README `'s [BinderHub](https://github.com/jupyterhub/mybinder.org-deploy#binderhub) section has this correct, but the user didn't think to scroll down as they had done the deployment process before but not on a regular basis._
 
 Investigation begins.
 
-### 08:17 
+### 08:17
 
 Following the process in the `README`, I reverted the original PR since Travis showed an error. PR [#255](https://github.com/jupyterhub/mybinder.org-deploy/pull/255) reverted #254.
 
@@ -41,7 +40,6 @@ Message posted on Gitter to understand why the merge SHA (4e3bafb) was not found
 
 From the Gitter response, user learned that there is a delay in the helm-chart showing up. User realizes that I also made an incorrect assumption about the hash to use in the PR for binderhub helm-chart. The correct SHA to use would be the last commit where the relevant files changed (441f5ea) which is not the same as the most recent commit (4e3bafb).
 
-
 ### 08:59
 
 Submitted a new PR [#256](https://github.com/jupyterhub/mybinder.org-deploy/pull/256) to staging with the correct hash. Travis deploys successfully to staging. Visual review of `staging.mybinder.org` site looks fine.
@@ -53,7 +51,6 @@ Deployed to Prod with PR [#257](https://github.com/jupyterhub/mybinder.org-deplo
 Tested repo, `willingc/ThinkDSP`, using the prod service to see if the notebook would launch. All seemed working on the sample notebook launch. Also checked Grafana dashboard to see if there was any disruption in activity.
 
 Everything is fine and prod is working.
-
 
 ## Action items
 

@@ -1,0 +1,214 @@
+# This is a GitHub workflow defining a set of jobs with a set of steps.
+# ref: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+#
+# - Watch the image tag referenced in mybinder/values.yaml under
+#   binderhub.config.BinderHub.build_image to match the latest image tag for
+#   quay.io/jupyterhub/repo2docker.
+#
+# - Watch the chart versions referenced as dependencies in mybinder/Chart.yaml
+#   to match the latest chart versions available.
+#
+name: Watch dependencies
+
+on:
+  push:
+    paths:
+      - ".github/workflows/watch-dependencies.yaml"
+  schedule:
+    # Run at 05:00 every day, ref: https://crontab.guru/#0_5_*_*_*
+    - cron: "0 5 * * *"
+  workflow_dispatch:
+
+jobs:
+  update-image-dependencies:
+    # Don't schedule runs on forks, but allow the job to execute on push and
+    # workflow_dispatch for CI development purposes.
+    if: github.repository == 'jupyterhub/mybinder.org-deploy' || github.event_name != 'schedule'
+
+    runs-on: ubuntu-20.04
+    environment: watch-dependencies-env
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: repo2docker
+            registry: quay.io
+            repository: jupyterhub/repo2docker
+            values_path: binderhub.config.BinderHub.build_image
+            changelog_url: https://repo2docker.readthedocs.io/en/latest/changelog.html
+            source_url: https://github.com/jupyterhub/repo2docker
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get values.yaml pinned tag of ${{ matrix.registry }}/${{ matrix.repository }}
+        id: local
+        # The local_full_image_spec can be a full image spec like
+        # "registry/repo:tag" or just the tag, but the local_tag will always
+        # become just the tag if ":" is part of the local_full_image_spec. See
+        # https://stackoverflow.com/a/15149278/2220152 for some details.
+        #
+        run: |
+          local_full_image_spec=$(cat mybinder/values.yaml | yq e '.${{ matrix.values_path }}' -)
+          local_tag=${local_full_image_spec#*:}
+          echo "::set-output name=tag::$local_tag"
+
+      - name: Get latest tag of ${{ matrix.registry }}/${{ matrix.repository }}
+        id: latest
+        # The skopeo image helps us list tags consistently from different docker
+        # registries. We use jq to filter out tags of the x.y.z(-a) format, and
+        # then sort based on the numerical x, y, z, and a values. Finally, we
+        # pick the last value in the list.
+        #
+        run: |
+          latest_tag=$(
+              docker run --rm quay.io/skopeo/stable list-tags docker://${{ matrix.registry }}/${{ matrix.repository }} \
+            | jq -r '[.Tags[] | select(. | match("^\\d+\\.\\d+\\.\\d+(-\\d+\\..*)$"))] | sort_by(split(".-") | map(tonumber? // 0)) | last'
+          )
+          echo "::set-output name=tag::$latest_tag"
+
+      - name: Update values.yaml pinned tag
+        if: steps.local.outputs.tag != steps.latest.outputs.tag
+        run: sed --in-place 's/${{ steps.local.outputs.tag }}/${{ steps.latest.outputs.tag }}/g' mybinder/values.yaml
+
+      - name: git diff
+        if: steps.local.outputs.tag != steps.latest.outputs.tag
+        run: git --no-pager diff --color=always
+
+      # ref: https://github.com/peter-evans/create-pull-request
+      - name: Create a PR
+        uses: peter-evans/create-pull-request@v4.0.4
+        # Don't try open PRs in forks or when the job is triggered by a push to
+        # a branch other than the default branch.
+        if: github.repository == 'jupyterhub/mybinder.org-deploy' && (github.event_name != 'push' || github.ref == 'refs/heads/master')
+        with:
+          token: "${{ secrets.jupyterhub_bot_pat }}"
+          author: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
+          committer: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
+          branch: update-image-${{ matrix.name }}
+          labels: maintenance,dependencies
+          commit-message: Update ${{ matrix.registry }}/${{ matrix.repository }} version to ${{ steps.latest.outputs.tag }}
+          title: Update ${{ matrix.registry }}/${{ matrix.repository }} version to ${{ steps.latest.outputs.tag }}
+          body: |
+            Updates mybinder to depend on the `${{ matrix.registry }}/${{ matrix.repository }}` image version `${{ steps.latest.outputs.tag }}` from version `${{ steps.local.outputs.tag }}`.
+
+            ## Related
+
+            - Source code: ${{ matrix.source_url }}
+            - Changelog: ${{ matrix.changelog_url }}
+
+  update-chart-dependencies:
+    # Don't schedule runs on forks, but allow the job to execute on push and
+    # workflow_dispatch for CI development purposes.
+    if: github.repository == 'jupyterhub/mybinder.org-deploy' || github.event_name != 'schedule'
+
+    runs-on: ubuntu-20.04
+    environment: watch-dependencies-env
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Updates mybinder/Chart.yaml declared chart dependencies versions by
+          # creating a PRs when a new stable version is available in the Helm
+          # chart repository.
+          #
+          - chart_dep_name: binderhub
+            chart_dep_chart_changelog_url: ""
+            chart_dep_app_changelog_url: "https://github.com/jupyterhub/binderhub/blob/master/CHANGES.md"
+            chart_dep_source_url: "https://github.com/jupyterhub/binderhub/tree/master/helm-chart"
+            chart_dep_devel_flag: "--devel"
+
+          - chart_dep_name: ingress-nginx
+            chart_dep_chart_changelog_url: "https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx#upgrading-chart"
+            chart_dep_app_changelog_url: "https://github.com/kubernetes/ingress-nginx/blob/master/Changelog.md"
+            chart_dep_source_url: "https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx"
+            chart_dep_devel_flag: ""
+
+          - chart_dep_name: prometheus
+            chart_dep_chart_changelog_url: "https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus#upgrading-chart"
+            chart_dep_app_changelog_url: "https://github.com/prometheus/prometheus/blob/master/CHANGELOG.md"
+            chart_dep_source_url: https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus
+            chart_dep_devel_flag: ""
+
+          - chart_dep_name: grafana
+            chart_dep_chart_changelog_url: "https://github.com/grafana/helm-charts/tree/main/charts/grafana#upgrading-an-existing-release-to-a-new-major-version"
+            chart_dep_app_changelog_url: "https://github.com/grafana/grafana/blob/master/CHANGELOG.md"
+            chart_dep_source_url: "https://github.com/grafana/helm-charts/tree/main/charts/grafana"
+            chart_dep_devel_flag: ""
+
+          - chart_dep_name: cryptnono
+            chart_dep_chart_changelog_url: ""
+            chart_dep_app_changelog_url: ""
+            chart_dep_source_url: "https://github.com/yuvipanda/cryptnono/"
+            chart_dep_devel_flag: "--devel"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Get Chart.yaml pinned version and fetch associated appVersion of ${{ matrix.chart_dep_name }} chart
+        id: local
+        # Chart.yaml's dependencies pins a chart's version which ships with some
+        # appVersion. Due to that, we need to fetch the appVersion separately
+        # with `helm show chart --version=<declared-chart-version>`.
+        #
+        run: |
+          local_version=$(cat mybinder/Chart.yaml | yq e '.dependencies[] | select(.name == "${{ matrix.chart_dep_name }}") | .version' -)
+          echo "::set-output name=version::$local_version"
+
+          chart_dep_repo=$(cat mybinder/Chart.yaml | yq e '.dependencies[] | select(.name == "${{ matrix.chart_dep_name }}") | .repository' -)
+          local_app_version=$(helm show chart --version=$local_version --repo=$chart_dep_repo ${{ matrix.chart_dep_name }} | yq e '.appVersion' -)
+          echo "::set-output name=appVersion::$local_app_version"
+
+      - name: Fetch latest version/appVersion of ${{ matrix.chart_dep_name }} chart
+        id: latest
+        # We need to fetch the version/appVersion with `helm show chart`, always
+        # getting the latest version directly from the helm chart repository,
+        # optionally passing `--devel` to get pre-releases as well.
+        #
+        run: |
+          chart_dep_repo=$(cat mybinder/Chart.yaml | yq e '.dependencies[] | select(.name == "${{ matrix.chart_dep_name }}") | .repository' -)
+
+          latest_version=$(helm show chart ${{ matrix.chart_dep_devel_flag }} --repo=$chart_dep_repo ${{ matrix.chart_dep_name }} | yq e '.version' -)
+          echo "::set-output name=version::$latest_version"
+
+          latest_app_version=$(helm show chart ${{ matrix.chart_dep_devel_flag }} --repo=$chart_dep_repo ${{ matrix.chart_dep_name }} | yq e '.appVersion' -)
+          echo "::set-output name=appVersion::$latest_app_version"
+
+      - name: Update Chart.yaml pinned version
+        # "<old version>" is replaced with "<new version>", where also the
+        # quotes are included.
+        #
+        run: sed --in-place 's/"${{ steps.local.outputs.version }}"/"${{ steps.latest.outputs.version }}"/g' mybinder/Chart.yaml
+
+      - name: git diff
+        run: git --no-pager diff --color=always
+
+      # ref: https://github.com/peter-evans/create-pull-request
+      - name: Create a PR
+        uses: peter-evans/create-pull-request@v4.0.4
+        # Don't try open PRs in forks or when the job is triggered by a push to
+        # a branch other than the default branch.
+        if: github.repository == 'jupyterhub/mybinder.org-deploy' && (github.event_name != 'push' || github.ref == 'refs/heads/master')
+        with:
+          token: "${{ secrets.jupyterhub_bot_pat }}"
+          author: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
+          committer: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
+          branch: update-chart-${{ matrix.chart_dep_name }}
+          labels: maintenance,dependencies
+          commit-message: Updates ${{ matrix.chart_dep_name }} chart to ${{ steps.latest.outputs.version }}
+          title: Updates ${{ matrix.chart_dep_name }} chart to ${{ steps.latest.outputs.version }}
+          body: |
+            Updates mybinder to depend on the ${{ matrix.chart_dep_name }} chart version `${{ steps.latest.outputs.version }}` from version `${{ steps.local.outputs.version }}`.
+
+            &nbsp; | Before | After
+            -|-|-
+            Chart.yaml's version | `${{ steps.local.outputs.version }}` | `${{ steps.latest.outputs.version }}`
+            Chart.yaml's appVersion | `${{ steps.local.outputs.appVersion }}` | `${{ steps.latest.outputs.appVersion }}`
+
+            ## Related
+
+            - Chart source code: ${{ matrix.chart_dep_source_url }}
+            - Chart changelog: ${{ matrix.chart_dep_chart_changelog_url }}
+            - Application changelog: ${{ matrix.chart_dep_app_changelog_url }}

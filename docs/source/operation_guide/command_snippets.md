@@ -137,6 +137,7 @@ new_user_pool=user-$(date +"%Y%m%d")
 ```
 
 > Note: You can see a list of the node pools by running:
+
 ```bash
 gcloud container node-pools list --cluster prod --project=binderhub-288415 --zone=us-central1
 ```
@@ -245,10 +246,10 @@ age. You can use it with the following pattern:
 python scripts/delete-pods.py --pod-name <your-query> --older-than <your-query>
 ```
 
-* `--pod-name` is a string and will be matched to any pod that contains this string.
-* `--older-than` is a float (in hours) and will match any pod that is older than this amount.
+- `--pod-name` is a string and will be matched to any pod that contains this string.
+- `--older-than` is a float (in hours) and will match any pod that is older than this amount.
 
-Note, they are both optional, but you need to supply *at least* one. Running
+Note, they are both optional, but you need to supply _at least_ one. Running
 the above command by itself will list all pods that match the query.
 
 ### Delete all pods that match a given name or age
@@ -277,12 +278,12 @@ kubectl --namespace=prod delete pod <POD-NAME> --grace-period=0 --force
 Below is a list of each production pod, and the expected outcome that comes with
 deleting each one.
 
-* `hub-` active user sessions will not be affected. New and pending launches will fail until the new Hub comes back.
-* `binder-` the `mybinder.org` website will temporarily go down. Active user sessions will not be affected.
-* `proxy-` all current users will lose connections (kernel connection lost) until the proxy returns and the Hub restores the routes. Server state is unaffected. Most browser sessions should recover by restoring connections. All pending launches will fail due to lost connections.
-* `proxy-patches-` brief, minor degradation of error messages when browsers attempt to connect to a not-running server. This results in increased load on the Hub, handling requests from browsers whose idle servers have been culled.
-* `redirector-` redirect sites (beta.mybinder.org) will 404 instead of sending to mybinder.org.
-* `jupyter-` deleting a user pod will shut down their session. The user will
+- `hub-` active user sessions will not be affected. New and pending launches will fail until the new Hub comes back.
+- `binder-` the `mybinder.org` website will temporarily go down. Active user sessions will not be affected.
+- `proxy-` all current users will lose connections (kernel connection lost) until the proxy returns and the Hub restores the routes. Server state is unaffected. Most browser sessions should recover by restoring connections. All pending launches will fail due to lost connections.
+- `proxy-patches-` brief, minor degradation of error messages when browsers attempt to connect to a not-running server. This results in increased load on the Hub, handling requests from browsers whose idle servers have been culled.
+- `redirector-` redirect sites (beta.mybinder.org) will 404 instead of sending to mybinder.org.
+- `jupyter-` deleting a user pod will shut down their session. The user will
   encounter errors when they attempt to submit code to the kernel.
 
 ## Node management and information
@@ -295,14 +296,15 @@ event.
 
 To pre-emptively bump the cluster size beyond current occupancy, follow these steps:
 
-* Increase autoscaler minimum size. (note this will lead to a brief period where
+- Increase autoscaler minimum size. (note this will lead to a brief period where
   the kubernetes API is not available.)
-  * Go to http://console.cloud.google.com/
-  * Click "Kubernetes engine" -> "edit" button
-  * Under "Node Pools" find the "minimum size" field and update it.
 
-* Use the `gcloud` command line tool to explicitly resize the cluster.
-  * `gcloud container clusters resize prod --size <NEW-SIZE>`
+  - Go to https://console.cloud.google.com/
+  - Click "Kubernetes engine" -> "edit" button
+  - Under "Node Pools" find the "minimum size" field and update it.
+
+- Use the `gcloud` command line tool to explicitly resize the cluster.
+  - `gcloud container clusters resize prod --size <NEW-SIZE>`
 
 Manually resizing a cluster with autoscaling on doesn't always work because the autoscaler
 can automatically reduce the cluster size after asking for more nodes that
@@ -319,7 +321,7 @@ To remove a node from the cluster, we follow a two-step process. We first
 **cordon** the node, which prevents new pods from being scheduled on it. We then
 **drain** the node, which removes all remaining pods from the node.
 
-* Step 1. Cordon the node
+- Step 1. Cordon the node
 
   ```bash
   kubectl cordon <NODE-NAME>
@@ -327,17 +329,19 @@ To remove a node from the cluster, we follow a two-step process. We first
 
   "cordoning" explicitly tells kubernetes **not** to start new pods on this node.
   For more information on cordoning, see :ref:`term-cordoning`.
-* Step 2. Wait a few hours for pods to naturally get deleted from the node.
-  We'd rather not forcibly delete pods if possible. However if you *need* to
+
+- Step 2. Wait a few hours for pods to naturally get deleted from the node.
+  We'd rather not forcibly delete pods if possible. However if you _need_ to
   delete all the pods on the node, you can skip to step 3.
-* Step 3. Remove all pods from the node
+- Step 3. Remove all pods from the node
 
   ```bash
   kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0  <NODE-NAME>
   ```
 
   After running this, the node should now (forcibly) have 0 pods running on it.
-* Step 4. Confirm the node has no pods on it after a few minutes. You can do this
+
+- Step 4. Confirm the node has no pods on it after a few minutes. You can do this
   with:
 
   ```bash
@@ -349,7 +353,7 @@ To remove a node from the cluster, we follow a two-step process. We first
 Once the node has no pods on it, the autoscaler will automatically remove it.
 
 **A note on the need for scaling down with the autoscaler**.
-The autoscaler has issues scaling nodes *down*, so scaling down needs to be
+The autoscaler has issues scaling nodes _down_, so scaling down needs to be
 manually done. The problems are caused by:
 
 1. The cluster autoscaler will never remove nodes that have user pods running.
@@ -385,32 +389,31 @@ The nature of these problems is often hard to debug, but they tend to be
 fixed by "recycling" the nodes (AKA, creating a new node to take the place
 of the older node). Here's the process for recycling nodes.
 
-* **List the node ages.** The following command will list the current nodes
+- **List the node ages.** The following command will list the current nodes
   and their ages.
 
   `kubectl get node`
 
-* **Check if any nodes are > 4 days old.** These are the nodes that we can
+- **Check if any nodes are > 4 days old.** These are the nodes that we can
   recycle.
-* **Cordon the node you'd like to recycle.**
+- **Cordon the node you'd like to recycle.**
 
   `kubectl cordon <NODE-NAME>`
 
-* **If you need a new node immediately.** E.g., if we think a currently-used
+- **If you need a new node immediately.** E.g., if we think a currently-used
   node is causing problems and we need to move production pods to a new node.
 
   In this case, manually resize the cluster up so that a new node is added,
   then delete the relevant pods from the (cordoned) old node.
 
-* **Wait a few hours.** This gives the pods time to naturally leave the node.
-* **Drain the node.** Run the following command to remove all pods from the node.
+- **Wait a few hours.** This gives the pods time to naturally leave the node.
+- **Drain the node.** Run the following command to remove all pods from the node.
 
-  `kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0  <NODE-NAME>`
+  `kubectl drain --force --delete-local-data --ignore-daemonsets --grace-period=0 <NODE-NAME>`
 
-* **If it isn't deleted after several hours, delete the node.** with
+- **If it isn't deleted after several hours, delete the node.** with
 
   `kubectl delete <NODE-NAME>`
-
 
 ## Networking
 
@@ -423,10 +426,10 @@ between Binder and that source.
 We can blacklist traffic in three ways:
 
 1. ingress ip (bans requests to Binder coming from this ip or ip range)
-2. egress ip (bans outgoing traffic *from* Binder to these ip addresses)
+2. egress ip (bans outgoing traffic _from_ Binder to these ip addresses)
 3. egress DNS (disables DNS resolution for specified domains)
 
-All of these are *stored* in the `secrets/ban.py` file.
+All of these are _stored_ in the `secrets/ban.py` file.
 These are not upgraded
 
 To update what should be banned, edit the `secrets/ban.py` file
@@ -445,14 +448,13 @@ If it is an update to the DNS block list, run the `secrets/ban.py` script:
 ./secrets/ban.py gke_binder-prod_us-central1-a_prod-a
 ```
 
-
 ## Acronyms that Chris likes to use in Gitter
 
 It has been pointed out that Chris often employs the use of unusually
 long acronyms. This is a short list of translations so that the world can
 understand his unique and special mind.
 
-* TYVM: Thank You Very Much
-* SGTM: Sounds Good To Me
-* LMKWYT: Let Me Know What You Think
-* WDYT: What Do You Think
+- TYVM: Thank You Very Much
+- SGTM: Sounds Good To Me
+- LMKWYT: Let Me Know What You Think
+- WDYT: What Do You Think

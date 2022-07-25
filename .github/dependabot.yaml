@@ -1,6 +1,40 @@
+# dependabot.yml reference: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+#
+# Notes:
+# - Status and logs from dependabot are provided at
+#   https://github.com/jupyterhub/mybinder.org-deploy/network/updates.
+# - YAML anchors are not supported here or in GitHub Workflows.
+#
 version: 2
+
 updates:
+  # Maintain Python dependencies for building documentation
   - package-ecosystem: pip
     directory: /docs
     schedule:
       interval: weekly
+      time: "05:00"
+      timezone: "Etc/UTC"
+    labels:
+      - dependencies
+
+  # Maintain dependencies in our GitHub Workflows
+  - package-ecosystem: github-actions
+    directory: "/" # This should be / rather than .github/workflows
+    schedule:
+      interval: daily
+      time: "05:00"
+      timezone: "Etc/UTC"
+    labels:
+      - dependencies
+
+  # Python dependencies in our deployment environment (pip-compile)
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: "wednesday"
+      time: "05:00"
+      timezone: "Etc/UTC"
+    labels:
+      - dependencies

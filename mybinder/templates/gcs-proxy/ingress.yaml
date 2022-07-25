@@ -1,10 +1,5 @@
 {{- if .Values.gcsProxy.enabled }}
-{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
 apiVersion: networking.k8s.io/v1
-{{- else }}
-apiVersion: networking.k8s.io/v1beta1
-{{- end }}
-{{ $root := . }}
 kind: Ingress
 metadata:
   name: gcs-proxy
@@ -18,28 +13,22 @@ metadata:
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
-    {{ range $bucket := .Values.gcsProxy.buckets }}
+    {{- range $bucket := .Values.gcsProxy.buckets }}
     - host: {{ $bucket.host | quote }}
       http:
         paths:
           - path: /
-            {{- if $root.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
             pathType: Prefix
             backend:
               service:
                 name: gcs-proxy
                 port:
                   number: 80
-            {{- else }}
-            backend:
-              serviceName: gcs-proxy
-              servicePort: 80
-            {{- end }}
-    {{ end }}
+    {{- end }}
   tls:
     - secretName: kubelego-tls-gcs-proxy
       hosts:
-      {{- range $bucket := .Values.gcsProxy.buckets }}
-      - {{ $bucket.host }}
-      {{- end }}
+        {{- range $bucket := .Values.gcsProxy.buckets }}
+        - {{ $bucket.host }}
+        {{- end }}
 {{- end }}

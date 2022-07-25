@@ -7,20 +7,17 @@ import sys
 from hashlib import blake2b
 
 import prometheus_client
-from prometheus_client import Gauge
-
 import tornado
 import tornado.ioloop
-import tornado.web
 import tornado.options
-from tornado.ioloop import IOLoop
-from tornado.log import app_log
+import tornado.web
+from prometheus_client import Gauge
 from tornado import options
-
 from tornado.httpclient import AsyncHTTPClient, HTTPError, HTTPRequest
 from tornado.httputil import HTTPHeaders
+from tornado.ioloop import IOLoop
+from tornado.log import app_log
 from tornado.web import RequestHandler
-
 
 # Config for local testing
 CONFIG = {
@@ -59,7 +56,7 @@ CONFIG = {
 
 
 def get_config(config_path):
-    app_log.info("Using config from '{}'.".format(config_path))
+    app_log.info(f"Using config from '{config_path}'.")
 
     with open(config_path) as f:
         config = json.load(f)
@@ -161,8 +158,7 @@ HEALTH_CHECK = Gauge(
 
 REDIRECTS = Gauge(
     "federation_redirect_count",
-    "Number of requests routed to each member."
-    " 'member' is the federation member.",
+    "Number of requests routed to each member." " 'member' is the federation member.",
     ["member"],
 )
 
@@ -242,8 +238,12 @@ class RedirectHandler(RequestHandler):
         hosts = dict(self.settings["hosts"])  # make a copy
         if not hosts:
             # no healthy hosts, allow routing to unhealthy 'prime' host only
-            hosts = {key: host for key, host in CONFIG["hosts"].items() if host.get("prime")}
-            app_log.warning(f"Using unhealthy prime host(s) {list(hosts)} because zero hosts are healthy")
+            hosts = {
+                key: host for key, host in CONFIG["hosts"].items() if host.get("prime")
+            }
+            app_log.warning(
+                f"Using unhealthy prime host(s) {list(hosts)} because zero hosts are healthy"
+            )
         self.hosts = hosts
         self.hosts_by_url = {}  # dict of {"https://gke.mybinder.org": "gke"}
         self.host_names = []  # ordered list of ["gke"]
@@ -283,7 +283,7 @@ class RedirectHandler(RequestHandler):
         # do we sometimes want to add this url param? Not for build urls, at least
         # redirect = url_concat(host_url + uri, {'binder_launch_host': 'https://mybinder.org/'})
         redirect = host_url + uri
-        app_log.info("Redirecting {} to {}".format(path, host_url))
+        app_log.info(f"Redirecting {path} to {host_url}")
         self.redirect(redirect, status=307)
 
 
@@ -300,7 +300,7 @@ class ActiveHostsHandler(RequestHandler):
 async def health_check(host, active_hosts):
     check_config = CONFIG["check"]
     all_hosts = CONFIG["hosts"]
-    app_log.info("Checking health of {}".format(host))
+    app_log.info(f"Checking health of {host}")
 
     client = AsyncHTTPClient()
     try:
@@ -321,7 +321,9 @@ async def health_check(host, active_hosts):
                 if all_hosts[host].get("prime", False):
                     old_versions = CONFIG.get("versions", None)
                     if old_versions != versions:
-                        app_log.info(f"Updating prime versions {old_versions}->{versions}")
+                        app_log.info(
+                            f"Updating prime versions {old_versions}->{versions}"
+                        )
                         CONFIG["versions"] = versions
                 # check if this cluster is on the same versions as the prime
                 # w/o information about the prime's version we allow each
@@ -404,7 +406,7 @@ async def health_check(host, active_hosts):
         HEALTH.labels(member=host, reason="").set(1)
         if host not in active_hosts:
             active_hosts[host] = all_hosts[host]
-            app_log.warning("{} has been added to the rotation".format(host))
+            app_log.warning(f"{host} has been added to the rotation")
         period = check_config["period"]
 
     # schedule ourselves to check again later

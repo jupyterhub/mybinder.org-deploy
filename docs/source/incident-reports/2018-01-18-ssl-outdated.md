@@ -1,4 +1,3 @@
-
 # 2018-01-11, Warning from letsencrypt about outdated SSL certificate
 
 ## Summary
@@ -19,7 +18,6 @@ All times in PST
 
 A team member received an email that our SSL for `beta.mybinder.org` was going to expire.
 He opened https://github.com/jupyterhub/mybinder.org-deploy/issues/283.
-
 
 ### 2018-01-18
 
@@ -61,7 +59,7 @@ is what is triggering the emails, but our new account is working fine.
 
 - Do not use a single team member's email address for letsencrypt
 - Instead, use a shared google groups email account so we all get pinged
-  * This has been done: binder-team@googlegroups.com
+  - This has been done: binder-team@googlegroups.com
 - keep an eye on the SSL once the first expiration date comes around and make sure
   this is a correct assumption.
 

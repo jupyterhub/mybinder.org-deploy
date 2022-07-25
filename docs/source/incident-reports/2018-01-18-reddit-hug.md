@@ -5,7 +5,6 @@
 A repo is posted to [reddit /r/python](https://www.reddit.com/r/Python/comments/7r6e6w/visualize_your_mostplayed_artists_tracks_and/), it starts getting popular. Traffic starts
 building from around 6pm. Peaks at about 6am with 600 running pods.
 
-
 ## Timeline
 
 All times in PST
@@ -81,10 +80,12 @@ Note that jupyterhub logs are full of errors. Reading logs leads to conclusion t
 ### 8:39
 
 Checking network connectivity between jupyterhub pod and a random pod. "ssh" into the hub pod with `kubectl --namespace=prod exec -it hub-7649b9bf8-d769g /bin/bash` and attempt to access a random user pod found with `kubectl --namespace=prod get pod -o wide`. Test network connectivity with:
+
 ```python
 >>> requests.get('http://10.12.6.136:8888/')
 <Response [404]>
 ```
+
 404 error means we managed to talk to the jupyter notebook server on that IP.
 
 ### 8:47
@@ -116,14 +117,12 @@ Decide to cordon off node: `kubectl cordon gke-prod-a-ssd-pool-972e4826-2fhq`. N
 
 After testing several repositories by hand and with `py.test tests/test_launch.py --hub-url=https://hub.mybinder.org --binder-url=https://mybinder.org` feeling is things are back to working order. Brief discussion if incident is over or not.
 
-
 ## Action items
 
 ### Process
 
 - Gather commands used in incident response and add to SRE guide.
 - Discuss how to know when to call an incident as resolved.
-
 
 ### Training
 

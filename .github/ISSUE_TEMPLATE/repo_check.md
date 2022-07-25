@@ -2,7 +2,6 @@
 name: "\U00002705 Repo Check"
 about: "If you're concerned if your repository is acceptable for mybinder.org, we can check your repo"
 labels: question
-
 ---
 
 <!--

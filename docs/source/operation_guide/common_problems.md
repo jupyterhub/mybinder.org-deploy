@@ -23,23 +23,23 @@ Build pods will not be working, and the `dind` pods are stuck in `CrashLoopBacko
 
 ### How to resolve the problem
 
-1. Find out which node contains the crashing `dind` pod (aka, the node that has
-   *folder* in `/var/run/dind/docker.sock` rather than the socket file).
-   You can do so by running:
+1.  Find out which node contains the crashing `dind` pod (aka, the node that has
+    _folder_ in `/var/run/dind/docker.sock` rather than the socket file).
+    You can do so by running:
 
-       kubectl --namespace=<ns> get pod -o wide
+        kubectl --namespace=<ns> get pod -o wide
 
-2. Once you find the node of interest, SSH into it with:
+2.  Once you find the node of interest, SSH into it with:
 
-       gcloud compute ssh <nodename>
+    gcloud compute ssh <nodename>
 
-3. Manually delete the `docker.sock` folder from the node.
+3.  Manually delete the `docker.sock` folder from the node.
 
-       sudo rm -rf /var/run/dind/docker.sock/
+    sudo rm -rf /var/run/dind/docker.sock/
 
-4. Delete the `dind` pod (k8s will automatically create a new one)
+4.  Delete the `dind` pod (k8s will automatically create a new one)
 
-       kubectl --namespace=<ns> delete pod <dind-pod-name>
+    kubectl --namespace=<ns> delete pod <dind-pod-name>
 
 ## Networking Errors
 
@@ -54,22 +54,22 @@ you want to confirm for yourself that there is no connectivity problem between
 pods follow this recipe.
 
 1. connect to the pod you want to use as "source", for example the jupyterhub
-pod: `kubectl --namespace=prod exec -it hub-989cc9bd-bbkbk /bin/bash`
+   pod: `kubectl --namespace=prod exec -it hub-989cc9bd-bbkbk /bin/bash`
 1. start `python3`, `import requests`
 1. use `requests.get(host)` to check connectivity. Some interesting hostnames
    to try talking to are:
-    * http://binder/, the binderhub service
-    * http://hub:8081/hub/api, the jupyterhub API
-    * http://proxy-public/hub/api, the CHP route that redirects you to the
-      jupyterhub API (content of the response should be equal)
-    * http://google.com/, the internet
-    * the CHP API needs a token so run: `headers={'Authorization': 'token ' + os.environ['CONFIGPROXY_AUTH_TOKEN']}`
-      and then`requests.get('http://proxy-api:8001/api/routes', headers=headers)`
-    * Other hostnames within the Kubernetes deployment. To find out hostnames
-      to try look at the `metadata.name` field of a kubernetes
-      service in the helm chart. You should be able to connect to each of them using
-      the name as the hostname. Take care to use the right port, not all of them are
-      listening on 80.
+   - http://binder/, the binderhub service
+   - http://hub:8081/hub/api, the jupyterhub API
+   - http://proxy-public/hub/api, the CHP route that redirects you to the
+     jupyterhub API (content of the response should be equal)
+   - http://google.com/, the internet
+   - the CHP API needs a token so run: `headers={'Authorization': 'token ' + os.environ['CONFIGPROXY_AUTH_TOKEN']}`
+     and then`requests.get('http://proxy-api:8001/api/routes', headers=headers)`
+   - Other hostnames within the Kubernetes deployment. To find out hostnames
+     to try look at the `metadata.name` field of a kubernetes
+     service in the helm chart. You should be able to connect to each of them using
+     the name as the hostname. Take care to use the right port, not all of them are
+     listening on 80.
 
 Here's a code snippet to try all of the above in quick succession:
 

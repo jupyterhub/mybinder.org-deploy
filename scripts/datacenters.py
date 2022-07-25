@@ -22,7 +22,7 @@ def cidrs_aws():
     url = "https://ip-ranges.amazonaws.com/ip-ranges.json"
     r = requests.get(url)
     r.raise_for_status()
- 
+
     return [prefix["ip_prefix"] for prefix in r.json()["prefixes"]]
 
 
@@ -42,6 +42,7 @@ def cidrs_gcp():
 
 class MicrosoftDownloadParser(HTMLParser):
     """Minimal HTML parser to find microsoft download links"""
+
     def __init__(self):
         super().__init__()
         self.links = []

@@ -66,9 +66,9 @@ spec:
         - name: src
           mountPath: /srv/minesweeper
           readOnly: true
-        command:
-        - python3
-        - /srv/minesweeper/minesweeper.py
+        args:
+          - python
+          - /srv/minesweeper/minesweeper.py
         env:
         - name: NODE_NAME
           valueFrom:

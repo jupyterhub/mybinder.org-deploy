@@ -1,10 +1,5 @@
 {{- if .Values.matomo.enabled }}
-{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
 apiVersion: networking.k8s.io/v1
-{{- else }}
-apiVersion: networking.k8s.io/v1beta1
-{{- end }}
-{{ $root := . }}
 kind: Ingress
 metadata:
   name: matomo
@@ -17,28 +12,22 @@ metadata:
     kubernetes.io/tls-acme: "true"
 spec:
   rules:
-    {{ range $host := .Values.matomo.ingress.hosts }}
+    {{- range $host := .Values.matomo.ingress.hosts }}
     - host: {{ $host }}
       http:
         paths:
           - path: /matomo
-            {{- if $root.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
             pathType: Prefix
             backend:
               service:
                 name: matomo
                 port:
                   number: 9000
-            {{- else }}
-            backend:
-              serviceName: matomo
-              servicePort: 9000
-            {{- end }}
-    {{ end }}
+    {{- end }}
   tls:
     - secretName: kubelego-tls-matomo
       hosts:
-      {{ range $host := .Values.matomo.ingress.hosts }}
-      - {{ $host }}
-      {{- end }}
+        {{- range $host := .Values.matomo.ingress.hosts }}
+        - {{ $host }}
+        {{- end }}
 {{- end }}

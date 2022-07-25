@@ -25,23 +25,12 @@ binderhub:
       mountPath: /secrets
       readOnly: true
   extraEnv:
-    - name: GOOGLE_APPLICATION_CREDENTIALS
-      value: /secrets/service-account.json
+    GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
 
   ingress:
-    enabled: true
-    https:
-      enabled: true
-      type: manual
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: 'false'
     hosts:
       - binder.mybinder.ovh
-    tls:
-      - secretName: tls-crt
-        hosts:
-          - binder.mybinder.ovh
+      - ovh.mybinder.org
 
   jupyterhub:
     hub:
@@ -56,13 +45,10 @@ binderhub:
         type: offload
 
     ingress:
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: 'false'
       hosts:
         - hub-binder.mybinder.ovh
       tls:
-        - secretName: tls-crt
+        - secretName: kubelego-tls-jupyterhub
           hosts:
             - hub-binder.mybinder.ovh
 
@@ -88,18 +74,17 @@ binderhub:
     imageGCThresholdLow: 30e9
     imageGCThresholdType: "absolute"
 
+cryptnono:
+  enabled: false
 
 grafana:
   ingress:
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: 'false'
     hosts:
       - grafana-mybinder.mybinder.ovh
     tls:
       - hosts:
           - grafana-mybinder.mybinder.ovh
-        secretName: tls-crt
+        secretName: kubelego-tls-grafana
   datasources:
     datasources.yaml:
       apiVersion: 1
@@ -120,64 +105,33 @@ prometheus:
       size: 50Gi
     retention: 30d
     ingress:
-      annotations:
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: 'false'
       hosts:
         - prometheus-mybinder.mybinder.ovh
       tls:
         - hosts:
             - prometheus-mybinder.mybinder.ovh
-          secretName: tls-crt
-
+          secretName: kubelego-tls-prometheus
 
 ingress-nginx:
   controller:
     hostNetwork: true
+    # host networking requires single instance
+    # with recreate to avoid new pods being unschedulable
+    # due to '1 node(s) didn't have free ports'
+    # Bumping the ingress causes downtime!
     replicaCount: 1
+    updateStrategy:
+      type: Recreate
+
     # OVH host-networking requires ingress controller on node-1
     nodeSelector:
       kubernetes.io/hostname: node-1
   scope:
     enabled: false
 
-
 static:
   ingress:
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: 'false'
     hosts:
       - static-mybinder.mybinder.ovh
     tls:
-      secretName: tls-crt
-
-redirector:
-  ingress:
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: 'false'
-    tls:
-      secretName: tls-crt
-  redirects:
-    - type: host
-      host:
-        from: beta-binder.mybinder.ovh
-        to: binder.mybinder.ovh
-    - type: host
-      host:
-        from: docs-mybinder.mybinder.ovh
-        to: mybinder.readthedocs.io
-    - type: host
-      host:
-        from: playground-mybinder.mybinder.ovh
-        to: play.nteract.io
-
-matomo:
-  enabled: false
-
-analyticsPublisher:
-  enabled: false
-
-gcsProxy:
-  enabled: false
+      secretName: kubelego-tls-static

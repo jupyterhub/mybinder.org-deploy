@@ -18,7 +18,7 @@ proceed further. Eventually it'd return a "your image took too long to launch" e
 ### 2018-02-12 14:06
 
 From the [grafana board](https://grafana.mybinder.org), we realized that in the
-"Launch Times Summary" plot we showed *all* pods as failing to launch.
+"Launch Times Summary" plot we showed _all_ pods as failing to launch.
 
 ### 14:08
 
@@ -33,20 +33,19 @@ shows successful "Launch Times Summary" data.
 
 ### What went well
 
-* Once we noted the problem, it was quickly resolved.
+- Once we noted the problem, it was quickly resolved.
 
 ### What went wrong
 
-* The outage was present for nearly an hour before we noticed it. This is partially
+- The outage was present for nearly an hour before we noticed it. This is partially
   because the site itself was returning no errors, only taking forever to launch.
 
 ### Where we got lucky
 
-* The solution was just "delete `binder` and `hub`" and the problem resolved
+- The solution was just "delete `binder` and `hub`" and the problem resolved
   itself.
 
 ## Action items
-
 
 ### Process improvements
 

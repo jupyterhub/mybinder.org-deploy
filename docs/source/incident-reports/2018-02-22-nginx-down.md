@@ -50,7 +50,6 @@ Confirm that the problem is resolved, grafana/mybinder.org are now back.
 
 1. Make sure that everybody gets emailed when the site goes down (DONE)
 
-
 ### Technical improvements
 
 1. Find a path forward to switch away from NGINX to better traffic tech [#528](https://github.com/jupyterhub/zero-to-jupyterhub-k8s/issues/528)
