@@ -339,7 +339,7 @@ def main():
         # script is running on CI, proceed with auth and helm setup
         if args.cluster == 'ovh':
             setup_auth_ovh(args.release, args.cluster)
-        elif args.cluster in list(AZURE_RGs.keys()):
+        elif args.cluster in AZURE_RGs:
             setup_auth_turing(args.release)
         else:
             setup_auth_gcloud(args.release, args.cluster)
