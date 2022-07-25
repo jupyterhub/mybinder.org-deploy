@@ -1,5 +1,9 @@
 projectName: turing
 
+userNodeSelector: &userNodeSelector
+  hub.jupyter.org/node-purpose: user
+coreNodeSelector: &coreNodeSelector
+  hub.jupyter.org/node-purpose: core
 
 letsencrypt:
   contactEmail: cmole@turing.ac.uk
@@ -10,11 +14,13 @@ binderhub:
       pod_quota: 200
       hub_url: https://hub.mybinder.turing.ac.uk
       badge_base_url: https://mybinder.org
+      build_node_selector: *userNodeSelector
       sticky_builds: true
       # Docker Hub registry for Turing
       use_registry: true
       image_prefix: turingmybinder/binder-prod-r2d-g5b5b759-
 
+  nodeSelector: *coreNodeSelector
   replicas: 1
 
   ingress:
@@ -39,10 +45,13 @@ binderhub:
       mountPath: /event-secret
       readOnly: true
   extraEnv:
-    - name: GOOGLE_APPLICATION_CREDENTIALS
-      value: /event-secret/service-account.json
+    GOOGLE_APPLICATION_CREDENTIALS: /event-secret/service-account.json
 
   jupyterhub:
+    singleuser:
+      nodeSelector: *userNodeSelector
+    hub:
+      nodeSelector: *coreNodeSelector
     ingress:
       enabled: true
       annotations:
@@ -55,9 +64,14 @@ binderhub:
           hosts:
             - hub.mybinder.turing.ac.uk
 
+    proxy:
+      chp:
+        nodeSelector: *coreNodeSelector
+
     scheduling:
       userPlaceholder:
-        replicas: 5
+        enabled: true
+        replicas: 10
 
   imageCleaner:
     # Use 40GB as upper limit, size is given in bytes
@@ -65,11 +79,15 @@ binderhub:
     imageGCThresholdLow: 30e9
     imageGCThresholdType: "absolute"
 
+cryptnono:
+  enabled: true
+
 grafana:
+  nodeSelector: *coreNodeSelector
   ingress:
     annotations:
       kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: 'true'
+      kubernetes.io/tls-acme: "true"
     hosts:
       - grafana.mybinder.turing.ac.uk
     tls:
@@ -96,7 +114,7 @@ prometheus:
     ingress:
       annotations:
         kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: 'true'
+        kubernetes.io/tls-acme: "true"
       hosts:
         - prometheus.mybinder.turing.ac.uk
         - prometheus.turing.mybinder.org
@@ -111,10 +129,9 @@ prometheus:
 ingress-nginx:
   controller:
     service:
-      loadBalancerIP: 20.76.176.114
+      loadBalancerIP: 
     scope:
       enabled: true
-
 
 static:
   ingress:
@@ -122,19 +139,3 @@ static:
       - static.mybinder.turing.ac.uk
     tls:
       secretName: turing-static-tls-crt
-
-redirector:
-  redirects:
-    - type: host
-      host:
-        from: docs-mybinder.turing.10.0.0.1.xip.io
-        to: mybinder.readthedocs.io
-
-matomo:
-  enabled: false
-
-analyticsPublisher:
-  enabled: false
-
-gcsProxy:
-  enabled: false

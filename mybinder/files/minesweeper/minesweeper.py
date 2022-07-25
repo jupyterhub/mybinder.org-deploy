@@ -28,17 +28,13 @@ from functools import partial
 from operator import attrgetter
 from textwrap import indent
 
-import kubernetes.client
-import kubernetes.config
-from kubernetes.stream import stream
-
-import psutil
-
 # herorat located in secrets/minesweeper/
 import herorat
-from herorat import inspect_pod
-from herorat import inspect_process
-
+import kubernetes.client
+import kubernetes.config
+import psutil
+from herorat import inspect_pod, inspect_process
+from kubernetes.stream import stream
 
 kubernetes.config.load_incluster_config()
 kube = kubernetes.client.CoreV1Api()
@@ -372,9 +368,10 @@ async def node_report(pods=None, userid=1000):
                     print(f"Failed to kill {proc}: {e}")
             elif proc.suspicious:
                 print(f"dind process is suspicious: {proc}")
-        suspicious_dind_procs_without_pod = [
-            p for p in procs_without_pod if p.suspicious
-        ]
+        # TODO: find a way to identity the build repo responsible for suspicious processes in dind
+        # suspicious_dind_procs_without_pod = [
+        #     p for p in procs_without_pod if p.suspicious
+        # ]
 
     if report_futures:
         await asyncio.gather(*report_futures)

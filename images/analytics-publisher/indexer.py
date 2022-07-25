@@ -6,48 +6,52 @@ This script reads the bucket containing archived events
 generating a human readable index.html & a machine readable
 index.jsonl.
 """
-import json
 import argparse
-import sys
-from dateutil.parser import parse
+import json
 import mimetypes
-from datetime import datetime
-import tempfile
-from google.cloud import logging, storage
-import jinja2
 import os
+import tempfile
+from datetime import datetime
 from glob import glob
+
+import jinja2
+from google.cloud import storage
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 # Static files that should be uploaded by indexer
-STATIC_FILES = glob(os.path.join(HERE, 'static', 'bootstrap-4.1.3.min.css'))
+STATIC_FILES = glob(os.path.join(HERE, "static", "bootstrap-4.1.3.min.css"))
 
 
 def index_events(project, bucket, debug=False, dry_run=False):
     storage_client = storage.Client()
     bucket = storage.Bucket(storage_client, bucket)
 
-    blobs = bucket.list_blobs(prefix='events-')
+    blobs = bucket.list_blobs(prefix="events-")
 
     archives = []
 
-    with open(os.path.join(HERE, 'index.html')) as f:
+    with open(os.path.join(HERE, "index.html")) as f:
         html_template = jinja2.Template(f.read())
 
     for blob in blobs:
-        archives.append({
-            'name': blob.name,
-            'date': blob.metadata['Events-Date'],
-            'count': blob.metadata['Events-Count']
-        })
+        archives.append(
+            {
+                "name": blob.name,
+                "date": blob.metadata["Events-Date"],
+                "count": blob.metadata["Events-Count"],
+            }
+        )
 
-    with tempfile.TemporaryFile(mode='w+') as htmlfile, \
-         tempfile.TemporaryFile(mode='w+') as jsonlfile:
+    with tempfile.TemporaryFile(mode="w+") as htmlfile, tempfile.TemporaryFile(
+        mode="w+"
+    ) as jsonlfile:
 
         html_index = html_template.render(
-            archives=sorted(archives, key=lambda archive: archive['date'], reverse=True),
-            generated_time=datetime.utcnow().isoformat() + 'Z'
+            archives=sorted(
+                archives, key=lambda archive: archive["date"], reverse=True
+            ),
+            generated_time=datetime.utcnow().isoformat() + "Z",
         )
 
         if debug:
@@ -56,18 +60,17 @@ def index_events(project, bucket, debug=False, dry_run=False):
         htmlfile.write(html_index)
 
         for archive in archives:
-            jsonlfile.write(json.dumps(archive) + '\n')
+            jsonlfile.write(json.dumps(archive) + "\n")
 
         htmlfile.seek(0)
         jsonlfile.seek(0)
 
         if not dry_run:
-            html_blob = bucket.blob('index.html')
-            html_blob.upload_from_file(htmlfile, content_type='text/html')
-            print('Uploaded index.html')
-            bucket.blob('index.jsonl').upload_from_file(jsonlfile)
-            print('Uploaded index.jsonl')
-
+            html_blob = bucket.blob("index.html")
+            html_blob.upload_from_file(htmlfile, content_type="text/html")
+            print("Uploaded index.html")
+            bucket.blob("index.jsonl").upload_from_file(jsonlfile)
+            print("Uploaded index.jsonl")
 
     # Upload static assets
     for static_file in STATIC_FILES:
@@ -75,33 +78,29 @@ def index_events(project, bucket, debug=False, dry_run=False):
         static_blob = bucket.blob(blob_name)
         mimetype, _ = mimetypes.guess_type(static_file)
         static_blob.upload_from_filename(static_file, content_type=mimetype)
-        print(f'Uploaded static file {blob_name}')
+        print(f"Uploaded static file {blob_name}")
 
 
 def main():
     argparser = argparse.ArgumentParser()
+    argparser.add_argument("project", help="Name of the GCP project to read logs from")
+
     argparser.add_argument(
-        'project',
-        help='Name of the GCP project to read logs from'
+        "bucket", help="GCS bucket to read archived event files from"
     )
 
     argparser.add_argument(
-        'bucket',
-        help='GCS bucket to read archived event files from'
+        "--debug",
+        help="Print events when processing",
+        action="store_true",
+        default=False,
     )
 
     argparser.add_argument(
-        '--debug',
-        help='Print events when processing',
-        action='store_true',
-        default=False
-    )
-
-    argparser.add_argument(
-        '--dry-run',
-        help='Do not upload processed events to GCS',
-        action='store_true',
-        default=False
+        "--dry-run",
+        help="Do not upload processed events to GCS",
+        action="store_true",
+        default=False,
     )
 
     args = argparser.parse_args()
@@ -109,5 +108,5 @@ def main():
     index_events(args.project, args.bucket, args.debug, args.dry_run)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

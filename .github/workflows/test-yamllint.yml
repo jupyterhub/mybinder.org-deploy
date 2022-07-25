@@ -1,0 +1,36 @@
+# This is a GitHub workflow defining a set of jobs with a set of steps.
+# ref: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+#
+name: Test yamllint
+
+on:
+  pull_request:
+    paths:
+      - "**/*.yaml"
+      - "**/*.yml"
+      - ".github/workflows/test-yamllint.yaml"
+  push:
+    paths:
+      - "**/*.yaml"
+      - "**/*.yml"
+      - ".github/workflows/test-yamllint.yaml"
+    branches-ignore:
+      - "dependabot/**"
+      - "pre-commit-ci-update-config"
+      - "update-*"
+  workflow_dispatch:
+
+jobs:
+  yamllint:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version-file: ".python-version"
+
+      - run: pip install yamllint
+
+      # We use --no-warnings to reduce output to errors that needs to be fixed
+      - run: yamllint --config-data=scripts/yamllint-no-secrets.yaml --no-warnings .

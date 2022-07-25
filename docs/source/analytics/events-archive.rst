@@ -14,7 +14,7 @@ interpret it.
 File format
 ===========
 
-All data files are in `jsonl <http://jsonlines.org/>`_ format. Each line,
+All data files are in `jsonl <https://jsonlines.org/>`_ format. Each line,
 delimited by a ``\n`` is a is a well formed JSON object. These files can
 be read / written in a streaming fashion, one line at a time, without
 having to read the entire file into memory.

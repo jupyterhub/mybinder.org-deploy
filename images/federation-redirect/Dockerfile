@@ -1,26 +1,35 @@
-ARG DIST=buster
-# build in non-slim image, which has compilation dependencies
-FROM python:3.9-$DIST as builder
+# The build stage
+# ---------------
+FROM python:3.9-bullseye as build-stage
 
-# RUN apt-get -y update
+RUN curl -sSLo /tini "https://github.com/krallin/tini/releases/download/v0.19.0/tini-amd64" \
+ && chmod +x /tini
 
 COPY requirements.txt requirements.txt
+RUN pip wheel --wheel-dir /wheelhouse \
+        -r requirements.txt
 
-RUN python3 -m pip wheel -r requirements.txt -w /wheelhouse
 
-FROM python:3.9-slim-$DIST
+# The final stage
+# ---------------
+FROM python:3.9-slim-bullseye
+ENV PYTHONUNBUFFERED=1
 
-# pycurl requires libcurl
+# fix known vulnerabilities
 RUN apt-get -y update \
+ && apt-get -y upgrade \
  && apt-get -y install --no-install-recommends \
+        # libcurl is required by pycurl
         libcurl4 \
- && apt-get clean \
  && rm -rvf /var/lib/apt/lists/*
 
-COPY --from=builder /wheelhouse /wheelhouse
-RUN python3 -m pip install /wheelhouse/*.whl
+COPY --from=build-stage /tini /tini
+COPY --from=build-stage /wheelhouse /wheelhouse
+RUN pip install --no-cache-dir /wheelhouse/*.whl
 
+# copy content to container
 WORKDIR /srv
-COPY app.py /srv/app.py
+COPY . .
 
-CMD ["python3", "/srv/app.py"]
+ENTRYPOINT ["/tini", "--"]
+CMD ["python", "/srv/app.py"]

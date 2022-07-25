@@ -1,3 +1,16 @@
+cryptnono:
+  enabled: true
+  tolerations:
+    # deploy anti-cryptomining cryptnono on all nodes
+    - effect: NoSchedule
+      key: hub.jupyter.org/dedicated
+      operator: Equal
+      value: user
+    - effect: NoSchedule
+      key: hub.jupyter.org_dedicated
+      operator: Equal
+      value: user
+
 imagePullSecrets:
 
 tags: {}
@@ -5,7 +18,7 @@ tags: {}
 etcJupyter:
   jupyter_notebook_config.json:
     NotebookApp:
-      allow_origin: '*'
+      allow_origin: "*"
       tornado_settings:
         trust_xheaders: true
       # shutdown the server after no activity
@@ -26,7 +39,6 @@ etcJupyter:
       cull_connected: true
 
 binderhub:
-
   replicas: 2
 
   resources:
@@ -77,7 +89,8 @@ binderhub:
         # ferarussia is clearly a fake GitHub account created by GuitarsAI to get around ban
         # it was created the day GuitarsAI was blocked and does the same thing
         - ^ferarussia/.*
-      high_quota_specs: []
+      high_quota_specs:
+        []
         # - ^jupyterlab/.*
         # - ^jupyter/.*
         # - ^jupyterhub/.*
@@ -89,11 +102,15 @@ binderhub:
         - pattern: ^petlja/.*
           config:
             quota: 50
+        - pattern: ^NavAbility/BinderNotebooks.*
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/2165
+          # 2022-05-27
+          config:
+            quota: 400
       # - pattern: ^github-owner/github-repo-prefix.*
       #   # YYYY-MM-DD of workshop
       #   config:
       #     quota: 123
-
 
     GitRepoProvider:
       banned_specs:
@@ -120,7 +137,7 @@ binderhub:
 
     BinderHub:
       use_registry: true
-      build_image: quay.io/jupyterhub/repo2docker:2021.08.0-136.g47ea95a
+      build_image: quay.io/jupyterhub/repo2docker:2022.02.0-60.g5b688f4
       per_repo_quota: 100
       per_repo_quota_higher: 200
       build_memory_limit: "3G"
@@ -128,11 +145,11 @@ binderhub:
       cors_allow_origin: "*"
 
       banner_message: |
-        <div style="display:flex">
+        <div style="display:flex;align-items:center;">
           <div style="flex:1;text-align:center;">
             Thanks to <a href="https://cloud.google.com/">Google Cloud</a>, <a href="https://www.ovh.com/">OVH</a>, <a href="https://notebooks.gesis.org">GESIS Notebooks</a> and the <a href="https://turing.ac.uk">Turing Institute</a> for supporting us! 🎉
           </div>
-          <a class="btn" style="width:fit-content;height:fit-content;padding:10px;background-color:#e66581;color:white;font-weight:bold;margin-top:-16px;"
+          <a class="btn" style="width:fit-content;height:fit-content;padding:10px;background-color:#e66581;color:white;font-weight:bold;margin:-8px 0px;"
           onmouseover="this.style.backgroundColor='#d15b75'" onmouseout="this.style.backgroundColor='#e66581'"
           href="https://numfocus.salsalabs.org/donate-to-binder" target="_blank">
             🤍 Donate to mybinder.org!
@@ -268,8 +285,8 @@ binderhub:
             "/": "http://proxy-patches"
       service:
         annotations:
-          prometheus.io/scrape: 'true'
-          prometheus.io/path: '/hub/metrics'
+          prometheus.io/scrape: "true"
+          prometheus.io/path: "/hub/metrics"
     proxy:
       service:
         type: ClusterIP
@@ -297,7 +314,7 @@ binderhub:
       annotations:
         ingress.kubernetes.io/proxy-body-size: 64m
         kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: 'true'
+        kubernetes.io/tls-acme: "true"
     scheduling:
       userScheduler:
         enabled: true
@@ -367,9 +384,9 @@ binderhub:
             - name: EGRESS_BANDWIDTH
               value: 1mbit
           securityContext:
-          # capabilities.add seems to be disabled
-          # by the `runAsUser: 1000` in the pod-level securityContext
-          # unless we explicitly run as root
+            # capabilities.add seems to be disabled
+            # by the `runAsUser: 1000` in the pod-level securityContext
+            # unless we explicitly run as root
             runAsUser: 0
             capabilities:
               add:
@@ -425,19 +442,20 @@ ingress-nginx:
       enabled: true
       service:
         annotations:
-          prometheus.io/scrape: 'true'
-          prometheus.io/port: '10254'
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "10254"
     service:
       # Preserve client IPs
       externalTrafficPolicy: Local
 
 redirector:
+  enabled: false
   nodeSelector: {}
   redirects: []
   ingress:
     annotations:
       kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: 'true'
+      kubernetes.io/tls-acme: "true"
     tls:
       secretName: kubelego-tls-redirector
 
@@ -448,7 +466,7 @@ static:
   ingress:
     annotations:
       kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: 'true'
+      kubernetes.io/tls-acme: "true"
     tls:
       secretName: kubelego-tls-static
 
@@ -458,7 +476,11 @@ grafana:
     enabled: true
     annotations:
       kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: 'true'
+      kubernetes.io/tls-acme: "true"
+  # deploymentStrategy.type is set to Recreate as we have storage that can only
+  # be attached once, we can't have two replicas as RollingUpdate leads to.
+  deploymentStrategy:
+    type: Recreate
   persistence:
     enabled: true
     size: 1Gi
@@ -501,14 +523,20 @@ prometheus:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: 'true'
+        kubernetes.io/tls-acme: "true"
+
+  # make sure we collect metrics on pods by app/component at least
+  kube-state-metrics:
+    metricLabelsAllowlist:
+      - pods=[app,component]
+      - nodes=[*]
 
 proxyPatches:
   enabled: true
   nodeSelector: {}
 
 matomo:
-  enabled: true
+  enabled: false
   nodeSelector: {}
   resources: {}
   replicas: 1
@@ -520,17 +548,17 @@ matomo:
     tables_prefix: matomo_
 
 gcsProxy:
-  enabled: true
+  enabled: false
   replicas: 1
   nodeSelector: {}
 
 analyticsPublisher:
-  enabled: true
+  enabled: false
   events:
     logName: binderhub-events-text
   image:
     name: jupyterhub/mybinder.org-analytics-publisher
-    tag: 'set-by-chartpress'
+    tag: "set-by-chartpress"
   cloudCosts:
     # All billing info goes into same bucket in prod, to which staging has access
     enabled: true
@@ -548,7 +576,7 @@ federationRedirect:
   enabled: false
   image:
     name: jupyterhub/mybinder.org-federation-redirect
-    tag: 'set-by-chartpress'
+    tag: "set-by-chartpress"
   check:
     period: 15
     jitter: 0.1
@@ -571,7 +599,7 @@ federationRedirect:
       versions: https://gesis.mybinder.org/versions
     ovh:
       url: https://ovh.mybinder.org
-      weight: 60
+      weight: 100
       health: https://ovh.mybinder.org/health
       versions: https://ovh.mybinder.org/versions
     turing:

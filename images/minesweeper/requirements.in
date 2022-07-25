@@ -1,1 +1,4 @@
+# See README.md on how to update requirements.txt based on this file.
+#
 kubernetes
+psutil

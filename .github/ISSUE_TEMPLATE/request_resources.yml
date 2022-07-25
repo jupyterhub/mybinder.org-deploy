@@ -1,0 +1,102 @@
+name: 📈 Request to bump resources for repo
+description: Answer some questions to help us make a decision about your request and set things up faster.
+labels: ["impact"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        # Request a resource increase for mybinder.org
+
+        Use this form to request a temporary increase in limits for a repository to help with running an event.
+
+        **Please answer all these questions**. The more information you provide the faster we'll be able to make a decision. Feel free to add additional information at the end.
+
+        The information you provide also allows us to track our impact which will be useful when we report to those who fund [mybinder.org](https://mybinder.org) or seek new funding.
+
+        See [the Binder community documentation](https://docs.mybinder.org) for more information about Binder.
+
+  - type: textarea
+    id: whoyouare
+    attributes:
+      label: Who you are
+      description: Who are you and what organization or community do you represent?
+    validations:
+      required: true
+
+  - type: textarea
+    id: details
+    attributes:
+      label: About the event
+      description: Provide details about when the event is happening, and what it's for.
+    validations:
+      required: true
+
+  - type: input
+    id: money
+    attributes:
+      label: Any money changing hands?
+      description: For example, do attendees pay to attend? Are there speaker or submission fees?
+    validations:
+      required: true
+
+  - type: input
+    id: repository
+    attributes:
+      label: Repository link
+    validations:
+      required: true
+
+  - type: dropdown
+    id: event_type
+    attributes:
+      label: Type of event
+      multiple: false
+      options:
+        - talk
+        - workshop
+        - lecture course
+        - training session
+
+  - type: input
+    id: attendees
+    attributes:
+      label: Number of attendees
+      description: How many people do you expect to use Binder at once?
+    validations:
+      required: true
+
+  - type: input
+    id: times
+    attributes:
+      label: Dates and times
+      description: At what dates and times will the event(s) occur? Make sure to include timezone information.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: runway
+    attributes:
+      label: More than 2 weeks before event
+      description: Is this event more than two weeks in the future? This is our recommended minimum time to open a resource request. However we may still consider requests up to 48 hours before and event.
+      multiple: false
+      options:
+        - "Yes"
+        - "No"
+    validations:
+      required: true
+
+  - type: textarea
+    id: support
+    attributes:
+      label: How you will support Binder
+      description: Binder is a community-led project that sustains itself with donations. Some [suggestions for supporting the Binder Project are here](https://mybinder.readthedocs.io/en/latest/about/support.html). Please describe how you've considered supporting the Binder Project. It can be as simple as "we will credit Binder and say thanks during the event" to "we will make a donation to the project".
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Extra information
+      description: Anything else you'd like to tell us?
+    validations:
+      required: false

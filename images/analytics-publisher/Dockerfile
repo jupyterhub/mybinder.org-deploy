@@ -1,10 +1,32 @@
-FROM python:3.8-slim-buster
+# The build stage
+# ---------------
+FROM python:3.9-bullseye as build-stage
 
+RUN curl -sSLo /tini "https://github.com/krallin/tini/releases/download/v0.19.0/tini-amd64" \
+ && chmod +x /tini
+
+COPY requirements.txt requirements.txt
+RUN pip wheel --wheel-dir /wheelhouse \
+        -r requirements.txt
+
+
+# The final stage
+# ---------------
+FROM python:3.9-slim-bullseye
+ENV PYTHONUNBUFFERED=1
+
+# fix known vulnerabilities
+RUN apt-get -y update \
+ && apt-get -y upgrade \
+ && rm -rvf /var/lib/apt/lists/*
+
+COPY --from=build-stage /tini /tini
+COPY --from=build-stage /wheelhouse /wheelhouse
+RUN pip install --no-cache-dir /wheelhouse/*.whl
+
+# copy content to container
 WORKDIR /srv
-
 COPY . .
 
-RUN python3 -m pip install --no-cache-dir -r requirements.txt
-
-# Python seems to never wanna flush to stdout without the '-u'
-CMD ["python3", "-u", "/srv/run.py"]
+ENTRYPOINT ["/tini", "--"]
+CMD ["python", "/srv/run.py"]

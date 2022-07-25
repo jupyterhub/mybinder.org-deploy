@@ -48,7 +48,6 @@ terraform output -json private_keys | jq '.["events-archiver"]' | pbcopy
 
 with key names: "events-archiver", "matomo", and "binderhub-builder" and paste them into the appropriate fields in `secrets/config/$deployment.yaml`.
 
-
 ### Notes
 
 - requesting previously-allocated static ip via loadBalancerIP did not work.

@@ -1,9 +1,28 @@
-FROM alpine:3.13
+# The build stage
+# ---------------
+FROM python:3.9-bullseye as build-stage
 
-RUN apk add --no-cache procps python3 py3-pip py3-psutil
-RUN python3 -mpip install --no-cache --upgrade pip
-COPY requirements.txt /tmp/requirements.txt
-RUN python3 -mpip install --no-cache -r /tmp/requirements.txt
+RUN curl -sSLo /tini "https://github.com/krallin/tini/releases/download/v0.19.0/tini-amd64" \
+ && chmod +x /tini
 
-# always!
+COPY requirements.txt requirements.txt
+RUN pip wheel --wheel-dir /wheelhouse \
+        -r requirements.txt
+
+
+# The final stage
+# ---------------
+FROM python:3.9-slim-bullseye
 ENV PYTHONUNBUFFERED=1
+
+# fix known vulnerabilities
+RUN apt-get -y update \
+ && apt-get -y upgrade \
+ && rm -rvf /var/lib/apt/lists/*
+
+COPY --from=build-stage /tini /tini
+COPY --from=build-stage /wheelhouse /wheelhouse
+RUN pip install --no-cache-dir /wheelhouse/*.whl
+
+ENTRYPOINT ["/tini", "--"]
+# CMD/args is set via the Helm chart that also mounts the minesweeper script

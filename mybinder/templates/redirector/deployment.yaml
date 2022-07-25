@@ -1,3 +1,4 @@
+{{- if .Values.redirector.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -36,3 +37,4 @@ spec:
         volumeMounts:
           - mountPath: /etc/nginx/conf.d/
             name: config
+{{- end }}
