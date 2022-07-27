@@ -29,6 +29,7 @@ GCP_ZONES = {
     "prod": "us-central1",
 }
 
+# Mapping of cluster names (keys) to resource group names (values) for Azure deployments
 AZURE_RGs = {"turing-prod": "binder-prod", "turing-staging": "binder-staging"}
 
 
