@@ -303,7 +303,7 @@ def main():
         elif args.cluster in GCP_PROJECTS:
             setup_auth_gcloud(args.release, args.cluster)
         else:
-            raise Exception('Cloud cluster not recognised!')
+            raise Exception("Cloud cluster not recognised!")
 
     deploy(args.release, args.name)
 
