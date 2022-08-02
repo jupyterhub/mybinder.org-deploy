@@ -31,7 +31,7 @@ dependencies:
   #       chart v11.16.9 maps to app v2.21.0  - 2020-12-06
   #       chart v12 requires Helm 3
   - name: prometheus
-    version: "15.10.5"
+    version: "15.11.0"
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
 
@@ -45,7 +45,7 @@ dependencies:
   #       chart v6 requires Helm 3
   #       chart v6.17.1 gives us Grafana v8.2.1
   - name: grafana
-    version: "6.32.5"
+    version: "6.32.9"
     repository: https://grafana.github.io/helm-charts
     condition: grafana.enabled
 
