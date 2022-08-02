@@ -6,7 +6,7 @@ coreNodeSelector: &coreNodeSelector
   hub.jupyter.org/node-purpose: core
 
 letsencrypt:
-  contactEmail: drsarahlgibson@gmail.com
+  contactEmail: cmole@turing.ac.uk
 
 binderhub:
   config:
@@ -69,10 +69,6 @@ binderhub:
         nodeSelector: *coreNodeSelector
 
     scheduling:
-      userScheduler:
-        enabled: false
-      podPriority:
-        enabled: true
       userPlaceholder:
         enabled: true
         replicas: 10
@@ -133,7 +129,7 @@ prometheus:
 ingress-nginx:
   controller:
     service:
-      loadBalancerIP: 20.76.176.114
+      loadBalancerIP: 20.90.137.68
     scope:
       enabled: true
 

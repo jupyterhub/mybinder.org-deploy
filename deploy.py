@@ -29,6 +29,9 @@ GCP_ZONES = {
     "prod": "us-central1",
 }
 
+# Mapping of cluster names (keys) to resource group names (values) for Azure deployments
+AZURE_RGs = {"turing-prod": "binder-prod", "turing-staging": "binder-staging"}
+
 
 def setup_auth_turing(cluster):
     """
@@ -61,7 +64,7 @@ def setup_auth_turing(cluster):
         "--name",
         cluster,
         "--resource-group",
-        "binder-prod",
+        AZURE_RGs[cluster],
     ]
     stdout = subprocess.check_output(creds_cmd)
     print(stdout.decode("utf-8"))
@@ -295,7 +298,7 @@ def main():
         # script is running on CI, proceed with auth and helm setup
         if args.cluster == "ovh":
             setup_auth_ovh(args.release, args.cluster)
-        elif args.cluster == "turing":
+        elif args.cluster in AZURE_RGs:
             setup_auth_turing(args.release)
         else:
             setup_auth_gcloud(args.release, args.cluster)
