@@ -300,8 +300,10 @@ def main():
             setup_auth_ovh(args.release, args.cluster)
         elif args.cluster in AZURE_RGs:
             setup_auth_turing(args.release)
-        else:
+        elif args.cluster in GCP_PROJECTS:
             setup_auth_gcloud(args.release, args.cluster)
+        else:
+            raise Exception("Cloud cluster not recognised!")
 
     deploy(args.release, args.name)
 

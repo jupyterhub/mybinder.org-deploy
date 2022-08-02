@@ -196,7 +196,7 @@ jobs:
             chartpress_args: ""
             helm_version: ""
 
-          - federation_member: turing
+          - federation_member: turing-prod
             binder_url: https://turing.mybinder.org
             hub_url: https://hub.mybinder.turing.ac.uk
             chartpress_args: ""
