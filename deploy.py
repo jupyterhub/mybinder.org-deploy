@@ -265,7 +265,7 @@ def main():
     )
 
     args = argparser.parse_args()
-    
+
     # Check if the local flag is set
     if not args.local:
         # Check if the script is being run on CI
@@ -294,7 +294,7 @@ def main():
 
         # script is running on CI, proceed with auth and helm setup
         cluster = args.cluster or args.release
-      
+
         if cluster == "ovh":
             setup_auth_ovh(args.release, cluster)
         elif cluster in AZURE_RGs:
