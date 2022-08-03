@@ -201,6 +201,7 @@ jobs:
             hub_url: https://hub.mybinder.turing.ac.uk
             chartpress_args: ""
             helm_version: ""
+            release_name: turing
 
           - federation_member: ovh
             binder_url: https://ovh.mybinder.org

@@ -97,9 +97,6 @@ def setup_auth_gcloud(release, cluster=None):
         ]
     )
 
-    if not cluster:
-        cluster = release
-
     project = GCP_PROJECTS[release]
     zone = GCP_ZONES[release]
 
@@ -249,7 +246,7 @@ def main():
     argparser.add_argument(
         "release",
         help="Release to deploy",
-        choices=["staging", "prod", "ovh", "turing"],
+        choices=["staging", "prod", "ovh", "turing-prod", "turing-staging", "turing"],
     )
     argparser.add_argument(
         "--name",
@@ -296,12 +293,14 @@ def main():
                 raise ValueError("Unrecognised input. Expecting either yes or no.")
 
         # script is running on CI, proceed with auth and helm setup
-        if args.cluster == "ovh":
-            setup_auth_ovh(args.release, args.cluster)
-        elif args.cluster in AZURE_RGs:
-            setup_auth_turing(args.release)
-        elif args.cluster in GCP_PROJECTS:
-            setup_auth_gcloud(args.release, args.cluster)
+        cluster = args.cluster or args.release
+
+        if cluster == "ovh":
+            setup_auth_ovh(args.release, cluster)
+        elif cluster in AZURE_RGs:
+            setup_auth_turing(cluster)
+        elif cluster in GCP_PROJECTS:
+            setup_auth_gcloud(args.release, cluster)
         else:
             raise Exception("Cloud cluster not recognised!")
 
