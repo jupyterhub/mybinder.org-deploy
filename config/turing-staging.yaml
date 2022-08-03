@@ -37,7 +37,7 @@ binderhub:
       mountPath: /event-secret
       readOnly: true
   extraEnv:
-    GOOGLE_APPLICATION_CREDENTIALS: /event-secret/service-account.json  
+    GOOGLE_APPLICATION_CREDENTIALS: /event-secret/service-account.json
 
   jupyterhub:
     ingress:
