@@ -29,10 +29,9 @@ GCP_ZONES = {
     "prod": "us-central1",
 }
 
-AZURE_RGs = {
-    "turing-prod":"binder-prod",
-    "turing-staging":"binder-staging"
-}
+# Mapping of cluster names (keys) to resource group names (values) for Azure deployments
+AZURE_RGs = {"turing-prod": "binder-prod", "turing-staging": "binder-staging"}
+
 
 def setup_auth_turing(cluster):
     """
@@ -59,10 +58,13 @@ def setup_auth_turing(cluster):
 
     # Set kubeconfig
     creds_cmd = [
-        "az", "aks", "get-credentials",
-        "--name", cluster,
-        "--resource-group", AZURE_RGs[cluster]
-
+        "az",
+        "aks",
+        "get-credentials",
+        "--name",
+        cluster,
+        "--resource-group",
+        AZURE_RGs[cluster],
     ]
     stdout = subprocess.check_output(creds_cmd)
     print(stdout.decode("utf-8"))
@@ -94,9 +96,6 @@ def setup_auth_gcloud(release, cluster=None):
             f"--key-file=secrets/gke-auth-key-{release}.json",
         ]
     )
-
-    if not cluster:
-        cluster = release
 
     project = GCP_PROJECTS[release]
     zone = GCP_ZONES[release]
@@ -133,7 +132,7 @@ def deploy(release, name=None):
     # some members have special logic in ban.py,
     # in which case they must be specified on the command-line
     ban_command = [sys.executable, "secrets/ban.py"]
-    if release in {"turing", "turing-staging", "ovh"}:
+    if release in {"turing-prod", "turing-staging", "turing", "ovh"}:
         ban_command.append(release)
 
     subprocess.check_call(ban_command)
@@ -247,7 +246,7 @@ def main():
     argparser.add_argument(
         "release",
         help="Release to deploy",
-        choices=["staging", "prod", "ovh", "turing", "turing-staging"],
+        choices=["staging", "prod", "ovh", "turing-prod", "turing-staging", "turing"],
     )
     argparser.add_argument(
         "--name",
@@ -294,12 +293,16 @@ def main():
                 raise ValueError("Unrecognised input. Expecting either yes or no.")
 
         # script is running on CI, proceed with auth and helm setup
-        if args.cluster == "ovh":
-            setup_auth_ovh(args.release, args.cluster)
-        elif args.cluster in AZURE_RGs:
-            setup_auth_turing(args.release)
+        cluster = args.cluster or args.release
+
+        if cluster == "ovh":
+            setup_auth_ovh(args.release, cluster)
+        elif cluster in AZURE_RGs:
+            setup_auth_turing(cluster)
+        elif cluster in GCP_PROJECTS:
+            setup_auth_gcloud(args.release, cluster)
         else:
-            setup_auth_gcloud(args.release, args.cluster)
+            raise Exception("Cloud cluster not recognised!")
 
     deploy(args.release, args.name)
 
