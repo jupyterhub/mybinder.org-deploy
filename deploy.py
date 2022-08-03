@@ -132,7 +132,7 @@ def deploy(release, name=None):
     # some members have special logic in ban.py,
     # in which case they must be specified on the command-line
     ban_command = [sys.executable, "secrets/ban.py"]
-    if release in {"turing", "ovh"}:
+    if release in {"turing-prod", "turing-staging", "turing", "ovh"}:
         ban_command.append(release)
 
     subprocess.check_call(ban_command)
