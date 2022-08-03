@@ -29,6 +29,17 @@ binderhub:
           - binder-staging.mybinder.turing.ac.uk
           - staging.turing.mybinder.org
 
+  extraVolumes:
+    - name: event-secret
+      secret:
+        secretName: events-archiver-secrets
+  extraVolumeMounts:
+    - name: event-secret
+      mountPath: /event-secret
+      readOnly: true
+  extraEnv:
+    GOOGLE_APPLICATION_CREDENTIALS: /event-secret/service-account.json  
+
   jupyterhub:
     ingress:
       enabled: true
