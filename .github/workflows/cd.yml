@@ -196,12 +196,13 @@ jobs:
             chartpress_args: ""
             helm_version: ""
 
-          - federation_member: turing-prod
+          - federation_member: turing
             binder_url: https://turing.mybinder.org
             hub_url: https://hub.mybinder.turing.ac.uk
             chartpress_args: ""
             helm_version: ""
             release_name: turing
+            cluster_name: turing-prod
 
           - federation_member: ovh
             binder_url: https://ovh.mybinder.org
