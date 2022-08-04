@@ -14,7 +14,7 @@ provider "google" {
 locals {
   gke_version        = "1.19.14-gke.1900"
   location           = "us-central1" # for regional clusters
-  federation_members = ["gke-old", "gesis", "turing", "ovh"]
+  federation_members = ["gesis", "turing", "ovh"]
 }
 
 module "mybinder" {
@@ -25,6 +25,8 @@ module "mybinder" {
   gke_location       = local.location # regional cluster for better upgrades
 
   sql_tier = "db-n1-standard-1"
+
+  federation_members = ["gesis", "turing", "ovh"]
 }
 
 # define node pools here, too hard to encode with variables
@@ -135,24 +137,6 @@ resource "google_storage_bucket" "billing" {
   uniform_bucket_level_access = true
 }
 
-# create service accounts and keys for logging events to stackdriver
-resource "google_service_account" "events" {
-  for_each     = toset(local.federation_members)
-  account_id   = "${each.key}-events-archiver"
-  display_name = "${each.key} Events Archiver"
-}
-
-resource "google_project_iam_member" "events" {
-  for_each = toset(local.federation_members)
-  role     = "roles/logging.logWriter"
-  member   = "serviceAccount:${google_service_account.events[each.key].email}"
-}
-
-# create keys for each service account
-resource "google_service_account_key" "events" {
-  for_each           = toset(local.federation_members)
-  service_account_id = google_service_account.events[each.key].account_id
-}
 
 # outputs: things we want to be able to see and/or save to files
 # e.g. credentials for deployment / event logging
@@ -174,9 +158,6 @@ output "private_keys" {
 }
 
 output "events_archiver_keys" {
-  value = {
-    for name in local.federation_members :
-    name => base64decode(google_service_account_key.events[name].private_key)
-  }
+  value     = module.mybinder.events_archiver_keys
   sensitive = true
 }

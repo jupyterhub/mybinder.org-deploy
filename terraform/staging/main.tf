@@ -16,10 +16,10 @@ locals {
 }
 
 module "mybinder" {
-  source = "../modules/mybinder"
-
+  source             = "../modules/mybinder"
   name               = "staging"
   gke_master_version = local.gke_version
+  federation_members = ["turing-staging"]
 }
 
 # define node pools here, too hard to encode with variables
@@ -53,7 +53,7 @@ resource "google_container_node_pool" "pool" {
 
   lifecycle {
     ignore_changes = [
-        version
+      version
     ]
   }
 }
@@ -71,5 +71,10 @@ output "private_keys" {
 
 output "matomo_password" {
   value     = module.mybinder.matomo_password
+  sensitive = true
+}
+
+output "events_archiver_keys" {
+  value     = module.mybinder.events_archiver_keys
   sensitive = true
 }

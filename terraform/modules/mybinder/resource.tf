@@ -121,12 +121,14 @@ resource "google_service_account" "sa" {
 }
 
 resource "google_project_iam_member" "iam" {
+  project  = data.google_client_config.provider.project
   for_each = local.service_accounts
   role     = each.value.role
   member   = "serviceAccount:${google_service_account.sa[each.key].email}"
 }
 
 resource "google_project_iam_member" "deploy-pusher" {
+  project = data.google_client_config.provider.project
   # deployer also gets storage admin
   role   = "roles/storage.admin"
   member = "serviceAccount:${google_service_account.sa["deployer"].email}"
@@ -169,6 +171,8 @@ resource "google_storage_bucket" "raw-export" {
 }
 
 resource "google_logging_project_sink" "events-archive" {
+  project = data.google_client_config.provider.project
+
   name                   = "binderhub-${var.name}-events-raw-text"
   filter                 = "resource.type=\"global\" AND logName=\"projects/${data.google_client_config.provider.project}/logs/${local.events_log_prefix}-events-text\""
   destination            = "storage.googleapis.com/${google_storage_bucket.raw-export.name}"
@@ -182,4 +186,33 @@ resource "google_storage_bucket_iam_binding" "event-log-sink" {
   members = [
     google_logging_project_sink.events-archive.writer_identity
   ]
+}
+
+# events-archiver
+# create service accounts and keys for logging events to stackdriver
+resource "google_service_account" "events" {
+  for_each     = toset(var.federation_members)
+  account_id   = "${each.key}-events-archiver"
+  display_name = "${each.key} Events Archiver"
+}
+
+resource "google_project_iam_member" "events" {
+  project  = data.google_client_config.provider.project
+  for_each = toset(var.federation_members)
+  role     = "roles/logging.logWriter"
+  member   = "serviceAccount:${google_service_account.events[each.key].email}"
+}
+
+# create keys for each service account
+resource "google_service_account_key" "events" {
+  for_each           = toset(var.federation_members)
+  service_account_id = google_service_account.events[each.key].account_id
+}
+
+output "events_archiver_keys" {
+  value = {
+    for name in var.federation_members :
+    name => base64decode(google_service_account_key.events[name].private_key)
+  }
+  sensitive = true
 }
