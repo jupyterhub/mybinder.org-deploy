@@ -19,6 +19,7 @@ Then, to deploy e.g. staging:
 
 ```bash
 cd staging
+terraform init
 terraform apply
 ```
 
