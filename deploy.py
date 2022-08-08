@@ -113,11 +113,12 @@ def setup_auth_gcloud(release, cluster=None):
         ]
     )
 
+
 def update_networkbans(cluster):
     """
     Run secrets/ban.py to update network bans
     """
-    
+
     print(BOLD + GREEN + f"Updating network-bans for {cluster}" + NC, flush=True)
 
     # some members have special logic in ban.py,
@@ -140,8 +141,6 @@ def deploy(release, name=None):
     """
     if not name:
         name = release
-
-    
 
     setup_certmanager()
 
@@ -271,7 +270,7 @@ def main():
     )
 
     args = argparser.parse_args()
-    
+
     # if one argument given make cluster == release
     cluster = args.cluster or args.release
 
