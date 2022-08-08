@@ -114,28 +114,33 @@ def setup_auth_gcloud(release, cluster=None):
     )
 
 
+def update_networkbans(cluster):
+    """
+    Run secrets/ban.py to update network bans
+    """
+
+    print(BOLD + GREEN + f"Updating network-bans for {cluster}" + NC, flush=True)
+
+    # some members have special logic in ban.py,
+    # in which case they must be specified on the command-line
+    ban_command = [sys.executable, "secrets/ban.py"]
+    if cluster in {"turing-prod", "turing-staging", "turing", "ovh"}:
+        ban_command.append(cluster)
+
+    subprocess.check_call(ban_command)
+
+
 def deploy(release, name=None):
     """Deploys a federation member to a k8s cluster.
 
     The deployment is done in the following steps:
 
-        1. Run secrets/ban.py to update network bans
-        2. Deploy cert-manager
-        3. Deploy mybinder helm chart
-        4. Await deployed deployment and daemonsets to become Ready
+        1. Deploy cert-manager
+        2. Deploy mybinder helm chart
+        3. Await deployed deployment and daemonsets to become Ready
     """
     if not name:
         name = release
-
-    print(BOLD + GREEN + f"Updating network-bans for {release}" + NC, flush=True)
-
-    # some members have special logic in ban.py,
-    # in which case they must be specified on the command-line
-    ban_command = [sys.executable, "secrets/ban.py"]
-    if release in {"turing-prod", "turing-staging", "turing", "ovh"}:
-        ban_command.append(release)
-
-    subprocess.check_call(ban_command)
 
     setup_certmanager()
 
@@ -266,6 +271,9 @@ def main():
 
     args = argparser.parse_args()
 
+    # if one argument given make cluster == release
+    cluster = args.cluster or args.release
+
     # Check if the local flag is set
     if not args.local:
         # Check if the script is being run on CI
@@ -293,7 +301,6 @@ def main():
                 raise ValueError("Unrecognised input. Expecting either yes or no.")
 
         # script is running on CI, proceed with auth and helm setup
-        cluster = args.cluster or args.release
 
         if cluster == "ovh":
             setup_auth_ovh(args.release, cluster)
@@ -304,6 +311,7 @@ def main():
         else:
             raise Exception("Cloud cluster not recognised!")
 
+    update_networkbans(cluster)
     deploy(args.release, args.name)
 
 
