@@ -19,14 +19,14 @@ binderhub:
     enabled: true
     hosts:
       - binder-staging.mybinder.turing.ac.uk
-      - staging.turing.mybinder.org
+      # - staging.turing.mybinder.org
     annotations:
       kubernetes.io/ingress.class: nginx
     tls:
       - secretName: turing-binder-tls-crt
         hosts:
           - binder-staging.mybinder.turing.ac.uk
-          - staging.turing.mybinder.org
+        #  - staging.turing.mybinder.org
 
   extraVolumes:
     - name: event-secret
@@ -96,11 +96,11 @@ prometheus:
         kubernetes.io/tls-acme: "true"
       hosts:
         - prometheus-staging.mybinder.turing.ac.uk
-        - prometheus.staging.turing.mybinder.org
+        # - prometheus.staging.turing.mybinder.org
       tls:
         - hosts:
             - prometheus-staging.mybinder.turing.ac.uk
-            - prometheus.staging.turing.mybinder.org
+            # - prometheus.staging.turing.mybinder.org
           secretName: turing-staging-prometheus-tls-crt
     persistentVolume:
       size: 64Gi
