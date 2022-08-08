@@ -156,7 +156,7 @@ jobs:
 
       # Action Repo: https://github.com/nick-invision/retry
       - name: "Stage 4: Verify staging works"
-        uses: nick-invision/retry@616fa81820c9b34fd44f4a0cfeda436b4b8338d3
+        uses: nick-invision/retry@b4fa57557dda8c2f30bcb2d19372cc3237190f7f
         with:
           timeout_minutes: 10
           max_attempts: 3
@@ -284,7 +284,7 @@ jobs:
           TERM: xterm
 
       - name: "Stage 4: Verify ${{ matrix.federation_member }} works"
-        uses: nick-invision/retry@616fa81820c9b34fd44f4a0cfeda436b4b8338d3
+        uses: nick-invision/retry@b4fa57557dda8c2f30bcb2d19372cc3237190f7f
         with:
           timeout_minutes: 10
           max_attempts: 3
