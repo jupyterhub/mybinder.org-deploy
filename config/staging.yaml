@@ -165,4 +165,8 @@ federationRedirect:
     ovh:
       weight: 0
     turing:
-      weight: 0
+      url: https://binder-staging.mybinder.turing.ac.uk
+      weight: 4
+      health: https://binder-staging.mybinder.turing.ac.uk
+      versions: https://binder-staging.mybinder.turing.ac.uk
+      
