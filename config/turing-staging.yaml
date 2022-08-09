@@ -108,7 +108,7 @@ prometheus:
 ingress-nginx:
   controller:
     service:
-      loadBalancerIP:
+      loadBalancerIP: 20.90.143.25
     scope:
       enabled: true
 
