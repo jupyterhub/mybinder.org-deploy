@@ -26,6 +26,7 @@ binderhub:
       - secretName: turing-binder-tls-crt
         hosts:
           - binder-staging.mybinder.turing.ac.uk
+          # staging.turing.mybinder.org can be reinstated once it has been added to mybinder.org DNS Zone. 
         #  - staging.turing.mybinder.org
 
   extraVolumes:
