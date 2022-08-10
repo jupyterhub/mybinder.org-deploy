@@ -167,5 +167,5 @@ federationRedirect:
     turing:
       url: https://binder-staging.mybinder.turing.ac.uk
       weight: 4
-      health: https://binder-staging.mybinder.turing.ac.uk
-      versions: https://binder-staging.mybinder.turing.ac.uk
+      health: https://binder-staging.mybinder.turing.ac.uk/health
+      versions: https://binder-staging.mybinder.turing.ac.uk/versions
