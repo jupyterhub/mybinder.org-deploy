@@ -1,0 +1,121 @@
+projectName: turing
+
+letsencrypt:
+  contactEmail: cmole@turing.ac.uk
+
+binderhub:
+  config:
+    BinderHub:
+      pod_quota: 20
+      hub_url: https://hub-staging.mybinder.turing.ac.uk
+      badge_base_url: https://mybinder.org
+      sticky_builds: true
+      # Docker Hub registry for Turing
+      use_registry: true
+      image_prefix: turingmybinder/binder-staging-r2d-g5b5b759-
+
+  replicas: 1
+  ingress:
+    enabled: true
+    hosts:
+      - binder-staging.mybinder.turing.ac.uk
+      # - staging.turing.mybinder.org
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    tls:
+      - secretName: turing-binder-tls-crt
+        hosts:
+          - binder-staging.mybinder.turing.ac.uk
+          # staging.turing.mybinder.org can be reinstated once it has been added to mybinder.org DNS Zone.
+        #  - staging.turing.mybinder.org
+
+  extraVolumes:
+    - name: event-secret
+      secret:
+        secretName: events-archiver-secrets
+  extraVolumeMounts:
+    - name: event-secret
+      mountPath: /event-secret
+      readOnly: true
+  extraEnv:
+    GOOGLE_APPLICATION_CREDENTIALS: /event-secret/service-account.json
+
+  jupyterhub:
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+      hosts:
+        - hub-staging.mybinder.turing.ac.uk
+      tls:
+        - secretName: turing-staging-hub-tls-crt
+          hosts:
+            - hub-staging.mybinder.turing.ac.uk
+
+    scheduling:
+      userPlaceholder:
+        replicas: 2
+
+  imageCleaner:
+    # Use 40GB as upper limit, size is given in bytes
+    imageGCThresholdHigh: 40e9
+    imageGCThresholdLow: 30e9
+    imageGCThresholdType: "absolute"
+
+grafana:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+    hosts:
+      - grafana-staging.mybinder.turing.ac.uk
+    tls:
+      - secretName: turing-staging-grafana-tls-crt
+        hosts:
+          - grafana-staging.mybinder.turing.ac.uk
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: prometheus
+          orgId: 1
+          type: prometheus
+          url: https://prometheus-staging.mybinder.turing.ac.uk
+          access: direct
+          isDefault: true
+          editable: false
+  persistence:
+    storageClassName: default
+
+prometheus:
+  server:
+    retention: 21d
+    ingress:
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+      hosts:
+        - prometheus-staging.mybinder.turing.ac.uk
+        # - prometheus.staging.turing.mybinder.org
+      tls:
+        - hosts:
+            - prometheus-staging.mybinder.turing.ac.uk
+            # - prometheus.staging.turing.mybinder.org
+          secretName: turing-staging-prometheus-tls-crt
+    persistentVolume:
+      size: 64Gi
+
+ingress-nginx:
+  controller:
+    service:
+      loadBalancerIP: 20.90.143.25
+    scope:
+      enabled: true
+
+static:
+  ingress:
+    hosts:
+      - static-staging.mybinder.turing.ac.uk
+    tls:
+      secretName: turing-staging-static-tls-crt
