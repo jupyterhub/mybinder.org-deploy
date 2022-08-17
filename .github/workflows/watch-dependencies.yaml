@@ -78,7 +78,7 @@ jobs:
 
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
-        uses: peter-evans/create-pull-request@v4.0.4
+        uses: peter-evans/create-pull-request@v4.1.0
         # Don't try open PRs in forks or when the job is triggered by a push to
         # a branch other than the default branch.
         if: github.repository == 'jupyterhub/mybinder.org-deploy' && (github.event_name != 'push' || github.ref == 'refs/heads/master')
@@ -187,7 +187,7 @@ jobs:
 
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
-        uses: peter-evans/create-pull-request@v4.0.4
+        uses: peter-evans/create-pull-request@v4.1.0
         # Don't try open PRs in forks or when the job is triggered by a push to
         # a branch other than the default branch.
         if: github.repository == 'jupyterhub/mybinder.org-deploy' && (github.event_name != 'push' || github.ref == 'refs/heads/master')
