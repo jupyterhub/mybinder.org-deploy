@@ -66,7 +66,10 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: false # Do not cancel all jobs if one fails
+      # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-preventing-a-specific-failing-matrix-job-from-failing-a-workflow-run
+      continue-on-error: ${{ matrix.experimental }}
       matrix:
+        experimental: false
         include:
           # Now we have only one staging environment, but we have had two when
           # we transitioned from one k8s cluster to another.
@@ -87,6 +90,8 @@ jobs:
             hub_url: https://hub-staging.mybinder.turing.ac.uk
             chartpress_args: ""
             helm_version: ""
+            # TODO: Remove this when turing-staging reliably passes
+            experimental: true
 
     steps:
       - name: "Stage 0: Update env vars based on job matrix arguments"
