@@ -69,7 +69,6 @@ jobs:
       # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-preventing-a-specific-failing-matrix-job-from-failing-a-workflow-run
       continue-on-error: ${{ matrix.experimental }}
       matrix:
-        experimental: false
         include:
           # Now we have only one staging environment, but we have had two when
           # we transitioned from one k8s cluster to another.
