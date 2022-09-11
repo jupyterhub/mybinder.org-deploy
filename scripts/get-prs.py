@@ -29,6 +29,11 @@ parser = ArgumentParser(description="Summarise PRs from a repo")
 parser.add_argument("repo", help="The repository in format user/repo")
 parser.add_argument("start", help="commit or image/chart version from which to start")
 parser.add_argument("end", help="commit or image/chart version to which to end")
+parser.add_argument(
+    "--github-action-escape",
+    action="store_true",
+    help="Escape output for GitHub Action",
+)
 
 args = parser.parse_args()
 
@@ -44,5 +49,12 @@ for c in git_compare.commits:
     s = gh.search_issues("", type="pr", repo=args.repo, sha=c.sha)
     prs.update(s)
 
-for pr in sorted(prs):
-    print(f"- [#{pr.number}]({pr.html_url}) {pr.title}")
+
+pr_summaries = [
+    f"- [#{pr.number}]({pr.html_url}) {pr.title}"
+    for pr in sorted(prs, key=lambda pr: pr.number)
+]
+if args.github_action_escape:
+    print("%0A".join(pr_summaries))
+else:
+    print("\n".join(pr_summaries))

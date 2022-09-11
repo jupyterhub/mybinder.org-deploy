@@ -83,8 +83,7 @@ jobs:
         # https://trstringer.com/github-actions-multiline-strings/#option-1---string-substitution
         run: |
           pip install PyGithub
-          PR_LIST=$(./scripts/get-prs.py ${{matrix.repository}} ${{steps.local.outputs.tag}} ${{steps.latest.outputs.tag}})
-          PR_LIST="${PR_LIST//$'\n'/'%0A'}"
+          PR_LIST=$(./scripts/get-prs.py ${{matrix.repository}} ${{steps.local.outputs.tag}} ${{steps.latest.outputs.tag}} --github-action-escape)
           echo "::set-output name=prs::$PR_LIST"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -213,8 +212,7 @@ jobs:
         # https://trstringer.com/github-actions-multiline-strings/#option-1---string-substitution
         run: |
           pip install PyGithub
-          PR_LIST=$(./scripts/get-prs.py ${{matrix.github_repo}} ${{steps.local.outputs.version}} ${{steps.latest.outputs.version}})
-          PR_LIST="${PR_LIST//$'\n'/'%0A'}"
+          PR_LIST=$(./scripts/get-prs.py ${{matrix.github_repo}} ${{steps.local.outputs.version}} ${{steps.latest.outputs.version}} --github-action-escape)
           echo "::set-output name=prs::$PR_LIST"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
