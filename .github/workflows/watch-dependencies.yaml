@@ -76,6 +76,19 @@ jobs:
         if: steps.local.outputs.tag != steps.latest.outputs.tag
         run: git --no-pager diff --color=always
 
+      - name: PR summary
+        id: prsummary
+        if: steps.local.outputs.tag != steps.latest.outputs.tag
+        # Needs to be a single line string
+        # https://trstringer.com/github-actions-multiline-strings/#option-1---string-substitution
+        run: |
+          pip install PyGithub
+          PR_LIST=$(./scripts/get-prs.py ${{matrix.repository}} ${{steps.local.outputs.tag}} ${{steps.latest.outputs.tag}})
+          PR_LIST="${PR_LIST//$'\n'/'%0A'}"
+          echo "::set-output name=prs::$PR_LIST"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
         uses: peter-evans/create-pull-request@v4.1.1
@@ -92,6 +105,9 @@ jobs:
           title: Update ${{ matrix.registry }}/${{ matrix.repository }} version to ${{ steps.latest.outputs.tag }}
           body: |
             Updates mybinder to depend on the `${{ matrix.registry }}/${{ matrix.repository }}` image version `${{ steps.latest.outputs.tag }}` from version `${{ steps.local.outputs.tag }}`.
+
+            ## Merged PRs:
+            ${{ steps.prsummary.outputs.prs }}
 
             ## Related
 
@@ -119,30 +135,35 @@ jobs:
             chart_dep_app_changelog_url: "https://github.com/jupyterhub/binderhub/blob/master/CHANGES.md"
             chart_dep_source_url: "https://github.com/jupyterhub/binderhub/tree/master/helm-chart"
             chart_dep_devel_flag: "--devel"
+            github_repo: jupyterhub/binderhub
 
           - chart_dep_name: ingress-nginx
             chart_dep_chart_changelog_url: "https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx#upgrading-chart"
             chart_dep_app_changelog_url: "https://github.com/kubernetes/ingress-nginx/blob/master/Changelog.md"
             chart_dep_source_url: "https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx"
             chart_dep_devel_flag: ""
+            github_repo: ""
 
           - chart_dep_name: prometheus
             chart_dep_chart_changelog_url: "https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus#upgrading-chart"
             chart_dep_app_changelog_url: "https://github.com/prometheus/prometheus/blob/master/CHANGELOG.md"
             chart_dep_source_url: https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus
             chart_dep_devel_flag: ""
+            github_repo: ""
 
           - chart_dep_name: grafana
             chart_dep_chart_changelog_url: "https://github.com/grafana/helm-charts/tree/main/charts/grafana#upgrading-an-existing-release-to-a-new-major-version"
             chart_dep_app_changelog_url: "https://github.com/grafana/grafana/blob/master/CHANGELOG.md"
             chart_dep_source_url: "https://github.com/grafana/helm-charts/tree/main/charts/grafana"
             chart_dep_devel_flag: ""
+            github_repo: ""
 
           - chart_dep_name: cryptnono
             chart_dep_chart_changelog_url: ""
             chart_dep_app_changelog_url: ""
             chart_dep_source_url: "https://github.com/yuvipanda/cryptnono/"
             chart_dep_devel_flag: "--devel"
+            github_repo: ""
 
     steps:
       - uses: actions/checkout@v3
@@ -185,6 +206,19 @@ jobs:
       - name: git diff
         run: git --no-pager diff --color=always
 
+      - name: PR summary
+        id: prsummary
+        if: matrix.github_repo && (steps.local.outputs.version != steps.latest.outputs.version)
+        # Needs to be a single line string
+        # https://trstringer.com/github-actions-multiline-strings/#option-1---string-substitution
+        run: |
+          pip install PyGithub
+          PR_LIST=$(./scripts/get-prs.py ${{matrix.github_repo}} ${{steps.local.outputs.version}} ${{steps.latest.outputs.version}})
+          PR_LIST="${PR_LIST//$'\n'/'%0A'}"
+          echo "::set-output name=prs::$PR_LIST"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
         uses: peter-evans/create-pull-request@v4.1.1
@@ -206,6 +240,9 @@ jobs:
             -|-|-
             Chart.yaml's version | `${{ steps.local.outputs.version }}` | `${{ steps.latest.outputs.version }}`
             Chart.yaml's appVersion | `${{ steps.local.outputs.appVersion }}` | `${{ steps.latest.outputs.appVersion }}`
+
+            ## Merged PRs:
+            ${{ steps.prsummary.outputs.prs }}
 
             ## Related
 
