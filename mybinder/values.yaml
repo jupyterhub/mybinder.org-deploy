@@ -142,6 +142,11 @@ binderhub:
           # 2021-09-13 PyHEP 2022 https://indico.cern.ch/event/1150631/timetable/#32-constructing-hep-vectors-an
           config:
             quota: 400
+        - pattern: ^JostMigenda/PyHEP2022.*
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/2333
+          # 2021-09-14 PyHEP 2022 https://indico.cern.ch/event/1150631/timetable/#21-the-supernova-early-warning
+          config:
+            quota: 400
         - pattern: ^cooperative-computing-lab/coffea-wq-notebook.*
           # https://github.com/jupyterhub/mybinder.org-deploy/issues/2333
           # 2021-09-14 PyHEP 2022 https://indico.cern.ch/event/1150631/timetable/#14-automatic-resource-manageme
@@ -155,6 +160,11 @@ binderhub:
         - pattern: ^goi42/pythia8_python_interface_pyHEP_2022.*
           # https://github.com/jupyterhub/mybinder.org-deploy/issues/2333
           # 2021-09-15 PyHEP 2022 https://indico.cern.ch/event/1150631/timetable/#8-the-pythia8-python-interface
+          config:
+            quota: 400
+        - pattern: ^douglasdavis/pyhep-2022-dask.*
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/2333
+          # 2021-09-16 PyHEP 2022 https://indico.cern.ch/event/1150631/timetable/#37-dask-tutorial
           config:
             quota: 400
         - pattern: ^masonproffitt/pyhep-2022-abcd-pyhf.*
