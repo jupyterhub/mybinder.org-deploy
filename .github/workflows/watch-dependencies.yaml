@@ -105,7 +105,6 @@ jobs:
           body: |
             Updates mybinder to depend on the `${{ matrix.registry }}/${{ matrix.repository }}` image version `${{ steps.latest.outputs.tag }}` from version `${{ steps.local.outputs.tag }}`.
 
-            ## Merged PRs:
             ${{ steps.prsummary.outputs.prs }}
 
             ## Related
@@ -239,7 +238,6 @@ jobs:
             Chart.yaml's version | `${{ steps.local.outputs.version }}` | `${{ steps.latest.outputs.version }}`
             Chart.yaml's appVersion | `${{ steps.local.outputs.appVersion }}` | `${{ steps.latest.outputs.appVersion }}`
 
-            ## Merged PRs:
             ${{ steps.prsummary.outputs.prs }}
 
             ## Related

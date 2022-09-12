@@ -34,6 +34,12 @@ parser.add_argument(
     action="store_true",
     help="Escape output for GitHub Action",
 )
+parser.add_argument(
+    "--max-commits",
+    type=int,
+    default=100,
+    help="Maximum number of commits to check",
+)
 
 args = parser.parse_args()
 
@@ -45,16 +51,21 @@ end = extract_gitref(args.end)
 
 prs = set()
 git_compare = r.compare(start, end)
-for c in git_compare.commits:
-    s = gh.search_issues("", type="pr", repo=args.repo, sha=c.sha)
-    prs.update(s)
-
-
-pr_summaries = [
-    f"- [#{pr.number}]({pr.html_url}) {pr.title}"
-    for pr in sorted(prs, key=lambda pr: pr.number)
-]
-if args.github_action_escape:
-    print("%0A".join(pr_summaries))
+commits = list(git_compare.commits)
+if len(commits) > args.max_commits:
+    pr_summaries = [
+        f"{len(commits)} commits between {start} and {end}, not searching for PRs"
+    ]
 else:
-    print("\n".join(pr_summaries))
+    for c in commits:
+        prs.update(c.get_pulls())
+    pr_summaries = [
+        f"- [#{pr.number}]({pr.html_url}) {pr.title}"
+        for pr in sorted(prs, key=lambda pr: pr.number)
+    ]
+
+md = ["# PRs"] + pr_summaries + ["", f"{r.html_url}/compare/{start}...{end}"]
+if args.github_action_escape:
+    print("%0A".join(md))
+else:
+    print("\n".join(md))
