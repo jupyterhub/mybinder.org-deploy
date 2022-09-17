@@ -28,7 +28,7 @@ iniconfig==1.1.1
     # via pytest
 kubernetes==24.2.0
     # via -r requirements.in
-oauthlib==3.2.0
+oauthlib==3.2.1
     # via requests-oauthlib
 packaging==21.3
     # via pytest
