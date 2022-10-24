@@ -67,6 +67,15 @@ binderhub:
       networkTools:
         image:
           pullPolicy: IfNotPresent
+      # there appear to be networking problems on node-1
+      # can't cordon due to the ingress controller
+      extraNodeAffinity:
+        required:
+          - matchExpressions:
+              - key: kubernetes.io/hostname
+                operator: NotIn
+                values:
+                  - node-1
 
   imageCleaner:
     # Use 40GB as upper limit, size is given in bytes
