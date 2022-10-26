@@ -8,7 +8,7 @@ dependencies:
   # Source code:    https://github.com/jupyterhub/binderhub/tree/master/helm-chart
   # App changelog:  https://github.com/jupyterhub/binderhub/blob/master/CHANGES.md
   - name: binderhub
-    version: "1.0.0-0.dev.git.2816.h5db2f98"
+    version: "1.0.0-0.dev.git.2825.haf97bce"
     repository: https://jupyterhub.github.io/helm-chart
 
   # Ingress-Nginx to route network traffic according to Ingress resources using
