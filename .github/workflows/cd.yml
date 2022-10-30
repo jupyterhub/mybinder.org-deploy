@@ -201,11 +201,15 @@ jobs:
 
     runs-on: ubuntu-20.04
 
+    # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-preventing-a-specific-failing-matrix-job-from-failing-a-workflow-run
+    continue-on-error: ${{ matrix.experimental }}
     # We run this job multiple times with different parameters
     # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategy
     strategy:
       fail-fast: false # Do not cancel all jobs if one fails
       matrix:
+        experimental:
+          - false
         include:
           - federation_member: prod
             binder_url: https://gke.mybinder.org
@@ -220,6 +224,9 @@ jobs:
             helm_version: ""
             release_name: turing
             cluster_name: turing-prod
+            # TODO: Remove this when turing is reliable
+            # https://github.com/jupyterhub/mybinder.org-deploy/issues/2252
+            experimental: true
 
           - federation_member: ovh
             binder_url: https://ovh.mybinder.org
