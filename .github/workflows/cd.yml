@@ -53,6 +53,11 @@ env:
   GIT_AUTHOR_NAME: JupterHub Bot Account
   GIT_COMMITTER_NAME: JupterHub Bot Account
 
+  # This is required for chartpress that run docker build, to ensure that we can
+  # make use of --mount flags in RUN statements for example.
+  #
+  DOCKER_BUILDKIT: "1"
+
 jobs:
   # In this dedicated job to deploy our staging environment we build and push
   # images that the jobs to deploy to the production environments depend on.
