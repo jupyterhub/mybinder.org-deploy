@@ -51,7 +51,11 @@ def archive_events(
             temp.seek(0)
 
             for line in temp:
-                event = json.loads(json.loads(line)["jsonPayload"]["message"])
+                event = json.loads(line)["jsonPayload"]
+                # Account for time when 'message' was nested
+                if "message" in event:
+                    event.update(json.loads(event["message"]))
+                    del event["message"]
                 # Account for time when 'event' was nested
                 if "event" in event:
                     event.update(event["event"])
