@@ -16,7 +16,10 @@ spec:
         operator: In
         values:
           - singleuser-server
+          # TODO: Remove dind after upgrade is complete
+          # https://github.com/jupyterhub/binderhub/pull/1543
           - dind
+          - image-builder
     matchLabels:
       release: {{ .Release.Name }}
   policyTypes:
