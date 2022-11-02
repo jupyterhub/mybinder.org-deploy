@@ -74,8 +74,6 @@ jobs:
     strategy:
       fail-fast: false # Do not cancel all jobs if one fails
       matrix:
-        experimental:
-          - false
         include:
           # Now we have only one staging environment, but we have had two when
           # we transitioned from one k8s cluster to another.
@@ -90,6 +88,7 @@ jobs:
             hub_url: https://hub.gke2.staging.mybinder.org
             chartpress_args: ""
             helm_version: ""
+            experimental: false
 
           - federation_member: turing-staging
             binder_url: https://binder-staging.mybinder.turing.ac.uk
@@ -208,14 +207,13 @@ jobs:
     strategy:
       fail-fast: false # Do not cancel all jobs if one fails
       matrix:
-        experimental:
-          - false
         include:
           - federation_member: prod
             binder_url: https://gke.mybinder.org
             hub_url: https://hub.gke.mybinder.org
             chartpress_args: ""
             helm_version: ""
+            experimental: false
 
           - federation_member: turing
             binder_url: https://turing.mybinder.org
@@ -234,6 +232,7 @@ jobs:
             # image-prefix should match ovh registry config in secrets/config/ovh.yaml
             chartpress_args: "--push --image-prefix=3i2li627.gra7.container-registry.ovh.net/binder/mybinder-"
             helm_version: ""
+            experimental: false
 
     steps:
       - name: "Stage 0: Update env vars based on job matrix arguments"
