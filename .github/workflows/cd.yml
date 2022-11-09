@@ -132,7 +132,7 @@ jobs:
 
       # Action Repo: https://github.com/google-github-actions/setup-gcloud
       - name: "Stage 1: Install gcloud ${{ env.GCLOUD_SDK_VERION }}"
-        uses: google-github-actions/setup-gcloud@v0
+        uses: google-github-actions/setup-gcloud@v1
         with:
           version: ${{ env.GCLOUD_SDK_VERION }}
 
@@ -268,7 +268,7 @@ jobs:
 
       - name: "Stage 1: Install gcloud ${{ env.GCLOUD_SDK_VERION }}"
         if: matrix.federation_member == 'prod'
-        uses: google-github-actions/setup-gcloud@v0
+        uses: google-github-actions/setup-gcloud@v1
         with:
           version: ${{ env.GCLOUD_SDK_VERION }}
 
