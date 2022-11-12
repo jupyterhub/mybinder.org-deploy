@@ -107,6 +107,32 @@ binderhub:
       #   config:
       #     quota: 123
 
+        # https://github.com/jupyterhub/mybinder.org-deploy/issues/2360
+        - pattern: ^comet-licsar/licsbas.*
+          # 2022-11-17
+          config:
+            quota: 500
+        - pattern: ^andwatson/coseismic_practical.*
+          # 2022-11-17
+          config:
+            quota: 500
+        - pattern: ^andwatson/interseismic_practical.*
+          # 2022-11-17
+          config:
+            quota: 500
+        - pattern: ^andwatson/volcano_practical.*
+          # 2022-11-18
+          config:
+            quota: 500
+        - pattern: ^matthew-gaddes/insar_workshop.*
+          # 2022-11-18
+          config:
+            quota: 500
+        - pattern: ^GenericMappingTools/egu22pygmt.*
+          # 2022-11-18
+          config:
+            quota: 500
+
     GitRepoProvider:
       banned_specs:
         - ^(git|https?)%3A%2F%2Fgithub.com%2Fa2nk%2F.*
