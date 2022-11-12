@@ -102,11 +102,6 @@ binderhub:
         - pattern: ^petlja/.*
           config:
             quota: 50
-        - pattern: ^NavAbility/BinderNotebooks.*
-          # https://github.com/jupyterhub/mybinder.org-deploy/issues/2165
-          # 2022-05-27
-          config:
-            quota: 400
       # - pattern: ^github-owner/github-repo-prefix.*
       #   # YYYY-MM-DD of workshop
       #   config:
@@ -128,12 +123,7 @@ binderhub:
         - ^h4j3s1978%2F.*
         - ^jasmt507%2F.*
         - .*%2Fabooz.*
-      spec_config:
-        - pattern: ^comet_licsar/licsbas.*
-          # https://github.com/jupyterhub/mybinder.org-deploy/issues/2061
-          # 2021-11-23
-          config:
-            quota: 500
+      spec_config: []
 
     BinderHub:
       use_registry: true
