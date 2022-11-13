@@ -102,10 +102,10 @@ binderhub:
         - pattern: ^petlja/.*
           config:
             quota: 50
-      # - pattern: ^github-owner/github-repo-prefix.*
-      #   # YYYY-MM-DD of workshop
-      #   config:
-      #     quota: 123
+        # - pattern: ^github-owner/github-repo-prefix.*
+        #   # YYYY-MM-DD of workshop
+        #   config:
+        #     quota: 123
 
         # https://github.com/jupyterhub/mybinder.org-deploy/issues/2360
         - pattern: ^comet-licsar/licsbas.*
