@@ -345,14 +345,14 @@ jobs:
             fi
           done
 
-          echo "::set-output name=status::$STATUS"
-          echo "::set-output name=conclusion::$CONCLUSION"
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+          echo "conclusion=$CONCLUSION" >> $GITHUB_OUTPUT
 
       - name: Set PR number as variable
         id: get-pr-number
         run: |
           PR_NUM=$(echo ${{ github.ref }} | awk -F'/' '{print $NF}')
-          echo "::set-output name=prnum::$PR_NUM"
+          echo "prnum=$PR_NUM" >> $GITHUB_OUTPUT
 
       - name: Comment on PR with Job Status and delete the test branch
         if: ${{ steps.staging-deploy-status.outputs.status }} == 'completed'

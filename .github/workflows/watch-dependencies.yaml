@@ -52,7 +52,7 @@ jobs:
         run: |
           local_full_image_spec=$(cat mybinder/values.yaml | yq e '.${{ matrix.values_path }}' -)
           local_tag=${local_full_image_spec#*:}
-          echo "::set-output name=tag::$local_tag"
+          echo "tag=$local_tag" >> $GITHUB_OUTPUT
 
       - name: Get latest tag of ${{ matrix.registry }}/${{ matrix.repository }}
         id: latest
@@ -66,7 +66,7 @@ jobs:
               docker run --rm quay.io/skopeo/stable list-tags docker://${{ matrix.registry }}/${{ matrix.repository }} \
             | jq -r '[.Tags[] | select(. | match("^\\d+\\.\\d+\\.\\d+(-\\d+\\..*)$"))] | sort_by(split(".-") | map(tonumber? // 0)) | last'
           )
-          echo "::set-output name=tag::$latest_tag"
+          echo "tag=$latest_tag" >> $GITHUB_OUTPUT
 
       - name: Update values.yaml pinned tag
         if: steps.local.outputs.tag != steps.latest.outputs.tag
@@ -84,7 +84,7 @@ jobs:
         run: |
           pip install PyGithub
           PR_LIST=$(./scripts/get-prs.py ${{matrix.repository}} ${{steps.local.outputs.tag}} ${{steps.latest.outputs.tag}} --github-action-escape)
-          echo "::set-output name=prs::$PR_LIST"
+          echo "prs=$PR_LIST" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -174,11 +174,11 @@ jobs:
         #
         run: |
           local_version=$(cat mybinder/Chart.yaml | yq e '.dependencies[] | select(.name == "${{ matrix.chart_dep_name }}") | .version' -)
-          echo "::set-output name=version::$local_version"
+          echo "version=$local_version" >> $GITHUB_OUTPUT
 
           chart_dep_repo=$(cat mybinder/Chart.yaml | yq e '.dependencies[] | select(.name == "${{ matrix.chart_dep_name }}") | .repository' -)
           local_app_version=$(helm show chart --version=$local_version --repo=$chart_dep_repo ${{ matrix.chart_dep_name }} | yq e '.appVersion' -)
-          echo "::set-output name=appVersion::$local_app_version"
+          echo "appVersion=$local_app_version" >> $GITHUB_OUTPUT
 
       - name: Fetch latest version/appVersion of ${{ matrix.chart_dep_name }} chart
         id: latest
@@ -190,10 +190,10 @@ jobs:
           chart_dep_repo=$(cat mybinder/Chart.yaml | yq e '.dependencies[] | select(.name == "${{ matrix.chart_dep_name }}") | .repository' -)
 
           latest_version=$(helm show chart ${{ matrix.chart_dep_devel_flag }} --repo=$chart_dep_repo ${{ matrix.chart_dep_name }} | yq e '.version' -)
-          echo "::set-output name=version::$latest_version"
+          echo "version=$latest_version" >> $GITHUB_OUTPUT
 
           latest_app_version=$(helm show chart ${{ matrix.chart_dep_devel_flag }} --repo=$chart_dep_repo ${{ matrix.chart_dep_name }} | yq e '.appVersion' -)
-          echo "::set-output name=appVersion::$latest_app_version"
+          echo "appVersion=$latest_app_version" >> $GITHUB_OUTPUT
 
       - name: Update Chart.yaml pinned version
         # "<old version>" is replaced with "<new version>", where also the
@@ -212,7 +212,7 @@ jobs:
         run: |
           pip install PyGithub
           PR_LIST=$(./scripts/get-prs.py ${{matrix.github_repo}} ${{steps.local.outputs.version}} ${{steps.latest.outputs.version}} --github-action-escape)
-          echo "::set-output name=prs::$PR_LIST"
+          echo "prs=$PR_LIST" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
