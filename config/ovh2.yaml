@@ -1,7 +1,7 @@
 projectName: ovh2
 
 userNodeSelector: &userNodeSelector
-  mybinder.org/pool-type: users
+  mybinder.org/pool-type: user
 coreNodeSelector: &coreNodeSelector
   mybinder.org/pool-type: core
 
@@ -13,9 +13,9 @@ binderhub:
       pod_quota: 10
       hub_url: https://hub.ovh-test.mybinder.org
       badge_base_url: https://mybinder.org
+      build_node_selector: *userNodeSelector
       sticky_builds: true
-      use_registry: true
-      image_prefix: https://2lmrrh8f.gra7.container-registry.ovh.net/mybinder-builds/r2d-g5b5b759
+      image_prefix: 2lmrrh8f.gra7.container-registry.ovh.net/mybinder-builds/r2d-g5b5b759
     DockerRegistry:
       # Docker Registry uses harbor
       # ref: https://github.com/goharbor/harbor/wiki/Harbor-FAQs#api
