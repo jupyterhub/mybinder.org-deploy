@@ -1,6 +1,6 @@
 # Terraform deployment info
 
-Common configuration is in terraform/modules/mybinder
+Common configuration for GKE is in terraform/modules/mybinder
 
 most deployed things are in mybinder/resource.tf
 variables (mostly things that should differ in staging/prod) in mybinder/variables.tf
@@ -26,6 +26,12 @@ terraform apply
 which will create a plan and prompt for confirmation.
 
 Review the proposed changes and if they look right, type 'yes' to apply the changes.
+
+## OVH
+
+The new OVH cluster is also deployed via terraform in the `ovh` directory.
+This has a lot less to deploy than flagship GKE,
+but deploys a Harbor registry as well.
 
 ## Getting secrets out
 
