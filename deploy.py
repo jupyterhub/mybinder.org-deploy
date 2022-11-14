@@ -76,7 +76,7 @@ def setup_auth_ovh(release, cluster):
     """
     print(f"Setup the OVH authentication for namespace {release}")
 
-    ovh_kubeconfig = os.path.join(ABSOLUTE_HERE, "secrets", "ovh-kubeconfig.yml")
+    ovh_kubeconfig = os.path.join(ABSOLUTE_HERE, "secrets", f"{release}-kubeconfig.yml")
     os.environ["KUBECONFIG"] = ovh_kubeconfig
     print(f"Current KUBECONFIG='{ovh_kubeconfig}'")
     stdout = subprocess.check_output(["kubectl", "config", "use-context", cluster])
@@ -124,7 +124,7 @@ def update_networkbans(cluster):
     # some members have special logic in ban.py,
     # in which case they must be specified on the command-line
     ban_command = [sys.executable, "secrets/ban.py"]
-    if cluster in {"turing-prod", "turing-staging", "turing", "ovh"}:
+    if cluster in {"turing-prod", "turing-staging", "turing", "ovh", "ovh2"}:
         ban_command.append(cluster)
 
     subprocess.check_call(ban_command)
@@ -251,7 +251,15 @@ def main():
     argparser.add_argument(
         "release",
         help="Release to deploy",
-        choices=["staging", "prod", "ovh", "turing-prod", "turing-staging", "turing"],
+        choices=[
+            "staging",
+            "prod",
+            "ovh",
+            "ovh2",
+            "turing-prod",
+            "turing-staging",
+            "turing",
+        ],
     )
     argparser.add_argument(
         "--name",
@@ -302,7 +310,7 @@ def main():
 
         # script is running on CI, proceed with auth and helm setup
 
-        if cluster == "ovh":
+        if cluster.startswith("ovh"):
             setup_auth_ovh(args.release, cluster)
         elif cluster in AZURE_RGs:
             setup_auth_turing(cluster)
