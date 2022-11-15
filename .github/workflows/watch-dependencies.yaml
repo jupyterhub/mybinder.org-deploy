@@ -79,12 +79,16 @@ jobs:
       - name: PR summary
         id: prsummary
         if: steps.local.outputs.tag != steps.latest.outputs.tag
-        # Needs to be a single line string
-        # https://trstringer.com/github-actions-multiline-strings/#option-1---string-substitution
         run: |
           pip install PyGithub
-          PR_LIST=$(./scripts/get-prs.py ${{matrix.repository}} ${{steps.local.outputs.tag}} ${{steps.latest.outputs.tag}} --github-action-escape)
-          echo "prs=$PR_LIST" >> $GITHUB_OUTPUT
+
+          # We want to set multiline output, so we rely on this technique:
+          # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
+          #
+          eof_randomized=EOF_$RANDOM
+          echo "prs<<$eof_randomized" >> $GITHUB_OUTPUT
+          ./scripts/get-prs.py ${{matrix.github_repo}} ${{steps.local.outputs.version}} ${{steps.latest.outputs.version}} >> $GITHUB_OUTPUT
+          echo "$eof_randomized" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -207,12 +211,16 @@ jobs:
       - name: PR summary
         id: prsummary
         if: matrix.github_repo && (steps.local.outputs.version != steps.latest.outputs.version)
-        # Needs to be a single line string
-        # https://trstringer.com/github-actions-multiline-strings/#option-1---string-substitution
         run: |
           pip install PyGithub
-          PR_LIST=$(./scripts/get-prs.py ${{matrix.github_repo}} ${{steps.local.outputs.version}} ${{steps.latest.outputs.version}} --github-action-escape)
-          echo "prs=$PR_LIST" >> $GITHUB_OUTPUT
+
+          # We want to set multiline output, so we rely on this technique:
+          # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
+          #
+          eof_randomized=EOF_$RANDOM
+          echo "prs<<$eof_randomized" >> $GITHUB_OUTPUT
+          ./scripts/get-prs.py ${{matrix.github_repo}} ${{steps.local.outputs.version}} ${{steps.latest.outputs.version}} >> $GITHUB_OUTPUT
+          echo "$eof_randomized" >> $GITHUB_OUTPUT
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

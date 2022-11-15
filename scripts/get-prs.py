@@ -30,11 +30,6 @@ parser.add_argument("repo", help="The repository in format user/repo")
 parser.add_argument("start", help="commit or image/chart version from which to start")
 parser.add_argument("end", help="commit or image/chart version to which to end")
 parser.add_argument(
-    "--github-action-escape",
-    action="store_true",
-    help="Escape output for GitHub Action",
-)
-parser.add_argument(
     "--max-commits",
     type=int,
     default=100,
@@ -65,7 +60,4 @@ else:
     ]
 
 md = ["# PRs"] + pr_summaries + ["", f"{r.html_url}/compare/{start}...{end}"]
-if args.github_action_escape:
-    print("%0A".join(md))
-else:
-    print("\n".join(md))
+print("\n".join(md))
