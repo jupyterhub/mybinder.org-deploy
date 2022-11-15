@@ -174,6 +174,11 @@ provider "harbor" {
 # chart images go in mybinder-chart
 resource "harbor_project" "mybinder-chart" {
   name = "mybinder-chart"
+  # chart images need to be public
+  # because we can't have two pull secrets for one registry,
+  # and harbor < 2.2 can't grant read-only access to more than one project
+  # on the same registry
+  public = true
 }
 
 # user builds go in mybinder-builds
