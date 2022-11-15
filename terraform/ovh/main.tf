@@ -16,10 +16,14 @@ terraform {
     }
   }
   # store state on gcs, like other clusters
-  backend "gcs" {
-    bucket = "tf-state-ovh"
-    prefix = "terraform/state"
-  }
+  backend "s3" {
+      bucket = "tf-state-ovh"
+      key    = "terraform.tfstate"
+      region = "gra"
+      endpoint = "s3.gra.io.cloud.ovh.net"
+      skip_credentials_validation = true
+      skip_region_validation = true
+    }
 }
 
 provider "ovh" {
