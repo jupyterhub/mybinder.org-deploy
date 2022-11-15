@@ -29,16 +29,41 @@ provider "ovh" {
 
 locals {
   service_name = "b309c78177f1458187add722e8db8dc2"
+  cluster_name = "ovh2"
   # TODO: pick a region
   # GRA9 is colocated with registry
   region = "GRA9"
 }
 
+# create a private network for our cluster
+resource "ovh_cloud_project_network_private" "network" {
+  service_name = local.service_name
+  name         = local.cluster_name
+  regions      = [local.region]
+}
+
+resource "ovh_cloud_project_network_private_subnet" "subnet" {
+  service_name = local.service_name
+  network_id   = ovh_cloud_project_network_private.network.id
+
+  region  = local.region
+  start   = "10.0.0.100"
+  end     = "10.0.0.254"
+  network = "10.0.0.0/24"
+  dhcp    = true
+}
+
 resource "ovh_cloud_project_kube" "cluster" {
   service_name = local.service_name
-  name         = "mybinder-ovh"
+  name         = local.cluster_name
   region       = local.region
   version      = "1.23"
+  # make sure we wait for the subnet to exist
+  depends_on = [ovh_cloud_project_network_private_subnet.subnet]
+
+  # private_network_id is an openstackid for some reason?
+  private_network_id = tolist(ovh_cloud_project_network_private.network.regions_attributes)[0].openstackid
+
   customization {
     apiserver {
       admissionplugins {
@@ -87,7 +112,7 @@ resource "ovh_cloud_project_kube_nodepool" "user" {
   template {
     metadata {
       labels = {
-        "mybinder.org/pool-type" = "user"
+        "mybinder.org/pool-type" = "users"
       }
     }
   }
@@ -100,10 +125,10 @@ output "kubeconfig" {
   sensitive   = true
   description = <<EOF
     # save output with:
-    export KUBECONFIG=$PWD/../../secrets/ovh2-kubeconfig.yaml
+    export KUBECONFIG=$PWD/../../secrets/ovh2-kubeconfig.yml
     terraform output -raw kubeconfig > $KUBECONFIG
     chmod 600 $KUBECONFIG
-    kubectl config rename-context kubernetes-admin@mybinder-ovh ovh2
+    kubectl config rename-context kubernetes-admin@ovh2 ovh2
     kubectl config use-context ovh2
     EOF
 }

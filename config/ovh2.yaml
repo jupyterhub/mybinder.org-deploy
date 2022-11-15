@@ -1,7 +1,7 @@
 projectName: ovh2
 
 userNodeSelector: &userNodeSelector
-  mybinder.org/pool-type: user
+  mybinder.org/pool-type: users
 coreNodeSelector: &coreNodeSelector
   mybinder.org/pool-type: core
 
