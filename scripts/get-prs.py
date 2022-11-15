@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import re
+import uuid
 from argparse import ArgumentParser
 
 import github
@@ -30,9 +31,8 @@ parser.add_argument("repo", help="The repository in format user/repo")
 parser.add_argument("start", help="commit or image/chart version from which to start")
 parser.add_argument("end", help="commit or image/chart version to which to end")
 parser.add_argument(
-    "--github-action-escape",
-    action="store_true",
-    help="Escape output for GitHub Action",
+    "--write-github-actions-output",
+    help="Name of a GitHub Action's output variable to write to",
 )
 parser.add_argument(
     "--max-commits",
@@ -65,7 +65,16 @@ else:
     ]
 
 md = ["# PRs"] + pr_summaries + ["", f"{r.html_url}/compare/{start}...{end}"]
-if args.github_action_escape:
-    print("%0A".join(md))
+md = "\n".join(md)
+
+if args.write_github_actions_output:
+    # GitHub Actions docs on setting a output variable with a multiline string:
+    # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#multiline-strings
+    #
+    eof_marker = str(uuid.uuid4()).replace("-", "_")
+    with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+        print(f"{args.write_github_actions_output}<<{eof_marker}", file=f)
+        print(md, file=f)
+        print(eof_marker, file=f)
 else:
-    print("\n".join(md))
+    print(md)

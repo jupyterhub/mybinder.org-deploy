@@ -76,15 +76,16 @@ jobs:
         if: steps.local.outputs.tag != steps.latest.outputs.tag
         run: git --no-pager diff --color=always
 
-      - name: PR summary
+      - name: Fetch PR summary
         id: prsummary
         if: steps.local.outputs.tag != steps.latest.outputs.tag
-        # Needs to be a single line string
-        # https://trstringer.com/github-actions-multiline-strings/#option-1---string-substitution
         run: |
           pip install PyGithub
-          PR_LIST=$(./scripts/get-prs.py ${{matrix.repository}} ${{steps.local.outputs.tag}} ${{steps.latest.outputs.tag}} --github-action-escape)
-          echo "prs=$PR_LIST" >> $GITHUB_OUTPUT
+          ./scripts/get-prs.py \
+              ${{matrix.github_repo}} \
+              ${{steps.local.outputs.version}} \
+              ${{steps.latest.outputs.version}} \
+              --write-github-actions-output=prs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -204,15 +205,16 @@ jobs:
       - name: git diff
         run: git --no-pager diff --color=always
 
-      - name: PR summary
+      - name: Fetch PR summary
         id: prsummary
         if: matrix.github_repo && (steps.local.outputs.version != steps.latest.outputs.version)
-        # Needs to be a single line string
-        # https://trstringer.com/github-actions-multiline-strings/#option-1---string-substitution
         run: |
           pip install PyGithub
-          PR_LIST=$(./scripts/get-prs.py ${{matrix.github_repo}} ${{steps.local.outputs.version}} ${{steps.latest.outputs.version}} --github-action-escape)
-          echo "prs=$PR_LIST" >> $GITHUB_OUTPUT
+          ./scripts/get-prs.py \
+              ${{matrix.github_repo}} \
+              ${{steps.local.outputs.version}} \
+              ${{steps.latest.outputs.version}} \
+              --write-github-actions-output=prs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
