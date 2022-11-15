@@ -34,7 +34,6 @@ provider "ovh" {
 locals {
   service_name = "b309c78177f1458187add722e8db8dc2"
   cluster_name = "ovh2"
-  # TODO: pick a region
   # GRA9 is colocated with registry
   region = "GRA9"
 }
@@ -86,9 +85,8 @@ resource "ovh_cloud_project_kube_nodepool" "core" {
   service_name = local.service_name
   kube_id      = ovh_cloud_project_kube.cluster.id
   name         = "core-202211"
-  # r2-60 is 4 core, 60GB
-  # TODO: use d2 for cheap setup testing
-  flavor_name   = "d2-8"
+  # b2-15 is 4 core, 15GB
+  flavor_name   = "b2-15"
   desired_nodes = 1
   max_nodes     = 3
   min_nodes     = 1
@@ -106,9 +104,8 @@ resource "ovh_cloud_project_kube_nodepool" "user" {
   service_name = local.service_name
   kube_id      = ovh_cloud_project_kube.cluster.id
   name         = "user-202211"
-  # r2-120 is 8 core, 120GB
-  # TODO: use d2 for cheap setup testing
-  flavor_name   = "d2-8"
+  # r2-60 is 4 core, 60GB
+  flavor_name   = "r2-60"
   desired_nodes = 1
   max_nodes     = 6
   min_nodes     = 1
