@@ -235,8 +235,8 @@ jobs:
             experimental: false
 
           - federation_member: ovh2
-            binder_url: https://ovh-test.mybinder.org
-            hub_url: https://hub.ovh-test.mybinder.org
+            binder_url: https://ovh2.mybinder.org
+            hub_url: https://hub.ovh2.mybinder.org
             # image-prefix should match ovh registry config in secrets/config/ovh.yaml
             chartpress_args: "--push --image-prefix=2lmrrh8f.gra7.container-registry.ovh.net/mybinder-chart/mybinder-"
             helm_version: ""

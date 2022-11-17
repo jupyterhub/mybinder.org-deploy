@@ -5,13 +5,11 @@ userNodeSelector: &userNodeSelector
 coreNodeSelector: &coreNodeSelector
   mybinder.org/pool-type: core
 
-# TODO: rename ovh-test to ovh2
-
 binderhub:
   config:
     BinderHub:
       pod_quota: 10
-      hub_url: https://hub.ovh-test.mybinder.org
+      hub_url: https://hub.ovh2.mybinder.org
       badge_base_url: https://mybinder.org
       build_node_selector: *userNodeSelector
       sticky_builds: true
@@ -37,7 +35,7 @@ binderhub:
 
   ingress:
     hosts:
-      - ovh-test.mybinder.org
+      - ovh2.mybinder.org
 
   jupyterhub:
     singleuser:
@@ -55,11 +53,11 @@ binderhub:
             cpu: "1"
     ingress:
       hosts:
-        - hub.ovh-test.mybinder.org
+        - hub.ovh2.mybinder.org
       tls:
         - secretName: kubelego-tls-hub
           hosts:
-            - hub.ovh-test.mybinder.org
+            - hub.ovh2.mybinder.org
     scheduling:
       userPlaceholder:
         replicas: 5
@@ -79,10 +77,10 @@ grafana:
   nodeSelector: *coreNodeSelector
   ingress:
     hosts:
-      - grafana.ovh-test.mybinder.org
+      - grafana.ovh2.mybinder.org
     tls:
       - hosts:
-          - grafana.ovh-test.mybinder.org
+          - grafana.ovh2.mybinder.org
         secretName: kubelego-tls-grafana
   datasources:
     datasources.yaml:
@@ -91,7 +89,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.ovh-test.mybinder.org
+          url: https://prometheus.ovh2.mybinder.org
           access: direct
           isDefault: true
           editable: false
@@ -106,20 +104,22 @@ prometheus:
     retention: 30d
     ingress:
       hosts:
-        - prometheus.ovh-test.mybinder.org
+        - prometheus.ovh2.mybinder.org
       tls:
         - hosts:
-            - prometheus.ovh-test.mybinder.org
+            - prometheus.ovh2.mybinder.org
           secretName: kubelego-tls-prometheus
 
 ingress-nginx:
   controller:
     scope:
       enabled: true
+    service:
+      loadBalancerIP: 162.19.17.37
 
 static:
   ingress:
     hosts:
-      - static.ovh-test.mybinder.org
+      - static.ovh2.mybinder.org
     tls:
       secretName: kubelego-tls-static
