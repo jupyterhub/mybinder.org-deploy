@@ -11,11 +11,6 @@ cryptnono:
       operator: Equal
       value: user
 
-# allow creating a pull secret
-imagePullSecret:
-  create: false
-  name: "chart-secret"
-
 imagePullSecrets:
 
 tags: {}
