@@ -245,6 +245,28 @@ def setup_certmanager():
     subprocess.check_call(helm_upgrade)
 
 
+def patch_coredns():
+    """Patch coredns resource allocation
+
+    OVH2 coredns does not have sufficient memory by default after our ban patches
+    """
+    print(BOLD + GREEN + "Patching coredns resources" + NC, flush=True)
+    subprocess.check_call(
+        [
+            "kubectl",
+            "set",
+            "resources",
+            "-n",
+            "kube-system",
+            "deployments/coredns",
+            "--limits",
+            "memory=250Mi",
+            "--requests",
+            "memory=200Mi",
+        ]
+    )
+
+
 def main():
     # parse command line args
     argparser = argparse.ArgumentParser()
@@ -312,6 +334,7 @@ def main():
 
         if cluster.startswith("ovh"):
             setup_auth_ovh(args.release, cluster)
+            patch_coredns()
         elif cluster in AZURE_RGs:
             setup_auth_turing(cluster)
         elif cluster in GCP_PROJECTS:
