@@ -618,6 +618,11 @@ federationRedirect:
       weight: 100
       health: https://ovh.mybinder.org/health
       versions: https://ovh.mybinder.org/versions
+    ovh2:
+      url: https://ovh2.mybinder.org
+      weight: 100
+      health: https://ovh2.mybinder.org/health
+      versions: https://ovh2.mybinder.org/versions
     turing:
       url: https://turing.mybinder.org
       # https://github.com/jupyterhub/mybinder.org-deploy/issues/2252#issuecomment-1295141310
