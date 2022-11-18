@@ -48,7 +48,7 @@ jobs:
           - release: ovh
             k3s-channel: "v1.20"
           - release: ovh2
-            k3s-channel: "v1.23"
+            k3s-channel: "v1.24"
           - release: turing
             k3s-channel: "v1.21"
 

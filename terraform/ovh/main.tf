@@ -60,7 +60,7 @@ resource "ovh_cloud_project_kube" "cluster" {
   service_name = local.service_name
   name         = local.cluster_name
   region       = local.region
-  version      = "1.23"
+  version      = "1.24"
   # make sure we wait for the subnet to exist
   depends_on = [ovh_cloud_project_network_private_subnet.subnet]
 
