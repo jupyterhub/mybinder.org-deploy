@@ -523,15 +523,10 @@ grafana:
 # values ref: https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml
 prometheus:
   enabled: true
-  nodeExporter:
-    updateStrategy:
-      type: RollingUpdate
   alertmanager:
     enabled: false
   pushgateway:
     enabled: false
-  rbac:
-    create: true
   server:
     podLabels:
       # needs access to the Hub API
