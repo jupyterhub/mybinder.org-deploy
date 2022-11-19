@@ -82,9 +82,9 @@ jobs:
         run: |
           pip install PyGithub
           ./scripts/get-prs.py \
-              ${{matrix.github_repo}} \
-              ${{steps.local.outputs.version}} \
-              ${{steps.latest.outputs.version}} \
+              ${{ matrix.repository }} \
+              ${{ steps.local.outputs.tag }} \
+              ${{ steps.latest.outputs.tag }} \
               --write-github-actions-output=prs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -211,9 +211,9 @@ jobs:
         run: |
           pip install PyGithub
           ./scripts/get-prs.py \
-              ${{matrix.github_repo}} \
-              ${{steps.local.outputs.version}} \
-              ${{steps.latest.outputs.version}} \
+              ${{ matrix.github_repo }} \
+              ${{ steps.local.outputs.version }} \
+              ${{ steps.latest.outputs.version }} \
               --write-github-actions-output=prs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
