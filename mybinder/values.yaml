@@ -1,3 +1,4 @@
+# values ref: https://github.com/yuvipanda/cryptnono/blob/main/cryptnono/values.yaml
 cryptnono:
   enabled: true
   tolerations:
@@ -38,6 +39,7 @@ etcJupyter:
       # when people leave a notebook open and wander off
       cull_connected: true
 
+# values ref: https://github.com/jupyterhub/binderhub/blob/main/helm-chart/binderhub/values.yaml
 binderhub:
   replicas: 2
 
@@ -408,6 +410,8 @@ binderhub:
               add:
                 - NET_ADMIN
 
+
+# values ref: https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
 ingress-nginx:
   enabled: true
   rbac:
@@ -486,6 +490,7 @@ static:
     tls:
       secretName: kubelego-tls-static
 
+# values ref: https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
 grafana:
   enabled: true
   ingress:
@@ -515,6 +520,7 @@ grafana:
     security:
       allow_embedding: true
 
+# values ref: https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml
 prometheus:
   enabled: true
   nodeExporter:
