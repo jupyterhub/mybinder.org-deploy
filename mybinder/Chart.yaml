@@ -5,16 +5,16 @@ version: "0.0.1-set.by.chartpress"
 kubeVersion: ">= 1.15.0-0"
 dependencies:
   # BinderHub
-  # Source code:    https://github.com/jupyterhub/binderhub/tree/master/helm-chart
-  # App changelog:  https://github.com/jupyterhub/binderhub/blob/master/CHANGES.md
+  # Source code:    https://github.com/jupyterhub/binderhub/tree/main/helm-chart
+  # App changelog:  https://github.com/jupyterhub/binderhub/blob/main/CHANGES.md
   - name: binderhub
     version: "1.0.0-0.dev.git.2866.hed86f2e"
     repository: https://jupyterhub.github.io/helm-chart
 
   # Ingress-Nginx to route network traffic according to Ingress resources using
   # this controller from within k8s.
-  # Source code:   https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx
-  # App changelog: https://github.com/kubernetes/ingress-nginx/blob/master/Changelog.md
+  # Source code:   https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx
+  # App changelog: https://github.com/kubernetes/ingress-nginx/blob/main/Changelog.md
   #
   # NOTE: chart v3.36.0 maps to v0.49.0 and has support for networking.k8s.io/v1
   #       chart v4.1.2 maps to v1.2.0 and has dropped support for networking.k8s.io/v1beta1
@@ -25,19 +25,19 @@ dependencies:
 
   # Prometheus for collection of metrics.
   # Source code:   https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus
-  # App changelog: https://github.com/prometheus/prometheus/blob/master/CHANGELOG.md
+  # App changelog: https://github.com/prometheus/prometheus/blob/main/CHANGELOG.md
   #
   # NOTE: chart v11.0.2 maps to app v2.16.0   - 2020-07-10
   #       chart v11.16.9 maps to app v2.21.0  - 2020-12-06
   #       chart v12 requires Helm 3
   - name: prometheus
-    version: "15.18.0"
+    version: "16.0.0"
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
 
   # Grafana for dashboarding of metrics.
   # Source code:   https://github.com/grafana/helm-charts/tree/main/charts/grafana
-  # App changelog: https://github.com/grafana/grafana/blob/master/CHANGELOG.md
+  # App changelog: https://github.com/grafana/grafana/blob/main/CHANGELOG.md
   #
   # NOTE: chart v3.10.1 maps to app v6.4.2   - 2019-11-22
   #       chart v5.0.26 maps to app v6.7.3   - 2020-12-06
