@@ -410,7 +410,6 @@ binderhub:
               add:
                 - NET_ADMIN
 
-
 # values ref: https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
 ingress-nginx:
   enabled: true
