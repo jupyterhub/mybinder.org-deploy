@@ -364,6 +364,7 @@ async def health_check(host, active_hosts):
                             check["total_pods"] + CONFIG["pod_headroom"]
                             >= check["quota"]
                         ):
+                            check["ok"] = False
                             raise FailedCheck(
                                 f"{host} is approaching pod quota: {check['total_pods']}/{check['quota']}",
                                 reason=check["service"],
