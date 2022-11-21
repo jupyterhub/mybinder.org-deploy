@@ -168,37 +168,10 @@ provider "harbor" {
   password = ovh_cloud_project_containerregistry_user.admin.password
 }
 
-# chart images go in mybinder-chart
-resource "harbor_project" "mybinder-chart" {
-  name = "mybinder-chart"
-  # chart images need to be public
-  # because we can't have two pull secrets for one registry,
-  # and harbor < 2.2 can't grant read-only access to more than one project
-  # on the same registry
-  public = true
-}
-
 # user builds go in mybinder-builds
 # these are separate for easier separation of retention policies
 resource "harbor_project" "mybinder-builds" {
   name = "mybinder-builds"
-}
-
-
-# TODO: robot accounts change with harbor 2.2 / harbor-provider 3.0
-# in particular, we can drop the two separate pullers
-resource "harbor_robot_account" "chartpress" {
-  name        = "chartpress"
-  description = "mybinder chartpress: access to push new chart images"
-  project_id  = harbor_project.mybinder-chart.id
-  actions     = ["push", "pull"]
-}
-
-resource "harbor_robot_account" "chart-puller" {
-  name        = "chart-puller"
-  description = "pull mybinder chart images"
-  project_id  = harbor_project.mybinder-chart.id
-  actions     = ["pull"]
 }
 
 resource "harbor_robot_account" "builder" {
@@ -230,22 +203,6 @@ resource "harbor_robot_account" "user-puller" {
 #     n_days_since_last_push = 7
 #   }
 # }
-#
-# resource "harbor_retention_policy" "chart" {
-#   scope    = harbor_project.mybinder-chart.id
-#   schedule = "weekly"
-#   # keep the most recent 5 versions
-#   # (by both push and pull, which should usually be the same)
-#   rule {
-#     most_recently_pulled = 5
-#   }
-#   rule {
-#     most_recently_pushed = 5
-#   }
-#   rule {
-#     n_days_since_last_push = 7
-#   }
-# }
 
 resource "harbor_garbage_collection" "gc" {
   schedule        = "weekly"
@@ -266,16 +223,6 @@ output "registry_admin_login" {
 
 output "registry_admin_password" {
   value     = ovh_cloud_project_containerregistry_user.admin.password
-  sensitive = true
-}
-
-output "registry_chartpress_token" {
-  value     = harbor_robot_account.chartpress.token
-  sensitive = true
-}
-
-output "registry_chart_puller_token" {
-  value     = harbor_robot_account.chart-puller.token
   sensitive = true
 }
 
