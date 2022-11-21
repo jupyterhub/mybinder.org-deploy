@@ -43,6 +43,7 @@ R2D_STRINGS = ["r2d-"]
 TODAY = datetime.now()
 FIVE_YEARS_AGO = TODAY - timedelta(days=5 * 365)
 TOMORROW = TODAY + timedelta(days=1)
+LAST_WEEK = TODAY - timedelta(days=7)
 
 
 class RequestFailed(Exception):
@@ -170,7 +171,12 @@ async def delete_image(session, image, digest, tags, dry_run=False):
 
 
 async def main(
-    release="staging", project=None, concurrency=20, delete_before=None, dry_run=True
+    release="staging",
+    project=None,
+    concurrency=20,
+    delete_before=None,
+    dry_run=True,
+    max_builds=None,
 ):
     if dry_run:
         print("THIS IS A DRY RUN.  NO IMAGES WILL BE DELETED.")
@@ -183,6 +189,8 @@ async def main(
         delete_before_ms = int(delete_before.timestamp()) * 1e3
     else:
         delete_before_ms = float("inf")
+
+    last_week_ms = int(LAST_WEEK.timestamp()) * 1e3
 
     if not project:
         project = "binderhub-288415"
@@ -317,10 +325,11 @@ async def main(
             desc=f"bytes {to_be}deleted",
         )
 
-        def should_delete_tag(image, info):
+        def should_delete_tag(image, info, tag_index):
             if should_delete_repository(image):
                 return True
-            if not delete_before:
+
+            if not delete_before and not (max_builds and tag_index < max_builds):
                 # no date cutoff
                 return False
 
@@ -333,9 +342,15 @@ async def main(
                     f"Not deleting image with weird date: {image}, {info}, {image_datetime}"
                 )
             if delete_before_ms > image_ms:
+                # delete images older than cutoff
                 return True
-            else:
-                return False
+
+            if max_builds and tag_index >= max_builds and last_week_ms > image_ms:
+                # limit to max_builds,
+                # but only delete excess builds older than 1 week
+                return True
+
+            return False
 
         def save_stats():
             df = pd.DataFrame(
@@ -366,7 +381,11 @@ async def main(
                 if delete_whole_repo and len(manifest["manifest"]) > 1:
                     delete_progress.total += len(manifest["manifest"]) - 1
 
-                for digest, info in manifest["manifest"].items():
+                all_digests = sorted(
+                    manifest["manifest"].items(),
+                    key=lambda digest_info: int(digest_info[1]["timeUploadedMs"]),
+                )
+                for order, (digest, info) in enumerate(all_digests):
                     image_ms = int(info["timeUploadedMs"])
                     image_datetime = datetime.fromtimestamp(image_ms / 1e3)
                     nbytes = int(info["imageSizeBytes"])
@@ -381,7 +400,7 @@ async def main(
                     )
                     if len(rows) % 100 == 0:
                         save_stats()
-                    if not should_delete_tag(image, info):
+                    if not should_delete_tag(image, info, order):
                         continue
                     if not delete_whole_repo:
                         # not counted yet
@@ -459,6 +478,15 @@ if __name__ == "__main__":
         "Too high and there may be timeouts. Default is 20.",
     )
     parser.add_argument(
+        "--max-builds",
+        type=int,
+        default=10,
+        help="""
+        The maximum number of builds to keep for a given repo.
+        If there are more than this many builds, only the newest MAX_BUILDS are kept.
+        """,
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Do a dry-run (no images will be deleted)",
@@ -471,5 +499,6 @@ if __name__ == "__main__":
             opts.concurrency,
             delete_before=opts.delete_before,
             dry_run=opts.dry_run,
+            max_builds=opts.max_builds,
         )
     )
