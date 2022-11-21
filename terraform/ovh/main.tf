@@ -87,7 +87,6 @@ resource "ovh_cloud_project_kube_nodepool" "core" {
   name         = "core-202211"
   # b2-15 is 4 core, 15GB
   flavor_name   = "b2-15"
-  desired_nodes = 1
   max_nodes     = 3
   min_nodes     = 1
   autoscale     = true
@@ -98,6 +97,12 @@ resource "ovh_cloud_project_kube_nodepool" "core" {
       }
     }
   }
+  lifecycle {
+    ignore_changes = [
+      # don't interfere with autoscaling
+      desired_nodes
+    ]
+  }
 }
 
 resource "ovh_cloud_project_kube_nodepool" "user" {
@@ -106,7 +111,6 @@ resource "ovh_cloud_project_kube_nodepool" "user" {
   name         = "user-202211"
   # r2-60 is 4 core, 60GB
   flavor_name   = "r2-60"
-  desired_nodes = 1
   max_nodes     = 6
   min_nodes     = 1
   autoscale     = true
@@ -116,6 +120,12 @@ resource "ovh_cloud_project_kube_nodepool" "user" {
         "mybinder.org/pool-type" = "users"
       }
     }
+  }
+  lifecycle {
+    ignore_changes = [
+      # don't interfere with autoscaling
+      desired_nodes
+    ]
   }
 }
 
