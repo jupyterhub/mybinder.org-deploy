@@ -8,7 +8,7 @@ coreNodeSelector: &coreNodeSelector
 binderhub:
   config:
     BinderHub:
-      pod_quota: 10
+      pod_quota: 20
       hub_url: https://hub.ovh2.mybinder.org
       badge_base_url: https://mybinder.org
       build_node_selector: *userNodeSelector
@@ -19,7 +19,7 @@ binderhub:
       # ref: https://github.com/goharbor/harbor/wiki/Harbor-FAQs#api
       token_url: "https://2lmrrh8f.gra7.container-registry.ovh.net/service/token?service=harbor-registry"
 
-  replicas: 1
+  replicas: 2
   nodeSelector: *coreNodeSelector
 
   extraVolumes:
@@ -60,7 +60,7 @@ binderhub:
             - hub.ovh2.mybinder.org
     scheduling:
       userPlaceholder:
-        replicas: 5
+        replicas: 10
       userScheduler:
         nodeSelector: *coreNodeSelector
 
