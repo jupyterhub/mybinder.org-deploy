@@ -90,13 +90,13 @@ jobs:
             helm_version: ""
             experimental: false
 
-          - federation_member: turing-staging
-            binder_url: https://binder-staging.mybinder.turing.ac.uk
-            hub_url: https://hub-staging.mybinder.turing.ac.uk
-            chartpress_args: ""
-            helm_version: ""
-            # TODO: Remove this when turing-staging reliably passes
-            experimental: true
+          # - federation_member: turing-staging
+          #   binder_url: https://binder-staging.mybinder.turing.ac.uk
+          #   hub_url: https://hub-staging.mybinder.turing.ac.uk
+          #   chartpress_args: ""
+          #   helm_version: ""
+          #   # TODO: Remove this when turing-staging reliably passes
+          #   experimental: true
 
     steps:
       - name: "Stage 0: Update env vars based on job matrix arguments"
