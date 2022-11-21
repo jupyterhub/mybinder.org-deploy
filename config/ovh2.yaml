@@ -1,0 +1,125 @@
+projectName: ovh2
+
+userNodeSelector: &userNodeSelector
+  mybinder.org/pool-type: users
+coreNodeSelector: &coreNodeSelector
+  mybinder.org/pool-type: core
+
+binderhub:
+  config:
+    BinderHub:
+      pod_quota: 10
+      hub_url: https://hub.ovh2.mybinder.org
+      badge_base_url: https://mybinder.org
+      build_node_selector: *userNodeSelector
+      sticky_builds: true
+      image_prefix: 2lmrrh8f.gra7.container-registry.ovh.net/mybinder-builds/r2d-g5b5b759
+    DockerRegistry:
+      # Docker Registry uses harbor
+      # ref: https://github.com/goharbor/harbor/wiki/Harbor-FAQs#api
+      token_url: "https://2lmrrh8f.gra7.container-registry.ovh.net/service/token?service=harbor-registry"
+
+  replicas: 1
+  nodeSelector: *coreNodeSelector
+
+  extraVolumes:
+    - name: secrets
+      secret:
+        secretName: events-archiver-secrets
+  extraVolumeMounts:
+    - name: secrets
+      mountPath: /secrets
+      readOnly: true
+  extraEnv:
+    GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+
+  ingress:
+    hosts:
+      - ovh2.mybinder.org
+
+  jupyterhub:
+    singleuser:
+      nodeSelector: *userNodeSelector
+    hub:
+      nodeSelector: *coreNodeSelector
+
+    proxy:
+      chp:
+        nodeSelector: *coreNodeSelector
+        resources:
+          requests:
+            cpu: "1"
+          limits:
+            cpu: "1"
+    ingress:
+      hosts:
+        - hub.ovh2.mybinder.org
+      tls:
+        - secretName: kubelego-tls-hub
+          hosts:
+            - hub.ovh2.mybinder.org
+    scheduling:
+      userPlaceholder:
+        replicas: 5
+      userScheduler:
+        nodeSelector: *coreNodeSelector
+
+  imageCleaner:
+    # Use 40GB as upper limit, size is given in bytes
+    imageGCThresholdHigh: 40e9
+    imageGCThresholdLow: 30e9
+    imageGCThresholdType: "absolute"
+
+cryptnono:
+  enabled: false
+
+grafana:
+  nodeSelector: *coreNodeSelector
+  ingress:
+    hosts:
+      - grafana.ovh2.mybinder.org
+    tls:
+      - hosts:
+          - grafana.ovh2.mybinder.org
+        secretName: kubelego-tls-grafana
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: prometheus
+          orgId: 1
+          type: prometheus
+          url: https://prometheus.ovh2.mybinder.org
+          access: direct
+          isDefault: true
+          editable: false
+  persistence:
+    storageClassName: csi-cinder-high-speed
+
+prometheus:
+  server:
+    nodeSelector: *coreNodeSelector
+    persistentVolume:
+      size: 50Gi
+    retention: 30d
+    ingress:
+      hosts:
+        - prometheus.ovh2.mybinder.org
+      tls:
+        - hosts:
+            - prometheus.ovh2.mybinder.org
+          secretName: kubelego-tls-prometheus
+
+ingress-nginx:
+  controller:
+    scope:
+      enabled: true
+    service:
+      loadBalancerIP: 162.19.17.37
+
+static:
+  ingress:
+    hosts:
+      - static.ovh2.mybinder.org
+    tls:
+      secretName: kubelego-tls-static

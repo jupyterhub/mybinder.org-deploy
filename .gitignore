@@ -19,3 +19,4 @@ travis/crypt-key
 env
 
 .terraform
+.terraform.lock.hcl
