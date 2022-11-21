@@ -237,8 +237,6 @@ jobs:
           - federation_member: ovh2
             binder_url: https://ovh2.mybinder.org
             hub_url: https://hub.ovh2.mybinder.org
-            # image-prefix should match ovh registry config in secrets/config/ovh.yaml
-            chartpress_args: "--push --image-prefix=2lmrrh8f.gra7.container-registry.ovh.net/mybinder-chart/mybinder-"
             helm_version: ""
             experimental: false
 
@@ -303,15 +301,6 @@ jobs:
           login-server: 3i2li627.gra7.container-registry.ovh.net
           username: ${{ secrets.DOCKER_USERNAME_OVH }}
           password: ${{ secrets.DOCKER_PASSWORD_OVH }}
-
-      - name: "Stage 3: Login to Docker registry (OVH2)"
-        if: matrix.federation_member == 'ovh2'
-        uses: azure/docker-login@v1
-        with:
-          login-server: 2lmrrh8f.gra7.container-registry.ovh.net
-          username: ${{ secrets.DOCKER_USERNAME_OVH2 }}
-          # terraform output registry_chartpress_token
-          password: ${{ secrets.DOCKER_PASSWORD_OVH2 }}
 
       - name: "Stage 3: Run chartpress to update values.yaml"
         run: |
