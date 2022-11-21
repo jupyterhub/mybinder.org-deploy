@@ -8,7 +8,7 @@ coreNodeSelector: &coreNodeSelector
 binderhub:
   config:
     BinderHub:
-      pod_quota: 20
+      pod_quota: 50
       hub_url: https://hub.ovh2.mybinder.org
       badge_base_url: https://mybinder.org
       build_node_selector: *userNodeSelector
