@@ -59,14 +59,14 @@ CONFIG = {
 
 def get_config(config_path):
     app_log.info(f"Using config from '{config_path}'.")
+    config = CONFIG.copy()
 
     with open(config_path) as f:
-        config = json.load(f)
+        config.update(json.load(f))
 
     # merge default config
-    config.setdefault("check", CONFIG["check"])
-    for key in CONFIG["check"]:
-        config["check"].setdefault(key, CONFIG["check"][key])
+    for key, value in CONFIG["check"].items():
+        config["check"].setdefault(key, value)
 
     for h in list(config["hosts"].keys()):
         # Remove empty entries from CONFIG["hosts"], these can happen because we
