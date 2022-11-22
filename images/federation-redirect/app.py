@@ -161,7 +161,7 @@ HEALTH_CHECK = Gauge(
 REDIRECTS = Gauge(
     "federation_redirect_count",
     "Number of requests routed to each member." " 'member' is the federation member.",
-    ["member"],
+    ["member", "reason"],
 )
 
 
