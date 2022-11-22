@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 import json
 import math
 import os
@@ -30,6 +31,7 @@ CONFIG = {
     },
     "load_balancer": "rendezvous",  # or "random"
     "pod_headroom": 10,  # number of available slots to consider a member 'available'
+    "host_cookie_age_hours": 4,
     "hosts": {
         "gke": dict(
             url="https://gke.mybinder.org",
@@ -276,9 +278,18 @@ class RedirectHandler(RequestHandler):
             else:
                 host_name = random.choices(self.host_keys, self.host_weights)[0]
             host_url = self.hosts[host_name]["url"]
+            reason = "load_balancer"
+        else:
+            reason = "cookie"
 
-        REDIRECTS.labels(member=host_name).inc()
-        self.set_cookie("host", host_url, path=path)
+        REDIRECTS.labels(member=host_name, reason=reason).inc()
+        self.set_cookie(
+            "host",
+            host_url,
+            path=path,
+            expires=datetime.datetime.now(datetime.timezone.utc)
+            + datetime.timedelta(hours=CONFIG["host_cookie_age_hours"]),
+        )
 
         # do we sometimes want to add this url param? Not for build urls, at least
         # redirect = url_concat(host_url + uri, {'binder_launch_host': 'https://mybinder.org/'})
