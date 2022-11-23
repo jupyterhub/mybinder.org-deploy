@@ -18,8 +18,6 @@ chartpress==2.1.0
     # via -r requirements.in
 docker==5.0.3
     # via chartpress
-exceptiongroup==1.0.0rc9
-    # via pytest
 execnet==1.9.0
     # via pytest-xdist
 google-auth==2.7.0
@@ -33,7 +31,9 @@ kubernetes==25.3.0
 oauthlib==3.2.1
     # via requests-oauthlib
 packaging==21.3
-    # via pytest
+    # via
+    #   pytest
+    #   pytest-rerunfailures
 pluggy==1.0.0
     # via pytest
 pyasn1==0.4.8
@@ -50,7 +50,7 @@ pytest==7.2.0
     #   pytest-rerunfailures
     #   pytest-timeout
     #   pytest-xdist
-pytest-rerunfailures==10.2
+pytest-rerunfailures==10.3
     # via -r requirements.in
 pytest-timeout==2.1.0
     # via -r requirements.in
@@ -74,15 +74,11 @@ rsa==4.8
     # via google-auth
 ruamel-yaml==0.17.21
     # via chartpress
-ruamel-yaml-clib==0.2.6
-    # via ruamel-yaml
 six==1.16.0
     # via
     #   google-auth
     #   kubernetes
     #   python-dateutil
-tomli==2.0.1
-    # via pytest
 urllib3==1.26.9
     # via
     #   kubernetes
