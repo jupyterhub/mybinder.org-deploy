@@ -105,30 +105,6 @@ resource "ovh_cloud_project_kube_nodepool" "core" {
   }
 }
 
-resource "ovh_cloud_project_kube_nodepool" "user" {
-  service_name = local.service_name
-  kube_id      = ovh_cloud_project_kube.cluster.id
-  name         = "user-202211"
-  # r2-60 is 4 core, 60GB
-  flavor_name   = "r2-60"
-  max_nodes     = 1
-  min_nodes     = 1
-  autoscale     = true
-  template {
-    metadata {
-      labels = {
-        "mybinder.org/pool-type" = "users"
-      }
-    }
-  }
-  lifecycle {
-    ignore_changes = [
-      # don't interfere with autoscaling
-      desired_nodes
-    ]
-  }
-}
-
 resource "ovh_cloud_project_kube_nodepool" "user-a" {
   service_name = local.service_name
   kube_id      = ovh_cloud_project_kube.cluster.id
