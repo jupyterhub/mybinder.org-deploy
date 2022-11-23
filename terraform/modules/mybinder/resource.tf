@@ -174,7 +174,7 @@ resource "google_logging_project_sink" "events-archive" {
   project = data.google_client_config.provider.project
 
   name                   = "binderhub-${var.name}-events-raw-text"
-  filter                 = "resource.type=\"global\" AND logName=\"projects/${data.google_client_config.provider.project}/logs/${local.events_log_prefix}-events-text\""
+  filter                 = "logName=\"projects/${data.google_client_config.provider.project}/logs/${local.events_log_prefix}-events-text\""
   destination            = "storage.googleapis.com/${google_storage_bucket.raw-export.name}"
   unique_writer_identity = true
 }
