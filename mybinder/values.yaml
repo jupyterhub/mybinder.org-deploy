@@ -524,7 +524,7 @@ prometheus:
   enabled: true
   alertmanager:
     enabled: false
-  pushgateway:
+  prometheus-pushgateway:
     enabled: false
   server:
     podLabels:
