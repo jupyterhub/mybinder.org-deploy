@@ -1,4 +1,4 @@
-# Terraform deployment info
+# GKE Terraform deployment info
 
 Common configuration for GKE is in terraform/modules/mybinder
 
@@ -36,7 +36,7 @@ The private keys for these will need to be exported to `secrets/config/$deployme
 To get a service-account key for deployment:
 
 ```bash
-cd terraform/staging
+cd staging
 
 terraform output -json private_keys | jq -r '.deployer' > ../../secrets/gke-auth-key-staging2.json
 ```
