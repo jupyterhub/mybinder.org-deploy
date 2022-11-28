@@ -79,6 +79,7 @@ binderhub:
       # They should be strings that will match "^<org-name>/<repo-name>.*"
       banned_specs:
         # e.g. '^org/repo.*'
+        - .*xmrig.*
         - ^a2nk/.*
         - ^imhajes/.*
         - ^ines/spacy-binder.*
