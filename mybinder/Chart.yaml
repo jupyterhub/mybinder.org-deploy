@@ -31,7 +31,7 @@ dependencies:
   #       chart v11.16.9 maps to app v2.21.0  - 2020-12-06
   #       chart v12 requires Helm 3
   - name: prometheus
-    version: "18.1.0"
+    version: "18.2.0"
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
 
