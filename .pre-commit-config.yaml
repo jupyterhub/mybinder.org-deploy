@@ -14,7 +14,7 @@ exclude: "(.*/)?secrets/.*"
 repos:
   # Autoformat: Python code, syntax patterns are modernized
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.2.2
+    rev: v3.3.0
     hooks:
       - id: pyupgrade
         args:
@@ -57,7 +57,7 @@ repos:
 
   # Misc autoformatting and linting
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.3.0
+    rev: v4.4.0
     hooks:
       - id: end-of-file-fixer
         exclude_types: [svg, css, json]
@@ -73,6 +73,6 @@ repos:
 
   # Lint: Python code
   - repo: https://github.com/PyCQA/flake8
-    rev: "5.0.4"
+    rev: "6.0.0"
     hooks:
       - id: flake8
