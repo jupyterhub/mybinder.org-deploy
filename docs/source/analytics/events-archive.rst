@@ -27,8 +27,8 @@ file named ``events-<YYYY>-<MM>-<DD>.jsonl`` that contains data for
 all the launches performed by mybinder.org on that date. All timestamps
 and dates are in `UTC <https://en.wikipedia.org/wiki/Coordinated_Universal_Time>`_.
 
-Each line is a JSON object that conforms to `this JSON Schema 
-<https://github.com/jupyterhub/binderhub/blob/master/binderhub/event-schemas/launch.json>`_. 
+Each line is a JSON object that conforms to `this JSON Schema
+<https://github.com/jupyterhub/binderhub/blob/HEAD/binderhub/event-schemas/launch.json>`_.
 A description of these fields is provided below.
 
 #. **schema** and **version**
@@ -54,14 +54,14 @@ A description of these fields is provided below.
 #. **provider**
 
    Where the launched repository was hosted. Current options are ``GitHub``,
-   ``GitLab`` and ``Git``. 
+   ``GitLab`` and ``Git``.
 
 #. **spec**
 
    Specification identifying the repository / commit immutably & uniquely in
    the provider.
 
-   For GitHub, it is ``<repo>/<commit-spec>``. Example would be ``yuvipanda/example-requirements/master``.
+   For GitHub, it is ``<repo>/<commit-spec>``. Example would be ``yuvipanda/example-requirements/HEAD``.
    For GitLab, it is ``<repo>/<commit-spec>``, except ``repo`` is URL escaped.
    For raw Git repositories, it is ``<repo-url>/<commit-spec>``. ``repo-url`` is full URL escaped
    to the repo and ``commit-spec`` is a full commit hash.
@@ -75,7 +75,7 @@ Example code
 ------------
 
 Some popular ways of reading this event data into a useful data structure are
-provided here. 
+provided here.
 
 ``pandas``
 ~~~~~~~~~~
@@ -83,14 +83,14 @@ provided here.
 .. code-block:: python
 
    import pandas as pd
-   df = pd.read_json("https://archive.analytics.mybinder.org/events-2018-11-05.jsonl", lines=True) 
+   df = pd.read_json("https://archive.analytics.mybinder.org/events-2018-11-05.jsonl", lines=True)
    df
 
 Plain Python
 ~~~~~~~~~~~~
 
 .. code-block:: python
-  
+
    import requests
    import json
 

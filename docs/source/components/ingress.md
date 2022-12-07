@@ -29,7 +29,7 @@ we decided to use nginx instead for the following reasons:
 
 ### Installation
 
-nginx-ingress is installed using the [nginx-ingress helm chart](https://github.com/helm/charts/tree/master/stable/nginx-ingress).
+nginx-ingress is installed using the [nginx-ingress helm chart](https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx).
 This installs the following components:
 
 1. `nginx-ingress-controller` - keeps the HTTPS rules in sync with `Ingress`
@@ -55,7 +55,7 @@ The following ingress objects currently exist:
 - `jupyterhub` - Directs traffic to `hub.mybinder.org`.
   The zero-to-jupyterhub guide has more [documentation](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/advanced.html#ingress).
 - `binderhub` - Directs traffic to `mybinder.org`. You can find more details
-  about this in the [binderhub helm chart](https://github.com/jupyterhub/binderhub/tree/master/helm-chart).
+  about this in the [binderhub helm chart](https://github.com/jupyterhub/binderhub/tree/HEAD/helm-chart).
 - `redirector` - Directs traffic to the HTTP redirector we run for `mybinder.org`.
   This helps do redirects such as `docs.mybinder.org` or `beta.mybinder.org`.
   The list of redirects is configured in `mybinder/values.yaml`. The code
@@ -84,7 +84,7 @@ Kube-lego is deprecated, and we should move to
 
 ### Installation
 
-kube-lego is installed using the [kube-lego](https://github.com/helm/charts/tree/master/stable/kube-lego).
+kube-lego is installed using the [kube-lego](https://github.com/helm/charts/tree/HEAD/stable/kube-lego).
 
 ### Configuration
 

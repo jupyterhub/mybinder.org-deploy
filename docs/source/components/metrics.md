@@ -87,7 +87,7 @@ these containers using right now', etc. These are usually prefixed with
 
 #### HTTP request information
 
-We use the [nginx-ingress helm chart](https://github.com/helm/charts/tree/master/stable/nginx-ingress)
+We use the [nginx-ingress helm chart](https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx)
 to let all HTTP traffic into our cluster. This allows us to use
 the [nginx VTS exporter](https://hnlq715.github.io/nginx-vts-exporter/)
 to collect information in prometheus about requests / responses.
@@ -103,7 +103,7 @@ These are currently somewhat limited, and prefixed with `binderhub_`
 ### Configuration
 
 Prometheus is installed using the
-[prometheus helm chart](https://github.com/helm/charts/tree/master/stable/prometheus).
+[prometheus helm chart](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus).
 This installs the following components:
 
 1. Prometheus server (storage + querying)
@@ -115,6 +115,6 @@ kubernetes component), and the prometheus helm chart has configuration
 that adds those as targets.
 
 You can see the available options for configuring the prometheus
-helm chart in its [values.yaml](https://github.com/helm/charts/blob/master/stable/prometheus/values.yaml)
+helm chart in its [values.yaml](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus/values.yaml)
 file. You can see the current configuration we have under the `prometheus`
 section of `mybinder/values.yaml`, `config/prod.yaml` and `config/staging.yaml`.

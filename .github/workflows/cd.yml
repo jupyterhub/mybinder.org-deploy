@@ -12,12 +12,12 @@ name: Continuous Deployment
 # ref: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#concurrency
 concurrency: deploy
 
-# Only trigger the workflow when pushing to master or a label is applied to a
+# Only trigger the workflow when pushing to main or a label is applied to a
 # Pull Request
 on:
   push:
     branches:
-      - master
+      - main
       - test-this-pr/**
   pull_request:
     types: [labeled]
@@ -63,10 +63,10 @@ jobs:
   # images that the jobs to deploy to the production environments depend on.
   staging-deploy:
     # Only run the job if the 'test-staging' label is present OR if the event
-    # is a push to master
+    # is a push to main
     if: |
       (github.event.label.name == 'test-staging') ||
-      ((github.event_name == 'push') && (github.ref == 'refs/heads/master')) ||
+      ((github.event_name == 'push') && (github.ref == 'refs/heads/main')) ||
       ((github.event_name == 'push') && contains(github.ref, 'test-this-pr'))
     runs-on: ubuntu-20.04
     # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#example-preventing-a-specific-failing-matrix-job-from-failing-a-workflow-run
@@ -144,7 +144,7 @@ jobs:
 
       - name: "Stage 1: Install and setup helm ${{ env.HELM_VERSION }}"
         run: |
-          curl -sf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
+          curl -sf https://raw.githubusercontent.com/helm/helm/HEAD/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
           helm dependency update ./mybinder
 
       # Action Repo: https://github.com/sliteteam/github-action-git-crypt-unlock
@@ -195,8 +195,8 @@ jobs:
     # - https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idneeds
     needs: staging-deploy
 
-    # Only run job if the event is a push to master
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    # Only run job if the event is a push to main
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
     runs-on: ubuntu-20.04
 
@@ -285,7 +285,7 @@ jobs:
 
       - name: "Stage 1: Install and setup helm ${{ env.HELM_VERSION }}"
         run: |
-          curl -sf https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
+          curl -sf https://raw.githubusercontent.com/helm/helm/HEAD/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
           helm dependency update ./mybinder
 
       - name: "Stage 2: Unlock git-crypt secrets"
