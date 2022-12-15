@@ -135,3 +135,64 @@ resource "aws_ecr_repository" "image_repo" {
 output "ecr_repo_url" {
   value = aws_ecr_repository.image_repo.repository_url
 }
+
+# Create an IAM role that has permissions to manage the contents of the ECR repo
+resource "aws_iam_role" "k8s_ecr_iam_role" {
+  name = "${local.cluster_name}-k8s-ecr-iam-role"
+
+  # Terraform's "jsonencode" function converts a Terraform expression result to
+  # valid JSON syntax.
+  # This content was copied from yet-to-be-merged docs:
+  # https://github.com/jupyterhub/binderhub/pull/1055/files#diff-12fbfe728e3edf4301ff30644079395e48e3eeb466ac9bc6cedad95c830a3fe6R185-R233
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        "Action": [
+          "ecr:ListImages",
+          "sts:AssumeRole"
+        ],
+        "Effect": "Allow",
+        "Resource": "${aws_ecr_repository.image_repo.arn}*",
+        "Sid": "ListImagesInRepository"
+      },
+      {
+        "Action": [
+          "ecr:GetAuthorizationToken",
+          "sts:AssumeRole"
+        ],
+        "Effect": "Allow",
+        "Resource": "*",
+        "Sid": "GetAuthorizationToken"
+      },
+      {
+        "Action": [
+          "sts:AssumeRole",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:GetRepositoryPolicy",
+          "ecr:DescribeRepositories",
+          "ecr:ListImages",
+          "ecr:DescribeImages",
+          "ecr:BatchGetImage",
+          "ecr:InitiateLayerUpload",
+          "ecr:UploadLayerPart",
+          "ecr:CompleteLayerUpload",
+          "ecr:PutImage"
+        ],
+        "Effect": "Allow",
+        "Resource": "${aws_ecr_repository.image_repo.arn}*",
+        "Sid": "ManageRepositoryContents"
+      },
+      {
+        "Action": [
+          "ecr:CreateRepository",
+          "sts:AssumeRole"
+        ],
+        "Effect": "Allow",
+        "Resource": "${aws_ecr_repository.image_repo.arn}*",
+        "Sid": "CreateRepository"
+      }
+    ]
+  })
+}
