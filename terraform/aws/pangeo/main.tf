@@ -1,10 +1,19 @@
-locals {
-  cluster_name = "pangeo-mybinder"
-  region       = "us-west-2"
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "~> 4.42"
+    }
+  }
 }
 
 provider "aws" {
   region = local.region
+}
+
+locals {
+  cluster_name = "pangeo-mybinder"
+  region       = "us-west-2"
 }
 
 data "aws_availability_zones" "available" {}
