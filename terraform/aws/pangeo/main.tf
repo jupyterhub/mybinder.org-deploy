@@ -125,3 +125,13 @@ module "eks" {
     }
   }
 }
+
+# Setup an image repository within an Elastic Container Registry
+# AWS accounts are automatically assigned a private ECR, so no need to create one
+resource "aws_ecr_repository" "image_repo" {
+  name = local.cluster_name
+}
+
+output "ecr_repo_url" {
+  value = aws_ecr_repository.image_repo.repository_url
+}
