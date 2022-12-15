@@ -196,3 +196,34 @@ resource "aws_iam_role" "k8s_ecr_iam_role" {
     ]
   })
 }
+
+# Create an IAM user that has enough permissions to access the EKS cluster and
+# read it, therefore, allowing us to deploy to the cluster from CI/CD
+resource "aws_iam_user" "continuous_deployer" {
+  name = "${local.cluster_name}-continuous-deployer"
+}
+
+resource "aws_iam_access_key" "continuous_deployer_access_key" {
+  user = aws_iam_user.continuous_deployer.name
+}
+
+resource "aws_iam_user_policy" "continuous_deployer_policy" {
+  name = "eks-readonly"
+  user = aws_iam_user.continuous_deployer.name
+
+  policy = jsonencode({
+    "Version" = "2012-10-17"
+    "Statement" = [
+      {
+        "Effect": "Allow",
+        "Action": "eks:DescribeCluster",
+        "Resource": "*"
+      }
+    ]
+  })
+}
+
+output "ci_deployer_key" {
+  value     = aws_iam_access_key.continuous_deployer_access_key.secret
+  sensitive = true
+}
