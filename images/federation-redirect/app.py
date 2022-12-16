@@ -40,19 +40,6 @@ CONFIG = {
             versions="https://gke.mybinder.org/versions",
             prime=True,
         ),
-        "ovh": dict(
-            url="https://ovh.mybinder.org",
-            weight=1,
-            health="https://ovh.mybinder.org/health",
-            # health="https://httpbin.org/status/404",
-            versions="https://ovh.mybinder.org/versions",
-        ),
-        "gesis": dict(
-            url="https://gesis.mybinder.org",
-            weight=200,
-            health="https://gesis.mybinder.org/health",
-            versions="https://gesis.mybinder.org/versions",
-        ),
     },
 }
 

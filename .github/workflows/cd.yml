@@ -226,14 +226,6 @@ jobs:
             # https://github.com/jupyterhub/mybinder.org-deploy/issues/2252
             experimental: true
 
-          - federation_member: ovh
-            binder_url: https://ovh.mybinder.org
-            hub_url: https://hub-binder.mybinder.ovh
-            # image-prefix should match ovh registry config in secrets/config/ovh.yaml
-            chartpress_args: "--push --image-prefix=3i2li627.gra7.container-registry.ovh.net/binder/mybinder-"
-            helm_version: ""
-            experimental: false
-
           - federation_member: ovh2
             binder_url: https://ovh2.mybinder.org
             hub_url: https://hub.ovh2.mybinder.org
@@ -292,15 +284,6 @@ jobs:
         uses: sliteteam/github-action-git-crypt-unlock@8b1fa3ccc81e322c5c45fbab261eee46513fd3f8
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
-
-      # Action Repo: https://github.com/Azure/docker-login
-      - name: "Stage 3: Login to Docker registry (OVH)"
-        if: matrix.federation_member == 'ovh'
-        uses: azure/docker-login@v1
-        with:
-          login-server: 3i2li627.gra7.container-registry.ovh.net
-          username: ${{ secrets.DOCKER_USERNAME_OVH }}
-          password: ${{ secrets.DOCKER_PASSWORD_OVH }}
 
       - name: "Stage 3: Run chartpress to update values.yaml"
         run: |
