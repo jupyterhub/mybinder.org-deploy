@@ -621,7 +621,7 @@ federationRedirect:
       versions: https://ovh.mybinder.org/versions
     ovh2:
       url: https://ovh2.mybinder.org
-      weight: 0
+      weight: 100
       health: https://ovh2.mybinder.org/health
       versions: https://ovh2.mybinder.org/versions
     turing:
