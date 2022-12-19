@@ -35,7 +35,7 @@ Amongst other things the guide contains:
 - [How to do a deployment](https://mybinder-sre.readthedocs.io/en/latest/deployment/how.html)
 - [What happens during a deployment?](https://mybinder-sre.readthedocs.io/en/latest/deployment/what.html)
 - [Incident reports for past incidents](https://mybinder-sre.readthedocs.io/en/latest/incident-reports/incident_reports_toc.html)
-- [Incident report template](https://github.com/jupyterhub/mybinder.org-deploy/blob/master/docs/source/incident-reports/template-incident-report.md)
+- [Incident report template](https://github.com/jupyterhub/mybinder.org-deploy/blob/HEAD/docs/source/incident-reports/template-incident-report.md)
 
 ## Key Links
 

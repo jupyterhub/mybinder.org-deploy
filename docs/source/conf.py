@@ -46,7 +46,7 @@ html_theme_options = {
 html_context = {
     "github_user": "jupyterhub",
     "github_repo": "mybinder.org-deploy",
-    "github_version": "master",
+    "github_version": "HEAD",
     "doc_path": "docs/source",
 }
 

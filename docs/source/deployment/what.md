@@ -248,7 +248,7 @@ We run the tests in `tests/` with `pytest` to validate that the deployment succe
 These try to be as thorough as possible, simulating the tests a human would do to
 ensure that the site works as required.
 
-Look at the docstrings in the files under [`tests/`](https://github.com/jupyterhub/mybinder.org-deploy/tree/master/tests)
+Look at the docstrings in the files under [`tests/`](https://github.com/jupyterhub/mybinder.org-deploy/tree/HEAD/tests)
 to see what are the tests being run.
 
 If all the tests succeed, we can consider the staging deployment success!

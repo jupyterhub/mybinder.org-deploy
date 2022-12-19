@@ -168,7 +168,7 @@ the name of the repository + the commit hash. This lets us check if
 the image has already been built, and if so, we can skip the building step.
 
 The code for generating the image name from repository information is
-in [binderhub's builder.py](https://github.com/jupyterhub/binderhub/blob/master/binderhub/builder.py),
+in [binderhub's builder.py](https://github.com/jupyterhub/binderhub/blob/HEAD/binderhub/builder.py),
 under `_generate_build_name`.
 
 Sometimes, we _do_ want to invalidate all previously built images - for example,

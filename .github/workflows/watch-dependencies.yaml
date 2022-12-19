@@ -94,7 +94,7 @@ jobs:
         uses: peter-evans/create-pull-request@v4.2.3
         # Don't try open PRs in forks or when the job is triggered by a push to
         # a branch other than the default branch.
-        if: github.repository == 'jupyterhub/mybinder.org-deploy' && (github.event_name != 'push' || github.ref == 'refs/heads/master')
+        if: github.repository == 'jupyterhub/mybinder.org-deploy' && (github.event_name != 'push' || github.ref == 'refs/heads/main')
         with:
           token: "${{ secrets.jupyterhub_bot_pat }}"
           author: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
@@ -131,29 +131,29 @@ jobs:
           #
           - chart_dep_name: binderhub
             chart_dep_chart_changelog_url: ""
-            chart_dep_app_changelog_url: "https://github.com/jupyterhub/binderhub/blob/master/CHANGES.md"
-            chart_dep_source_url: "https://github.com/jupyterhub/binderhub/tree/master/helm-chart"
+            chart_dep_app_changelog_url: "https://github.com/jupyterhub/binderhub/blob/HEAD/CHANGES.md"
+            chart_dep_source_url: "https://github.com/jupyterhub/binderhub/tree/HEAD/helm-chart"
             chart_dep_devel_flag: "--devel"
             github_repo: jupyterhub/binderhub
 
           - chart_dep_name: ingress-nginx
-            chart_dep_chart_changelog_url: "https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx#upgrading-chart"
-            chart_dep_app_changelog_url: "https://github.com/kubernetes/ingress-nginx/blob/master/Changelog.md"
-            chart_dep_source_url: "https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx"
+            chart_dep_chart_changelog_url: "https://github.com/kubernetes/ingress-nginx/tree/HEAD/charts/ingress-nginx#upgrading-chart"
+            chart_dep_app_changelog_url: "https://github.com/kubernetes/ingress-nginx/blob/HEAD/Changelog.md"
+            chart_dep_source_url: "https://github.com/kubernetes/ingress-nginx/tree/HEAD/charts/ingress-nginx"
             chart_dep_devel_flag: ""
             github_repo: ""
 
           - chart_dep_name: prometheus
-            chart_dep_chart_changelog_url: "https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus#upgrading-chart"
-            chart_dep_app_changelog_url: "https://github.com/prometheus/prometheus/blob/master/CHANGELOG.md"
-            chart_dep_source_url: https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus
+            chart_dep_chart_changelog_url: "https://github.com/prometheus-community/helm-charts/tree/HEAD/charts/prometheus#upgrading-chart"
+            chart_dep_app_changelog_url: "https://github.com/prometheus/prometheus/blob/HEAD/CHANGELOG.md"
+            chart_dep_source_url: https://github.com/prometheus-community/helm-charts/tree/HEAD/charts/prometheus
             chart_dep_devel_flag: ""
             github_repo: ""
 
           - chart_dep_name: grafana
             chart_dep_chart_changelog_url: "https://github.com/grafana/helm-charts/tree/main/charts/grafana#upgrading-an-existing-release-to-a-new-major-version"
-            chart_dep_app_changelog_url: "https://github.com/grafana/grafana/blob/master/CHANGELOG.md"
-            chart_dep_source_url: "https://github.com/grafana/helm-charts/tree/main/charts/grafana"
+            chart_dep_app_changelog_url: "https://github.com/grafana/grafana/blob/HEAD/CHANGELOG.md"
+            chart_dep_source_url: "https://github.com/grafana/helm-charts/tree/HEAD/charts/grafana"
             chart_dep_devel_flag: ""
             github_repo: ""
 
@@ -223,7 +223,7 @@ jobs:
         uses: peter-evans/create-pull-request@v4.2.3
         # Don't try open PRs in forks or when the job is triggered by a push to
         # a branch other than the default branch.
-        if: github.repository == 'jupyterhub/mybinder.org-deploy' && (github.event_name != 'push' || github.ref == 'refs/heads/master')
+        if: github.repository == 'jupyterhub/mybinder.org-deploy' && (github.event_name != 'push' || github.ref == 'refs/heads/main')
         with:
           token: "${{ secrets.jupyterhub_bot_pat }}"
           author: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>

@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import requests
 
 
-def build_binder(repo, ref="master", binder_url="https://mybinder.org"):
+def build_binder(repo, ref="HEAD", binder_url="https://mybinder.org"):
     """Launch a binder"""
     url = binder_url + f"/build/gh/{repo}/{ref}"
     r = requests.get(url, stream=True)
@@ -19,7 +19,7 @@ def build_binder(repo, ref="master", binder_url="https://mybinder.org"):
 
 
 def launch_binder(
-    n, repo, ref="master", filepath=None, binder_url="https://mybinder.org", delay=10
+    n, repo, ref="HEAD", filepath=None, binder_url="https://mybinder.org", delay=10
 ):
     """Launch a new binder from `repo` at `ref`
 
@@ -100,7 +100,7 @@ def launch_binder(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("repo", type=str, help="The GitHub repo to build")
-    parser.add_argument("--ref", default="master", help="The ref of the repo to build")
+    parser.add_argument("--ref", default="HEAD", help="The ref of the repo to build")
     parser.add_argument("--filepath", default=None, help="The notebook to open")
     parser.add_argument(
         "--results", default="results.json", help="File name to store results in"
