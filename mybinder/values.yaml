@@ -611,7 +611,7 @@ federationRedirect:
       versions: https://gke.mybinder.org/versions
     gesis:
       url: https://gesis.mybinder.org
-      weight: 0
+      weight: 100
       health: https://gesis.mybinder.org/health
       versions: https://gesis.mybinder.org/versions
     ovh:
