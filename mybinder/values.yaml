@@ -159,8 +159,6 @@ binderhub:
       build_image: quay.io/jupyterhub/repo2docker:2022.10.0-89.g49162fc
       per_repo_quota: 100
       per_repo_quota_higher: 200
-      build_memory_limit: "3G"
-      build_memory_request: "1G"
       cors_allow_origin: "*"
 
       banner_message: |
@@ -207,6 +205,9 @@ binderhub:
               g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
             })();
           }
+    KubernetesBuildExecutor:
+      memory_limit: "3G"
+      memory_request: "1G"
 
   extraConfig:
     # Send Events to StackDriver on Google Cloud
@@ -248,8 +249,8 @@ binderhub:
       enabled: true
       type: kube-lego
 
+  imageBuilderType: dind
   dind:
-    enabled: true
     resources:
       requests:
         cpu: "0.5"
@@ -264,8 +265,6 @@ binderhub:
     # cull images until only 40% are used.
     imageGCThresholdHigh: 80
     imageGCThresholdLow: 40
-    host:
-      enabled: false
 
   jupyterhub:
     cull:
