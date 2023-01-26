@@ -3,8 +3,8 @@ from yaml import safe_load as load
 
 print("Fetching the SHA for live BinderHub and repo2docker...")
 
-# Load master requirements
-url_requirements = "https://raw.githubusercontent.com/jupyterhub/mybinder.org-deploy/master/mybinder/Chart.yaml"
+# Load latest requirements
+url_requirements = "https://raw.githubusercontent.com/jupyterhub/mybinder.org-deploy/HEAD/mybinder/Chart.yaml"
 requirements = load(requests.get(url_requirements).text)
 binderhub_dep = [
     ii for ii in requirements["dependencies"] if ii["name"] == "binderhub"
@@ -18,8 +18,8 @@ jupyterhub_dep = [
 ][0]
 jhub_live = jupyterhub_dep["version"].split("-")[-1]
 
-# Load master repo2docker
-url_helm_chart = "https://raw.githubusercontent.com/jupyterhub/mybinder.org-deploy/master/mybinder/values.yaml"
+# Load latest repo2docker
+url_helm_chart = "https://raw.githubusercontent.com/jupyterhub/mybinder.org-deploy/HEAD/mybinder/values.yaml"
 helm_chart = requests.get(url_helm_chart)
 helm_chart = load(helm_chart.text)
 r2d_live = helm_chart["binderhub"]["config"]["BinderHub"]["build_image"].split(":")[-1]
@@ -29,7 +29,7 @@ print("Fetching latest commit SHA for BinderHub and repo2docker...")
 # Load latest r2d commit from dockerhub
 url = "https://hub.docker.com/v2/repositories/jupyter/repo2docker/tags/"
 resp = requests.get(url)
-r2d_master = resp.json()["results"][0]["name"]
+r2d_head = resp.json()["results"][0]["name"]
 
 # Load latest binderhub and jupyterhub commits
 url_helm_chart = (
@@ -48,7 +48,7 @@ url_bhub = "https://github.com/jupyterhub/binderhub/compare/{}...{}".format(
     bhub_live, latest_hash["binderhub"]
 )
 url_r2d = (
-    f"https://github.com/jupyterhub/repo2docker/compare/{r2d_live}...{r2d_master[:8]}"
+    f"https://github.com/jupyterhub/repo2docker/compare/{r2d_live}...{r2d_head[:8]}"
 )
 url_jhub = (
     "https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/{}...{}".format(

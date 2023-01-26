@@ -29,7 +29,7 @@ Deployments to mybinder.org should be:
    not require specific sysadmin knowledge.
 
 3. **Timely**. We deploy changes to repo2docker and BinderHub within a few days of
-   them being merged into master.
+   them being merged into main.
 
 These are all **aspirational** - we strive for hitting the above points,
 but recognize that work and life may get in the way of doing this perfectly.
@@ -98,7 +98,7 @@ The following lines describe how to point mybinder.org to the new repo2docker im
 
 1.  Merge changes to repo2docker.
 2.  Open the [branches page for repo2docker](https://travis-ci.org/jupyter/repo2docker/branches).
-    And click on the number for the latest build on "Master".
+    And click on the number for the latest build on "main".
 3.  Wait for the build for your PR merge to pass (it will say "#NNN passed").
     If it does, then continue to step 4. If it doesn't, take a look at the error message, and debug as needed
     until they pass.
@@ -144,7 +144,7 @@ The following lines describe how to point mybinder.org to the new repo2docker im
 ### Deploying to _both_ `staging` then `prod`
 
 Deploying a change involves making a PR with your desired change and merging it to
-master.
+main.
 
 1.  Make the changes as described above [on your fork of this repo](https://github.com/jupyterhub/mybinder.org-deploy).
 2.  Keep track of the **hashes** that were updated. You should have both the _old_ hash that
@@ -152,7 +152,7 @@ master.
 3.  If you haven't already, run the `list_new_commits.py` script in the `scripts/`
     folder. This will print out a URL that describes the changes made to both
     BinderHub and repo2docker.
-4.  Make a PR to the `master` branch with the changes you want.
+4.  Make a PR to the `main` branch with the changes you want.
 
     - Name the PR like so: `<TOOL-CHANGED>: <OLD-HASH>...<NEW-HASH>`
     - In the description of the PR, paste the full URL that you printed out
@@ -197,10 +197,10 @@ In this scenario, a user with `OWNER`, `COLLABORATOR` or `MEMBER` association wi
 The final option to deploy to staging only is by editing `staging`-only config files. To deploy
 to staging only, follow these steps:
 
-1. Make changes to [`config/staging.yaml`](https://github.com/jupyterhub/mybinder.org-deploy/blob/master/config/staging.yaml)
+1. Make changes to [`config/staging.yaml`](https://github.com/jupyterhub/mybinder.org-deploy/blob/HEAD/config/staging.yaml)
    on your fork. This file contains configuration for Helm that will **override**
    whatever is in `mybinder/values.yaml`.
-2. Make a PR to the `master` branch, and review, accept, and merge this PR.
+2. Make a PR to the `main` branch, and review, accept, and merge this PR.
    **In this case, you can merge your own PR**.
    This will make GitHub Actions deploy the changes
    to [staging.mybinder.org](https://staging.mybinder.org), and run tests in the `tests/`

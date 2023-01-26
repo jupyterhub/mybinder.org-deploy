@@ -184,18 +184,56 @@ resource "harbor_project" "mybinder-builds" {
   name = "mybinder-builds"
 }
 
-resource "harbor_robot_account" "builder" {
-  name        = "builder"
-  description = "BinderHub builder: push new user images"
-  project_id  = harbor_project.mybinder-builds.id
-  actions     = ["push", "pull"]
+# we should be able to use robot accounts
+# after an update to Harbor and the harbor provider
+# resource "harbor_robot_account" "builder" {
+#   name        = "builder"
+#   description = "BinderHub builder: push new user images"
+#   project_id  = harbor_project.mybinder-builds.id
+#   actions     = ["push", "pull"]
+# }
+#
+# resource "harbor_robot_account" "user-puller" {
+#   name        = "user-puller"
+#   description = "Pull access to user images"
+#   project_id  = harbor_project.mybinder-builds.id
+#   actions     = ["pull"]
+# }
+
+resource "random_password" "builder" {
+  length  = 16
+  special = true
 }
 
-resource "harbor_robot_account" "user-puller" {
-  name        = "user-puller"
-  description = "Pull access to user images"
-  project_id  = harbor_project.mybinder-builds.id
-  actions     = ["pull"]
+resource "random_password" "user-puller" {
+  length  = 16
+  special = true
+}
+
+resource "harbor_user" "builder" {
+  username = "mybinder-builder"
+  password = random_password.builder.result
+  full_name = "MyBinder Builder"
+  email = "builder@mybinder.org"
+}
+
+resource "harbor_user" "user-puller" {
+  username = "mybinder-puller"
+  password = random_password.user-puller.result
+  full_name = "MyBinder Puller"
+  email = "puller@mybinder.org"
+}
+
+resource "harbor_project_member_user" "builder" {
+  project_id    = harbor_project.mybinder-builds.id
+  user_name     = harbor_user.builder.username
+  role          = "developer"
+}
+
+resource "harbor_project_member_user" "user-puller" {
+  project_id    = harbor_project.mybinder-builds.id
+  user_name     = harbor_user.user-puller.username
+  role          = "limitedguest"
 }
 
 # retention policies created by hand
@@ -237,11 +275,11 @@ output "registry_admin_password" {
 }
 
 output "registry_builder_token" {
-  value     = harbor_robot_account.builder.token
+  value     = harbor_user.builder.password
   sensitive = true
 }
 
 output "registry_user_puller_token" {
-  value     = harbor_robot_account.user-puller.token
+  value     = harbor_user.user-puller.password
   sensitive = true
 }
