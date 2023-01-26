@@ -223,7 +223,12 @@ resource "aws_iam_user_policy" "continuous_deployer_policy" {
   })
 }
 
-output "ci_deployer_key" {
+# Output AWS access credentials for the CI deployer IAM user
+output "ci_deployer_access_key_id" {
+  value = aws_iam_access_key.continuous_deployer_access_key.id
+}
+
+output "ci_deployer_secret_access_key" {
   value     = aws_iam_access_key.continuous_deployer_access_key.secret
   sensitive = true
 }
