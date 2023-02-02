@@ -166,7 +166,6 @@ async def main(release="staging", project=None, concurrency=20, dry_run=True):
         auth=aiohttp.BasicAuth("_json_key", password),
         connector=aiohttp.TCPConnector(limit=2 * concurrency),
     ) as session:
-
         print("Fetching images")
         tag_futures = []
         matches = 0
