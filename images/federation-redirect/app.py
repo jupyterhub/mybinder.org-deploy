@@ -117,7 +117,7 @@ def rendezvous_rank(buckets, key):
     all buckets, sorted in decreasing order (highest ranked first).
     """
     ranking = []
-    for (bucket, weight) in buckets:
+    for bucket, weight in buckets:
         # The particular hash function doesn't matter a lot, as long as it is
         # one that maps the key to a fixed sized value and distributes the keys
         # uniformly across the output space
