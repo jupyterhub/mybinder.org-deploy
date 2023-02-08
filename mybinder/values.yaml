@@ -135,6 +135,10 @@ binderhub:
           # 2022-11-18
           config:
             quota: 500
+        - pattern: ^inchinn1/BMSC3393.*
+          # 2023-02-06
+          config:
+            quota: 300
 
     GitRepoProvider:
       banned_specs:
