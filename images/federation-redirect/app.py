@@ -62,6 +62,10 @@ def get_config(config_path):
         # can modify the dict while iterating over it
         if config["hosts"][h] is None:
             config["hosts"].pop(h)
+        # remove zero-weight entries
+        if config["hosts"][h].get("weight", 0) == 0:
+            app_log.warning(f"Removing host {h} with 0 weight")
+            config["hosts"].pop(h)
         # remove trailing slashes in host urls
         # these can cause 404 after redirection (RedirectHandler) and we don't
         # realize it

@@ -162,8 +162,6 @@ federationRedirect:
     # unset the rest of the federation
     gesis:
       weight: 0
-    ovh:
-      weight: 0
     turing:
       url: https://binder-staging.mybinder.turing.ac.uk
       weight: 4
