@@ -36,6 +36,7 @@ binderhub:
   ingress:
     hosts:
       - ovh2.mybinder.org
+      - ovh.mybinder.org
 
   jupyterhub:
     singleuser:
