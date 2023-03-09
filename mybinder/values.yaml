@@ -160,7 +160,7 @@ binderhub:
 
     BinderHub:
       use_registry: true
-      build_image: quay.io/jupyterhub/repo2docker:2022.10.0-113.g8c0f49e
+      build_image: quay.io/jupyterhub/repo2docker:2022.10.0-128.g4c6b5bc
       per_repo_quota: 100
       per_repo_quota_higher: 200
       cors_allow_origin: "*"
@@ -347,27 +347,6 @@ binderhub:
         enabled: true
         # replicas set in config/<deployment>
     singleuser:
-      cmd:
-        - python3
-        - "-c"
-        - |
-          import os
-          import sys
-
-          try:
-              import jupyterlab
-              major = int(jupyterlab.__version__.split(".", 1)[0])
-          except Exception:
-              have_lab = False
-          else:
-              have_lab = major >= 3
-
-          if have_lab:
-              # if recent-enough lab is available, make it the default UI
-              sys.argv.insert(1, "--NotebookApp.default_url=/lab/")
-
-          # launch the notebook server
-          os.execvp("jupyter-notebook", sys.argv)
       # clear singleuser.defaultUrl config from chart
       defaultUrl:
       cloudMetadata:

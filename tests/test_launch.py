@@ -11,7 +11,7 @@ def test_launch_binder(binder_url):
     """
     # Known good version of this repo
     repo = "binder-examples/requirements"
-    ref = "fa84f12"
+    ref = "50533eb"
     build_url = binder_url + f"/build/gh/{repo}/{ref}"
     r = requests.get(build_url, stream=True)
     r.raise_for_status()
