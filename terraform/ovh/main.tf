@@ -301,11 +301,20 @@ output "registry_admin_password" {
   sensitive = true
 }
 
+output "registry_builder_name" {
+  value     = harbor_robot_account.builder.full_name
+  sensitive = true
+}
+
 output "registry_builder_token" {
   value     = harbor_robot_account.builder.secret
   sensitive = true
 }
 
+output "registry_user_puller_name" {
+  value     = harbor_robot_account.user-puller.full_name
+  sensitive = true
+}
 output "registry_user_puller_token" {
   value     = harbor_robot_account.user-puller.secret
   sensitive = true
