@@ -260,12 +260,12 @@ resource "harbor_project_member_user" "user-puller" {
 resource "harbor_retention_policy" "builds" {
   scope    = harbor_project.mybinder-builds.id
   schedule = "Weekly"
-  rule {
-    repo_matching        = "**"
-    tag_matching         = "**"
-    most_recently_pulled = 1
-    untagged_artifacts   = false
-  }
+  # rule {
+  #   repo_matching        = "**"
+  #   tag_matching         = "**"
+  #   most_recently_pulled = 1
+  #   untagged_artifacts   = false
+  # }
   rule {
     repo_matching          = "**"
     tag_matching           = "**"
