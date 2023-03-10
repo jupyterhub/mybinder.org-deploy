@@ -9,21 +9,19 @@ terraform {
       version = "~> 3.3.2"
     }
     harbor = {
-      source = "BESTSELLER/harbor"
-      # can't use 3.0, which requires harbor 2.2 for robot accounts
-      # OVH deploys 2.0.1
-      version = "~> 2.0.11"
+      source  = "BESTSELLER/harbor"
+      version = "~> 3.0"
     }
   }
   # store state on gcs, like other clusters
   backend "s3" {
-      bucket = "tf-state-ovh"
-      key    = "terraform.tfstate"
-      region = "gra"
-      endpoint = "s3.gra.io.cloud.ovh.net"
-      skip_credentials_validation = true
-      skip_region_validation = true
-    }
+    bucket                      = "tf-state-ovh"
+    key                         = "terraform.tfstate"
+    region                      = "gra"
+    endpoint                    = "s3.gra.io.cloud.ovh.net"
+    skip_credentials_validation = true
+    skip_region_validation      = true
+  }
 }
 
 provider "ovh" {
@@ -86,10 +84,10 @@ resource "ovh_cloud_project_kube_nodepool" "core" {
   kube_id      = ovh_cloud_project_kube.cluster.id
   name         = "core-202211"
   # b2-15 is 4 core, 15GB
-  flavor_name   = "b2-15"
-  max_nodes     = 3
-  min_nodes     = 1
-  autoscale     = true
+  flavor_name = "b2-15"
+  max_nodes   = 3
+  min_nodes   = 1
+  autoscale   = true
   template {
     metadata {
       labels = {
@@ -110,10 +108,10 @@ resource "ovh_cloud_project_kube_nodepool" "user-a" {
   kube_id      = ovh_cloud_project_kube.cluster.id
   name         = "user-202211a"
   # r2-120 is 8 core, 120GB
-  flavor_name   = "r2-120"
-  max_nodes     = 6
-  min_nodes     = 1
-  autoscale     = true
+  flavor_name = "r2-120"
+  max_nodes   = 6
+  min_nodes   = 1
+  autoscale   = true
   template {
     metadata {
       labels = {
@@ -150,8 +148,8 @@ data "ovh_cloud_project_capabilities_containerregistry_filter" "registry_plan" {
   service_name = local.service_name
   # SMALL is 200GB (too small)
   # MEDIUM is 600GB
-  # Large is 5TiB
-  plan_name = "MEDIUM"
+  # LARGE is 5TiB
+  plan_name = "LARGE"
   region    = "GRA"
 }
 
@@ -186,19 +184,37 @@ resource "harbor_project" "mybinder-builds" {
 
 # we should be able to use robot accounts
 # after an update to Harbor and the harbor provider
-# resource "harbor_robot_account" "builder" {
-#   name        = "builder"
-#   description = "BinderHub builder: push new user images"
-#   project_id  = harbor_project.mybinder-builds.id
-#   actions     = ["push", "pull"]
-# }
-#
-# resource "harbor_robot_account" "user-puller" {
-#   name        = "user-puller"
-#   description = "Pull access to user images"
-#   project_id  = harbor_project.mybinder-builds.id
-#   actions     = ["pull"]
-# }
+resource "harbor_robot_account" "builder" {
+  name        = "builder"
+  description = "BinderHub builder: push new user images"
+  level       = "project"
+  permissions {
+    access {
+      action   = "push"
+      resource = "repository"
+    }
+    access {
+      action   = "pull"
+      resource = "repository"
+    }
+    kind      = "project"
+    namespace = harbor_project.mybinder-builds.name
+  }
+}
+
+resource "harbor_robot_account" "user-puller" {
+  name        = "user-puller"
+  description = "Pull access to user images"
+  level       = "project"
+  permissions {
+    access {
+      action   = "pull"
+      resource = "repository"
+    }
+    kind      = "project"
+    namespace = harbor_project.mybinder-builds.name
+  }
+}
 
 resource "random_password" "builder" {
   length  = 16
@@ -210,52 +226,63 @@ resource "random_password" "user-puller" {
   special = true
 }
 
+# TODO: delete after migrating to robot accounts
 resource "harbor_user" "builder" {
-  username = "mybinder-builder"
-  password = random_password.builder.result
+  username  = "mybinder-builder"
+  password  = random_password.builder.result
   full_name = "MyBinder Builder"
-  email = "builder@mybinder.org"
+  email     = "builder@mybinder.org"
 }
 
 resource "harbor_user" "user-puller" {
-  username = "mybinder-puller"
-  password = random_password.user-puller.result
+  username  = "mybinder-puller"
+  password  = random_password.user-puller.result
   full_name = "MyBinder Puller"
-  email = "puller@mybinder.org"
+  email     = "puller@mybinder.org"
 }
 
 resource "harbor_project_member_user" "builder" {
-  project_id    = harbor_project.mybinder-builds.id
-  user_name     = harbor_user.builder.username
-  role          = "developer"
+  project_id = harbor_project.mybinder-builds.id
+  user_name  = harbor_user.builder.username
+  role       = "developer"
 }
 
 resource "harbor_project_member_user" "user-puller" {
-  project_id    = harbor_project.mybinder-builds.id
-  user_name     = harbor_user.user-puller.username
-  role          = "limitedguest"
+  project_id = harbor_project.mybinder-builds.id
+  user_name  = harbor_user.user-puller.username
+  role       = "limitedguest"
 }
+
+# END delete
 
 # retention policies created by hand
 # OVH harbor is too old for terraform provider (2.0.1, need 2.2)
-# resource "harbor_retention_policy" "user" {
-#   scope    = harbor_project.mybinder-builds.id
-#   schedule = "weekly"
-#   rule {
-#     most_recently_pulled = 1
-#   }
-#   rule {
-#     n_days_since_last_pull = 30
-#   }
-#   rule {
-#     n_days_since_last_push = 7
-#   }
-# }
+resource "harbor_retention_policy" "builds" {
+  scope    = harbor_project.mybinder-builds.id
+  schedule = "Weekly"
+  # rule {
+  #   repo_matching        = "**"
+  #   tag_matching         = "**"
+  #   most_recently_pulled = 1
+  #   untagged_artifacts   = false
+  # }
+  rule {
+    repo_matching          = "**"
+    tag_matching           = "**"
+    n_days_since_last_pull = 30
+    untagged_artifacts     = false
+  }
+  rule {
+    repo_matching          = "**"
+    tag_matching           = "**"
+    n_days_since_last_push = 7
+    untagged_artifacts     = false
+  }
+}
 
 resource "harbor_garbage_collection" "gc" {
-  schedule        = "weekly"
+  schedule        = "Weekly"
   delete_untagged = true
-
 }
 
 # registry outputs
@@ -274,12 +301,21 @@ output "registry_admin_password" {
   sensitive = true
 }
 
-output "registry_builder_token" {
-  value     = harbor_user.builder.password
+output "registry_builder_name" {
+  value     = harbor_robot_account.builder.full_name
   sensitive = true
 }
 
+output "registry_builder_token" {
+  value     = harbor_robot_account.builder.secret
+  sensitive = true
+}
+
+output "registry_user_puller_name" {
+  value     = harbor_robot_account.user-puller.full_name
+  sensitive = true
+}
 output "registry_user_puller_token" {
-  value     = harbor_user.user-puller.password
+  value     = harbor_robot_account.user-puller.secret
   sensitive = true
 }
