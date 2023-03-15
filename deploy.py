@@ -28,6 +28,47 @@ GCP_ZONES = {
     "prod": "us-central1",
 }
 
+# Mapping of cluster names (keys) to resource group names (values) for Azure deployments
+AZURE_RGs = {}
+
+
+def setup_auth_azure(cluster):
+    """
+    Set up authentication with a k8s cluster on Azure.
+    """
+    # Read in auth info. Note that we assume a file name convention of 
+    # secrets/{CLUSTER_NAME}-auth-key-prod.json
+    azure_file = os.path.join(ABSOLUTE_HERE, "secrets", f"{cluster}-auth-key-prod.json")
+    with open(azure_file) as stream:
+        azure = json.load(stream)
+
+    # Login in to Azure
+    login_cmd = [
+        "az",
+        "login",
+        "--service-principal",
+        "--username",
+        azure["sp-app-id"],
+        "--password",
+        azure["sp-app-key"],
+        "--tenant",
+        azure["tenant-id"],
+    ]
+    subprocess.check_output(login_cmd)
+
+    # Set kubeconfig
+    creds_cmd = [
+        "az",
+        "aks",
+        "get-credentials",
+        "--name",
+        cluster,
+        "--resource-group",
+        AZURE_RGs[cluster],
+    ]
+    stdout = subprocess.check_output(creds_cmd)
+    print(stdout.decode("utf-8"))
+
 
 def setup_auth_ovh(release, cluster):
     """
@@ -291,6 +332,8 @@ def main():
         if cluster.startswith("ovh"):
             setup_auth_ovh(args.release, cluster)
             patch_coredns()
+        elif cluster in AZURE_RGs:
+            setup_auth_azure(cluster)
         elif cluster in GCP_PROJECTS:
             setup_auth_gcloud(args.release, cluster)
         else:
