@@ -37,7 +37,7 @@ def setup_auth_azure(cluster):
     """
     Set up authentication with a k8s cluster on Azure.
     """
-    # Read in auth info. Note that we assume a file name convention of 
+    # Read in auth info. Note that we assume a file name convention of
     # secrets/{CLUSTER_NAME}-auth-key-prod.json
     azure_file = os.path.join(ABSOLUTE_HERE, "secrets", f"{cluster}-auth-key-prod.json")
     with open(azure_file) as stream:
