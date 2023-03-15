@@ -19,7 +19,7 @@ module "mybinder" {
   source             = "../modules/mybinder"
   name               = "staging"
   gke_master_version = local.gke_version
-  federation_members = ["turing-staging"]
+  federation_members = []
 }
 
 # define node pools here, too hard to encode with variables

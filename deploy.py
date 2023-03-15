@@ -29,46 +29,6 @@ GCP_ZONES = {
     "prod": "us-central1",
 }
 
-# Mapping of cluster names (keys) to resource group names (values) for Azure deployments
-AZURE_RGs = {"turing-prod": "binder-prod", "turing-staging": "binder-staging"}
-
-
-def setup_auth_turing(cluster):
-    """
-    Set up authentication with Turing k8s cluster on Azure.
-    """
-    # Read in auth info
-    azure_file = os.path.join(ABSOLUTE_HERE, "secrets", "turing-auth-key-prod.json")
-    with open(azure_file) as stream:
-        azure = json.load(stream)
-
-    # Login in to Azure
-    login_cmd = [
-        "az",
-        "login",
-        "--service-principal",
-        "--username",
-        azure["sp-app-id"],
-        "--password",
-        azure["sp-app-key"],
-        "--tenant",
-        azure["tenant-id"],
-    ]
-    subprocess.check_output(login_cmd)
-
-    # Set kubeconfig
-    creds_cmd = [
-        "az",
-        "aks",
-        "get-credentials",
-        "--name",
-        cluster,
-        "--resource-group",
-        AZURE_RGs[cluster],
-    ]
-    stdout = subprocess.check_output(creds_cmd)
-    print(stdout.decode("utf-8"))
-
 
 def setup_auth_ovh(release, cluster):
     """
@@ -124,7 +84,7 @@ def update_networkbans(cluster):
     # some members have special logic in ban.py,
     # in which case they must be specified on the command-line
     ban_command = [sys.executable, "secrets/ban.py"]
-    if cluster in {"turing-prod", "turing-staging", "turing", "ovh", "ovh2"}:
+    if cluster in {"ovh", "ovh2"}:
         ban_command.append(cluster)
 
     subprocess.check_call(ban_command)
@@ -278,9 +238,6 @@ def main():
             "prod",
             "ovh",
             "ovh2",
-            "turing-prod",
-            "turing-staging",
-            "turing",
         ],
     )
     argparser.add_argument(
@@ -335,8 +292,6 @@ def main():
         if cluster.startswith("ovh"):
             setup_auth_ovh(args.release, cluster)
             patch_coredns()
-        elif cluster in AZURE_RGs:
-            setup_auth_turing(cluster)
         elif cluster in GCP_PROJECTS:
             setup_auth_gcloud(args.release, cluster)
         else:
