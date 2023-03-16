@@ -598,7 +598,7 @@ federationRedirect:
       versions: https://gesis.mybinder.org/versions
     ovh2:
       url: https://ovh2.mybinder.org
-      weight: 0
+      weight: 50
       health: https://ovh2.mybinder.org/health
       versions: https://ovh2.mybinder.org/versions
   nodeSelector: {}
