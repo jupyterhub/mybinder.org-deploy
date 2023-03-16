@@ -30,15 +30,16 @@ GCP_ZONES = {
 }
 
 # Mapping of cluster names (keys) to resource group names (values) for Azure deployments
-AZURE_RGs = {"turing-prod": "binder-prod", "turing-staging": "binder-staging"}
+AZURE_RGs = {}
 
 
-def setup_auth_turing(cluster):
+def setup_auth_azure(cluster):
     """
-    Set up authentication with Turing k8s cluster on Azure.
+    Set up authentication with a k8s cluster on Azure.
     """
-    # Read in auth info
-    azure_file = os.path.join(ABSOLUTE_HERE, "secrets", "turing-auth-key-prod.json")
+    # Read in auth info. Note that we assume a file name convention of
+    # secrets/{CLUSTER_NAME}-auth-key-prod.json
+    azure_file = os.path.join(ABSOLUTE_HERE, "secrets", f"{cluster}-auth-key-prod.json")
     with open(azure_file) as stream:
         azure = json.load(stream)
 
@@ -124,7 +125,7 @@ def update_networkbans(cluster):
     # some members have special logic in ban.py,
     # in which case they must be specified on the command-line
     ban_command = [sys.executable, "secrets/ban.py"]
-    if cluster in {"turing-prod", "turing-staging", "turing", "ovh", "ovh2"}:
+    if cluster in {"ovh", "ovh2"}:
         ban_command.append(cluster)
 
     subprocess.check_call(ban_command)
@@ -278,9 +279,6 @@ def main():
             "prod",
             "ovh",
             "ovh2",
-            "turing-prod",
-            "turing-staging",
-            "turing",
         ],
     )
     argparser.add_argument(
@@ -336,7 +334,7 @@ def main():
             setup_auth_ovh(args.release, cluster)
             patch_coredns()
         elif cluster in AZURE_RGs:
-            setup_auth_turing(cluster)
+            setup_auth_azure(cluster)
         elif cluster in GCP_PROJECTS:
             setup_auth_gcloud(args.release, cluster)
         else:

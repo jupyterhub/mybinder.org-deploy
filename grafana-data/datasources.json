@@ -49,21 +49,5 @@
   "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
   "url": "https://prometheus.mybinder.org",
   "user": ""
- },
- {
-  "access": "proxy",
-  "basicAuth": false,
-  "database": "",
-  "id": 5,
-  "isDefault": false,
-  "jsonData": {},
-  "name": "Turing",
-  "orgId": 1,
-  "password": "",
-  "readOnly": false,
-  "type": "prometheus",
-  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
-  "url": "https://prometheus.turing.mybinder.org",
-  "user": ""
  }
 ]

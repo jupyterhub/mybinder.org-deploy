@@ -14,7 +14,7 @@ provider "google" {
 locals {
   gke_version        = "1.19.14-gke.1900"
   location           = "us-central1" # for regional clusters
-  federation_members = ["gesis", "turing", "ovh"]
+  federation_members = ["gesis", "ovh"]
 }
 
 module "mybinder" {
@@ -26,7 +26,7 @@ module "mybinder" {
 
   sql_tier = "db-n1-standard-1"
 
-  federation_members = ["gesis", "turing", "ovh"]
+  federation_members = ["gesis", "ovh"]
 }
 
 # define node pools here, too hard to encode with variables
