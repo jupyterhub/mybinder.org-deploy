@@ -92,6 +92,7 @@ binderhub:
         # ferarussia is clearly a fake GitHub account created by GuitarsAI to get around ban
         # it was created the day GuitarsAI was blocked and does the same thing
         - ^ferarussia/.*
+        - ^irw4ns1/.*
       high_quota_specs:
         []
         # - ^jupyterlab/.*
@@ -150,6 +151,7 @@ binderhub:
         - ^(git|https?)%3A%2F%2Fgitlab.com%2Fjasmt507%2F.*
         - ^(git|https?)%3A%2F%2Fgitlab.com%2Fh4j3s1978%2F.*
         - .*%2Fabooz.*
+        - .*%2Firw4ns1.*
 
     GitLabRepoProvider:
       banned_specs:
