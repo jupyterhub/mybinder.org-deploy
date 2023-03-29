@@ -110,6 +110,11 @@ binderhub:
         #   # YYYY-MM-DD of workshop
         #   config:
         #     quota: 123
+        - pattern: ^MNGuenther/hackanexoplanet-env.*
+          # 2023-04-18
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/2534
+          config:
+            quota: 300
 
     GitRepoProvider:
       banned_specs:
