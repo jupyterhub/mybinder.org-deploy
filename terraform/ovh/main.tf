@@ -182,8 +182,6 @@ resource "harbor_project" "mybinder-builds" {
   name = "mybinder-builds"
 }
 
-# we should be able to use robot accounts
-# after an update to Harbor and the harbor provider
 resource "harbor_robot_account" "builder" {
   name        = "builder"
   description = "BinderHub builder: push new user images"
@@ -216,50 +214,30 @@ resource "harbor_robot_account" "user-puller" {
   }
 }
 
-resource "random_password" "builder" {
+
+# robot accounts don't seem to have permission to delete repositories
+resource "random_password" "culler" {
   length  = 16
   special = true
 }
 
-resource "random_password" "user-puller" {
-  length  = 16
-  special = true
+resource "harbor_user" "culler" {
+  username  = "mybinder-culler"
+  password  = random_password.culler.result
+  full_name = "MyBinder culler"
+  email     = "culler@mybinder.org"
 }
 
-# TODO: delete after migrating to robot accounts
-resource "harbor_user" "builder" {
-  username  = "mybinder-builder"
-  password  = random_password.builder.result
-  full_name = "MyBinder Builder"
-  email     = "builder@mybinder.org"
-}
-
-resource "harbor_user" "user-puller" {
-  username  = "mybinder-puller"
-  password  = random_password.user-puller.result
-  full_name = "MyBinder Puller"
-  email     = "puller@mybinder.org"
-}
-
-resource "harbor_project_member_user" "builder" {
+resource "harbor_project_member_user" "culler" {
   project_id = harbor_project.mybinder-builds.id
-  user_name  = harbor_user.builder.username
-  role       = "developer"
+  user_name  = harbor_user.culler.username
+  role       = "maintainer"
 }
 
-resource "harbor_project_member_user" "user-puller" {
-  project_id = harbor_project.mybinder-builds.id
-  user_name  = harbor_user.user-puller.username
-  role       = "limitedguest"
-}
-
-# END delete
-
-# retention policies created by hand
-# OVH harbor is too old for terraform provider (2.0.1, need 2.2)
 resource "harbor_retention_policy" "builds" {
+  # run retention policy on Saturday morning
   scope    = harbor_project.mybinder-builds.id
-  schedule = "Weekly"
+  schedule = "0 7 * * 6"
   # rule {
   #   repo_matching        = "**"
   #   tag_matching         = "**"
@@ -281,7 +259,9 @@ resource "harbor_retention_policy" "builds" {
 }
 
 resource "harbor_garbage_collection" "gc" {
-  schedule        = "Weekly"
+  # run garbage collection on Sunday morning
+  # try to make sure it's not run at the same time as the retention policy
+  schedule = "0 7 * * 0"
   delete_untagged = true
 }
 
@@ -298,6 +278,16 @@ output "registry_admin_login" {
 
 output "registry_admin_password" {
   value     = ovh_cloud_project_containerregistry_user.admin.password
+  sensitive = true
+}
+
+output "registry_culler_name" {
+  value     = harbor_user.culler.username
+  sensitive = true
+}
+
+output "registry_culler_password" {
+  value     = harbor_user.culler.password
   sensitive = true
 }
 
