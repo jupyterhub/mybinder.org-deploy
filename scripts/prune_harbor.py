@@ -43,30 +43,38 @@ def prune_repositories(
     These are often going to be repos with no content
     """
     print("Deleting repositories with no images")
-    fetch_progress: tqdm.tqdm = tqdm.tqdm(desc="fetching", unit="repo", total=0)
-    prune_progress: tqdm.tqdm = tqdm.tqdm(desc="pruning", unit="repo", total=0)
 
-    page = 1
+    r = requests.get(
+        harbor_url + f"/projects/{project_name}/summary",
+        auth=(username, password),
+    )
+    r.raise_for_status()
+    repo_count = r.json()["repo_count"]
+    fetch_progress: tqdm.tqdm = tqdm.tqdm(
+        desc="fetching", unit="repo", total=repo_count
+    )
+    prune_progress: tqdm.tqdm = tqdm.tqdm(desc="pruning", unit="repo", total=repo_count)
+
     page_size = 100
 
-    while True:
-        page_deleted = 0
+    def fetch_page(page: int = 1) -> list:
         r = requests.get(
             harbor_url + f"/projects/{project_name}/repositories",
-            params=dict(sort="update_time", page_size=str(page_size), page=str(page)),
+            # sort by update_time because the oldest ones are the most likely to be empty
+            # reversed (-) because we iterate from the back
+            params=dict(sort="-update_time", page_size=str(page_size), page=str(page)),
             auth=(username, password),
         )
-        if not prune_progress.total and "X-Total-Count" in r.headers:
-            prune_progress.total = fetch_progress.total = int(
-                r.headers["X-Total-Count"]
-            )
-
-        repos: list[dict] = r.json()
-        if not repos:
-            break
-        fetch_progress.update(len(repos))
         r.raise_for_status()
-        for repo in repos:
+        repos: list[dict] = r.json()
+        fetch_progress.update(len(repos))
+        return repos
+
+    page = repo_count // page_size
+
+    for page in range(repo_count // page_size + 1, 0, -1):
+        for repo in fetch_page(page):
+            # run deletions sequentially because harbor seems to have trouble under too much load
             project_name, repo_name = repo["name"].split("/", 1)
             if repo["artifact_count"] == 0:
                 r = requests.delete(
@@ -75,16 +83,9 @@ def prune_repositories(
                 )
                 r.raise_for_status()
                 prune_progress.update(1)
-                page_deleted += 1
-        # if we deleted less than 90% of the images, request the next page
-        # i.e. stay on the current page if we delete at least 50% of the repos
-        # so we don't skip over them
-        # the alternative is to fetch _all_ repos
-        if page_deleted < page_size / 2:
-            page += 1
     fetch_progress.close()
     prune_progress.close()
-    print(f"Pruned {prune_progress.n} repositories with no artifacts")
+    print(f"Pruned {prune_progress.n}/{repo_count} repositories with no artifacts")
 
 
 def load_config(member: str) -> dict:
