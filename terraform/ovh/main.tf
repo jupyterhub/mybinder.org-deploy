@@ -261,7 +261,7 @@ resource "harbor_retention_policy" "builds" {
 resource "harbor_garbage_collection" "gc" {
   # run garbage collection on Sunday morning
   # try to make sure it's not run at the same time as the retention policy
-  schedule = "0 7 * * 0"
+  schedule = "0 7 * * 7"
   delete_untagged = true
 }
 
