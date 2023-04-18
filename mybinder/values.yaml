@@ -41,6 +41,7 @@ etcJupyter:
 
 # values ref: https://github.com/jupyterhub/binderhub/blob/main/helm-chart/binderhub/values.yaml
 binderhub:
+  enabled: true
   replicas: 2
 
   resources:
