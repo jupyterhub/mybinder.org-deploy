@@ -30,7 +30,7 @@ iniconfig==1.1.1
     # via pytest
 kubernetes==25.3.0
     # via -r requirements.in
-oauthlib==3.2.1
+oauthlib==3.2.2
     # via requests-oauthlib
 packaging==21.3
     # via
@@ -46,17 +46,17 @@ pyasn1-modules==0.2.8
     # via google-auth
 pyparsing==3.0.9
     # via packaging
-pytest==7.2.1
+pytest==7.2.2
     # via
     #   -r requirements.in
     #   pytest-rerunfailures
     #   pytest-timeout
     #   pytest-xdist
-pytest-rerunfailures==11.0
+pytest-rerunfailures==11.1.2
     # via -r requirements.in
 pytest-timeout==2.1.0
     # via -r requirements.in
-pytest-xdist==3.1.0
+pytest-xdist==3.2.1
     # via -r requirements.in
 python-dateutil==2.8.2
     # via kubernetes

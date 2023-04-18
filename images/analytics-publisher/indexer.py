@@ -46,7 +46,6 @@ def index_events(project, bucket, debug=False, dry_run=False):
     with tempfile.TemporaryFile(mode="w+") as htmlfile, tempfile.TemporaryFile(
         mode="w+"
     ) as jsonlfile:
-
         html_index = html_template.render(
             archives=sorted(
                 archives, key=lambda archive: archive["date"], reverse=True

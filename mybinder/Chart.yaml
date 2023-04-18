@@ -8,7 +8,7 @@ dependencies:
   # Source code:    https://github.com/jupyterhub/binderhub/tree/main/helm-chart
   # App changelog:  https://github.com/jupyterhub/binderhub/blob/main/CHANGES.md
   - name: binderhub
-    version: "1.0.0-0.dev.git.3009.h9046454"
+    version: "1.0.0-0.dev.git.3035.h32213a4"
     repository: https://jupyterhub.github.io/helm-chart
 
   # Ingress-Nginx to route network traffic according to Ingress resources using
@@ -19,7 +19,7 @@ dependencies:
   # NOTE: chart v3.36.0 maps to v0.49.0 and has support for networking.k8s.io/v1
   #       chart v4.1.2 maps to v1.2.0 and has dropped support for networking.k8s.io/v1beta1
   - name: ingress-nginx
-    version: "4.4.2"
+    version: "4.6.0"
     repository: https://kubernetes.github.io/ingress-nginx
     condition: ingress-nginx.enabled
 
@@ -31,7 +31,7 @@ dependencies:
   #       chart v11.16.9 maps to app v2.21.0  - 2020-12-06
   #       chart v12 requires Helm 3
   - name: prometheus
-    version: "18.2.0"
+    version: "20.2.0"
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
 
@@ -45,7 +45,7 @@ dependencies:
   #       chart v6 requires Helm 3
   #       chart v6.17.1 gives us Grafana v8.2.1
   - name: grafana
-    version: "6.50.2"
+    version: "6.52.1"
     repository: https://grafana.github.io/helm-charts
     condition: grafana.enabled
 

@@ -92,6 +92,7 @@ binderhub:
         # ferarussia is clearly a fake GitHub account created by GuitarsAI to get around ban
         # it was created the day GuitarsAI was blocked and does the same thing
         - ^ferarussia/.*
+        - ^irw4ns1/.*
       high_quota_specs:
         []
         # - ^jupyterlab/.*
@@ -109,32 +110,11 @@ binderhub:
         #   # YYYY-MM-DD of workshop
         #   config:
         #     quota: 123
-
-        # https://github.com/jupyterhub/mybinder.org-deploy/issues/2360
-        - pattern: ^comet-licsar/licsbas.*
-          # 2022-11-17
+        - pattern: ^MNGuenther/hackanexoplanet-env.*
+          # 2023-04-18
+          # https://github.com/jupyterhub/mybinder.org-deploy/issues/2534
           config:
-            quota: 500
-        - pattern: ^andwatson/coseismic_practical.*
-          # 2022-11-17
-          config:
-            quota: 500
-        - pattern: ^andwatson/interseismic_practical.*
-          # 2022-11-17
-          config:
-            quota: 500
-        - pattern: ^andwatson/volcano_practical.*
-          # 2022-11-18
-          config:
-            quota: 500
-        - pattern: ^matthew-gaddes/insar_workshop.*
-          # 2022-11-18
-          config:
-            quota: 500
-        - pattern: ^GenericMappingTools/egu22pygmt.*
-          # 2022-11-18
-          config:
-            quota: 500
+            quota: 300
 
     GitRepoProvider:
       banned_specs:
@@ -146,6 +126,7 @@ binderhub:
         - ^(git|https?)%3A%2F%2Fgitlab.com%2Fjasmt507%2F.*
         - ^(git|https?)%3A%2F%2Fgitlab.com%2Fh4j3s1978%2F.*
         - .*%2Fabooz.*
+        - .*%2Firw4ns1.*
 
     GitLabRepoProvider:
       banned_specs:
@@ -156,7 +137,7 @@ binderhub:
 
     BinderHub:
       use_registry: true
-      build_image: quay.io/jupyterhub/repo2docker:2022.10.0-94.gc45374d
+      build_image: quay.io/jupyterhub/repo2docker:2022.10.0-148.g43ff7bb
       per_repo_quota: 100
       per_repo_quota_higher: 200
       cors_allow_origin: "*"
@@ -164,7 +145,7 @@ binderhub:
       banner_message: |
         <div style="display:flex;align-items:center;">
           <div style="flex:1;text-align:center;">
-            Thanks to <a href="https://cloud.google.com/">Google Cloud</a>, <a href="https://www.ovh.com/">OVH</a>, <a href="https://notebooks.gesis.org">GESIS Notebooks</a> and the <a href="https://turing.ac.uk">Turing Institute</a> for supporting us! 🎉
+            Thanks to <a href="https://cloud.google.com/">Google Cloud</a>, <a href="https://www.ovh.com/">OVH</a>, and <a href="https://notebooks.gesis.org">GESIS Notebooks</a> for supporting us! 🎉
           </div>
           <a class="btn" style="width:fit-content;height:fit-content;padding:10px;background-color:#e66581;color:white;font-weight:bold;margin:-8px 0px;"
           onmouseover="this.style.backgroundColor='#d15b75'" onmouseout="this.style.backgroundColor='#e66581'"
@@ -343,27 +324,6 @@ binderhub:
         enabled: true
         # replicas set in config/<deployment>
     singleuser:
-      cmd:
-        - python3
-        - "-c"
-        - |
-          import os
-          import sys
-
-          try:
-              import jupyterlab
-              major = int(jupyterlab.__version__.split(".", 1)[0])
-          except Exception:
-              have_lab = False
-          else:
-              have_lab = major >= 3
-
-          if have_lab:
-              # if recent-enough lab is available, make it the default UI
-              sys.argv.insert(1, "--NotebookApp.default_url=/lab/")
-
-          # launch the notebook server
-          os.execvp("jupyter-notebook", sys.argv)
       # clear singleuser.defaultUrl config from chart
       defaultUrl:
       cloudMetadata:
@@ -610,25 +570,14 @@ federationRedirect:
       versions: https://gke.mybinder.org/versions
     gesis:
       url: https://gesis.mybinder.org
-      weight: 100
+      weight: 0
       health: https://gesis.mybinder.org/health
       versions: https://gesis.mybinder.org/versions
-    ovh:
-      url: https://ovh.mybinder.org
-      weight: 100
-      health: https://ovh.mybinder.org/health
-      versions: https://ovh.mybinder.org/versions
     ovh2:
       url: https://ovh2.mybinder.org
-      weight: 100
+      weight: 50
       health: https://ovh2.mybinder.org/health
       versions: https://ovh2.mybinder.org/versions
-    turing:
-      url: https://turing.mybinder.org
-      # https://github.com/jupyterhub/mybinder.org-deploy/issues/2252#issuecomment-1295141310
-      weight: 0
-      health: https://turing.mybinder.org/health
-      versions: https://turing.mybinder.org/versions
   nodeSelector: {}
 
 minesweeper:

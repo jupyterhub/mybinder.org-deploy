@@ -58,7 +58,9 @@ if len(commits) > args.max_commits:
     ]
 else:
     for c in commits:
-        prs.update(c.get_pulls())
+        if len(c.parents) == 1:
+            # Chartpress ignores merge commits when generating the Helm chart SHA
+            prs.update(c.get_pulls())
     pr_summaries = [
         f"- [#{pr.number}]({pr.html_url}) {pr.title}"
         for pr in sorted(prs, key=lambda pr: pr.number)

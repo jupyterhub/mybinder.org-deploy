@@ -21,6 +21,8 @@ on:
 
 jobs:
   update-image-dependencies:
+    name: update ${{ matrix.name }} image
+
     # Don't schedule runs on forks, but allow the job to execute on push and
     # workflow_dispatch for CI development purposes.
     if: github.repository == 'jupyterhub/mybinder.org-deploy' || github.event_name != 'schedule'
@@ -41,6 +43,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
       - name: Get values.yaml pinned tag of ${{ matrix.registry }}/${{ matrix.repository }}
         id: local
@@ -91,7 +97,7 @@ jobs:
 
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
-        uses: peter-evans/create-pull-request@v4.2.3
+        uses: peter-evans/create-pull-request@v4.2.4
         # Don't try open PRs in forks or when the job is triggered by a push to
         # a branch other than the default branch.
         if: github.repository == 'jupyterhub/mybinder.org-deploy' && (github.event_name != 'push' || github.ref == 'refs/heads/main')
@@ -114,6 +120,7 @@ jobs:
             - Changelog: ${{ matrix.changelog_url }}
 
   update-chart-dependencies:
+    name: update ${{ matrix.chart_dep_name }} chart
     # Don't schedule runs on forks, but allow the job to execute on push and
     # workflow_dispatch for CI development purposes.
     if: github.repository == 'jupyterhub/mybinder.org-deploy' || github.event_name != 'schedule'
@@ -166,6 +173,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
       - name: Get Chart.yaml pinned version and fetch associated appVersion of ${{ matrix.chart_dep_name }} chart
         id: local
@@ -220,7 +231,7 @@ jobs:
 
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
-        uses: peter-evans/create-pull-request@v4.2.3
+        uses: peter-evans/create-pull-request@v4.2.4
         # Don't try open PRs in forks or when the job is triggered by a push to
         # a branch other than the default branch.
         if: github.repository == 'jupyterhub/mybinder.org-deploy' && (github.event_name != 'push' || github.ref == 'refs/heads/main')

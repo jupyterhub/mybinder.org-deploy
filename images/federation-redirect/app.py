@@ -40,19 +40,6 @@ CONFIG = {
             versions="https://gke.mybinder.org/versions",
             prime=True,
         ),
-        "ovh": dict(
-            url="https://ovh.mybinder.org",
-            weight=1,
-            health="https://ovh.mybinder.org/health",
-            # health="https://httpbin.org/status/404",
-            versions="https://ovh.mybinder.org/versions",
-        ),
-        "gesis": dict(
-            url="https://gesis.mybinder.org",
-            weight=200,
-            health="https://gesis.mybinder.org/health",
-            versions="https://gesis.mybinder.org/versions",
-        ),
     },
 }
 
@@ -74,6 +61,10 @@ def get_config(config_path):
         # set them to Null/None. We need to turn the keys into a list so that we
         # can modify the dict while iterating over it
         if config["hosts"][h] is None:
+            config["hosts"].pop(h)
+        # remove zero-weight entries
+        if config["hosts"][h].get("weight", 0) == 0:
+            app_log.warning(f"Removing host {h} with 0 weight")
             config["hosts"].pop(h)
         # remove trailing slashes in host urls
         # these can cause 404 after redirection (RedirectHandler) and we don't
@@ -117,7 +108,7 @@ def rendezvous_rank(buckets, key):
     all buckets, sorted in decreasing order (highest ranked first).
     """
     ranking = []
-    for (bucket, weight) in buckets:
+    for bucket, weight in buckets:
         # The particular hash function doesn't matter a lot, as long as it is
         # one that maps the key to a fixed sized value and distributes the keys
         # uniformly across the output space

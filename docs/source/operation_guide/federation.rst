@@ -16,7 +16,6 @@ gke.mybinder.org
 ovh.mybinder.org
 ovh2.mybinder.org
 gesis.mybinder.org
-turing.mybinder.org
 ==========================  ========  ===============  ==============  =============== =====
 
 .. raw:: html
@@ -27,7 +26,6 @@ turing.mybinder.org
        "https://ovh.mybinder.org",
        "https://ovh2.mybinder.org",
        "https://gesis.mybinder.org",
-       "https://turing.mybinder.org",
    ]
 
    // Use a dictionary to store the rows that should be updated
