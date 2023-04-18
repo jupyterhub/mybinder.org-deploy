@@ -55,3 +55,10 @@ dependencies:
     version: "0.0.1-n025.h28f473f"
     repository: https://yuvipanda.github.io/cryptnono/
     condition: cryptnono.enabled
+
+  # cluster autoscaler, autoscales k8s nodes, required for EKS clusters that
+  # don't have this feature out of the box
+  - name: cluster-autoscaler
+    version: 9.21.1
+    repository: https://kubernetes.github.io/autoscaler
+    condition: cluster-autoscaler.enabled

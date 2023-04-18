@@ -634,3 +634,15 @@ federationRedirect:
 minesweeper:
   enabled: true
   image: jupyterhub/mybinder.org-minesweeper:set-by-chartpress
+
+# cluster-autoscaler is responsible for understanding if k8s nodes needs to be
+# added or removed. A pending pod is a sign that another node should be added,
+# and an underused node is a sign that a node should be removed.
+#
+# We always need a cluster-autoscaler, but only deploy it ourselves if its not
+# provided as part of the k8s cluster.
+#
+# values ref: https://github.com/kubernetes/autoscaler/blob/master/charts/cluster-autoscaler/values.yaml
+#
+cluster-autoscaler:
+  enabled: false
