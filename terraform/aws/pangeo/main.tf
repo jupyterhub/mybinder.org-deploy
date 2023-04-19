@@ -47,31 +47,11 @@ module "vpc" {
 resource "aws_security_group" "node_group_core" {
   name_prefix = "node_group_core"
   vpc_id      = module.vpc.vpc_id
-
-  ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
-
-    cidr_blocks = [
-      "10.0.0.0/8",
-    ]
-  }
 }
 
 resource "aws_security_group" "node_group_user" {
   name_prefix = "node_group_user"
   vpc_id      = module.vpc.vpc_id
-
-  ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
-
-    cidr_blocks = [
-      "192.168.0.0/16",
-    ]
-  }
 }
 
 # Setup EKS cluster with control plane and two managed node groups
