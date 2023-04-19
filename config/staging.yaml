@@ -1,7 +1,8 @@
 projectName: binderhub-288415
 
+# binderhubEnabled: false
+
 binderhub:
-  enabled: false
   config:
     BinderHub:
       pod_quota: 20
