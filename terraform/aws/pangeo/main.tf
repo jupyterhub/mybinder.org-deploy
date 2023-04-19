@@ -82,7 +82,7 @@ module "eks" {
 
   # k8s v1.24 allows us to scale managed node groups to zero
   # ref: https://github.com/aws/containers-roadmap/issues/724
-  cluster_version = "1.24"
+  cluster_version = "1.25"
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.public_subnets
