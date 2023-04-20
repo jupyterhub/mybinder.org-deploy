@@ -131,6 +131,19 @@ def update_networkbans(cluster):
     subprocess.check_call(ban_command)
 
 
+def get_config_files(release):
+    """Return the list of config files to load"""
+    # common config files
+    config_files = sorted(glob.glob(os.path.join("config", "common", "*.yaml")))
+    config_files.extend(
+        sorted(glob.glob(os.path.join("secrets", "config", "common", "*.yaml")))
+    )
+    # release-specific config files
+    for config_dir in ("config", "secrets/config"):
+        config_files.append(os.path.join(config_dir, release + ".yaml"))
+    return config_files
+
+
 def deploy(release, name=None):
     """Deploys a federation member to a k8s cluster.
 
@@ -157,14 +170,7 @@ def deploy(release, name=None):
         "mybinder",
     ]
 
-    # common config files
-    config_files = sorted(glob.glob(os.path.join("config", "common", "*.yaml")))
-    config_files.extend(
-        sorted(glob.glob(os.path.join("secrets", "config", "common", "*.yaml")))
-    )
-    # release-specific config files
-    for config_dir in ("config", "secrets/config"):
-        config_files.append(os.path.join(config_dir, release + ".yaml"))
+    config_files = get_config_files(release)
     # add config files to helm command
     for config_file in config_files:
         helm.extend(["-f", config_file])

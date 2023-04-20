@@ -84,8 +84,6 @@ jobs:
           #   pass --image-prefix to override the chartpress.yaml configuration
           #   for one of the environments.
           - federation_member: staging
-            binder_url: https://gke2.staging.mybinder.org
-            hub_url: https://hub.gke2.staging.mybinder.org
             chartpress_args: ""
             helm_version: ""
             experimental: false
@@ -168,7 +166,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: pytest -vx --color=yes --numprocesses=2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matrix.hub_url }} tests/
+          command: pytest -vx --color=yes --numprocesses=2 --release=${{ matrix.federation_member }} tests/
 
       - name: "Stage 5: Post message to Grafana that deployment to production has started"
         run: |
@@ -201,15 +199,11 @@ jobs:
       matrix:
         include:
           - federation_member: prod
-            binder_url: https://gke.mybinder.org
-            hub_url: https://hub.gke.mybinder.org
             chartpress_args: ""
             helm_version: ""
             experimental: false
 
           - federation_member: ovh2
-            binder_url: https://ovh2.mybinder.org
-            hub_url: https://hub.ovh2.mybinder.org
             helm_version: ""
             experimental: false
 
@@ -281,7 +275,7 @@ jobs:
         with:
           timeout_minutes: 10
           max_attempts: 3
-          command: pytest -vx --color=yes --numprocesses=2 --binder-url=${{ matrix.binder_url }} --hub-url=${{ matrix.hub_url }} tests/
+          command: pytest -vx --color=yes --numprocesses=2 --release=${{ matrix.federation_member }} tests/
 
   report-status:
     # This job will wait for staging-deploy to finish and report its status
