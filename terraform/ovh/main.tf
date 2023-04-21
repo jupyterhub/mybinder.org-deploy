@@ -26,7 +26,7 @@ terraform {
 
 provider "ovh" {
   endpoint = "ovh-eu"
-  # credentials loaded via source ../secrets/ovh-creds.sh
+  # credentials loaded via source ./secrets/ovh-creds.sh
 }
 
 locals {
