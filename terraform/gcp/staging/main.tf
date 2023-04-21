@@ -16,10 +16,11 @@ locals {
 }
 
 module "mybinder" {
-  source             = "../modules/mybinder"
-  name               = "staging"
-  gke_master_version = local.gke_version
-  federation_members = []
+  source                = "../modules/mybinder"
+  name                  = "staging"
+  gke_master_version    = local.gke_version
+  use_artifact_registry = true
+  federation_members    = []
 }
 
 # define node pools here, too hard to encode with variables
@@ -69,7 +70,7 @@ resource "google_container_node_pool" "pool-1" {
 
 output "private_keys" {
   value       = module.mybinder.private_keys
-  description = "GCP serice account keys"
+  description = "GCP service account keys"
   sensitive   = true
 }
 

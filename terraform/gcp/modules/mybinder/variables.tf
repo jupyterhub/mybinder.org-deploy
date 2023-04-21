@@ -18,6 +18,12 @@ variable "gke_location" {
   default     = null
 }
 
+variable "use_artifact_registry" {
+  type        = bool
+  description = "Use artifact registry instead of legacy container registry"
+  default     = false
+}
+
 variable "registry_location" {
   type        = string
   description = "Registry location for cluster if different from provider region, e.g. us for multi-region"

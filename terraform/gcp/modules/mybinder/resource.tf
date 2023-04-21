@@ -16,7 +16,7 @@ locals {
     },
     binderhub-builder = {
       display_name = "Storage access for ${var.name} image builder",
-      role         = "roles/storage.admin",
+      role         = var.use_artifact_registry ? "roles/artifactregistry.createOnPushWriter" : "roles/storage.admin",
     },
   }
   # add -staging to events prefix, but don't include 'prod' in prod events
