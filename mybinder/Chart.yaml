@@ -31,7 +31,7 @@ dependencies:
   #       chart v11.16.9 maps to app v2.21.0  - 2020-12-06
   #       chart v12 requires Helm 3
   - name: prometheus
-    version: "20.0.2"
+    version: "20.2.0"
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
 
@@ -45,7 +45,7 @@ dependencies:
   #       chart v6 requires Helm 3
   #       chart v6.17.1 gives us Grafana v8.2.1
   - name: grafana
-    version: "6.52.1"
+    version: "6.54.0"
     repository: https://grafana.github.io/helm-charts
     condition: grafana.enabled
 
@@ -55,3 +55,10 @@ dependencies:
     version: "0.0.1-n025.h28f473f"
     repository: https://yuvipanda.github.io/cryptnono/
     condition: cryptnono.enabled
+
+  # cluster autoscaler, autoscales k8s nodes, required for EKS clusters that
+  # don't have this feature out of the box
+  - name: cluster-autoscaler
+    version: 9.21.1
+    repository: https://kubernetes.github.io/autoscaler
+    condition: cluster-autoscaler.enabled

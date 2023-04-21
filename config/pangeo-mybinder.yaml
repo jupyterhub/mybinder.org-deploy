@@ -1,0 +1,9 @@
+cluster-autoscaler:
+  enabled: true
+  autoDiscovery:
+    clusterName: pangeo-mybinder
+  awsRegion: us-west-2
+  rbac:
+    serviceAccount:
+      annotations:
+        eks.amazonaws.com/role-arn: arn:aws:iam::783380859522:role/pangeo-mybinder-cluster-autoscaler-role
