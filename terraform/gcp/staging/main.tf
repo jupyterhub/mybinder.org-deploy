@@ -12,7 +12,7 @@ provider "google" {
 }
 
 locals {
-  gke_version = "1.19.14-gke.1900"
+  gke_version = "1.23.14-gke.1800"
 }
 
 module "mybinder" {
@@ -23,20 +23,22 @@ module "mybinder" {
 }
 
 # define node pools here, too hard to encode with variables
-resource "google_container_node_pool" "pool" {
-  name    = "pool-2020-09"
+resource "google_container_node_pool" "pool-1" {
+  name    = "pool-2023-04"
   cluster = module.mybinder.cluster_name
 
   autoscaling {
     min_node_count = 1
-    max_node_count = 4
+    max_node_count = 3
   }
 
   version = local.gke_version
 
   node_config {
-    machine_type = "n1-standard-4"
-    disk_size_gb = 500
+    # e2-medium is 2cpu, 8GB shared-core
+    # very cheap!
+    machine_type = "e2-medium"
+    disk_size_gb = 100
     disk_type    = "pd-standard"
     # https://www.terraform.io/docs/providers/google/r/container_cluster.html#oauth_scopes-1
     oauth_scopes = [
