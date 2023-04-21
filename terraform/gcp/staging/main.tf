@@ -12,7 +12,7 @@ provider "google" {
 }
 
 locals {
-  gke_version = "1.23.14-gke.1800"
+  gke_version = "1.24.10-gke.2300"
 }
 
 module "mybinder" {
@@ -36,8 +36,10 @@ resource "google_container_node_pool" "pool-1" {
 
   node_config {
     # e2-medium is 2cpu, 8GB shared-core
-    # very cheap!
-    machine_type = "e2-medium"
+    # only 1 CPU allocatable, though, and k8s itself needs most of that
+    # e2-standard-2 is 2x as expensive
+    # but 2 e2-standard-2 is $100/month
+    machine_type = "e2-standard-2"
     disk_size_gb = 100
     disk_type    = "pd-standard"
     # https://www.terraform.io/docs/providers/google/r/container_cluster.html#oauth_scopes-1
