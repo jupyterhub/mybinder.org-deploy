@@ -25,6 +25,13 @@ locals {
   events_log_prefix = var.name == "prod" ? "binderhub" : "binderhub-${var.name}"
 }
 
+resource "google_artifact_registry_repository" "repo" {
+  location      = var.registry_location != null ? var.registry_location : data.google_client_config.provider.region
+  repository_id = var.name
+  description   = "${var.name} container registry"
+  format        = "DOCKER"
+}
+
 resource "google_container_cluster" "cluster" {
   name     = var.name
   location = var.gke_location != null ? var.gke_location : data.google_client_config.provider.zone
