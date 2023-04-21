@@ -12,7 +12,7 @@ concurrency: prune-harbor
 jobs:
   prune-harbor:
     name: Prune ${{ matrix.name }} harbor registry
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     strategy:
       fail-fast: false
@@ -28,13 +28,11 @@ jobs:
           python-version: "3.10"
 
       - name: "Install dependencies"
-        # --upgrade is important since we carry a cache and may risk grow very
-        # outdated otherwise.
         run: |
           pip install --upgrade setuptools pip
-          pip install --upgrade requests ruamel.yaml tqdm
+          pip install requests ruamel.yaml tqdm
 
-      - name: "Stage 2: Unlock git-crypt secrets"
+      - name: "Unlock git-crypt secrets"
         uses: sliteteam/github-action-git-crypt-unlock@8b1fa3ccc81e322c5c45fbab261eee46513fd3f8
         env:
           GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
