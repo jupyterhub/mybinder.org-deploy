@@ -26,11 +26,6 @@ repo = Path(__file__).parent.parent.resolve()
 
 yaml = YAML(typ="safe")
 
-# harbor_url = "https://2lmrrh8f.gra7.container-registry.ovh.net/api/v2.0"
-# project_name = "mybinder-builds"
-#
-# expires_days = 30
-
 
 def prune_repositories(
     harbor_url: str,
@@ -38,9 +33,10 @@ def prune_repositories(
     username: str,
     password: str,
 ) -> None:
-    """Deletes all repositories with no activity older than 30 days
+    """Deletes all repositories with no images
 
-    These are often going to be repos with no content
+    Repository images may be pruned by Harbor garbage collection
+    and image retention policy.
     """
     print("Deleting repositories with no images")
 
