@@ -1,0 +1,42 @@
+name: Prune harbor
+
+on:
+  schedule:
+    # Run at 03:00 every Sunday, ref: https://crontab.guru/#0_3_*_*_0
+    - cron: "0 3 * * 0"
+  workflow_dispatch:
+
+# only allow one prune at a time
+concurrency: prune-harbor
+
+jobs:
+  prune-harbor:
+    name: Prune ${{ matrix.name }} harbor registry
+    runs-on: ubuntu-22.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: ovh2
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: "Install dependencies"
+        run: |
+          pip install --upgrade setuptools pip
+          pip install requests ruamel.yaml tqdm
+
+      - name: "Unlock git-crypt secrets"
+        uses: sliteteam/github-action-git-crypt-unlock@8b1fa3ccc81e322c5c45fbab261eee46513fd3f8
+        env:
+          GIT_CRYPT_KEY: ${{ secrets.GIT_CRYPT_KEY }}
+
+      - name: Prune registry
+        run: |
+          python3 scripts/prune_harbor.py ${{ matrix.name }}
