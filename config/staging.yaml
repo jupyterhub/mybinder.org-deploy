@@ -10,8 +10,11 @@ binderhub:
       sticky_builds: true
       build_memory_limit: "2G"
     DockerRegistry:
-      url: "https://us-central1-docker.pkg.dev"
       token_url: "https://us-central1-docker.pkg.dev/v2/token"
+
+  registry:
+    url: "https://us-central1-docker.pkg.dev"
+    username: "_json_key"
 
   extraEnv:
     EVENT_LOG_NAME: "binderhub-staging-events-text"
