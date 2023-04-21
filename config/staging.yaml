@@ -6,7 +6,7 @@ binderhub:
       pod_quota: 20
       hub_url: https://hub.gke2.staging.mybinder.org
       badge_base_url: https://staging.mybinder.org
-      image_prefix: gcr.io/binderhub-288415/r2d-staging-g5b5b759-
+      image_prefix: us-central1-docker.pkg.dev/binderhub-288415/staging/r2d-2023-04-
       sticky_builds: true
       build_memory_limit: "2G"
   extraEnv:
