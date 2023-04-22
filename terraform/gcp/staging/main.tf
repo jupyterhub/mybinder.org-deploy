@@ -19,7 +19,7 @@ module "mybinder" {
   source                = "../modules/mybinder"
   name                  = "staging"
   gke_master_version    = local.gke_version
-  use_artifact_registry = true
+  use_artifact_registry = false
   federation_members    = []
 }
 
