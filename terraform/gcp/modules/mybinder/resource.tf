@@ -16,13 +16,20 @@ locals {
     },
     binderhub-builder = {
       display_name = "Storage access for ${var.name} image builder",
-      role         = "roles/storage.admin",
+      role         = var.use_artifact_registry ? "roles/artifactregistry.createOnPushWriter" : "roles/storage.admin",
     },
   }
   # add -staging to events prefix, but don't include 'prod' in prod events
   events_prefix = var.name == "prod" ? "binder" : "binder-${var.name}"
   # add -staging to events log name, but don't include 'prod' in prod events
   events_log_prefix = var.name == "prod" ? "binderhub" : "binderhub-${var.name}"
+}
+
+resource "google_artifact_registry_repository" "repo" {
+  location      = var.registry_location != null ? var.registry_location : data.google_client_config.provider.region
+  repository_id = var.name
+  description   = "${var.name} container registry"
+  format        = "DOCKER"
 }
 
 resource "google_container_cluster" "cluster" {

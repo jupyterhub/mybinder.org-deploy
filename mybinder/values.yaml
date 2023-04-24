@@ -542,14 +542,28 @@ analyticsPublisher:
     fileName: cloud-costs.jsonl
     kind: csv
   nodeSelector: {}
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 200Mi
+    limits:
+      cpu: 0.2
+      memory: 300Mi
 
 # this is defined in secrets/ for the OVH cluster
 eventsArchiver:
   serviceAccountKey: ""
 
 federationRedirect:
-  host: mybinder.org
   enabled: false
+  host: mybinder.org
+  resources:
+    requests:
+      cpu: 0.2
+      memory: 200Mi
+    limits:
+      cpu: 0.2
+      memory: 300Mi
   image:
     name: jupyterhub/mybinder.org-federation-redirect
     tag: "set-by-chartpress"

@@ -50,12 +50,6 @@ spec:
           - name: config
             mountPath: /etc/analytics-publisher
             readOnly: true
-        resources:
-          requests:
-            cpu: 0.2
-            memory: 200Mi
-          limits:
-            cpu: 0.2
-            memory: 300Mi
+        resources: {{ .Values.analyticsPublisher.resources | toJson }}
 
 {{- end }}

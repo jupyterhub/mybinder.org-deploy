@@ -7,21 +7,29 @@ binderhub:
       hub_url: https://hub.gke2.staging.mybinder.org
       badge_base_url: https://staging.mybinder.org
       image_prefix: gcr.io/binderhub-288415/r2d-staging-g5b5b759-
+      # image_prefix: us-central1-docker.pkg.dev/binderhub-288415/staging/r2d-2023-04-
       sticky_builds: true
       build_memory_limit: "2G"
+    # DockerRegistry:
+    #   token_url: "https://us-central1-docker.pkg.dev/v2/token"
+
+  # registry:
+  #   url: "https://us-central1-docker.pkg.dev"
+  #   username: "_json_key"
+
   extraEnv:
     EVENT_LOG_NAME: "binderhub-staging-events-text"
 
   resources:
     requests:
-      cpu: 0.25
+      cpu: 0.1
       memory: 512Mi
 
   hpa:
     enabled: true
     maxReplicas: 3
     minReplicas: 1
-    targetCPU: 50 # 50% of cpu request, so 0.125 CPU
+    targetCPU: 90 # 90% of cpu request, so 90m CPU
 
   dind:
     resources:
@@ -30,7 +38,7 @@ binderhub:
         memory: 1Gi
       limits:
         cpu: "1"
-        memory: 2.5Gi
+        memory: 1Gi
 
   ingress:
     hosts:
@@ -41,14 +49,14 @@ binderhub:
     hub:
       resources:
         requests:
-          memory: 512Mi
-          cpu: null
+          memory: 100M
+          cpu: "10m"
     singleuser:
       memory:
-        guarantee: 256M
+        guarantee: 100M
         limit: 256M
       cpu:
-        guarantee: 0.1
+        guarantee: .01
         limit: 0.5
     ingress:
       hosts:
@@ -61,7 +69,20 @@ binderhub:
             - hub.gke2.staging.mybinder.org
     scheduling:
       userPlaceholder:
-        replicas: 2
+        replicas: 1
+
+    proxy:
+      chp:
+        resources:
+          requests:
+            memory: 100M
+            cpu: 10m
+
+minesweeper:
+  resources:
+    requests:
+      cpu: 5m
+      memory: 100Mi
 
 grafana:
   ingress:
@@ -101,8 +122,16 @@ prometheus:
 
 ingress-nginx:
   controller:
+    replicaCount: 2
     service:
       loadBalancerIP: 35.222.35.25
+    resources:
+      requests:
+        cpu: 10m
+        memory: 100Mi
+      limits:
+        cpu: 500m
+        memory: 500Mi
 
 static:
   ingress:
@@ -137,7 +166,9 @@ analyticsPublisher:
   events:
     logName: binderhub-staging-events-text
     sourceBucket: binder-staging-events-raw-export
-
+  resources:
+    requests:
+      cpu: 10m
   # TODO: copy to values
   cloudCosts:
     sourceBucket: binder-billing-archive
@@ -153,6 +184,13 @@ gcsProxy:
 federationRedirect:
   host: staging.mybinder.org
   enabled: true
+  resources:
+    requests:
+      cpu: 10m
+      memory: 100Mi
+    limits:
+      cpu: 0.2
+      memory: 200Mi
   hosts:
     gke:
       url: https://gke2.staging.mybinder.org

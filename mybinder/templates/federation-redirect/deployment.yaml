@@ -54,13 +54,10 @@ spec:
           - name: config
             mountPath: /etc/federation-redirect
             readOnly: true
+        {{- with .Values.federationRedirect.resources }}
         resources:
-          requests:
-            cpu: 0.2
-            memory: 200Mi
-          limits:
-            cpu: 0.2
-            memory: 300Mi
+          {{- . | toYaml | nindent 10 }}
+        {{- end }}
       tolerations:
       - key: "node.kubernetes.io/unschedulable"
         operator: "Exists"

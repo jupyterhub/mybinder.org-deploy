@@ -57,7 +57,8 @@ spec:
             add:
               - KILL
         {{- with .Values.minesweeper.resources }}
-        resources: {{ toJson . }}
+        resources:
+          {{- . | toYaml | nindent 10 }}
         {{- end }}
         volumeMounts:
         - name: config
