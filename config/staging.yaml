@@ -197,3 +197,8 @@ federationRedirect:
       weight: 4
       health: https://gke2.staging.mybinder.org/health
       versions: https://gke2.staging.mybinder.org/versions
+    gesis:
+      url: https://notebooks.gesis.org/binder
+      weight: 100
+      health: https://notebooks.gesis.org/binder/health
+      versions: https://notebooks.gesis.org/binder/versions
