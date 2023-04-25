@@ -217,3 +217,20 @@ gcsProxy:
 
 federationRedirect:
   enabled: true
+  hosts:
+    gke:
+      prime: true
+      url: https://gke.mybinder.org
+      weight: 100
+      health: https://gke.mybinder.org/health
+      versions: https://gke.mybinder.org/versions
+    gesis:
+      url: https://gesis.mybinder.org
+      weight: 0
+      health: https://gesis.mybinder.org/health
+      versions: https://gesis.mybinder.org/versions
+    ovh2:
+      url: https://ovh2.mybinder.org
+      weight: 100
+      health: https://ovh2.mybinder.org/health
+      versions: https://ovh2.mybinder.org/versions
