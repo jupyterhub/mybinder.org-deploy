@@ -1,6 +1,5 @@
 # scripts for managing mybinder.org
 
-
 ## delete-old-images.py
 
 This script talks to the docker registry API and tries to delete old images.
@@ -11,7 +10,6 @@ The script has the following conditions to check:
 - deleting all images older than a certain date (`--delete-before`)
 
 Use:
-
 
 ```bash
 python3 scripts/delete-old-images.py prod --dry-run
