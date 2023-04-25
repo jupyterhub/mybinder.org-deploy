@@ -17,7 +17,7 @@ What is the mybinder.org operations team?
 Behind the mybinder.org deployment is a team of contributors that
 donate their time to keeping mybinder.org running smoothly. This
 role is often called a
-`Site Reliability Engineer <https://en.wikipedia.org/wiki/Site_Reliability_Engineering>`_.
+`Site Reliability Engineer <https://en.wikipedia.org/wiki/Site_Reliability_Engineering>`_
 (or SRE). We informally call this team the "mybinder.org operators".
 
 This site is a collection of wisdom, tools, and other helpful information that the
