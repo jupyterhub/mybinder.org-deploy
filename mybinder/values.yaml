@@ -40,6 +40,8 @@ etcJupyter:
       cull_connected: true
 
 # values ref: https://github.com/jupyterhub/binderhub/blob/main/helm-chart/binderhub/values.yaml
+# can't use binderhub.enabled due to validation errors
+binderhubEnabled: true
 binderhub:
   replicas: 2
 
