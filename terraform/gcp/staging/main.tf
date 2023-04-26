@@ -24,8 +24,8 @@ module "mybinder" {
 }
 
 # define node pools here, too hard to encode with variables
-resource "google_container_node_pool" "pool-1" {
-  name    = "pool-2023-04"
+resource "google_container_node_pool" "pool" {
+  name    = "pool-2023-04-spot"
   cluster = module.mybinder.cluster_name
 
   autoscaling {
@@ -41,6 +41,9 @@ resource "google_container_node_pool" "pool-1" {
     # e2-standard-2 is 2x as expensive
     # but 2 e2-standard-2 is $100/month
     machine_type = "e2-standard-2"
+    # spot = true increases disruption,
+    # but saves ~70%
+    spot = true
     disk_size_gb = 100
     disk_type    = "pd-standard"
     # https://www.terraform.io/docs/providers/google/r/container_cluster.html#oauth_scopes-1
