@@ -19,6 +19,12 @@ on:
     branches:
       - main
       - test-this-pr/**
+    paths-ignore:
+      - terraform/**
+      - docs/**
+      - .pre-commit-config.yaml
+      - .github/**
+      - "!.github/workflows/cd.yml"
   pull_request:
     types: [labeled]
 
