@@ -50,7 +50,7 @@ def helm_config(release):
     config = {}
     for config_file in [repo_root / "mybinder/values.yaml"] + get_config_files(release):
         # don't load secret config
-        if "secrets" in config_file:
+        if "secrets" in str(config_file):
             continue
         with open(config_file) as f:
             loaded = yaml.safe_load(f)
