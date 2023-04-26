@@ -62,7 +62,7 @@ def helm_config(release):
 def binder_url(helm_config):
     if not helm_config["binderhubEnabled"]:
         pytest.skip("binderhub not enabled")
-    return helm_config["binderhub"]["ingress"]["hosts"][0]
+    return "https://" + helm_config["binderhub"]["ingress"]["hosts"][0]
 
 
 @pytest.fixture
