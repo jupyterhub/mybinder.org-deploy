@@ -9,6 +9,7 @@ binderhub:
   config:
     BinderHub:
       pod_quota: 0
+      concurrent_build_limit: 1
       build_node_selector: *userNodeSelector
       hub_url: https://hub.gke2.mybinder.org
       badge_base_url: https://mybinder.org
