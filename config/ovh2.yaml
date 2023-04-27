@@ -61,7 +61,7 @@ binderhub:
             - hub.ovh2.mybinder.org
     scheduling:
       userPlaceholder:
-        replicas: 20
+        replicas: 50
       userScheduler:
         nodeSelector: *coreNodeSelector
 
