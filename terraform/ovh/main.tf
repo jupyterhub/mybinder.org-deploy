@@ -110,7 +110,7 @@ resource "ovh_cloud_project_kube_nodepool" "user-a" {
   # r2-120 is 8 core, 120GB
   flavor_name = "r2-120"
   max_nodes   = 6
-  min_nodes   = 1
+  min_nodes   = 2
   autoscale   = true
   template {
     metadata {
