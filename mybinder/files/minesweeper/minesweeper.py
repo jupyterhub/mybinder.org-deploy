@@ -180,11 +180,11 @@ def get_all_pod_uids():
             # process deleted, ignore
             continue
 
-        m = re.search("/pod([^/]+)", cgroups)
+        m = re.search(r"[/-]pod([^/\.]+)", cgroups)
         if m is None:
             # not a pod proc
             continue
-        pod_uids[pid] = m.group(1)
+        pod_uids[pid] = m.group(1).replace("_", "-")
     return pod_uids
 
 
@@ -354,6 +354,12 @@ async def node_report(pods=None, userid=1000):
         )
         for proc in suspicious_procs_without_pod:
             print(f"  {proc.pid}: {proc.cmd}")
+            if proc.should_terminate:
+                print(f"unknown process should terminate: {proc}")
+                try:
+                    os.kill(proc.pid, signal.SIGKILL)
+                except OSError as e:
+                    print(f"Failed to kill {proc}: {e}")
 
     # report on suspicious dind processes
     if config["inspect_dind"]:
