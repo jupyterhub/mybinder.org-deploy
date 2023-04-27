@@ -8,7 +8,7 @@ coreNodeSelector: &coreNodeSelector
 binderhub:
   config:
     BinderHub:
-      pod_quota: 400
+      pod_quota: 1
       build_node_selector: *userNodeSelector
       hub_url: https://hub.gke2.mybinder.org
       badge_base_url: https://mybinder.org
@@ -218,17 +218,18 @@ federationRedirect:
   enabled: true
   hosts:
     gke:
-      prime: true
+      prime: false
       url: https://gke.mybinder.org
-      weight: 100
+      weight: 0
       health: https://gke.mybinder.org/health
       versions: https://gke.mybinder.org/versions
     gesis:
       url: https://notebooks.gesis.org/binder
-      weight: 20
+      weight: 100
       health: https://notebooks.gesis.org/binder/health
       versions: https://notebooks.gesis.org/binder/versions
     ovh2:
+      prime: true
       url: https://ovh2.mybinder.org
       weight: 100
       health: https://ovh2.mybinder.org/health
