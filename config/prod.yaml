@@ -119,9 +119,8 @@ prometheus:
         # 20Gi isn't enough to rebuild WAL on startup
         memory: 33Gi
     persistentVolume:
-      # Use a large SSD Volume in production
-      size: 2000Gi
-      storageClass: ssd
+      size: 50G
+      storageClass: balanced
     retention: 30d
     ingress:
       hosts:
