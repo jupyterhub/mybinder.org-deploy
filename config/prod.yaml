@@ -226,7 +226,7 @@ federationRedirect:
       versions: https://gke.mybinder.org/versions
     gesis:
       url: https://notebooks.gesis.org/binder
-      weight: 20
+      weight: 100
       health: https://notebooks.gesis.org/binder/health
       versions: https://notebooks.gesis.org/binder/versions
     ovh2:
