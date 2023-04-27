@@ -127,6 +127,30 @@ resource "ovh_cloud_project_kube_nodepool" "user-a" {
   }
 }
 
+resource "ovh_cloud_project_kube_nodepool" "builds" {
+  service_name = local.service_name
+  kube_id      = ovh_cloud_project_kube.cluster.id
+  name         = "builds-2304"
+  # b2-30 is 8-core, 30GB
+  flavor_name = "b2-30"
+  max_nodes   = 3
+  min_nodes   = 1
+  autoscale   = true
+  template {
+    metadata {
+      labels = {
+        "mybinder.org/pool-type" = "builds"
+      }
+    }
+  }
+  lifecycle {
+    ignore_changes = [
+      # don't interfere with autoscaling
+      desired_nodes
+    ]
+  }
+}
+
 # outputs
 
 output "kubeconfig" {

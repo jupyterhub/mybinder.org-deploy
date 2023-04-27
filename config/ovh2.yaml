@@ -11,7 +11,8 @@ binderhub:
       pod_quota: 200
       hub_url: https://hub.ovh2.mybinder.org
       badge_base_url: https://mybinder.org
-      build_node_selector: *userNodeSelector
+      build_node_selector:
+        mybinder.org/pool-type: builds
       sticky_builds: true
       image_prefix: 2lmrrh8f.gra7.container-registry.ovh.net/mybinder-builds/r2d-g5b5b759
     DockerRegistry:
