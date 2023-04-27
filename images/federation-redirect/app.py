@@ -32,15 +32,7 @@ CONFIG = {
     "load_balancer": "rendezvous",  # or "random"
     "pod_headroom": 10,  # number of available slots to consider a member 'available'
     "host_cookie_age_hours": 4,
-    "hosts": {
-        "gke": dict(
-            url="https://gke.mybinder.org",
-            weight=100,
-            health="https://gke.mybinder.org/health",
-            versions="https://gke.mybinder.org/versions",
-            prime=True,
-        ),
-    },
+    "hosts": {},
 }
 
 
