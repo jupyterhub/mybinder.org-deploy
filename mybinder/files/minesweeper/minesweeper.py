@@ -354,12 +354,6 @@ async def node_report(pods=None, userid=1000):
         )
         for proc in suspicious_procs_without_pod:
             print(f"  {proc.pid}: {proc.cmd}")
-            if proc.should_terminate:
-                print(f"unknown process should terminate: {proc}")
-                try:
-                    os.kill(proc.pid, signal.SIGKILL)
-                except OSError as e:
-                    print(f"Failed to kill {proc}: {e}")
 
     # report on suspicious dind processes
     if config["inspect_dind"]:
