@@ -88,7 +88,16 @@ resource "google_sql_database_instance" "matomo" {
   settings {
     tier = var.sql_tier
     backup_configuration {
-      enabled = true
+      enabled  = true
+      location = "us"
+    }
+    database_flags {
+      name  = "table_open_cache"
+      value = "10000"
+    }
+    maintenance_window {
+        day = 1
+        hour = 1
     }
   }
 }
