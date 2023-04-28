@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: static
+  labels:
+    app: static
+    component: nginx
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: static
+    component: nginx
+    release: {{ .Release.Name }}

@@ -22,15 +22,13 @@ spec:
     - host: {{ $host }}
       http:
         paths:
-          {{- range $path := $.Values.static.paths }}
-          - path: {{ $path }}
+          - path: /
             pathType: Prefix
             backend:
               service:
-                name: binder
+                name: static
                 port:
                   number: 80
-          {{- end }}
     {{- end }}
   tls:
     - secretName: {{ .Values.static.ingress.tls.secretName }}
