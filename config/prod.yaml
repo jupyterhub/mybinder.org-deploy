@@ -116,7 +116,9 @@ prometheus:
         memory: 4Gi
       limits:
         cpu: "1"
-        # 20Gi isn't enough to rebuild WAL on startup
+        # before stopping prod binderhub
+        # 20Gi wasn't enough to rebuild WAL on startup
+        # keep an eye on this
         memory: 16Gi
     persistentVolume:
       size: 50G
