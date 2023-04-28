@@ -5,6 +5,8 @@ userNodeSelector: &userNodeSelector
 coreNodeSelector: &coreNodeSelector
   mybinder.org/pool-type: core
 
+binderhubEnabled: false
+
 binderhub:
   config:
     BinderHub:
