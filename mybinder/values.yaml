@@ -441,9 +441,6 @@ redirector:
       secretName: kubelego-tls-redirector
 
 static:
-  paths:
-    - /badge.svg
-    - /badge_logo.svg
   ingress:
     annotations:
       kubernetes.io/ingress.class: nginx
