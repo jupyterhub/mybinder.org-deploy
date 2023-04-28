@@ -8,7 +8,6 @@ coreNodeSelector: &coreNodeSelector
 binderhub:
   config:
     BinderHub:
-      pod_quota: 200
       hub_url: https://hub.ovh2.mybinder.org
       badge_base_url: https://mybinder.org
       build_node_selector:
@@ -19,7 +18,10 @@ binderhub:
     # use this to limit the number of builds per node
     # complicated: dind memory request + KubernetesBuildExecutor.memory_request * builds_per_node ~= node memory
     KubernetesBuildExecutor:
-      memory_request: "2Gi"
+      memory_request: "2G"
+
+    LaunchQuota:
+      total_quota: 300
 
     DockerRegistry:
       # Docker Registry uses harbor
