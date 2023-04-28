@@ -77,3 +77,8 @@ def federation_url(helm_config):
     if not helm_config["federationRedirect"]["enabled"]:
         pytest.skip("federationRedirect not enabled")
     return "https://" + helm_config["federationRedirect"]["host"]
+
+
+@pytest.fixture
+def static_url(helm_config):
+    return "https://" + helm_config["static"]["ingress"]["hosts"][0]

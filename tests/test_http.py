@@ -41,3 +41,16 @@ def test_hub_user_redirect(hub_url):
     resp = requests.get(hub_url + "/other/doesntexist")
     assert resp.status_code == 404
     assert "Binder not found" in resp.text
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "badge.svg",
+        "badge_logo.svg",
+    ],
+)
+def test_static(name, static_url):
+    """Static files are being served"""
+    resp = requests.get(static_url + "/" + name)
+    assert resp.status_code == 200
