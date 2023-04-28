@@ -15,6 +15,12 @@ binderhub:
         mybinder.org/pool-type: builds
       sticky_builds: true
       image_prefix: 2lmrrh8f.gra7.container-registry.ovh.net/mybinder-builds/r2d-g5b5b759
+    # TODO: we should have CPU requests, too
+    # use this to limit the number of builds per node
+    # complicated: dind memory request + KubernetesBuildExecutor.memory_request * builds_per_node ~= node memory
+    KubernetesBuildExecutor:
+      memory_request: "2Gi"
+
     DockerRegistry:
       # Docker Registry uses harbor
       # ref: https://github.com/goharbor/harbor/wiki/Harbor-FAQs#api
@@ -33,6 +39,17 @@ binderhub:
       readOnly: true
   extraEnv:
     GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+
+  # build pods are dedicated 8-core, 30GB
+  # let dind use ~all of it
+  dind:
+    resources:
+      requests:
+        cpu: "4"
+        memory: 16Gi
+      limits:
+        cpu: "7"
+        memory: 24Gi
 
   ingress:
     hosts:
