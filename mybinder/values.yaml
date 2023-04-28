@@ -385,10 +385,10 @@ ingress-nginx:
       enabled: false
     resources:
       requests:
-        cpu: 0.5
-        memory: 440Mi
+        cpu: 100m
+        memory: 150Mi
       limits:
-        cpu: 0.8
+        cpu: 800m
         memory: 500Mi
     tolerations:
       - key: "node.kubernetes.io/unschedulable"
@@ -546,10 +546,10 @@ analyticsPublisher:
   nodeSelector: {}
   resources:
     requests:
-      cpu: 0.2
-      memory: 200Mi
+      cpu: 10m
+      memory: 150Mi
     limits:
-      cpu: 0.2
+      cpu: 100m
       memory: 300Mi
 
 # this is defined in secrets/ for the OVH cluster
@@ -561,11 +561,11 @@ federationRedirect:
   host: mybinder.org
   resources:
     requests:
-      cpu: 0.2
-      memory: 200Mi
+      cpu: 10m
+      memory: 50Mi
     limits:
-      cpu: 0.2
-      memory: 300Mi
+      cpu: 100m
+      memory: 250Mi
   image:
     name: jupyterhub/mybinder.org-federation-redirect
     tag: "set-by-chartpress"

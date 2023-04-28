@@ -80,10 +80,10 @@ grafana:
   nodeSelector: *coreNodeSelector
   resources:
     requests:
-      cpu: "0"
+      cpu: 10m
       memory: 128Mi
     limits:
-      cpu: "0.25"
+      cpu: 250m
       memory: 128Mi
   ingress:
     hosts:
@@ -115,12 +115,14 @@ prometheus:
     livenessProbeInitialDelay: 800
     resources:
       requests:
-        cpu: "4"
-        memory: 30Gi
+        cpu: 100m
+        memory: 4Gi
       limits:
-        cpu: "4"
-        # 20Gi isn't enough to rebuild WAL on startup
-        memory: 33Gi
+        cpu: "1"
+        # before stopping prod binderhub
+        # 20Gi wasn't enough to rebuild WAL on startup
+        # keep an eye on this
+        memory: 16Gi
     persistentVolume:
       size: 50G
       storageClass: standard
@@ -179,7 +181,7 @@ redirector:
 
 matomo:
   enabled: true
-  replicas: 3
+  replicas: 2
   nodeSelector: *coreNodeSelector
   db:
     instanceName: binderhub-288415:us-central1:matomo-prod
@@ -194,10 +196,10 @@ matomo:
       - gke2.mybinder.org
   resources:
     requests:
-      cpu: 0.1
+      cpu: 10m
       memory: 256Mi
     limits:
-      cpu: 1
+      cpu: 200m
       memory: 1Gi
 
 analyticsPublisher:
