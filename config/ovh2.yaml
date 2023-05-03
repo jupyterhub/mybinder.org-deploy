@@ -8,9 +8,6 @@ coreNodeSelector: &coreNodeSelector
 binderhub:
   config:
     BinderHub:
-      # duplicate launch quota here so health check is right
-      # util we deploy https://github.com/jupyterhub/binderhub/pull/1682
-      pod_quota: 300
       hub_url: https://hub.ovh2.mybinder.org
       badge_base_url: https://mybinder.org
       build_node_selector:
