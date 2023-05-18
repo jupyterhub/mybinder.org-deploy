@@ -8,14 +8,9 @@ or [repo2docker](https://github.com/jupyterhub/repo2docker), they need to be exp
 deployed to mybinder.org for users to benefit from them. This is the most common kind of
 change deployed to mybinder.org.
 
-The first two sections of this page cover how to upgrade either `repo2docker` or
-`BinderHub`.
+Upgrades to BinderHub and repo2docker are automatically managed by the [Watch Dependencies GitHub](https://github.com/jupyterhub/mybinder.org-deploy/blob/main/.github/workflows/watch-dependencies.yaml) workflow.
 
-```{note}
-Currently upgrades to BinderHub and repo2docker are automatically managed
-by the fantastic `henchbot <https://github.com/henchbot/mybinder.org-upgrades>`_ and manual intervention is rarely required.
-However, we have left the manual steps here for provenance or in case of emergency.
-```
+Follow the instructions below if you need to manually update BinderHub or Repo2docker.
 
 ## Deployment policy
 
@@ -45,46 +40,11 @@ Upgrading the version of BinderHub that is used in mybinder.org corresponds to
 updating the BinderHub Helm chart version, which we step through below.
 
 1.  Merge changes to BinderHub.
-2.  Open the [branches page for the BinderHub travis account](https://travis-ci.org/jupyterhub/binderhub/branches).
-3.  Wait for the build for your PR merge to pass (it will say "#NNN passed").
-    If it does, then continue to step 4. If it doesn't, take a look at the error message, and debug as needed
-    until they pass.
-4.  Run the `list_new_commits.py` script in the `scripts/` of the
-    `mybinder.org-deploy` repository. It will output something like the following:
-
-        ---------------------
-
-        BinderHub: https://github.com/jupyterhub/binderhub/compare/<OLD-HASH>...<NEW-HASH>
-        repo2docker: https://github.com/jupyterhub/repo2docker/compare/<OLD-HASH>...<NEW-HASH>
-        JupyterHub: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/<OLD-HASH>...<NEW-HASH>
-
-        ---------------------
-
-    Since you are updating BinderHub, copy the text in `<NEW-HASH>` for the
-    line that refers to BinderHub. This is the name of the new BinderHub image.
-    We'll now update the config to refer to this image.
-
-5.  In your fork of the [mybinder.org-deploy](https://github.com/jupyterhub/mybinder.org-deploy)
-    repository, open `mybinder/Chart.yaml`.
-6.  Toward the end of the file, you will see lines similar to:
-
-    - name: binderhub
-      version: 0.2.0-n454.h97fb8c3
-      repository: https://jupyterhub.github.io/helm-chart
-
-    Where `97fb8c3` following `.h`, a prefix for hash, is the same value printed
-    in `<OLD-HASH>` above.
-
-    Replace this hash with the text in `<NEW-HASH>` above. For example, in the
-    above case, we'll replace it with the new hash.
-
-    - name: binderhub
-      version: 0.2.0-n457.hdc3df7f
-      repository: https://jupyterhub.github.io/helm-chart
-
-7.  Merge this change to `mybinder/Chart.yaml` into the mybinder.org-deploy
-    repository following the steps in the [Deploying a change](deploying-a-change) section
-    to deploy the change.
+2.  Wait for the [Publish helm chart and docker images workflow on the main branch](https://github.com/jupyterhub/binderhub/actions/workflows/publish.yml?query=branch%3Amain) to complete successfully.
+3.  Lookup the latest BinderHub chart dev version on https://hub.jupyter.org/helm-chart/#development-releases-binderhub
+4.  In your fork of the [mybinder.org-deploy](https://github.com/jupyterhub/mybinder.org-deploy) repository, open `mybinder/Chart.yaml` and change `version` in the `binderhub` section of `dependencies` to the latest BinderHub chart dev version.
+5.  Open a pull request to merge this change into the main branch of the
+    mybinder.org-deploy repository, following the steps in [Deploying a change](deploying-a-change).
 
 ## Updating repo2docker
 
@@ -94,48 +54,13 @@ merging a PR in the [repo2docker](https://github.com/jupyterhub/repo2docker) rep
 BinderHub uses a docker image with repo2docker in it. When a new commit is merged in
 the repo2docker repository, a new version of this image is pushed. We then configure
 BinderHub to use the newly built image (which is identified by a tag) by editing `values.yaml`.
-The following lines describe how to point mybinder.org to the new repo2docker image
 
 1.  Merge changes to repo2docker.
-2.  Open the [branches page for repo2docker](https://travis-ci.org/jupyter/repo2docker/branches).
-    And click on the number for the latest build on "main".
-3.  Wait for the build for your PR merge to pass (it will say "#NNN passed").
-    If it does, then continue to step 4. If it doesn't, take a look at the error message, and debug as needed
-    until they pass.
-4.  Run the `list_new_commits.py` script in the `scripts/` of the
-    `mybinder.org-deploy` repository. It will output something like the following:
-
-        ---------------------
-
-        BinderHub: https://github.com/jupyterhub/binderhub/compare/<OLD-HASH>...<NEW-HASH>
-        repo2docker: https://github.com/jupyterhub/repo2docker/compare/<OLD-HASH>...<NEW-HASH>
-        JupyterHub: https://github.com/jupyterhub/zero-to-jupyterhub-k8s/compare/<OLD-HASH>...<NEW-HASH>
-
-        ---------------------
-
-    Since you are updating repo2docker, copy the text in `<NEW-HASH>` for the
-    line that refers to repo2docker. This is the name of the new repo2docker image.
-    We'll now update the config to refer to this image.
-
-5.  In your fork of the mybinder.org-deploy repository, open
-    `mybinder/values.yaml`.
-6.  Somewhere in the file you will see `repo2dockerImage`, it will look like
-    this:
-
-        BinderHub:
-          build_image: jupyter/repo2docker:65d5411
-
-    Where `65d5411` is the same value in `<OLD-HASH>` above.
-
-7.  Replace the _old_ hash that is there with what you copied in step 4.
-    For example, the edited file will look similar to:
-
-        BinderHub:
-          build_image: jupyter/repo2docker:<NEW-HASH>
-
-8.  Merge this change to `mybinder/values.yaml` into the mybinder.org-deploy
-    repository following the steps in the [Deploying a change](deploying-a-change) section
-    to deploy the change.
+2.  Wait for the [Publish helm chart and docker images workflow on the main branch](https://github.com/jupyterhub/repo2docker/actions/workflows/release.yml?query=branch%3Amain) to complete successfully.
+3.  Lookup the latest Repo2docker tag on https://quay.io/repository/jupyterhub/repo2docker?tab=tags
+4.  In your fork of the mybinder.org-deploy repository, open `mybinder/values.yaml` and change the tag in `binderhub.config.BinderHub.build_image` to the latest tag.
+5.  Open a pull request to merge this change into the main branch of the
+    mybinder.org-deploy repository, following the steps in [Deploying a change](deploying-a-change).
 
 (deploying-a-change)=
 
