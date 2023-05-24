@@ -158,18 +158,6 @@ def deploy(release, name=None):
 
     setup_certmanager()
 
-    print(BOLD + GREEN + "Starting prometheus chart upgrade preparation", flush=True)
-    kubectl_delete = [
-        "kubectl",
-        "delete",
-        f"--namespace={name}",
-        "deploy,sts",
-        "-l",
-    ]
-    subprocess.check_call(kubectl_delete + ["app=prometheus"])
-    subprocess.check_call(kubectl_delete + ["app.kubernetes.io/name=prometheus"])
-    print(BOLD + GREEN + "SUCCESS: prometheus chart upgrade preparation", flush=True)
-
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
     helm = [
         "helm",
