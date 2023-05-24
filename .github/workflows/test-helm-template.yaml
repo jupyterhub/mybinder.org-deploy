@@ -44,7 +44,7 @@ jobs:
           - release: staging
             k3s-channel: "v1.24"
           - release: prod
-            k3s-channel: "v1.23"
+            k3s-channel: "v1.24"
           - release: ovh2
             k3s-channel: "v1.24"
 
