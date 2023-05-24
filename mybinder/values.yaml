@@ -220,7 +220,7 @@ binderhub:
           # for now. Should be fixed in https://github.com/googleapis/google-cloud-python/pull/6293
           name = os.environ.get("EVENT_LOG_NAME") or "binderhub-events-text")
           get_logger().info("Sending event logs to %s/logs/%s", client.project, name)
-          return [JSONCloudLoggingHandler(client, name=name]
+          return [JSONCloudLoggingHandler(client, name=name)]
       c.EventLog.handlers_maker = _make_eventsink_handler
 
   registry:
