@@ -33,15 +33,15 @@ env:
   # gcloud versions at https://cloud.google.com/sdk/docs/release-notes, update
   # to latest when updating.
   #
-  GCLOUD_SDK_VERION: "387.0.0"
+  GCLOUD_SDK_VERION: "432.0.0"
   # kubectl versions at https://github.com/kubernetes/kubernetes/tags, update to
   # second latest minor for a broad compatibility range when updating.
   #
-  KUBECTL_VERSION: "v1.23.7"
+  KUBECTL_VERSION: "v1.25.10"
   # helm versions at https://github.com/helm/helm/tags, use latest when
   # updating.
   #
-  HELM_VERSION: "v3.9.0"
+  HELM_VERSION: "v3.12.0"
   # cert-mangaer versions at https://cert-manager.io/docs/release-notes/, update
   # to latest when updating and make sure to read upgrade notes. "kubectl apply"
   # will be done on CRDs but sometimes more is needed.
