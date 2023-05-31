@@ -59,12 +59,12 @@ resource "aws_s3_bucket_public_access_block" "public-block" {
   restrict_public_buckets = true
 }
 
-# resource "aws_dynamodb_table" "tfstate-lock" {
-#   hash_key = "LockID"
-#   name     = "dynamodb-state-locking"
-#   attribute {
-#     name = "LockID"
-#     type = "S"
-#   }
-#   billing_mode = "PAY_PER_REQUEST"
-# }
+resource "aws_dynamodb_table" "tfstate-lock" {
+  hash_key = "LockID"
+  name     = "dynamodb-state-locking"
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+  billing_mode = "PAY_PER_REQUEST"
+}

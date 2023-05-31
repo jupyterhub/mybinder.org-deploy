@@ -13,10 +13,10 @@ terraform {
   # 2. run the deployment to create the S3 bucket
   # 3. uncomment this and migrate the tfstate to S3
   backend "s3" {
-    bucket = "binderhub-tfstate-7rjazazm1c7k"
-    key    = "tfstate/dev/binderhub-dev"
-    region = "us-east-2"
-    # dynamodb_table = "dynamodb-state-locking"
+    bucket         = "binderhub-tfstate-7rjazazm1c7k"
+    key            = "tfstate/dev/binderhub-dev"
+    region         = "us-east-2"
+    dynamodb_table = "dynamodb-state-locking"
   }
 }
 
