@@ -6,7 +6,7 @@ variable "bucket-name" {
   description = "Bucket name for Terraform state file"
 }
 
-variable "aws-region" {
+variable "region" {
   type        = string
   default     = "us-east-2"
   description = "AWS region"
@@ -23,7 +23,7 @@ terraform {
 
 # Configure the AWS Provider
 provider "aws" {
-  region = var.aws-region
+  region = var.region
   default_tags {
     tags = {
       "owner" : "binderhub"

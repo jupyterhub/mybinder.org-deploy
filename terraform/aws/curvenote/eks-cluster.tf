@@ -1,39 +1,45 @@
 # Full example:
-# https://github.com/terraform-aws-modules/terraform-aws-eks/blame/v19.10.0/examples/complete/main.tf
-# https://github.com/terraform-aws-modules/terraform-aws-eks/blob/v19.10.0/docs/compute_resources.md
+# https://github.com/terraform-aws-modules/terraform-aws-eks/blame/v19.14.0/examples/complete/main.tf
+# https://github.com/terraform-aws-modules/terraform-aws-eks/blob/v19.14.0/docs/compute_resources.md
 
-# Get IP of caller to limit SSH inbound IPs
-data "http" "myip" {
-  url = "https://checkip.amazonaws.com/"
-}
+data "aws_caller_identity" "current" {}
 
 locals {
-  cluster_endpoint_public_access_cidrs = [
-    for item in var.k8s_api_cidrs :
-    replace(item, "myip", "${chomp(data.http.myip.response_body)}/32")
-  ]
+  permissions_boundary_arn = (
+    var.permissions_boundary_name != null ?
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/${var.permissions_boundary_name}" :
+    null
+  )
 }
 
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
   version         = "19.14.0"
   cluster_name    = var.cluster_name
-  cluster_version = "1.25"
-  subnet_ids      = module.vpc.private_subnets
+  cluster_version = var.k8s_version
+  subnet_ids      = module.vpc.public_subnets
 
   cluster_endpoint_private_access      = true
   cluster_endpoint_public_access       = true
-  cluster_endpoint_public_access_cidrs = local.cluster_endpoint_public_access_cidrs
+  cluster_endpoint_public_access_cidrs = var.k8s_api_cidrs
 
   vpc_id = module.vpc.vpc_id
 
+  enable_irsa                   = var.enable_irsa
+  iam_role_permissions_boundary = local.permissions_boundary_arn
+
+  aws_auth_accounts = [
+    data.aws_caller_identity.current.account_id,
+  ]
+
   eks_managed_node_group_defaults = {
-    capacity_type = "SPOT"
+    capacity_type                 = "SPOT"
+    iam_role_permissions_boundary = local.permissions_boundary_arn
   }
 
   eks_managed_node_groups = {
     worker_group-1 = {
-      name           = "worker-group-1"
+      name           = "${var.cluster_name}-wg1"
       instance_types = ["t3a.large"]
       ami_type       = "BOTTLEROCKET_x86_64"
       platform       = "bottlerocket"
@@ -60,7 +66,7 @@ module "eks" {
         }
       ]
 
-      subnet_ids = slice(module.vpc.private_subnets, 0, var.worker-group-1-number-azs)
+      subnet_ids = slice(module.vpc.public_subnets, 0, var.worker_group_1_number_azs)
     },
     # Add more worker groups here
   }
