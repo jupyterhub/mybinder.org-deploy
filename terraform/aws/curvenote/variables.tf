@@ -13,7 +13,7 @@ variable "cluster_name" {
 variable "k8s_version" {
   type        = string
   description = "Kubernetes cluster version"
-  default     = "1.25"
+  default     = "1.26"
 }
 
 variable "k8s_api_cidrs" {

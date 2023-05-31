@@ -14,7 +14,7 @@ locals {
 
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
-  version         = "19.14.0"
+  version         = "19.15.2"
   cluster_name    = var.cluster_name
   cluster_version = var.k8s_version
   subnet_ids      = module.vpc.public_subnets
@@ -27,6 +27,13 @@ module "eks" {
 
   enable_irsa                   = var.enable_irsa
   iam_role_permissions_boundary = local.permissions_boundary_arn
+
+  iam_role_additional_policies = {
+    # This should not be necessary if we create the service linked role
+    # https://docs.aws.amazon.com/eks/latest/userguide/service_IAM_role.html
+    AmazonEKSServicePolicy    = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
+    AllAllowedBinderhubPolicy = local.permissions_boundary_arn
+  }
 
   aws_auth_accounts = [
     data.aws_caller_identity.current.account_id,
