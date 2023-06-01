@@ -13,4 +13,3 @@ terraform init
 terraform apply
 cd ..
 ```
-
