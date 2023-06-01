@@ -1,3 +1,4 @@
+# https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/19.15.2
 # Full example:
 # https://github.com/terraform-aws-modules/terraform-aws-eks/blame/v19.14.0/examples/complete/main.tf
 # https://github.com/terraform-aws-modules/terraform-aws-eks/blob/v19.14.0/docs/compute_resources.md
@@ -12,6 +13,7 @@ locals {
   )
 }
 
+# This assumes the EKS service linked role is already created (or the current user has permissions to create it)
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
   version         = "19.15.2"
@@ -28,13 +30,7 @@ module "eks" {
   enable_irsa                   = var.enable_irsa
   iam_role_permissions_boundary = local.permissions_boundary_arn
 
-  iam_role_additional_policies = {
-    # This should not be necessary if we create the service linked role
-    # https://docs.aws.amazon.com/eks/latest/userguide/service_IAM_role.html
-    AmazonEKSServicePolicy    = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
-    AllAllowedBinderhubPolicy = local.permissions_boundary_arn
-  }
-
+  # Anyone in the AWS account with sufficient permissions can access the cluster
   aws_auth_accounts = [
     data.aws_caller_identity.current.account_id,
   ]
