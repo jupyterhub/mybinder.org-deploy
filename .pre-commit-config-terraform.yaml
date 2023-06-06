@@ -1,0 +1,20 @@
+# Config reference: https://pre-commit.com/#pre-commit-configyaml---top-level
+#
+# Common tasks
+#
+# - Run on all files: pre-commit run --all --config .pre-commit-config-terraform.yaml
+#
+# Prerequisites:
+# - terraform
+# - tflint
+
+# Currently only aws/curvenote is checked
+files: "^terraform/aws/curvenote/"
+repos:
+  # We can't run any CI tests on production Terraform code, so use as many static linters as possible
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.80.0
+    hooks:
+      - id: terraform_fmt
+      - id: terraform_tflint
+      - id: terraform_validate
