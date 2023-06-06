@@ -1,0 +1,33 @@
+resource "aws_iam_openid_connect_provider" "binderhub_eks_oidc_provider" {
+  client_id_list = [
+    "sts.amazonaws.com",
+  ]
+  tags = {
+    "Name" = "binderhub-eks-irsa"
+  }
+  thumbprint_list = [
+    # Use output from cluster_tls_certificate_sha1_fingerprint
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+    "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  ]
+  # Use output from cluster_oidc_issuer_url
+  url = "https://oidc.eks.us-east-2.amazonaws.com/id/XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+}
+
+# https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services
+# Use in conjunction with a role, and
+# https://github.com/aws-actions/configure-aws-credentials
+resource "aws_iam_openid_connect_provider" "github_oidc" {
+  client_id_list = [
+    "sts.amazonaws.com",
+  ]
+  tags = {
+    "Name" = "github-oidc"
+  }
+  thumbprint_list = [
+    "6938fd4d98bab03faadb97b34396831e3780aea1"
+  ]
+  url = "https://token.actions.githubusercontent.com"
+}

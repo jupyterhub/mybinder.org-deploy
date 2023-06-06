@@ -4,8 +4,8 @@
 # https://github.com/terraform-aws-modules/terraform-aws-iam/tree/v5.2.0/modules/iam-role-for-service-accounts-eks
 
 locals {
-  oidc_provider_arn = (var.oidc_provider_arn == null) ? var.oidc_provider_arn : module.eks.oidc_provider_arn
-  count             = (local.oidc_provider_arn == null) ? 0 : 1
+  oidc_provider_arn = (var.oidc_provider_arn != null) ? var.oidc_provider_arn : module.eks.oidc_provider_arn
+  count             = (var.oidc_provider_arn != null || var.enable_irsa) ? 1 : 0
 }
 
 module "irsa_eks_role_load_balancer" {
