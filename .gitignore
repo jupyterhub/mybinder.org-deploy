@@ -19,4 +19,4 @@ travis/crypt-key
 env
 
 .terraform
-.terraform.lock.hcl
+# Note: Do not ignore .terraform.lock.hcl, this is required for reproducible deployments
