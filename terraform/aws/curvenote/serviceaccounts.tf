@@ -4,17 +4,17 @@
 # https://github.com/terraform-aws-modules/terraform-aws-iam/tree/v5.2.0/modules/iam-role-for-service-accounts-eks
 
 locals {
-  count             = (var.enable_irsa || var.oidc_created) ? 1 : 0
-  oidc_provider_arn = (local.count == 1) ? data.aws_iam_openid_connect_provider.binderhub_eks_oidc_provider[0].arn : null
+  create_irsa_roles     = (var.enable_irsa || var.oidc_created) ? 1 : 0
+  eks_oidc_provider_arn = (local.create_irsa_roles == 1) ? data.aws_iam_openid_connect_provider.binderhub_eks_oidc_provider[0].arn : null
 }
 
 data "aws_iam_openid_connect_provider" "binderhub_eks_oidc_provider" {
-  count = local.count
+  count = local.create_irsa_roles
   url   = module.eks.cluster_oidc_issuer_url
 }
 
 module "irsa_eks_role_load_balancer" {
-  count                                  = local.count
+  count                                  = local.create_irsa_roles
   source                                 = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version                                = "5.19.0"
   role_name                              = "${var.cluster_name}-IRSA-aws-load-balancer-controller"
@@ -24,14 +24,14 @@ module "irsa_eks_role_load_balancer" {
 
   oidc_providers = {
     default = {
-      provider_arn               = local.oidc_provider_arn
+      provider_arn               = local.eks_oidc_provider_arn
       namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
     }
   }
 }
 
 module "irsa_eks_role_ebs_csi" {
-  count                         = local.count
+  count                         = local.create_irsa_roles
   source                        = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version                       = "5.19.0"
   role_name                     = "${var.cluster_name}-IRSA-ebs-csi-controller-sa"
@@ -41,7 +41,7 @@ module "irsa_eks_role_ebs_csi" {
 
   oidc_providers = {
     default = {
-      provider_arn               = local.oidc_provider_arn
+      provider_arn               = local.eks_oidc_provider_arn
       namespace_service_accounts = ["kube-system:ebs-csi-controller-sa"]
     }
   }
@@ -79,7 +79,7 @@ resource "aws_iam_policy" "binderhub-ecr" {
           "ecr:PutLifecyclePolicy",
         ]
         Effect   = "Allow"
-        Resource = "arn:aws:ecr:region:${data.aws_caller_identity.current.account_id}:*"
+        Resource = "arn:aws:ecr:${var.region}:${data.aws_caller_identity.current.account_id}:*"
       },
     ]
   })
@@ -87,7 +87,7 @@ resource "aws_iam_policy" "binderhub-ecr" {
 
 
 module "irsa_eks_role_binderhub_ecr" {
-  count                         = local.count
+  count                         = local.create_irsa_roles
   source                        = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
   version                       = "5.19.0"
   role_name                     = "${var.cluster_name}-IRSA-aws-binderhub-ecr"
@@ -96,7 +96,7 @@ module "irsa_eks_role_binderhub_ecr" {
 
   oidc_providers = {
     default = {
-      provider_arn               = local.oidc_provider_arn
+      provider_arn               = local.eks_oidc_provider_arn
       namespace_service_accounts = ["binder:aws-binderhub-ecr"]
     }
   }
