@@ -47,7 +47,7 @@ resource "aws_iam_role" "github_oidc_mybinderorgdeploy" {
         {
           Action   = ["eks:DescribeCluster"]
           Effect   = "Allow"
-          Resource = "arn:aws:ecr:${var.region}:${data.aws_caller_identity.current.account_id}:*"
+          Resource = "arn:aws:eks:${var.region}:${data.aws_caller_identity.current.account_id}:*"
         }
       ]
     })
