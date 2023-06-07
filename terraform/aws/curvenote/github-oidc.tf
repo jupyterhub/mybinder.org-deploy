@@ -30,6 +30,8 @@ resource "aws_iam_role" "github_oidc_mybinderorgdeploy" {
             "token.actions.githubusercontent.com:sub" = [
               # GitHub repositories and refs allowed to use this role
               "repo:jupyterhub/mybinder.org-deploy:ref:refs/heads/main",
+              # TODO: Remove this, just for development:
+              "repo:manics/mybinder.org-deploy:ref:refs/heads/aws-curvenote",
             ]
           }
         }
