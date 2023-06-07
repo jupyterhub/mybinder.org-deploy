@@ -44,7 +44,7 @@ variable "enable_irsa" {
 
 variable "oidc_created" {
   type        = bool
-  default     = false
+  default     = true
   description = <<-EOT
     If enable_irsa is false and the OIDC provider has been manually created using
     the openid_connect_providers.tf.example file, set this to true.
