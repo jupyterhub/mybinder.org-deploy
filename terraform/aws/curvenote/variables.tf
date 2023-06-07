@@ -42,6 +42,15 @@ variable "enable_irsa" {
     EOT
 }
 
+variable "oidc_created" {
+  type        = bool
+  default     = false
+  description = <<-EOT
+    If enable_irsa is false and the OIDC provider has been manually created using
+    the openid_connect_providers.tf.example file, set this to true.
+    EOT
+}
+
 variable "permissions_boundary_name" {
   type        = string
   description = <<-EOT
@@ -49,17 +58,4 @@ variable "permissions_boundary_name" {
     Specify if you are using a limited IAM role for deployment.
     EOT
   default     = "system/binderhub_policy"
-}
-
-variable "oidc_provider_arn" {
-  type        = string
-  description = <<-EOT
-    The ARN of the OIDC provider, specify if OIDC was setup manually.
-    If enable_irsa is true the OIDC provider is automatically created so this
-    can be left empty as it will be autodetected.
-    If enable_irsa is false and this is null then no IRSA service roles will be created.
-    This is useful if you need to deploy the cluster in one step, create the OIDC provider
-    separately, and then deploy again after setting this variable.
-    EOT
-  default     = null
 }

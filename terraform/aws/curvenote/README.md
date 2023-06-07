@@ -41,7 +41,7 @@ enable_irsa = false
 
 ```
 terraform init
-terraform apply"
+terraform apply
 ```
 
 Copy [`openid_connect_providers.tf.example`](./openid_connect_providers.tf.example) and edit the `resource "aws_iam_openid_connect_provider" "binderhub_eks_oidc_provider" { thumbprint_list, url }` fields, using the values from [`outputs.tf`](./outputs.tf).
@@ -51,13 +51,12 @@ Ask the AWS account administrator to create the OIDC Provider, and retrieve the 
 Set
 
 ```
-oidc_provider_arn = aws_iam_openid_connect_provider.binderhub_eks_oidc_provider.arn
+oidc_created = true
 ```
 
 and deploy again
 
 ```
-terraform init
 terraform apply
 ```
 

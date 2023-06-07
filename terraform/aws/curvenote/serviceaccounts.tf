@@ -4,8 +4,13 @@
 # https://github.com/terraform-aws-modules/terraform-aws-iam/tree/v5.2.0/modules/iam-role-for-service-accounts-eks
 
 locals {
-  oidc_provider_arn = (var.oidc_provider_arn != null) ? var.oidc_provider_arn : module.eks.oidc_provider_arn
-  count             = (var.oidc_provider_arn != null || var.enable_irsa) ? 1 : 0
+  count             = (var.enable_irsa || var.oidc_created) ? 1 : 0
+  oidc_provider_arn = (local.count == 1) ? data.aws_iam_openid_connect_provider.binderhub_eks_oidc_provider[0].arn : null
+}
+
+data "aws_iam_openid_connect_provider" "binderhub_eks_oidc_provider" {
+  count = local.count
+  url   = module.eks.cluster_oidc_issuer_url
 }
 
 module "irsa_eks_role_load_balancer" {
