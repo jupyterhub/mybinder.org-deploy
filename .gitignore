@@ -19,4 +19,6 @@ travis/crypt-key
 env
 
 .terraform
-# Note: Do not ignore .terraform.lock.hcl, this is required for reproducible deployments
+.terraform.lock.hcl
+# Keep .terraform.lock.hcl to ensure reproducible deployments
+!terraform/aws/curvenote/.terraform.lock.hcl
