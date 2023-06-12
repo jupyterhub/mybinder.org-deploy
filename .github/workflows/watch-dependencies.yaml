@@ -2,7 +2,7 @@
 # ref: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
 #
 # - Watch the image tag referenced in mybinder/values.yaml under
-#   binderhub.config.BinderHub.build_image to match the latest image tag for
+#   binderhub.config.KubernetesBuildExecutor.build_image to match the latest image tag for
 #   quay.io/jupyterhub/repo2docker.
 #
 # - Watch the chart versions referenced as dependencies in mybinder/Chart.yaml
@@ -37,7 +37,7 @@ jobs:
           - name: repo2docker
             registry: quay.io
             repository: jupyterhub/repo2docker
-            values_path: binderhub.config.BinderHub.build_image
+            values_path: binderhub.config.KubernetesBuildExecutor.build_image
             changelog_url: https://repo2docker.readthedocs.io/en/latest/changelog.html
             source_url: https://github.com/jupyterhub/repo2docker
 

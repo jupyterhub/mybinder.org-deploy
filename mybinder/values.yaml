@@ -139,7 +139,6 @@ binderhub:
 
     BinderHub:
       use_registry: true
-      build_image: quay.io/jupyterhub/repo2docker:2022.10.0-169.g6250c06
       per_repo_quota: 100
       per_repo_quota_higher: 200
       cors_allow_origin: "*"
@@ -189,6 +188,7 @@ binderhub:
             })();
           }
     KubernetesBuildExecutor:
+      build_image: quay.io/jupyterhub/repo2docker:2022.10.0-169.g6250c06
       memory_limit: "3G"
       memory_request: "1G"
 
