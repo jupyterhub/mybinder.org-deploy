@@ -62,7 +62,19 @@ terraform apply
 
 ## Obtaining a kubeconfig file
 
+You must assume the `arn:aws:iam::<AWS_ACCOUNT_ID>:role/binderhub-eks-access` role to obtain a kubeconfig file.
+Assuming your AWS credentials are already setup, the easiest way to do this is to [add a second profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-role.html) in `~/.aws/config`:
+
 ```
-aws eks update-kubeconfig --name binderhub --kubeconfig /path/to/kubeconfig
+[profile aws-curvenote-binderhub-eks-access]
+region = us-east-2
+role_arn = arn:aws:iam::<AWS_ACCOUNT_ID>:role/binderhub-eks-access
+source_profile = <name-of-your-aws-curvenote-profile>
+```
+
+Obtain a kubeconfig file
+
+```
+aws --profile=aws-curvenote-binderhub-eks-access eks update-kubeconfig --name binderhub --kubeconfig /path/to/kubeconfig
 kubectl --kubeconfig=/path/to/kubeconfig get nodes
 ```
