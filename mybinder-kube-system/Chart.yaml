@@ -1,0 +1,17 @@
+apiVersion: v2
+description: A meta-chart for the kube-system charts on some mybinder.org hosts
+name: mybinder-kube-system
+version: "0.0.1-set.by.chartpress"
+kubeVersion: ">= 1.26.0-0"
+dependencies:
+  # https://artifacthub.io/packages/helm/aws/aws-load-balancer-controller
+  - name: aws-load-balancer-controller
+    version: 1.5.3
+    repository: https://aws.github.io/eks-charts
+    condition: aws-load-balancer-controller.enabled
+
+  # https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/master/docs/install.md
+  - name: aws-ebs-csi-driver
+    version: 2.17.2
+    repository: https://kubernetes-sigs.github.io/aws-ebs-csi-driver
+    condition: aws-ebs-csi-driver.enabled
