@@ -16,7 +16,7 @@ locals {
 # This assumes the EKS service linked role is already created (or the current user has permissions to create it)
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
-  version         = "19.15.2"
+  version         = "19.15.3"
   cluster_name    = var.cluster_name
   cluster_version = var.k8s_version
   subnet_ids      = module.vpc.public_subnets
