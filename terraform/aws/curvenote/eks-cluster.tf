@@ -30,11 +30,6 @@ module "eks" {
   enable_irsa                   = var.enable_irsa
   iam_role_permissions_boundary = local.permissions_boundary_arn
 
-  # Anyone in the AWS account with sufficient permissions can access the cluster
-  aws_auth_accounts = [
-    data.aws_caller_identity.current.account_id,
-  ]
-
   eks_managed_node_group_defaults = {
     capacity_type                 = "SPOT"
     iam_role_permissions_boundary = local.permissions_boundary_arn
@@ -73,6 +68,24 @@ module "eks" {
     },
     # Add more worker groups here
   }
+
+  manage_aws_auth_configmap = true
+  # Anyone in the AWS account with sufficient permissions can access the cluster
+  aws_auth_accounts = [
+    data.aws_caller_identity.current.account_id,
+  ]
+  aws_auth_roles = [
+    {
+      # GitHub OIDC role
+      rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.cluster_name}-${var.github_oidc_role_suffix}"
+      username = "binderhub-admin"
+      groups   = ["system:masters"]
+    },
+  ]
+}
+
+data "aws_eks_cluster_auth" "binderhub" {
+  name = var.cluster_name
 }
 
 # data "aws_eks_cluster" "cluster" {

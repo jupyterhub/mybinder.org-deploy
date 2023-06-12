@@ -51,6 +51,15 @@ variable "oidc_created" {
     EOT
 }
 
+variable "github_oidc_role_suffix" {
+  type        = string
+  description = <<-EOT
+    The suffix of the IAM role that will be created for the GitHub OIDC provider.
+    Will be joined to var.cluster_name with a hyphen.
+    EOT
+  default     = "github-oidc-mybinderorgdeploy"
+}
+
 variable "permissions_boundary_name" {
   type        = string
   description = <<-EOT

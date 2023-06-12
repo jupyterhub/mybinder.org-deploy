@@ -13,11 +13,6 @@ output "cluster_security_group_id" {
   value       = module.eks.cluster_security_group_id
 }
 
-output "config_map_aws_auth" {
-  description = "A kubernetes configuration to authenticate to this EKS cluster."
-  value       = module.eks.aws_auth_configmap_yaml
-}
-
 output "region" {
   description = "AWS region"
   value       = var.region

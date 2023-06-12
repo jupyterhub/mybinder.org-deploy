@@ -12,7 +12,7 @@ data "aws_iam_openid_connect_provider" "github_oidc_provider" {
 
 resource "aws_iam_role" "github_oidc_mybinderorgdeploy" {
   count = local.create_github_roles
-  name  = "${var.cluster_name}-github-oidc-mybinderorgdeploy"
+  name  = "${var.cluster_name}-${var.github_oidc_role_suffix}"
 
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
