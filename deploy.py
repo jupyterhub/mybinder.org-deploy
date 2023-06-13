@@ -33,7 +33,30 @@ GCP_ZONES = {
 AZURE_RGs = {}
 
 
-def setup_auth_azure(cluster):
+def check_call(cmd, dry_run):
+    """
+    Print a command if dry_run is true, otherwise run it with subprocess.check_call
+    """
+    if dry_run:
+        print("dry-run:", " ".join(cmd))
+    else:
+        subprocess.check_call(cmd)
+
+
+def check_output(cmd, dry_run):
+    """
+    Print a command if dry_run is true, otherwise run it with subprocess.check_output
+    and return decoded output
+    """
+    if dry_run:
+        print("dry-run:", " ".join(cmd))
+        return ""
+    else:
+        out = subprocess.check_output(cmd)
+        return out.decode("utf-8")
+
+
+def setup_auth_azure(cluster, dry_run=False):
     """
     Set up authentication with a k8s cluster on Azure.
     """
@@ -55,7 +78,7 @@ def setup_auth_azure(cluster):
         "--tenant",
         azure["tenant-id"],
     ]
-    subprocess.check_output(login_cmd)
+    check_output(login_cmd, dry_run)
 
     # Set kubeconfig
     creds_cmd = [
@@ -67,11 +90,11 @@ def setup_auth_azure(cluster):
         "--resource-group",
         AZURE_RGs[cluster],
     ]
-    stdout = subprocess.check_output(creds_cmd)
-    print(stdout.decode("utf-8"))
+    stdout = check_output(creds_cmd, dry_run)
+    print(stdout)
 
 
-def setup_auth_ovh(release, cluster):
+def setup_auth_ovh(release, cluster, dry_run=False):
     """
     Set up authentication with 'ovh' K8S from the ovh-kubeconfig.yml
     """
@@ -80,29 +103,30 @@ def setup_auth_ovh(release, cluster):
     ovh_kubeconfig = os.path.join(ABSOLUTE_HERE, "secrets", f"{release}-kubeconfig.yml")
     os.environ["KUBECONFIG"] = ovh_kubeconfig
     print(f"Current KUBECONFIG='{ovh_kubeconfig}'")
-    stdout = subprocess.check_output(["kubectl", "config", "use-context", cluster])
-    print(stdout.decode("utf8"))
+    stdout = check_output(["kubectl", "config", "use-context", cluster], dry_run)
+    print(stdout)
 
 
-def setup_auth_gcloud(release, cluster=None):
+def setup_auth_gcloud(release, cluster=None, dry_run=False):
     """
     Set up GCloud + Kubectl authentication for talking to a given cluster
     """
     # Authenticate to GoogleCloud using a service account
-    subprocess.check_output(
+    check_output(
         [
             "gcloud",
             "auth",
             "activate-service-account",
             f"--key-file=secrets/gke-auth-key-{release}.json",
-        ]
+        ],
+        dry_run,
     )
 
     project = GCP_PROJECTS[release]
     zone = GCP_ZONES[release]
 
     # Use gcloud to populate ~/.kube/config, which kubectl / helm can use
-    subprocess.check_call(
+    check_call(
         [
             "gcloud",
             "container",
@@ -111,11 +135,12 @@ def setup_auth_gcloud(release, cluster=None):
             cluster,
             f"--zone={zone}",
             f"--project={project}",
-        ]
+        ],
+        dry_run,
     )
 
 
-def update_networkbans(cluster):
+def update_networkbans(cluster, dry_run=False):
     """
     Run secrets/ban.py to update network bans
     """
@@ -128,23 +153,23 @@ def update_networkbans(cluster):
     if cluster in {"ovh", "ovh2"}:
         ban_command.append(cluster)
 
-    subprocess.check_call(ban_command)
+    check_call(ban_command, dry_run)
 
 
-def get_config_files(release):
+def get_config_files(release, config_dir="config"):
     """Return the list of config files to load"""
     # common config files
-    config_files = sorted(glob.glob(os.path.join("config", "common", "*.yaml")))
+    config_files = sorted(glob.glob(os.path.join(config_dir, "common", "*.yaml")))
     config_files.extend(
-        sorted(glob.glob(os.path.join("secrets", "config", "common", "*.yaml")))
+        sorted(glob.glob(os.path.join("secrets", config_dir, "common", "*.yaml")))
     )
     # release-specific config files
-    for config_dir in ("config", "secrets/config"):
+    for config_dir in (config_dir, os.path.join("secrets", config_dir)):
         config_files.append(os.path.join(config_dir, release + ".yaml"))
     return config_files
 
 
-def deploy(release, name=None):
+def deploy(release, name=None, dry_run=False):
     """Deploys a federation member to a k8s cluster.
 
     The deployment is done in the following steps:
@@ -156,7 +181,7 @@ def deploy(release, name=None):
     if not name:
         name = release
 
-    setup_certmanager()
+    setup_certmanager(dry_run)
 
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
     helm = [
@@ -175,12 +200,18 @@ def deploy(release, name=None):
     for config_file in config_files:
         helm.extend(["-f", config_file])
 
-    subprocess.check_call(helm)
+    check_call(helm, dry_run)
     print(
         BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC, flush=True
     )
 
-    # Explicitly wait for all deployments and daemonsets to be fully rolled out
+    wait_for_deployments_daemonsets(name, dry_run)
+
+
+def wait_for_deployments_daemonsets(name, dry_run=False):
+    """
+    Wait for all deployments and daemonsets to be fully rolled out
+    """
     print(
         BOLD
         + GREEN
@@ -189,22 +220,22 @@ def deploy(release, name=None):
         flush=True,
     )
     deployments_and_daemonsets = (
-        subprocess.check_output(
+        check_output(
             [
                 "kubectl",
                 "get",
                 f"--namespace={name}",
                 "--output=name",
                 "deployments,daemonsets",
-            ]
+            ],
+            dry_run,
         )
-        .decode()
         .strip()
         .split("\n")
     )
 
     for d in deployments_and_daemonsets:
-        subprocess.check_call(
+        check_call(
             [
                 "kubectl",
                 "rollout",
@@ -213,11 +244,12 @@ def deploy(release, name=None):
                 "--timeout=10m",
                 "--watch",
                 d,
-            ]
+            ],
+            dry_run,
         )
 
 
-def setup_certmanager():
+def setup_certmanager(dry_run=False):
     """
     Install cert-manager separately into its own namespace and `kubectl apply`
     its CRDs each time as helm won't attempt to handle changes to CRD resources.
@@ -233,7 +265,7 @@ def setup_certmanager():
     print(BOLD + GREEN + f"Installing cert-manager CRDs {version}" + NC, flush=True)
 
     # Sometimes 'replace' is needed for upgrade (e.g. 1.1->1.2)
-    subprocess.check_call(["kubectl", "apply", "-f", manifest_url])
+    check_call(["kubectl", "apply", "-f", manifest_url], dry_run)
 
     print(BOLD + GREEN + f"Installing cert-manager {version}" + NC, flush=True)
     helm_upgrade = [
@@ -249,16 +281,16 @@ def setup_certmanager():
         "--values=config/cert-manager.yaml",
     ]
 
-    subprocess.check_call(helm_upgrade)
+    check_call(helm_upgrade, dry_run)
 
 
-def patch_coredns():
+def patch_coredns(dry_run=False):
     """Patch coredns resource allocation
 
     OVH2 coredns does not have sufficient memory by default after our ban patches
     """
     print(BOLD + GREEN + "Patching coredns resources" + NC, flush=True)
-    subprocess.check_call(
+    check_call(
         [
             "kubectl",
             "set",
@@ -270,7 +302,8 @@ def patch_coredns():
             "memory=250Mi",
             "--requests",
             "memory=200Mi",
-        ]
+        ],
+        dry_run,
     )
 
 
@@ -301,6 +334,11 @@ def main():
         "--local",
         action="store_true",
         help="If the script is running locally, skip auth step",
+    )
+    argparser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print commands, but don't run them",
     )
 
     args = argparser.parse_args()
@@ -337,17 +375,17 @@ def main():
         # script is running on CI, proceed with auth and helm setup
 
         if cluster.startswith("ovh"):
-            setup_auth_ovh(args.release, cluster)
-            patch_coredns()
+            setup_auth_ovh(args.release, cluster, args.dry_run)
+            patch_coredns(args.dry_run)
         elif cluster in AZURE_RGs:
-            setup_auth_azure(cluster)
+            setup_auth_azure(cluster, args.dry_run)
         elif cluster in GCP_PROJECTS:
-            setup_auth_gcloud(args.release, cluster)
+            setup_auth_gcloud(args.release, cluster, args.dry_run)
         else:
             raise Exception("Cloud cluster not recognised!")
 
-    update_networkbans(cluster)
-    deploy(args.release, args.name)
+    update_networkbans(cluster, args.dry_run)
+    deploy(args.release, args.name, args.dry_run)
 
 
 if __name__ == "__main__":
