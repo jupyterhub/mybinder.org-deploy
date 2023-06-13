@@ -62,7 +62,7 @@ else:
             # Chartpress ignores merge commits when generating the Helm chart SHA
             prs.update(c.get_pulls())
     pr_summaries = [
-        f"- [#{pr.number}]({pr.html_url}) {pr.title}"
+        f"- [#{pr.number}]({pr.html_url}) {pr.title} ({', '.join(label.name for label in pr.labels)})"
         for pr in sorted(prs, key=lambda pr: pr.number)
     ]
 
