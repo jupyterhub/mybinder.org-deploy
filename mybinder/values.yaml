@@ -144,15 +144,16 @@ binderhub:
       cors_allow_origin: "*"
 
       banner_message: |
-        <div style="display:flex;align-items:center;">
-          <div style="flex:1;text-align:center;">
-            Thanks to <a href="https://www.ovh.com/">OVH</a> and <a href="https://notebooks.gesis.org">GESIS Notebooks</a> for supporting us! 🎉
-          </div>
-          <a class="btn" style="width:fit-content;height:fit-content;padding:10px;background-color:#e66581;color:white;font-weight:bold;position:absolute; right:4px;"
+        <a class="btn" style="flex:1;width:fit-content;height:fit-content;padding:10px;background-color:#e66581;color:white;font-weight:bold;position:absolute;top:14px;right:4px;"
           onmouseover="this.style.backgroundColor='#d15b75'" onmouseout="this.style.backgroundColor='#e66581'"
           href="https://numfocus.salsalabs.org/donate-to-binder" target="_blank">
             🤍 Donate to mybinder.org!
-          </a>
+        </a>
+        <div style="text-align:center;">
+        Thanks to <a href="https://www.ovh.com/">OVH</a> and <a href="https://notebooks.gesis.org">GESIS Notebooks</a> for supporting us! 🎉
+        </div>
+        <div style="text-align:center;">
+        mybinder.org will be updating the base image from Ubuntu 18.04 to 22.04 soon. See <a href="https://discourse.jupyter.org/t/repo2docker-and-mybinder-org-upgrading-base-image-to-ubuntu-22-04/19865">this discussion</a> for details.
         </div>
       about_message: |
         <p>mybinder.org is public infrastructure operated by the <a href="https://jupyterhub-team-compass.readthedocs.io/en/latest/team.html#binder-team">Binder Project team</a>.<br /><br />
