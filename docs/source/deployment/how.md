@@ -58,7 +58,7 @@ BinderHub to use the newly built image (which is identified by a tag) by editing
 1.  Merge changes to repo2docker.
 2.  Wait for the [Publish helm chart and docker images workflow on the main branch](https://github.com/jupyterhub/repo2docker/actions/workflows/release.yml?query=branch%3Amain) to complete successfully.
 3.  Lookup the latest Repo2docker tag on https://quay.io/repository/jupyterhub/repo2docker?tab=tags
-4.  In your fork of the mybinder.org-deploy repository, open `mybinder/values.yaml` and change the tag in `binderhub.config.BinderHub.build_image` to the latest tag.
+4.  In your fork of the mybinder.org-deploy repository, open `mybinder/values.yaml` and change the tag in `binderhub.config.KubernetesBuildExecutor.build_image` to the latest tag.
 5.  Open a pull request to merge this change into the main branch of the
     mybinder.org-deploy repository, following the steps in [Deploying a change](deploying-a-change).
 

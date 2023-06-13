@@ -22,7 +22,9 @@ jhub_live = jupyterhub_dep["version"].split("-")[-1]
 url_helm_chart = "https://raw.githubusercontent.com/jupyterhub/mybinder.org-deploy/HEAD/mybinder/values.yaml"
 helm_chart = requests.get(url_helm_chart)
 helm_chart = load(helm_chart.text)
-r2d_live = helm_chart["binderhub"]["config"]["BinderHub"]["build_image"].split(":")[-1]
+r2d_live = helm_chart["binderhub"]["config"]["KubernetesBuildExecutor"][
+    "build_image"
+].split(":")[-1]
 
 print("Fetching latest commit SHA for BinderHub and repo2docker...")
 
