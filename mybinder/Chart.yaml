@@ -63,3 +63,10 @@ dependencies:
     version: 9.21.1
     repository: https://kubernetes.github.io/autoscaler
     condition: cluster-autoscaler.enabled
+
+  # Registry helper, used to create container repositories before pushing and to
+  # fetch dynamic registry credentials
+  - name: binderhub-container-registry-helper
+    version: 0.2.0
+    repository: oci://ghcr.io/manics/binderhub-container-registry-helper
+    condition: binderhub-container-registry-helper.enabled

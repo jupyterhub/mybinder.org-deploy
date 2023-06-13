@@ -600,3 +600,6 @@ minesweeper:
 #
 cluster-autoscaler:
   enabled: false
+
+binderhub-container-registry-helper:
+  enabled: false
