@@ -144,7 +144,7 @@ binderhub:
       cors_allow_origin: "*"
 
       banner_message: |
-        <a class="btn" style="flex:1;width:fit-content;height:fit-content;padding:10px;background-color:#e66581;color:white;font-weight:bold;position:absolute;top:14px;right:4px;"
+        <a class="btn" style="width:fit-content;height:fit-content;padding:10px;background-color:#e66581;color:white;font-weight:bold;position:absolute;top:0px;bottom:0px;margin:auto 0;right:4px;"
           onmouseover="this.style.backgroundColor='#d15b75'" onmouseout="this.style.backgroundColor='#e66581'"
           href="https://numfocus.salsalabs.org/donate-to-binder" target="_blank">
             🤍 Donate to mybinder.org!
