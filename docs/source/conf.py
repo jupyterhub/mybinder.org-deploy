@@ -16,7 +16,6 @@ default_role = "literal"
 extensions = [
     "myst_parser",
     "sphinx_copybutton",
-    "jupyterhub_sphinx_theme",
 ]
 
 # The suffix(es) of source filenames.
@@ -39,21 +38,30 @@ exclude_patterns = []
 # -- Options for HTML output ----------------------------------------------
 # ref: http://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 #
-html_theme = "jupyterhub_sphinx_theme"
+html_theme = "pydata_sphinx_theme"
 html_theme_options = {
+    "use_edit_page_button": True,
+    "github_url": "https://github.com/jupyterhub/binderhub",
+    "twitter_url": "https://twitter.com/mybinderteam",
     "icon_links": [
         {
-            "name": "GitHub",
-            "url": "https://github.com/jupyterhub/mybinder.org-deploy",
-            "icon": "fa-brands fa-github",
+            "name": "Discourse",
+            "url": "https://discourse.jupyter.org/",
+            "icon": "fa-brands fa-discourse",
+            "type": "fontawesome"
         },
-    ],
-    "use_edit_page_button": True,
+        {
+            "name": "Team Compass",
+            "url": "https://jupyterhub-team-compass.readthedocs.io/en/latest/",
+            "icon": "fa-solid fa-compass",
+            "type": "fontawesome"
+        }
+  ]
 }
 html_context = {
     "github_user": "jupyterhub",
     "github_repo": "mybinder.org-deploy",
-    "github_version": "HEAD",
+    "github_version": "main",
     "doc_path": "docs/source",
 }
 
