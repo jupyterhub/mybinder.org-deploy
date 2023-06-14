@@ -48,15 +48,15 @@ html_theme_options = {
             "name": "Discourse",
             "url": "https://discourse.jupyter.org/",
             "icon": "fa-brands fa-discourse",
-            "type": "fontawesome"
+            "type": "fontawesome",
         },
         {
             "name": "Team Compass",
             "url": "https://jupyterhub-team-compass.readthedocs.io/en/latest/",
             "icon": "fa-solid fa-compass",
-            "type": "fontawesome"
-        }
-  ]
+            "type": "fontawesome",
+        },
+    ],
 }
 html_context = {
     "github_user": "jupyterhub",
