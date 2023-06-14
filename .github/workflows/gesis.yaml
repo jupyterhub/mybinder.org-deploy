@@ -7,10 +7,10 @@ on:
 
 jobs:
   update-gesis:
+    if: github.repository == 'jupyterhub/mybinder.org-deploy'
     runs-on: ubuntu-latest
     steps:
       - name: Dispatcher
-        if: github.repository == 'jupyterhub/mybinder.org-deploy'
         env:
           GESIS_TOKEN: ${{ secrets.GESIS_TOKEN }}
         run: |
