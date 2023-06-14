@@ -61,6 +61,7 @@ html_theme_options = {
 html_context = {
     "github_user": "jupyterhub",
     "github_repo": "mybinder.org-deploy",
+    # Branch name is needed to ensure the `Edit on GitHub` button works
     "github_version": "main",
     "doc_path": "docs/source",
 }
