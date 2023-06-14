@@ -1,4 +1,4 @@
-name: 'GESIS update dispatcher'
+name: "GESIS update dispatcher"
 
 on:
   push:
