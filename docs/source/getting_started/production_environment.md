@@ -263,16 +263,16 @@ creating files:
 
 People who currently have the git-crypt secret include:
 
-- @minrk
-- @yuvipanda
-- @betatim
-- @choldgraf
-- @mael-le-gal
-- @sgibson91
-- @bitnik
-- @arnim
-- @MridulS
-- @callummole
+- [@minrk at GitHub](https://github.com/minrk/)
+- [@yuvipanda at GitHub](https://github.com/yuvipanda/)
+- [@choldgraf at GitHub](https://github.com/choldgraf/)
+- [@mael-le-gal at GitHub](https://github.com/mael-le-gal/)
+- [@sgibson91 at GitHub](https://github.com/sgibson91/)
+- [@bitnik at GitHub](https://github.com/bitnik/)
+- [@arnim at GitHub](https://github.com/arnim/)
+- [@MridulS at GitHub](https://github.com/MridulS/)
+- [@callummole at GitHub](https://github.com/callummole/)
+- [@rgaiacs at GitHub](https://github.com/rgaiacs/)
 - _add yourself here if you have it_
 
 Contact one of them if you need access to the git-crypt key.
