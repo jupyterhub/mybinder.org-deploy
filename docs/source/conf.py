@@ -59,7 +59,7 @@ html_context = {
 
 html_static_path = ["_static"]
 html_logo = "_static/images/logo.png"
-html_favicon = "_static/images/favicon.ico"
+html_favicon = "_static/images/favicon.png"
 
 
 # -- Options for linkcheck builder -------------------------------------------
