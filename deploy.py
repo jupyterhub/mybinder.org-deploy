@@ -227,7 +227,9 @@ def setup_certmanager():
     additional upgrade notes, see https://cert-manager.io/docs/release-notes/
     before you upgrade to a new version.
     """
-    version = os.environ["CERT_MANAGER_VERSION"]
+    version = os.getenv("CERT_MANAGER_VERSION")
+    if not version:
+        raise RuntimeError("CERT_MANAGER_VERSION not set. Source cert-manager.env")
 
     manifest_url = f"https://github.com/jetstack/cert-manager/releases/download/{version}/cert-manager.crds.yaml"
     print(BOLD + GREEN + f"Installing cert-manager CRDs {version}" + NC, flush=True)
