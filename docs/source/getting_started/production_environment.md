@@ -265,7 +265,6 @@ People who currently have the git-crypt secret include:
 
 - [@minrk at GitHub](https://github.com/minrk/)
 - [@yuvipanda at GitHub](https://github.com/yuvipanda/)
-- [@betatim at GitHub](https://github.com/betatim/)
 - [@choldgraf at GitHub](https://github.com/choldgraf/)
 - [@mael-le-gal at GitHub](https://github.com/mael-le-gal/)
 - [@sgibson91 at GitHub](https://github.com/sgibson91/)
