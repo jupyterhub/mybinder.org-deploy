@@ -78,3 +78,6 @@ Obtain a kubeconfig file
 aws --profile=aws-curvenote-binderhub-eks-access eks update-kubeconfig --name binderhub --kubeconfig /path/to/kubeconfig
 kubectl --kubeconfig=/path/to/kubeconfig get nodes
 ```
+
+Note: The AWS user who deployed the cluster [automatically has admin access to the cluster](https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html)- this is not configurable.
+To avoid confusion between other team members always assume the `binderhub-eks-access` IAM role to create the kubeconfig.

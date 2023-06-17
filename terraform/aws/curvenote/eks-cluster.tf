@@ -78,9 +78,15 @@ module "eks" {
     {
       # GitHub OIDC role
       rolearn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.cluster_name}-${var.github_oidc_role_suffix}"
-      username = "binderhub-admin"
+      username = "binderhub-github-oidc"
       groups   = ["system:masters"]
     },
+    {
+      # BinderHub admins role
+      rolearn  = aws_iam_role.eks_access.arn
+      username = "binderhub-admin"
+      groups   = ["system:masters"]
+    }
   ]
 }
 
