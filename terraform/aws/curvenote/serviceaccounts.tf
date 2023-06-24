@@ -81,6 +81,13 @@ resource "aws_iam_policy" "binderhub-ecr" {
         Effect   = "Allow"
         Resource = "arn:aws:ecr:${var.region}:${data.aws_caller_identity.current.account_id}:*"
       },
+      {
+        Action = [
+          "ecr:GetAuthorizationToken",
+        ]
+        Effect   = "Allow"
+        Resource = "*"
+      },
     ]
   })
 }
@@ -97,7 +104,7 @@ module "irsa_eks_role_binderhub_ecr" {
   oidc_providers = {
     default = {
       provider_arn               = local.eks_oidc_provider_arn
-      namespace_service_accounts = ["binder:aws-binderhub-ecr"]
+      namespace_service_accounts = ["aws-curvenote:binderhub-container-registry-helper"]
     }
   }
 
