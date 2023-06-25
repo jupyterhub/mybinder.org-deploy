@@ -38,33 +38,35 @@ module "eks" {
   eks_managed_node_groups = {
     worker_group-1 = {
       name           = "${var.cluster_name}-wg1"
-      instance_types = ["t3a.large"]
-      ami_type       = "BOTTLEROCKET_x86_64"
-      platform       = "bottlerocket"
+      instance_types = [var.instance_type_wg1]
+      ami_type       = var.use_bottlerocket ? "BOTTLEROCKET_x86_64" : "AL2_x86_64"
+      platform       = var.use_bottlerocket ? "bottlerocket" : "linux"
 
       # additional_userdata = "echo foo bar"
       vpc_security_group_ids = [
         aws_security_group.all_worker_mgmt.id,
         aws_security_group.worker_group_all.id,
       ]
-      min_size     = 1
-      max_size     = 2
-      desired_size = 1
+      desired_size = var.wg1_size
+      min_size     = var.wg1_size
+      max_size     = var.wg1_max_size
 
       # Disk space can't be set with the default custom launch template
       # disk_size = 100
       block_device_mappings = [
         {
           # https://github.com/bottlerocket-os/bottlerocket/discussions/2011
-          device_name = "/dev/xvdb"
+          device_name = var.use_bottlerocket ? "/dev/xvdb" : "/dev/xvda"
           ebs = {
-            volume_size = 100
+            # Uses default alias/aws/ebs key
+            encrypted   = true
+            volume_size = var.root_volume_size
             volume_type = "gp3"
           }
         }
       ]
 
-      subnet_ids = slice(module.vpc.public_subnets, 0, var.worker_group_1_number_azs)
+      subnet_ids = slice(module.vpc.public_subnets, 0, var.number_azs)
     },
     # Add more worker groups here
   }
@@ -93,11 +95,3 @@ module "eks" {
 data "aws_eks_cluster_auth" "binderhub" {
   name = var.cluster_name
 }
-
-# data "aws_eks_cluster" "cluster" {
-#   name = split("/", module.eks.cluster_arn)[1]
-# }
-
-# data "aws_eks_cluster_auth" "cluster" {
-#   name = split("/", module.eks.cluster_arn)[1]
-# }

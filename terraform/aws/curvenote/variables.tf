@@ -22,12 +22,42 @@ variable "k8s_api_cidrs" {
   description = "CIDRs that have access to the K8s API"
 }
 
-variable "worker_group_1_number_azs" {
+variable "number_azs" {
   type = number
   # Use just one so we don't have to deal with node/volume affinity-
   # can't use EBS volumes across AZs
   default     = 1
-  description = "Number of AZs to use for worker-group-1"
+  description = "Number of AZs to use"
+}
+
+variable "instance_type_wg1" {
+  type        = string
+  default     = "r6a.2xlarge"
+  description = "Worker-group-1 EC2 instance type"
+}
+
+variable "use_bottlerocket" {
+  type        = bool
+  default     = false
+  description = "Use Bottlerocket for worker nodes"
+}
+
+variable "root_volume_size" {
+  type        = number
+  default     = 100
+  description = "Root volume size in GB"
+}
+
+variable "wg1_size" {
+  type        = number
+  default     = 1
+  description = "Worker-group-1 desired/minimum number of nodes"
+}
+
+variable "wg1_max_size" {
+  type        = number
+  default     = 2
+  description = "Worker-group-1 maximum number of nodes"
 }
 
 
