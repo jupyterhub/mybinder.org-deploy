@@ -270,7 +270,7 @@ prometheus:
 ingress-nginx:
   controller:
     service:
-    #   loadBalancerIP: 162.19.17.37
+      #   loadBalancerIP: 162.19.17.37
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
 
@@ -285,7 +285,6 @@ minesweeper:
   enabled: false
   image: jupyterhub/mybinder.org-minesweeper:2020.12.4-0.dev.git.5080.hf35cc80d
 
-
 binderhub-container-registry-helper:
   enabled: true
   auth_token: secret-token-use-existing-secret-instead
@@ -295,3 +294,9 @@ binderhub-container-registry-helper:
     name: binderhub-container-registry-helper
     annotations:
       eks.amazonaws.com/role-arn: "arn:aws:iam::166088433508:role/binderhub-IRSA-aws-binderhub-ecr"
+
+awsEcrRegistryCleaner:
+  enabled: true
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: "arn:aws:iam::166088433508:role/binderhub-IRSA-aws-binderhub-ecr-registry-cleaner"
