@@ -92,7 +92,6 @@ resource "aws_iam_policy" "binderhub-ecr" {
   })
 }
 
-
 module "irsa_eks_role_binderhub_ecr" {
   count                         = local.create_irsa_roles
   source                        = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
@@ -104,11 +103,59 @@ module "irsa_eks_role_binderhub_ecr" {
   oidc_providers = {
     default = {
       provider_arn               = local.eks_oidc_provider_arn
-      namespace_service_accounts = ["aws-curvenote:binderhub-container-registry-helper"]
+      namespace_service_accounts = ["curvenote:binderhub-container-registry-helper"]
     }
   }
 
   role_policy_arns = {
     binderhub-ecr = aws_iam_policy.binderhub-ecr.arn
+  }
+}
+
+# BinderHub ECR registry cleaner role
+resource "aws_iam_policy" "binderhub-ecr-registry-cleaner" {
+  name        = "${var.cluster_name}-ecr-cleaner-policy"
+  path        = "/"
+  description = "BinderHub ECR list/delete"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "ecr:DescribeImages",
+          "ecr:DescribeRepositories",
+
+          "ecr:ListImages",
+
+          "ecr:BatchDeleteImage",
+          "ecr:DeleteLifecyclePolicy",
+          "ecr:DeleteRepository",
+          "ecr:GetLifecyclePolicy",
+        ]
+        Effect   = "Allow"
+        Resource = "arn:aws:ecr:${var.region}:${data.aws_caller_identity.current.account_id}:*"
+      },
+    ]
+  })
+}
+
+module "irsa_eks_role_binderhub_ecr_registry_cleaner" {
+  count                         = local.create_irsa_roles
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version                       = "5.19.0"
+  role_name                     = "${var.cluster_name}-IRSA-aws-binderhub-ecr-registry-cleaner"
+  role_permissions_boundary_arn = local.permissions_boundary_arn
+  policy_name_prefix            = "${var.cluster_name}-AmazonEKS_"
+
+  oidc_providers = {
+    default = {
+      provider_arn               = local.eks_oidc_provider_arn
+      namespace_service_accounts = ["curvenote:binderhub-ecr-registry-cleaner"]
+    }
+  }
+
+  role_policy_arns = {
+    binderhub-ecr = aws_iam_policy.binderhub-ecr-registry-cleaner.arn
   }
 }
