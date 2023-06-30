@@ -31,7 +31,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_CURVENOTE_ACCOUNT_ID }}:role/binderhub-github-oidc-mybinderorgdeploy
+          role-to-assume: arn:aws:iam::166088433508:role/binderhub-github-oidc-mybinderorgdeploy
           aws-region: us-east-2
 
       - name: Check EKS access
