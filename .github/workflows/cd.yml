@@ -172,6 +172,7 @@ jobs:
 
       - name: "Stage 4: Deploy to staging"
         run: |
+          . cert-manager.env
           python ./deploy.py ${{ matrix.federation_member }}
         env:
           TERM: xterm
@@ -301,6 +302,7 @@ jobs:
 
       - name: "Stage 4: Deploy to ${{ matrix.federation_member }}"
         run: |
+          . cert-manager.env
           python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.cluster_name || matrix.federation_member }} --name ${{ matrix.release_name || matrix.federation_member }}
         env:
           TERM: xterm
