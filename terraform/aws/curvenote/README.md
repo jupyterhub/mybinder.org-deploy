@@ -4,7 +4,7 @@ This deployment is run in an [AWS account owned by Curvenote](https://github.com
 
 ## AWS account prerequisites
 
-IAM roles, and users, and some other base infrastructure is defined in a separate private repository under the control of the AWS account administrator.
+IAM roles, users, and some other base infrastructure is defined in a separate private repository under the control of the AWS account administrator.
 Contact the mybinder team and @stevejpurves to obtain access.
 
 ## Bootstrapping (new deployment only)
@@ -31,7 +31,7 @@ Failure to do this will result in the original deployment becoming unmanageable-
 Ensure you have a recent version of Terraform.
 The minimum required version is specified by `terraform { required_version } }` in [`provider.tf`](provider.tf).
 
-The full deployment requires an OIDC Provider that must be created by a privileged administrator.
+The full deployment requires an OIDC Provider that must be created by a privileged AWS administrator.
 
 Deploy the Kubernetes cluster without the OIDC Provider by setting the following [variables](variables.tf):
 
@@ -62,8 +62,10 @@ terraform apply
 
 ## Obtaining a kubeconfig file
 
+You must have the AWS CLI (v2 is recommended) and kubectl in your PATH.
+
 You must assume the `arn:aws:iam::<AWS_ACCOUNT_ID>:role/binderhub-eks-access` role to obtain a kubeconfig file.
-Assuming your AWS credentials are already setup, the easiest way to do this is to [add a second profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-role.html) in `~/.aws/config`:
+Assuming your AWS credentials are already setup, for example in a profile called `aws-curvenote`, the easiest way to do this is to [add a second profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-role.html) in `~/.aws/config`:
 
 ```
 [profile aws-curvenote-binderhub-eks-access]
@@ -76,8 +78,16 @@ Obtain a kubeconfig file
 
 ```
 aws --profile=aws-curvenote-binderhub-eks-access eks update-kubeconfig --name binderhub --kubeconfig /path/to/kubeconfig
+
 kubectl --kubeconfig=/path/to/kubeconfig get nodes
 ```
 
 Note: The AWS user who deployed the cluster [automatically has admin access to the cluster](https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html)- this is not configurable.
-To avoid confusion between other team members always assume the `binderhub-eks-access` IAM role to create the kubeconfig.
+To minimise confusion always assume the `binderhub-eks-access` IAM role to create the kubeconfig.
+
+## GitHub workflows
+
+All access to the Kubernetes cluster is managed using [GitHub OIDC](https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services).
+
+AWS secret tokens are not required.
+AWS API access for BinderHub components, for example to ECR, is managed using [IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html).
