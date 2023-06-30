@@ -171,6 +171,10 @@ binderhub:
       db:
         pvc:
           storageClassName: ebs-sc
+      config:
+        KubeSpawner:
+          extra_pod_config:
+            enableServiceLinks: false
 
     singleuser:
       initContainers:
