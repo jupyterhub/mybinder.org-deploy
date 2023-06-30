@@ -198,16 +198,10 @@ def get_config_files(release, config_dir="config"):
 def deploy(release, name=None, dry_run=False):
     """Deploys a federation member to a k8s cluster.
 
-    The deployment is done in the following steps:
-
-        1. Deploy cert-manager
-        2. Deploy mybinder helm chart
-        3. Await deployed deployment and daemonsets to become Ready
+    Waits for deployments and daemonsets to become Ready
     """
     if not name:
         name = release
-
-    setup_certmanager(dry_run)
 
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
     helm = [
@@ -404,6 +398,13 @@ def main():
         action="store_true",
         help="Print commands, but don't run them",
     )
+    stages = ["all", "auth", "networkbans", "kubesystem", "certmanager", "mybinder"]
+    argparser.add_argument(
+        "--stage",
+        choices=stages,
+        default=stages[0],
+        help="Stage to deploy, default all",
+    )
 
     args = argparser.parse_args()
 
@@ -438,21 +439,27 @@ def main():
 
         # script is running on CI, proceed with auth and helm setup
 
-        if cluster.startswith("ovh"):
-            setup_auth_ovh(args.release, cluster, args.dry_run)
-            patch_coredns(args.dry_run)
-        elif cluster in AZURE_RGs:
-            setup_auth_azure(cluster, args.dry_run)
-        elif cluster in GCP_PROJECTS:
-            setup_auth_gcloud(args.release, cluster, args.dry_run)
-        elif cluster in AWS_DEPLOYMENTS:
-            setup_auth_aws(cluster, args.dry_run)
-        else:
-            raise Exception("Cloud cluster not recognised!")
+        if args.stage in ("all", "auth"):
+            if cluster.startswith("ovh"):
+                setup_auth_ovh(args.release, cluster, args.dry_run)
+                patch_coredns(args.dry_run)
+            elif cluster in AZURE_RGs:
+                setup_auth_azure(cluster, args.dry_run)
+            elif cluster in GCP_PROJECTS:
+                setup_auth_gcloud(args.release, cluster, args.dry_run)
+            elif cluster in AWS_DEPLOYMENTS:
+                setup_auth_aws(cluster, args.dry_run)
+            else:
+                raise Exception("Cloud cluster not recognised!")
 
-    # update_networkbans(cluster, args.dry_run)
-    deploy_kube_system_charts(args.release, args.name, args.dry_run)
-    deploy(args.release, args.name, args.dry_run)
+    if args.stage in ("all", "networkban"):
+        update_networkbans(cluster, args.dry_run)
+    if args.stage in ("all", "kubesystem"):
+        deploy_kube_system_charts(args.release, args.name, args.dry_run)
+    if args.stage in ("all", "certmanager"):
+        setup_certmanager(args.dry_run)
+    if args.stage in ("all", "mybinder"):
+        deploy(args.release, args.name, args.dry_run)
 
 
 if __name__ == "__main__":
