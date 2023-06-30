@@ -13,7 +13,7 @@ files: "^terraform/aws/curvenote/"
 repos:
   # We can't run any CI tests on production Terraform code, so use as many static linters as possible
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.80.0
+    rev: v1.81.0
     hooks:
       - id: terraform_fmt
       - id: terraform_tflint

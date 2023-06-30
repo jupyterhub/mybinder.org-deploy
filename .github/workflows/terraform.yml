@@ -30,7 +30,7 @@ jobs:
       - name: Install tflint
         uses: terraform-linters/setup-tflint@v3.0.0
         with:
-          tflint_version: v0.46.1
+          tflint_version: v0.47.0
 
       - name: Run terraform pre-commit
         run: pre-commit run --all --config .pre-commit-config-terraform.yaml
