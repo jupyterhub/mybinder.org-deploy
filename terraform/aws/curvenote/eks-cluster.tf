@@ -27,6 +27,9 @@ module "eks" {
 
   vpc_id = module.vpc.vpc_id
 
+  # Allow all allowed roles to access the KMS key
+  kms_key_enable_default_policy = true
+
   enable_irsa                   = var.enable_irsa
   iam_role_permissions_boundary = local.permissions_boundary_arn
 
