@@ -29,6 +29,11 @@ module "eks" {
 
   # Allow all allowed roles to access the KMS key
   kms_key_enable_default_policy = true
+  # This duplicates the above, but the default is the current user/role so this will avoid
+  # a deployment change when run by different users/roles
+  kms_key_administrators = [
+    "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root",
+  ]
 
   enable_irsa                   = var.enable_irsa
   iam_role_permissions_boundary = local.permissions_boundary_arn
