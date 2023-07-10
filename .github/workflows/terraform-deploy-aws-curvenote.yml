@@ -1,3 +1,4 @@
+# See terraform/aws/curvenote/README.md
 name: Terraform aws-curvenote
 
 on:
