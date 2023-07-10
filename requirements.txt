@@ -50,7 +50,7 @@ pytest==7.4.0
     #   pytest-rerunfailures
     #   pytest-timeout
     #   pytest-xdist
-pytest-rerunfailures==11.1.2
+pytest-rerunfailures==12.0
     # via -r requirements.in
 pytest-timeout==2.1.0
     # via -r requirements.in
