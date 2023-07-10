@@ -1,0 +1,115 @@
+name: Terraform aws-curvenote
+
+on:
+  push:
+    branches:
+      - main
+      - aws-curvenote2
+    paths:
+      - "terraform/aws/curvenote/**"
+      - .github/workflows/terraform-deploy.yml
+  workflow_dispatch:
+
+# Only allow one workflow to run at a time
+concurrency: terraform-deploy-aws-curvenote
+
+env:
+  TFPLAN: aws-curvenote.tfplan
+  AWS_DEPLOYMENT_ROLE: arn:aws:iam::166088433508:role/binderhub-github-oidc-mybinderorgdeploy-terraform
+  AWS_REGION: us-east-2
+  WORKDIR: ./terraform/aws/curvenote
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    outputs:
+      apply: ${{ steps.terraform-plan.outputs.apply }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ env.AWS_DEPLOYMENT_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: terraform-plan
+
+      - name: Terraform plan
+        id: terraform-plan
+        run: |
+          terraform init
+          EXIT_CODE=0
+          terraform plan -out="${TFPLAN}" -detailed-exitcode || EXIT_CODE=$?
+          if [ $EXIT_CODE -eq 0 ]; then
+            echo "No changes"
+            echo "apply=false" >> "$GITHUB_OUTPUT"
+          elif [ $EXIT_CODE -eq 2 ]; then
+            echo "Changes found"
+            echo "apply=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Terraform plan failed"
+            exit $EXIT_CODE
+          fi
+
+      - name: Encrypt plan
+        if: steps.terraform-plan.outputs.apply == 'true'
+        run: |
+          echo ${{ secrets.TFPLAN_ARTIFACT_PASSPHRASE }} | gpg --batch --yes --passphrase-fd 0 --symmetric --cipher-algo AES256 --output "${TFPLAN}.gpg" "${TFPLAN}"
+
+      - name: Upload plan
+        if: steps.terraform-plan.outputs.apply == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.TFPLAN }}
+          path: ${{ env.WORKDIR }}/${{ env.TFPLAN }}.gpg
+          if-no-files-found: error
+
+  terraform-apply:
+    needs:
+      - terraform-plan
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    # This environment requires approval before the deploy is run.
+    environment: aws-curvenote
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    if: needs.terraform-plan.outputs.apply == 'true'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ env.AWS_DEPLOYMENT_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: terraform-apply
+
+      - name: Download plan
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.TFPLAN }}
+          path: ${{ env.WORKDIR }}
+
+      - name: Decrypt plan
+        run: |
+          echo ${{ secrets.TFPLAN_ARTIFACT_PASSPHRASE }} | gpg --batch --yes --passphrase-fd 0 --decrypt --cipher-algo AES256 --output "${TFPLAN}" "${TFPLAN}.gpg"
+
+      - name: Terraform apply
+        run: |
+          terraform init
+          terraform apply "${TFPLAN}"

@@ -60,6 +60,44 @@ resource "aws_iam_role" "github_oidc_mybinderorgdeploy" {
   permissions_boundary = local.permissions_boundary_arn
 }
 
+resource "aws_iam_role" "github_oidc_mybinderorgdeploy_terraform" {
+  count = local.create_github_roles
+  name  = "${var.cluster_name}-${var.github_oidc_role_suffix}-terraform"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Effect = "Allow"
+        Principal = {
+          Federated = data.aws_iam_openid_connect_provider.github_oidc_provider[0].arn
+        }
+        Condition = {
+          StringLike = {
+            "token.actions.githubusercontent.com:sub" = [
+              # GitHub repositories and refs allowed to use this role
+              "repo:jupyterhub/mybinder.org-deploy:ref:refs/heads/main",
+              # Can't have branch and environment in the same condition
+              # https://github.com/aws-actions/configure-aws-credentials/issues/746
+              "repo:jupyterhub/mybinder.org-deploy:environment:aws-curvenote",
+              # TODO: Remove this, just for development:
+              "repo:manics/mybinder.org-deploy:ref:refs/heads/aws-curvenote",
+              "repo:manics/mybinder.org-deploy:ref:refs/heads/aws-curvenote2",
+              "repo:manics/mybinder.org-deploy:environment:aws-curvenote",
+            ]
+          }
+        }
+      }
+    ]
+  })
+  inline_policy {}
+  managed_policy_arns = [
+    local.permissions_boundary_arn,
+  ]
+  permissions_boundary = local.permissions_boundary_arn
+}
+
 # IAM role that can be assumed by anyone in the AWS account (assuming they have sufficient permissions)
 resource "aws_iam_role" "eks_access" {
   name = "${var.cluster_name}-eks-access"
