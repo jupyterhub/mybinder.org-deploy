@@ -6,11 +6,6 @@ projectName: curvenote
 #   mybinder.org/pool-type: core
 
 binderhub:
-  # Manual build with https://github.com/jupyterhub/binderhub/pull/1637
-  image:
-    name: docker.io/manics/binderhub
-    tag: pr1724-2023-06-27-21-50-amd64
-
   config:
     BinderHub:
       # hub_url: https://hub.curvenote.mybinder.org

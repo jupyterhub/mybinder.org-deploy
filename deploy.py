@@ -184,9 +184,9 @@ def get_config_files(release, config_dir="config"):
     """Return the list of config files to load"""
     # common config files
     config_files = sorted(glob.glob(os.path.join(config_dir, "common", "*.yaml")))
-    # config_files.extend(
-    #     sorted(glob.glob(os.path.join("secrets", config_dir, "common", "*.yaml")))
-    # )
+    config_files.extend(
+        sorted(glob.glob(os.path.join("secrets", config_dir, "common", "*.yaml")))
+    )
     # release-specific config files
     for config_dir in (config_dir, os.path.join("secrets", config_dir)):
         f = os.path.join(config_dir, release + ".yaml")
