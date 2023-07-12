@@ -607,7 +607,7 @@ binderhub-container-registry-helper:
 awsEcrRegistryCleaner:
   enabled: false
   image: ghcr.io/manics/aws-ecr-registry-cleaner:0.0.1
-  expiresAfterPullDays: 1
+  expiresAfterPullDays: 7
   # 12 hours
   loopDelay: 43200
   serviceAccount:
