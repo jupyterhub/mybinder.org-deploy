@@ -170,6 +170,7 @@ binderhub:
         KubeSpawner:
           extra_pod_config:
             enableServiceLinks: false
+          image_pull_policy: Always
 
     singleuser:
       initContainers:
