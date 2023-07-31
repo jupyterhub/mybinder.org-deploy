@@ -103,6 +103,22 @@ The role assumed by GitHub for this deployment does not have sufficient rights t
 It should be sufficient for most routine changes such as Kubernetes upgrades or changes to the cluster size.
 For more complex changes the deployment should be run manually first.
 
+### Example approval
+
+If `terraform-plan` found changes a request for approval will be sent:
+![Request for a Terraform deployment to be approved](./docs/terraform-request-approval.png)
+
+Open the `terraform-plan` job:
+![](./docs/terraform-plan-1.png)
+
+Check the planned changes in the `Terraform plan` step:
+![](./docs/terraform-plan-2.png)
+
+If the changes are acceptable approve the deployment:
+![](./docs/terraform-request-approved.png)
+
+This should start the `terraform-apply` job which will apply the saved plan.
+
 ### GitHub secrets and environment setup
 
 A GitHub secret `TFPLAN_ARTIFACT_PASSPHRASE` must be created so the Terraform plan artifact can be encrypted/decrypted.
