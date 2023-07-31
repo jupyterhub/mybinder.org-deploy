@@ -51,7 +51,13 @@ variable "root_volume_size" {
 variable "wg1_size" {
   type        = number
   default     = 2
-  description = "Worker-group-1 desired number of nodes"
+  description = <<-EOT
+    Worker-group-1 initial desired number of nodes.
+    Note this has no effect after the cluster is provisioned:
+    - https://github.com/terraform-aws-modules/terraform-aws-eks/issues/2030
+    - https://github.com/bryantbiggs/eks-desired-size-hack
+    Manually change the node group size in the AWS console instead.
+    EOT
 }
 
 variable "wg1_max_size" {
