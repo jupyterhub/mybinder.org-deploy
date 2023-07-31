@@ -56,7 +56,7 @@ module "eks" {
         aws_security_group.worker_group_all.id,
       ]
       desired_size = var.wg1_size
-      min_size     = var.wg1_size
+      min_size     = 1
       max_size     = var.wg1_max_size
 
       # Disk space can't be set with the default custom launch template

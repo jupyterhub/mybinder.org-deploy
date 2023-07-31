@@ -50,8 +50,8 @@ variable "root_volume_size" {
 
 variable "wg1_size" {
   type        = number
-  default     = 1
-  description = "Worker-group-1 desired/minimum number of nodes"
+  default     = 2
+  description = "Worker-group-1 desired number of nodes"
 }
 
 variable "wg1_max_size" {
