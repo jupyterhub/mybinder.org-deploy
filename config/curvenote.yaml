@@ -216,8 +216,8 @@ binderhub:
         enabled: false
         # nodeSelector: *coreNodeSelector
     cull:
-      # maxAge: 15 min since we're just testing
-      maxAge: 900
+      # maxAge: 1 hour since we're just testing
+      maxAge: 3600
 
   imageCleaner:
     # Use 40GB as upper limit, size is given in bytes
