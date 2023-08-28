@@ -44,7 +44,7 @@ module "eks" {
   }
 
   eks_managed_node_groups = {
-    worker_group-1 = {
+    worker_group_1 = {
       name           = "${var.cluster_name}-wg1"
       instance_types = [var.instance_type_wg1]
       ami_type       = var.use_bottlerocket ? "BOTTLEROCKET_x86_64" : "AL2_x86_64"
