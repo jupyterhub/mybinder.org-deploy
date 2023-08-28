@@ -8,12 +8,14 @@
 # - terraform
 # - tflint
 
-# Currently only aws/curvenote is checked
-files: "^terraform/aws/curvenote/"
+# Currently only aws/ is checked
+files: "^terraform/aws/"
+exclude: "^terraform/aws/pangeo/"
+
 repos:
   # We can't run any CI tests on production Terraform code, so use as many static linters as possible
   - repo: https://github.com/antonbabenko/pre-commit-terraform
-    rev: v1.81.0
+    rev: v1.83.0
     hooks:
       - id: terraform_fmt
       - id: terraform_tflint

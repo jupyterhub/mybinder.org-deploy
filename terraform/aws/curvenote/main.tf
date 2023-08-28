@@ -9,19 +9,11 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "~> 2.21"
     }
-
-    tls = {
-      source  = "hashicorp/tls"
-      version = "~> 4.0"
-    }
   }
 
   required_version = ">= 1.4.6"
 
-  # Bootstrapping
-  # 1. comment this out for a new deployment
-  # 2. run the deployment to create the S3 bucket
-  # 3. uncomment this and migrate the tfstate to S3
+  # Bootstrapping: Create the bucket and DynamoDB table using the ./bootstrap directory
   backend "s3" {
     bucket         = "binderhub-tfstate-7rjazazm1c7k"
     key            = "tfstate/dev/binderhub-dev"
