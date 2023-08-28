@@ -1,5 +1,5 @@
 # Initial setup of S3 bucket to store tfstate file
-variable "bucket-name" {
+variable "state_bucket_name" {
   type = string
   # python -c 'import random; import string; print("".join(random.choices(string.ascii_lowercase + string.digits,k=12)))'
   default     = "binderhub-tfstate-7rjazazm1c7k"
@@ -33,7 +33,7 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "bucket" {
-  bucket = var.bucket-name
+  bucket = var.state_bucket_name
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "bucket_encryption" {
