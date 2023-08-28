@@ -69,6 +69,8 @@ default_config = {
         "status",
         "uids",
     ],
+    # 8 hour max age, cleanup after culler
+    "pod_max_age_seconds": 0,
 }
 
 default_config.update(herorat.default_config)
@@ -378,7 +380,7 @@ async def node_report(pods=None, userid=1000):
 
     # finally, terminate pods that meet the immediate termination condition
     pods_to_terminate = [
-        pod for pod in suspicious_pods if pod["minesweeper"]["should_terminate"]
+        pod for pod in pods.values() if pod["minesweeper"]["should_terminate"]
     ]
     if pods_to_terminate:
         terminate_futures = [
