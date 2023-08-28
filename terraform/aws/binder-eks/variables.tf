@@ -1,6 +1,5 @@
 variable "region" {
   type        = string
-  default     = "us-east-2"
   description = "AWS region"
 }
 
@@ -71,7 +70,7 @@ variable "wg1_max_size" {
 
 variable "enable_irsa" {
   type        = bool
-  default     = false
+  default     = true
   description = <<-EOT
     Disable if OIDC needs to be setup manually due to limited permissions.
     If you have full admin access, you can set this to true.
@@ -80,7 +79,7 @@ variable "enable_irsa" {
 
 variable "oidc_created" {
   type        = bool
-  default     = true
+  default     = false
   description = <<-EOT
     If enable_irsa is false and the OIDC provider has been manually created using
     the openid_connect_providers.tf.example file, set this to true.
@@ -102,5 +101,5 @@ variable "permissions_boundary_name" {
     The name of the permissions boundary to attach to all IAM roles.
     Specify if you are using a limited IAM role for deployment.
     EOT
-  default     = "system/binderhub_policy"
+  default     = null
 }
