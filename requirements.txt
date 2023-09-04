@@ -44,7 +44,7 @@ pyasn1-modules==0.2.8
     # via google-auth
 pyparsing==3.0.9
     # via packaging
-pytest==7.4.0
+pytest==7.4.1
     # via
     #   -r requirements.in
     #   pytest-rerunfailures
