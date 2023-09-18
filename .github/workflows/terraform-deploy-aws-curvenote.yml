@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - aws-curvenote2
     paths:
       - "terraform/aws/curvenote/**"
       - .github/workflows/terraform-deploy.yml
