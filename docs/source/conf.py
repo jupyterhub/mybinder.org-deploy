@@ -42,7 +42,7 @@ exclude_patterns = []
 html_theme = "jupyterhub_sphinx_theme"
 html_theme_options = {
     "use_edit_page_button": True,
-    "github_url": "https://github.com/jupyterhub/binderhub",
+    "github_url": "https://github.com/jupyterhub/mybinder.org-deploy",
     "twitter_url": "https://twitter.com/mybinderteam",
 }
 html_context = {
