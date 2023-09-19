@@ -41,25 +41,21 @@ exclude_patterns = []
 #
 html_theme = "jupyterhub_sphinx_theme"
 html_theme_options = {
-    "icon_links": [
-        {
-            "name": "GitHub",
-            "url": "https://github.com/jupyterhub/mybinder.org-deploy",
-            "icon": "fa-brands fa-github",
-        },
-    ],
     "use_edit_page_button": True,
+    "github_url": "https://github.com/jupyterhub/mybinder.org-deploy",
+    "twitter_url": "https://twitter.com/mybinderteam",
 }
 html_context = {
     "github_user": "jupyterhub",
     "github_repo": "mybinder.org-deploy",
-    "github_version": "HEAD",
+    # Branch name is needed to ensure the `Edit on GitHub` button works
+    "github_version": "main",
     "doc_path": "docs/source",
 }
 
 html_static_path = ["_static"]
 html_logo = "_static/images/logo.png"
-html_favicon = "_static/images/favicon.ico"
+html_favicon = "_static/images/favicon.png"
 
 
 # -- Options for linkcheck builder -------------------------------------------
