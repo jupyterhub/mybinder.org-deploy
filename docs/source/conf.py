@@ -16,6 +16,7 @@ default_role = "literal"
 extensions = [
     "myst_parser",
     "sphinx_copybutton",
+    "jupyterhub_sphinx_theme",
 ]
 
 # The suffix(es) of source filenames.
@@ -38,7 +39,7 @@ exclude_patterns = []
 # -- Options for HTML output ----------------------------------------------
 # ref: http://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 #
-html_theme = "pydata_sphinx_theme"
+html_theme = "jupyterhub_sphinx_theme"
 html_theme_options = {
     "use_edit_page_button": True,
     "github_url": "https://github.com/jupyterhub/binderhub",
