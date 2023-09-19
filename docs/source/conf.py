@@ -44,20 +44,6 @@ html_theme_options = {
     "use_edit_page_button": True,
     "github_url": "https://github.com/jupyterhub/binderhub",
     "twitter_url": "https://twitter.com/mybinderteam",
-    "icon_links": [
-        {
-            "name": "Discourse",
-            "url": "https://discourse.jupyter.org/",
-            "icon": "fa-brands fa-discourse",
-            "type": "fontawesome",
-        },
-        {
-            "name": "Team Compass",
-            "url": "https://jupyterhub-team-compass.readthedocs.io/en/latest/",
-            "icon": "fa-solid fa-compass",
-            "type": "fontawesome",
-        },
-    ],
 }
 html_context = {
     "github_user": "jupyterhub",
