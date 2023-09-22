@@ -63,14 +63,15 @@ jobs:
       - name: Encrypt plan
         if: steps.terraform-plan.outputs.apply == 'true'
         run: |
-          echo ${{ secrets.TFPLAN_ARTIFACT_PASSPHRASE }} | gpg --batch --yes --passphrase-fd 0 --symmetric --cipher-algo AES256 --output "${TFPLAN}.gpg" "${TFPLAN}"
+          echo ${{ secrets.TFPLAN_ARTIFACT_SECRET_KEY }} > tfplan.key
+          age --identity tfplan.key --encrypt --output "${TFPLAN}.enc" "${TFPLAN}"
 
       - name: Upload plan
         if: steps.terraform-plan.outputs.apply == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.TFPLAN }}
-          path: ${{ env.WORKDIR }}/${{ env.TFPLAN }}.gpg
+          path: ${{ env.WORKDIR }}/${{ env.TFPLAN }}.enc
           if-no-files-found: error
 
   terraform-apply:
@@ -107,7 +108,8 @@ jobs:
 
       - name: Decrypt plan
         run: |
-          echo ${{ secrets.TFPLAN_ARTIFACT_PASSPHRASE }} | gpg --batch --yes --passphrase-fd 0 --decrypt --cipher-algo AES256 --output "${TFPLAN}" "${TFPLAN}.gpg"
+          echo ${{ secrets.TFPLAN_ARTIFACT_SECRET_KEY }} > tfplan.key
+          age --identity tfplan.key --decrypt --output "${TFPLAN}" "${TFPLAN}.enc"
 
       - name: Terraform apply
         run: |

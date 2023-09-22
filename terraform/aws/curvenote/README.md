@@ -121,9 +121,18 @@ This should start the `terraform-apply` job which will apply the saved plan.
 
 ### GitHub secrets and environment setup
 
-A GitHub secret `TFPLAN_ARTIFACT_PASSPHRASE` must be created so the Terraform plan artifact can be encrypted/decrypted.
-This is because the plan may contain sensitive information so must not be visible to downloaders.
-This passphrase is only needed by the GitHub workflow, it is never required outside the workflow so should be set to a long one-off random string which is not recorded anywhere else.
+The terraform plan needs to be passed between jobs as an artifact, but may contain sensitive information so must not be visible to downloaders.
+[`age`](https://github.com/FiloSottile/age) is used to encrypt and decrypt the artifact.
+
+A GitHub secret `TFPLAN_ARTIFACT_SECRET_KEY` must be created by running
+
+```
+age-keygen
+```
+
+and saving the `AGE-SECRET-KEY-*` output as the GitHub secret.
+
+The secret is only needed by the GitHub workflow, it is never required outside the workflow so should be treated as a write-once read-never secret which is not recorded anywhere else.
 It can be rotated at any time between deployments.
 
 The GitHub environment `aws-curvenote` must be created before the first deployment with the following settings:
