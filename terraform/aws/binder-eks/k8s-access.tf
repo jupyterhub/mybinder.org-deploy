@@ -45,8 +45,6 @@ resource "aws_iam_role" "github_oidc_mybinderorgdeploy" {
             "token.actions.githubusercontent.com:sub" = [
               # GitHub repositories and refs allowed to use this role
               "repo:jupyterhub/mybinder.org-deploy:ref:refs/heads/main",
-              # TODO: Remove this, just for development:
-              "repo:manics/mybinder.org-deploy:ref:refs/heads/aws-curvenote",
             ]
           }
         }
@@ -81,10 +79,6 @@ resource "aws_iam_role" "github_oidc_mybinderorgdeploy_terraform" {
               # Can't have branch and environment in the same condition
               # https://github.com/aws-actions/configure-aws-credentials/issues/746
               "repo:jupyterhub/mybinder.org-deploy:environment:aws-curvenote",
-              # TODO: Remove this, just for development:
-              "repo:manics/mybinder.org-deploy:ref:refs/heads/aws-curvenote",
-              "repo:manics/mybinder.org-deploy:ref:refs/heads/aws-curvenote2",
-              "repo:manics/mybinder.org-deploy:environment:aws-curvenote",
             ]
           }
         }
