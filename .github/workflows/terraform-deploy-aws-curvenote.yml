@@ -7,7 +7,7 @@ on:
       - main
     paths:
       - "terraform/aws/curvenote/**"
-      - .github/workflows/terraform-deploy.yml
+      - .github/workflows/terraform-deploy-aws-curvenote.yml
   workflow_dispatch:
 
 # Only allow one workflow to run at a time
