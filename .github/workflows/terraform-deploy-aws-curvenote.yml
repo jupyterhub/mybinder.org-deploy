@@ -60,6 +60,11 @@ jobs:
             exit $EXIT_CODE
           fi
 
+      - name: Install age
+        run: |
+          sudo apt-get update -y -q
+          sudo apt-get install -y -q age
+
       - name: Encrypt plan
         if: steps.terraform-plan.outputs.apply == 'true'
         run: |
@@ -105,6 +110,11 @@ jobs:
         with:
           name: ${{ env.TFPLAN }}
           path: ${{ env.WORKDIR }}
+
+      - name: Install age
+        run: |
+          sudo apt-get update -y -q
+          sudo apt-get install -y -q age
 
       - name: Decrypt plan
         run: |
