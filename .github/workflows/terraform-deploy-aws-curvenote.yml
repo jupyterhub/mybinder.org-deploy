@@ -43,12 +43,16 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           role-session-name: terraform-plan
 
+      # Capture the console output of terraform plan to a file, so we can include
+      # it as a job summary in the Actions view:
+      # https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/
       - name: Terraform plan
         id: terraform-plan
         run: |
           terraform init
-          EXIT_CODE=0
-          terraform plan -out="${TFPLAN}" -detailed-exitcode || EXIT_CODE=$?
+          terraform plan -out="${TFPLAN}" -detailed-exitcode -no-color | tee tfplan.stdout
+          # Get the exit code of the terraform plan command, not the tee command.
+          EXIT_CODE="${PIPESTATUS[0]}"
           if [ $EXIT_CODE -eq 0 ]; then
             echo "No changes"
             echo "apply=false" >> "$GITHUB_OUTPUT"
@@ -60,7 +64,18 @@ jobs:
             exit $EXIT_CODE
           fi
 
+      # Skip the first bit of the terraform plan stdout
+      # https://unix.stackexchange.com/a/205680
+      - name: Set job summary
+        if: steps.terraform-plan.outputs.apply == 'true'
+        run: |
+          echo '### Terraform Plan summary' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          sed -n '/Terraform will perform the following/,$p' tfplan.stdout >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
       - name: Install age
+        if: steps.terraform-plan.outputs.apply == 'true'
         run: |
           sudo apt-get update -y -q
           sudo apt-get install -y -q age
