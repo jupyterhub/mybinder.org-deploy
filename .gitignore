@@ -20,3 +20,5 @@ env
 
 .terraform
 .terraform.lock.hcl
+# Keep .terraform.lock.hcl to ensure reproducible deployments
+!terraform/aws/curvenote/.terraform.lock.hcl

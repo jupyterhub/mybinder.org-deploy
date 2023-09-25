@@ -1,0 +1,142 @@
+# See terraform/aws/curvenote/README.md
+name: Terraform aws-curvenote
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "terraform/aws/curvenote/**"
+      - .github/workflows/terraform-deploy-aws-curvenote.yml
+  workflow_dispatch:
+
+# Only allow one workflow to run at a time
+concurrency: terraform-deploy-aws-curvenote
+
+env:
+  TFPLAN: aws-curvenote.tfplan
+  AWS_DEPLOYMENT_ROLE: arn:aws:iam::166088433508:role/binderhub-github-oidc-mybinderorgdeploy-terraform
+  AWS_REGION: us-east-2
+  WORKDIR: ./terraform/aws/curvenote
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    outputs:
+      apply: ${{ steps.terraform-plan.outputs.apply }}
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ env.AWS_DEPLOYMENT_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: terraform-plan
+
+      # Capture the console output of terraform plan to a file, so we can include
+      # it as a job summary in the Actions view:
+      # https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/
+      - name: Terraform plan
+        id: terraform-plan
+        run: |
+          terraform init
+          terraform plan -out="${TFPLAN}" -detailed-exitcode -no-color | tee tfplan.stdout
+          # Get the exit code of the terraform plan command, not the tee command.
+          EXIT_CODE="${PIPESTATUS[0]}"
+          if [ $EXIT_CODE -eq 0 ]; then
+            echo "No changes"
+            echo "apply=false" >> "$GITHUB_OUTPUT"
+          elif [ $EXIT_CODE -eq 2 ]; then
+            echo "Changes found"
+            echo "apply=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Terraform plan failed"
+            exit $EXIT_CODE
+          fi
+
+      # Skip the first bit of the terraform plan stdout
+      # https://unix.stackexchange.com/a/205680
+      - name: Set job summary
+        if: steps.terraform-plan.outputs.apply == 'true'
+        run: |
+          echo '### Terraform Plan summary' >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          sed -n '/Terraform will perform the following/,$p' tfplan.stdout >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Install age
+        if: steps.terraform-plan.outputs.apply == 'true'
+        run: |
+          sudo apt-get update -y -q
+          sudo apt-get install -y -q age
+
+      - name: Encrypt plan
+        if: steps.terraform-plan.outputs.apply == 'true'
+        run: |
+          echo ${{ secrets.TFPLAN_ARTIFACT_SECRET_KEY }} > tfplan.key
+          age --identity tfplan.key --encrypt --output "${TFPLAN}.enc" "${TFPLAN}"
+
+      - name: Upload plan
+        if: steps.terraform-plan.outputs.apply == 'true'
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.TFPLAN }}
+          path: ${{ env.WORKDIR }}/${{ env.TFPLAN }}.enc
+          if-no-files-found: error
+
+  terraform-apply:
+    needs:
+      - terraform-plan
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    # This environment requires approval before the deploy is run.
+    environment: aws-curvenote
+    # These permissions are needed to interact with GitHub's OIDC Token endpoint.
+    permissions:
+      id-token: write
+      contents: read
+    defaults:
+      run:
+        working-directory: ${{ env.WORKDIR }}
+    if: needs.terraform-plan.outputs.apply == 'true'
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{ env.AWS_DEPLOYMENT_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: terraform-apply
+
+      - name: Download plan
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.TFPLAN }}
+          path: ${{ env.WORKDIR }}
+
+      - name: Install age
+        run: |
+          sudo apt-get update -y -q
+          sudo apt-get install -y -q age
+
+      - name: Decrypt plan
+        run: |
+          echo ${{ secrets.TFPLAN_ARTIFACT_SECRET_KEY }} > tfplan.key
+          age --identity tfplan.key --decrypt --output "${TFPLAN}" "${TFPLAN}.enc"
+
+      - name: Terraform apply
+        run: |
+          terraform init
+          terraform apply "${TFPLAN}"
