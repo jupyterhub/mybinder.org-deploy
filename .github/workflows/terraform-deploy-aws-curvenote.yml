@@ -34,7 +34,7 @@ jobs:
       apply: ${{ steps.terraform-plan.outputs.apply }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -111,7 +111,7 @@ jobs:
     if: needs.terraform-plan.outputs.apply == 'true'
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
