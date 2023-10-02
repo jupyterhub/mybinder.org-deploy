@@ -146,3 +146,12 @@ All access to the Kubernetes cluster is managed using [GitHub OIDC](https://docs
 
 AWS secret tokens are not required.
 AWS API access for BinderHub components, for example to ECR, is managed using [IRSA](https://docs.aws.amazon.com/eks/latest/userguide/iam-roles-for-service-accounts.html).
+
+## Testing network policies
+
+```
+git clone https://github.com/jupyterhub/action-k3s-helm
+helm upgrade --install netpol -ntest --create-namespace ./action-k3s-helm/test-netpol-enforcement/
+helm test -ntest netpol
+helm delete -ntest netpol
+```
