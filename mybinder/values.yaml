@@ -340,6 +340,8 @@ binderhub:
       networkPolicy:
         enabled: true
         egress: []
+        egressAllowRules:
+          nonPrivateIPs: false
       memory:
         guarantee: 450M
         limit: 2G
