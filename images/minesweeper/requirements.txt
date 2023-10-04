@@ -45,7 +45,7 @@ six==1.16.0
     #   google-auth
     #   kubernetes
     #   python-dateutil
-urllib3==1.26.9
+urllib3==1.26.17
     # via
     #   kubernetes
     #   requests
