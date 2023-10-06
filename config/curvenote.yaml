@@ -280,7 +280,7 @@ binderhub:
     imageGCThresholdType: "absolute"
 
 cryptnono:
-  enabled: false
+  enabled: true
 
 grafana:
   enabled: false
@@ -339,7 +339,7 @@ analyticsPublisher:
 
 minesweeper:
   # Requires secrets
-  enabled: false
+  enabled: true
   image: jupyterhub/mybinder.org-minesweeper:2020.12.4-0.dev.git.5220.hbe9f3f64
 
 priorityClasses:
