@@ -330,8 +330,7 @@ ingress-nginx:
 static:
   ingress:
     hosts:
-      # - static.binder.curvenote.dev
-      - static.3.13.147.101.nip.io
+      - static.binder.curvenote.dev
 
 analyticsPublisher:
   image:
