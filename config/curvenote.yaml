@@ -23,8 +23,6 @@ binderhub:
     username: ""
     password: ""
 
-  replicas: 1
-
   # extraVolumes:
   #   - name: secrets
   #     secret:
@@ -39,6 +37,7 @@ binderhub:
   extraConfig:
     01-eventlog: |
       # Disabled until GOOGLE_APPLICATION_CREDENTIALS secret is available
+      # and secrets/events-archiver/curvenote.json is created
 
     10-external-registry-helper: |
       # from binderhub.registry import ExternalRegistryHelper
@@ -134,15 +133,6 @@ binderhub:
       c.ExternalRegistryHelper.service_url = "http://curvenote-binderhub-container-registry-helper:8080"
       c.ExternalRegistryHelper.auth_token = "secret-token-use-existing-secret-instead"
 
-  dind:
-    resources:
-      requests:
-        cpu: "4"
-        memory: 16Gi
-      limits:
-        cpu: "7"
-        memory: 24Gi
-
   ingress:
     hosts:
       - binder.curvenote.dev
@@ -211,11 +201,6 @@ binderhub:
 
     proxy:
       chp:
-        resources:
-          requests:
-            cpu: "1"
-          limits:
-            cpu: "1"
         extraPodSpec:
           priorityClassName: binderhub-core
         networkPolicy:
@@ -251,7 +236,6 @@ binderhub:
     scheduling:
       userPlaceholder:
         enabled: false
-        replicas: 50
       userScheduler:
         enabled: false
     cull:
@@ -259,6 +243,7 @@ binderhub:
       maxAge: 3600
 
   imageCleaner:
+    enabled: true
     # Use 40GB as upper limit, size is given in bytes
     imageGCThresholdHigh: 40e9
     imageGCThresholdLow: 30e9
