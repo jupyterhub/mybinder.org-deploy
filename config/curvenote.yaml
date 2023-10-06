@@ -1,18 +1,11 @@
 projectName: curvenote
 
-# userNodeSelector: &userNodeSelector
-#   mybinder.org/pool-type: users
-# coreNodeSelector: &coreNodeSelector
-#   mybinder.org/pool-type: core
-
 binderhub:
   config:
     BinderHub:
       hub_url: https://hub.binder.curvenote.dev
       hub_url_local: http://proxy-public
       badge_base_url: https://mybinder.org
-      # build_node_selector:
-      #   mybinder.org/pool-type: builds
       sticky_builds: true
       image_prefix: 166088433508.dkr.ecr.us-east-2.amazonaws.com/binderhub/
       # log_level: DEBUG
@@ -31,7 +24,6 @@ binderhub:
     password: ""
 
   replicas: 1
-  # nodeSelector: *coreNodeSelector
 
   # extraVolumes:
   #   - name: secrets
@@ -156,10 +148,6 @@ binderhub:
       - binder.curvenote.dev
 
   jupyterhub:
-    # singleuser:
-    #   nodeSelector: *userNodeSelector
-    # hub:
-    #   nodeSelector: *coreNodeSelector
     hub:
       db:
         pvc:
@@ -172,7 +160,6 @@ binderhub:
       extraPodSpec:
         priorityClassName: binderhub-core
       networkPolicy:
-        # enabled: false
         ingress:
           # AWS VPC CNI only works if the name of the service port name is the same as
           # the name of the pod port and the port number is the same
@@ -224,7 +211,6 @@ binderhub:
 
     proxy:
       chp:
-        # nodeSelector: *coreNodeSelector
         resources:
           requests:
             cpu: "1"
@@ -268,7 +254,6 @@ binderhub:
         replicas: 50
       userScheduler:
         enabled: false
-        # nodeSelector: *coreNodeSelector
     cull:
       # maxAge: 1 hour since we're just testing
       maxAge: 3600
@@ -284,7 +269,6 @@ cryptnono:
 
 grafana:
   enabled: false
-  # nodeSelector: *coreNodeSelector
   ingress:
     hosts:
       # - grafana.curvenote.mybinder.org
@@ -335,7 +319,6 @@ analyticsPublisher:
     tag: 2020.12.4-0.dev.git.5220.hdf4d139f
 
 minesweeper:
-  # Requires secrets
   enabled: true
   image: jupyterhub/mybinder.org-minesweeper:2020.12.4-0.dev.git.5220.hbe9f3f64
 
