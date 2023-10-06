@@ -601,6 +601,10 @@ minesweeper:
 cluster-autoscaler:
   enabled: false
 
+# Name:Priority pairs of priority classes to create
+# https://kubernetes.io/blog/2023/01/12/protect-mission-critical-pods-priorityclass/
+priorityClasses: {}
+
 binderhub-container-registry-helper:
   enabled: false
 

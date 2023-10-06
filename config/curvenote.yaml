@@ -169,6 +169,8 @@ binderhub:
           extra_pod_config:
             enableServiceLinks: false
           image_pull_policy: Always
+      extraPodSpec:
+        priorityClassName: binderhub-core
       networkPolicy:
         # enabled: false
         ingress:
@@ -228,6 +230,8 @@ binderhub:
             cpu: "1"
           limits:
             cpu: "1"
+        extraPodSpec:
+          priorityClassName: binderhub-core
         networkPolicy:
           ingress:
             # AWS VPC CNI only works if the name of the service port name is the same as
@@ -338,6 +342,9 @@ minesweeper:
   # Requires secrets
   enabled: false
   image: jupyterhub/mybinder.org-minesweeper:2020.12.4-0.dev.git.5220.hbe9f3f64
+
+priorityClasses:
+  binderhub-core: 10000
 
 binderhub-container-registry-helper:
   enabled: true
