@@ -275,10 +275,15 @@ static:
       # - static.binder.curvenote.dev
       - static.3.13.147.101.nip.io
 
+analyticsPublisher:
+  image:
+    # name: jupyterhub/mybinder.org-analytics-publisher
+    tag: 2020.12.4-0.dev.git.5220.hdf4d139f
+
 minesweeper:
   # Requires secrets
   enabled: false
-  image: jupyterhub/mybinder.org-minesweeper:2020.12.4-0.dev.git.5080.hf35cc80d
+  image: jupyterhub/mybinder.org-minesweeper:2020.12.4-0.dev.git.5220.hbe9f3f64
 
 binderhub-container-registry-helper:
   enabled: true
