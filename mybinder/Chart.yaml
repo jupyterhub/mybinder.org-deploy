@@ -68,5 +68,5 @@ dependencies:
   # fetch dynamic registry credentials
   - name: binderhub-container-registry-helper
     version: 0.2.3
-    repository: oci://quay.io/manics/helm-charts
+    repository: https://www.manicstreetpreacher.co.uk/binderhub-container-registry-helper/
     condition: binderhub-container-registry-helper.enabled
