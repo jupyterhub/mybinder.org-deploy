@@ -10,12 +10,11 @@ import sys
 # Color codes for colored output!
 if os.environ.get("TERM"):
     BOLD = subprocess.check_output(["tput", "bold"]).decode()
-    RED = subprocess.check_output(["tput", "setaf", "1"]).decode()
     GREEN = subprocess.check_output(["tput", "setaf", "2"]).decode()
     NC = subprocess.check_output(["tput", "sgr0"]).decode()
 else:
     # no term, no colors
-    BOLD = RED = GREEN = NC = ""
+    BOLD = GREEN = NC = ""
 
 HERE = os.path.dirname(__file__)
 ABSOLUTE_HERE = os.path.dirname(os.path.realpath(__file__))
@@ -196,7 +195,7 @@ def get_config_files(release, config_dir="config"):
     return config_files
 
 
-def deploy(release, name=None, dry_run=False, diff=False):
+def deploy(release, name=None, dry_run=False):
     """Deploys a federation member to a k8s cluster.
 
     Waits for deployments and daemonsets to become Ready
@@ -204,30 +203,17 @@ def deploy(release, name=None, dry_run=False, diff=False):
     if not name:
         name = release
 
-    if diff:
-        helm_commands = [
-            "diff",
-            "upgrade",
-            "--install",
-        ]
-    else:
-        helm_commands = [
-            "upgrade",
-            "--install",
-            "--cleanup-on-fail",
-            "--create-namespace",
-        ]
-
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
-    helm = (
-        ["helm"]
-        + helm_commands
-        + [
-            f"--namespace={name}",
-            name,
-            "mybinder",
-        ]
-    )
+    helm = [
+        "helm",
+        "upgrade",
+        "--install",
+        "--cleanup-on-fail",
+        "--create-namespace",
+        f"--namespace={name}",
+        name,
+        "mybinder",
+    ]
 
     config_files = get_config_files(release)
     # add config files to helm command
@@ -236,12 +222,10 @@ def deploy(release, name=None, dry_run=False, diff=False):
 
     check_call(helm, dry_run)
     print(
-        BOLD + GREEN + f"SUCCESS: Helm {helm_commands[0]} for {release} completed" + NC,
-        flush=True,
+        BOLD + GREEN + f"SUCCESS: Helm upgrade for {release} completed" + NC, flush=True
     )
 
-    if not diff:
-        wait_for_deployments_daemonsets(name, dry_run)
+    wait_for_deployments_daemonsets(name, dry_run)
 
 
 def wait_for_deployments_daemonsets(name, dry_run=False):
@@ -285,7 +269,7 @@ def wait_for_deployments_daemonsets(name, dry_run=False):
         )
 
 
-def setup_certmanager(dry_run=False, diff=False):
+def setup_certmanager(dry_run=False):
     """
     Install cert-manager separately into its own namespace and `kubectl apply`
     its CRDs each time as helm won't attempt to handle changes to CRD resources.
@@ -302,50 +286,32 @@ def setup_certmanager(dry_run=False, diff=False):
     manifest_url = f"https://github.com/jetstack/cert-manager/releases/download/{version}/cert-manager.crds.yaml"
     print(BOLD + GREEN + f"Installing cert-manager CRDs {version}" + NC, flush=True)
 
-    if diff:
-        kubectl_commands = ["diff"]
-        helm_commands = [
-            "diff",
-            "upgrade",
-            "--install",
-        ]
-    else:
-        kubectl_commands = ["apply"]
-        helm_commands = [
-            "upgrade",
-            "--install",
-            "--create-namespace",
-        ]
-
     # Sometimes 'replace' is needed for upgrade (e.g. 1.1->1.2)
-    check_call(["kubectl"] + kubectl_commands + ["-f", manifest_url], dry_run)
+    check_call(["kubectl", "apply", "-f", manifest_url], dry_run)
 
     print(BOLD + GREEN + f"Installing cert-manager {version}" + NC, flush=True)
-    helm_upgrade = (
-        ["helm"]
-        + helm_commands
-        + [
-            "--namespace=cert-manager",
-            "--repo=https://charts.jetstack.io",
-            "cert-manager",
-            "cert-manager",
-            f"--version={version}",
-            "--values=config/cert-manager.yaml",
-        ]
-    )
+    helm_upgrade = [
+        "helm",
+        "upgrade",
+        "--install",
+        "--create-namespace",
+        "--namespace=cert-manager",
+        "--repo=https://charts.jetstack.io",
+        "cert-manager",
+        "cert-manager",
+        f"--version={version}",
+        "--values=config/cert-manager.yaml",
+    ]
 
     check_call(helm_upgrade, dry_run)
 
 
-def patch_coredns(dry_run=False, diff=False):
+def patch_coredns(dry_run=False):
     """Patch coredns resource allocation
 
     OVH2 coredns does not have sufficient memory by default after our ban patches
     """
     print(BOLD + GREEN + "Patching coredns resources" + NC, flush=True)
-    if diff:
-        print(BOLD + RED + "diff not supported" + NC, flush=True)
-        return
     check_call(
         [
             "kubectl",
@@ -363,7 +329,7 @@ def patch_coredns(dry_run=False, diff=False):
     )
 
 
-def deploy_kube_system_charts(release, name=None, dry_run=False, diff=False):
+def deploy_kube_system_charts(release, name=None, dry_run=False):
     """
     Some charts must be deployed into the kube-system namespace
     """
@@ -377,41 +343,25 @@ def deploy_kube_system_charts(release, name=None, dry_run=False, diff=False):
         return
 
     print(BOLD + GREEN + f"Starting helm upgrade for {log_name}" + NC, flush=True)
-    if diff:
-        helm_commands = [
-            "diff",
-            "upgrade",
-            "--install",
-        ]
-    else:
-        helm_commands = [
-            "upgrade",
-            "--install",
-            "--cleanup-on-fail",
-        ]
-    helm = (
-        ["helm"]
-        + helm_commands
-        + [
-            "--namespace=kube-system",
-            name,
-            "mybinder-kube-system",
-        ]
-    )
+    helm = [
+        "helm",
+        "upgrade",
+        "--install",
+        "--cleanup-on-fail",
+        "--namespace=kube-system",
+        name,
+        "mybinder-kube-system",
+    ]
     for config_file in config_files:
         helm.extend(["-f", config_file])
 
     check_call(helm, dry_run)
     print(
-        BOLD
-        + GREEN
-        + f"SUCCESS: Helm {helm_commands[0]} for {log_name} completed"
-        + NC,
+        BOLD + GREEN + f"SUCCESS: Helm upgrade for {log_name} completed" + NC,
         flush=True,
     )
 
-    if not diff:
-        wait_for_deployments_daemonsets("kube-system", dry_run)
+    wait_for_deployments_daemonsets("kube-system", dry_run)
 
 
 def main():
@@ -447,11 +397,6 @@ def main():
         "--dry-run",
         action="store_true",
         help="Print commands, but don't run them",
-    )
-    argparser.add_argument(
-        "--diff",
-        action="store_true",
-        help="Run helm/kubectl diff (plugins must be installed), do not make any changes",
     )
     stages = ["all", "auth", "networkbans", "kubesystem", "certmanager", "mybinder"]
     argparser.add_argument(
@@ -497,7 +442,7 @@ def main():
         if args.stage in ("all", "auth"):
             if cluster.startswith("ovh"):
                 setup_auth_ovh(args.release, cluster, args.dry_run)
-                patch_coredns(args.dry_run, args.diff)
+                patch_coredns(args.dry_run)
             elif cluster in AZURE_RGs:
                 setup_auth_azure(cluster, args.dry_run)
             elif cluster in GCP_PROJECTS:
@@ -508,13 +453,13 @@ def main():
                 raise Exception("Cloud cluster not recognised!")
 
     if args.stage in ("all", "networkban"):
-        update_networkbans(cluster, args.dry_run, args.diff)
+        update_networkbans(cluster, args.dry_run)
     if args.stage in ("all", "kubesystem"):
-        deploy_kube_system_charts(args.release, args.name, args.dry_run, args.diff)
+        deploy_kube_system_charts(args.release, args.name, args.dry_run)
     if args.stage in ("all", "certmanager"):
-        setup_certmanager(args.dry_run, args.diff)
+        setup_certmanager(args.dry_run)
     if args.stage in ("all", "mybinder"):
-        deploy(args.release, args.name, args.dry_run, args.diff)
+        deploy(args.release, args.name, args.dry_run)
 
 
 if __name__ == "__main__":
