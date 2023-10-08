@@ -1,4 +1,5 @@
-{{- range $name, $priority := .Values.priorityClasses -}}
+{{- range $name, $priority := .Values.priorityClasses }}
+---
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
