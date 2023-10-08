@@ -274,10 +274,10 @@ grafana:
   enabled: false
   ingress:
     hosts:
-      # - grafana.curvenote.mybinder.org
+      # - grafana.binder.curvenote.dev
     tls:
       - hosts:
-          # - grafana.curvenote.mybinder.org
+          # - grafana.binder.curvenote.dev
         secretName: kubelego-tls-grafana
   datasources:
     datasources.yaml:
@@ -286,7 +286,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.curvenote.mybinder.org
+          url: https://prometheus.binder.curvenote.dev
           access: direct
           isDefault: true
           editable: false
@@ -299,10 +299,10 @@ prometheus:
     retention: 30d
     ingress:
       hosts:
-        - prometheus.curvenote.mybinder.org
+        - prometheus.binder.curvenote.dev
       tls:
         - hosts:
-            - prometheus.curvenote.mybinder.org
+            - prometheus.binder.curvenote.dev
           secretName: kubelego-tls-prometheus
 
 ingress-nginx:
