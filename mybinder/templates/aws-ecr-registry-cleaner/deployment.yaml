@@ -18,7 +18,6 @@ spec:
       app: aws-ecr-registry-cleaner
       component: aws-ecr-registry-cleaner
       release: {{ .Release.Name }}
-  replicas: 1
   template:
     metadata:
       labels:
