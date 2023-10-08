@@ -41,6 +41,9 @@ module "eks" {
   eks_managed_node_group_defaults = {
     capacity_type                 = "SPOT"
     iam_role_permissions_boundary = local.permissions_boundary_arn
+    iam_role_additional_policies = {
+      ssmcore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+    }
   }
 
   eks_managed_node_groups = {
