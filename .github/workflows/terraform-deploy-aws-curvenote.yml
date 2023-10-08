@@ -6,6 +6,7 @@ on:
     branches:
       - main
     paths:
+      - "terraform/aws/binder-eks/**"
       - "terraform/aws/curvenote/**"
       - .github/workflows/terraform-deploy-aws-curvenote.yml
   workflow_dispatch:
