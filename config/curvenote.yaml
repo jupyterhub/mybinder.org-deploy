@@ -185,23 +185,6 @@ binderhub:
             #     protocol: TCP
 
     singleuser:
-      initContainers:
-        - name: tc-init
-          image: jupyterhub/mybinder.org-tc-init:2020.12.4-0.dev.git.4289.h140cef52
-          imagePullPolicy: IfNotPresent
-          env:
-            - name: WHITELIST_CIDR
-              value: 10.0.0.0/8
-            - name: EGRESS_BANDWIDTH
-              value: 1mbit
-          securityContext:
-            # capabilities.add seems to be disabled
-            # by the `runAsUser: 1000` in the pod-level securityContext
-            # unless we explicitly run as root
-            runAsUser: 0
-            capabilities:
-              add:
-                - NET_ADMIN
       networkPolicy:
         ingress:
           # AWS VPC CNI only works if the name of the service port name is the same as
@@ -317,13 +300,10 @@ static:
       - static.binder.curvenote.dev
 
 analyticsPublisher:
-  image:
-    # name: jupyterhub/mybinder.org-analytics-publisher
-    tag: 2020.12.4-0.dev.git.5220.hdf4d139f
+  enabled: false
 
 minesweeper:
   enabled: true
-  image: jupyterhub/mybinder.org-minesweeper:2020.12.4-0.dev.git.5220.hbe9f3f64
 
 priorityClasses:
   binderhub-core: 10000
