@@ -52,7 +52,7 @@ pytest==7.4.2
     #   pytest-xdist
 pytest-rerunfailures==12.0
     # via -r requirements.in
-pytest-timeout==2.1.0
+pytest-timeout==2.2.0
     # via -r requirements.in
 pytest-xdist==3.3.1
     # via -r requirements.in
