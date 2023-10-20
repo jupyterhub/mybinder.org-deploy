@@ -153,7 +153,7 @@ binderhub:
         Thanks to <a href="https://www.ovh.com/">OVH</a> and <a href="https://notebooks.gesis.org">GESIS Notebooks</a> for supporting us! 🎉
         </div>
         <div style="text-align:center;">
-        mybinder.org will be updating the base image from Ubuntu 18.04 to 22.04 soon. See <a href="https://discourse.jupyter.org/t/repo2docker-and-mybinder-org-upgrading-base-image-to-ubuntu-22-04/19865">this discussion</a> for details.
+        mybinder.org has updated the base image to Ubuntu 22.04! See the <a href="https://repo2docker.readthedocs.io/en/latest/howto/breaking_changes.html">upgrade guide</a> for details.
         </div>
       about_message: |
         <p>mybinder.org is public infrastructure operated by the <a href="https://jupyterhub-team-compass.readthedocs.io/en/latest/team.html#binder-team">Binder Project team</a>.<br /><br />
@@ -189,7 +189,7 @@ binderhub:
             })();
           }
     KubernetesBuildExecutor:
-      build_image: quay.io/jupyterhub/repo2docker:2023.06.0-8.gd414e99
+      build_image: quay.io/jupyterhub/repo2docker:2023.06.0-39.g8bdf681
       memory_limit: "3G"
       memory_request: "1G"
 
