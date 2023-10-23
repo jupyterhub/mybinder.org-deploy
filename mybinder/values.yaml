@@ -95,6 +95,8 @@ binderhub:
         # it was created the day GuitarsAI was blocked and does the same thing
         - ^ferarussia/.*
         - ^irw4ns1/.*
+        # CryptoCurrency mining bans
+        - ^wyattsanchez54/.*
       high_quota_specs:
         []
         # - ^jupyterlab/.*
