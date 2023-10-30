@@ -91,9 +91,6 @@ binderhub:
     imageGCThresholdLow: 30e9
     imageGCThresholdType: "absolute"
 
-cryptnono:
-  enabled: false
-
 grafana:
   nodeSelector: *coreNodeSelector
   ingress:
