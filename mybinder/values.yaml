@@ -1,11 +1,6 @@
 # values ref: https://github.com/yuvipanda/cryptnono/blob/main/cryptnono/values.yaml
 cryptnono:
   enabled: true
-  detectors:
-    execwhacker:
-      # Temporarily disable execwhacker until https://github.com/jupyterhub/mybinder.org-deploy/issues/2795
-      # is sorted
-      enabled: false
 
 imagePullSecrets:
 
