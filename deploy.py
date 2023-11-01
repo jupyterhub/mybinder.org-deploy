@@ -398,7 +398,7 @@ def main():
         action="store_true",
         help="Print commands, but don't run them",
     )
-    stages = ["all", "auth", "networkbans", "kubesystem", "certmanager", "mybinder"]
+    stages = ["all", "auth", "networkban", "kubesystem", "certmanager", "mybinder"]
     argparser.add_argument(
         "--stage",
         choices=stages,
