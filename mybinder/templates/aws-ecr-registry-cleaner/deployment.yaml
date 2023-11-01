@@ -1,0 +1,44 @@
+{{- if .Values.awsEcrRegistryCleaner.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-ecr-registry-cleaner
+  labels:
+    app: aws-ecr-registry-cleaner
+    component: aws-ecr-registry-cleaner
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  # Never run more than one cleaner pod at a time
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: aws-ecr-registry-cleaner
+      component: aws-ecr-registry-cleaner
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: aws-ecr-registry-cleaner
+        component: aws-ecr-registry-cleaner
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: cleaner
+          image: {{ .Values.awsEcrRegistryCleaner.image }}
+          args:
+            - -expires-after-pull-days={{ .Values.awsEcrRegistryCleaner.expiresAfterPullDays }}
+            - -loop-delay={{ .Values.awsEcrRegistryCleaner.loopDelay }}
+      tolerations:
+        - effect: NoSchedule
+          key: hub.jupyter.org/dedicated
+          operator: Equal
+          value: user
+        - effect: NoSchedule
+          key: hub.jupyter.org_dedicated
+          operator: Equal
+          value: user
+      serviceAccountName: binderhub-ecr-registry-cleaner
+{{- end }}

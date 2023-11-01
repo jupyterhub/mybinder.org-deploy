@@ -1,0 +1,31 @@
+# Install the more modern load-balancer controller:
+# https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html
+aws-load-balancer-controller:
+  enabled: true
+  clusterName: binderhub
+  clusterSecretsPermissions:
+    allowAllSecrets: true
+  enableShield: false
+  enableWaf: false
+  enableWafv2: false
+  logLevel: debug
+  serviceAccount:
+    # Must match the IRSA service account name
+    name: aws-load-balancer-controller
+    annotations:
+      eks.amazonaws.com/role-arn: "arn:aws:iam::166088433508:role/binderhub-IRSA-aws-load-balancer-controller"
+
+aws-ebs-csi-driver:
+  enabled: true
+  controller:
+    serviceAccount:
+      # Must match the IRSA service account name
+      name: ebs-csi-controller-sa
+      annotations:
+        eks.amazonaws.com/role-arn: "arn:aws:iam::166088433508:role/binderhub-IRSA-ebs-csi-controller-sa"
+  storageClasses:
+    - name: ebs-sc
+      # Note this results in EKS having two default StorageClasses, so to be sure
+      # always specify the storage class in the PVC.
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"

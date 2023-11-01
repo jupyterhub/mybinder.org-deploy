@@ -152,6 +152,7 @@ jobs:
         run: |
           curl -sf https://raw.githubusercontent.com/helm/helm/HEAD/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
           helm dependency update ./mybinder
+          helm dependency update ./mybinder-kube-system
 
       # Action Repo: https://github.com/sliteteam/github-action-git-crypt-unlock
       - name: "Stage 2: Unlock git-crypt secrets"
@@ -290,6 +291,7 @@ jobs:
         run: |
           curl -sf https://raw.githubusercontent.com/helm/helm/HEAD/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
           helm dependency update ./mybinder
+          helm dependency update ./mybinder-kube-system
 
       - name: "Stage 2: Unlock git-crypt secrets"
         uses: sliteteam/github-action-git-crypt-unlock@8b1fa3ccc81e322c5c45fbab261eee46513fd3f8

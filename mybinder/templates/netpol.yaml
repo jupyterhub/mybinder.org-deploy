@@ -39,6 +39,9 @@ spec:
       to:
         - ipBlock:
             cidr: 10.0.0.0/8
+        - ipBlock:
+            # AWS EKS defaults to running DNS on 172.20.0.10
+            cidr: 172.20.0.10/32
     # allow access to the world,
     # but not the cluster
     - ports:

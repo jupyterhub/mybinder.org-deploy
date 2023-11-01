@@ -592,3 +592,20 @@ minesweeper:
 #
 cluster-autoscaler:
   enabled: false
+
+# Name:Priority pairs of priority classes to create
+# https://kubernetes.io/blog/2023/01/12/protect-mission-critical-pods-priorityclass/
+priorityClasses: {}
+
+binderhub-container-registry-helper:
+  enabled: false
+
+awsEcrRegistryCleaner:
+  enabled: false
+  image: ghcr.io/manics/aws-ecr-registry-cleaner:0.0.1
+  expiresAfterPullDays: 7
+  # 12 hours
+  loopDelay: 43200
+  serviceAccount:
+    name: binderhub-ecr-registry-cleaner
+    annotations: {}

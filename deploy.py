@@ -29,6 +29,9 @@ GCP_ZONES = {
     "prod": "us-central1",
 }
 
+# Mapping of config name to cluster name for AWS EKS deployments
+AWS_DEPLOYMENTS = {"curvenote": "binderhub"}
+
 # Mapping of cluster names (keys) to resource group names (values) for Azure deployments
 AZURE_RGs = {}
 
@@ -140,6 +143,27 @@ def setup_auth_gcloud(release, cluster=None, dry_run=False):
     )
 
 
+def setup_auth_aws(cluster, dry_run=False):
+    """
+    Set up authentication for EKS on AWS
+
+    Assumes you already have an AWS CLI profile setup with access to EKS,
+    and that either this is the default profile (e.g. on CI) or you have set the
+    AWS_PROFILE environment variable.
+    """
+    print(BOLD + GREEN + f"Obtaining AWS EKS kubeconfig for {cluster}" + NC, flush=True)
+
+    eks_kubeconfig = [
+        "aws",
+        "eks",
+        "update-kubeconfig",
+        "--name",
+        AWS_DEPLOYMENTS[cluster],
+    ]
+    stdout = check_output(eks_kubeconfig, dry_run)
+    print(stdout)
+
+
 def update_networkbans(cluster, dry_run=False):
     """
     Run secrets/ban.py to update network bans
@@ -165,23 +189,19 @@ def get_config_files(release, config_dir="config"):
     )
     # release-specific config files
     for config_dir in (config_dir, os.path.join("secrets", config_dir)):
-        config_files.append(os.path.join(config_dir, release + ".yaml"))
+        f = os.path.join(config_dir, release + ".yaml")
+        if os.path.exists(f):
+            config_files.append(f)
     return config_files
 
 
 def deploy(release, name=None, dry_run=False):
     """Deploys a federation member to a k8s cluster.
 
-    The deployment is done in the following steps:
-
-        1. Deploy cert-manager
-        2. Deploy mybinder helm chart
-        3. Await deployed deployment and daemonsets to become Ready
+    Waits for deployments and daemonsets to become Ready
     """
     if not name:
         name = release
-
-    setup_certmanager(dry_run)
 
     print(BOLD + GREEN + f"Starting helm upgrade for {release}" + NC, flush=True)
     helm = [
@@ -309,6 +329,41 @@ def patch_coredns(dry_run=False):
     )
 
 
+def deploy_kube_system_charts(release, name=None, dry_run=False):
+    """
+    Some charts must be deployed into the kube-system namespace
+    """
+    if not name:
+        name = release
+    log_name = f"mybinder-kube-system {release}"
+
+    config_files = get_config_files(release, config_dir="config-kube-system")
+    if not config_files:
+        print(BOLD + GREEN + f"No config files found for {log_name}" + NC, flush=True)
+        return
+
+    print(BOLD + GREEN + f"Starting helm upgrade for {log_name}" + NC, flush=True)
+    helm = [
+        "helm",
+        "upgrade",
+        "--install",
+        "--cleanup-on-fail",
+        "--namespace=kube-system",
+        name,
+        "mybinder-kube-system",
+    ]
+    for config_file in config_files:
+        helm.extend(["-f", config_file])
+
+    check_call(helm, dry_run)
+    print(
+        BOLD + GREEN + f"SUCCESS: Helm upgrade for {log_name} completed" + NC,
+        flush=True,
+    )
+
+    wait_for_deployments_daemonsets("kube-system", dry_run)
+
+
 def main():
     # parse command line args
     argparser = argparse.ArgumentParser()
@@ -320,6 +375,7 @@ def main():
             "prod",
             "ovh",
             "ovh2",
+            "curvenote",
         ],
     )
     argparser.add_argument(
@@ -341,6 +397,13 @@ def main():
         "--dry-run",
         action="store_true",
         help="Print commands, but don't run them",
+    )
+    stages = ["all", "auth", "networkbans", "kubesystem", "certmanager", "mybinder"]
+    argparser.add_argument(
+        "--stage",
+        choices=stages,
+        default=stages[0],
+        help="Stage to deploy, default all",
     )
 
     args = argparser.parse_args()
@@ -376,18 +439,27 @@ def main():
 
         # script is running on CI, proceed with auth and helm setup
 
-        if cluster.startswith("ovh"):
-            setup_auth_ovh(args.release, cluster, args.dry_run)
-            patch_coredns(args.dry_run)
-        elif cluster in AZURE_RGs:
-            setup_auth_azure(cluster, args.dry_run)
-        elif cluster in GCP_PROJECTS:
-            setup_auth_gcloud(args.release, cluster, args.dry_run)
-        else:
-            raise Exception("Cloud cluster not recognised!")
+        if args.stage in ("all", "auth"):
+            if cluster.startswith("ovh"):
+                setup_auth_ovh(args.release, cluster, args.dry_run)
+                patch_coredns(args.dry_run)
+            elif cluster in AZURE_RGs:
+                setup_auth_azure(cluster, args.dry_run)
+            elif cluster in GCP_PROJECTS:
+                setup_auth_gcloud(args.release, cluster, args.dry_run)
+            elif cluster in AWS_DEPLOYMENTS:
+                setup_auth_aws(cluster, args.dry_run)
+            else:
+                raise Exception("Cloud cluster not recognised!")
 
-    update_networkbans(cluster, args.dry_run)
-    deploy(args.release, args.name, args.dry_run)
+    if args.stage in ("all", "networkban"):
+        update_networkbans(cluster, args.dry_run)
+    if args.stage in ("all", "kubesystem"):
+        deploy_kube_system_charts(args.release, args.name, args.dry_run)
+    if args.stage in ("all", "certmanager"):
+        setup_certmanager(args.dry_run)
+    if args.stage in ("all", "mybinder"):
+        deploy(args.release, args.name, args.dry_run)
 
 
 if __name__ == "__main__":
