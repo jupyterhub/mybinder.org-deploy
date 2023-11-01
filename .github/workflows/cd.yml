@@ -225,6 +225,10 @@ jobs:
             helm_version: ""
             experimental: false
 
+          - federation_member: curvenote
+            helm_version: ""
+            experimental: false
+
     steps:
       - name: "Stage 0: Update env vars based on job matrix arguments"
         run: |
