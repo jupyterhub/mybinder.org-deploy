@@ -322,22 +322,9 @@ jobs:
           chartpress ${{ matrix.chartpress_args || '--skip-build' }}
 
       - name: "Stage 4: Deploy to ${{ matrix.federation_member }}"
-        if: matrix.federation_member != 'curvenote'
         run: |
           . cert-manager.env
           python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.cluster_name || matrix.federation_member }} --name ${{ matrix.release_name || matrix.federation_member }}
-        env:
-          TERM: xterm
-
-      - name: "Stage 4: Deploy to ${{ matrix.federation_member }}"
-        # TODO: fix ban.py to work on AWS/curvenote
-        if: matrix.federation_member == 'curvenote'
-        run: |
-          . cert-manager.env
-          for stage in auth kubesystem certmanager mybinder; do
-            echo $stage
-            python ./deploy.py ${{ matrix.federation_member }} ${{ matrix.cluster_name || matrix.federation_member }} --name ${{ matrix.release_name || matrix.federation_member }} --stage $stage
-          done
         env:
           TERM: xterm
 
