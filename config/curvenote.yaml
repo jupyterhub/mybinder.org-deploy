@@ -278,6 +278,7 @@ grafana:
 prometheus:
   enabled: true
   server:
+    priorityClassName: binderhub-core
     persistentVolume:
       size: 50Gi
     retention: 30d
@@ -291,6 +292,7 @@ prometheus:
 
 ingress-nginx:
   controller:
+    priorityClassName: binderhub-core
     autoscaling:
       maxReplicas: 2
     service:
