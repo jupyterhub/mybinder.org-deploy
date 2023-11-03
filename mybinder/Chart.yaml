@@ -54,6 +54,6 @@ dependencies:
   # Registry helper, used to create container repositories before pushing and to
   # fetch dynamic registry credentials
   - name: binderhub-container-registry-helper
-    version: 0.2.3
+    version: 0.2.4
     repository: https://www.manicstreetpreacher.co.uk/binderhub-container-registry-helper/
     condition: binderhub-container-registry-helper.enabled

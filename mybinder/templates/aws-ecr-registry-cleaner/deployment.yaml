@@ -42,3 +42,6 @@ spec:
           value: user
       serviceAccountName: binderhub-ecr-registry-cleaner
 {{- end }}
+      {{- with .Values.awsEcrRegistryCleaner.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}

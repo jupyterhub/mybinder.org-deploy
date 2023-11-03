@@ -609,3 +609,4 @@ awsEcrRegistryCleaner:
   serviceAccount:
     name: binderhub-ecr-registry-cleaner
     annotations: {}
+  priorityClassName: ""
