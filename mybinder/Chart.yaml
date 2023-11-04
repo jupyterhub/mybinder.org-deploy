@@ -33,7 +33,7 @@ dependencies:
   # Source code:   https://github.com/grafana/helm-charts/tree/main/charts/grafana
   # App changelog: https://github.com/grafana/grafana/blob/main/CHANGELOG.md
   - name: grafana
-    version: "7.0.2"
+    version: "7.0.3"
     repository: https://grafana.github.io/helm-charts
     condition: grafana.enabled
 
