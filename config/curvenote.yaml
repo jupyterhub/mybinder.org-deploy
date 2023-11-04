@@ -1,7 +1,6 @@
 projectName: curvenote
 
 binderhub:
-  # TODO: priorityClassName: binderhub-core
   replicas: 1
   config:
     BinderHub:
@@ -45,6 +44,9 @@ binderhub:
   #     readOnly: true
   # extraEnv:
   #   GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+
+  extraPodSpec:
+    priorityClassName: binderhub-core
 
   extraConfig:
     01-eventlog: |
@@ -296,8 +298,7 @@ prometheus:
 ingress-nginx:
   controller:
     priorityClassName: binderhub-core
-    autoscaling:
-      maxReplicas: 2
+    replicaCount: 2
     service:
       annotations:
         service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
