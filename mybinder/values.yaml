@@ -217,6 +217,78 @@ binderhub:
           return [JSONCloudLoggingHandler(client, name=name)]
       c.EventLog.handlers_maker = _make_eventsink_handler
 
+    # backport event_loop_seconds metric
+    # from https://github.com/jupyterhub/jupyterhub/pull/4615
+    02-event-loop-metric: |
+      import time
+
+      from prometheus_client import Histogram
+      from tornado.ioloop import PeriodicCallback
+      from traitlets.log import get_logger
+
+      c = get_config()  # noqa
+      EVENT_LOOP_INTERVAL_SECONDS = Histogram(
+          'event_loop_interval_seconds',
+          'Distribution of measured event loop intervals',
+          namespace="jupyterhub",
+          # Increase resolution to 5ms below 50ms
+          # because this is where we are most sensitive.
+          # No need to have buckets below 25, since we only measure every 20ms.
+          buckets=[
+              # 5ms from 25-50ms
+              25e-3,
+              30e-3,
+              35e-3,
+              40e-3,
+              45e-3,
+              50e-3,
+              # from here, default prometheus buckets
+              75e-3,
+              0.1,
+              0.25,
+              0.5,
+              0.75,
+              1,
+              2.5,
+              5,
+              7.5,
+              10,
+              float("inf"),
+          ],
+      )
+
+
+      class EventLoopMetric:
+          event_loop_interval_resolution = 20e-3
+          event_loop_interval_log_threshold = 1
+          def _event_loop_tick(self):
+              """Measure a single tick of the event loop
+          
+              This measures the time since the last tick
+              """
+              now = time.perf_counter()
+              tick_duration = now - self._last_tick
+              self._last_tick = now
+              EVENT_LOOP_INTERVAL_SECONDS.observe(tick_duration)
+              if tick_duration >= self.event_loop_interval_log_threshold:
+                  # warn about slow ticks
+                  self.log.warning("Event loop was unresponsive for %.2fs!", tick_duration)
+              
+          
+          def start(self):
+              self.log = get_logger()
+              self.log.info("starting!")
+              now = time.perf_counter()
+              self._last_tick = self._last_tick_collect = now
+              pc = PeriodicCallback(
+                  self._event_loop_tick,
+                  self.event_loop_interval_resolution * 1000,
+              )
+              pc.start()
+
+      metric = EventLoopMetric()
+      metric.start()
+
   registry:
     url: https://gcr.io
 
