@@ -103,7 +103,6 @@ grafana:
           orgId: 1
           type: prometheus
           url: https://prometheus.staging.mybinder.org
-          access: direct
           isDefault: true
           editable: false
   persistence:
