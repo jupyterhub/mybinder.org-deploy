@@ -56,7 +56,7 @@ pytest-rerunfailures==12.0
     # via -r requirements.in
 pytest-timeout==2.2.0
     # via -r requirements.in
-pytest-xdist==3.3.1
+pytest-xdist==3.4.0
     # via -r requirements.in
 python-dateutil==2.8.2
     # via kubernetes
