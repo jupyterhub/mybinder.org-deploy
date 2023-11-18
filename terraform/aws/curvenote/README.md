@@ -60,6 +60,8 @@ and deploy again
 terraform apply
 ```
 
+[Install the AWS VPC-CNI plugin](../binder-eks/README.md#install-the-aws-vpc-cni-add-on)
+
 ## Obtaining a kubeconfig file
 
 You must have the AWS CLI (v2 is recommended) and kubectl in your PATH.
