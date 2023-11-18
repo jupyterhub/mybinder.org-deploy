@@ -8,9 +8,12 @@ __pycache__
 config/common/datacenter-*.yaml
 secrets/banned_hosts.txt
 secrets/config/common/bans.yaml
-mybinder*/charts
-mybinder*/requirements.lock
-mybinder*/Chart.lock
+system-charts/*/charts
+system-charts/*/requirements.lock
+system-charts/*/Chart.lock
+mybinder/charts
+mybinder/requirements.lock
+mybinder/Chart.lock
 
 .ipynb_checkpoints
 

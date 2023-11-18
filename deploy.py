@@ -329,39 +329,47 @@ def patch_coredns(dry_run=False):
     )
 
 
-def deploy_kube_system_charts(release, name=None, dry_run=False):
+def deploy_system_charts(release, name=None, dry_run=False):
     """
-    Some charts must be deployed into the kube-system namespace
+    Some charts must be deployed into other namespaces
     """
     if not name:
         name = release
-    log_name = f"mybinder-kube-system {release}"
 
-    config_files = get_config_files(release, config_dir="config-kube-system")
-    if not config_files:
-        print(BOLD + GREEN + f"No config files found for {log_name}" + NC, flush=True)
-        return
+    charts = glob.glob("system-charts/*/Chart.yaml")
+    namespaces = [c.split("/")[1] for c in charts]
 
-    print(BOLD + GREEN + f"Starting helm upgrade for {log_name}" + NC, flush=True)
-    helm = [
-        "helm",
-        "upgrade",
-        "--install",
-        "--cleanup-on-fail",
-        "--namespace=kube-system",
-        name,
-        "mybinder-kube-system",
-    ]
-    for config_file in config_files:
-        helm.extend(["-f", config_file])
+    for ns in namespaces:
+        log_name = f"mybinder-{ns} {release}"
 
-    check_call(helm, dry_run)
-    print(
-        BOLD + GREEN + f"SUCCESS: Helm upgrade for {log_name} completed" + NC,
-        flush=True,
-    )
+        config_files = get_config_files(release, config_dir=f"system-config/{ns}")
+        if not config_files:
+            print(
+                BOLD + GREEN + f"No config files found for {log_name}" + NC, flush=True
+            )
+            return
 
-    wait_for_deployments_daemonsets("kube-system", dry_run)
+        print(BOLD + GREEN + f"Starting helm upgrade for {log_name}" + NC, flush=True)
+        helm = [
+            "helm",
+            "upgrade",
+            "--install",
+            "--cleanup-on-fail",
+            f"--namespace={ns}",
+            "--create-namespace",
+            name,
+            f"system-charts/{ns}",
+        ]
+        for config_file in config_files:
+            helm.extend(["-f", config_file])
+
+        check_call(helm, dry_run)
+        print(
+            BOLD + GREEN + f"SUCCESS: Helm upgrade for {log_name} completed" + NC,
+            flush=True,
+        )
+
+        wait_for_deployments_daemonsets(ns, dry_run)
 
 
 def main():
@@ -398,7 +406,7 @@ def main():
         action="store_true",
         help="Print commands, but don't run them",
     )
-    stages = ["all", "auth", "networkban", "kubesystem", "certmanager", "mybinder"]
+    stages = ["all", "auth", "networkban", "system", "certmanager", "mybinder"]
     argparser.add_argument(
         "--stage",
         choices=stages,
@@ -454,8 +462,8 @@ def main():
 
     if args.stage in ("all", "networkban"):
         update_networkbans(cluster, args.dry_run)
-    if args.stage in ("all", "kubesystem"):
-        deploy_kube_system_charts(args.release, args.name, args.dry_run)
+    if args.stage in ("all", "system"):
+        deploy_system_charts(args.release, args.name, args.dry_run)
     if args.stage in ("all", "certmanager"):
         setup_certmanager(args.dry_run)
     if args.stage in ("all", "mybinder"):
