@@ -1,0 +1,3 @@
+# Tigera operator for installing Calico
+tigera-operator:
+  enabled: false
