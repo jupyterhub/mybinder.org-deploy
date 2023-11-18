@@ -1,0 +1,11 @@
+apiVersion: v2
+description: A meta-chart for the tiger-operator charts on some mybinder.org hosts
+name: mybinder-tiger-operator
+version: "0.0.1-set.by.chartpress"
+kubeVersion: ">= 1.26.0-0"
+dependencies:
+  # https://artifacthub.io/packages/helm/aws/aws-load-balancer-controller
+  - name: tigera-operator
+    version: 3.25.2
+    repository: https://docs.tigera.io/calico/charts
+    condition: tigera-operator.enabled

@@ -1,0 +1,11 @@
+# Install Calico for proper NetworkPolicy support
+tigera-operator:
+  enabled: true
+  installation:
+    kubernetesProvider: EKS
+  apiServer:
+    # Doesn't seem to work on EKS
+    # https://github.com/projectcalico/calico/issues/7555
+    # It's not needed anyway since we only want standard NetworkPolicy support,
+    # not 'projectcalico.org/v3'
+    enabled: false
