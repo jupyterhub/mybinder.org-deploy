@@ -336,11 +336,11 @@ def deploy_system_charts(release, name=None, dry_run=False):
     if not name:
         name = release
 
-    charts = glob.glob("system-charts/*/Chart.yaml")
-    namespaces = [c.split("/")[1] for c in charts]
+    charts = ["mybinder-kube-system", "mybinder-tigera-operator"]
 
-    for ns in namespaces:
-        log_name = f"mybinder-{ns} {release}"
+    for chart in charts:
+        log_name = f"{chart} {release}"
+        ns = chart[9:]
 
         config_files = get_config_files(release, config_dir=f"system-config/{ns}")
         if not config_files:
@@ -358,7 +358,7 @@ def deploy_system_charts(release, name=None, dry_run=False):
             f"--namespace={ns}",
             "--create-namespace",
             name,
-            f"system-charts/{ns}",
+            chart,
         ]
         for config_file in config_files:
             helm.extend(["-f", config_file])

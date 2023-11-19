@@ -11,3 +11,4 @@ charts:
       tc-init:
         valuesPath: binderhub.jupyterhub.singleuser.initContainers.0.image
   - name: mybinder-kube-system
+  - name: mybinder-tigera-operator

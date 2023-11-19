@@ -151,7 +151,7 @@ jobs:
       - name: "Stage 1: Install and setup helm ${{ env.HELM_VERSION }}"
         run: |
           curl -sf https://raw.githubusercontent.com/helm/helm/HEAD/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
-          for d in ./mybinder/ ./system-charts/*/; do
+          for d in ./mybinder*/; do
             helm dependency update "$d"
           done
 
@@ -310,7 +310,7 @@ jobs:
       - name: "Stage 1: Install and setup helm ${{ env.HELM_VERSION }}"
         run: |
           curl -sf https://raw.githubusercontent.com/helm/helm/HEAD/scripts/get-helm-3 | DESIRED_VERSION=${HELM_VERSION} bash
-          for d in ./mybinder/ ./system-charts/*/; do
+          for d in ./mybinder*/; do
             helm dependency update "$d"
           done
 
