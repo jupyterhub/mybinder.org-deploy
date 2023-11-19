@@ -171,65 +171,11 @@ binderhub:
           image_pull_policy: Always
       extraPodSpec:
         priorityClassName: binderhub-core
-      networkPolicy:
-        ingress:
-          # AWS VPC CNI only works if the name of the service port name is the same as
-          # the name of the pod port and the port number is the same
-          # https://docs.aws.amazon.com/eks/latest/userguide/cni-network-policy.html#cni-network-policy-considerations
-          - from:
-              - podSelector:
-                  matchLabels:
-                    hub.jupyter.org/network-access-hub: "true"
-            # For unknown reasons the hub <-> notebook traffic is partially blocked if
-            # this is included:
-            # ports:
-            #   # service/hub port name is "hub"
-            #   # pod/hub port name is "http"
-            #   - port: 8081
-            #     protocol: TCP
-
-    singleuser:
-      networkPolicy:
-        ingress:
-          # AWS VPC CNI only works if the name of the service port name is the same as
-          # the name of the pod port and the port number is the same
-          # https://docs.aws.amazon.com/eks/latest/userguide/cni-network-policy.html#cni-network-policy-considerations
-          - from:
-              - podSelector:
-                  matchLabels:
-                    hub.jupyter.org/network-access-singleuser: "true"
-            ports:
-              # proxy/pod port name is "notebook-port"
-              # I've no idea why that doesn't work
-              - port: 8888
-                protocol: TCP
 
     proxy:
       chp:
         extraPodSpec:
           priorityClassName: binderhub-core
-        networkPolicy:
-          ingress:
-            # AWS VPC CNI only works if the name of the service port name is the same as
-            # the name of the pod port and the port number is the same
-            # https://docs.aws.amazon.com/eks/latest/userguide/cni-network-policy.html#cni-network-policy-considerations
-            - from:
-                - podSelector:
-                    matchLabels:
-                      hub.jupyter.org/network-access-proxy-api: "true"
-              ports:
-                # service/proxy-api port doesn't have a name
-                # proxy/pod port name is "api"
-                - port: 8001
-                  protocol: TCP
-            - from:
-              ports:
-                # service/proxy-public port is 80
-                # proxy/pod port is 8000
-                - port: 8000
-                  protocol: TCP
-                - port: 80
-                  protocol: TCP
 
     ingress:
       hosts:
