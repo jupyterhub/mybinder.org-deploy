@@ -5,16 +5,28 @@
     {
      "$$hashKey": "object:58",
      "builtIn": 1,
-     "datasource": "-- Grafana --",
+     "datasource": {
+      "type": "datasource",
+      "uid": "grafana"
+     },
      "enable": true,
      "hide": true,
      "iconColor": "rgba(0, 211, 255, 1)",
      "name": "Annotations & Alerts",
+     "target": {
+      "limit": 100,
+      "matchAny": false,
+      "tags": [],
+      "type": "dashboard"
+     },
      "type": "dashboard"
     },
     {
      "$$hashKey": "object:59",
-     "datasource": "-- Grafana --",
+     "datasource": {
+      "type": "datasource",
+      "uid": "grafana"
+     },
      "enable": true,
      "hide": false,
      "iconColor": "rgba(255, 96, 96, 1)",
@@ -24,30 +36,61 @@
      "tags": [
       "deployment-start"
      ],
+     "target": {
+      "limit": 100,
+      "matchAny": false,
+      "tags": [
+       "deployment-start"
+      ],
+      "type": "tags"
+     },
      "type": "tags"
     }
    ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 6,
-  "iteration": 1622666494848,
   "links": [],
+  "liveNow": false,
   "panels": [
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 0
+    },
+    "id": 30,
+    "panels": [],
+    "repeat": "cluster",
+    "repeatDirection": "h",
+    "title": "BinderHub",
+    "type": "row"
+   },
    {
     "aliasColors": {},
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 7,
      "w": 8,
      "x": 0,
-     "y": 0
+     "y": 1
     },
     "hiddenSeries": false,
     "id": 4,
@@ -65,9 +108,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -77,6 +121,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(irate(container_cpu_usage_seconds_total{pod=~\"hub-.*\", container!=\"\"}[2m])) by (pod)",
       "format": "time_series",
       "interval": "",
@@ -94,9 +141,7 @@
       "value": 1
      }
     ],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "JupyterHub CPU Usage",
     "tooltip": {
      "shared": true,
@@ -105,33 +150,25 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "percentunit",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -139,14 +176,22 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 7,
      "w": 8,
      "x": 8,
-     "y": 0
+     "y": 1
     },
     "hiddenSeries": false,
     "id": 2,
@@ -164,9 +209,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -176,6 +222,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"binder-.*\", container!=\"\"}[2m])) by (pod)",
       "format": "time_series",
       "interval": "",
@@ -193,9 +242,7 @@
       "value": 1.5
      }
     ],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "BinderHub CPU Usage (per pod)",
     "tooltip": {
      "shared": true,
@@ -204,33 +251,25 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "percentunit",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -238,14 +277,22 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 7,
      "w": 8,
      "x": 16,
-     "y": 0
+     "y": 1
     },
     "hiddenSeries": false,
     "id": 3,
@@ -265,9 +312,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -277,6 +325,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"proxy-.*\", container!=\"\"}[2m])) by (container)",
       "format": "time_series",
       "interval": "",
@@ -286,9 +337,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Proxy CPU usage",
     "tooltip": {
      "shared": true,
@@ -297,9 +346,7 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
@@ -307,25 +354,19 @@
      {
       "$$hashKey": "object:116",
       "format": "percentunit",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "$$hashKey": "object:117",
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -333,14 +374,22 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 7,
      "w": 8,
      "x": 0,
-     "y": 7
+     "y": 8
     },
     "hiddenSeries": false,
     "id": 1,
@@ -358,9 +407,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -370,6 +420,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(container_memory_rss{pod=~\"hub-.*\",container!=\"\"})",
       "format": "time_series",
       "interval": "",
@@ -387,9 +440,7 @@
       "value": 1000000000
      }
     ],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "JupyterHub Memory usage",
     "tooltip": {
      "shared": true,
@@ -398,33 +449,25 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "bytes",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -432,14 +475,22 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 7,
      "w": 8,
      "x": 8,
-     "y": 7
+     "y": 8
     },
     "hiddenSeries": false,
     "id": 6,
@@ -457,9 +508,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -469,6 +521,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(container_memory_rss{pod=~\"binder-.*\",container!=\"\"}) by (pod)",
       "format": "time_series",
       "interval": "",
@@ -487,9 +542,7 @@
       "yaxis": "left"
      }
     ],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Binder Memory usage",
     "tooltip": {
      "shared": true,
@@ -498,33 +551,25 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "bytes",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -532,14 +577,22 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 7,
      "w": 8,
      "x": 16,
-     "y": 7
+     "y": 8
     },
     "hiddenSeries": false,
     "id": 5,
@@ -559,9 +612,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -571,6 +625,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(container_memory_rss{pod=~\"proxy-.*\", container!=\"\"}) by (container)",
       "format": "time_series",
       "interval": "",
@@ -580,9 +637,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Proxy Memory usage",
     "tooltip": {
      "shared": true,
@@ -591,33 +646,25 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "bytes",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -625,14 +672,22 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 7,
      "w": 8,
      "x": 0,
-     "y": 14
+     "y": 15
     },
     "hiddenSeries": false,
     "id": 7,
@@ -650,9 +705,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -662,6 +718,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(container_memory_rss{pod=~\"prod-dind-.*\",container!=\"\"}) by (instance)",
       "format": "time_series",
       "interval": "",
@@ -671,9 +730,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "DinD builder Memory usage",
     "tooltip": {
      "shared": true,
@@ -682,33 +739,25 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "bytes",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -716,196 +765,22 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 7,
      "w": 8,
      "x": 8,
-     "y": 14
-    },
-    "hiddenSeries": false,
-    "id": 8,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": false,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "expr": "sum(container_memory_rss{pod=~\"[[:alnum:]]+-grafana-.*\",container!=\"\"})",
-      "format": "time_series",
-      "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "{{instance}}",
-      "refId": "A"
-     }
-    ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "Grafana Memory usage",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "bytes",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
-   },
-   {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 1,
-    "fillGradient": 0,
-    "gridPos": {
-     "h": 7,
-     "w": 8,
-     "x": 16,
-     "y": 14
-    },
-    "hiddenSeries": false,
-    "id": 9,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": false,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "expr": "sum(container_memory_rss{pod=~\"[[:alnum:]]+-prometheus-server-.*\",container!=\"\"}) ",
-      "format": "time_series",
-      "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "{{instance}}",
-      "refId": "A"
-     }
-    ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "Prometheus Memory usage",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "bytes",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
-   },
-   {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 1,
-    "fillGradient": 0,
-    "gridPos": {
-     "h": 7,
-     "w": 8,
-     "x": 0,
-     "y": 21
+     "y": 15
     },
     "hiddenSeries": false,
     "id": 10,
@@ -923,9 +798,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -935,6 +811,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"prod-dind-.*\",container!=\"\"}[2m])) by (instance)",
       "format": "time_series",
       "interval": "",
@@ -944,9 +823,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "DinD builders CPU Usage",
     "tooltip": {
      "shared": true,
@@ -955,139 +832,63 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "percentunit",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 22
+    },
+    "id": 20,
+    "panels": [],
+    "repeat": "cluster",
+    "repeatDirection": "h",
+    "title": "Component resources",
+    "type": "row"
    },
    {
     "aliasColors": {},
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
-    "fill": 1,
-    "fillGradient": 0,
-    "gridPos": {
-     "h": 7,
-     "w": 8,
-     "x": 8,
-     "y": 21
+    "datasource": {
+     "uid": "$cluster"
     },
-    "hiddenSeries": false,
-    "id": 11,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": false,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"[[:alnum:]]+-grafana-.*\",container!=\"\"}[2m]))",
-      "format": "time_series",
-      "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "",
-      "refId": "A"
-     }
-    ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "Grafana CPU Usage",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "percentunit",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
+    "fieldConfig": {
+     "defaults": {
+      "links": []
      },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
-   },
-   {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 7,
      "w": 8,
-     "x": 16,
-     "y": 21
+     "x": 0,
+     "y": 23
     },
     "hiddenSeries": false,
     "id": 12,
@@ -1105,9 +906,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -1117,6 +919,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"[[:alnum:]]+-prometheus-server-.*\",container!=\"\"}[2m]))",
       "format": "time_series",
       "interval": "",
@@ -1126,9 +931,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Prometheus Server CPU Usage",
     "tooltip": {
      "shared": true,
@@ -1137,33 +940,24 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "percentunit",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -1171,23 +965,31 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 7,
-     "w": 12,
-     "x": 0,
-     "y": 28
+     "w": 8,
+     "x": 8,
+     "y": 23
     },
     "hiddenSeries": false,
-    "id": 13,
+    "id": 9,
     "legend": {
      "avg": false,
      "current": false,
      "max": false,
      "min": false,
-     "show": true,
+     "show": false,
      "total": false,
      "values": false
     },
@@ -1196,9 +998,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -1208,19 +1011,20 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(irate(container_cpu_usage_seconds_total{pod=~\"[[:alnum:]-]+-ingress[[:alnum:]-]+controller-.*\",container!=\"\"}[2m])) by (pod)",
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "expr": "sum(container_memory_rss{pod=~\"[[:alnum:]]+-prometheus-server-.*\",container!=\"\"}) ",
       "format": "time_series",
       "interval": "",
       "intervalFactor": 2,
-      "legendFormat": "{{pod}}",
+      "legendFormat": "{{instance}}",
       "refId": "A"
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
-    "title": "nginx Ingress CPU usage",
+    "title": "Prometheus Memory usage",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -1228,33 +1032,25 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
-      "format": "percentunit",
-      "label": null,
+      "format": "bytes",
       "logBase": 1,
-      "max": null,
-      "min": null,
+      "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -1262,15 +1058,23 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
     "description": "The amount of storage being used by prometheus\n\nadjust prometheus storage size and retention to avoid filling up",
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 7,
      "w": 8,
      "x": 16,
-     "y": 28
+     "y": 23
     },
     "hiddenSeries": false,
     "id": 18,
@@ -1288,20 +1092,22 @@
     "linewidth": 1,
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 2,
     "points": false,
     "renderer": "flot",
-    "repeat": null,
-    "repeatDirection": null,
     "seriesOverrides": [],
     "spaceLength": 10,
     "stack": false,
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "prometheus_tsdb_storage_blocks_bytes",
       "interval": "",
       "legendFormat": "prometheus storage",
@@ -1309,9 +1115,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Prometheus storage",
     "tooltip": {
      "shared": true,
@@ -1320,9 +1124,7 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
@@ -1330,25 +1132,19 @@
      {
       "$$hashKey": "object:178",
       "format": "decbytes",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "$$hashKey": "object:179",
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -1356,14 +1152,206 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 7,
-     "w": 12,
+     "w": 8,
      "x": 0,
-     "y": 35
+     "y": 30
+    },
+    "hiddenSeries": false,
+    "id": 11,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": false,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "alertThreshold": true
+    },
+    "percentage": false,
+    "pluginVersion": "9.4.7",
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"[[:alnum:]]+-grafana-.*\",container!=\"\"}[2m]))",
+      "format": "time_series",
+      "interval": "",
+      "intervalFactor": 2,
+      "legendFormat": "",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeRegions": [],
+    "title": "Grafana CPU Usage",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "mode": "time",
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "percentunit",
+      "logBase": 1,
+      "show": true
+     },
+     {
+      "format": "short",
+      "logBase": 1,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 7,
+     "w": 8,
+     "x": 8,
+     "y": 30
+    },
+    "hiddenSeries": false,
+    "id": 13,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "alertThreshold": true
+    },
+    "percentage": false,
+    "pluginVersion": "9.4.7",
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "expr": "sum(irate(container_cpu_usage_seconds_total{pod=~\"[[:alnum:]-]+-ingress[[:alnum:]-]+controller-.*\",container!=\"\"}[2m])) by (pod)",
+      "format": "time_series",
+      "interval": "",
+      "intervalFactor": 2,
+      "legendFormat": "{{pod}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeRegions": [],
+    "title": "nginx Ingress CPU usage",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "mode": "time",
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "percentunit",
+      "logBase": 1,
+      "show": true
+     },
+     {
+      "format": "short",
+      "logBase": 1,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 7,
+     "w": 8,
+     "x": 16,
+     "y": 30
     },
     "hiddenSeries": false,
     "id": 15,
@@ -1381,9 +1369,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -1393,6 +1382,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(irate(container_cpu_usage_seconds_total{pod=~\"user-scheduler-.*\",container!=\"\"}[2m])) by (pod)",
       "format": "time_series",
       "interval": "",
@@ -1402,9 +1394,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "user scheduler CPU usage",
     "tooltip": {
      "shared": true,
@@ -1413,33 +1403,24 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "percentunit",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -1447,14 +1428,115 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 7,
-     "w": 12,
-     "x": 12,
-     "y": 35
+     "w": 8,
+     "x": 0,
+     "y": 37
+    },
+    "hiddenSeries": false,
+    "id": 8,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": false,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "alertThreshold": true
+    },
+    "percentage": false,
+    "pluginVersion": "9.4.7",
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "expr": "sum(container_memory_rss{pod=~\"[[:alnum:]]+-grafana-.*\",container!=\"\"})",
+      "format": "time_series",
+      "interval": "",
+      "intervalFactor": 2,
+      "legendFormat": "{{instance}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeRegions": [],
+    "title": "Grafana Memory usage",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "mode": "time",
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "bytes",
+      "logBase": 1,
+      "min": "0",
+      "show": true
+     },
+     {
+      "format": "short",
+      "logBase": 1,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 7,
+     "w": 8,
+     "x": 8,
+     "y": 37
     },
     "hiddenSeries": false,
     "id": 14,
@@ -1472,9 +1554,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -1484,6 +1567,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(container_memory_rss{pod=~\"[[:alnum:]-]+-ingress[[:alnum:]-]+controller-.*\",container!=\"\"}) by (pod)",
       "format": "time_series",
       "interval": "",
@@ -1493,9 +1579,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "nginx Ingress Memory usage",
     "tooltip": {
      "shared": true,
@@ -1504,33 +1588,25 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "bytes",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -1538,14 +1614,22 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 7,
-     "w": 12,
-     "x": 12,
-     "y": 42
+     "w": 8,
+     "x": 16,
+     "y": 37
     },
     "hiddenSeries": false,
     "id": 16,
@@ -1563,9 +1647,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -1575,6 +1660,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(container_memory_rss{pod=~\"user-scheduler-.*\",container!=\"\"}) by (pod)",
       "format": "time_series",
       "interval": "",
@@ -1584,9 +1672,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "user scheduler Memory usage",
     "tooltip": {
      "shared": true,
@@ -1595,38 +1681,604 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "bytes",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": {
+     "type": "prometheus",
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 7,
+     "w": 8,
+     "x": 0,
+     "y": 44
+    },
+    "hiddenSeries": false,
+    "id": 23,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "alertThreshold": true
+    },
+    "percentage": false,
+    "pluginVersion": "9.4.7",
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "editorMode": "code",
+      "expr": "sum(irate(container_cpu_usage_seconds_total{pod=~\"analytics-publisher-.*\",container!=\"\"}[2m]))",
+      "format": "time_series",
+      "interval": "",
+      "intervalFactor": 2,
+      "legendFormat": "{{ pod }}",
+      "range": true,
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeRegions": [],
+    "title": "analytics publisher CPU usage",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "mode": "time",
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "percentunit",
+      "logBase": 1,
+      "show": true
+     },
+     {
+      "format": "short",
+      "logBase": 1,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": {
+     "type": "prometheus",
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 7,
+     "w": 8,
+     "x": 8,
+     "y": 44
+    },
+    "hiddenSeries": false,
+    "id": 25,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "alertThreshold": true
+    },
+    "percentage": false,
+    "pluginVersion": "9.4.7",
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "editorMode": "code",
+      "expr": "sum(irate(container_cpu_usage_seconds_total{pod=~\"federation-redirect-.*\",container!=\"\"}[2m])) by (pod)",
+      "format": "time_series",
+      "interval": "",
+      "intervalFactor": 2,
+      "legendFormat": "{{ pod }}",
+      "range": true,
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeRegions": [],
+    "title": "federation redirector CPU usage",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "mode": "time",
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "percentunit",
+      "logBase": 1,
+      "show": true
+     },
+     {
+      "format": "short",
+      "logBase": 1,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": {
+     "type": "prometheus",
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 7,
+     "w": 8,
+     "x": 16,
+     "y": 44
+    },
+    "hiddenSeries": false,
+    "id": 28,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "alertThreshold": true
+    },
+    "percentage": false,
+    "pluginVersion": "9.4.7",
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "editorMode": "code",
+      "expr": "sum(irate(container_cpu_usage_seconds_total{pod=~\"matomo-.*\",container!=\"\"}[2m])) by (pod)",
+      "format": "time_series",
+      "interval": "",
+      "intervalFactor": 2,
+      "legendFormat": "{{ pod }}",
+      "range": true,
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeRegions": [],
+    "title": "matomo CPU usage",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "mode": "time",
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "percentunit",
+      "logBase": 1,
+      "show": true
+     },
+     {
+      "format": "short",
+      "logBase": 1,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": {
+     "type": "prometheus",
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 7,
+     "w": 8,
+     "x": 0,
+     "y": 51
+    },
+    "hiddenSeries": false,
+    "id": 24,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "alertThreshold": true
+    },
+    "percentage": false,
+    "pluginVersion": "9.4.7",
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "editorMode": "code",
+      "expr": "sum(container_memory_rss{pod=~\"analytics-publisher-.*\",container!=\"\"})",
+      "format": "time_series",
+      "interval": "",
+      "intervalFactor": 2,
+      "legendFormat": "{{ pod }}",
+      "range": true,
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeRegions": [],
+    "title": "analytics publisher Memory usage",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "mode": "time",
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "bytes",
+      "logBase": 1,
+      "min": "0",
+      "show": true
+     },
+     {
+      "format": "short",
+      "logBase": 1,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": {
+     "type": "prometheus",
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 7,
+     "w": 8,
+     "x": 8,
+     "y": 51
+    },
+    "hiddenSeries": false,
+    "id": 26,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "alertThreshold": true
+    },
+    "percentage": false,
+    "pluginVersion": "9.4.7",
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "editorMode": "code",
+      "expr": "sum(container_memory_rss{pod=~\"federation-redirect-.*\",container!=\"\"}) by (pod)",
+      "format": "time_series",
+      "interval": "",
+      "intervalFactor": 2,
+      "legendFormat": "{{ pod }}",
+      "range": true,
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeRegions": [],
+    "title": "federation redirector Memory usage",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "mode": "time",
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "bytes",
+      "logBase": 1,
+      "min": "0",
+      "show": true
+     },
+     {
+      "format": "short",
+      "logBase": 1,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false
+    }
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": {
+     "type": "prometheus",
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 7,
+     "w": 8,
+     "x": 16,
+     "y": 51
+    },
+    "hiddenSeries": false,
+    "id": 27,
+    "legend": {
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "show": true,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "options": {
+     "alertThreshold": true
+    },
+    "percentage": false,
+    "pluginVersion": "9.4.7",
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "editorMode": "code",
+      "expr": "sum(container_memory_rss{pod=~\"matomo-.*\",container!=\"\"}) by (pod)",
+      "format": "time_series",
+      "interval": "",
+      "intervalFactor": 2,
+      "legendFormat": "{{ pod }}",
+      "range": true,
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeRegions": [],
+    "title": "matomo Memory usage",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "mode": "time",
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "bytes",
+      "logBase": 1,
+      "min": "0",
+      "show": true
+     },
+     {
+      "format": "short",
+      "logBase": 1,
+      "show": true
+     }
+    ],
+    "yaxis": {
+     "align": false
     }
    }
   ],
   "refresh": "1m",
-  "schemaVersion": 22,
+  "revision": 1,
+  "schemaVersion": 38,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -1639,11 +2291,11 @@
      },
      "hide": 0,
      "includeAll": false,
-     "label": null,
      "multi": false,
      "name": "cluster",
      "options": [],
      "query": "prometheus",
+     "queryValue": "",
      "refresh": 1,
      "regex": "",
      "skipUrlSync": false,
@@ -1683,31 +2335,46 @@
   "timezone": "",
   "title": "Components Resource Metrics",
   "uid": "GYEYQm7ik",
-  "variables": {
-   "list": []
-  },
-  "version": 14
+  "version": 17,
+  "weekStart": ""
  },
  "meta": {
-  "canAdmin": true,
-  "canEdit": true,
-  "canSave": true,
-  "canStar": true,
+  "annotationsPermissions": {
+   "dashboard": {
+    "canAdd": true,
+    "canDelete": true,
+    "canEdit": true
+   },
+   "organization": {
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
+   }
+  },
+  "canAdmin": false,
+  "canDelete": false,
+  "canEdit": false,
+  "canSave": false,
+  "canStar": false,
   "created": "2020-09-22T09:29:52Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 0,
   "folderTitle": "General",
+  "folderUid": "",
   "folderUrl": "",
   "hasAcl": false,
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
+  "publicDashboardAccessToken": "",
+  "publicDashboardEnabled": false,
+  "publicDashboardUid": "",
   "slug": "components-resource-metrics",
   "type": "db",
-  "updated": "2021-06-02T20:51:10Z",
+  "updated": "2023-04-27T10:09:06Z",
   "updatedBy": "admin",
   "url": "/d/GYEYQm7ik/components-resource-metrics",
-  "version": 14
+  "version": 17
  }
 }

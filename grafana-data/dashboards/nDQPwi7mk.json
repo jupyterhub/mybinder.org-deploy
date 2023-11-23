@@ -5,16 +5,28 @@
     {
      "$$hashKey": "object:10",
      "builtIn": 1,
-     "datasource": "-- Grafana --",
+     "datasource": {
+      "type": "datasource",
+      "uid": "grafana"
+     },
      "enable": true,
      "hide": true,
      "iconColor": "rgba(0, 211, 255, 1)",
      "name": "Annotations & Alerts",
+     "target": {
+      "limit": 100,
+      "matchAny": false,
+      "tags": [],
+      "type": "dashboard"
+     },
      "type": "dashboard"
     },
     {
      "$$hashKey": "object:11",
-     "datasource": "-- Grafana --",
+     "datasource": {
+      "type": "datasource",
+      "uid": "grafana"
+     },
      "enable": true,
      "hide": false,
      "iconColor": "#e5ac0e",
@@ -24,11 +36,22 @@
      "tags": [
       "deployment-start"
      ],
+     "target": {
+      "limit": 100,
+      "matchAny": false,
+      "tags": [
+       "deployment-start"
+      ],
+      "type": "tags"
+     },
      "type": "tags"
     },
     {
      "$$hashKey": "object:12",
-     "datasource": "-- Grafana --",
+     "datasource": {
+      "type": "datasource",
+      "uid": "grafana"
+     },
      "enable": true,
      "hide": false,
      "iconColor": "rgba(255, 96, 96, 1)",
@@ -39,23 +62,39 @@
      "tags": [
       "ops-log"
      ],
+     "target": {
+      "limit": 100,
+      "matchAny": true,
+      "tags": [
+       "ops-log"
+      ],
+      "type": "tags"
+     },
      "type": "tags"
     }
    ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 8,
-  "iteration": 1622699337607,
   "links": [],
+  "liveNow": false,
   "panels": [
    {
     "aliasColors": {},
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -82,9 +121,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -94,6 +134,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(kube_pod_status_phase{pod=~\"user-placeholder.*\"}) by (phase)",
       "format": "time_series",
       "intervalFactor": 1,
@@ -102,9 +145,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Placeholder pods",
     "tooltip": {
      "shared": true,
@@ -113,33 +154,24 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -147,7 +179,15 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -172,9 +212,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -191,6 +232,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "count(kube_pod_info{pod=~\"jupyter-.*\"}) by (node)",
       "format": "time_series",
       "intervalFactor": 2,
@@ -198,6 +242,9 @@
       "refId": "A"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "avg(count(kube_pod_info{pod=~\"jupyter-.*\"}) by (node))",
       "format": "time_series",
       "intervalFactor": 2,
@@ -215,9 +262,7 @@
       "yaxis": "left"
      }
     ],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "User Pods per node",
     "tooltip": {
      "shared": true,
@@ -226,33 +271,25 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -260,8 +297,16 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
     "description": "Number of nodes in the user pool.",
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -286,9 +331,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -298,6 +344,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(kube_node_info{node!~\".*-core-.*\"}) ",
       "format": "time_series",
       "instant": false,
@@ -306,15 +355,16 @@
       "refId": "A"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(kube_node_spec_unschedulable)",
       "legendFormat": "Cordoned",
       "refId": "B"
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Nodes in the user pool",
     "tooltip": {
      "shared": true,
@@ -323,9 +373,7 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
@@ -333,24 +381,18 @@
      {
       "decimals": 0,
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -358,7 +400,15 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -383,9 +433,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -403,6 +454,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "count(kube_pod_info{pod=~\"build-.*\"}) by (node)",
       "format": "time_series",
       "intervalFactor": 2,
@@ -410,6 +464,9 @@
       "refId": "A"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "count(kube_pod_info{pod=~\"build-.*\"})",
       "format": "time_series",
       "intervalFactor": 2,
@@ -427,9 +484,7 @@
       "yaxis": "left"
      }
     ],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Build pods per node",
     "tooltip": {
      "shared": false,
@@ -438,9 +493,7 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
@@ -448,24 +501,18 @@
      {
       "decimals": 0,
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -473,7 +520,16 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "type": "prometheus",
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 3,
     "fillGradient": 0,
     "gridPos": {
@@ -498,14 +554,16 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
     "seriesOverrides": [
      {
+      "$$hashKey": "object:212",
       "alias": "Total",
       "linewidth": 2
      }
@@ -515,14 +573,20 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(increase(kubelet_docker_operations{operation_type=\"pull_image\"}[5m]) )",
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "expr": "sum(increase(kubelet_runtime_operations_total{operation_type=\"pull_image\"}[5m]) )",
       "format": "time_series",
       "intervalFactor": 1,
       "legendFormat": "Total",
       "refId": "B"
      },
      {
-      "expr": "increase(kubelet_docker_operations{operation_type=\"pull_image\"}[5m])",
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "expr": "increase(kubelet_runtime_operations_total{operation_type=\"pull_image\"}[5m])",
       "format": "time_series",
       "intervalFactor": 2,
       "legendFormat": "{{kubernetes_io_hostname}}",
@@ -530,9 +594,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Docker Image Pulls (5m)",
     "tooltip": {
      "shared": true,
@@ -541,33 +603,27 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
+      "$$hashKey": "object:219",
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
+      "$$hashKey": "object:220",
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -575,8 +631,17 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "type": "prometheus",
+     "uid": "$cluster"
+    },
     "description": "Total amount of disk space available on the node. A reading of 0 would be \"out of disk space\". A sharp increase toward the top of the chart indicates that Kubernetes has cleaned up disk space.",
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 0,
     "fillGradient": 0,
     "gridPos": {
@@ -601,9 +666,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -613,18 +679,21 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "node_filesystem_avail_bytes{mountpoint=\"/etc/hostname\"} * on(instance) group_left(nodename) node_uname_info",
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "editorMode": "code",
+      "expr": "node_filesystem_avail_bytes{mountpoint=\"/home\"}",
       "format": "time_series",
       "interval": "",
       "intervalFactor": 2,
-      "legendFormat": "{{nodename}}",
+      "legendFormat": "{{ node }}",
+      "range": true,
       "refId": "A"
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "DiskAvailable on Nodes",
     "tooltip": {
      "shared": true,
@@ -633,33 +702,28 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
+      "$$hashKey": "object:273",
       "format": "decbytes",
       "label": "Available disk space",
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
+      "$$hashKey": "object:274",
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -667,7 +731,15 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 0,
     "fillGradient": 0,
     "gridPos": {
@@ -692,9 +764,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -704,6 +777,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "node_memory_MemAvailable_bytes * on(instance) group_left(nodename) node_uname_info",
       "format": "time_series",
       "interval": "",
@@ -713,9 +789,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "MemAvailable on Nodes",
     "tooltip": {
      "shared": true,
@@ -724,132 +798,135 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "decbytes",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 1,
-    "fillGradient": 0,
+    "datasource": {
+     "type": "prometheus",
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "axisLabel": "",
+       "axisPlacement": "auto",
+       "barAlignment": 0,
+       "drawStyle": "line",
+       "fillOpacity": 0,
+       "gradientMode": "none",
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "scaleDistribution": {
+        "type": "linear"
+       },
+       "showPoints": "auto",
+       "spanNulls": false,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       },
+       "thresholdsStyle": {
+        "mode": "off"
+       }
+      },
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green"
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      }
+     },
+     "overrides": []
+    },
     "gridPos": {
      "h": 7,
      "w": 12,
      "x": 12,
      "y": 18
     },
-    "hiddenSeries": false,
     "id": 28,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": true,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
     "links": [],
-    "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "legend": {
+      "calcs": [],
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "single",
+      "sort": "none"
+     }
     },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
+    "pluginVersion": "9.0.5",
     "targets": [
      {
-      "expr": "kubelet_docker_operations_latency_microseconds{quantile=\"0.9\", operation_type=\"pull_image\"}",
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "editorMode": "code",
+      "expr": "histogram_quantile(0.9, rate(kubelet_runtime_operations_duration_seconds_bucket{operation_type=\"pull_image\"}[10m]))",
       "format": "time_series",
       "interval": "",
       "intervalFactor": 2,
-      "legendFormat": "{{kubernetes_io_hostname}}",
+      "legendFormat": "{{ kubernetes_io_hostname }}",
+      "range": true,
       "refId": "A"
      }
     ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
     "title": "Image pulling latency (90th percentile)",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "\u00b5s",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
+    "type": "timeseries"
    },
    {
     "aliasColors": {},
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "type": "prometheus",
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -874,9 +951,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -886,7 +964,10 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "rate(kubelet_pod_start_latency_microseconds_sum[2m])",
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "expr": "rate(kubelet_pod_start_duration_seconds_sum[2m])",
       "format": "time_series",
       "intervalFactor": 2,
       "legendFormat": "{{kubernetes_io_hostname}}",
@@ -894,9 +975,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Pod Start Latency",
     "tooltip": {
      "shared": true,
@@ -905,33 +984,26 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
-      "format": "\u00b5s",
-      "label": null,
+      "$$hashKey": "object:153",
+      "format": "s",
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      },
      {
+      "$$hashKey": "object:154",
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -939,7 +1011,15 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -964,9 +1044,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -976,6 +1057,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "kube_node_spec_unschedulable",
       "format": "time_series",
       "intervalFactor": 1,
@@ -984,9 +1068,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Cordoned Nodes",
     "tooltip": {
      "shared": true,
@@ -995,33 +1077,25 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -1029,7 +1103,16 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "type": "prometheus",
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -1038,6 +1121,7 @@
      "x": 0,
      "y": 31
     },
+    "hiddenSeries": false,
     "id": 30,
     "legend": {
      "avg": false,
@@ -1053,9 +1137,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -1065,7 +1150,10 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(kube_pod_container_resource_requests_memory_bytes and on (pod) (kube_pod_container_status_ready)) by (node)",
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "expr": "sum(kube_pod_container_resource_requests{resource=\"memory\"} and on (pod) (kube_pod_container_status_ready)) by (node)",
       "format": "time_series",
       "interval": "",
       "intervalFactor": 2,
@@ -1074,9 +1162,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Requested memory",
     "tooltip": {
      "shared": true,
@@ -1085,33 +1171,25 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "bytes",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -1119,7 +1197,15 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -1128,6 +1214,7 @@
      "x": 12,
      "y": 34
     },
+    "hiddenSeries": false,
     "id": 34,
     "legend": {
      "avg": false,
@@ -1143,9 +1230,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -1155,6 +1243,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(increase(binderhub_launch_time_seconds_count{status=\"success\"}[5m])) / sum(increase(binderhub_launch_time_seconds_count{status!=\"retry\"}[5m]))",
       "format": "time_series",
       "intervalFactor": 1,
@@ -1162,6 +1253,9 @@
       "refId": "A"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(increase(binderhub_launch_time_seconds_count{status=\"success\",retries=\"0\"}[5m])) / sum(increase(binderhub_launch_time_seconds_count{status!=\"retry\"}[5m]))",
       "format": "time_series",
       "intervalFactor": 1,
@@ -1170,9 +1264,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Launch success %",
     "tooltip": {
      "shared": true,
@@ -1181,9 +1273,7 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
@@ -1191,7 +1281,6 @@
      {
       "decimals": 0,
       "format": "percentunit",
-      "label": null,
       "logBase": 1,
       "max": "1.05",
       "min": "0",
@@ -1199,16 +1288,12 @@
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -1216,8 +1301,17 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "type": "prometheus",
+     "uid": "$cluster"
+    },
     "description": "CPU 5-minute load average per core on each node (nodes sustained above 1 are overloaded)",
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -1226,6 +1320,7 @@
      "x": 0,
      "y": 38
     },
+    "hiddenSeries": false,
     "id": 38,
     "legend": {
      "avg": false,
@@ -1241,9 +1336,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "10.1.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -1253,17 +1349,20 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "node_load5 / on(kubernetes_node) group_left label_replace(kube_node_status_capacity_cpu_cores, \"kubernetes_node\", \"$1\", \"node\", \"(.*)\")",
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "editorMode": "code",
+      "expr": "node_load5 / on(node) group_left sum(kube_node_status_capacity{resource=\"cpu\"}) by (node)",
       "format": "time_series",
       "intervalFactor": 4,
-      "legendFormat": "{{kubernetes_node}}",
+      "legendFormat": "{{node}}",
+      "range": true,
       "refId": "A"
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "CPU Load5 per core on each node",
     "tooltip": {
      "shared": true,
@@ -1272,33 +1371,24 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -1306,7 +1396,15 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 0,
     "fillGradient": 0,
     "gridPos": {
@@ -1315,6 +1413,7 @@
      "x": 0,
      "y": 44
     },
+    "hiddenSeries": false,
     "id": 32,
     "legend": {
      "avg": false,
@@ -1330,9 +1429,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -1342,6 +1442,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "avg((time() - kube_node_created) / 60 / 60 / 24) by (node)",
       "format": "time_series",
       "intervalFactor": 2,
@@ -1350,9 +1453,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Node Age (days)",
     "tooltip": {
      "shared": true,
@@ -1361,38 +1462,30 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    }
   ],
-  "refresh": false,
-  "schemaVersion": 22,
+  "refresh": "",
+  "schemaVersion": 38,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -1405,7 +1498,6 @@
      },
      "hide": 0,
      "includeAll": false,
-     "label": null,
      "multi": false,
      "name": "cluster",
      "options": [],
@@ -1449,31 +1541,46 @@
   "timezone": "",
   "title": "Node Activity",
   "uid": "nDQPwi7mk",
-  "variables": {
-   "list": []
-  },
-  "version": 5
+  "version": 8,
+  "weekStart": ""
  },
  "meta": {
-  "canAdmin": true,
-  "canEdit": true,
-  "canSave": true,
-  "canStar": true,
+  "annotationsPermissions": {
+   "dashboard": {
+    "canAdd": true,
+    "canDelete": true,
+    "canEdit": true
+   },
+   "organization": {
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
+   }
+  },
+  "canAdmin": false,
+  "canDelete": false,
+  "canEdit": false,
+  "canSave": false,
+  "canStar": false,
   "created": "2020-09-22T09:29:52Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 0,
   "folderTitle": "General",
+  "folderUid": "",
   "folderUrl": "",
   "hasAcl": false,
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
+  "publicDashboardAccessToken": "",
+  "publicDashboardEnabled": false,
+  "publicDashboardUid": "",
   "slug": "node-activity",
   "type": "db",
-  "updated": "2021-06-03T05:49:06Z",
+  "updated": "2023-11-13T11:50:34Z",
   "updatedBy": "admin",
   "url": "/d/nDQPwi7mk/node-activity",
-  "version": 5
+  "version": 8
  }
 }

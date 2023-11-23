@@ -510,20 +510,37 @@
   "version": 2
  },
  "meta": {
-  "canAdmin": true,
-  "canEdit": true,
-  "canSave": true,
-  "canStar": true,
+  "annotationsPermissions": {
+   "dashboard": {
+    "canAdd": true,
+    "canDelete": true,
+    "canEdit": true
+   },
+   "organization": {
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
+   }
+  },
+  "canAdmin": false,
+  "canDelete": false,
+  "canEdit": false,
+  "canSave": false,
+  "canStar": false,
   "created": "2020-09-22T09:29:50Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 0,
   "folderTitle": "General",
+  "folderUid": "",
   "folderUrl": "",
   "hasAcl": false,
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
+  "publicDashboardAccessToken": "",
+  "publicDashboardEnabled": false,
+  "publicDashboardUid": "",
   "slug": "memory-usage",
   "type": "db",
   "updated": "2020-09-22T09:29:56Z",
