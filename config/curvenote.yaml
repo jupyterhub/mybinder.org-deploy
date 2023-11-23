@@ -28,31 +28,26 @@ binderhub:
         secretKeyRef:
           name: curvenote-binderhub-container-registry-helper
           key: auth_token
+    GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
 
   registry:
     url: 166088433508.dkr.ecr.us-east-2.amazonaws.com
     username: ""
     password: ""
 
-  # extraVolumes:
-  #   - name: secrets
-  #     secret:
-  #       secretName: events-archiver-secrets
-  # extraVolumeMounts:
-  #   - name: secrets
-  #     mountPath: /secrets
-  #     readOnly: true
-  # extraEnv:
-  #   GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+  extraVolumes:
+    - name: secrets
+      secret:
+        secretName: events-archiver-secrets
+  extraVolumeMounts:
+    - name: secrets
+      mountPath: /secrets
+      readOnly: true
 
   extraPodSpec:
     priorityClassName: binderhub-core
 
   extraConfig:
-    01-eventlog: |
-      # Disabled until GOOGLE_APPLICATION_CREDENTIALS secret is available
-      # and secrets/events-archiver/curvenote.json is created
-
     10-external-registry-helper: |
       import json
       from os import getenv
