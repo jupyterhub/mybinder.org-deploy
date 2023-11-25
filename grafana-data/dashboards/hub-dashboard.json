@@ -3,28 +3,39 @@
   "annotations": {
    "list": [
     {
-     "$$hashKey": "object:10",
      "builtIn": 1,
-     "datasource": "-- Grafana --",
+     "datasource": {
+      "type": "grafana",
+      "uid": "-- Grafana --"
+     },
      "enable": true,
      "hide": true,
      "iconColor": "rgba(0, 211, 255, 1)",
      "name": "Annotations & Alerts",
+     "target": {
+      "limit": 100,
+      "matchAny": false,
+      "tags": [],
+      "type": "dashboard"
+     },
      "type": "dashboard"
     }
    ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 18,
-  "iteration": 1624874119073,
   "links": [],
+  "liveNow": false,
   "panels": [
    {
     "collapse": false,
     "collapsed": false,
-    "datasource": null,
+    "datasource": {
+     "type": "prometheus",
+     "uid": "000000001"
+    },
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -33,10 +44,16 @@
     },
     "id": 2,
     "panels": [],
-    "repeat": null,
-    "repeatIteration": null,
-    "repeatRowId": null,
     "showTitle": true,
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000001"
+      },
+      "refId": "A"
+     }
+    ],
     "title": "Hub usage stats",
     "titleSize": "h6",
     "type": "row"
@@ -46,7 +63,9 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": null,
+    "datasource": {
+     "uid": "$PROMETHEUS_DS"
+    },
     "decimals": 0,
     "fill": 1,
     "fillGradient": 0,
@@ -66,7 +85,6 @@
      "min": false,
      "rightSide": false,
      "show": true,
-     "sideWidth": null,
      "total": false,
      "values": false
     },
@@ -75,19 +93,22 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
-    "repeat": null,
     "seriesOverrides": [],
     "spaceLength": 10,
     "stack": false,
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$PROMETHEUS_DS"
+      },
       "expr": "sum(\n  kube_pod_status_phase{phase=\"Running\"}\n  * on (namespace, pod) group_right(phase) kube_pod_labels{label_app=\"jupyterhub\", label_component=\"singleuser-server\" , namespace=~\"$hub\"}\n) by (phase)\n",
       "format": "time_series",
       "intervalFactor": 2,
@@ -96,9 +117,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Current running users",
     "tooltip": {
      "shared": true,
@@ -107,9 +126,7 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
@@ -117,32 +134,24 @@
      {
       "decimals": 0,
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": 0,
       "show": true
      },
      {
       "decimals": 0,
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": 0,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
-    "cards": {
-     "cardPadding": null,
-     "cardRound": null
-    },
+    "cards": {},
     "color": {
      "cardColor": "#b4ff00",
      "colorScale": "sqrt",
@@ -151,7 +160,9 @@
      "mode": "spectrum"
     },
     "dataFormat": "timeseries",
-    "datasource": null,
+    "datasource": {
+     "uid": "$PROMETHEUS_DS"
+    },
     "gridPos": {
      "h": 10,
      "w": 12,
@@ -163,11 +174,14 @@
     "highlightCards": true,
     "id": 4,
     "legend": {
-     "show": false
+     "show": true
     },
     "reverseYBuckets": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$PROMETHEUS_DS"
+      },
       "expr": "(\n  time()\n  - (\n    kube_pod_created\n    * on (namespace, pod)  kube_pod_labels{label_app=\"jupyterhub\", label_component=\"singleuser-server\" , namespace=~\"$hub\"}\n  )\n)\n",
       "format": "time_series",
       "interval": "600s",
@@ -179,32 +193,23 @@
     "title": "User active age distribution",
     "tooltip": {
      "show": true,
-     "showHistogram": false
+     "showHistogram": true
     },
     "type": "heatmap",
     "xAxis": {
      "show": true
     },
-    "xBucketNumber": null,
     "xBucketSize": "600s",
     "yAxis": {
-     "decimals": null,
      "format": "s",
      "logBase": 1,
-     "max": null,
      "min": 0,
-     "show": true,
-     "splitFactor": null
+     "show": true
     },
-    "yBucketBound": "auto",
-    "yBucketNumber": null,
-    "yBucketSize": null
+    "yBucketBound": "auto"
    },
    {
-    "cards": {
-     "cardPadding": null,
-     "cardRound": null
-    },
+    "cards": {},
     "color": {
      "cardColor": "#b4ff00",
      "colorScale": "sqrt",
@@ -213,7 +218,9 @@
      "mode": "spectrum"
     },
     "dataFormat": "timeseries",
-    "datasource": null,
+    "datasource": {
+     "uid": "$PROMETHEUS_DS"
+    },
     "gridPos": {
      "h": 10,
      "w": 12,
@@ -221,15 +228,18 @@
      "y": 11
     },
     "heatmap": {},
-    "hideZeroBuckets": false,
+    "hideZeroBuckets": true,
     "highlightCards": true,
     "id": 5,
     "legend": {
-     "show": false
+     "show": true
     },
     "reverseYBuckets": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$PROMETHEUS_DS"
+      },
       "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n  # with both no name and `name=k8s_...`,\n  # in which case sum() by (pod) reports double the actual metric\n  irate(container_cpu_usage_seconds_total{name!=\"\"}[5m])\n  * on (namespace, pod) group_left(container) kube_pod_labels{label_app=\"jupyterhub\", label_component=\"singleuser-server\" , namespace=~\"$hub\"}\n) by (pod)\n",
       "format": "time_series",
       "interval": "600s",
@@ -241,32 +251,24 @@
     "title": "User CPU usage distribution",
     "tooltip": {
      "show": true,
-     "showHistogram": false
+     "showHistogram": true
     },
     "type": "heatmap",
     "xAxis": {
      "show": true
     },
-    "xBucketNumber": null,
     "xBucketSize": "600s",
     "yAxis": {
-     "decimals": null,
+     "decimals": 0,
      "format": "percentunit",
      "logBase": 1,
-     "max": null,
      "min": 0,
-     "show": true,
-     "splitFactor": null
+     "show": true
     },
-    "yBucketBound": "auto",
-    "yBucketNumber": null,
-    "yBucketSize": null
+    "yBucketBound": "auto"
    },
    {
-    "cards": {
-     "cardPadding": null,
-     "cardRound": null
-    },
+    "cards": {},
     "color": {
      "cardColor": "#b4ff00",
      "colorScale": "sqrt",
@@ -275,7 +277,9 @@
      "mode": "spectrum"
     },
     "dataFormat": "timeseries",
-    "datasource": null,
+    "datasource": {
+     "uid": "$PROMETHEUS_DS"
+    },
     "gridPos": {
      "h": 10,
      "w": 12,
@@ -283,15 +287,18 @@
      "y": 11
     },
     "heatmap": {},
-    "hideZeroBuckets": false,
+    "hideZeroBuckets": true,
     "highlightCards": true,
     "id": 6,
     "legend": {
-     "show": false
+     "show": true
     },
     "reverseYBuckets": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$PROMETHEUS_DS"
+      },
       "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n  # with both no name and `name=k8s_...`,\n  # in which case sum() by (pod) reports double the actual metric\n  container_memory_working_set_bytes{name!=\"\"}\n  * on (namespace, pod) group_left(container) kube_pod_labels{label_app=\"jupyterhub\", label_component=\"singleuser-server\" , namespace=~\"$hub\"}\n) by (pod)\n",
       "format": "time_series",
       "interval": "600s",
@@ -303,31 +310,28 @@
     "title": "User memory usage distribution",
     "tooltip": {
      "show": true,
-     "showHistogram": false
+     "showHistogram": true
     },
     "type": "heatmap",
     "xAxis": {
      "show": true
     },
-    "xBucketNumber": null,
-    "xBucketSize": "600s",
+    "xBucketSize": "10m",
     "yAxis": {
-     "decimals": null,
-     "format": "bytes",
+     "decimals": 1,
+     "format": "decbytes",
      "logBase": 1,
-     "max": null,
-     "min": 0,
-     "show": true,
-     "splitFactor": null
+     "show": true
     },
-    "yBucketBound": "auto",
-    "yBucketNumber": null,
-    "yBucketSize": null
+    "yBucketBound": "auto"
    },
    {
     "collapse": false,
     "collapsed": false,
-    "datasource": null,
+    "datasource": {
+     "type": "prometheus",
+     "uid": "000000001"
+    },
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -336,10 +340,16 @@
     },
     "id": 7,
     "panels": [],
-    "repeat": null,
-    "repeatIteration": null,
-    "repeatRowId": null,
     "showTitle": true,
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000001"
+      },
+      "refId": "A"
+     }
+    ],
     "title": "Hub Diagnostics",
     "titleSize": "h6",
     "type": "row"
@@ -349,7 +359,9 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": null,
+    "datasource": {
+     "uid": "$PROMETHEUS_DS"
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -368,7 +380,6 @@
      "min": false,
      "rightSide": false,
      "show": true,
-     "sideWidth": null,
      "total": false,
      "values": false
     },
@@ -377,27 +388,33 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 2,
     "points": true,
     "renderer": "flot",
-    "repeat": null,
     "seriesOverrides": [],
     "spaceLength": 10,
     "stack": false,
     "steppedLine": false,
     "targets": [
      {
-      "expr": "histogram_quantile(0.99, sum(rate(jupyterhub_server_spawn_duration_seconds_bucket{app=\"jupyterhub\", kubernetes_namespace=~\"$hub\"}[5m])) by (le))",
+      "datasource": {
+       "uid": "$PROMETHEUS_DS"
+      },
+      "expr": "histogram_quantile(0.99, sum(rate(jupyterhub_server_spawn_duration_seconds_bucket{app=\"jupyterhub\", namespace=~\"$hub\"}[5m])) by (le))",
       "format": "time_series",
       "intervalFactor": 2,
       "legendFormat": "99th percentile",
       "refId": "A"
      },
      {
-      "expr": "histogram_quantile(0.5, sum(rate(jupyterhub_server_spawn_duration_seconds_bucket{app=\"jupyterhub\", kubernetes_namespace=~\"$hub\"}[5m])) by (le))",
+      "datasource": {
+       "uid": "$PROMETHEUS_DS"
+      },
+      "expr": "histogram_quantile(0.5, sum(rate(jupyterhub_server_spawn_duration_seconds_bucket{app=\"jupyterhub\", namespace=~\"$hub\"}[5m])) by (le))",
       "format": "time_series",
       "intervalFactor": 2,
       "legendFormat": "50th percentile",
@@ -405,9 +422,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Server Start Times",
     "tooltip": {
      "shared": true,
@@ -416,33 +431,26 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "s",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": 0,
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": 0,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -450,7 +458,9 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": null,
+    "datasource": {
+     "uid": "$PROMETHEUS_DS"
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -469,7 +479,6 @@
      "min": false,
      "rightSide": false,
      "show": true,
-     "sideWidth": null,
      "total": false,
      "values": false
     },
@@ -478,27 +487,33 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
-    "repeat": null,
     "seriesOverrides": [],
     "spaceLength": 10,
     "stack": false,
     "steppedLine": false,
     "targets": [
      {
-      "expr": "histogram_quantile(0.99, sum(rate(jupyterhub_request_duration_seconds_bucket{app=\"jupyterhub\", kubernetes_namespace=~\"$hub\"}[5m])) by (le))",
+      "datasource": {
+       "uid": "$PROMETHEUS_DS"
+      },
+      "expr": "histogram_quantile(0.99, sum(rate(jupyterhub_request_duration_seconds_bucket{app=\"jupyterhub\", namespace=~\"$hub\"}[5m])) by (le))",
       "format": "time_series",
       "intervalFactor": 2,
       "legendFormat": "99th percentile",
       "refId": "A"
      },
      {
-      "expr": "histogram_quantile(0.50, sum(rate(jupyterhub_request_duration_seconds_bucket{app=\"jupyterhub\", kubernetes_namespace=~\"$hub\"}[5m])) by (le))",
+      "datasource": {
+       "uid": "$PROMETHEUS_DS"
+      },
+      "expr": "histogram_quantile(0.50, sum(rate(jupyterhub_request_duration_seconds_bucket{app=\"jupyterhub\", namespace=~\"$hub\"}[5m])) by (le))",
       "format": "time_series",
       "intervalFactor": 2,
       "legendFormat": "50th percentile",
@@ -506,9 +521,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Hub response latency",
     "tooltip": {
      "shared": true,
@@ -517,33 +530,26 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "s",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": 0,
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": 0,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -551,7 +557,10 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": null,
+    "datasource": {
+     "type": "prometheus",
+     "uid": "000000001"
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -571,7 +580,6 @@
      "min": false,
      "rightSide": false,
      "show": true,
-     "sideWidth": null,
      "total": false,
      "values": true
     },
@@ -580,19 +588,23 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
-    "repeat": null,
     "seriesOverrides": [],
     "spaceLength": 10,
     "stack": false,
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000001"
+      },
       "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\nirate(container_cpu_usage_seconds_total{name!=\"\"}[5m])\n\n  * on (namespace, pod) group_left(container, label_component) kube_pod_labels{label_app=\"jupyterhub\", label_component!=\"singleuser-server\" , namespace=~\"$hub\"}\n) by (label_component)\n",
       "format": "time_series",
       "intervalFactor": 2,
@@ -601,9 +613,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "All JupyterHub Components CPU",
     "tooltip": {
      "shared": true,
@@ -612,9 +622,7 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
@@ -622,24 +630,19 @@
      {
       "decimals": 1,
       "format": "percentunit",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": 0,
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": 0,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -647,7 +650,10 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": null,
+    "datasource": {
+     "type": "prometheus",
+     "uid": "000000001"
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -667,7 +673,6 @@
      "min": false,
      "rightSide": false,
      "show": true,
-     "sideWidth": null,
      "total": false,
      "values": true
     },
@@ -676,19 +681,23 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
-    "repeat": null,
     "seriesOverrides": [],
     "spaceLength": 10,
     "stack": false,
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000001"
+      },
       "expr": "sum(\n  # exclude name=\"\" because the same container can be reported\n# with both no name and `name=k8s_...`,\n# in which case sum() reports double the actual metric\ncontainer_memory_working_set_bytes{name!=\"\"}\n\n  * on (namespace, pod) group_left(container, label_component) kube_pod_labels{label_app=\"jupyterhub\", label_component!=\"singleuser-server\" , namespace=~\"$hub\"}\n) by (label_component)\n",
       "format": "time_series",
       "intervalFactor": 2,
@@ -697,9 +706,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "All JupyterHub Components Memory (Working Set)",
     "tooltip": {
      "shared": true,
@@ -708,33 +715,26 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "bytes",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": 0,
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": 0,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -742,7 +742,9 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": null,
+    "datasource": {
+     "uid": "$PROMETHEUS_DS"
+    },
     "description": "Pods in a non-running state in the hub's namespace.\n\nPods stuck in non-running states often indicate an error condition\n",
     "fill": 1,
     "fillGradient": 0,
@@ -762,7 +764,6 @@
      "min": false,
      "rightSide": false,
      "show": true,
-     "sideWidth": null,
      "total": false,
      "values": false
     },
@@ -771,19 +772,22 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
-    "repeat": null,
     "seriesOverrides": [],
     "spaceLength": 10,
     "stack": true,
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$PROMETHEUS_DS"
+      },
       "expr": "sum(\n  kube_pod_status_phase{phase!=\"Running\", namespace=~\"$hub\"}\n) by (phase)\n",
       "format": "time_series",
       "intervalFactor": 2,
@@ -792,9 +796,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Non Running Pods",
     "tooltip": {
      "shared": true,
@@ -803,9 +805,7 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
@@ -813,24 +813,19 @@
      {
       "decimals": 0,
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": 0,
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": 0,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -838,7 +833,9 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": null,
+    "datasource": {
+     "uid": "$PROMETHEUS_DS"
+    },
     "decimals": 0,
     "fill": 1,
     "fillGradient": 0,
@@ -858,7 +855,6 @@
      "min": false,
      "rightSide": false,
      "show": true,
-     "sideWidth": null,
      "total": false,
      "values": false
     },
@@ -867,20 +863,23 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.0.5",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
-    "repeat": null,
     "seriesOverrides": [],
     "spaceLength": 10,
     "stack": false,
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(\n    # kube_pod_info.node identifies the pod node,\n    # while kube_pod_labels.kubernetes_node is the metrics exporter's node\n    kube_pod_info{node!=\"\"}\n    * on (namespace, pod) group_right(node) kube_pod_labels{label_app=\"jupyterhub\", label_component=\"singleuser-server\" , namespace=~\"$hub\"}\n) by (node)\n",
+      "datasource": {
+       "uid": "$PROMETHEUS_DS"
+      },
+      "expr": "sum(\n    # kube_pod_info.node identifies the pod node,\n    # while kube_pod_labels.node is the metrics exporter's node\n    kube_pod_info{node!=\"\"}\n    * on (namespace, pod) group_right(node) kube_pod_labels{label_app=\"jupyterhub\", label_component=\"singleuser-server\" , namespace=~\"$hub\"}\n) by (node)\n",
       "format": "time_series",
       "intervalFactor": 2,
       "legendFormat": "{{ node }}",
@@ -888,9 +887,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Users per node",
     "tooltip": {
      "shared": true,
@@ -899,9 +896,7 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
@@ -909,31 +904,29 @@
      {
       "decimals": 0,
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": 0,
       "show": true
      },
      {
       "decimals": 0,
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
       "min": 0,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
     "collapse": false,
     "collapsed": false,
-    "datasource": null,
+    "datasource": {
+     "type": "prometheus",
+     "uid": "000000001"
+    },
     "gridPos": {
      "h": 1,
      "w": 24,
@@ -942,19 +935,26 @@
     },
     "id": 14,
     "panels": [],
-    "repeat": null,
-    "repeatIteration": null,
-    "repeatRowId": null,
     "showTitle": true,
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000001"
+      },
+      "refId": "A"
+     }
+    ],
     "title": "Anomalous user pods",
     "titleSize": "h6",
     "type": "row"
    },
    {
     "columns": [],
-    "datasource": null,
+    "datasource": {
+     "uid": "$PROMETHEUS_DS"
+    },
     "description": "User pods that have been running for a long time (>8h).\n\nThis often indicates problems with the idle culler\n",
-    "fontSize": "100%",
     "gridPos": {
      "h": 12,
      "w": 12,
@@ -963,8 +963,6 @@
     },
     "id": 15,
     "links": [],
-    "pageSize": null,
-    "showHeader": true,
     "sort": {
      "col": 2,
      "desc": true
@@ -986,6 +984,9 @@
     ],
     "targets": [
      {
+      "datasource": {
+       "uid": "$PROMETHEUS_DS"
+      },
       "expr": "(\n  time() - (kube_pod_created * on (namespace, pod)  kube_pod_labels{label_app=\"jupyterhub\", label_component=\"singleuser-server\" , namespace=~\"$hub\"})\n)  > (8 * 60 * 60) # 8 hours is our threshold\n",
       "format": "time_series",
       "instant": true,
@@ -994,17 +995,16 @@
       "refId": "A"
      }
     ],
-    "timeFrom": null,
-    "timeShift": null,
     "title": "Very old user pods",
     "transform": "timeseries_to_rows",
-    "type": "table"
+    "type": "table-old"
    },
    {
     "columns": [],
-    "datasource": null,
+    "datasource": {
+     "uid": "$PROMETHEUS_DS"
+    },
     "description": "User pods using a lot of CPU\n\nThis could indicate a runaway process consuming resources\nunnecessarily.\n",
-    "fontSize": "100%",
     "gridPos": {
      "h": 12,
      "w": 12,
@@ -1013,8 +1013,6 @@
     },
     "id": 16,
     "links": [],
-    "pageSize": null,
-    "showHeader": true,
     "sort": {
      "col": 2,
      "desc": true
@@ -1036,6 +1034,9 @@
     ],
     "targets": [
      {
+      "datasource": {
+       "uid": "$PROMETHEUS_DS"
+      },
       "expr": "max( # Ideally we just want 'current' value, so max will do\n  irate(container_cpu_usage_seconds_total[5m])\n  * on (namespace, pod) group_left() kube_pod_labels{label_app=\"jupyterhub\", label_component=\"singleuser-server\" , namespace=~\"$hub\"}\n) by (namespace, pod) > 0.5\n",
       "format": "time_series",
       "instant": true,
@@ -1044,17 +1045,16 @@
       "refId": "A"
      }
     ],
-    "timeFrom": null,
-    "timeShift": null,
     "title": "User Pods with high CPU usage (>0.5)",
     "transform": "timeseries_to_rows",
-    "type": "table"
+    "type": "table-old"
    },
    {
     "columns": [],
-    "datasource": null,
+    "datasource": {
+     "uid": "$PROMETHEUS_DS"
+    },
     "description": "User pods getting close to their memory limit\n\nOnce they hit their memory limit, user kernels will start dying.\n",
-    "fontSize": "100%",
     "gridPos": {
      "h": 12,
      "w": 12,
@@ -1063,8 +1063,6 @@
     },
     "id": 17,
     "links": [],
-    "pageSize": null,
-    "showHeader": true,
     "sort": {
      "col": 2,
      "desc": true
@@ -1086,6 +1084,9 @@
     ],
     "targets": [
      {
+      "datasource": {
+       "uid": "$PROMETHEUS_DS"
+      },
       "expr": "max( # Ideally we just want 'current', but max will do. This metric is a gauge, so sum is inappropriate\n  container_memory_working_set_bytes\n  * on (namespace, pod) group_left() kube_pod_labels{label_app=\"jupyterhub\", label_component=\"singleuser-server\" , namespace=~\"$hub\"}\n) by (namespace, pod)\n/\nsum(\n  kube_pod_container_resource_limits_memory_bytes\n  * on (namespace, pod) group_left() kube_pod_labels{label_app=\"jupyterhub\", label_component=\"singleuser-server\" , namespace=~\"$hub\"}\n) by (namespace, pod)\n> 0.8\n",
       "format": "time_series",
       "instant": true,
@@ -1094,15 +1095,13 @@
       "refId": "A"
      }
     ],
-    "timeFrom": null,
-    "timeShift": null,
     "title": "User pods with high memory usage (>80% of limit)",
     "transform": "timeseries_to_rows",
-    "type": "table"
+    "type": "table-old"
    }
   ],
   "refresh": "",
-  "schemaVersion": 22,
+  "schemaVersion": 36,
   "style": "dark",
   "tags": [
    "jupyterhub"
@@ -1110,37 +1109,50 @@
   "templating": {
    "list": [
     {
-     "allValue": null,
      "current": {
       "selected": true,
       "tags": [],
-      "text": "prod",
-      "value": [
-       "prod"
-      ]
+      "text": "GESIS",
+      "value": "GESIS"
      },
-     "datasource": "prometheus",
+     "hide": 1,
+     "includeAll": false,
+     "multi": false,
+     "name": "PROMETHEUS_DS",
+     "options": [],
+     "query": "prometheus",
+     "queryValue": "",
+     "refresh": 1,
+     "regex": "",
+     "skipUrlSync": false,
+     "type": "datasource"
+    },
+    {
+     "current": {
+      "selected": true,
+      "tags": [],
+      "text": "bhub-ns",
+      "value": "bhub-ns"
+     },
+     "datasource": {
+      "type": "prometheus",
+      "uid": "$PROMETHEUS_DS"
+     },
      "definition": "",
      "hide": 0,
      "includeAll": true,
-     "index": -1,
-     "label": null,
      "multi": true,
      "name": "hub",
-     "options": [
-      {
-       "selected": true,
-       "text": "prod",
-       "value": "prod"
-      }
-     ],
-     "query": "label_values(kube_service_labels{service=\"hub\"}, namespace)",
-     "refresh": 0,
+     "options": [],
+     "query": {
+      "query": "label_values(kube_service_labels{service=\"hub\"}, namespace)",
+      "refId": "GESIS-hub-Variable-Query"
+     },
+     "refresh": 1,
      "regex": "",
      "skipUrlSync": false,
      "sort": 0,
      "tagValuesQuery": "",
-     "tags": [],
      "tagsQuery": "",
      "type": "query",
      "useTags": false
@@ -1179,31 +1191,46 @@
   "timezone": "browser",
   "title": "JupyterHub Dashboard",
   "uid": "hub-dashboard",
-  "variables": {
-   "list": []
-  },
-  "version": 8
+  "version": 14,
+  "weekStart": ""
  },
  "meta": {
-  "canAdmin": true,
-  "canEdit": true,
-  "canSave": true,
-  "canStar": true,
+  "annotationsPermissions": {
+   "dashboard": {
+    "canAdd": true,
+    "canDelete": true,
+    "canEdit": true
+   },
+   "organization": {
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
+   }
+  },
+  "canAdmin": false,
+  "canDelete": false,
+  "canEdit": false,
+  "canSave": false,
+  "canStar": false,
   "created": "2021-06-28T08:39:03Z",
   "createdBy": "Anonymous",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 15,
   "folderTitle": "JupyterHub Default Dashboards",
+  "folderUid": "70E5EE84-1217-4021-A89E-1E3DE0566D93",
   "folderUrl": "/dashboards/f/70E5EE84-1217-4021-A89E-1E3DE0566D93/jupyterhub-default-dashboards",
   "hasAcl": false,
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
+  "publicDashboardAccessToken": "",
+  "publicDashboardEnabled": false,
+  "publicDashboardUid": "",
   "slug": "jupyterhub-dashboard",
   "type": "db",
-  "updated": "2021-06-28T09:56:18Z",
+  "updated": "2022-09-06T09:45:36Z",
   "updatedBy": "admin",
   "url": "/d/hub-dashboard/jupyterhub-dashboard",
-  "version": 8
+  "version": 14
  }
 }

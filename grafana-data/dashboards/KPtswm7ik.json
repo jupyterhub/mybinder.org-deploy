@@ -14,6 +14,14 @@
      "tags": [
       "deployment-start"
      ],
+     "target": {
+      "limit": 100,
+      "matchAny": false,
+      "tags": [
+       "deployment-start"
+      ],
+      "type": "tags"
+     },
      "type": "tags"
     },
     {
@@ -26,15 +34,23 @@
      "limit": 100,
      "name": "Annotations & Alerts",
      "showIn": 0,
+     "target": {
+      "limit": 100,
+      "matchAny": false,
+      "tags": [],
+      "type": "dashboard"
+     },
      "type": "dashboard"
     }
    ]
   },
   "editable": true,
+  "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
   "id": 7,
   "links": [],
+  "liveNow": false,
   "panels": [
    {
     "aliasColors": {},
@@ -42,6 +58,12 @@
     "dashLength": 10,
     "dashes": false,
     "datasource": "prometheus",
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -65,10 +87,8 @@
     "linewidth": 1,
     "links": [],
     "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
     "percentage": false,
+    "pluginVersion": "8.2.1",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -144,6 +164,12 @@
     "dashLength": 10,
     "dashes": false,
     "datasource": "prometheus",
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -168,9 +194,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "8.2.1",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -185,7 +212,8 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(delta(binderhub_launch_time_seconds_count[6h]))",
+      "exemplar": true,
+      "expr": "sum(increase(binderhub_launch_time_seconds_count[6h]))",
       "format": "time_series",
       "interval": "30m",
       "intervalFactor": 2,
@@ -193,7 +221,8 @@
       "refId": "C"
      },
      {
-      "expr": "sum(delta(binderhub_build_time_seconds_count[6h]))",
+      "exemplar": true,
+      "expr": "sum(increase(binderhub_build_time_seconds_count[6h]))",
       "format": "time_series",
       "hide": false,
       "instant": false,
@@ -252,6 +281,12 @@
     "dashLength": 10,
     "dashes": false,
     "datasource": "prometheus",
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -275,10 +310,8 @@
     "linewidth": 1,
     "links": [],
     "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
     "percentage": false,
+    "pluginVersion": "8.2.1",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -355,8 +388,8 @@
     }
    }
   ],
-  "refresh": "1m",
-  "schemaVersion": 22,
+  "refresh": "",
+  "schemaVersion": 31,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -394,31 +427,45 @@
   "timezone": "",
   "title": "Service Level Objectives",
   "uid": "KPtswm7ik",
-  "variables": {
-   "list": []
-  },
-  "version": 3
+  "version": 4
  },
  "meta": {
-  "canAdmin": true,
-  "canEdit": true,
-  "canSave": true,
-  "canStar": true,
+  "annotationsPermissions": {
+   "dashboard": {
+    "canAdd": true,
+    "canDelete": true,
+    "canEdit": true
+   },
+   "organization": {
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
+   }
+  },
+  "canAdmin": false,
+  "canDelete": false,
+  "canEdit": false,
+  "canSave": false,
+  "canStar": false,
   "created": "2020-09-22T09:29:52Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 0,
   "folderTitle": "General",
+  "folderUid": "",
   "folderUrl": "",
   "hasAcl": false,
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
+  "publicDashboardAccessToken": "",
+  "publicDashboardEnabled": false,
+  "publicDashboardUid": "",
   "slug": "service-level-objectives",
   "type": "db",
-  "updated": "2021-06-02T20:40:13Z",
+  "updated": "2021-11-18T15:40:31Z",
   "updatedBy": "admin",
   "url": "/d/KPtswm7ik/service-level-objectives",
-  "version": 3
+  "version": 4
  }
 }

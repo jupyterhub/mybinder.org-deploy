@@ -1,0 +1,339 @@
+{
+ "dashboard": {
+  "annotations": {
+   "list": [
+    {
+     "builtIn": 1,
+     "datasource": {
+      "type": "grafana",
+      "uid": "-- Grafana --"
+     },
+     "enable": true,
+     "hide": true,
+     "iconColor": "rgba(0, 211, 255, 1)",
+     "name": "Annotations & Alerts",
+     "type": "dashboard"
+    }
+   ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 23,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "${cluster}"
+    },
+    "description": "Number of event loop ticks in each duration\n\nExcludes smallest bucket (25ms) which generally includes ~all ticks.",
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "continuous-purples"
+      },
+      "custom": {
+       "fillOpacity": 70,
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "lineWidth": 1
+      },
+      "decimals": 0,
+      "mappings": [],
+      "min": 0,
+      "noValue": "0",
+      "thresholds": {
+       "mode": "percentage",
+       "steps": [
+        {
+         "color": "green",
+         "value": null
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      },
+      "unit": "none"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 0,
+     "y": 0
+    },
+    "id": 2,
+    "links": [
+     {
+      "targetBlank": true,
+      "title": "Feature PR for JupyterHub",
+      "url": "https://github.com/jupyterhub/jupyterhub/pull/4615"
+     }
+    ],
+    "options": {
+     "colWidth": 0.9,
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "rowHeight": 0.9,
+     "showValue": "auto",
+     "tooltip": {
+      "mode": "single",
+      "sort": "none"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "${cluster}"
+      },
+      "disableTextWrap": false,
+      "editorMode": "code",
+      "exemplar": false,
+      "expr": "max(increase(jupyterhub_event_loop_interval_seconds_bucket{le!=\"0.025\"}[$__interval])) by (le) - ignoring(le) group_left max(increase(jupyterhub_event_loop_interval_seconds_bucket{le=\"0.025\"}[$__interval]))",
+      "format": "heatmap",
+      "fullMetaSearch": false,
+      "includeNullMetadata": false,
+      "instant": false,
+      "interval": "5m",
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "A",
+      "useBackend": false
+     }
+    ],
+    "title": "Event Loop Tick duration distribution",
+    "type": "status-history"
+   },
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "${cluster}"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "axisCenteredZero": false,
+       "axisColorMode": "text",
+       "axisLabel": "",
+       "axisPlacement": "auto",
+       "axisSoftMax": 0.1,
+       "axisSoftMin": 0,
+       "barAlignment": 0,
+       "drawStyle": "line",
+       "fillOpacity": 0,
+       "gradientMode": "none",
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "insertNulls": false,
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "scaleDistribution": {
+        "type": "linear"
+       },
+       "showPoints": "auto",
+       "spanNulls": false,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       },
+       "thresholdsStyle": {
+        "mode": "off"
+       }
+      },
+      "mappings": [],
+      "min": 0,
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": null
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      },
+      "unit": "s"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 0,
+     "y": 8
+    },
+    "id": 1,
+    "options": {
+     "legend": {
+      "calcs": [],
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "single",
+      "sort": "none"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "${cluster}"
+      },
+      "disableTextWrap": false,
+      "editorMode": "code",
+      "exemplar": false,
+      "expr": "max(increase(jupyterhub_event_loop_interval_seconds_sum[$__rate_interval]) / increase( jupyterhub_event_loop_interval_seconds_count[$__rate_interval]))",
+      "fullMetaSearch": false,
+      "includeNullMetadata": true,
+      "instant": false,
+      "interval": "2m",
+      "legendFormat": "average",
+      "range": true,
+      "refId": "A",
+      "useBackend": false
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "${cluster}"
+      },
+      "disableTextWrap": false,
+      "editorMode": "builder",
+      "expr": "histogram_quantile(0.95, sum by(le) (irate(jupyterhub_event_loop_interval_seconds_bucket[$__rate_interval])))",
+      "format": "heatmap",
+      "fullMetaSearch": false,
+      "hide": false,
+      "includeNullMetadata": false,
+      "instant": false,
+      "interval": "2m",
+      "legendFormat": "95%",
+      "range": true,
+      "refId": "B",
+      "useBackend": false
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "${cluster}"
+      },
+      "disableTextWrap": false,
+      "editorMode": "builder",
+      "expr": "histogram_quantile(0.99, sum by(le) (irate(jupyterhub_event_loop_interval_seconds_bucket[$__rate_interval])))",
+      "format": "heatmap",
+      "fullMetaSearch": false,
+      "hide": false,
+      "includeNullMetadata": false,
+      "instant": false,
+      "interval": "2m",
+      "legendFormat": "99%",
+      "range": true,
+      "refId": "C",
+      "useBackend": false
+     }
+    ],
+    "title": "Event Loop Tick durations",
+    "type": "timeseries"
+   }
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+   "list": [
+    {
+     "current": {
+      "selected": false,
+      "text": "GESIS",
+      "value": "000000002"
+     },
+     "hide": 0,
+     "includeAll": false,
+     "label": "cluster",
+     "multi": false,
+     "name": "cluster",
+     "options": [],
+     "query": "prometheus",
+     "queryValue": "",
+     "refresh": 1,
+     "regex": "",
+     "skipUrlSync": false,
+     "type": "datasource"
+    }
+   ]
+  },
+  "time": {
+   "from": "now-30m",
+   "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "event loop diagnostics",
+  "uid": "b8de32f1-59c3-4fce-b8ac-f70b070f2053",
+  "version": 9,
+  "weekStart": ""
+ },
+ "meta": {
+  "annotationsPermissions": {
+   "dashboard": {
+    "canAdd": true,
+    "canDelete": true,
+    "canEdit": true
+   },
+   "organization": {
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
+   }
+  },
+  "canAdmin": false,
+  "canDelete": false,
+  "canEdit": false,
+  "canSave": false,
+  "canStar": false,
+  "created": "2023-11-10T11:17:36Z",
+  "createdBy": "admin",
+  "expires": "0001-01-01T00:00:00Z",
+  "folderId": 0,
+  "folderTitle": "General",
+  "folderUid": "",
+  "folderUrl": "",
+  "hasAcl": false,
+  "isFolder": false,
+  "provisioned": false,
+  "provisionedExternalId": "",
+  "publicDashboardAccessToken": "",
+  "publicDashboardEnabled": false,
+  "publicDashboardUid": "",
+  "slug": "event-loop-diagnostics",
+  "type": "db",
+  "updated": "2023-11-13T07:48:44Z",
+  "updatedBy": "admin",
+  "url": "/d/b8de32f1-59c3-4fce-b8ac-f70b070f2053/event-loop-diagnostics",
+  "version": 9
+ }
+}

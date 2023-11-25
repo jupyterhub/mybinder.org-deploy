@@ -17,7 +17,7 @@
     "bars": true,
     "dashLength": 10,
     "dashes": false,
-    "datasource": null,
+    "datasource": "$PROMETHEUS_DS",
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -103,7 +103,7 @@
     "bars": true,
     "dashLength": 10,
     "dashes": false,
-    "datasource": null,
+    "datasource": "$PROMETHEUS_DS",
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -189,7 +189,7 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": null,
+    "datasource": "$PROMETHEUS_DS",
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -278,7 +278,39 @@
    "jupyterhub"
   ],
   "templating": {
-   "list": []
+   "list": [
+    {
+     "current": {
+      "text": {},
+      "value": {}
+     },
+     "hide": 1,
+     "label": null,
+     "name": "PROMETHEUS_DS",
+     "options": [
+      {
+       "text": "GESIS",
+       "value": "GESIS"
+      },
+      {
+       "text": "OVH",
+       "value": "OVH"
+      },
+      {
+       "text": "prometheus",
+       "value": "prometheus"
+      },
+      {
+       "text": "Turing",
+       "value": "Turing"
+      }
+     ],
+     "query": "prometheus",
+     "refresh": 1,
+     "regex": "",
+     "type": "datasource"
+    }
+   ]
   },
   "time": {
    "from": "now-30d",
@@ -312,28 +344,45 @@
   "timezone": "browser",
   "title": "Usage Dashboard",
   "uid": "usage-dashboard",
-  "version": 5
+  "version": 8
  },
  "meta": {
-  "canAdmin": true,
-  "canEdit": true,
-  "canSave": true,
-  "canStar": true,
+  "annotationsPermissions": {
+   "dashboard": {
+    "canAdd": true,
+    "canDelete": true,
+    "canEdit": true
+   },
+   "organization": {
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
+   }
+  },
+  "canAdmin": false,
+  "canDelete": false,
+  "canEdit": false,
+  "canSave": false,
+  "canStar": false,
   "created": "2021-06-28T08:38:59Z",
   "createdBy": "Anonymous",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 15,
   "folderTitle": "JupyterHub Default Dashboards",
+  "folderUid": "70E5EE84-1217-4021-A89E-1E3DE0566D93",
   "folderUrl": "/dashboards/f/70E5EE84-1217-4021-A89E-1E3DE0566D93/jupyterhub-default-dashboards",
   "hasAcl": false,
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
+  "publicDashboardAccessToken": "",
+  "publicDashboardEnabled": false,
+  "publicDashboardUid": "",
   "slug": "usage-dashboard",
   "type": "db",
-  "updated": "2021-06-28T09:54:55Z",
+  "updated": "2022-06-17T08:01:17Z",
   "updatedBy": "Anonymous",
   "url": "/d/usage-dashboard/usage-dashboard",
-  "version": 5
+  "version": 8
  }
 }

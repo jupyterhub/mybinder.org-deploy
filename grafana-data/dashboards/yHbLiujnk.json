@@ -9,7 +9,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "hideControls": false,
-  "id": 16,
+  "id": 19,
   "links": [],
   "panels": [
    {
@@ -27,7 +27,7 @@
     "repeatIteration": null,
     "repeatRowId": null,
     "showTitle": true,
-    "title": "Cluster Stats",
+    "title": "NFS diagnostics",
     "titleSize": "h6",
     "type": "row"
    },
@@ -38,12 +38,11 @@
     "dashes": false,
     "datasource": "$PROMETHEUS_DS",
     "decimals": 0,
-    "description": "Count of running users, grouped by namespace\n",
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 10,
-     "w": 24,
+     "w": 12,
      "x": 0,
      "y": 10
     },
@@ -71,21 +70,21 @@
     "repeat": null,
     "seriesOverrides": [],
     "spaceLength": 10,
-    "stack": true,
+    "stack": false,
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(\n  kube_pod_status_phase{phase=\"Running\"}\n  * on (namespace, pod) group_right() kube_pod_labels{label_app=\"jupyterhub\", label_component=\"singleuser-server\" }\n) by (namespace)\n",
+      "expr": "sum(rate(node_nfs_requests_total[5m])) by (node) > 0",
       "format": "time_series",
       "intervalFactor": 2,
-      "legendFormat": "{{namespace}}",
+      "legendFormat": "{{ node }}",
       "refId": "A"
      }
     ],
     "thresholds": [],
     "timeFrom": null,
     "timeShift": null,
-    "title": "Running Users",
+    "title": "User Nodes NFS Ops",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -126,13 +125,13 @@
     "dashLength": 10,
     "dashes": false,
     "datasource": "$PROMETHEUS_DS",
-    "description": "% of total memory in the cluster currently requested by to non-placeholder pods.\n\nIf autoscaling is efficient, this should be a fairly constant, high number (>70%).\n",
+    "decimals": 0,
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 10,
      "w": 12,
-     "x": 0,
+     "x": 12,
      "y": 20
     },
     "id": 4,
@@ -163,17 +162,17 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(\n  (\n    # Get individual container memory requests\n    kube_pod_container_resource_requests{resource=\"memory\"}\n    # Add node pool name as label\n    * on(node) group_left(label_cloud_google_com_gke_nodepool) kube_node_labels{}\n  )\n  # Ignore containers from pods that aren't currently running or scheduled\n  # FIXME: This isn't the best metric here, evaluate what is.\n  and on (pod) kube_pod_status_scheduled{condition='true'}\n  # Ignore user and node placeholder pods\n  and on (pod) kube_pod_labels{label_component!~'user-placeholder|node-placeholder'}\n) by (label_cloud_google_com_gke_nodepool)\n/\nsum(\n  # Total allocatable memory on a node\n  kube_node_status_allocatable{resource=\"memory\"}\n  # Add nodepool name as label\n  * on(node) group_left(label_cloud_google_com_gke_nodepool) kube_node_labels{}\n) by (label_cloud_google_com_gke_nodepool)\n",
+      "expr": "sum(rate(node_nfs_requests_total[5m])) by (node)",
       "format": "time_series",
       "intervalFactor": 2,
-      "legendFormat": "{{label_cloud_google_com_gke_nodepool}}",
+      "legendFormat": "{{ node }}",
       "refId": "A"
      }
     ],
     "thresholds": [],
     "timeFrom": null,
     "timeShift": null,
-    "title": "Memory commitment %",
+    "title": "iowait % on each node",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -189,18 +188,20 @@
     },
     "yaxes": [
      {
-      "format": "percentunit",
+      "decimals": 0,
+      "format": "short",
       "label": null,
       "logBase": 1,
-      "max": 1,
+      "max": null,
       "min": 0,
       "show": true
      },
      {
+      "decimals": 0,
       "format": "short",
       "label": null,
       "logBase": 1,
-      "max": 1,
+      "max": null,
       "min": 0,
       "show": true
      }
@@ -212,13 +213,13 @@
     "dashLength": 10,
     "dashes": false,
     "datasource": "$PROMETHEUS_DS",
-    "description": "% of total CPU in the cluster currently requested by to non-placeholder pods.\n\nJupyterHub users mostly are capped by memory, so this is not super useful.\n",
+    "decimals": 0,
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 10,
      "w": 12,
-     "x": 12,
+     "x": 0,
      "y": 30
     },
     "id": 5,
@@ -249,17 +250,17 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(\n  (\n    # Get individual container memory requests\n    kube_pod_container_resource_requests{resource=\"cpu\"}\n    # Add node pool name as label\n    * on(node) group_left(label_cloud_google_com_gke_nodepool) kube_node_labels{}\n  )\n  # Ignore containers from pods that aren't currently running or scheduled\n  # FIXME: This isn't the best metric here, evaluate what is.\n  and on (pod) kube_pod_status_scheduled{condition='true'}\n  # Ignore user and node placeholder pods\n  and on (pod) kube_pod_labels{label_component!~'user-placeholder|node-placeholder'}\n) by (label_cloud_google_com_gke_nodepool)\n/\nsum(\n  # Total allocatable memory on a node\n  kube_node_status_allocatable{resource=\"cpu\"}\n  # Add nodepool name as label\n  * on(node) group_left(label_cloud_google_com_gke_nodepool) kube_node_labels{}\n) by (label_cloud_google_com_gke_nodepool)\n",
+      "expr": "sum(rate(node_nfs_requests_total[5m])) by (method) > 0",
       "format": "time_series",
       "intervalFactor": 2,
-      "legendFormat": "{{label_cloud_google_com_gke_nodepool}}",
+      "legendFormat": "{{method}}",
       "refId": "A"
      }
     ],
     "thresholds": [],
     "timeFrom": null,
     "timeShift": null,
-    "title": "CPU commitment %",
+    "title": "NFS Operation Types on user nodes",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -275,18 +276,20 @@
     },
     "yaxes": [
      {
-      "format": "percentunit",
+      "decimals": 0,
+      "format": "short",
       "label": null,
       "logBase": 1,
-      "max": 1,
+      "max": null,
       "min": 0,
       "show": true
      },
      {
+      "decimals": 0,
       "format": "short",
       "label": null,
       "logBase": 1,
-      "max": 1,
+      "max": null,
       "min": 0,
       "show": true
      }
@@ -298,13 +301,12 @@
     "dashLength": 10,
     "dashes": false,
     "datasource": "$PROMETHEUS_DS",
-    "decimals": 0,
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 10,
      "w": 12,
-     "x": 0,
+     "x": 12,
      "y": 40
     },
     "id": 6,
@@ -335,17 +337,17 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(kube_node_labels) by (label_cloud_google_com_gke_nodepool)",
+      "expr": "avg(rate(node_cpu_seconds_total{job=\"prometheus-nfsd-server\", mode!=\"idle\"}[2m])) by (mode)",
       "format": "time_series",
       "intervalFactor": 2,
-      "legendFormat": "{{label_cloud_google_com_gke_nodepool}}",
+      "legendFormat": "{{mode}}",
       "refId": "A"
      }
     ],
     "thresholds": [],
     "timeFrom": null,
     "timeShift": null,
-    "title": "Node Count",
+    "title": "NFS Server CPU",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -361,7 +363,6 @@
     },
     "yaxes": [
      {
-      "decimals": 0,
       "format": "short",
       "label": null,
       "logBase": 1,
@@ -370,7 +371,6 @@
       "show": true
      },
      {
-      "decimals": 0,
       "format": "short",
       "label": null,
       "logBase": 1,
@@ -387,13 +387,12 @@
     "dashes": false,
     "datasource": "$PROMETHEUS_DS",
     "decimals": 0,
-    "description": "Pods in states other than 'Running'.\n\nIn a functional clusters, pods should not be in non-Running states for long.\n",
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
      "h": 10,
      "w": 12,
-     "x": 12,
+     "x": 0,
      "y": 50
     },
     "id": 7,
@@ -401,7 +400,6 @@
      "alignAsTable": false,
      "avg": false,
      "current": false,
-     "hideZero": true,
      "max": false,
      "min": false,
      "rightSide": false,
@@ -425,17 +423,24 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(kube_pod_status_phase{phase!=\"Running\"}) by (phase)",
+      "expr": "sum(rate(node_nfsd_disk_bytes_read_total[5m]))",
       "format": "time_series",
       "intervalFactor": 2,
-      "legendFormat": "{{phase}}",
+      "legendFormat": "Read",
       "refId": "A"
+     },
+     {
+      "expr": "sum(rate(node_nfsd_disk_bytes_written_total[5m]))",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "Write",
+      "refId": "B"
      }
     ],
     "thresholds": [],
     "timeFrom": null,
     "timeShift": null,
-    "title": "Non Running Pods",
+    "title": "NFS Server Disk ops",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -471,23 +476,89 @@
     ]
    },
    {
-    "collapse": false,
-    "collapsed": false,
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$PROMETHEUS_DS",
+    "fill": 1,
+    "fillGradient": 0,
     "gridPos": {
      "h": 10,
      "w": 12,
-     "x": 0,
+     "x": 12,
      "y": 60
     },
     "id": 8,
-    "panels": [],
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
     "repeat": null,
-    "repeatIteration": null,
-    "repeatRowId": null,
-    "showTitle": true,
-    "title": "Node Stats",
-    "titleSize": "h6",
-    "type": "row"
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(rate(node_disk_write_time_seconds_total{job=\"prometheus-nfsd-server\"}[5m])) by (device) / sum(rate(node_disk_writes_completed_total{job=\"prometheus-nfsd-server\"}[5m])) by (device)",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "{{device}}",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "NFS Server disk write latency",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     }
+    ]
    },
    {
     "aliasColors": {},
@@ -495,7 +566,6 @@
     "dashLength": 10,
     "dashes": false,
     "datasource": "$PROMETHEUS_DS",
-    "description": "% of available CPUs currently in use\n",
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -532,17 +602,17 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(rate(node_cpu_seconds_total{mode!=\"idle\"}[5m])) by (node)\n/\nsum(kube_node_status_capacity{resource=\"cpu\"}) by (node)\n",
+      "expr": "sum(rate(node_disk_read_time_seconds_total{job=\"prometheus-nfsd-server\"}[5m])) by (device) / sum(rate(node_disk_reads_completed_total{job=\"prometheus-nfsd-server\"}[5m])) by (device)",
       "format": "time_series",
       "intervalFactor": 2,
-      "legendFormat": "{{ node }}",
+      "legendFormat": "{{device}}",
       "refId": "A"
      }
     ],
     "thresholds": [],
     "timeFrom": null,
     "timeShift": null,
-    "title": "Node CPU Utilization %",
+    "title": "NFS Server disk read latency",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -558,10 +628,10 @@
     },
     "yaxes": [
      {
-      "format": "percentunit",
+      "format": "short",
       "label": null,
       "logBase": 1,
-      "max": 1,
+      "max": null,
       "min": 0,
       "show": true
      },
@@ -569,21 +639,15 @@
       "format": "short",
       "label": null,
       "logBase": 1,
-      "max": 1,
+      "max": null,
       "min": 0,
       "show": true
      }
     ]
    },
    {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$PROMETHEUS_DS",
-    "description": "% of available Memory currently in use\n",
-    "fill": 1,
-    "fillGradient": 0,
+    "collapse": false,
+    "collapsed": false,
     "gridPos": {
      "h": 10,
      "w": 12,
@@ -591,75 +655,14 @@
      "y": 80
     },
     "id": 10,
-    "legend": {
-     "alignAsTable": false,
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "rightSide": false,
-     "show": true,
-     "sideWidth": null,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "nullPointMode": "null",
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
+    "panels": [],
     "repeat": null,
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "expr": "1 - (\n  sum (\n    # Memory that can be allocated to processes when they need\n    node_memory_MemFree_bytes + # Unused bytes\n    node_memory_Cached_bytes + # Shared memory + temporary disk cache\n    node_memory_Buffers_bytes # Very temporary buffer memory cache for disk i/o\n  ) by (node)\n  /\n  sum(node_memory_MemTotal_bytes) by (node)\n)\n",
-      "format": "time_series",
-      "intervalFactor": 2,
-      "legendFormat": "{{node}}",
-      "refId": "A"
-     }
-    ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeShift": null,
-    "title": "Node Memory Utilization %",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "percentunit",
-      "label": null,
-      "logBase": 1,
-      "max": 1,
-      "min": 0,
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": 1,
-      "min": 0,
-      "show": true
-     }
-    ]
+    "repeatIteration": null,
+    "repeatRowId": null,
+    "showTitle": true,
+    "title": "Support system diagnostics",
+    "titleSize": "h6",
+    "type": "row"
    },
    {
     "aliasColors": {},
@@ -667,7 +670,6 @@
     "dashLength": 10,
     "dashes": false,
     "datasource": "$PROMETHEUS_DS",
-    "description": "% of each node guaranteed to pods on it\n",
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -704,17 +706,17 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(\n  # Get individual container memory limits\n  kube_pod_container_resource_requests{resource=\"cpu\"}\n  # Ignore containers from pods that aren't currently running or scheduled\n  # FIXME: This isn't the best metric here, evaluate what is.\n  and on (pod) kube_pod_status_scheduled{condition='true'}\n  # Ignore user and node placeholder pods\n  and on (pod) kube_pod_labels{label_component!~'user-placeholder|node-placeholder'}\n) by (node)\n/\nsum(\n  # Get individual container memory requests\n  kube_node_status_allocatable{resource=\"cpu\"}\n) by (node)\n",
+      "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"support-prometheus-server-.*\",namespace=\"support\"}[5m]))",
       "format": "time_series",
       "intervalFactor": 2,
-      "legendFormat": "{{node}}",
+      "legendFormat": "",
       "refId": "A"
      }
     ],
     "thresholds": [],
     "timeFrom": null,
     "timeShift": null,
-    "title": "Node CPU Commit %",
+    "title": "Prometheus CPU",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -730,10 +732,10 @@
     },
     "yaxes": [
      {
-      "format": "percentunit",
+      "format": "short",
       "label": null,
       "logBase": 1,
-      "max": 1,
+      "max": null,
       "min": 0,
       "show": true
      },
@@ -741,7 +743,7 @@
       "format": "short",
       "label": null,
       "logBase": 1,
-      "max": 1,
+      "max": null,
       "min": 0,
       "show": true
      }
@@ -753,7 +755,6 @@
     "dashLength": 10,
     "dashes": false,
     "datasource": "$PROMETHEUS_DS",
-    "description": "% of each node guaranteed to pods on it\n",
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -790,17 +791,17 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(\n  # Get individual container memory limits\n  kube_pod_container_resource_requests{resource=\"memory\"}\n  # Ignore containers from pods that aren't currently running or scheduled\n  # FIXME: This isn't the best metric here, evaluate what is.\n  and on (pod) kube_pod_status_scheduled{condition='true'}\n  # Ignore user and node placeholder pods\n  and on (pod) kube_pod_labels{label_component!~'user-placeholder|node-placeholder'}\n) by (node)\n/\nsum(\n  # Get individual container memory requests\n  kube_node_status_allocatable{resource=\"memory\"}\n) by (node)\n",
+      "expr": "sum(container_memory_working_set_bytes{pod=~\"support-prometheus-server-.*\", namespace=\"support\"})",
       "format": "time_series",
       "intervalFactor": 2,
-      "legendFormat": "{{node}}",
+      "legendFormat": "",
       "refId": "A"
      }
     ],
     "thresholds": [],
     "timeFrom": null,
     "timeShift": null,
-    "title": "Node Memory Commit %",
+    "title": "Prometheus Memory (Working Set)",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -816,10 +817,10 @@
     },
     "yaxes": [
      {
-      "format": "percentunit",
+      "format": "bytes",
       "label": null,
       "logBase": 1,
-      "max": 1,
+      "max": null,
       "min": 0,
       "show": true
      },
@@ -827,7 +828,187 @@
       "format": "short",
       "label": null,
       "logBase": 1,
-      "max": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     }
+    ]
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$PROMETHEUS_DS",
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 0,
+     "y": 110
+    },
+    "id": 13,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(kubelet_volume_stats_available_bytes{namespace=\"support\",persistentvolumeclaim=\"support-prometheus-server\"})",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "",
+      "refId": "A"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "Prometheus Free Disk space",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "format": "bytes",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     },
+     {
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     }
+    ]
+   },
+   {
+    "aliasColors": {},
+    "bars": false,
+    "dashLength": 10,
+    "dashes": false,
+    "datasource": "$PROMETHEUS_DS",
+    "decimals": 0,
+    "fill": 1,
+    "fillGradient": 0,
+    "gridPos": {
+     "h": 10,
+     "w": 12,
+     "x": 12,
+     "y": 120
+    },
+    "id": 14,
+    "legend": {
+     "alignAsTable": false,
+     "avg": false,
+     "current": false,
+     "max": false,
+     "min": false,
+     "rightSide": false,
+     "show": true,
+     "sideWidth": null,
+     "total": false,
+     "values": false
+    },
+    "lines": true,
+    "linewidth": 1,
+    "links": [],
+    "nullPointMode": "null",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "repeat": null,
+    "seriesOverrides": [],
+    "spaceLength": 10,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+     {
+      "expr": "sum(rate(container_network_receive_bytes_total{pod=~\"support-prometheus-server-.*\",namespace=\"support\"}[5m]))",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "receive",
+      "refId": "A"
+     },
+     {
+      "expr": "sum(rate(container_network_send_bytes_total{pod=~\"support-prometheus-server-.*\",namespace=\"support\"}[5m]))",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "send",
+      "refId": "B"
+     }
+    ],
+    "thresholds": [],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "Prometheus Network Usage",
+    "tooltip": {
+     "shared": true,
+     "sort": 0,
+     "value_type": "individual"
+    },
+    "type": "graph",
+    "xaxis": {
+     "buckets": null,
+     "mode": "time",
+     "name": null,
+     "show": true,
+     "values": []
+    },
+    "yaxes": [
+     {
+      "decimals": 0,
+      "format": "bytes",
+      "label": null,
+      "logBase": 1,
+      "max": null,
+      "min": 0,
+      "show": true
+     },
+     {
+      "decimals": 0,
+      "format": "short",
+      "label": null,
+      "logBase": 1,
+      "max": null,
       "min": 0,
       "show": true
      }
@@ -839,7 +1020,7 @@
   "schemaVersion": 14,
   "style": "dark",
   "tags": [
-   "jupyterhub",
+   "support",
    "kubernetes"
   ],
   "templating": {
@@ -910,9 +1091,9 @@
    ]
   },
   "timezone": "browser",
-  "title": "Cluster Information",
-  "uid": "bW5aBKknz",
-  "version": 9
+  "title": "NFS and Support Information",
+  "uid": "yHbLiujnk",
+  "version": 3
  },
  "meta": {
   "annotationsPermissions": {
@@ -932,7 +1113,7 @@
   "canEdit": false,
   "canSave": false,
   "canStar": false,
-  "created": "2021-06-28T08:38:58Z",
+  "created": "2022-06-17T07:52:58Z",
   "createdBy": "Anonymous",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 15,
@@ -946,11 +1127,11 @@
   "publicDashboardAccessToken": "",
   "publicDashboardEnabled": false,
   "publicDashboardUid": "",
-  "slug": "cluster-information",
+  "slug": "nfs-and-support-information",
   "type": "db",
-  "updated": "2022-06-17T08:01:15Z",
+  "updated": "2022-06-17T08:01:22Z",
   "updatedBy": "Anonymous",
-  "url": "/d/bW5aBKknz/cluster-information",
-  "version": 9
+  "url": "/d/yHbLiujnk/nfs-and-support-information",
+  "version": 3
  }
 }

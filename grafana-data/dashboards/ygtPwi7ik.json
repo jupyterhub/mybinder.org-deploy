@@ -5,16 +5,28 @@
     {
      "$$hashKey": "object:465",
      "builtIn": 1,
-     "datasource": "-- Grafana --",
+     "datasource": {
+      "type": "datasource",
+      "uid": "grafana"
+     },
      "enable": true,
      "hide": true,
      "iconColor": "rgba(0, 211, 255, 1)",
      "name": "Annotations & Alerts",
+     "target": {
+      "limit": 100,
+      "matchAny": false,
+      "tags": [],
+      "type": "dashboard"
+     },
      "type": "dashboard"
     },
     {
      "$$hashKey": "object:466",
-     "datasource": "-- Grafana --",
+     "datasource": {
+      "type": "datasource",
+      "uid": "grafana"
+     },
      "enable": true,
      "hide": false,
      "iconColor": "#e5ac0e",
@@ -24,11 +36,22 @@
      "tags": [
       "deployment-start"
      ],
+     "target": {
+      "limit": 100,
+      "matchAny": false,
+      "tags": [
+       "deployment-start"
+      ],
+      "type": "tags"
+     },
      "type": "tags"
     },
     {
      "$$hashKey": "object:467",
-     "datasource": "-- Grafana --",
+     "datasource": {
+      "type": "datasource",
+      "uid": "grafana"
+     },
      "enable": true,
      "hide": false,
      "iconColor": "rgba(255, 96, 96, 1)",
@@ -38,23 +61,40 @@
      "tags": [
       "operations log"
      ],
+     "target": {
+      "limit": 100,
+      "matchAny": false,
+      "tags": [
+       "operations log"
+      ],
+      "type": "tags"
+     },
      "type": "tags"
     }
    ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 3,
-  "iteration": 1633513507182,
   "links": [],
+  "liveNow": false,
   "panels": [
    {
     "aliasColors": {},
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "type": "prometheus",
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 0,
     "fillGradient": 0,
     "gridPos": {
@@ -81,9 +121,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -93,19 +134,22 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "sum(increase(nginx_ingress_controller_requests{service=\"binder\"}[10m]) / 10) by (status)",
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "editorMode": "code",
+      "expr": "sum(rate(nginx_ingress_controller_requests{service=\"binder\"}[5m]) * 60) by (status)",
       "format": "time_series",
       "interval": "",
       "intervalFactor": 2,
       "legendFormat": "{{status}}",
+      "range": true,
       "refId": "A"
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
-    "title": "Response codes (mybinder.org)",
+    "title": "Response codes (binder)",
     "tooltip": {
      "shared": true,
      "sort": 0,
@@ -113,36 +157,28 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "$$hashKey": "object:626",
-      "decimals": null,
       "format": "short",
       "label": "requests/min",
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "$$hashKey": "object:627",
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
@@ -150,7 +186,16 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "type": "prometheus",
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 1,
     "gridPos": {
@@ -180,9 +225,10 @@
     "links": [],
     "nullPointMode": "null as zero",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -196,19 +242,23 @@
     "steppedLine": false,
     "targets": [
      {
-      "expr": "topk(10, sum(increase(nginx_ingress_controller_requests{service=\"proxy-public\"}[10m]) / 10) by (status))",
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "editorMode": "code",
+      "expr": "topk(10, sum(rate(nginx_ingress_controller_requests{service=\"proxy-public\"}[5m]) * 60) by (status))",
       "format": "time_series",
+      "hide": false,
       "interval": "",
       "intervalFactor": 2,
       "legendFormat": "{{ status }}",
+      "range": true,
       "refId": "A"
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
-    "title": "Response codes (hub.mybinder.org)",
+    "title": "Response codes (hub)",
     "tooltip": {
      "shared": true,
      "sort": 2,
@@ -216,140 +266,145 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "$$hashKey": "object:548",
-      "decimals": null,
       "format": "short",
       "label": "requests/min",
       "logBase": 1,
-      "max": null,
       "min": "0",
       "show": true
      },
      {
       "$$hashKey": "object:549",
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 0,
-    "fillGradient": 0,
+    "datasource": {
+     "type": "prometheus",
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "axisCenteredZero": false,
+       "axisColorMode": "text",
+       "axisLabel": "requests/min",
+       "axisPlacement": "auto",
+       "barAlignment": 0,
+       "drawStyle": "line",
+       "fillOpacity": 0,
+       "gradientMode": "none",
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "scaleDistribution": {
+        "type": "linear"
+       },
+       "showPoints": "never",
+       "spanNulls": false,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       },
+       "thresholdsStyle": {
+        "mode": "off"
+       }
+      },
+      "links": [],
+      "mappings": [],
+      "min": 0,
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": null
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      },
+      "unit": "short"
+     },
+     "overrides": []
+    },
     "gridPos": {
      "h": 7,
      "w": 24,
      "x": 0,
      "y": 13
     },
-    "hiddenSeries": false,
     "id": 15,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "hideEmpty": true,
-     "hideZero": true,
-     "max": false,
-     "min": false,
-     "show": true,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
     "links": [],
-    "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "legend": {
+      "calcs": [],
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "none"
+     }
     },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
+    "pluginVersion": "9.4.7",
     "targets": [
      {
-      "expr": "sum(increase(nginx_ingress_controller_requests{service=\"redirector\"}[10m]) / 10) by (status)",
-      "format": "time_series",
+      "datasource": {
+       "type": "prometheus",
+       "uid": "$cluster"
+      },
+      "editorMode": "code",
+      "exemplar": false,
+      "expr": "sum(rate(nginx_ingress_controller_requests{service=\"federation-redirect\"}[5m]) * 60)  by (status)",
+      "hide": false,
+      "instant": false,
       "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "{{status}}",
-      "refId": "A"
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "B"
      }
     ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "Response codes (Redirector)",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "$$hashKey": "object:833",
-      "decimals": null,
-      "format": "short",
-      "label": "requests/min",
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     },
-     {
-      "$$hashKey": "object:834",
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
+    "title": "Response codes (Federation Redirector)",
+    "type": "timeseries"
    },
    {
     "aliasColors": {},
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -374,9 +429,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 5,
     "points": false,
     "renderer": "flot",
@@ -386,6 +442,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "min(binderhub_github_rate_limit_remaining) without (instance)",
       "format": "time_series",
       "interval": "",
@@ -403,9 +462,7 @@
       "value": 2000
      }
     ],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "GitHub requests remaining",
     "tooltip": {
      "shared": true,
@@ -414,17 +471,13 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
-      "decimals": null,
       "format": "short",
-      "label": null,
       "logBase": 1,
       "max": "5000",
       "min": "0",
@@ -432,21 +485,18 @@
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    }
   ],
   "refresh": "1m",
-  "schemaVersion": 22,
+  "revision": 1,
+  "schemaVersion": 38,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -458,11 +508,11 @@
      },
      "hide": 0,
      "includeAll": false,
-     "label": null,
      "multi": false,
      "name": "cluster",
      "options": [],
      "query": "prometheus",
+     "queryValue": "",
      "refresh": 1,
      "regex": "",
      "skipUrlSync": false,
@@ -502,31 +552,46 @@
   "timezone": "",
   "title": "Network Activity",
   "uid": "ygtPwi7ik",
-  "variables": {
-   "list": []
-  },
-  "version": 8
+  "version": 13,
+  "weekStart": ""
  },
  "meta": {
-  "canAdmin": true,
-  "canEdit": true,
-  "canSave": true,
-  "canStar": true,
+  "annotationsPermissions": {
+   "dashboard": {
+    "canAdd": true,
+    "canDelete": true,
+    "canEdit": true
+   },
+   "organization": {
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
+   }
+  },
+  "canAdmin": false,
+  "canDelete": false,
+  "canEdit": false,
+  "canSave": false,
+  "canStar": false,
   "created": "2020-09-22T09:29:51Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 0,
   "folderTitle": "General",
+  "folderUid": "",
   "folderUrl": "",
   "hasAcl": false,
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
+  "publicDashboardAccessToken": "",
+  "publicDashboardEnabled": false,
+  "publicDashboardUid": "",
   "slug": "network-activity",
   "type": "db",
-  "updated": "2021-10-06T09:56:27Z",
+  "updated": "2023-04-28T12:22:19Z",
   "updatedBy": "admin",
   "url": "/d/ygtPwi7ik/network-activity",
-  "version": 8
+  "version": 13
  }
 }

@@ -5,16 +5,28 @@
     {
      "$$hashKey": "object:782",
      "builtIn": 1,
-     "datasource": "-- Grafana --",
+     "datasource": {
+      "type": "datasource",
+      "uid": "grafana"
+     },
      "enable": true,
      "hide": true,
      "iconColor": "rgba(0, 211, 255, 1)",
      "name": "Annotations & Alerts",
+     "target": {
+      "limit": 100,
+      "matchAny": false,
+      "tags": [],
+      "type": "dashboard"
+     },
      "type": "dashboard"
     },
     {
      "$$hashKey": "object:783",
-     "datasource": "-- Grafana --",
+     "datasource": {
+      "type": "datasource",
+      "uid": "grafana"
+     },
      "enable": true,
      "hide": false,
      "iconColor": "#e5ac0e",
@@ -24,11 +36,22 @@
      "tags": [
       "deployment-start"
      ],
+     "target": {
+      "limit": 100,
+      "matchAny": false,
+      "tags": [
+       "deployment-start"
+      ],
+      "type": "tags"
+     },
      "type": "tags"
     },
     {
      "$$hashKey": "object:784",
-     "datasource": "-- Grafana --",
+     "datasource": {
+      "type": "datasource",
+      "uid": "grafana"
+     },
      "enable": true,
      "hide": false,
      "iconColor": "rgba(255, 96, 96, 1)",
@@ -39,65 +62,131 @@
      "tags": [
       "ops-log"
      ],
+     "target": {
+      "limit": 100,
+      "matchAny": true,
+      "tags": [
+       "ops-log"
+      ],
+      "type": "tags"
+     },
      "type": "tags"
     }
    ]
   },
   "editable": true,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 9,
-  "iteration": 1631271878252,
   "links": [],
+  "liveNow": false,
   "panels": [
    {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 0,
-    "fillGradient": 0,
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "axisCenteredZero": false,
+       "axisColorMode": "text",
+       "axisLabel": "Launches",
+       "axisPlacement": "auto",
+       "barAlignment": 0,
+       "drawStyle": "line",
+       "fillOpacity": 0,
+       "gradientMode": "none",
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "scaleDistribution": {
+        "type": "linear"
+       },
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       },
+       "thresholdsStyle": {
+        "mode": "off"
+       }
+      },
+      "links": [],
+      "mappings": [],
+      "min": 0,
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": null
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      },
+      "unit": "none"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byRegexp",
+        "options": "/.*build.*/"
+       },
+       "properties": [
+        {
+         "id": "custom.fillOpacity",
+         "value": 30
+        },
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "custom.axisLabel",
+         "value": "Builds"
+        }
+       ]
+      }
+     ]
+    },
     "gridPos": {
      "h": 7,
      "w": 12,
      "x": 0,
      "y": 0
     },
-    "hiddenSeries": false,
     "id": 17,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": true,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
     "links": [],
-    "nullPointMode": "null",
     "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [
-     {
-      "alias": "/.*build.*/",
-      "fill": 3,
-      "yaxis": 2
+     "legend": {
+      "calcs": [],
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "single",
+      "sort": "none"
      }
-    ],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
+    },
+    "pluginVersion": "8.2.1",
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(increase(binderhub_build_time_seconds_count[10m]))",
       "format": "time_series",
       "intervalFactor": 2,
@@ -105,6 +194,9 @@
       "refId": "A"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(increase(binderhub_launch_time_seconds_count[10m]))",
       "format": "time_series",
       "intervalFactor": 2,
@@ -112,217 +204,248 @@
       "refId": "B"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(kube_pod_status_phase{pod=~\"build-.*\", kubernetes_namespace!=\"jhub-ns\"})",
       "legendFormat": "Running builds",
       "refId": "C"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "",
       "refId": "D"
      }
     ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
     "title": "Total launches/builds",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "decimals": null,
-      "format": "none",
-      "label": "Launches",
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": "Builds",
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
+    "type": "timeseries"
    },
    {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "-- Mixed --",
-    "fill": 1,
-    "fillGradient": 0,
+    "datasource": {
+     "type": "datasource",
+     "uid": "-- Mixed --"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "axisCenteredZero": false,
+       "axisColorMode": "text",
+       "axisLabel": "",
+       "axisPlacement": "auto",
+       "barAlignment": 0,
+       "drawStyle": "line",
+       "fillOpacity": 10,
+       "gradientMode": "none",
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "scaleDistribution": {
+        "type": "linear"
+       },
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "normal"
+       },
+       "thresholdsStyle": {
+        "mode": "off"
+       }
+      },
+      "links": [],
+      "mappings": [],
+      "min": 0,
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": null
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      },
+      "unit": "short"
+     },
+     "overrides": []
+    },
     "gridPos": {
      "h": 9,
      "w": 12,
      "x": 12,
      "y": 0
     },
-    "hiddenSeries": false,
     "id": 31,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": true,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
     "links": [],
-    "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "legend": {
+      "calcs": [],
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "none"
+     }
     },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": true,
-    "steppedLine": false,
+    "pluginVersion": "8.2.1",
     "targets": [
      {
-      "datasource": "prometheus",
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000001"
+      },
       "expr": "sum(kube_pod_status_phase{pod=~\"^jupyter-.*\", phase=\"Running\"})",
+      "hide": false,
       "legendFormat": "GKE",
       "refId": "A"
      },
      {
-      "datasource": "GESIS",
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000002"
+      },
       "expr": "sum(kube_pod_status_phase{pod=~\"^jupyter-.*\", phase=\"Running\", kubernetes_namespace!=\"jhub-ns\"})",
+      "hide": false,
       "legendFormat": "Gesis",
       "refId": "B"
      },
      {
-      "datasource": "OVH",
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000004"
+      },
       "expr": "sum(kube_pod_status_phase{pod=~\"^jupyter-.*\", phase=\"Running\"})",
       "hide": false,
       "legendFormat": "OVH",
       "refId": "C"
-     },
-     {
-      "datasource": "Turing",
-      "expr": "sum(kube_pod_status_phase{pod=~\"^jupyter-.*\", phase=\"Running\"})",
-      "hide": false,
-      "legendFormat": "Turing",
-      "refId": "D"
      }
     ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
     "title": "User pods running over time",
-    "tooltip": {
-     "shared": true,
-     "sort": 1,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "$$hashKey": "object:252",
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     },
-     {
-      "$$hashKey": "object:253",
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
+    "type": "timeseries"
    },
    {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
     "description": "The number of currently outstanding requests waiting on a launch or build.\n\nThis does correspond to the number of launches, but has little relationship to the number of builds because many requests could be waiting on the same build, and some builds may no longer have anyone waiting for them.",
-    "fill": 0,
-    "fillGradient": 0,
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "axisCenteredZero": false,
+       "axisColorMode": "text",
+       "axisLabel": "Launches",
+       "axisPlacement": "auto",
+       "barAlignment": 0,
+       "drawStyle": "line",
+       "fillOpacity": 0,
+       "gradientMode": "none",
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "scaleDistribution": {
+        "type": "linear"
+       },
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       },
+       "thresholdsStyle": {
+        "mode": "off"
+       }
+      },
+      "decimals": 0,
+      "links": [],
+      "mappings": [],
+      "min": 0,
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": null
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      },
+      "unit": "none"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byRegexp",
+        "options": "/.*builds.*/"
+       },
+       "properties": [
+        {
+         "id": "custom.fillOpacity",
+         "value": 30
+        },
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "custom.axisLabel",
+         "value": "Builds"
+        }
+       ]
+      }
+     ]
+    },
     "gridPos": {
      "h": 7,
      "w": 12,
      "x": 0,
      "y": 7
     },
-    "hiddenSeries": false,
     "id": 34,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": true,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
     "links": [],
-    "nullPointMode": "null",
     "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [
-     {
-      "alias": "/.*builds.*/",
-      "fill": 3,
-      "yaxis": 2
+     "legend": {
+      "calcs": [],
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "single",
+      "sort": "none"
      }
-    ],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
+    },
+    "pluginVersion": "8.2.1",
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(binderhub_inprogress_builds)",
       "interval": "",
       "intervalFactor": 1,
@@ -330,6 +453,9 @@
       "refId": "A"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "sum(binderhub_inprogress_launches)",
       "instant": false,
       "interval": "",
@@ -338,455 +464,541 @@
       "refId": "B"
      }
     ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
     "title": "Requests waiting on launches/builds",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "decimals": 0,
-      "format": "none",
-      "label": "Launches",
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     },
-     {
-      "decimals": 0,
-      "format": "short",
-      "label": "Builds",
-      "logBase": 1,
-      "max": null,
-      "min": "0",
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
+    "type": "timeseries"
    },
    {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 0,
-    "fillGradient": 0,
+    "datasource": {
+     "type": "prometheus",
+     "uid": "000000001"
+    },
+    "description": "",
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "fixedColor": "green",
+       "mode": "fixed"
+      },
+      "custom": {
+       "fillOpacity": 70,
+       "lineWidth": 0,
+       "spanNulls": false
+      },
+      "mappings": [
+       {
+        "options": {
+         "0": {
+          "color": "red",
+          "index": 1,
+          "text": "Unhealthy"
+         },
+         "1": {
+          "color": "blue",
+          "index": 0,
+          "text": "OK"
+         }
+        },
+        "type": "value"
+       }
+      ],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "red",
+         "value": null
+        }
+       ]
+      },
+      "unit": "bool_yes_no"
+     },
+     "overrides": []
+    },
     "gridPos": {
-     "h": 10,
+     "h": 12,
      "w": 12,
      "x": 12,
      "y": 9
     },
-    "hiddenSeries": false,
-    "id": 26,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": true,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "nullPointMode": "null",
+    "id": 36,
     "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [
-     {
-      "alias": "Total Usage",
-      "color": "rgb(124, 124, 124)",
-      "linewidth": 5
+     "alignValue": "left",
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "mergeValues": true,
+     "rowHeight": 0.9,
+     "showValue": "never",
+     "tooltip": {
+      "mode": "single",
+      "sort": "none"
      }
-    ],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
+    },
     "targets": [
      {
-      "expr": "sum(kube_pod_container_resource_requests_memory_bytes and on (pod) (kube_pod_container_status_ready)) / sum(kube_node_status_allocatable_memory_bytes) ",
-      "format": "time_series",
-      "intervalFactor": 2,
-      "legendFormat": "Total Usage",
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000001"
+      },
+      "exemplar": true,
+      "expr": "max(federation_health) by (member)",
+      "hide": false,
+      "interval": "",
+      "legendFormat": "{{ member }}",
       "refId": "A"
      },
      {
-      "expr": "sum(kube_pod_container_resource_requests_memory_bytes and on (pod) (kube_pod_container_status_ready)) by (node) / sum(kube_node_status_allocatable_memory_bytes) by (node)",
-      "format": "time_series",
-      "intervalFactor": 2,
-      "legendFormat": "{{node}}",
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000001"
+      },
+      "exemplar": true,
+      "expr": "max(federation_health_check) by (member, check)",
+      "hide": false,
+      "interval": "",
+      "legendFormat": "{{ member }} {{ check }}",
       "refId": "B"
      }
     ],
-    "thresholds": [
-     {
-      "colorMode": "warning",
-      "fill": false,
-      "fillColor": "rgba(234, 184, 57, 0.21)",
-      "line": true,
-      "op": "lt",
-      "value": 0.4
-     }
-    ],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "Cluster utilization",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "percentunit",
-      "label": null,
-      "logBase": 1,
-      "max": "1",
-      "min": "0",
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
+    "title": "Federation health",
+    "type": "state-timeline"
    },
    {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 0,
-    "fillGradient": 0,
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "axisCenteredZero": false,
+       "axisColorMode": "text",
+       "axisLabel": "",
+       "axisPlacement": "auto",
+       "barAlignment": 0,
+       "drawStyle": "line",
+       "fillOpacity": 0,
+       "gradientMode": "none",
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "lineInterpolation": "linear",
+       "lineWidth": 2,
+       "pointSize": 5,
+       "scaleDistribution": {
+        "type": "linear"
+       },
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       },
+       "thresholdsStyle": {
+        "mode": "off"
+       }
+      },
+      "links": [],
+      "mappings": [],
+      "max": 1,
+      "min": 0,
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": null
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      },
+      "unit": "percentunit"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "Num builds"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "max",
+         "value": 20
+        },
+        {
+         "id": "custom.axisPlacement",
+         "value": "hidden"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "Total build attempts"
+       },
+       "properties": [
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "max",
+         "value": 20
+        },
+        {
+         "id": "custom.axisPlacement",
+         "value": "hidden"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "New build attempts"
+       },
+       "properties": [
+        {
+         "id": "custom.fillOpacity",
+         "value": 30
+        },
+        {
+         "id": "unit",
+         "value": "short"
+        },
+        {
+         "id": "max",
+         "value": 20
+        },
+        {
+         "id": "custom.axisPlacement",
+         "value": "hidden"
+        }
+       ]
+      }
+     ]
+    },
     "gridPos": {
      "h": 7,
      "w": 12,
      "x": 0,
      "y": 14
     },
-    "hiddenSeries": false,
     "id": 16,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": true,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 2,
     "links": [],
-    "nullPointMode": "null",
     "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [
-     {},
-     {
-      "alias": "Num builds",
-      "yaxis": 2
+     "legend": {
+      "calcs": [],
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
      },
-     {
-      "alias": "Total build attempts",
-      "yaxis": 2
-     },
-     {
-      "alias": "New build attempts",
-      "fill": 3,
-      "yaxis": 2
+     "tooltip": {
+      "mode": "single",
+      "sort": "none"
      }
-    ],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
+    },
+    "pluginVersion": "8.2.1",
     "targets": [
      {
-      "expr": "sum(delta(binderhub_build_time_seconds_count{status=\"success\", kubernetes_namespace!=\"jhub-ns\"}[10m])) / sum(delta(binderhub_build_time_seconds_count{kubernetes_namespace!=\"jhub-ns\"}[10m]))",
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "exemplar": true,
+      "expr": "sum(increase(binderhub_build_time_seconds_count{status=\"success\", kubernetes_namespace!=\"jhub-ns\"}[10m])) / sum(increase(binderhub_build_time_seconds_count{kubernetes_namespace!=\"jhub-ns\"}[10m]))",
       "format": "time_series",
+      "interval": "",
       "intervalFactor": 2,
       "legendFormat": "Build % Success",
       "refId": "A"
      },
      {
-      "expr": "sum(delta(binderhub_launch_time_seconds_count{status=\"success\", kubernetes_namespace!=\"jhub-ns\"}[10m])) / sum(delta(binderhub_launch_time_seconds_count{status!=\"retry\", kubernetes_namespace!=\"jhub-ns\"}[10m]))",
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "exemplar": true,
+      "expr": "sum(increase(binderhub_launch_time_seconds_count{status=\"success\", kubernetes_namespace!=\"jhub-ns\"}[10m])) / sum(increase(binderhub_launch_time_seconds_count{status!=\"retry\", kubernetes_namespace!=\"jhub-ns\"}[10m]))",
       "format": "time_series",
+      "interval": "",
       "intervalFactor": 2,
       "legendFormat": "Launch % Success",
       "refId": "C"
      },
      {
-      "expr": "sum(delta(binderhub_launch_time_seconds_count{status=\"success\", retries=\"0\", kubernetes_namespace!=\"jhub-ns\"}[10m])) / sum(delta(binderhub_launch_time_seconds_count{status!=\"retry\", kubernetes_namespace!=\"jhub-ns\"}[10m]))",
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "exemplar": true,
+      "expr": "sum(increase(binderhub_launch_time_seconds_count{status=\"success\", retries=\"0\", kubernetes_namespace!=\"jhub-ns\"}[10m])) / sum(increase(binderhub_launch_time_seconds_count{status!=\"retry\", kubernetes_namespace!=\"jhub-ns\"}[10m]))",
       "format": "time_series",
+      "interval": "",
       "intervalFactor": 1,
       "legendFormat": "Launch % Success (first try)",
       "refId": "B"
-     }
-    ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "Launch/Build Success % [10m]",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "decimals": null,
-      "format": "percentunit",
-      "label": null,
-      "logBase": 1,
-      "max": "1",
-      "min": "0",
-      "show": true
      },
      {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": "20",
-      "min": "0",
-      "show": false
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
-   },
-   {
-    "aliasColors": {},
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "-- Mixed --",
-    "description": "Cordoned nodes on each cluster",
-    "fill": 1,
-    "fillGradient": 0,
-    "gridPos": {
-     "h": 8,
-     "w": 12,
-     "x": 12,
-     "y": 19
-    },
-    "hiddenSeries": false,
-    "id": 33,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": true,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
-    "links": [],
-    "maxPerRow": 2,
-    "nullPointMode": "null",
-    "options": {
-     "dataLinks": []
-    },
-    "percentage": false,
-    "pointradius": 2,
-    "points": false,
-    "renderer": "flot",
-    "repeat": "cluster",
-    "repeatDirection": "v",
-    "scopedVars": {
-     "cluster": {
-      "selected": true,
-      "text": "prometheus",
-      "value": "prometheus"
-     }
-    },
-    "seriesOverrides": [
-     {}
-    ],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
-    "targets": [
-     {
-      "datasource": "$cluster",
-      "expr": "sum(kube_node_spec_unschedulable)",
-      "legendFormat": "GKE",
-      "refId": "A"
-     },
-     {
-      "datasource": "GESIS",
-      "expr": "sum(kube_node_spec_unschedulable)",
-      "legendFormat": "GESIS",
-      "refId": "B"
-     },
-     {
-      "datasource": "OVH",
-      "expr": "sum(kube_node_spec_unschedulable)",
-      "legendFormat": "OVH",
-      "refId": "C"
-     },
-     {
-      "datasource": "Turing",
-      "expr": "sum(kube_node_spec_unschedulable)",
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "exemplar": true,
+      "expr": "sum by (status) (increase(binderhub_launch_count_total{status!=\"success\"}[10m])) / ignoring (status) group_left sum(increase(binderhub_launch_count_total[10m])) ",
       "hide": false,
-      "legendFormat": "Turing",
+      "interval": "",
+      "legendFormat": "{{ status }} rejection %",
       "refId": "D"
      }
     ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
-    "title": "Cordoned nodes",
-    "tooltip": {
-     "shared": true,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
+    "title": "Launch/Build Success % [10m]",
+    "type": "timeseries"
    },
    {
-    "aliasColors": {
-     "10th-percentile-failure": "#ef843c",
-     "10th-percentile-success": "#b7dbab",
-     "25th-percentile-failure": "#99440a",
-     "25th-percentile-success": "#7eb26d",
-     "50th-percentile-failure": "#ea6460",
-     "50th-percentile-success": "#7eb26d",
-     "75th-percentile-failure": "#bf1b00",
-     "75th-percentile-success": "#508642",
-     "90th-percentile-failure": "#58140c",
-     "90th-percentile-success": "#3f6833"
+    "datasource": {
+     "uid": "$cluster"
     },
-    "bars": false,
-    "dashLength": 10,
-    "dashes": false,
-    "datasource": "$cluster",
-    "fill": 1,
-    "fillGradient": 0,
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "axisCenteredZero": false,
+       "axisColorMode": "text",
+       "axisLabel": "",
+       "axisPlacement": "auto",
+       "barAlignment": 0,
+       "drawStyle": "line",
+       "fillOpacity": 10,
+       "gradientMode": "none",
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "scaleDistribution": {
+        "log": 2,
+        "type": "log"
+       },
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       },
+       "thresholdsStyle": {
+        "mode": "off"
+       }
+      },
+      "links": [],
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": null
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      },
+      "unit": "s"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "10th-percentile-failure"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#ef843c",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "10th-percentile-success"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#b7dbab",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "25th-percentile-failure"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#99440a",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "25th-percentile-success"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#7eb26d",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "50th-percentile-failure"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#ea6460",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "50th-percentile-success"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#7eb26d",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "75th-percentile-failure"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#bf1b00",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "75th-percentile-success"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#508642",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "90th-percentile-failure"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#58140c",
+          "mode": "fixed"
+         }
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "90th-percentile-success"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "#3f6833",
+          "mode": "fixed"
+         }
+        }
+       ]
+      }
+     ]
+    },
     "gridPos": {
      "h": 8,
      "w": 12,
      "x": 0,
      "y": 21
     },
-    "hiddenSeries": false,
     "id": 28,
-    "legend": {
-     "avg": false,
-     "current": false,
-     "max": false,
-     "min": false,
-     "show": true,
-     "total": false,
-     "values": false
-    },
-    "lines": true,
-    "linewidth": 1,
     "links": [],
-    "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "legend": {
+      "calcs": [],
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "none"
+     }
     },
-    "percentage": false,
-    "pointradius": 5,
-    "points": false,
-    "renderer": "flot",
-    "seriesOverrides": [],
-    "spaceLength": 10,
-    "stack": false,
-    "steppedLine": false,
+    "pluginVersion": "8.2.1",
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "histogram_quantile(0.1, sum(rate(binderhub_launch_time_seconds_bucket[5m])) without (instance, repo, provider)) > 0",
       "format": "time_series",
       "hide": true,
@@ -795,6 +1007,9 @@
       "refId": "A"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "histogram_quantile(0.25, sum(rate(binderhub_launch_time_seconds_bucket[5m])) without (instance, repo, provider)) > 0",
       "format": "time_series",
       "hide": true,
@@ -803,6 +1018,9 @@
       "refId": "B"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "histogram_quantile(0.5, sum(rate(binderhub_launch_time_seconds_bucket[5m])) without (retries, kubernetes_node, instance, repo, provider)) > 0",
       "format": "time_series",
       "hide": false,
@@ -812,6 +1030,9 @@
       "refId": "C"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "histogram_quantile(0.75, sum(rate(binderhub_launch_time_seconds_bucket[5m])) without (instance, repo, provider)) > 0",
       "format": "time_series",
       "hide": true,
@@ -820,6 +1041,9 @@
       "refId": "D"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "histogram_quantile(0.9, sum(rate(binderhub_launch_time_seconds_bucket[5m])) without (instance, kubernetes_node, repo, provider)) > 0",
       "format": "time_series",
       "hide": false,
@@ -828,6 +1052,9 @@
       "refId": "E"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "histogram_quantile(0.99, sum(rate(binderhub_launch_time_seconds_bucket[5m])) without (instance, kubernetes_node, repo, provider)) > 0",
       "format": "time_series",
       "hide": false,
@@ -836,110 +1063,134 @@
       "refId": "F"
      }
     ],
-    "thresholds": [],
-    "timeFrom": null,
-    "timeRegions": [],
-    "timeShift": null,
     "title": "Launch time percentiles",
-    "tooltip": {
-     "shared": false,
-     "sort": 0,
-     "value_type": "individual"
-    },
-    "type": "graph",
-    "xaxis": {
-     "buckets": null,
-     "mode": "time",
-     "name": null,
-     "show": true,
-     "values": []
-    },
-    "yaxes": [
-     {
-      "format": "s",
-      "label": null,
-      "logBase": 2,
-      "max": null,
-      "min": null,
-      "show": true
-     },
-     {
-      "format": "short",
-      "label": null,
-      "logBase": 1,
-      "max": null,
-      "min": null,
-      "show": true
-     }
-    ],
-    "yaxis": {
-     "align": false,
-     "alignLevel": null
-    }
+    "type": "timeseries"
    },
    {
-    "cards": {
-     "cardPadding": null,
-     "cardRound": null
+    "datasource": {
+     "uid": "$cluster"
     },
-    "color": {
-     "cardColor": "#b4ff00",
-     "colorScale": "sqrt",
-     "colorScheme": "interpolateSpectral",
-     "exponent": 0.5,
-     "max": null,
-     "min": 0,
-     "mode": "spectrum"
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "axisCenteredZero": false,
+       "axisColorMode": "text",
+       "axisLabel": "",
+       "axisPlacement": "auto",
+       "barAlignment": 0,
+       "drawStyle": "line",
+       "fillOpacity": 0,
+       "gradientMode": "none",
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "scaleDistribution": {
+        "type": "linear"
+       },
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       },
+       "thresholdsStyle": {
+        "mode": "line"
+       }
+      },
+      "links": [],
+      "mappings": [],
+      "max": 1,
+      "min": 0,
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "orange",
+         "value": null
+        },
+        {
+         "color": "transparent",
+         "value": 0.4
+        }
+       ]
+      },
+      "unit": "percentunit"
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "Total Usage"
+       },
+       "properties": [
+        {
+         "id": "color",
+         "value": {
+          "fixedColor": "rgb(124, 124, 124)",
+          "mode": "fixed"
+         }
+        },
+        {
+         "id": "custom.lineWidth",
+         "value": 5
+        }
+       ]
+      }
+     ]
     },
-    "dataFormat": "timeseries",
-    "datasource": "$cluster",
     "gridPos": {
-     "h": 6,
+     "h": 10,
      "w": 12,
      "x": 12,
-     "y": 27
+     "y": 21
     },
-    "heatmap": {},
-    "hideZeroBuckets": false,
-    "highlightCards": true,
-    "id": 25,
-    "legend": {
-     "show": true
-    },
+    "id": 26,
     "links": [],
-    "reverseYBuckets": false,
+    "options": {
+     "legend": {
+      "calcs": [],
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "multi",
+      "sort": "none"
+     }
+    },
+    "pluginVersion": "8.2.1",
     "targets": [
      {
-      "expr": "(time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60",
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "expr": "sum(kube_pod_container_resource_requests_memory_bytes and on (pod) (kube_pod_container_status_ready)) / sum(kube_node_status_allocatable_memory_bytes) ",
       "format": "time_series",
-      "interval": "30m",
       "intervalFactor": 2,
+      "legendFormat": "Total Usage",
       "refId": "A"
+     },
+     {
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "expr": "sum(kube_pod_container_resource_requests_memory_bytes and on (pod) (kube_pod_container_status_ready)) by (node) / sum(kube_node_status_allocatable_memory_bytes) by (node)",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "{{node}}",
+      "refId": "B"
      }
     ],
-    "title": "Distribution of user pod age over time (max 2 hr)",
-    "tooltip": {
-     "show": true,
-     "showHistogram": true
-    },
-    "type": "heatmap",
-    "xAxis": {
-     "show": true
-    },
-    "xBucketNumber": null,
-    "xBucketSize": "30m",
-    "yAxis": {
-     "decimals": null,
-     "format": "m",
-     "logBase": 1,
-     "max": "120",
-     "min": null,
-     "show": true,
-     "splitFactor": null
-    },
-    "yBucketBound": "auto",
-    "yBucketNumber": null,
-    "yBucketSize": 5
+    "title": "Cluster utilization",
+    "type": "timeseries"
    },
    {
     "aliasColors": {
@@ -957,7 +1208,15 @@
     "bars": false,
     "dashLength": 10,
     "dashes": false,
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "links": []
+     },
+     "overrides": []
+    },
     "fill": 1,
     "fillGradient": 0,
     "gridPos": {
@@ -982,9 +1241,10 @@
     "links": [],
     "nullPointMode": "null",
     "options": {
-     "dataLinks": []
+     "alertThreshold": true
     },
     "percentage": false,
+    "pluginVersion": "9.4.7",
     "pointradius": 2,
     "points": true,
     "renderer": "flot",
@@ -994,6 +1254,9 @@
     "steppedLine": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "histogram_quantile(0.1, sum(rate(binderhub_build_time_seconds_bucket[2m])) without (instance, provider, repo)) > 0",
       "format": "time_series",
       "hide": true,
@@ -1002,6 +1265,9 @@
       "refId": "A"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "histogram_quantile(0.25, sum(rate(binderhub_build_time_seconds_bucket[2m])) without (instance, provider, repo)) > 0",
       "format": "time_series",
       "hide": true,
@@ -1010,6 +1276,9 @@
       "refId": "B"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "histogram_quantile(0.5, sum(rate(binderhub_build_time_seconds_bucket[2m])) without (instance, provider, repo)) > 0",
       "format": "time_series",
       "intervalFactor": 2,
@@ -1017,6 +1286,9 @@
       "refId": "C"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "histogram_quantile(0.75, sum(rate(binderhub_build_time_seconds_bucket[2m])) without (instance, provider, repo)) > 0",
       "format": "time_series",
       "hide": true,
@@ -1025,6 +1297,9 @@
       "refId": "D"
      },
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "histogram_quantile(0.9, sum(rate(binderhub_build_time_seconds_bucket[2m])) without (instance, provider, repo)) > 0",
       "format": "time_series",
       "intervalFactor": 2,
@@ -1033,9 +1308,7 @@
      }
     ],
     "thresholds": [],
-    "timeFrom": null,
     "timeRegions": [],
-    "timeShift": null,
     "title": "Build time percentiles",
     "tooltip": {
      "shared": true,
@@ -1044,113 +1317,169 @@
     },
     "type": "graph",
     "xaxis": {
-     "buckets": null,
      "mode": "time",
-     "name": null,
      "show": true,
      "values": []
     },
     "yaxes": [
      {
       "format": "s",
-      "label": null,
       "logBase": 2,
-      "max": null,
-      "min": null,
       "show": true
      },
      {
       "format": "short",
-      "label": null,
       "logBase": 1,
-      "max": null,
-      "min": null,
       "show": true
      }
     ],
     "yaxis": {
-     "align": false,
-     "alignLevel": null
+     "align": false
     }
    },
    {
-    "cards": {
-     "cardPadding": null,
-     "cardRound": null
+    "datasource": {
+     "type": "datasource",
+     "uid": "-- Mixed --"
     },
-    "color": {
-     "cardColor": "#b4ff00",
-     "colorScale": "sqrt",
-     "colorScheme": "interpolateSpectral",
-     "exponent": 0.5,
-     "mode": "spectrum"
+    "description": "Cordoned nodes on each cluster",
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "axisCenteredZero": false,
+       "axisColorMode": "text",
+       "axisLabel": "",
+       "axisPlacement": "auto",
+       "barAlignment": 0,
+       "drawStyle": "line",
+       "fillOpacity": 10,
+       "gradientMode": "none",
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "scaleDistribution": {
+        "type": "linear"
+       },
+       "showPoints": "never",
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       },
+       "thresholdsStyle": {
+        "mode": "off"
+       }
+      },
+      "links": [],
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": null
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      },
+      "unit": "short"
+     },
+     "overrides": []
     },
-    "dataFormat": "timeseries",
-    "datasource": "$cluster",
     "gridPos": {
-     "h": 6,
+     "h": 8,
      "w": 12,
      "x": 12,
-     "y": 33
+     "y": 31
     },
-    "heatmap": {},
-    "hideZeroBuckets": false,
-    "highlightCards": true,
-    "id": 24,
-    "legend": {
-     "show": true
-    },
+    "id": 33,
     "links": [],
-    "reverseYBuckets": false,
+    "options": {
+     "legend": {
+      "calcs": [],
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "mode": "single",
+      "sort": "none"
+     }
+    },
+    "pluginVersion": "8.2.1",
+    "repeat": "cluster",
+    "repeatDirection": "v",
     "targets": [
      {
-      "expr": "(time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60",
-      "format": "time_series",
-      "interval": "30m",
-      "intervalFactor": 2,
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "expr": "sum(kube_node_spec_unschedulable)",
+      "legendFormat": "GKE",
       "refId": "A"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000002"
+      },
+      "expr": "sum(kube_node_spec_unschedulable)",
+      "legendFormat": "GESIS",
+      "refId": "B"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000004"
+      },
+      "expr": "sum(kube_node_spec_unschedulable)",
+      "legendFormat": "OVH",
+      "refId": "C"
      }
     ],
-    "title": "Distribution of user pod age over time (stale pods)",
-    "tooltip": {
-     "show": true,
-     "showHistogram": true
-    },
-    "type": "heatmap",
-    "xAxis": {
-     "show": true
-    },
-    "xBucketNumber": null,
-    "xBucketSize": "30m",
-    "yAxis": {
-     "decimals": null,
-     "format": "m",
-     "logBase": 1,
-     "max": null,
-     "min": null,
-     "show": true,
-     "splitFactor": null
-    },
-    "yBucketBound": "auto",
-    "yBucketNumber": null,
-    "yBucketSize": 60
+    "title": "Cordoned nodes",
+    "type": "timeseries"
    },
    {
-    "cards": {
-     "cardPadding": null,
-     "cardRound": null
-    },
+    "cards": {},
     "color": {
      "cardColor": "#b4ff00",
      "colorScale": "sqrt",
      "colorScheme": "interpolateSpectral",
      "exponent": 0.5,
-     "max": null,
      "min": 0,
      "mode": "spectrum"
     },
     "dataFormat": "timeseries",
-    "datasource": "$cluster",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "scaleDistribution": {
+        "type": "linear"
+       }
+      }
+     },
+     "overrides": []
+    },
     "gridPos": {
      "h": 6,
      "w": 12,
@@ -1165,9 +1494,60 @@
      "show": true
     },
     "links": [],
+    "options": {
+     "calculate": true,
+     "calculation": {
+      "xBuckets": {
+       "mode": "size",
+       "value": "10m"
+      },
+      "yBuckets": {
+       "mode": "size",
+       "value": "5"
+      }
+     },
+     "cellGap": 2,
+     "cellValues": {},
+     "color": {
+      "exponent": 0.5,
+      "fill": "#b4ff00",
+      "min": 0,
+      "mode": "scheme",
+      "reverse": false,
+      "scale": "exponential",
+      "scheme": "Spectral",
+      "steps": 128
+     },
+     "exemplars": {
+      "color": "rgba(255,0,255,0.7)"
+     },
+     "filterValues": {
+      "le": 1e-09
+     },
+     "legend": {
+      "show": true
+     },
+     "rowsFrame": {
+      "layout": "auto"
+     },
+     "showValue": "never",
+     "tooltip": {
+      "show": true,
+      "yHistogram": true
+     },
+     "yAxis": {
+      "axisPlacement": "left",
+      "reverse": false,
+      "unit": "m"
+     }
+    },
+    "pluginVersion": "9.4.7",
     "reverseYBuckets": false,
     "targets": [
      {
+      "datasource": {
+       "uid": "$cluster"
+      },
       "expr": "(time() - kube_pod_created{pod=~\"^build-.*\"}) / 60",
       "format": "time_series",
       "interval": "",
@@ -1185,24 +1565,263 @@
     "xAxis": {
      "show": true
     },
-    "xBucketNumber": null,
     "xBucketSize": "10m",
     "yAxis": {
-     "decimals": null,
      "format": "m",
      "logBase": 1,
-     "max": null,
-     "min": null,
-     "show": true,
-     "splitFactor": null
+     "show": true
     },
     "yBucketBound": "auto",
-    "yBucketNumber": null,
     "yBucketSize": 5
+   },
+   {
+    "cards": {},
+    "color": {
+     "cardColor": "#b4ff00",
+     "colorScale": "sqrt",
+     "colorScheme": "interpolateSpectral",
+     "exponent": 0.5,
+     "min": 0,
+     "mode": "spectrum"
+    },
+    "dataFormat": "timeseries",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "scaleDistribution": {
+        "type": "linear"
+       }
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 6,
+     "w": 12,
+     "x": 12,
+     "y": 39
+    },
+    "heatmap": {},
+    "hideZeroBuckets": false,
+    "highlightCards": true,
+    "id": 25,
+    "legend": {
+     "show": true
+    },
+    "links": [],
+    "options": {
+     "calculate": true,
+     "calculation": {
+      "xBuckets": {
+       "mode": "size",
+       "value": "30m"
+      },
+      "yBuckets": {
+       "mode": "size",
+       "value": "5"
+      }
+     },
+     "cellGap": 2,
+     "cellValues": {},
+     "color": {
+      "exponent": 0.5,
+      "fill": "#b4ff00",
+      "min": 0,
+      "mode": "scheme",
+      "reverse": false,
+      "scale": "exponential",
+      "scheme": "Spectral",
+      "steps": 128
+     },
+     "exemplars": {
+      "color": "rgba(255,0,255,0.7)"
+     },
+     "filterValues": {
+      "le": 1e-09
+     },
+     "legend": {
+      "show": true
+     },
+     "rowsFrame": {
+      "layout": "auto"
+     },
+     "showValue": "never",
+     "tooltip": {
+      "show": true,
+      "yHistogram": true
+     },
+     "yAxis": {
+      "axisPlacement": "left",
+      "max": "120",
+      "reverse": false,
+      "unit": "m"
+     }
+    },
+    "pluginVersion": "9.4.7",
+    "reverseYBuckets": false,
+    "targets": [
+     {
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "expr": "(time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60",
+      "format": "time_series",
+      "interval": "30m",
+      "intervalFactor": 2,
+      "refId": "A"
+     }
+    ],
+    "title": "Distribution of user pod age over time (max 2 hr)",
+    "tooltip": {
+     "show": true,
+     "showHistogram": true
+    },
+    "type": "heatmap",
+    "xAxis": {
+     "show": true
+    },
+    "xBucketSize": "30m",
+    "yAxis": {
+     "format": "m",
+     "logBase": 1,
+     "max": "120",
+     "show": true
+    },
+    "yBucketBound": "auto",
+    "yBucketSize": 5
+   },
+   {
+    "cards": {},
+    "color": {
+     "cardColor": "#b4ff00",
+     "colorScale": "sqrt",
+     "colorScheme": "interpolateSpectral",
+     "exponent": 0.5,
+     "mode": "spectrum"
+    },
+    "dataFormat": "timeseries",
+    "datasource": {
+     "uid": "$cluster"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "scaleDistribution": {
+        "type": "linear"
+       }
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 6,
+     "w": 12,
+     "x": 12,
+     "y": 45
+    },
+    "heatmap": {},
+    "hideZeroBuckets": false,
+    "highlightCards": true,
+    "id": 24,
+    "legend": {
+     "show": true
+    },
+    "links": [],
+    "options": {
+     "calculate": true,
+     "calculation": {
+      "xBuckets": {
+       "mode": "size",
+       "value": "30m"
+      },
+      "yBuckets": {
+       "mode": "size",
+       "value": "60"
+      }
+     },
+     "cellGap": 2,
+     "cellValues": {},
+     "color": {
+      "exponent": 0.5,
+      "fill": "#b4ff00",
+      "mode": "scheme",
+      "reverse": false,
+      "scale": "exponential",
+      "scheme": "Spectral",
+      "steps": 128
+     },
+     "exemplars": {
+      "color": "rgba(255,0,255,0.7)"
+     },
+     "filterValues": {
+      "le": 1e-09
+     },
+     "legend": {
+      "show": true
+     },
+     "rowsFrame": {
+      "layout": "auto"
+     },
+     "showValue": "never",
+     "tooltip": {
+      "show": true,
+      "yHistogram": true
+     },
+     "yAxis": {
+      "axisPlacement": "left",
+      "reverse": false,
+      "unit": "m"
+     }
+    },
+    "pluginVersion": "9.4.7",
+    "reverseYBuckets": false,
+    "targets": [
+     {
+      "datasource": {
+       "uid": "$cluster"
+      },
+      "expr": "(time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60",
+      "format": "time_series",
+      "interval": "30m",
+      "intervalFactor": 2,
+      "refId": "A"
+     }
+    ],
+    "title": "Distribution of user pod age over time (stale pods)",
+    "tooltip": {
+     "show": true,
+     "showHistogram": true
+    },
+    "type": "heatmap",
+    "xAxis": {
+     "show": true
+    },
+    "xBucketSize": "30m",
+    "yAxis": {
+     "format": "m",
+     "logBase": 1,
+     "show": true
+    },
+    "yBucketBound": "auto",
+    "yBucketSize": 60
    }
   ],
-  "refresh": "1m",
-  "schemaVersion": 22,
+  "refresh": "",
+  "revision": 1,
+  "schemaVersion": 38,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -1259,31 +1878,46 @@
   "timezone": "",
   "title": "1. Overview",
   "uid": "3SpLQinmk",
-  "variables": {
-   "list": []
-  },
-  "version": 11
+  "version": 24,
+  "weekStart": ""
  },
  "meta": {
-  "canAdmin": true,
-  "canEdit": true,
-  "canSave": true,
-  "canStar": true,
+  "annotationsPermissions": {
+   "dashboard": {
+    "canAdd": true,
+    "canDelete": true,
+    "canEdit": true
+   },
+   "organization": {
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
+   }
+  },
+  "canAdmin": false,
+  "canDelete": false,
+  "canEdit": false,
+  "canSave": false,
+  "canStar": false,
   "created": "2020-09-22T09:29:52Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
   "folderId": 0,
   "folderTitle": "General",
+  "folderUid": "",
   "folderUrl": "",
   "hasAcl": false,
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
+  "publicDashboardAccessToken": "",
+  "publicDashboardEnabled": false,
+  "publicDashboardUid": "",
   "slug": "1-overview",
   "type": "db",
-  "updated": "2021-09-10T11:08:22Z",
+  "updated": "2023-04-25T13:55:51Z",
   "updatedBy": "admin",
   "url": "/d/3SpLQinmk/1-overview",
-  "version": 11
+  "version": 24
  }
 }
