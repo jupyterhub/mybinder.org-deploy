@@ -17,7 +17,7 @@ binderhub:
       memory_request: "2G"
 
     LaunchQuota:
-      total_quota: 10
+      total_quota: 40
 
     ExternalRegistryHelper:
       service_url: http://curvenote-binderhub-container-registry-helper:8080
@@ -184,9 +184,9 @@ binderhub:
         enabled: false
       userScheduler:
         enabled: false
-    cull:
-      # maxAge: 1 hour since we're just testing
-      maxAge: 3600
+    # cull:
+    #   # maxAge: 1 hour since we're just testing
+    #   maxAge: 3600
 
   imageCleaner:
     # TODO: priorityClassName: binderhub-core
@@ -197,8 +197,8 @@ binderhub:
     imageGCThresholdType: "absolute"
 
 cryptnono:
-  # TODO: priorityClassName: binderhub-core
   enabled: true
+  priorityClassName: binderhub-core
 
 grafana:
   enabled: false
