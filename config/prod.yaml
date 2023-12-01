@@ -241,6 +241,6 @@ federationRedirect:
       versions: https://ovh2.mybinder.org/versions
     curvenote:
       url: https://binder.curvenote.dev
-      weight: 1
+      weight: 10
       health: https://binder.curvenote.dev/health
       versions: https://binder.curvenote.dev/versions
