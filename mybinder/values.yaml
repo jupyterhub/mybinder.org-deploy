@@ -9,7 +9,7 @@ tags: {}
 etcJupyter:
   jupyter_notebook_config.json:
     NotebookApp:
-      allow_origin: "*"
+      allow_origin: '*'
       tornado_settings:
         trust_xheaders: true
       # shutdown the server after no activity
@@ -37,10 +37,10 @@ binderhub:
 
   resources:
     requests:
-      cpu: "0.25"
+      cpu: '0.25'
       memory: 1Gi
     limits:
-      cpu: "2"
+      cpu: '2'
       memory: 1Gi
 
   hpa:
@@ -134,7 +134,7 @@ binderhub:
       use_registry: true
       per_repo_quota: 100
       per_repo_quota_higher: 200
-      cors_allow_origin: "*"
+      cors_allow_origin: '*'
 
       banner_message: |
         <a class="btn" style="width:fit-content;height:fit-content;padding:10px;background-color:#e66581;color:white;font-weight:bold;position:absolute;top:0px;bottom:0px;margin:auto 0;right:4px;"
@@ -143,7 +143,7 @@ binderhub:
             🤍 Donate to mybinder.org!
         </a>
         <div style="text-align:center;">
-        Thanks to <a href="https://www.ovh.com/">OVH</a> and <a href="https://notebooks.gesis.org">GESIS Notebooks</a> for supporting us! 🎉
+        Thanks to <a href="https://www.ovh.com/">OVH</a>, <a href="https://notebooks.gesis.org">GESIS Notebooks</a> and <a href="https://curvenote.com">Curvenote</a> for supporting us! 🎉
         </div>
         <div style="text-align:center;">
         mybinder.org has updated the base image to Ubuntu 22.04! See the <a href="https://repo2docker.readthedocs.io/en/latest/howto/breaking_changes.html">upgrade guide</a> for details.
@@ -183,8 +183,8 @@ binderhub:
           }
     KubernetesBuildExecutor:
       build_image: quay.io/jupyterhub/repo2docker:2023.06.0-41.g57d229e
-      memory_limit: "3G"
-      memory_request: "1G"
+      memory_limit: '3G'
+      memory_request: '1G'
 
   extraConfig:
     # Send Events to StackDriver on Google Cloud
@@ -307,10 +307,10 @@ binderhub:
   dind:
     resources:
       requests:
-        cpu: "0.5"
+        cpu: '0.5'
         memory: 1Gi
       limits:
-        cpu: "4"
+        cpu: '4'
         memory: 4Gi
 
   imageCleaner:
@@ -333,10 +333,10 @@ binderhub:
         enabled: true
       resources:
         requests:
-          cpu: "0.25"
+          cpu: '0.25'
           memory: 1Gi
         limits:
-          cpu: "2"
+          cpu: '2'
           memory: 1Gi
       extraConfig:
         neverRestart: |
@@ -347,18 +347,18 @@ binderhub:
           c.JupyterHub.authenticate_prometheus = False
       config:
         BinderSpawner:
-          cors_allow_origin: "*"
+          cors_allow_origin: '*'
         JupyterHub:
           # only serve the hub's API, not full UI
-          hub_routespec: "/hub/api/"
+          hub_routespec: '/hub/api/'
         Proxy:
           # default-route to our nginx "Binder not found" service
           extra_routes:
-            "/": "http://proxy-patches"
+            '/': 'http://proxy-patches'
       service:
         annotations:
-          prometheus.io/scrape: "true"
-          prometheus.io/path: "/hub/metrics"
+          prometheus.io/scrape: 'true'
+          prometheus.io/path: '/hub/metrics'
     proxy:
       service:
         type: ClusterIP
@@ -368,10 +368,10 @@ binderhub:
         resources:
           requests:
             memory: 320Mi
-            cpu: "0.1"
+            cpu: '0.1'
           limits:
             memory: 320Mi
-            cpu: "0.5"
+            cpu: '0.5'
         # FIXME: move to errorTarget/defaultTarget when hub chart dependency is bumped
         # to include https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2079
         # this still works, though, as repeatedly specifying CLI flags overrides earlier values
@@ -386,7 +386,7 @@ binderhub:
       annotations:
         ingress.kubernetes.io/proxy-body-size: 64m
         kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "true"
+        kubernetes.io/tls-acme: 'true'
     scheduling:
       userScheduler:
         enabled: true
@@ -464,9 +464,9 @@ ingress-nginx:
         cpu: 800m
         memory: 500Mi
     tolerations:
-      - key: "node.kubernetes.io/unschedulable"
-        operator: "Exists"
-        effect: "NoExecute"
+      - key: 'node.kubernetes.io/unschedulable'
+        operator: 'Exists'
+        effect: 'NoExecute'
         tolerationSeconds: 30
     affinity:
       podAntiAffinity:
@@ -496,8 +496,8 @@ ingress-nginx:
       enabled: true
       service:
         annotations:
-          prometheus.io/scrape: "true"
-          prometheus.io/port: "10254"
+          prometheus.io/scrape: 'true'
+          prometheus.io/port: '10254'
     service:
       # Preserve client IPs
       externalTrafficPolicy: Local
@@ -509,7 +509,7 @@ redirector:
   ingress:
     annotations:
       kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
+      kubernetes.io/tls-acme: 'true'
     tls:
       secretName: kubelego-tls-redirector
 
@@ -517,7 +517,7 @@ static:
   ingress:
     annotations:
       kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
+      kubernetes.io/tls-acme: 'true'
     tls:
       secretName: kubelego-tls-static
 
@@ -528,7 +528,7 @@ grafana:
     enabled: true
     annotations:
       kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
+      kubernetes.io/tls-acme: 'true'
   # deploymentStrategy.type is set to Recreate as we have storage that can only
   # be attached once, we can't have two replicas as RollingUpdate leads to.
   deploymentStrategy:
@@ -561,7 +561,7 @@ prometheus:
   server:
     podLabels:
       # needs access to the Hub API
-      hub.jupyter.org/network-access-hub: "true"
+      hub.jupyter.org/network-access-hub: 'true'
     strategy:
       # The default of RollingUpdate fail because attached storage can only be
       # mounted on one pod, so we need to use Recreate that first shut down the
@@ -571,7 +571,7 @@ prometheus:
       enabled: true
       annotations:
         kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "true"
+        kubernetes.io/tls-acme: 'true'
 
   # make sure we collect metrics on pods by app/component at least
   kube-state-metrics:
@@ -606,7 +606,7 @@ analyticsPublisher:
     logName: binderhub-events-text
   image:
     name: jupyterhub/mybinder.org-analytics-publisher
-    tag: "set-by-chartpress"
+    tag: 'set-by-chartpress'
   cloudCosts:
     # All billing info goes into same bucket in prod, to which staging has access
     enabled: true
@@ -624,7 +624,7 @@ analyticsPublisher:
 
 # this is defined in secrets/ for the OVH cluster
 eventsArchiver:
-  serviceAccountKey: ""
+  serviceAccountKey: ''
 
 federationRedirect:
   enabled: false
@@ -638,14 +638,14 @@ federationRedirect:
       memory: 250Mi
   image:
     name: jupyterhub/mybinder.org-federation-redirect
-    tag: "set-by-chartpress"
+    tag: 'set-by-chartpress'
   check:
     period: 15
     jitter: 0.1
     retries: 5
     timeout: 5
     failed_period: 90
-  load_balancer: "rendezvous"
+  load_balancer: 'rendezvous'
   pod_headroom: 10
   hosts: {}
   nodeSelector: {}
@@ -682,4 +682,4 @@ awsEcrRegistryCleaner:
   serviceAccount:
     name: binderhub-ecr-registry-cleaner
     annotations: {}
-  priorityClassName: ""
+  priorityClassName: ''
