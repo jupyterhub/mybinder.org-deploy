@@ -17,7 +17,7 @@ binderhub:
       memory_request: "2G"
 
     LaunchQuota:
-      total_quota: 40
+      total_quota: 50
 
     ExternalRegistryHelper:
       service_url: http://curvenote-binderhub-container-registry-helper:8080
