@@ -524,7 +524,7 @@ def main():
                 raise Exception("Cloud cluster not recognised!")
 
     if args.stage in ("all", "networkban"):
-        update_networkbans(cluster, args.dry_run, args.diff)
+        update_networkbans(cluster, args.dry_run)
     if args.stage in ("all", "system"):
         deploy_system_charts(args.release, args.name, args.dry_run, args.diff)
     if args.stage in ("all", "certmanager"):
