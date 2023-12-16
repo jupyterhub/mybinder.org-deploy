@@ -1,6 +1,10 @@
 # values ref: https://github.com/yuvipanda/cryptnono/blob/main/cryptnono/values.yaml
 cryptnono:
   enabled: true
+  detectors:
+    execwhacker:
+      metrics:
+        enabled: true
 
 imagePullSecrets:
 
