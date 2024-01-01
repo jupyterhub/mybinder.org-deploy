@@ -89,7 +89,7 @@ jobs:
 
       - name: Upload plan
         if: steps.terraform-plan.outputs.apply == 'true'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.TFPLAN }}
           path: ${{ env.WORKDIR }}/${{ env.TFPLAN }}.enc
