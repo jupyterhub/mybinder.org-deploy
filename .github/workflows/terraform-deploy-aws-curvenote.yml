@@ -122,7 +122,7 @@ jobs:
           role-session-name: terraform-apply
 
       - name: Download plan
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ env.TFPLAN }}
           path: ${{ env.WORKDIR }}
