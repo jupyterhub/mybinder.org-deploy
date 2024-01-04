@@ -5,6 +5,8 @@ cryptnono:
     execwhacker:
       metrics:
         enabled: true
+      containerdHostPath: /run/containerd
+      dockerHostPath: /run/dind
 
 imagePullSecrets:
 
