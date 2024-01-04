@@ -5,8 +5,9 @@ cryptnono:
     execwhacker:
       metrics:
         enabled: true
-      containerdHostPath: /run/containerd
-      # TODO: Currently disabled as isn't present on all nodes, only on nodes running builders
+      # execwhacker needs access to containerd, and docker on build hosts, to lookup the container.
+      # Set these in the configurations for each deployment
+      # containerdHostPath: /run/containerd
       # dockerHostPath: /run/dind
 
 imagePullSecrets:
