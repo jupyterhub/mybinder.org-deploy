@@ -91,6 +91,13 @@ binderhub:
     imageGCThresholdLow: 30e9
     imageGCThresholdType: "absolute"
 
+cryptnono:
+  detectors:
+    execwhacker:
+      containerdHostPath: /run/containerd
+      # TODO: Currently disabled as isn't present on all nodes, only on nodes running builders
+      # dockerHostPath: /run/dind
+
 grafana:
   nodeSelector: *coreNodeSelector
   ingress:

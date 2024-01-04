@@ -199,6 +199,10 @@ binderhub:
 cryptnono:
   enabled: true
   priorityClassName: binderhub-core
+  detectors:
+    execwhacker:
+      containerdHostPath: /run/containerd
+      dockerHostPath: /run/dind
 
 grafana:
   enabled: false
