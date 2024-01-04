@@ -6,7 +6,8 @@ cryptnono:
       metrics:
         enabled: true
       containerdHostPath: /run/containerd
-      dockerHostPath: /run/dind
+      # TODO: Currently disabled as isn't present on all nodes, only on nodes running builders
+      # dockerHostPath: /run/dind
 
 imagePullSecrets:
 
