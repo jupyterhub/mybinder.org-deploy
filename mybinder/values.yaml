@@ -6,9 +6,9 @@ cryptnono:
       metrics:
         enabled: true
       # execwhacker needs access to containerd, and docker on build hosts, to lookup the container.
-      # Set these in the configurations for each deployment
-      # containerdHostPath: /run/containerd
-      # dockerHostPath: /run/dind
+      # Override if K8s uses a different path for containerd
+      containerdHostPath: /run/containerd/containerd.sock
+      dockerHostPath: /run/dind/docker.sock
 
 imagePullSecrets:
 
