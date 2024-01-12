@@ -38,10 +38,10 @@ dependencies:
     condition: grafana.enabled
 
   # cryptnono, counters crypto mining
-  # Source code: https://github.com/yuvipanda/cryptnono/
+  # Source code: https://github.com/cryptnono/cryptnono/
   - name: cryptnono
     version: "0.3.1-0.dev.git.124.ha9d46de"
-    repository: https://yuvipanda.github.io/cryptnono/
+    repository: https://cryptnono.github.io/cryptnono/
     condition: cryptnono.enabled
 
   # cluster autoscaler, autoscales k8s nodes, required for EKS clusters that
