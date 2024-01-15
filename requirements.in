@@ -1,4 +1,4 @@
-chartpress==2.1.*
+chartpress==2.2.*
 kubernetes
 pytest
 pytest-rerunfailures
