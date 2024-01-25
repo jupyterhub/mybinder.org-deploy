@@ -190,7 +190,7 @@ binderhub:
             })();
           }
     KubernetesBuildExecutor:
-      build_image: quay.io/jupyterhub/repo2docker:2023.06.0-41.g57d229e
+      build_image: quay.io/jupyterhub/repo2docker:2023.06.0-64.g6aad2bc
       memory_limit: "3G"
       memory_request: "1G"
 
