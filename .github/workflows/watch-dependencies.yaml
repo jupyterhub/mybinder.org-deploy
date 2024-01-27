@@ -167,10 +167,9 @@ jobs:
           - chart_dep_name: cryptnono
             chart_dep_chart_changelog_url: ""
             chart_dep_app_changelog_url: ""
-            chart_dep_source_url: "https://github.com/yuvipanda/cryptnono/"
+            chart_dep_source_url: "https://github.com/cryptnono/cryptnono/"
             chart_dep_devel_flag: "--devel"
-            github_repo: ""
-
+            github_repo: cryptnono/cryptnono
     steps:
       - uses: actions/checkout@v4
 
