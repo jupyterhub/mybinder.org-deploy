@@ -1,6 +1,7 @@
 """
 Produces daily summaries of GCP spending data.
 """
+
 import argparse
 import csv
 import io
