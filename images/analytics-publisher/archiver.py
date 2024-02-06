@@ -1,6 +1,7 @@
 """
 Read event logs from stackdriver & export them to Google Cloud Storage
 """
+
 import argparse
 import json
 import tempfile
