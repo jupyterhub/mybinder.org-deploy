@@ -1,0 +1,59 @@
+# This is a GitHub workflow defining a set of jobs with a set of steps.
+# ref: https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
+#
+# - Download changes made to the dashbaord on grafana.mybinder.org
+name: Update Grafana data
+
+on:
+  push:
+    paths:
+      - ".github/workflows/update-grafana-data.yaml"
+  schedule:
+    # Run at 05:00 every day, ref: https://crontab.guru/#0_5_*_*_*
+    - cron: "0 5 * * *"
+  workflow_dispatch:
+
+jobs:
+  update-grafana-data:
+    # Don't schedule runs on forks, but allow the job to execute on push and
+    # workflow_dispatch for CI development purposes.
+    if: github.repository == 'jupyterhub/mybinder.org-deploy' || github.event_name != 'schedule'
+
+    runs-on: ubuntu-22.04
+    environment: update-grafana-data-env
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Export grafana dashboards
+        id: grafana
+        run: ./scripts/grafana-export
+        env:
+          GRAFANA_PASSWORD: ${{ secrets.GRAFANA_PASSWORD }}
+
+      - name: git diff
+        run: git --no-pager diff --color=always
+
+      # ref: https://github.com/peter-evans/create-pull-request
+      - name: Create a PR
+        uses: peter-evans/create-pull-request@v5
+        # Don't try open PRs in forks or when the job is triggered by a push to
+        # a branch other than the default branch.
+        if: github.repository == 'jupyterhub/mybinder.org-deploy' && (github.event_name != 'push' || github.ref == 'refs/heads/main')
+        with:
+          token: "${{ secrets.jupyterhub_bot_pat }}"
+          author: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
+          committer: JupterHub Bot Account <105740858+jupyterhub-bot@users.noreply.github.com>
+          branch: update-grafana-data
+          labels: maintenance
+          commit-message: Update Grafana dashboards
+          title: Update Grafana dashboards
+          body: |
+            Update Grafana dashboards from https://grafana.mybinder.org
