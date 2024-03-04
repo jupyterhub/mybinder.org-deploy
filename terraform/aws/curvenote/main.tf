@@ -35,7 +35,7 @@ module "binder-eks" {
   source            = "../binder-eks"
   region            = "us-east-2"
   cluster_name      = "binderhub"
-  k8s_version       = "1.28"
+  k8s_version       = "1.27"
   k8s_api_cidrs     = ["0.0.0.0/0"]
   number_azs        = 1
   instance_type_wg1 = "r6a.4xlarge"
