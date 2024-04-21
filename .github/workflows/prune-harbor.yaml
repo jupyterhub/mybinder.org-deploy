@@ -13,6 +13,7 @@ jobs:
   prune-harbor:
     name: Prune ${{ matrix.name }} harbor registry
     runs-on: ubuntu-22.04
+    if: github.repository_owner == 'jupyterhub'
 
     strategy:
       fail-fast: false
