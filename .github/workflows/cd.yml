@@ -144,7 +144,7 @@ jobs:
 
       # Action Repo: https://github.com/Azure/setup-kubectl
       - name: "Stage 1: Install kubectl ${{ env.KUBECTL_VERSION }}"
-        uses: azure/setup-kubectl@v3.2
+        uses: azure/setup-kubectl@v4
         with:
           version: ${{ env.KUBECTL_VERSION }}
 
@@ -303,7 +303,7 @@ jobs:
           role-session-name: mybinder-github-cd
 
       - name: "Stage 1: Install kubectl ${{ env.KUBECTL_VERSION }}"
-        uses: azure/setup-kubectl@v3.2
+        uses: azure/setup-kubectl@v4
         with:
           version: ${{ env.KUBECTL_VERSION }}
 
