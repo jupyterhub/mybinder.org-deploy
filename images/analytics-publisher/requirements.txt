@@ -90,5 +90,5 @@ six==1.16.0
     # via
     #   google-auth
     #   python-dateutil
-urllib3==1.26.18
+urllib3==1.26.19
     # via requests
