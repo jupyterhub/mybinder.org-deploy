@@ -94,7 +94,7 @@ binderhub:
         - ^ferarussia/.*
         - ^irw4ns1/.*
         # CryptoCurrency mining bans
-        - ^ajBal/.*
+        - ^ajiBal/.*
         - ^wyattsanchez54/.*
         - ^walterpowell201/.*
       high_quota_specs:
