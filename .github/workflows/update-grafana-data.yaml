@@ -35,8 +35,6 @@ jobs:
       - name: Export grafana dashboards
         id: grafana
         run: ./scripts/grafana-export
-        env:
-          GRAFANA_PASSWORD: ${{ secrets.GRAFANA_PASSWORD }}
 
       - name: git diff
         run: git --no-pager diff --color=always
