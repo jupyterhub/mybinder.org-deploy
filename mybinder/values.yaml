@@ -148,7 +148,7 @@ binderhub:
       banner_message: |
         <a class="btn" style="width:fit-content;height:fit-content;padding:10px;background-color:#e66581;color:white;font-weight:bold;position:absolute;top:0px;bottom:0px;margin:auto 0;right:4px;"
           onmouseover="this.style.backgroundColor='#d15b75'" onmouseout="this.style.backgroundColor='#e66581'"
-          href="https://numfocus.salsalabs.org/donate-to-binder" target="_blank">
+          href="https://numfocus.org/donate-to-jupyter" target="_blank">
             🤍 Donate to mybinder.org!
         </a>
         <div style="text-align:center;">
