@@ -2,7 +2,7 @@ url: https://notebooks-test.gesis.org/binder/
 
 binderhub:
   replicas: 1
-  
+
   ingress:
     hosts:
       - notebooks-test.gesis.org
@@ -79,7 +79,7 @@ ingress-nginx:
       enabled: true
     service:
       type: ClusterIP
-      externalTrafficPolicy: Cluster
+      externalTrafficPolicy: null
 
 
 static:
