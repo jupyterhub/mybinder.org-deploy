@@ -1,4 +1,5 @@
-{{- if .Values.ingress-nginx.service.type == "ClusterIP" }}
+{{- $ingressType := index .Values "ingress-nginx" "controller" "service" "type" }}
+{{- if eq $ingressType "ClusterIP" }}
 apiVersion: networking.k8s.io/v1
 kind: IngressClass
 metadata:
@@ -26,4 +27,5 @@ spec:
                 name: binder
                 port:
                   number: 80
+    {{- end }}
 {{- end }}
