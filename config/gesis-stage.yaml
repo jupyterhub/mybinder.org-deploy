@@ -70,3 +70,17 @@ grafana:
 
 cryptnono:
   enabled: true
+
+ingress-nginx:
+  controller:
+    scope:
+      enabled: true
+    service:
+      type: ClusterIP
+
+static:
+  ingress:
+    hosts:
+      - notebooks-test.gesis.org
+    tls:
+      secretName: kubelego-tls-static
