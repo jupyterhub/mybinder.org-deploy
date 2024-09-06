@@ -1,0 +1,12 @@
+- name: Stop kubelet service
+  ansible.builtin.systemd:
+    name: kubelet
+    state: stopped
+- name: Copy kubelet configuration
+  ansible.builtin.copy:
+    src: ../var/lib/kubelet/config.yaml
+    dest: /var/lib/kubelet/config.yaml
+- name: Restarted kubelet service
+  ansible.builtin.systemd:
+    name: kubelet
+    state: restarted
