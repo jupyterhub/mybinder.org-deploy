@@ -44,7 +44,8 @@ include:
         --create-namespace \
         --history-max 3 \
         --install \
-        --namespace=${chart}
+        --namespace=${chart};
+      done
     - |
       helm lint ./mybinder \
       --values ./config/gesis-${HELM_ENVIRONMENT}.yaml
