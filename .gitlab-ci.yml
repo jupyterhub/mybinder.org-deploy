@@ -37,6 +37,15 @@ include:
         helm dependency update "$d"
       done
     - |
+      for chart in mybinder-kube-system mybinder-tigera-operator; do
+        helm upgrade \
+        ${chart:0:9} ./${chart} \
+        --cleanup-on-fail \
+        --create-namespace \
+        --history-max 3 \
+        --install \
+        --namespace=${chart}
+    - |
       helm lint ./mybinder \
       --values ./config/gesis-${HELM_ENVIRONMENT}.yaml
     - |
