@@ -6,12 +6,6 @@ stages:
   - deploy-prod-nginx
   - deploy-prod-helm
 
-.manual-web:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'web'
-      when: manual
-      allow_failure: true
-
 include:
   - component: $CI_SERVER_FQDN/rse/docker/images/ansible/ansible-lint@10.2.6
     inputs:
@@ -29,11 +23,6 @@ include:
 
 lint helm configuration:
   stage: build
-  rules:
-    - !reference [.manual-web, rules]
-    - if: (($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
-      changes:
-        - helm/**/*
   image: 
     name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
     entrypoint: [""]
@@ -75,11 +64,6 @@ lint helm configuration:
 gesis helm stage deploy:
   resource_group: stage
   stage: deploy-stage-helm
-  rules:
-    - !reference [.manual-web, rules]
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-      changes:
-        - helm/**/*
   variables:
     HELM_ENVIRONMENT: stage
   extends:
