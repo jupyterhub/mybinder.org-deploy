@@ -22,3 +22,8 @@
   become: true
   roles:
     - k8s-worker
+- name: Configure mybinder.org Kubernetes cluster
+  hosts: kubernetes_control_panel
+  gather_facts: false
+  roles:
+    - mybinder
