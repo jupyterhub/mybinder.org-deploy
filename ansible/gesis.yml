@@ -10,3 +10,9 @@
   become: true
   roles:
     - k8s-control-panel
+- name: Configure Kubernetes workers
+  hosts: kubernetes_workers
+  gather_facts: false
+  become: true
+  roles:
+    - k8s-worker
