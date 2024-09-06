@@ -31,3 +31,8 @@ include:
           - ansible/**/*
       - if: $CI_PIPELINE_SOURCE == 'push' && $CI_COMMIT_BRANCH  == $CI_DEFAULT_BRANCH
       - if: $CI_PIPELINE_SOURCE == 'push' && $CI_COMMIT_BRANCH  == 'gesis'
+
+smoke test to stage cluster:
+  stage: test-stage
+  script:
+    - curl https://notebooks-test.gesis.org/binder/
