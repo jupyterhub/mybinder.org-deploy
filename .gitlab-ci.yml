@@ -7,7 +7,7 @@ stages:
   - deploy-prod-helm
 
 include:
-  - component: $CI_SERVER_FQDN/rse/docker/images/ansible/ansible-lint@10.2.5
+  - component: $CI_SERVER_FQDN/rse/docker/images/ansible/ansible-lint@10.2.6
     inputs:
       stage: build
       dir: ansible
@@ -18,7 +18,7 @@ include:
       - if: $CI_PIPELINE_SOURCE == 'push' && $CI_COMMIT_BRANCH  == $CI_DEFAULT_BRANCH
       - if: $CI_PIPELINE_SOURCE == 'push' && $CI_COMMIT_BRANCH  == 'gesis'
 
-  - component: $CI_SERVER_FQDN/rse/docker/images/ansible/ansible-deploy@10.2.5
+  - component: $CI_SERVER_FQDN/rse/docker/images/ansible/ansible-deploy@10.2.6
     inputs:
       stage: deploy-stage-ansible
       dir: ansible
