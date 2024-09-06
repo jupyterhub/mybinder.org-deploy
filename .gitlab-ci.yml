@@ -28,9 +28,9 @@ lint helm configuration:
     entrypoint: [""]
   script:
     - helm version
-    - helm dependency update ./helm/charts/gesis
-    - helm lint ./helm/charts/gesis
-    - helm template gesis ./helm/charts/gesis > gesis.helm.chart.yaml
+    - helm dependency update ./mybinder
+    - helm lint ./helm/charts/gesismybinder
+    - helm template gesis ./mybinder > mybinder.chart.yaml
 
 .gesis helm deploy:
   image: 
