@@ -86,6 +86,10 @@
   kubernetes.core.k8s:
     state: present
     definition: "{{ lookup('file', '{{ role_path }}/files/calico/custom-resources.yaml') | from_yaml_all }}"
+- name: Install Cert Manager
+  kubernetes.core.k8s:
+    state: present
+    src: https://github.com/cert-manager/cert-manager/releases/download/v1.15.3/cert-manager.crds.yaml
 - name: Add GitLab Helm repository
   kubernetes.core.helm_repository:
     name: gitlab
