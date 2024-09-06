@@ -39,7 +39,7 @@ include:
     - |
       for chart in mybinder-kube-system mybinder-tigera-operator; do
         helm upgrade \
-        ${chart:0:9} ./${chart} \
+        ${chart:9} ./${chart} \
         --cleanup-on-fail \
         --create-namespace \
         --history-max 3 \
