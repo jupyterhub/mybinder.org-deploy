@@ -29,7 +29,7 @@ lint helm configuration:
   script:
     - helm version
     - helm dependency update ./mybinder
-    - helm lint ./helm/charts/gesismybinder
+    - helm lint ./mybinder
     - helm template gesis ./mybinder > mybinder.chart.yaml
 
 .gesis helm deploy:
