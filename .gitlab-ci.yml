@@ -6,6 +6,12 @@ stages:
   - deploy-prod-nginx
   - deploy-prod-helm
 
+.manual-web:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'web'
+      when: manual
+      allow_failure: true
+
 include:
   - component: $CI_SERVER_FQDN/rse/docker/images/ansible/ansible-lint@10.2.6
     inputs:
@@ -20,6 +26,64 @@ include:
       playbook: gesis.yml
       ssh-user: ansible
       ssh-key-type: ed25519
+
+lint helm configuration:
+  stage: build
+  rules:
+    - !reference [.manual-web, rules]
+    - if: (($CI_PIPELINE_SOURCE != "schedule") && $CI_COMMIT_BRANCH == 'main') || $CI_PIPELINE_SOURCE == 'merge_request_event'
+      changes:
+        - helm/**/*
+  image: 
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
+    entrypoint: [""]
+  script:
+    - helm version
+    - helm dependency update ./helm/charts/gesis
+    - helm lint ./helm/charts/gesis
+    - helm template gesis ./helm/charts/gesis > gesis.helm.chart.yaml
+
+.gesis helm deploy:
+  image: 
+    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
+    entrypoint: [""]
+  variables:
+    HELM_ENVIRONMENT: template
+  script:
+    - cat $git_crypt_secret_key | base64 -d > git_crypt_secret_key
+    - git-crypt unlock git_crypt_secret_key
+    - kubectl config use-context ${CI_PROJECT_PATH}:${HELM_ENVIRONMENT}
+    - helm version
+    - |
+      for d in ./mybinder*/; do
+        helm dependency update "$d"
+      done
+    - |
+      helm upgrade \
+      binderhub ./mybinder \
+      --cleanup-on-fail \
+      --create-namespace \
+      --history-max 3 \
+      --install \
+      --namespace=gesis \
+      --render-subchart-notes \
+      --values ./config/gesis-${HELM_ENVIRONMENT}.yaml \
+      --values ./secrets/config/common/common.yaml \
+      --values ./secrets/config/common/cryptnono.yaml \
+      --values ./secrets/config/gesis-${HELM_ENVIRONMENT}.yaml
+
+gesis helm stage deploy:
+  resource_group: stage
+  stage: deploy-stage-helm
+  rules:
+    - !reference [.manual-web, rules]
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - helm/**/*
+  variables:
+    HELM_ENVIRONMENT: stage
+  extends:
+    - .gesis helm deploy
 
 smoke test to stage cluster:
   stage: test-stage
