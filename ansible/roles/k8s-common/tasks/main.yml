@@ -179,6 +179,9 @@
     pkg:
       - rsync
       - python3
+      - python3-kubernetes
+      - python3-invoke
+      - python3-fabric
       - apt-transport-https
       - ca-certificates
       - curl

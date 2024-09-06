@@ -1,0 +1,14 @@
+[Unit]
+Description=Bot service to restart ORC2 Docker-in-Docker when is not working
+After=kubelet.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=ansible
+{% for host in hostvars %}
+Environment="PASSWORD_{{ hostvars[host]['ansible_host'] | replace(".", "_") }}={{ hostvars[host]['ansible_become_pass'] }}"
+{% endfor %}
+ExecStart=/usr/bin/python3 /usr/bin/orc2-fix-dind-bot.py --verbose

@@ -1,0 +1,11 @@
+[Unit]
+Description=Bot service to restart ORC2 JupyterHub when API is not working
+After=kubelet.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=ansible
+ExecStart=/usr/bin/python3 /usr/bin/orc2-fix-jupyterhub-bot.py --verbose
