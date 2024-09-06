@@ -1,13 +1,6 @@
 {{- $ingressType := index .Values "ingress-nginx" "controller" "service" "type" }}
 {{- if eq $ingressType "ClusterIP" }}
 apiVersion: networking.k8s.io/v1
-kind: IngressClass
-metadata:
-  name: {{ .Release.Name }}
-spec:
-  controller: k8s.io/ingress-nginx
----
-apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ .Release.Name }}
