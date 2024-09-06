@@ -63,7 +63,9 @@
     mode: u=rw,g=r,o=
 - name: Save content of join command
   ansible.builtin.copy:
-    content: "{{ kubernetes_join_command.stdout }}"
+    content: |
+      #!/bin/sh
+      {{ kubernetes_join_command.stdout }}
     dest: /tmp/kubernetes_join_command
     owner: ansible
     group: ansible
