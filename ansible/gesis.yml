@@ -4,3 +4,9 @@
   become: true
   roles:
     - k8s-common
+- name: Configure Kubernetes control panel
+  hosts: kubernetes_control_panel
+  gather_facts: false
+  become: true
+  roles:
+    - k8s-control-panel
