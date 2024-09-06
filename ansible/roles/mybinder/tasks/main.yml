@@ -7,6 +7,7 @@
     kubectl label nodes {{ host }} hub.jupyter.org/node-purpose-
     {% endif %}
     {% endfor %}
+  changed_when: false
 - name: Add labels from inventory
   ansible.builtin.shell: |
     {% for host in hostvars %}
@@ -18,3 +19,4 @@
     {% endif %}
     {% endfor %}
     {% endfor %}
+  changed_when: false

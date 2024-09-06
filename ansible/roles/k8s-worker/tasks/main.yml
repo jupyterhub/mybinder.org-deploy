@@ -4,8 +4,9 @@
     dest: /tmp/kubernetes_join_command
     mode: u=rwx,g=rx,o=rx
 - name: Attempt to join cluster
-  ansible.builtin.shell: /tmp/kubernetes_join_command
+  ansible.builtin.command: /tmp/kubernetes_join_command
   register: kubernetes_join_attempt
   failed_when:
     - kubernetes_join_attempt.rc != 0
     - '"already exists" not in kubernetes_join_attempt.stderr'
+  changed_when: false

@@ -1,12 +1,14 @@
 - name: Check if Kubernetes is running
   ansible.builtin.shell: >
     kubectl get nodes || /bin/true
+  changed_when: false
   register: kubernetes_nodes
 - name: Pull kubernetes images
   when: kubernetes_nodes.stdout.find('control-plane') == -1
   ansible.builtin.shell: >
     kubeadm config images pull
     --cri-socket unix:///run/containerd/containerd.sock
+  changed_when: false
 - name: Initialize the cluster
   when: kubernetes_nodes.stdout.find('control-plane') == -1
   ansible.builtin.shell: >
@@ -15,22 +17,28 @@
     --upload-certs
     --control-plane-endpoint={{ K8S_CONTROL_PLANE_ENDPOINT }}
     --cri-socket unix:///run/containerd/containerd.sock
+  changed_when: false
   register: kubeadm_init_output
 - name: Create root's .kube directory
   ansible.builtin.file:
     path: /root/.kube
     state: directory
-    mode: 0755
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
 - name: Copies admin.conf to root's kube config
   ansible.builtin.copy:
     src: /etc/kubernetes/admin.conf
     dest: /root/.kube/config
     remote_src: true
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=
 - name: Create user's .kube directory
   ansible.builtin.file:
     path: /home/ansible/.kube
     state: directory
-    mode: 0755
+    mode: u=rwx,g=rx,o=rx
     owner: ansible
     group: ansible
 - name: Copies admin.conf to user's kube config
@@ -40,9 +48,11 @@
     remote_src: true
     owner: ansible
     group: ansible
+    mode: u=rw,g=r,o=
 - name: Get the token for joining the worker nodes
   ansible.builtin.shell: >
     kubeadm token create --print-join-command
+  changed_when: false
   register: kubernetes_join_command
 - name: Create temporary file
   ansible.builtin.file:
@@ -50,10 +60,14 @@
     state: touch
     owner: ansible
     group: ansible
+    mode: u=rw,g=r,o=
 - name: Save content of join command
   ansible.builtin.copy:
     content: "{{ kubernetes_join_command.stdout }}"
     dest: /tmp/kubernetes_join_command
+    owner: ansible
+    group: ansible
+    mode: u=rw,g=r,o=
 - name: Copy join command to local file
   ansible.builtin.fetch:
     src: /tmp/kubernetes_join_command
