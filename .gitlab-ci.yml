@@ -1,4 +1,5 @@
 variables:
+  GIT_STRATEGY: clone
   GIT_CLEAN_FLAGS: "-ffdx"
 
 stages:
