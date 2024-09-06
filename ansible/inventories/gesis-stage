@@ -1,0 +1,41 @@
+[all]
+#svko-ilcm04 ansible_host=194.95.75.14 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_14 }}'
+svko-css-backup-node ansible_host=194.95.75.20 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_20 }}'
+svko-k8s-test01 ansible_host=194.95.75.21 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_21 }}'
+svko-k8s-test02 ansible_host=194.95.75.22 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_22 }}'
+svko-k8s-test03 ansible_host=194.95.75.23 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_23 }}'
+
+[all:vars]
+INVENTORY_NAME=stage
+K8S_CONTROL_PLANE_ENDPOINT=194.95.75.21
+K8S_CONTROL_PLANE_ALIAS=svko-k8s-test01
+
+[notebooks_gesis_org]
+svko-css-backup-node
+
+[kubernetes_control_panel]
+svko-k8s-test01
+
+[kubernetes_workers]
+#svko-ilcm04
+svko-css-backup-node
+svko-k8s-test02
+svko-k8s-test03
+
+[ingress]
+svko-css-backup-node
+
+[harbor]
+svko-css-backup-node
+
+[binderhub]
+svko-k8s-test02
+
+[jupyterhub_single_user]
+svko-k8s-test03
+
+[prometheus]
+svko-css-backup-node
+
+[grafana]
+svko-css-backup-node
