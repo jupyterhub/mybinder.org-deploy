@@ -1,5 +1,10 @@
 url: https://notebooks-test.gesis.org/binder/
 
+userNodeSelector: &userNodeSelector
+  jupyterhub_single_user: true
+coreNodeSelector: &coreNodeSelector
+  ingress: true
+
 binderhub:
   replicas: 1
 
@@ -13,6 +18,8 @@ binderhub:
 
     LaunchQuota:
       total_quota: 30
+
+  nodeSelector: *coreNodeSelector
 
   extraConfig:
     02-badge-base-url: |
@@ -32,6 +39,12 @@ binderhub:
     imageGCThresholdHigh: 80e9
     imageGCThresholdLow: 50e9
     imageGCThresholdType: absolute
+
+  jupyterhub:
+    singleuser:
+      nodeSelector: *userNodeSelector
+    hub:
+      nodeSelector: *coreNodeSelector
 
 prometheus:
   enabled: true
