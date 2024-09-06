@@ -16,3 +16,9 @@
   become: true
   roles:
     - k8s-worker
+- name: Configure JupyterHub workers
+  hosts: jupyterhub_single_user
+  gather_facts: false
+  become: true
+  roles:
+    - k8s-worker
