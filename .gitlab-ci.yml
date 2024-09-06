@@ -34,7 +34,7 @@ include:
     - helm version
     - |
       for d in ./mybinder*/; do
-        helm dependency update "$d"
+        helm dependency update "$d";
       done
     - |
       for chart in mybinder-kube-system mybinder-tigera-operator; do
