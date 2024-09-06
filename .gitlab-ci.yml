@@ -23,7 +23,7 @@ include:
 
 .gesis helm deploy:
   image: 
-    name: docker-private-snapshots.gesis.intra/gesis/ilcm/orc2/k8s:latest
+    name: docker-private.gesis.intra/gesis/ilcm/orc2/k8s:latest
     entrypoint: [""]
   variables:
     HELM_ENVIRONMENT: template
