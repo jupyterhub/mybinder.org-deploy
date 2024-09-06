@@ -77,6 +77,8 @@ ingress-nginx:
       enabled: true
     service:
       type: ClusterIP
+      externalTrafficPolicy: Cluster
+
 
 static:
   ingress:
