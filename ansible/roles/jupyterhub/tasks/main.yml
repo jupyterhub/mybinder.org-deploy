@@ -6,6 +6,9 @@
   ansible.builtin.copy:
     src: ../var/lib/kubelet/config.yaml
     dest: /var/lib/kubelet/config.yaml
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
 - name: Restarted kubelet service
   ansible.builtin.systemd:
     name: kubelet

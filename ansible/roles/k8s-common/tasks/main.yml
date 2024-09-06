@@ -203,14 +203,19 @@
     name: containerd
     enabled: true
     masked: false
-- name: modprobe overlay
-  ansible.builtin.shell: modprobe overlay
-- name: modprobe br_netfilter
-  ansible.builtin.shell: modprobe br_netfilter
+- name: Modify kernel module overlay
+  ansible.builtin.command: modprobe overlay
+  changed_when: false
+- name: Modify kernel module br_netfilter
+  ansible.builtin.command: modprobe br_netfilter
+  changed_when: false
 - name: Create file for list of kernel modules required by containerd
   ansible.builtin.file:
     path: "/etc/modules-load.d/containerd.conf"
     state: "touch"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
 - name: Populate list of kernel modules required by containerd
   ansible.builtin.blockinfile:
     path: "/etc/modules-load.d/containerd.conf"
