@@ -83,4 +83,4 @@
 - name: Install Calico and resource
   kubernetes.core.k8s:
     state: present
-    definition: "{{ lookup('file', '{{ role_path }}files/calico/custom-resources.yaml') | from_yaml_all }}"
+    definition: "{{ lookup('file', '{{ role_path }}/files/calico/custom-resources.yaml') | from_yaml_all }}"
