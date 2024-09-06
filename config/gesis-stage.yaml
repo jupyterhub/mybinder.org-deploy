@@ -1,6 +1,10 @@
 url: https://notebooks-test.gesis.org/binder/
 
 binderhub:
+  ingress:
+    hosts:
+      - notebooks-test.gesis.org
+
   config:
     BinderHub:
       hub_url: https://notebooks-test.gesis.org/binder/jupyter/
