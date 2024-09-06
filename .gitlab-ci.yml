@@ -25,7 +25,6 @@ include:
       inventory: gesis-stage
       playbook: gesis.yml
       ssh-user: ansible
-      ssh-key-type: rsa
     rules:
       - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
         changes:
