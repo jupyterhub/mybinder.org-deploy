@@ -6,19 +6,12 @@ stages:
   - deploy-prod-nginx
   - deploy-prod-helm
 
-.manual-web:
-  rules:
-    - if: $CI_PIPELINE_SOURCE == 'web'
-      when: manual
-      allow_failure: true
-
 include:
   - component: $CI_SERVER_FQDN/rse/docker/images/ansible/ansible-lint@10.2.4
     inputs:
       stage: build
       dir: ansible
     rules:
-      - !reference [.manual-web, rules]
       - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
         changes:
           - ansible/**/*
@@ -34,7 +27,6 @@ include:
       ssh-user: ansible
       ssh-key-type: rsa
     rules:
-      - !reference [.manual-web, rules]
       - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
         changes:
           - ansible/**/*
