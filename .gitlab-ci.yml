@@ -11,12 +11,6 @@ include:
     inputs:
       stage: build
       dir: ansible
-    rules:
-      - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-        changes:
-          - ansible/**/*
-      - if: $CI_PIPELINE_SOURCE == 'push' && $CI_COMMIT_BRANCH  == $CI_DEFAULT_BRANCH
-      - if: $CI_PIPELINE_SOURCE == 'push' && $CI_COMMIT_BRANCH  == 'gesis'
 
   - component: $CI_SERVER_FQDN/rse/docker/images/ansible/ansible-deploy@10.2.6
     inputs:
@@ -25,12 +19,6 @@ include:
       inventory: gesis-stage
       playbook: gesis.yml
       ssh-user: ansible
-    rules:
-      - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
-        changes:
-          - ansible/**/*
-      - if: $CI_PIPELINE_SOURCE == 'push' && $CI_COMMIT_BRANCH  == $CI_DEFAULT_BRANCH
-      - if: $CI_PIPELINE_SOURCE == 'push' && $CI_COMMIT_BRANCH  == 'gesis'
 
 smoke test to stage cluster:
   stage: test-stage
