@@ -1,0 +1,68 @@
+url: https://notebooks-test.gesis.org/binder/
+
+binderhub:
+  config:
+    BinderHub:
+      hub_url: https://notebooks-test.gesis.org/binder/jupyter/
+
+    LaunchQuota:
+      total_quota: 30
+
+  extraConfig:
+    02-badge-base-url: |
+      c.BinderHub.badge_base_url = "https://mybinder.org/"
+    01-template-variables: |
+      template_vars = {
+        "gesis_notebooks_https": 'https://notebooks-test.gesis.org/',
+        'production': False,
+      }
+      template_vars['gesis_notebooks_static'] = template_vars['gesis_notebooks_https'] + "static/"
+      template_vars['gesis_web_frontend_framework'] = template_vars['gesis_notebooks_static'] + "gesis-web-frontend-framework/"
+      template_vars['binder_static'] = template_vars['gesis_notebooks_https'] + "binder/static/"
+      c.BinderHub.template_variables.update(template_vars)
+
+  imageCleaner:
+    enabled: true
+    imageGCThresholdHigh: 80e9
+    imageGCThresholdLow: 50e9
+    imageGCThresholdType: absolute
+
+prometheus:
+  enabled: true
+  server:
+    service:
+      type: NodePort
+      nodePort: 30073
+      servicePort: 80
+    livenessProbeInitialDelay: 800
+    resources:
+      requests:
+        cpu: "1"
+        memory: 1Gi
+      limits:
+        cpu: "1"
+        memory: 1Gi
+    persistentVolume:
+      size: 10Gi
+      storageClass: standard
+    retention: 30d
+    ingress:
+      hosts:
+        - notebooks-test.gesis.org/prometheus
+
+grafana:
+  enabled: true
+  resources:
+    requests:
+      cpu: "0"
+      memory: 128Mi
+    limits:
+      cpu: "0.25"
+      memory: 128Mi
+  ingress:
+    path: /grafana
+    hosts:
+      - notebooks-test.gesis.org
+
+cryptnono:
+  enabled: true
