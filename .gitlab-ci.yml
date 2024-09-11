@@ -70,15 +70,15 @@ include:
       --values ./secrets/config/common/cryptnono.yaml \
       --values ./secrets/config/gesis-${HELM_ENVIRONMENT}.yaml
 
-gesis helm stage deploy:
-  resource_group: stage
-  stage: deploy-stage-helm
-  variables:
-    HELM_ENVIRONMENT: stage
-  extends:
-    - .gesis helm deploy
+# gesis helm stage deploy:
+#   resource_group: stage
+#   stage: deploy-stage-helm
+#   variables:
+#     HELM_ENVIRONMENT: stage
+#   extends:
+#     - .gesis helm deploy
 
-smoke test to stage cluster:
-  stage: test-stage
-  script:
-    - curl https://notebooks-test.gesis.org/binder/
+# smoke test to stage cluster:
+#   stage: test-stage
+#   script:
+#     - curl https://notebooks-test.gesis.org/binder/
