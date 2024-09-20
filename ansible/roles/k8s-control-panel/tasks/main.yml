@@ -74,22 +74,9 @@
   ansible.builtin.fetch:
     src: /tmp/kubernetes_join_command
     dest: '{{ ANSIBLE_CONTROL_NODE_TMP }}'
-- name: Remove Container Network Interface (CNI) Flannel
-  kubernetes.core.k8s:
-    state: absent
-    src: https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
-- name: Install Container Network Interface (CNI) Tigera Calico operator
-  kubernetes.core.k8s:
-    state: present
-    src: https://raw.githubusercontent.com/projectcalico/calico/v3.26.3/manifests/tigera-operator.yaml
-- name: Install Calico and resource
-  kubernetes.core.k8s:
-    state: present
-    definition: "{{ lookup('file', '{{ role_path }}/files/calico/custom-resources.yaml') | from_yaml_all }}"
-- name: Install Cert Manager
-  kubernetes.core.k8s:
-    state: present
-    src: https://github.com/cert-manager/cert-manager/releases/download/v1.15.3/cert-manager.crds.yaml
+- name: Add Container Network Interface (CNI) to Kubernetes cluster
+  ansible.builtin.import_tasks:
+    file: cni.yml
 - name: Add GitLab Helm repository
   kubernetes.core.helm_repository:
     name: gitlab
