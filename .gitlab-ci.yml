@@ -25,27 +25,6 @@ include:
       ssh-user: ansible
       ssh-key-type: ed25519
 
-Create Helm release number:
-  stage: build
-  image: alpine:3.20.3
-  services:
-    - docker:dind
-  variables:
-    APK_CACHE_DIR: "$CI_PROJECT_DIR/.cache/apk"
-    PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-  cache:
-    paths:
-      - .cache/
-  script:
-    - apk add git helm python3 pipx
-    - pipx install chartpress
-    - pipx run chartpress
-    - cp -r mybinder dist
-  artifacts:
-    paths:
-      - dist/
-    expire_in: 1h
-
 .gesis helm deploy:
   image: 
     name: docker-private.gesis.intra/gesis/ilcm/orc2/k8s:latest
@@ -58,7 +37,7 @@ Create Helm release number:
     - kubectl config use-context ${CI_PROJECT_PATH}:${HELM_ENVIRONMENT}
     - helm version
     - |
-      for d in ./dist*/; do
+      for d in ./mybinder*/; do
         helm dependency update "$d";
       done
     # - |
@@ -72,7 +51,7 @@ Create Helm release number:
     #     --namespace=${chart};
     #   done
     - |
-      helm lint ./dist \
+      helm lint ./mybinder \
       --values ./config/gesis-${HELM_ENVIRONMENT}.yaml \
       --values ./secrets/config/common/common.yaml \
       --values ./secrets/config/common/cryptnono.yaml \
