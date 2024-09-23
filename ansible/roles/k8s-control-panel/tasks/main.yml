@@ -83,7 +83,7 @@
     repo_url: https://charts.gitlab.io
 - name: Deploy GitLab agent
   kubernetes.core.helm:
-    name: gitlab-agent
+    name: 'gitlab-agent-{{ ansible_hostname  }}'
     chart_ref: gitlab/gitlab-agent
     release_namespace: gitlab-agent
     dependency_update: true
