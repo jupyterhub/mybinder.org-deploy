@@ -195,7 +195,7 @@
       - "kubelet={{ k8s_common_kubernetes_version }}.*"
       - "kubeadm={{ k8s_common_kubernetes_version }}.*"
       - "kubectl={{ k8s_common_kubernetes_version }}.*"
-      - helm=3.15.*
+      - "helm={{ k8s_common_helm_version }}"
 - name: Copy containerd configuration file
   ansible.builtin.copy:
     src: files/etc/containerd/config.toml
