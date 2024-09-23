@@ -16,6 +16,8 @@ chartpress==2.2.0
     # via -r requirements.in
 docker==5.0.3
     # via chartpress
+durationpy==0.7
+    # via kubernetes
 exceptiongroup==1.1.0
     # via pytest
 execnet==2.1.1
@@ -26,7 +28,7 @@ idna==3.7
     # via requests
 iniconfig==1.1.1
     # via pytest
-kubernetes==28.1.0
+kubernetes==31.0.0
     # via -r requirements.in
 oauthlib==3.2.2
     # via
