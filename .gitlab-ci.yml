@@ -28,6 +28,8 @@ include:
 Create Helm release number:
   stage: build
   image: alpine:3.20.3
+  services:
+    - docker:dind
   variables:
     APK_CACHE_DIR: "$CI_PROJECT_DIR/.cache/apk"
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
@@ -35,7 +37,7 @@ Create Helm release number:
     paths:
       - .cache/
   script:
-    - apk add git docker helm python3 pipx
+    - apk add git helm python3 pipx
     - pipx install chartpress
     - pipx run chartpress
     - cp -r mybinder dist
