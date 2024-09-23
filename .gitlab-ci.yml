@@ -35,7 +35,7 @@ Create Helm release number:
     paths:
       - .cache/
   script:
-    - apk add git python3 pipx
+    - apk add git docker python3 pipx
     - pipx install chartpress
     - pipx run chartpress
     - cp -r mybinder dist
