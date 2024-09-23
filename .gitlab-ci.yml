@@ -58,7 +58,7 @@ include:
       --values ./secrets/config/gesis-${HELM_ENVIRONMENT}.yaml
     - |
       helm upgrade \
-      binderhub ./dist \
+      binderhub ./mybinder \
       --cleanup-on-fail \
       --create-namespace \
       --history-max 3 \
