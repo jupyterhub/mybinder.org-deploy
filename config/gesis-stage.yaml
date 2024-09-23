@@ -1,9 +1,9 @@
 url: https://notebooks-test.gesis.org/binder/
 
 userNodeSelector: &userNodeSelector
-  jupyterhub_single_user: true
+  jupyterhub_single_user: "true"
 coreNodeSelector: &coreNodeSelector
-  ingress: true
+  ingress: "true"
 
 binderhub:
   replicas: 1
