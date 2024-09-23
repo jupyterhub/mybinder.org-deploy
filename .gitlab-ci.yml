@@ -27,19 +27,17 @@ include:
 
 Create Helm release number:
   stage: build
-  image: python:3.12.6-alpine3.20
+  image: alpine:3.20.3
   variables:
+    APK_CACHE_DIR: "$CI_PROJECT_DIR/.cache/apk"
     PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
   cache:
     paths:
-      - .cache/pip
+      - .cache/
   script:
-    - python -V
-    - python -m pip install virtualenv
-    - virtualenv venv
-    - source venv/bin/activate
-    - python -m pip install chartpress
-    - chartpress
+    - apk add python3 pipx
+    - pipx install chartpress
+    - pipx run chartpress
     - cp -r mybinder dist
   artifacts:
     paths:
