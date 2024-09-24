@@ -142,7 +142,7 @@ ingress-nginx:
       enabled: true
     service:
       externalTrafficPolicy: null
-      type: ClusterIP
+      type: LoadBalancer
 prometheus:
   enabled: true
   server:

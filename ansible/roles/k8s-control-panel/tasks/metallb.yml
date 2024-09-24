@@ -34,7 +34,8 @@
         namespace: metallb
       spec:
         addresses:
-          - '{{ k8s_control_panel_cidr }}'
+          # TODO Use Jinja filter to automate this.
+          - '{{ K8S_INGRESS }}-{{ K8S_INGRESS }}'
 - name: Configure L2 Advertisement for MetalLB
   kubernetes.core.k8s:
     state: present
