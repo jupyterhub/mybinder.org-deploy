@@ -10,7 +10,7 @@
   kubernetes.core.k8s:
     state: present
     # A local copy of https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/custom-resources.yaml
-    definition: "{{ lookup('file', '{{ role_path }}/files/calico/custom-resources.yaml') | from_yaml_all }}"
+    definition: "{{ lookup('ansible.builtin.template', '{{ role_path }}/templates/calico/custom-resources.yaml.jinja') | from_yaml_all }}"
 - name: Install Cert Manager
   kubernetes.core.k8s:
     state: present
