@@ -1,1 +1,3 @@
 **/secrets/** filter=git-crypt diff=git-crypt
+# GitHub syntax highlighting
+pixi.lock linguist-language=YAML linguist-generated=true

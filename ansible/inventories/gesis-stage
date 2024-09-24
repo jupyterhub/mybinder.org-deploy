@@ -17,6 +17,11 @@ svko-k8s-test02
 [kubernetes_control_panel]
 svko-k8s-test01
 
+[kubernetes_control_panel:vars]
+GRAFANA_CAPACITY_STORAGE=2Gi
+JUPYTERHUB_CAPACITY_STORAGE=2Gi
+PROMETHEUS_CAPACITY_STORAGE=15Gi
+
 [kubernetes_workers]
 #svko-ilcm04
 ; svko-css-backup-node
@@ -31,6 +36,9 @@ svko-k8s-test02
 ; svko-css-backup-node
 
 [binderhub]
+svko-k8s-test02
+
+[jupyterhub]
 svko-k8s-test02
 
 [jupyterhub_single_user]
