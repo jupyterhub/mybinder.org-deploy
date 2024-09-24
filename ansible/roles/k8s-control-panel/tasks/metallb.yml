@@ -21,6 +21,9 @@
     release_name: metallb
     release_namespace: metallb
     chart_ref: metallb/metallb
+    release_values:
+      speaker:
+        enabled: false
     create_namespace: false
     history_max: 3
 - name: Create MetalLB Kubernetes IP Address Pool
