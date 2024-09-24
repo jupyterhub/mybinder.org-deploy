@@ -10,7 +10,7 @@ spec:
     ipPools:
       - name: default-ipv4-ippool
         blockSize: 26
-        cidr: 10.244.0.0/16
+        cidr: '{{ k8s_control_panel_cidr }}'
         encapsulation: VXLANCrossSubnet
         natOutgoing: Enabled
         nodeSelector: all()
