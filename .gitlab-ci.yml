@@ -55,6 +55,7 @@ include:
       --values ./config/gesis-${HELM_ENVIRONMENT}.yaml \
       --values ./secrets/config/common/common.yaml \
       --values ./secrets/config/common/cryptnono.yaml \
+      --values ./secrets/config/common/gesis.yaml \
       --values ./secrets/config/gesis-${HELM_ENVIRONMENT}.yaml
     - |
       helm upgrade \
@@ -68,6 +69,7 @@ include:
       --values ./config/gesis-${HELM_ENVIRONMENT}.yaml \
       --values ./secrets/config/common/common.yaml \
       --values ./secrets/config/common/cryptnono.yaml \
+      --values ./secrets/config/common/gesis.yaml \
       --values ./secrets/config/gesis-${HELM_ENVIRONMENT}.yaml
 
 gesis helm stage deploy:
