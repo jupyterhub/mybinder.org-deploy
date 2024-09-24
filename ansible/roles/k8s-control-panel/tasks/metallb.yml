@@ -16,18 +16,6 @@
           pod-security.kubernetes.io/enforce: privileged
           pod-security.kubernetes.io/audit: privileged
           pod-security.kubernetes.io/warn: privileged
-- name: Create MetalLB Kubernetes IP Address Pool
-  kubernetes.core.k8s:
-    state: present
-    definition:
-      apiVersion: metallb.io/v1beta1
-      kind: IPAddressPool
-      metadata:
-        name: first-pool
-        namespace: metallb-system
-      spec:
-        addresses:
-          - 192.168.100.0/24
 - name: Deploy MetalLB
   kubernetes.core.helm:
     release_name: metallb
@@ -35,3 +23,27 @@
     chart_ref: metallb/metallb
     create_namespace: false
     history_max: 3
+- name: Create MetalLB Kubernetes IP Address Pool
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: metallb.io/v1beta1
+      kind: IPAddressPool
+      metadata:
+        name: '{{ k8s_control_panel_metallb_ip_address_pool }}'
+        namespace: metallb
+      spec:
+        addresses:
+          - 192.168.100.0/24
+- name: Configure L2 Advertisement for MetalLB
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: metallb.io/v1beta1
+      kind: L2Advertisement
+      metadata:
+        name: '{{ k8s_control_panel_metallb_ip_address_pool }}-l2-advertisement'
+        namespace: metallb
+      spec:
+        ipAddressPools:
+          - '{{ k8s_control_panel_metallb_ip_address_pool }}'

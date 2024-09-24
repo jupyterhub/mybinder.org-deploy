@@ -1,1 +1,2 @@
 k8s_control_panel_calico_version: "3.28.2"
+k8s_control_panel_metallb_ip_address_pool: "gesis"
