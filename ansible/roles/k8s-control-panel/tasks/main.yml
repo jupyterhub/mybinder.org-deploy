@@ -164,3 +164,6 @@
     name: "remove timeout"
     job: "python3 /home/ansible/bin/kill-after-timeout-pods.py --verbose >> /home/ansible/kill-after-timeout-pods.log 2>&1"
     minute: "*/5"
+- name: Add MetalLB to Kubernetes cluster
+  ansible.builtin.import_tasks:
+    file: metallb.yml

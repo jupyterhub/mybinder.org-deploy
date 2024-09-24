@@ -1,0 +1,25 @@
+- name: Add a MetalLB Helm repository
+  kubernetes.core.helm_repository:
+    repo_name: metallb
+    repo_url: https://metallb.github.io/metallb
+- name: Create MetalLB Kubernetes namespace
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: metallb
+        labels:
+          # Required labels
+          # https://metallb.universe.tf/installation/#installation-with-helm
+          pod-security.kubernetes.io/enforce: privileged
+          pod-security.kubernetes.io/audit: privileged
+          pod-security.kubernetes.io/warn: privileged
+- name: Deploy MetalLB
+  kubernetes.core.helm:
+    release_name: metallb
+    release_namespace: metallb
+    chart_ref: metallb/metallb
+    create_namespace: false
+    history_max: 3
