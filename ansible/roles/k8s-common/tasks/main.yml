@@ -39,76 +39,9 @@
     name: fs.inotify.max_user_watches
     value: '655360'
     state: present
-- name: Create /orc2_data/containerd directory if it does not exist
-  ansible.builtin.file:
-    path: /orc2_data/containerd
-    state: directory
-    owner: root
-    group: root
-    mode: u=rwx,g=rx,o=rx
-- name: Create /orc2_data/repo2docker directory if it does not exist
-  ansible.builtin.file:
-    path: /orc2_data/repo2docker
-    state: directory
-    owner: root
-    group: root
-    mode: u=rwx,g=rx,o=rx
-- name: Create /orc2_data/prometheus directory if it does not exist
-  ansible.builtin.file:
-    path: /orc2_data/prometheus
-    state: directory
-    owner: root
-    group: root
-    mode: u=rwx,g=rx,o=rx
-- name: Create /orc2_data/grafana directory if it does not exist
-  ansible.builtin.file:
-    path: /orc2_data/grafana
-    state: directory
-    owner: root
-    group: root
-    mode: u=rwx,g=rx,o=rx
-- name: Create /orc2_data/alertmanager directory if it does not exist
-  ansible.builtin.file:
-    path: /orc2_data/alertmanager
-    state: directory
-    owner: root
-    group: root
-    mode: u=rwx,g=rx,o=rx
-- name: Create /harbor/jobservice directory if it does not exist
-  ansible.builtin.file:
-    path: /harbor/jobservice
-    state: directory
-    owner: root
-    group: root
-    mode: u=rwx,g=rx,o=rx
-- name: Create /harbor/registry directory if it does not exist
-  ansible.builtin.file:
-    path: /harbor/registry
-    state: directory
-    owner: root
-    group: root
-    mode: u=rwx,g=rx,o=rx
-- name: Create /harbor/redis directory if it does not exist
-  ansible.builtin.file:
-    path: /harbor/redis
-    state: directory
-    owner: root
-    group: root
-    mode: u=rwx,g=rx,o=rx
-- name: Create /harbor/trivy directory if it does not exist
-  ansible.builtin.file:
-    path: /harbor/trivy
-    state: directory
-    owner: root
-    group: root
-    mode: u=rwx,g=rx,o=rx
-- name: Create /harbor/database directory if it does not exist
-  ansible.builtin.file:
-    path: /harbor/database
-    state: directory
-    owner: root
-    group: root
-    mode: u=rwx,g=rx,o=rx
+- name: Create directory for Persistent Volume
+  ansible.builtin.import_tasks:
+    file: pv.yml
 - name: Add Docker public GPG key
   ansible.builtin.get_url:
     url: https://download.docker.com/linux/ubuntu/gpg

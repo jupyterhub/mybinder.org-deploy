@@ -1,0 +1,22 @@
+- name: Create a Persistent Volume for Prometheus
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: storage.k8s.io/v1
+      kind: StorageClass
+      metadata:
+        name: local-storage
+        labels:
+          app.kubernetes.io/managed-by: Ansible
+          app.kubernetes.io/part-of: mybinder
+      provisioner: kubernetes.io/no-provisioner
+      volumeBindingMode: WaitForFirstConsumer
+- name: Provide Persistent Volume for Grafana
+  ansible.builtin.import_tasks:
+    file: grafana.yml
+- name: Provide Persistent Volume for JupyterHub
+  ansible.builtin.import_tasks:
+    file: jupyter-hub-db.yml
+- name: Provide Persistent Volume for Prometheus
+  ansible.builtin.import_tasks:
+    file: prometheus.yml

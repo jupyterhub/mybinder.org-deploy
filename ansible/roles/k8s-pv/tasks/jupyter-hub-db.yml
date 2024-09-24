@@ -1,0 +1,29 @@
+- name: Create a Persistent Volume for JupyterHub
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: "jupyterhub-db"
+        labels:
+          app.kubernetes.io/managed-by: Ansible
+          app.kubernetes.io/part-of: jupyterhub
+      spec:
+        capacity:
+          storage: "{{ JUPYTERHUB_CAPACITY_STORAGE }}"
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+        persistentVolumeReclaimPolicy: Retain
+        storageClassName: "local-storage"
+        local:
+          path: /orc2_data/jupyterhub
+        nodeAffinity:
+          required:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: jupyterhub
+                    operator: In
+                    values:
+                      - "true"

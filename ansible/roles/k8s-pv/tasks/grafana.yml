@@ -1,0 +1,29 @@
+- name: Create a Persistent Volume for Grafana
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: grafana
+        labels:
+          app.kubernetes.io/managed-by: Ansible
+          app.kubernetes.io/part-of: grafana
+      spec:
+        capacity:
+          storage: "{{ GRAFANA_CAPACITY_STORAGE }}"
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+        persistentVolumeReclaimPolicy: Retain
+        storageClassName: "local-storage"
+        local:
+          path: /orc2_data/grafana
+        nodeAffinity:
+          required:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: grafana
+                    operator: In
+                    values:
+                      - "true"

@@ -1,0 +1,28 @@
+- name: Create persistent directories in /orc2_data if it does not exist
+  ansible.builtin.file:
+    path: "/orc2_data/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  loop:
+    - jupyterhub
+    - containerd
+    - repo2docker
+    - prometheus
+    - grafana
+    - alertmanager
+
+- name: Create persistent directories in /harbor/ if it does not exist
+  ansible.builtin.file:
+    path: "/harbor/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+  loop:
+    - jobservice
+    - registry
+    - redis
+    - trivy
+    - database
