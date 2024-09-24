@@ -27,9 +27,7 @@
         namespace: metallb-system
       spec:
         addresses:
-          {% for host in groups['all'] %}
-          - {{ hostvars[host]['ansible_facts']['eth0']['ipv4']['address'] }}
-        {% endfor %}
+          - 192.168.100.0/24
 - name: Deploy MetalLB
   kubernetes.core.helm:
     release_name: metallb
