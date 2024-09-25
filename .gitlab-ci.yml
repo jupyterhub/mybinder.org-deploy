@@ -30,8 +30,8 @@ stages:
   - deploy-stage-ansible
   - deploy-stage-helm
   - test-stage
-  - deploy-prod-nginx
-  - deploy-prod-helm
+  - deploy-production-ansible
+  - deploy-production-helm
 
 include:
   - component: $CI_SERVER_FQDN/rse/docker/images/ansible/ansible-lint@10.2.6
