@@ -40,11 +40,11 @@ source of information. At a minimum, you must at least understand:
 - [What are values files?](https://helm.sh/docs/chart_template_guide/values_files/)
 - [How do chart dependencies work?](https://helm.sh/docs/chart_template_guide/subcharts_and_globals/)
 
-## Travis
+## GitHub Actions
 
-We use [Travis CI](https://travis-ci.org/) for doing all our deployments. Our
-`.travis.yml` file contains the entire configuration for our deployment. Travis CI
-has documentation on the [various components of the `.travis.yml` file](https://docs.travis-ci.com/user/customizing-the-build/).
+We use [GitHub Actions](https://docs.github.com/en/actions) for doing all our deployments. Our
+[`.github/workflows/cd.yml`](https://github.com/jupyterhub/mybinder.org-deploy/blob/main/.github/workflows/cd.yml) file
+contains the entire configuration for our **continuous** deployment.
 
 [mybinder.org]: https://mybinder.org
 [staging.mybinder.org]: https://staging.mybinder.org
