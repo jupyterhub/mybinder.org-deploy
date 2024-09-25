@@ -5,10 +5,9 @@ import datetime
 import logging
 import os
 
-from kubernetes import client, config, watch
-
-from invoke import Responder
 from fabric import Connection
+from invoke import Responder
+from kubernetes import client, config, watch
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)-8s | %(message)s", datefmt="%Y-%m-%d %H:%M:%S"
@@ -99,7 +98,7 @@ def monitor_cluster():
                                 logger.info(
                                     "Fail to delete pod %s due %s", pod_name, exception
                                 )
-                    
+
                 elif event["object"].type == "Normal":
                     logger.debug(
                         "Found Normal event in %s ... skipping!",
