@@ -23,6 +23,12 @@ sequenceDiagram
 
 ![Sequence diagram illustrating the deployment.](./gesis-diagram.svg)
 
+## Kubernetes on bare metal
+
+Cloud environments provide a load balancer to the Kubernetes clusters. Unfortunately, Kubernetes cluster does not includes a default implementation of a load balancer for the scenario that it is running on bare metal. Because of this, the deployment of mybinder.org to GESIS servers must include the configuration of a load balancer. We are using [MetalLB](https://metallb.universe.tf/) with [Ingress NGINX Controller](https://kubernetes.github.io/ingress-nginx/).
+
+![Sequence diagram illustrating the load balancer.](./gesis-load-balancer.drawio.svg)
+
 ## Virtual Private Server configuration with Ansible
 
 We use [Ansible](https://www.ansible.com/) to automate the configuration of the virtual private server (VPS) provided by GESIS. After a successful configuration, we will have a operational Kubernetes cluster to deploy mybinder.org.
