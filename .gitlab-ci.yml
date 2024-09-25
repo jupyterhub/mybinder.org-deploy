@@ -99,7 +99,7 @@ gesis helm stage deploy:
   resource_group: stage
   stage: deploy-stage-helm
   rules:
-    - !reference [.manual-web, rules]
+    - !reference [.gesis-manual-web, rules]
     - !reference [.geis-merge-request, rules]
     - !reference [.geis-push-main, rules]
   variables:
@@ -111,7 +111,7 @@ gesis helm production deploy:
   resource_group: production
   stage: deploy-production-helm
   rules:
-    - !reference [.manual-web, rules]
+    - !reference [.gesis-manual-web, rules]
     - !reference [.geis-push-main, rules]
   variables:
     HELM_ENVIRONMENT: stage
@@ -120,5 +120,9 @@ gesis helm production deploy:
 
 smoke test after stage deploy:
   stage: test-stage
+  rules:
+    - !reference [.gesis-manual-web, rules]
+    - !reference [.geis-merge-request, rules]
+    - !reference [.geis-push-main, rules]
   script:
     - curl https://notebooks-test.gesis.org/binder/
