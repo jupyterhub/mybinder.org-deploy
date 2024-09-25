@@ -44,7 +44,7 @@ source of information. At a minimum, you must at least understand:
 
 We use [GitHub Actions](https://docs.github.com/en/actions) for doing all our deployments. Our
 [`.github/workflows/cd.yml`](https://github.com/jupyterhub/mybinder.org-deploy/blob/main/.github/workflows/cd.yml) file
-contains the entire configuration for our **continous** deployment.
+contains the entire configuration for our **continuous** deployment.
 
 [mybinder.org]: https://mybinder.org
 [staging.mybinder.org]: https://staging.mybinder.org
