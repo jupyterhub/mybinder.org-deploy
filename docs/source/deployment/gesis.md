@@ -23,6 +23,12 @@ sequenceDiagram
 
 ![Sequence diagram illustrating the deployment.](./gesis-diagram.svg)
 
+## GESIS GitLab CI/CD Server
+
+GESIS GitLab server runs [GitLab Community Edition v16.11.6](https://gitlab.com/gitlab-org/gitlab-foss/-/tags/v16.11.6) with [continuous integration (CI) and continuous delivery (CD)](https://about.gitlab.com/topics/ci-cd/) enable.
+
+The CI/CD jobs are defined in [`.gitlab-ci.yml`](https://github.com/jupyterhub/mybinder.org-deploy/tree/main/.gitlab-ci.yml).
+
 ## Kubernetes on bare metal
 
 Cloud environments provide a load balancer to the Kubernetes clusters. Unfortunately, Kubernetes cluster does not includes a default implementation of a load balancer for the scenario that it is running on bare metal. Because of this, the deployment of mybinder.org to GESIS servers must include the configuration of a load balancer. We are using [MetalLB](https://metallb.universe.tf/) with [Ingress NGINX Controller](https://kubernetes.github.io/ingress-nginx/).
