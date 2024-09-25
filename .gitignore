@@ -19,3 +19,6 @@ travis/crypt-key
 env
 
 .terraform
+# pixi environments
+.pixi
+*.egg-info

@@ -1,0 +1,51 @@
+- name: Remove old Kubernetes public GPG key
+  ansible.builtin.file:
+    path: /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg
+    state: absent
+- name: Remove old Kubernetes public GPG key
+  ansible.builtin.file:
+    path: /etc/apt/trusted.gpg.d/kubernetes-archive-keyring.asc
+    state: absent
+- name: Remove old Kubernetes repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main"
+    filename: kubernetes
+    state: absent
+- name: Remove old Kubernetes repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/trusted.gpg.d/kubernetes.asc] https://pkgs.k8s.io/core:/stable:/{{ item }}/deb/ /"
+    filename: kubernetes
+    state: absent
+  loop:
+    - v1.27
+    - v1.28
+    - v1.29
+    - v1.30
+    - v1.31
+- name: Download Kubernetes public GPG key
+  ansible.builtin.get_url:
+    url: "https://pkgs.k8s.io/core:/stable:/v{{ k8s_common_kubernetes_version }}/deb/Release.key"
+    dest: /tmp/kubernetes-archive-keyring.asc
+    mode: "0644"
+    force: true
+- name: Convert the public GPG key to binary
+  ansible.builtin.command:
+    argv:
+      - gpg
+      - --yes
+      - --dearmor
+      - --output
+      - /tmp/kubernetes.gpg
+      - /tmp/kubernetes-archive-keyring.asc
+  changed_when: false
+- name: Copy GPG key
+  ansible.builtin.copy:
+    src: /tmp/kubernetes.gpg
+    dest: /etc/apt/keyrings/kubernetes.gpg
+    remote_src: true
+    mode: "0644"
+- name: Add Kubernetes repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/kubernetes.gpg] https://pkgs.k8s.io/core:/stable:/v{{ k8s_common_kubernetes_version }}/deb/ /"
+    filename: kubernetes
+    state: present
