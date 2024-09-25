@@ -26,7 +26,7 @@
   ansible.builtin.get_url:
     url: "https://pkgs.k8s.io/core:/stable:/v{{ k8s_common_kubernetes_version }}/deb/Release.key"
     dest: /tmp/kubernetes-archive-keyring.asc
-    mode: '0644'
+    mode: "0644"
     force: true
 - name: Convert the public GPG key to binary
   ansible.builtin.command:
@@ -43,7 +43,7 @@
     src: /tmp/kubernetes.gpg
     dest: /etc/apt/keyrings/kubernetes.gpg
     remote_src: true
-    mode: '0644'
+    mode: "0644"
 - name: Add Kubernetes repository
   ansible.builtin.apt_repository:
     repo: "deb [signed-by=/etc/apt/keyrings/kubernetes.gpg] https://pkgs.k8s.io/core:/stable:/v{{ k8s_common_kubernetes_version }}/deb/ /"

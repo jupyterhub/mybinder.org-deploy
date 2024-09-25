@@ -34,9 +34,7 @@ def kill_pod(pod):
         api_response = v1.delete_namespaced_pod(pod.metadata.name, NAMESPACE)
         logger.info("Pod %s deleted.", api_response.metadata.name)
     except client.exceptions.ApiException as exception:
-        logger.info(
-            "Fail to delete pod %s due %s", pod.metadata.name, exception
-        )
+        logger.info("Fail to delete pod %s due %s", pod.metadata.name, exception)
 
 
 def kill_succeeded_pods():
