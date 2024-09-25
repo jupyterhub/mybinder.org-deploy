@@ -2,6 +2,29 @@ variables:
   GIT_STRATEGY: clone
   GIT_CLEAN_FLAGS: "-ffdx"
 
+.gesis-manual-web:
+  rules:
+    - if: $CI_SERVER_HOST == 'git.gesis.org' && $CI_PIPELINE_SOURCE == 'web'
+      when: manual
+      allow_failure: true
+
+.geis-merge-request:
+  rules:
+    - if: $CI_SERVER_HOST == 'git.gesis.org' && $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - .gitlab.yml
+      when: manual  
+    - if: $CI_SERVER_HOST == 'git.gesis.org' && $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes:
+        - ansible/**/*
+        - mybinder/**/*
+        - config/**/*
+        - secrets/**/*
+
+.geis-push-main:
+  rules:
+    - if: $CI_SERVER_HOST == 'git.gesis.org' && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == 'main'
+
 stages:
   - build
   - deploy-stage-ansible
@@ -75,12 +98,27 @@ include:
 gesis helm stage deploy:
   resource_group: stage
   stage: deploy-stage-helm
+  rules:
+    - !reference [.manual-web, rules]
+    - !reference [.geis-merge-request, rules]
+    - !reference [.geis-push-main, rules]
   variables:
     HELM_ENVIRONMENT: stage
   extends:
     - .gesis helm deploy
 
-smoke test to stage cluster:
+gesis helm production deploy:
+  resource_group: production
+  stage: deploy-production-helm
+  rules:
+    - !reference [.manual-web, rules]
+    - !reference [.geis-push-main, rules]
+  variables:
+    HELM_ENVIRONMENT: stage
+  extends:
+    - .gesis helm deploy
+
+smoke test after stage deploy:
   stage: test-stage
   script:
     - curl https://notebooks-test.gesis.org/binder/
