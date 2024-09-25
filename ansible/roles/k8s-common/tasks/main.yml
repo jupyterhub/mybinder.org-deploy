@@ -11,7 +11,7 @@
 - name: Ensure DOCKER_CLIENT_TIMEOUT is set
   ansible.builtin.lineinfile:
     path: /etc/environment
-    regexp: '^DOCKER_CLIENT_TIMEOUT='
+    regexp: "^DOCKER_CLIENT_TIMEOUT="
     line: DOCKER_CLIENT_TIMEOUT=180
 - name: Disable SWAP since kubernetes can't work with swap enabled
   ansible.builtin.command: swapoff -a
@@ -27,17 +27,17 @@
 - name: Allow IP forward
   ansible.posix.sysctl:
     name: net.ipv4.ip_forward
-    value: '1'
+    value: "1"
     state: present
 - name: Set inotify max user instances
   ansible.posix.sysctl:
     name: fs.inotify.max_user_instances
-    value: '1280'
+    value: "1280"
     state: present
 - name: Set inotify max user watches
   ansible.posix.sysctl:
     name: fs.inotify.max_user_watches
-    value: '655360'
+    value: "655360"
     state: present
 - name: Create directory for Persistent Volume
   ansible.builtin.import_tasks:
@@ -46,7 +46,7 @@
   ansible.builtin.get_url:
     url: https://download.docker.com/linux/ubuntu/gpg
     dest: /etc/apt/trusted.gpg.d/docker.asc
-    mode: '0644'
+    mode: "0644"
     force: true
 - name: Add Docker repository
   ansible.builtin.apt_repository:
@@ -57,7 +57,7 @@
   ansible.builtin.get_url:
     url: https://baltocdn.com/helm/signing.asc
     dest: /etc/apt/trusted.gpg.d/helm.asc
-    mode: '0644'
+    mode: "0644"
     force: true
 - name: Add Helm repository
   ansible.builtin.apt_repository:
