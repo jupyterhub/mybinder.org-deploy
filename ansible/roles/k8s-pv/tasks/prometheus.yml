@@ -1,0 +1,29 @@
+- name: Create a Persistent Volume for Prometheus
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: prometheus
+        labels:
+          app.kubernetes.io/managed-by: Ansible
+          app.kubernetes.io/part-of: prometheus
+      spec:
+        capacity:
+          storage: "{{ PROMETHEUS_CAPACITY_STORAGE }}"
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+        persistentVolumeReclaimPolicy: Retain
+        storageClassName: "local-storage"
+        local:
+          path: /orc2_data/prometheus
+        nodeAffinity:
+          required:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: prometheus
+                    operator: In
+                    values:
+                      - "true"

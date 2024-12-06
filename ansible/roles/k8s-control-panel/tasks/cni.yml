@@ -1,0 +1,17 @@
+- name: Remove Container Network Interface (CNI) Flannel
+  kubernetes.core.k8s:
+    state: absent
+    src: https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
+- name: Install Container Network Interface (CNI) Tigera Calico operator
+  kubernetes.core.k8s:
+    state: present
+    src: https://raw.githubusercontent.com/projectcalico/calico/v{{ k8s_control_panel_calico_version }}/manifests/tigera-operator.yaml
+- name: Install Calico and resource
+  kubernetes.core.k8s:
+    state: present
+    # A local copy of https://raw.githubusercontent.com/projectcalico/calico/v3.28.2/manifests/custom-resources.yaml
+    definition: "{{ lookup('ansible.builtin.template', '{{ role_path }}/templates/calico/custom-resources.yaml.jinja') | from_yaml_all }}"
+- name: Install Cert Manager
+  kubernetes.core.k8s:
+    state: present
+    src: https://github.com/cert-manager/cert-manager/releases/download/v1.15.3/cert-manager.crds.yaml
