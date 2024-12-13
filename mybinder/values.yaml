@@ -148,7 +148,7 @@ binderhub:
       banner_message: |
         <a class="btn" style="width:fit-content;height:fit-content;padding:10px;background-color:#e66581;color:white;font-weight:bold;position:absolute;top:0px;bottom:0px;margin:auto 0;right:4px;"
           onmouseover="this.style.backgroundColor='#d15b75'" onmouseout="this.style.backgroundColor='#e66581'"
-          href="https://numfocus.org/donate-to-jupyter" target="_blank">
+          href="https://jupyter.org/about#donate" target="_blank">
             🤍 Donate to mybinder.org!
         </a>
         <div style="text-align:center;">
@@ -159,8 +159,8 @@ binderhub:
         </div>
       about_message: |
         <p>mybinder.org is public infrastructure operated by the <a href="https://jupyterhub-team-compass.readthedocs.io/en/latest/team.html#binder-team">Binder Project team</a>.<br /><br />
-        The Binder Project is a member of <a href="https://jupyter.org">Project Jupyter</a>, which is a fiscally
-        sponsored project of <a href="https://numfocus.org/">NumFocus</a>, a US 501c3 non-profit.<br /><br />
+        The Binder Project is a member of <a href="https://jupyter.org">Project Jupyter</a>.
+        Donations are managed by <a href="https://lf-charities.org">LF Charities</a>, a US 501c3 non-profit.<br /><br />
         For abuse please email: <a href="mailto:binder-team@googlegroups.com">binder-team@googlegroups.com</a>, to report a
         security vulnerability please see: <a href="https://mybinder.readthedocs.io/en/latest/faq.html#where-can-i-report-a-security-issue">Where can I report a security issue</a><br /><br />
         For more information about the Binder Project, see <a href="https://mybinder.readthedocs.io/en/latest/about.html">the About Binder page</a></p>
