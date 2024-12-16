@@ -234,13 +234,13 @@ federationRedirect:
       health: https://notebooks.gesis.org/binder/health
       versions: https://notebooks.gesis.org/binder/versions
     ovh2:
-      prime: false
+      prime: true
       url: https://ovh2.mybinder.org
       weight: 60
       health: https://ovh2.mybinder.org/health
       versions: https://ovh2.mybinder.org/versions
     curvenote:
-      prime: true
+      prime: false
       url: https://binder.curvenote.dev
       weight: 20
       health: https://binder.curvenote.dev/health
