@@ -226,12 +226,6 @@ jobs:
             helm_version: ""
             experimental: false
 
-          - federation_member: curvenote
-            helm_version: ""
-            experimental: false
-            aws_deployment_role: arn:aws:iam::166088433508:role/binderhub-github-oidc-mybinderorgdeploy
-            aws_region: us-east-2
-
     # These permissions are needed to interact with GitHub's OIDC Token endpoint.
     permissions:
       id-token: write
@@ -293,14 +287,6 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           version: ${{ env.GCLOUD_SDK_VERION }}
-
-      - name: "Stage 1: Configure AWS credentials"
-        if: matrix.federation_member == 'curvenote'
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ matrix.aws_deployment_role }}
-          aws-region: ${{ matrix.aws_region }}
-          role-session-name: mybinder-github-cd
 
       - name: "Stage 1: Install kubectl ${{ env.KUBECTL_VERSION }}"
         uses: azure/setup-kubectl@v4
