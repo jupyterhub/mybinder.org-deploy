@@ -2,6 +2,14 @@ variables:
   GIT_STRATEGY: clone
   GIT_CLEAN_FLAGS: "-ffdx"
 
+acceptances:
+  - lint
+  - deploy-acceptance-ansible
+  - deploy-acceptance-helm
+  - test-acceptance
+  - deploy-production-nginx
+  - deploy-production-helm
+
 .gesis-manual-web:
   rules:
     - if: $CI_SERVER_HOST == 'git.gesis.org' && $CI_PIPELINE_SOURCE == 'web'
@@ -25,33 +33,29 @@ variables:
   rules:
     - if: $CI_SERVER_HOST == 'git.gesis.org' && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == 'main'
 
-stages:
-  - build
-  - deploy-stage-ansible
-  - deploy-stage-helm
-  - test-stage
-  - deploy-production-ansible
-  - deploy-production-helm
-
 include:
   - component: $CI_SERVER_FQDN/rse/docker/images/ansible/ansible-lint@10.2.6
     inputs:
-      stage: build
+      stage: lint
       dir: ansible
 
   - component: $CI_SERVER_FQDN/rse/docker/images/ansible/ansible-deploy@10.2.6
     inputs:
-      stage: deploy-stage-ansible
+      stage: deploy-acceptance-ansible
       dir: ansible
-      inventory: gesis-stage
+      inventory: gesis-acceptance
       playbook: gesis.yml
       ssh-user: ansible
       ssh-key-type: ed25519
+    rules:
+      - if: CI_SERVER_HOST == "git.gesis.org"
 
 .gesis helm deploy:
   image:
     name: docker-private.gesis.intra/gesis/ilcm/orc2/k8s:latest
     entrypoint: [""]
+  rules:
+      - if: CI_SERVER_HOST == "git.gesis.org"
   variables:
     HELM_ENVIRONMENT: template
   script:
@@ -95,15 +99,15 @@ include:
       --values ./secrets/config/common/gesis.yaml \
       --values ./secrets/config/gesis-${HELM_ENVIRONMENT}.yaml
 
-gesis helm stage deploy:
-  resource_group: stage
-  stage: deploy-stage-helm
+gesis helm acceptance deploy:
+  resource_group: acceptance
+  stage: deploy-acceptance-helm
   rules:
     - !reference [.gesis-manual-web, rules]
     - !reference [.geis-merge-request, rules]
     - !reference [.geis-push-main, rules]
   variables:
-    HELM_ENVIRONMENT: stage
+    HELM_ENVIRONMENT: acceptance
   extends:
     - .gesis helm deploy
 
@@ -118,8 +122,8 @@ gesis helm production deploy:
   extends:
     - .gesis helm deploy
 
-smoke test after stage deploy:
-  stage: test-stage
+smoke test to acceptance cluster:
+  stage: test-acceptance
   rules:
     - !reference [.gesis-manual-web, rules]
     - !reference [.geis-merge-request, rules]
