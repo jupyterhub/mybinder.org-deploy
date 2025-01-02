@@ -157,6 +157,12 @@
     create_namespace: true
     values:
       harborAdminPassword: "{{ HARBOR_ADMIN_PASSWORD }}"
+      expose:
+        type: loadBalancer
+        tls:
+          enabled: false
+        loadBalancer:
+          name: "{{ harbor_name }}"
       persistence:
         persistentVolumeClaim:
           registry:
