@@ -55,7 +55,7 @@ include:
     name: docker-private.gesis.intra/gesis/ilcm/orc2/k8s:latest
     entrypoint: [""]
   rules:
-      - if: CI_SERVER_HOST == "git.gesis.org"
+      - if: $CI_SERVER_HOST == "git.gesis.org"
   variables:
     HELM_ENVIRONMENT: template
   script:
