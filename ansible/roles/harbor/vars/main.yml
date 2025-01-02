@@ -1,3 +1,4 @@
+harbor_name: harbor
 harbor_namespace: harbor
 harbor_jobservice_storage: 10Gi
 harbor_registry_storage: 10Gi
