@@ -156,6 +156,7 @@
     release_namespace: "{{ harbor_namespace }}"
     create_namespace: true
     values:
+      harborAdminPassword: "{{ HARBOR_ADMIN_PASSWORD }}"
       persistence:
         persistentVolumeClaim:
           registry:
