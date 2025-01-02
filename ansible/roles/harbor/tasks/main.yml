@@ -20,7 +20,7 @@
         accessModes:
           - ReadWriteMany
         persistentVolumeReclaimPolicy: Delete
-        storageClassName: standard
+        storageClassName: "{{ harbor_storage_class_name }}"
         local:
           path: /harbor/jobservice
         nodeAffinity:
@@ -49,7 +49,7 @@
         accessModes:
           - ReadWriteMany
         persistentVolumeReclaimPolicy: Delete
-        storageClassName: standard
+        storageClassName: "{{ harbor_storage_class_name }}"
         local:
           path: /harbor/registry
         nodeAffinity:
@@ -78,7 +78,7 @@
         accessModes:
           - ReadWriteMany
         persistentVolumeReclaimPolicy: Delete
-        storageClassName: standard
+        storageClassName: "{{ harbor_storage_class_name }}"
         local:
           path: /harbor/registry
         nodeAffinity:
@@ -107,7 +107,7 @@
         accessModes:
           - ReadWriteMany
         persistentVolumeReclaimPolicy: Delete
-        storageClassName: standard
+        storageClassName: "{{ harbor_storage_class_name }}"
         local:
           path: /harbor/registry
         nodeAffinity:
@@ -136,7 +136,7 @@
         accessModes:
           - ReadWriteMany
         persistentVolumeReclaimPolicy: Delete
-        storageClassName: standard
+        storageClassName: "{{ harbor_storage_class_name }}"
         local:
           path: /harbor/registry
         nodeAffinity:
@@ -155,3 +155,17 @@
     release_name: "{{ harbor_name }}"
     release_namespace: "{{ harbor_namespace }}"
     create_namespace: true
+    values:
+      persistence:
+        persistentVolumeClaim:
+          registry:
+            storageClass: "{{ harbor_storage_class_name }}"
+          jobservice:
+            jobLog:
+              storageClass: "{{ harbor_storage_class_name }}"
+          database:
+            storageClass: "{{ harbor_storage_class_name }}"
+          redis:
+            storageClass: "{{ harbor_storage_class_name }}"
+          trivy:
+            storageClass: "{{ harbor_storage_class_name }}"
