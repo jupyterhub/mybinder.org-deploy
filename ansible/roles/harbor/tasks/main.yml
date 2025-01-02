@@ -18,7 +18,7 @@
           storage: "{{ harbor_jobservice_storage }}"
         volumeMode: Filesystem
         accessModes:
-          - ReadWriteMany
+          - ReadWriteOnce
         persistentVolumeReclaimPolicy: Delete
         storageClassName: "{{ harbor_storage_class_name }}"
         local:
@@ -47,7 +47,7 @@
           storage: "{{ harbor_registry_storage }}"
         volumeMode: Filesystem
         accessModes:
-          - ReadWriteMany
+          - ReadWriteOnce
         persistentVolumeReclaimPolicy: Delete
         storageClassName: "{{ harbor_storage_class_name }}"
         local:
@@ -70,17 +70,17 @@
       metadata:
         name: "{{ harbor_name }}-redis"
         labels:
-        harbor: registry
+        harbor: redis
       spec:
         capacity:
           storage: "{{ harbor_redis_storage }}"
         volumeMode: Filesystem
         accessModes:
-          - ReadWriteMany
+          - ReadWriteOnce
         persistentVolumeReclaimPolicy: Delete
         storageClassName: "{{ harbor_storage_class_name }}"
         local:
-          path: /harbor/registry
+          path: /harbor/redis
         nodeAffinity:
           required:
             nodeSelectorTerms:
@@ -99,17 +99,17 @@
       metadata:
         name: "{{ harbor_name }}-trivy"
         labels:
-        harbor: registry
+        harbor: trivy
       spec:
         capacity:
           storage: "{{ harbor_trivy_storage }}"
         volumeMode: Filesystem
         accessModes:
-          - ReadWriteMany
+          - ReadWriteOnce
         persistentVolumeReclaimPolicy: Delete
         storageClassName: "{{ harbor_storage_class_name }}"
         local:
-          path: /harbor/registry
+          path: /harbor/trivy
         nodeAffinity:
           required:
             nodeSelectorTerms:
@@ -128,17 +128,17 @@
       metadata:
         name: "{{ harbor_name }}-database"
         labels:
-        harbor: registry
+        harbor: database
       spec:
         capacity:
           storage: "{{ harbor_database_storage }}"
         volumeMode: Filesystem
         accessModes:
-          - ReadWriteMany
+          - ReadWriteOnce
         persistentVolumeReclaimPolicy: Delete
         storageClassName: "{{ harbor_storage_class_name }}"
         local:
-          path: /harbor/registry
+          path: /harbor/database
         nodeAffinity:
           required:
             nodeSelectorTerms:
