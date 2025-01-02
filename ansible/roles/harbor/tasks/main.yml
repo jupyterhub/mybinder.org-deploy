@@ -10,7 +10,7 @@
       apiVersion: v1
       kind: PersistentVolume
       metadata:
-        name: "{{ harbor_namespace }}-jobservice"
+        name: "{{ harbor_name }}-jobservice"
         labels:
           harbor: jobservice
       spec:
@@ -39,7 +39,7 @@
       apiVersion: v1
       kind: PersistentVolume
       metadata:
-        name: "{{ harbor_namespace }}-registry"
+        name: "{{ harbor_name }}-registry"
         labels:
         harbor: registry
       spec:
@@ -68,7 +68,7 @@
       apiVersion: v1
       kind: PersistentVolume
       metadata:
-        name: "{{ harbor_namespace }}-registry"
+        name: "{{ harbor_name }}-registry"
         labels:
         harbor: registry
       spec:
@@ -97,7 +97,7 @@
       apiVersion: v1
       kind: PersistentVolume
       metadata:
-        name: "{{ harbor_namespace }}-registry"
+        name: "{{ harbor_name }}-registry"
         labels:
         harbor: registry
       spec:
@@ -126,7 +126,7 @@
       apiVersion: v1
       kind: PersistentVolume
       metadata:
-        name: "{{ harbor_namespace }}-registry"
+        name: "{{ harbor_name }}-registry"
         labels:
         harbor: registry
       spec:
@@ -150,7 +150,8 @@
 
 - name: Deploy harbor
   kubernetes.core.helm:
-    name: harbor
+    chart_ref: harbor/harbor
     chart_version: 1.16.0
+    release_name: "{{ harbor_name }}"
     release_namespace: "{{ harbor_namespace }}"
     create_namespace: true
