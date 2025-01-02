@@ -22,6 +22,11 @@
   become: true
   roles:
     - k8s-pv
+- name: Configure Harbor
+  hosts: kubernetes_control_panel
+  gather_facts: false
+  roles:
+    - harbor
 - name: Configure JupyterHub workers
   hosts: jupyterhub_single_user
   gather_facts: false

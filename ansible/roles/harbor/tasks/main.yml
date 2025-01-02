@@ -1,0 +1,156 @@
+- name: Add harbor's repository
+  kubernetes.core.helm_repository:
+    name: harbor
+    repo_url: https://helm.goharbor.io
+
+- name: Create a storage for jobservice
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: "{{ harbor_namespace }}-jobservice"
+        labels:
+          harbor: jobservice
+      spec:
+        capacity:
+          storage: "{{harbor_jobservice_storage}}"
+        volumeMode: Filesystem
+        accessModes:
+        - ReadWriteMany
+        persistentVolumeReclaimPolicy: Delete
+        storageClassName: standard
+        local:
+          path: /harbor/jobservice
+        nodeAffinity:
+          required:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: harbor
+                operator: In
+                values:
+                - 'true'
+
+- name: Create a storage for registry
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: "{{ harbor_namespace }}-registry"
+        labels:
+        harbor: registry
+      spec:
+        capacity:
+          storage: "{{harbor_registry_storage}}"
+        volumeMode: Filesystem
+        accessModes:
+        - ReadWriteMany
+        persistentVolumeReclaimPolicy: Delete
+        storageClassName: standard
+        local:
+          path: /harbor/registry
+        nodeAffinity:
+          required:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: harbor
+                operator: In
+                values:
+                - 'true'
+
+- name: Create a storage for redis
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: "{{ harbor_namespace }}-registry"
+        labels:
+        harbor: registry
+      spec:
+        capacity:
+          storage: "{{harbor_redis_storage}}"
+        volumeMode: Filesystem
+        accessModes:
+        - ReadWriteMany
+        persistentVolumeReclaimPolicy: Delete
+        storageClassName: standard
+        local:
+          path: /harbor/registry
+        nodeAffinity:
+          required:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: harbor
+                operator: In
+                values:
+                - 'true'
+
+- name: Create a storage for trivy
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: "{{ harbor_namespace }}-registry"
+        labels:
+        harbor: registry
+      spec:
+        capacity:
+          storage: "{{harbor_trivy_storage}}"
+        volumeMode: Filesystem
+        accessModes:
+        - ReadWriteMany
+        persistentVolumeReclaimPolicy: Delete
+        storageClassName: standard
+        local:
+          path: /harbor/registry
+        nodeAffinity:
+          required:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: harbor
+                operator: In
+                values:
+                - 'true'
+
+- name: Create a storage for database
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: "{{ harbor_namespace }}-registry"
+        labels:
+        harbor: registry
+      spec:
+        capacity:
+          storage: "{{harbor_database_storage}}"
+        volumeMode: Filesystem
+        accessModes:
+        - ReadWriteMany
+        persistentVolumeReclaimPolicy: Delete
+        storageClassName: standard
+        local:
+          path: /harbor/registry
+        nodeAffinity:
+          required:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: harbor
+                operator: In
+                values:
+                - 'true'
+
+- name: Deploy harbor
+  kubernetes.core.helm:
+    name: harbor
+    chart_version: 1.16.0 
+    release_namespace: "{{ harbor_namespace }}"
+    create_namespace: true
