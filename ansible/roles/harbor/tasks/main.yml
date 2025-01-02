@@ -68,7 +68,7 @@
       apiVersion: v1
       kind: PersistentVolume
       metadata:
-        name: "{{ harbor_name }}-registry"
+        name: "{{ harbor_name }}-redis"
         labels:
         harbor: registry
       spec:
@@ -97,7 +97,7 @@
       apiVersion: v1
       kind: PersistentVolume
       metadata:
-        name: "{{ harbor_name }}-registry"
+        name: "{{ harbor_name }}-trivy"
         labels:
         harbor: registry
       spec:
@@ -126,7 +126,7 @@
       apiVersion: v1
       kind: PersistentVolume
       metadata:
-        name: "{{ harbor_name }}-registry"
+        name: "{{ harbor_name }}-database"
         labels:
         harbor: registry
       spec:
