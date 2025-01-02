@@ -1,3 +1,4 @@
+harbor_version: 1.16.0
 harbor_name: harbor
 harbor_namespace: harbor
 harbor_storage_class_name: standard

@@ -151,7 +151,7 @@
 - name: Deploy harbor
   kubernetes.core.helm:
     chart_ref: harbor/harbor
-    chart_version: 1.16.0
+    chart_version: "{{ harbor_version }}"
     release_name: "{{ harbor_name }}"
     release_namespace: "{{ harbor_namespace }}"
     create_namespace: true
