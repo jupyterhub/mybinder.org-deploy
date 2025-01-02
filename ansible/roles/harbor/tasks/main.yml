@@ -15,10 +15,10 @@
           harbor: jobservice
       spec:
         capacity:
-          storage: "{{harbor_jobservice_storage}}"
+          storage: "{{ harbor_jobservice_storage }}"
         volumeMode: Filesystem
         accessModes:
-        - ReadWriteMany
+          - ReadWriteMany
         persistentVolumeReclaimPolicy: Delete
         storageClassName: standard
         local:
@@ -26,11 +26,11 @@
         nodeAffinity:
           required:
             nodeSelectorTerms:
-            - matchExpressions:
-              - key: harbor
-                operator: In
-                values:
-                - 'true'
+              - matchExpressions:
+                  - key: harbor
+                    operator: In
+                    values:
+                      - 'true'
 
 - name: Create a storage for registry
   kubernetes.core.k8s:
@@ -44,10 +44,10 @@
         harbor: registry
       spec:
         capacity:
-          storage: "{{harbor_registry_storage}}"
+          storage: "{{ harbor_registry_storage }}"
         volumeMode: Filesystem
         accessModes:
-        - ReadWriteMany
+          - ReadWriteMany
         persistentVolumeReclaimPolicy: Delete
         storageClassName: standard
         local:
@@ -55,11 +55,11 @@
         nodeAffinity:
           required:
             nodeSelectorTerms:
-            - matchExpressions:
-              - key: harbor
-                operator: In
-                values:
-                - 'true'
+              - matchExpressions:
+                  - key: harbor
+                    operator: In
+                    values:
+                      - 'true'
 
 - name: Create a storage for redis
   kubernetes.core.k8s:
@@ -73,10 +73,10 @@
         harbor: registry
       spec:
         capacity:
-          storage: "{{harbor_redis_storage}}"
+          storage: "{{ harbor_redis_storage }}"
         volumeMode: Filesystem
         accessModes:
-        - ReadWriteMany
+          - ReadWriteMany
         persistentVolumeReclaimPolicy: Delete
         storageClassName: standard
         local:
@@ -84,11 +84,11 @@
         nodeAffinity:
           required:
             nodeSelectorTerms:
-            - matchExpressions:
-              - key: harbor
-                operator: In
-                values:
-                - 'true'
+              - matchExpressions:
+                  - key: harbor
+                    operator: In
+                    values:
+                      - 'true'
 
 - name: Create a storage for trivy
   kubernetes.core.k8s:
@@ -102,10 +102,10 @@
         harbor: registry
       spec:
         capacity:
-          storage: "{{harbor_trivy_storage}}"
+          storage: "{{ harbor_trivy_storage }}"
         volumeMode: Filesystem
         accessModes:
-        - ReadWriteMany
+          - ReadWriteMany
         persistentVolumeReclaimPolicy: Delete
         storageClassName: standard
         local:
@@ -113,11 +113,11 @@
         nodeAffinity:
           required:
             nodeSelectorTerms:
-            - matchExpressions:
-              - key: harbor
-                operator: In
-                values:
-                - 'true'
+              - matchExpressions:
+                  - key: harbor
+                    operator: In
+                    values:
+                      - 'true'
 
 - name: Create a storage for database
   kubernetes.core.k8s:
@@ -131,10 +131,10 @@
         harbor: registry
       spec:
         capacity:
-          storage: "{{harbor_database_storage}}"
+          storage: "{{ harbor_database_storage }}"
         volumeMode: Filesystem
         accessModes:
-        - ReadWriteMany
+          - ReadWriteMany
         persistentVolumeReclaimPolicy: Delete
         storageClassName: standard
         local:
@@ -142,15 +142,15 @@
         nodeAffinity:
           required:
             nodeSelectorTerms:
-            - matchExpressions:
-              - key: harbor
-                operator: In
-                values:
-                - 'true'
+              - matchExpressions:
+                  - key: harbor
+                    operator: In
+                    values:
+                      - 'true'
 
 - name: Deploy harbor
   kubernetes.core.helm:
     name: harbor
-    chart_version: 1.16.0 
+    chart_version: 1.16.0
     release_namespace: "{{ harbor_namespace }}"
     create_namespace: true
