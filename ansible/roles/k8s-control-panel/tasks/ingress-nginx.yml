@@ -2,6 +2,7 @@
   kubernetes.core.helm_repository:
     repo_name: ingress-nginx
     repo_url: https://kubernetes.github.io/ingress-nginx
+    force_update: true
 - name: Create Ingress NGINX Controller Kubernetes namespace
   kubernetes.core.k8s:
     state: present
