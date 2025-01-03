@@ -1,0 +1,11 @@
+harbor_version: 1.16.0
+harbor_name: harbor
+harbor_namespace: harbor
+harbor_storage_class_name: standard
+harbor_jobservice_storage: 10Gi
+harbor_registry_storage: 10Gi
+harbor_redis_storage: 10Gi
+harbor_trivy_storage: 10Gi
+harbor_database_storage: 10Gi
+harbor_domain: harbor.localhost
+harbor_path: '/'

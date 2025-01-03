@@ -1,0 +1,172 @@
+- name: Check if Kubernetes is running
+  ansible.builtin.shell: >
+    kubectl get nodes || /bin/true
+  changed_when: false
+  register: kubernetes_nodes
+- name: Pull kubernetes images
+  when: kubernetes_nodes.stdout.find('control-plane') == -1
+  ansible.builtin.shell: >
+    kubeadm config images pull
+    --cri-socket unix:///run/containerd/containerd.sock
+  changed_when: false
+- name: Initialize the cluster
+  when: kubernetes_nodes.stdout.find('control-plane') == -1
+  ansible.builtin.shell: >
+    kubeadm init
+    --pod-network-cidr=10.244.0.0/16
+    --upload-certs
+    --control-plane-endpoint={{ K8S_CONTROL_PLANE_ENDPOINT }}
+    --cri-socket unix:///run/containerd/containerd.sock
+  changed_when: false
+  register: kubeadm_init_output
+- name: Create root's .kube directory
+  ansible.builtin.file:
+    path: /root/.kube
+    state: directory
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+- name: Copies admin.conf to root's kube config
+  ansible.builtin.copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+    remote_src: true
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=
+- name: Create user's .kube directory
+  ansible.builtin.file:
+    path: /home/ansible/.kube
+    state: directory
+    mode: u=rwx,g=x,o=x
+    owner: ansible
+    group: ansible
+- name: Copies admin.conf to user's kube config
+  ansible.builtin.copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /home/ansible/.kube/config
+    remote_src: true
+    owner: ansible
+    group: ansible
+    mode: u=rw,g=,o=
+- name: Get the token for joining the worker nodes
+  ansible.builtin.shell: >
+    kubeadm token create --print-join-command
+  changed_when: false
+  register: kubernetes_join_command
+- name: Create temporary file
+  ansible.builtin.file:
+    path: /tmp/kubernetes_join_command
+    state: touch
+    owner: ansible
+    group: ansible
+    mode: u=rw,g=r,o=
+- name: Save content of join command
+  ansible.builtin.copy:
+    content: |
+      #!/bin/sh
+      {{ kubernetes_join_command.stdout }}
+    dest: /tmp/kubernetes_join_command
+    owner: ansible
+    group: ansible
+    mode: u=rw,g=r,o=
+- name: Copy join command to local file
+  ansible.builtin.fetch:
+    src: /tmp/kubernetes_join_command
+    dest: "{{ ANSIBLE_CONTROL_NODE_TMP }}"
+- name: Add Container Network Interface (CNI) to Kubernetes cluster
+  ansible.builtin.import_tasks:
+    file: cni.yml
+- name: Add GitLab Helm repository
+  kubernetes.core.helm_repository:
+    name: gitlab
+    repo_url: https://charts.gitlab.io
+- name: Deploy GitLab agent
+  kubernetes.core.helm:
+    name: "gitlab-agent-{{ inventory_file | basename }}"
+    chart_ref: gitlab/gitlab-agent
+    release_namespace: gitlab-agent
+    dependency_update: true
+    create_namespace: true
+    set_values:
+      - value: "config.token={{ GITLAB_K8S_TOKEN }}"
+      - value: config.kasAddress=wss://git.gesis.org/-/kubernetes-agent/
+- name: Copy orc2-fix-jupyterhub-bot Python script
+  ansible.builtin.copy:
+    src: files/usr/bin/orc2-fix-jupyterhub-bot.py
+    dest: /usr/bin/orc2-fix-jupyterhub-bot.py
+    owner: root
+    group: root
+    mode: u=rwx,g=rwx,o=r
+- name: Copy orc2-fix-jupyterhub-bot Systemd Unit script
+  ansible.builtin.copy:
+    src: files/etc/systemd/system/orc2-fix-jupyterhub-bot.service
+    dest: /etc/systemd/system/orc2-fix-jupyterhub-bot.service
+    owner: root
+    group: root
+    mode: u=rwx,g=rwx,o=r
+- name: Enable service orc2-fix-jupyterhub-bot
+  ansible.builtin.systemd:
+    name: orc2-fix-jupyterhub-bot
+    daemon_reload: true
+    enabled: true
+    masked: false
+    state: restarted
+- name: Copy orc2-fix-dind-bot Python script
+  ansible.builtin.copy:
+    src: files/usr/bin/orc2-fix-dind-bot.py
+    dest: /usr/bin/orc2-fix-dind-bot.py
+    owner: root
+    group: root
+    mode: u=rwx,g=rwx,o=rx
+- name: Copy orc2-fix-dind-bot Systemd Unit script
+  ansible.builtin.template:
+    src: files/etc/systemd/system/orc2-fix-dind-bot.service
+    dest: /etc/systemd/system/orc2-fix-dind-bot.service
+    owner: root
+    group: root
+    mode: u=rwx,g=rwx,o=r
+- name: Enable service orc2-fix-dind-bot
+  ansible.builtin.systemd:
+    name: orc2-fix-dind-bot
+    daemon_reload: true
+    enabled: true
+    masked: false
+    state: restarted
+- name: Create directory
+  ansible.builtin.file:
+    state: directory
+    path: /home/ansible/bin
+    owner: ansible
+    group: ansible
+    mode: u=rwx,g=rwx,o=rx
+- name: Copy kill-succeeded-pods.py
+  ansible.builtin.copy:
+    src: files/cron/kill-succeeded-pods.py
+    dest: /home/ansible/bin/kill-succeeded-pods.py
+    owner: ansible
+    group: ansible
+    mode: u=rwx,g=rwx,o=r
+- name: Add cron job to remove succeeded pods
+  ansible.builtin.cron:
+    name: "remove succeeded"
+    job: "python3 /home/ansible/bin/kill-succeeded-pods.py --verbose >> /home/ansible/kill-succeeded-pods.log 2>&1"
+    minute: "*/5"
+- name: Copy kill-after-timeout-pods.py
+  ansible.builtin.copy:
+    src: files/cron/kill-after-timeout-pods.py
+    dest: /home/ansible/bin/kill-after-timeout-pods.py
+    owner: ansible
+    group: ansible
+    mode: u=rwx,g=rwx,o=r
+- name: Add cron job to remove timed out pods
+  ansible.builtin.cron:
+    name: "remove timeout"
+    job: "python3 /home/ansible/bin/kill-after-timeout-pods.py --verbose >> /home/ansible/kill-after-timeout-pods.log 2>&1"
+    minute: "*/5"
+- name: Add MetalLB to Kubernetes cluster
+  ansible.builtin.import_tasks:
+    file: metallb.yml
+- name: Add Ingress NGINX Controller to Kubernetes cluster
+  ansible.builtin.import_tasks:
+    file: ingress-nginx.yml

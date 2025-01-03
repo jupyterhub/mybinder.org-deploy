@@ -1,0 +1,7 @@
+k8s_control_panel_calico_version: "3.28.2"
+k8s_control_panel_cidr: "10.244.0.0/16"
+k8s_control_panel_metallb_version: 0.14.9
+k8s_control_panel_metallb_ip_address_pool_name: "gesis"
+k8s_control_panel_ingress_nginx_version: 4.12.0
+k8s_control_panel_addresses_begin: 0.0.0.0
+k8s_control_panel_addresses_end: 0.0.0.0

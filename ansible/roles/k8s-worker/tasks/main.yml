@@ -1,0 +1,12 @@
+- name: Copy join command
+  ansible.builtin.copy:
+    src: "{{ ANSIBLE_CONTROL_NODE_TMP }}/{{ K8S_CONTROL_PLANE_ALIAS }}/tmp/kubernetes_join_command"
+    dest: /tmp/kubernetes_join_command
+    mode: u=rwx,g=rx,o=rx
+- name: Attempt to join cluster
+  ansible.builtin.command: /tmp/kubernetes_join_command
+  register: kubernetes_join_attempt
+  failed_when:
+    - kubernetes_join_attempt.rc != 0
+    - '"already exists" not in kubernetes_join_attempt.stderr'
+  changed_when: false

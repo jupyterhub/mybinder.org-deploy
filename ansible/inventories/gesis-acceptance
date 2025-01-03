@@ -1,0 +1,51 @@
+[all]
+svko-css-backup-node ansible_host=194.95.75.20 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_20 }}'
+svko-k8s-test01 ansible_host=194.95.75.21 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_21 }}'
+svko-k8s-test02 ansible_host=194.95.75.22 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_22 }}'
+svko-k8s-test03 ansible_host=194.95.75.23 ansible_ssh_user=ansible ansible_become_pass='{{ become_pass_194_95_75_23 }}'
+
+[all:vars]
+INVENTORY_NAME=stage
+K8S_CONTROL_PLANE_ENDPOINT=194.95.75.21
+K8S_CONTROL_PLANE_ALIAS=svko-k8s-test01
+; Replace this variable with a filter
+; This must match the group ingress
+K8S_INGRESS=194.95.75.20
+
+[notebooks_gesis_org]
+svko-css-backup-node
+
+[kubernetes_control_panel]
+svko-k8s-test01
+
+[kubernetes_control_panel:vars]
+GRAFANA_CAPACITY_STORAGE=2Gi
+JUPYTERHUB_CAPACITY_STORAGE=2Gi
+PROMETHEUS_CAPACITY_STORAGE=15Gi
+HARBOR_DOMAIN=notebooks.gesis.org
+HARBOR_PATH='/'
+
+[kubernetes_workers]
+svko-k8s-test02
+svko-k8s-test03
+
+[ingress]
+svko-css-backup-node
+
+[harbor]
+svko-k8s-test03
+
+[binderhub]
+svko-k8s-test02
+
+[jupyterhub]
+svko-k8s-test02
+
+[jupyterhub_single_user]
+svko-k8s-test02
+
+[prometheus]
+svko-css-backup-node
+
+[grafana]
+svko-css-backup-node

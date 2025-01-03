@@ -1,0 +1,22 @@
+- name: Add hub.jupyter.org/node-purpose label
+  ansible.builtin.shell: |
+    {% for host in hostvars %}
+    {% if host in groups['binderhub'] %}
+    kubectl label nodes {{ host }} hub.jupyter.org/node-purpose=core
+    {% else %}
+    kubectl label nodes {{ host }} hub.jupyter.org/node-purpose-
+    {% endif %}
+    {% endfor %}
+  changed_when: false
+- name: Add labels from inventory
+  ansible.builtin.shell: |
+    {% for host in hostvars %}
+    {% for group, host_list in groups.items() %}
+    {% if host in host_list %}
+    kubectl label nodes {{ host }} {{ group }}=true
+    {% else %}
+    kubectl label nodes {{ host }} {{ group }}-
+    {% endif %}
+    {% endfor %}
+    {% endfor %}
+  changed_when: false

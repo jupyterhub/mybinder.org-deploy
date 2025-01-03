@@ -1,0 +1,118 @@
+- name: Create directory /etc/apt/keyrings if it does not exist
+  ansible.builtin.file:
+    state: directory
+    path: /etc/apt/keyrings
+    owner: root
+    group: root
+    mode: u=rwx,g=rx,o=rx
+- name: Add Kubernetes repository
+  ansible.builtin.import_tasks:
+    file: k8s-repository.yml
+- name: Ensure DOCKER_CLIENT_TIMEOUT is set
+  ansible.builtin.lineinfile:
+    path: /etc/environment
+    regexp: "^DOCKER_CLIENT_TIMEOUT="
+    line: DOCKER_CLIENT_TIMEOUT=180
+- name: Disable SWAP since kubernetes can't work with swap enabled
+  ansible.builtin.command: swapoff -a
+  changed_when: false
+- name: Disable SWAP in fstab since kubernetes can't work with swap enabled
+  ansible.builtin.replace:
+    path: /etc/fstab
+    regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+    replace: '# \1'
+- name: Disable Firewall
+  ansible.builtin.command: ufw disable
+  changed_when: false
+- name: Allow IP forward
+  ansible.posix.sysctl:
+    name: net.ipv4.ip_forward
+    value: "1"
+    state: present
+- name: Set inotify max user instances
+  ansible.posix.sysctl:
+    name: fs.inotify.max_user_instances
+    value: "1280"
+    state: present
+- name: Set inotify max user watches
+  ansible.posix.sysctl:
+    name: fs.inotify.max_user_watches
+    value: "655360"
+    state: present
+- name: Create directory for Persistent Volume
+  ansible.builtin.import_tasks:
+    file: pv.yml
+- name: Add Docker public GPG key
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /etc/apt/trusted.gpg.d/docker.asc
+    mode: "0644"
+    force: true
+- name: Add Docker repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/trusted.gpg.d/docker.asc] https://download.docker.com/linux/ubuntu jammy stable"
+    filename: docker
+    state: present
+- name: Add Helm public GPG key
+  ansible.builtin.get_url:
+    url: https://baltocdn.com/helm/signing.asc
+    dest: /etc/apt/trusted.gpg.d/helm.asc
+    mode: "0644"
+    force: true
+- name: Add Helm repository
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/helm.asc] https://baltocdn.com/helm/stable/debian/ all main"
+    filename: kubernetes
+    state: present
+- name: Install dependencies
+  ansible.builtin.apt:
+    update_cache: true
+    pkg:
+      - rsync
+      - python3
+      - python3-kubernetes
+      - python3-invoke
+      - python3-fabric
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - containerd.io=1.7.*
+      - "kubelet={{ k8s_common_kubernetes_version }}*"
+      - "kubeadm={{ k8s_common_kubernetes_version }}*"
+      - "kubectl={{ k8s_common_kubernetes_version }}*"
+      - "helm={{ k8s_common_helm_version }}*"
+- name: Copy containerd configuration file
+  ansible.builtin.copy:
+    src: files/etc/containerd/config.toml
+    dest: /etc/containerd/config.toml
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+- name: Reload service containerd
+  ansible.builtin.systemd:
+    name: containerd
+    state: restarted
+- name: Enable service containerd
+  ansible.builtin.systemd:
+    name: containerd
+    enabled: true
+    masked: false
+- name: Modify kernel module overlay
+  ansible.builtin.command: modprobe overlay
+  changed_when: false
+- name: Modify kernel module br_netfilter
+  ansible.builtin.command: modprobe br_netfilter
+  changed_when: false
+- name: Create file for list of kernel modules required by containerd
+  ansible.builtin.file:
+    path: "/etc/modules-load.d/containerd.conf"
+    state: "touch"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+- name: Populate list of kernel modules required by containerd
+  ansible.builtin.blockinfile:
+    path: "/etc/modules-load.d/containerd.conf"
+    block: |
+      overlay
+      br_netfilter

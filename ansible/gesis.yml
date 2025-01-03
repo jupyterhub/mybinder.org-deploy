@@ -1,0 +1,46 @@
+- name: Configure servers that are part of Kubernetes cluster
+  hosts: all
+  gather_facts: false
+  become: true
+  roles:
+    - k8s-common
+- name: Configure Kubernetes control panel
+  hosts: kubernetes_control_panel
+  gather_facts: false
+  become: true
+  roles:
+    - role: k8s-control-panel
+      vars:
+        k8s_control_panel_addresses_begin: '{{ K8S_INGRESS }}'
+        k8s_control_panel_addresses_end: '{{ K8S_INGRESS }}'
+- name: Configure Kubernetes workers
+  hosts: kubernetes_workers
+  gather_facts: false
+  become: true
+  roles:
+    - k8s-worker
+- name: Configure Kubernetes Persistent Volumes
+  hosts: kubernetes_control_panel
+  gather_facts: false
+  become: true
+  roles:
+    - k8s-pv
+- name: Configure Harbor
+  hosts: kubernetes_control_panel
+  gather_facts: false
+  roles:
+    - role: harbor
+      vars:
+        harbor_domain: '{{ HARBOR_DOMAIN }}'
+        harbor_path: '{{ HARBOR_PATH }}'
+- name: Configure JupyterHub workers
+  hosts: jupyterhub_single_user
+  gather_facts: false
+  become: true
+  roles:
+    - k8s-worker
+- name: Configure mybinder.org Kubernetes cluster
+  hosts: kubernetes_control_panel
+  gather_facts: false
+  roles:
+    - mybinder

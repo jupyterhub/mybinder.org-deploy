@@ -1,0 +1,201 @@
+- name: Add harbor's repository
+  kubernetes.core.helm_repository:
+    name: harbor
+    repo_url: https://helm.goharbor.io
+
+- name: Create a storage for jobservice
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: "{{ harbor_name }}-jobservice"
+        labels:
+          harbor: jobservice
+      spec:
+        capacity:
+          storage: "{{ harbor_jobservice_storage }}"
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+        persistentVolumeReclaimPolicy: Delete
+        storageClassName: "{{ harbor_storage_class_name }}"
+        local:
+          path: /harbor/jobservice
+        nodeAffinity:
+          required:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: harbor
+                    operator: In
+                    values:
+                      - 'true'
+
+- name: Create a storage for registry
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: "{{ harbor_name }}-registry"
+        labels:
+        harbor: registry
+      spec:
+        capacity:
+          storage: "{{ harbor_registry_storage }}"
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+        persistentVolumeReclaimPolicy: Delete
+        storageClassName: "{{ harbor_storage_class_name }}"
+        local:
+          path: /harbor/registry
+        nodeAffinity:
+          required:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: harbor
+                    operator: In
+                    values:
+                      - 'true'
+
+- name: Create a storage for redis
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: "{{ harbor_name }}-redis"
+        labels:
+        harbor: redis
+      spec:
+        capacity:
+          storage: "{{ harbor_redis_storage }}"
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+        persistentVolumeReclaimPolicy: Delete
+        storageClassName: "{{ harbor_storage_class_name }}"
+        local:
+          path: /harbor/redis
+        nodeAffinity:
+          required:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: harbor
+                    operator: In
+                    values:
+                      - 'true'
+
+- name: Create a storage for trivy
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: "{{ harbor_name }}-trivy"
+        labels:
+        harbor: trivy
+      spec:
+        capacity:
+          storage: "{{ harbor_trivy_storage }}"
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+        persistentVolumeReclaimPolicy: Delete
+        storageClassName: "{{ harbor_storage_class_name }}"
+        local:
+          path: /harbor/trivy
+        nodeAffinity:
+          required:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: harbor
+                    operator: In
+                    values:
+                      - 'true'
+
+- name: Create a storage for database
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: PersistentVolume
+      metadata:
+        name: "{{ harbor_name }}-database"
+        labels:
+        harbor: database
+      spec:
+        capacity:
+          storage: "{{ harbor_database_storage }}"
+        volumeMode: Filesystem
+        accessModes:
+          - ReadWriteOnce
+        persistentVolumeReclaimPolicy: Delete
+        storageClassName: "{{ harbor_storage_class_name }}"
+        local:
+          path: /harbor/database
+        nodeAffinity:
+          required:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: harbor
+                    operator: In
+                    values:
+                      - 'true'
+
+- name: Deploy harbor
+  kubernetes.core.helm:
+    chart_ref: harbor/harbor
+    chart_version: "{{ harbor_version }}"
+    release_name: "{{ harbor_name }}"
+    release_namespace: "{{ harbor_namespace }}"
+    create_namespace: true
+    history_max: 3
+    values:
+      harborAdminPassword: "{{ HARBOR_ADMIN_PASSWORD }}"
+      expose:
+        type: ClusterIP
+        tls:
+          enabled: false
+      persistence:
+        persistentVolumeClaim:
+          registry:
+            storageClass: "{{ harbor_storage_class_name }}"
+          jobservice:
+            jobLog:
+              storageClass: "{{ harbor_storage_class_name }}"
+          database:
+            storageClass: "{{ harbor_storage_class_name }}"
+          redis:
+            storageClass: "{{ harbor_storage_class_name }}"
+          trivy:
+            storageClass: "{{ harbor_storage_class_name }}"
+
+# Based on https://kubernetes.github.io/ingress-nginx/user-guide/basic-usage/
+- name: Create a ingress resources
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: networking.k8s.io/v1
+      kind: Ingress
+      metadata:
+        name: 'ingress-{{ harbor_name }}'
+      spec:
+        rules:
+          - host: '{{ harbor_domain }}'
+            http:
+              paths:
+                - path: '{{ harbor_path }}'
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: '{{ harbor_name }}'
+                      port:
+                        number: 80
+        # Don't change the ingressClassName
+        ingressClassName: nginx

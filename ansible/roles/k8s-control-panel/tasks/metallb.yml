@@ -1,0 +1,52 @@
+- name: Add a MetalLB Helm repository
+  kubernetes.core.helm_repository:
+    repo_name: metallb
+    repo_url: https://metallb.github.io/metallb
+    force_update: true
+- name: Create MetalLB Kubernetes namespace
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: metallb
+        labels:
+          # Required labels
+          # https://metallb.universe.tf/installation/#installation-with-helm
+          pod-security.kubernetes.io/enforce: privileged
+          pod-security.kubernetes.io/audit: privileged
+          pod-security.kubernetes.io/warn: privileged
+- name: Deploy MetalLB
+  kubernetes.core.helm:
+    release_name: metallb
+    release_namespace: metallb
+    chart_ref: metallb/metallb
+    chart_version: '{{ k8s_control_panel_metallb_version }}'
+    create_namespace: false
+    history_max: 3
+- name: Create MetalLB Kubernetes IP Address Pool
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: metallb.io/v1beta1
+      kind: IPAddressPool
+      metadata:
+        name: "{{ k8s_control_panel_metallb_ip_address_pool_name }}"
+        namespace: metallb
+      spec:
+        addresses:
+          # TODO Use Jinja filter to automate this.
+          - "{{ k8s_control_panel_addresses_begin }}-{{ k8s_control_panel_addresses_end }}"
+- name: Configure L2 Advertisement for MetalLB
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: metallb.io/v1beta1
+      kind: L2Advertisement
+      metadata:
+        name: "{{ k8s_control_panel_metallb_ip_address_pool_name }}-l2-advertisement"
+        namespace: metallb
+      spec:
+        ipAddressPools:
+          - "{{ k8s_control_panel_metallb_ip_address_pool_name }}"
