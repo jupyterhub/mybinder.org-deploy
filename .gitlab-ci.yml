@@ -146,3 +146,5 @@ smoke test to acceptance cluster:
     - !reference [.gesis-push-gesis, rules]
   variables:
     INTERACTIVE_URL: https://notebooks-test.gesis.org/binder/
+  extends:
+    - .smoke test
