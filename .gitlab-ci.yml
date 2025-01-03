@@ -33,6 +33,10 @@ stages:
   rules:
     - if: $CI_SERVER_HOST == 'git.gesis.org' && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == 'main'
 
+.gesis-push-gesis:
+  rules:
+    - if: $CI_SERVER_HOST == 'git.gesis.org' && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == 'gesis'
+
 include:
   - component: $CI_SERVER_FQDN/rse/docker/images/ansible/ansible-lint@10.2.6
     inputs:
@@ -50,6 +54,7 @@ include:
     rules:
       - if: $CI_SERVER_HOST == "git.gesis.org" && $CI_PIPELINE_SOURCE == "merge_request_event"
       - if: $CI_SERVER_HOST == 'git.gesis.org' && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == 'main'
+      - if: $CI_SERVER_HOST == 'git.gesis.org' && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == 'gesis'
 
 .gesis helm deploy:
   image:
@@ -107,21 +112,30 @@ gesis helm acceptance deploy:
     - !reference [.gesis-manual-web, rules]
     - !reference [.gesis-merge-request, rules]
     - !reference [.gesis-push-main, rules]
+    - !reference [.gesis-push-gesis, rules]
   variables:
     HELM_ENVIRONMENT: acceptance
   extends:
     - .gesis helm deploy
 
-gesis helm production deploy:
+.gesis helm production deploy:
   resource_group: production
   stage: deploy-production-helm
   rules:
     - !reference [.gesis-manual-web, rules]
     - !reference [.gesis-push-main, rules]
+    - !reference [.gesis-push-gesis, rules]
   variables:
     HELM_ENVIRONMENT: stage
   extends:
     - .gesis helm deploy
+
+.smoke test:
+  stage: test-acceptance
+  variables:
+    INTERACTIVE_URL: url
+  script:
+    - curl $INTERACTIVE_URL
 
 smoke test to acceptance cluster:
   stage: test-acceptance
@@ -129,5 +143,6 @@ smoke test to acceptance cluster:
     - !reference [.gesis-manual-web, rules]
     - !reference [.gesis-merge-request, rules]
     - !reference [.gesis-push-main, rules]
-  script:
-    - curl https://notebooks-test.gesis.org/binder/
+    - !reference [.gesis-push-gesis, rules]
+  variables:
+    INTERACTIVE_URL: https://notebooks-test.gesis.org/binder/
