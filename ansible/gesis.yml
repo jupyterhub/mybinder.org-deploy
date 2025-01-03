@@ -26,7 +26,10 @@
   hosts: kubernetes_control_panel
   gather_facts: false
   roles:
-    - harbor
+    - role: harbor
+      vars:
+        harbor_domain: '{{ HARBOR_DOMAIN }}'
+        harbor_path: '{{ HARBOR_PATH }}'
 - name: Configure JupyterHub workers
   hosts: jupyterhub_single_user
   gather_facts: false
