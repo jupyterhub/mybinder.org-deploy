@@ -10,7 +10,7 @@ K8S_CONTROL_PLANE_ENDPOINT=194.95.75.21
 K8S_CONTROL_PLANE_ALIAS=svko-k8s-test01
 ; Replace this variable with a filter
 ; This must match the group ingress
-K8S_INGRESS=194.95.75.22
+K8S_INGRESS=194.95.75.20
 
 [notebooks_gesis_org]
 svko-css-backup-node
