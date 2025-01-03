@@ -16,7 +16,7 @@ stages:
       when: manual
       allow_failure: true
 
-.geis-merge-request:
+.gesis-merge-request:
   rules:
     - if: $CI_SERVER_HOST == 'git.gesis.org' && $CI_PIPELINE_SOURCE == "merge_request_event"
       changes:
@@ -29,7 +29,7 @@ stages:
         - config/**/*
         - secrets/**/*
 
-.geis-push-main:
+.gesis-push-main:
   rules:
     - if: $CI_SERVER_HOST == 'git.gesis.org' && $CI_PIPELINE_SOURCE == "push" && $CI_COMMIT_BRANCH == 'main'
 
@@ -104,8 +104,8 @@ gesis helm acceptance deploy:
   stage: deploy-acceptance-helm
   rules:
     - !reference [.gesis-manual-web, rules]
-    - !reference [.geis-merge-request, rules]
-    - !reference [.geis-push-main, rules]
+    - !reference [.gesis-merge-request, rules]
+    - !reference [.gesis-push-main, rules]
   variables:
     HELM_ENVIRONMENT: acceptance
   extends:
@@ -116,7 +116,7 @@ gesis helm production deploy:
   stage: deploy-production-helm
   rules:
     - !reference [.gesis-manual-web, rules]
-    - !reference [.geis-push-main, rules]
+    - !reference [.gesis-push-main, rules]
   variables:
     HELM_ENVIRONMENT: stage
   extends:
@@ -126,7 +126,7 @@ smoke test to acceptance cluster:
   stage: test-acceptance
   rules:
     - !reference [.gesis-manual-web, rules]
-    - !reference [.geis-merge-request, rules]
-    - !reference [.geis-push-main, rules]
+    - !reference [.gesis-merge-request, rules]
+    - !reference [.gesis-push-main, rules]
   script:
     - curl https://notebooks-test.gesis.org/binder/
