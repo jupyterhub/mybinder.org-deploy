@@ -38,7 +38,7 @@
   ansible.builtin.file:
     path: /home/ansible/.kube
     state: directory
-    mode: u=rwx,g=rx,o=rx
+    mode: u=rwx,g=x,o=x
     owner: ansible
     group: ansible
 - name: Copies admin.conf to user's kube config
@@ -48,7 +48,7 @@
     remote_src: true
     owner: ansible
     group: ansible
-    mode: u=rw,g=r,o=
+    mode: u=rw,g=,o=
 - name: Get the token for joining the worker nodes
   ansible.builtin.shell: >
     kubeadm token create --print-join-command
