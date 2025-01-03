@@ -155,6 +155,7 @@
     release_name: "{{ harbor_name }}"
     release_namespace: "{{ harbor_namespace }}"
     create_namespace: true
+    history_max: 3
     values:
       harborAdminPassword: "{{ HARBOR_ADMIN_PASSWORD }}"
       expose:
@@ -174,3 +175,27 @@
             storageClass: "{{ harbor_storage_class_name }}"
           trivy:
             storageClass: "{{ harbor_storage_class_name }}"
+
+# Based on https://kubernetes.github.io/ingress-nginx/user-guide/basic-usage/
+- name: Create a ingress resources
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: networking.k8s.io/v1
+      kind: Ingress
+      metadata:
+        name: 'ingress-{{ harbor_name }}'
+      spec:
+        rules:
+          - host: '{{ harbor_domain }}'
+            http:
+              paths:
+                - path: '{{ harbor_path }}'
+                  pathType: Prefix
+                  backend:
+                    service:
+                      name: '{{ harbor_name }}'
+                      port:
+                        number: 80
+        # Don't change the ingressClassName
+        ingressClassName: nginx
