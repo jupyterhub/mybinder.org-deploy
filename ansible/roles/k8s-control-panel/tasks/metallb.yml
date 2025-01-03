@@ -37,7 +37,7 @@
       spec:
         addresses:
           # TODO Use Jinja filter to automate this.
-          - "{{ K8S_INGRESS }}-{{ K8S_INGRESS }}"
+          - "{{ k8s_control_panel_addresses_begin }}-{{ k8s_control_panel_addresses_end }}"
 - name: Configure L2 Advertisement for MetalLB
   kubernetes.core.k8s:
     state: present
