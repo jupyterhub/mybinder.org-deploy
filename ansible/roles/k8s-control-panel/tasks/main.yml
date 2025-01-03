@@ -167,3 +167,6 @@
 - name: Add MetalLB to Kubernetes cluster
   ansible.builtin.import_tasks:
     file: metallb.yml
+- name: Add Ingress NGINX Controller to Kubernetes cluster
+  ansible.builtin.import_tasks:
+    file: ingress-nginx.yml
