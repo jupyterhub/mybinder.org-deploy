@@ -21,6 +21,7 @@
     release_name: metallb
     release_namespace: metallb
     chart_ref: metallb/metallb
+    chart_version: '{{ k8s_control_panel_metallb_version }}'
     create_namespace: false
     history_max: 3
 - name: Create MetalLB Kubernetes IP Address Pool

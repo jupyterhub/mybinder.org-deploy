@@ -158,11 +158,9 @@
     values:
       harborAdminPassword: "{{ HARBOR_ADMIN_PASSWORD }}"
       expose:
-        type: loadBalancer
+        type: ClusterIP
         tls:
           enabled: false
-        loadBalancer:
-          name: "{{ harbor_name }}"
       persistence:
         persistentVolumeClaim:
           registry:
