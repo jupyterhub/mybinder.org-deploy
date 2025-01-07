@@ -22,3 +22,33 @@ kubectl get -A pods
 ```
 
 and a list of all running pods should be printed.
+
+## Deploy Harbor to Docker Desktop
+
+Run the following command:
+
+```
+helm repo add harbor https://helm.goharbor.io
+```
+
+```
+helm install harbor harbor/harbor
+```
+
+## Deploy mybinder.org to Docker Desktop
+
+Run the following command:
+
+```
+source cert-manager.env
+```
+
+```
+for d in ./mybinder*/; do
+    helm dependency update "$d"
+done
+```
+
+```
+python deploy.py docker-desktop
+```
