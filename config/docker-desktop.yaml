@@ -1,0 +1,26 @@
+binderhub:
+  registry:
+    username: "your-username"
+    # This is unsafe! Only se for local development
+    password: "your-password"
+
+  ingress:
+    hosts:
+      - localhost
+
+  jupyterhub:
+    ingress:
+      hosts:
+        - localhost
+
+prometheus:
+  enabled: false
+
+grafana:
+  enabled: false
+
+cryptnono:
+  enabled: false
+
+cluster-autoscaler:
+  enabled: false
