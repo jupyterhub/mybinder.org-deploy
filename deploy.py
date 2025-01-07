@@ -31,7 +31,7 @@ GCP_ZONES = {
 }
 
 # Projects using raw KUBECONFIG files
-KUBECONFIG_CLUSTERS = {"ovh2", "hetzner-2i2c", "hetzner-2i2c-bare"}
+KUBECONFIG_CLUSTERS = {"docker-desktop", "ovh2", "hetzner-2i2c", "hetzner-2i2c-bare"}
 
 # Mapping of config name to cluster name for AWS EKS deployments
 AWS_DEPLOYMENTS = {"curvenote": "binderhub"}
@@ -477,6 +477,9 @@ def main():
 
     args = argparser.parse_args()
 
+    if args.release == "docker-desktop":
+        args.local = True
+
     # if one argument given make cluster == release
     cluster = args.cluster or args.release
 
@@ -518,6 +521,8 @@ def main():
                 setup_auth_gcloud(args.release, cluster, args.dry_run)
             elif cluster in AWS_DEPLOYMENTS:
                 setup_auth_aws(cluster, args.dry_run)
+            elif cluster == "docker-desktop":
+                pass
             else:
                 raise Exception("Cloud cluster not recognised!")
 
