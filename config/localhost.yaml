@@ -13,6 +13,12 @@ binderhub:
       hosts:
         - localhost
 
+static:
+  ingress:
+    hosts:
+      - localhost
+      - localhost
+
 prometheus:
   enabled: false
 
