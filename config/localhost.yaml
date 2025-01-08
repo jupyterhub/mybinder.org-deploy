@@ -19,15 +19,14 @@ binderhub:
   jupyterhub:
     ingress:
       hosts:
-        - localhost
+        - jupyterhub.localhost
 
 static:
   ingress:
     tls:
       enabled: false
     hosts:
-      - localhost
-      - localhost
+      - static.localhost
 
 analyticsPublisher:
   enabled: false
