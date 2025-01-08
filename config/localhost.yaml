@@ -1,4 +1,12 @@
 binderhub:
+  config:
+    BinderHub:
+      use_registry: false
+
+  extraConfig:
+    # Disable send events to StackDriver on Google Cloud
+    01-eventlog:
+
   registry:
     username: "your-username"
     # This is unsafe! Only se for local development
