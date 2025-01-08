@@ -437,7 +437,7 @@ def main():
         "release",
         help="Release to deploy",
         choices=[
-            "docker-desktop",
+            "localhost",
             "staging",
             "prod",
             "ovh",
@@ -480,7 +480,7 @@ def main():
 
     args = argparser.parse_args()
 
-    if args.release == "docker-desktop":
+    if args.release == "localhost":
         args.local = True
 
     # if one argument given make cluster == release
@@ -524,7 +524,7 @@ def main():
                 setup_auth_gcloud(args.release, cluster, args.dry_run)
             elif cluster in AWS_DEPLOYMENTS:
                 setup_auth_aws(cluster, args.dry_run)
-            elif cluster == "docker-desktop":
+            elif cluster == "localhost":
                 pass
             else:
                 raise Exception("Cloud cluster not recognised!")
