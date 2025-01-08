@@ -60,5 +60,9 @@ done
 ```
 
 ```
+chartpress --skip-build
+```
+
+```
 python deploy.py localhost
 ```
