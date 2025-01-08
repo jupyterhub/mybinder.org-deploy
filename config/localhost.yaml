@@ -23,6 +23,8 @@ binderhub:
 
 static:
   ingress:
+    tls:
+      enabled: false
     hosts:
       - localhost
       - localhost
