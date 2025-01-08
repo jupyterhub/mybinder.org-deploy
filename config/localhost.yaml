@@ -19,6 +19,9 @@ static:
       - localhost
       - localhost
 
+analyticsPublisher:
+  enabled: false
+
 prometheus:
   enabled: false
 
