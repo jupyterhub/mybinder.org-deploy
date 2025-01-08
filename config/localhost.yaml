@@ -13,6 +13,9 @@ binderhub:
     password: "your-password"
 
   ingress:
+    https:
+      # This is unsafe! Only se for local development
+      enabled: false
     hosts:
       - localhost
 
@@ -24,6 +27,7 @@ binderhub:
 static:
   ingress:
     tls:
+      # This is unsafe! Only se for local development
       enabled: false
     hosts:
       - static.localhost
