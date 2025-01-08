@@ -15,8 +15,9 @@ You will need a local Kubernetes cluster. A few options are
 
 Install Docker Desktop on [Mac](https://docs.docker.com/desktop/setup/install/mac-install/), [Windows](https://docs.docker.com/desktop/setup/install/windows-install/), or [Linux](https://docs.docker.com/desktop/setup/install/linux/). And [turn on Kubernetes](https://docs.docker.com/desktop/features/kubernetes/#install-and-turn-on-kubernetes).
 
-## Set up `kubectl`
+## Set up `kubectl` to connect to Kubernetes
 
+Once you have `kubectl` installed, you can connect it with your local Kubernetes.
 To do so, run the following command:
 
 ```
@@ -33,7 +34,7 @@ kubectl get -A pods
 
 and a list of all running pods should be printed.
 
-## Deploy Harbor
+## Deploy Harbor to Kubernetes
 
 Run the following command:
 
@@ -45,7 +46,7 @@ helm repo add harbor https://helm.goharbor.io
 helm install harbor harbor/harbor
 ```
 
-## Deploy mybinder.org
+## Deploy mybinder.org to Kubernetes
 
 Run the following command:
 
@@ -66,3 +67,7 @@ chartpress --skip-build
 ```
 python deploy.py localhost
 ```
+
+## Access your mybinder.org
+
+Open http://localhost with your favourite web browser.
