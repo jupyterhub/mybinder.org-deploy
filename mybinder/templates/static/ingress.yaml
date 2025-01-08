@@ -30,9 +30,11 @@ spec:
                 port:
                   number: 80
     {{- end }}
+  {{- if  .Values.static.ingress.tls.enabled }}
   tls:
     - secretName: {{ .Values.static.ingress.tls.secretName }}
       hosts:
         {{- range $host := .Values.static.ingress.hosts }}
         - {{ $host }}
         {{- end }}
+  {{- end }}
