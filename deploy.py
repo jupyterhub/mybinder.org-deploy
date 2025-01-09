@@ -198,7 +198,7 @@ def get_config_files(release, config_dir="config"):
     return config_files
 
 
-def deploy(release, name=None, dry_run=False, diff=False):
+def deploy(release, name=None, dry_run=False, diff=False, ip_address=None):
     """Deploys a federation member to a k8s cluster.
 
     Waits for deployments and daemonsets to become Ready
@@ -237,6 +237,20 @@ def deploy(release, name=None, dry_run=False, diff=False):
     # add config files to helm command
     for config_file in config_files:
         helm.extend(["-f", config_file])
+
+    if release == "localhost":
+        helm.extend(
+            [
+                "--set",
+                f"binderhub.config.BinderHub.hub_url=http://jupyterhub.{ip_address}.nip.io",
+                "--set",
+                f"binderhub.ingress.hosts={{{ip_address}.nip.io}}",
+                "--set",
+                f"binderhub.jupyterhub.ingress.hosts={{jupyterhub.{ip_address}.nip.io}}",
+                "--set",
+                f"static.ingress.hosts={{static.{ip_address}.nip.io}}",
+            ]
+        )
 
     check_call(helm, dry_run)
     print(
@@ -437,6 +451,7 @@ def main():
         "release",
         help="Release to deploy",
         choices=[
+            "localhost",
             "staging",
             "prod",
             "ovh",
@@ -460,6 +475,10 @@ def main():
         help="If the script is running locally, skip auth step",
     )
     argparser.add_argument(
+        "--local-ip",
+        help="IP address of the local machine",
+    )
+    argparser.add_argument(
         "--dry-run",
         action="store_true",
         help="Print commands, but don't run them",
@@ -478,6 +497,12 @@ def main():
     )
 
     args = argparser.parse_args()
+
+    if args.release == "localhost":
+        args.local = True
+
+        if args.local_ip is None:
+            raise ValueError("Cluster localhost requires IP address.")
 
     # if one argument given make cluster == release
     cluster = args.cluster or args.release
@@ -520,6 +545,8 @@ def main():
                 setup_auth_gcloud(args.release, cluster, args.dry_run)
             elif cluster in AWS_DEPLOYMENTS:
                 setup_auth_aws(cluster, args.dry_run)
+            elif cluster == "localhost":
+                pass
             else:
                 raise Exception("Cloud cluster not recognised!")
 
@@ -530,7 +557,7 @@ def main():
     if args.stage in ("all", "certmanager"):
         setup_certmanager(args.dry_run, args.diff)
     if args.stage in ("all", "mybinder"):
-        deploy(args.release, args.name, args.dry_run, args.diff)
+        deploy(args.release, args.name, args.dry_run, args.diff, args.local_ip)
 
 
 if __name__ == "__main__":
