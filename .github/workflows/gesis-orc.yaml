@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  update-gesis:
+  update-orc-at-gesis:
     if: github.repository == 'jupyterhub/mybinder.org-deploy'
     runs-on: ubuntu-latest
     steps:
