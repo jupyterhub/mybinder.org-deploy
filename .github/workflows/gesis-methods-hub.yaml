@@ -1,0 +1,26 @@
+name: "GESIS update dispatcher"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-methods-hub-at-gesis:
+    if: github.repository == 'jupyterhub/mybinder.org-deploy'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create remote
+        run: |
+          if [ -z "$(git remote | grep methodshub)" ]
+          then
+          git remote add methodshub https://git.gesis.org/methods-hub/interactive-environment.git
+          fi
+      - name: Update remote
+        env:
+          GESIS_METHODS_HUB_TOKEN: ${{ secrets.GESIS_METHODS_HUB_TOKEN }}
+        run: |
+          git remote set-url methodshub https://jupyterhub-mybinder-org-deploy:${GESIS_METHODS_HUB_TOKEN}@git.gesis.org/methods-hub/interactive-environment.git
+      - name: Push main
+        run: |
+          git push methodshub ${GITHUB_SHA}:main
