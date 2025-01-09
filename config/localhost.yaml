@@ -1,6 +1,8 @@
 binderhub:
   config:
     BinderHub:
+      # Use Kubernetes DNS
+      hub_url: http://hub:8081
       use_registry: false
 
   extraConfig:
@@ -17,12 +19,12 @@ binderhub:
       # This is unsafe! Only se for local development
       enabled: false
     hosts:
-      - localhost
+      - 127.0.0.1.nip.io
 
   jupyterhub:
     ingress:
       hosts:
-        - jupyterhub.localhost
+        - jupyterhub.127.0.0.1.nip.io
 
 static:
   ingress:
@@ -30,7 +32,7 @@ static:
       # This is unsafe! Only se for local development
       enabled: false
     hosts:
-      - static.localhost
+      - static.127.0.0.1.nip.io
 
 analyticsPublisher:
   enabled: false
