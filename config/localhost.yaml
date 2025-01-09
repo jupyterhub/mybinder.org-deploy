@@ -1,8 +1,11 @@
+# 127.0.0.1.nip.io will not work because when pods try to use it,
+# the domain will resolve to the pod itself.
+# The deploy.py overwrite the 127.0.0.1 to the user IP address.
 binderhub:
   config:
     BinderHub:
       # Use Kubernetes DNS
-      hub_url: http://hub:8081
+      hub_url: http://jupyterhub.127.0.0.1.nip.io
       use_registry: false
 
   extraConfig:
