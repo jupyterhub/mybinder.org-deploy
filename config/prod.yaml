@@ -229,12 +229,13 @@ federationRedirect:
       health: https://gke.mybinder.org/health
       versions: https://gke.mybinder.org/versions
     gesis:
+      prime: true
       url: https://notebooks.gesis.org/binder
       weight: 60
       health: https://notebooks.gesis.org/binder/health
       versions: https://notebooks.gesis.org/binder/versions
     ovh2:
-      prime: true
+      prime: false
       url: https://ovh2.mybinder.org
       weight: 60
       health: https://ovh2.mybinder.org/health
