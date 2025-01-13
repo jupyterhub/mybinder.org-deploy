@@ -237,7 +237,7 @@ federationRedirect:
     ovh2:
       prime: false
       url: https://ovh2.mybinder.org
-      weight: 60
+      weight: 0
       health: https://ovh2.mybinder.org/health
       versions: https://ovh2.mybinder.org/versions
     curvenote:
