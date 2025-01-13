@@ -444,6 +444,8 @@ def make_app():
             ),
             (r"/active_hosts", ActiveHostsHandler, {"active_hosts": hosts}),
             (r"/metrics", MetricsHandler),
+            # temporary: redirect everything, no proxy
+            (r".*", RedirectHandler, {"load_balancer": CONFIG["load_balancer"]}),
             (r".*", ProxyHandler, {"host": prime_host}),
         ],
         hosts=hosts,
