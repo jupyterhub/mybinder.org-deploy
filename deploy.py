@@ -437,14 +437,7 @@ def main():
     argparser.add_argument(
         "release",
         help="Release to deploy",
-        choices=[
-            "staging",
-            "prod",
-            "ovh",
-            "ovh2",
-            "curvenote",
-            "hetzner-2i2c"
-        ],
+        choices=["staging", "prod", "ovh", "ovh2", "curvenote", "hetzner-2i2c"],
     )
     argparser.add_argument(
         "--name",

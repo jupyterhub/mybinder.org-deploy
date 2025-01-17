@@ -24,7 +24,7 @@ binderhub:
       total_quota: 300
 
     # DockerRegistry:
-      # token_url: "https://2lmrrh8f.gra7.container-registry.ovh.net/service/token?service=harbor-registry"
+    # token_url: "https://2lmrrh8f.gra7.container-registry.ovh.net/service/token?service=harbor-registry"
 
   replicas: 1
 
@@ -87,7 +87,7 @@ grafana:
           isDefault: true
           editable: false
   # persistence:
-    # storageClassName: csi-cinder-high-speed
+  # storageClassName: csi-cinder-high-speed
 
 prometheus:
   server:
