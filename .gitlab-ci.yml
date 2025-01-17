@@ -44,3 +44,12 @@ build helm chart:
       - mybinder-tigera-operator/Chart.yaml
       - mybinder/Chart.yaml
       - mybinder/values.yaml
+
+include:
+  - component: $CI_SERVER_FQDN/rse/docker/images/helm/helm-lint@1.0.2
+    inputs:
+      stage: lint
+      dir: mybinder
+    rules:
+    - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
