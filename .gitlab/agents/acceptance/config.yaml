@@ -1,0 +1,3 @@
+ci_access:
+  projects:
+    - id: methods-hub/interactive-environment
