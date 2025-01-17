@@ -23,7 +23,8 @@ build helm chart:
   rules:
     - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_PIPELINE_SOURCE == 'merge_request_event'
     - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-  image: python:3.13.1-bookworm
+  # Python version blocked by https://github.com/jupyterhub/mybinder.org-deploy/issues/3168
+  image: python:3.11.11-bookworm
   cache:
     paths:
       - .cache/pip
