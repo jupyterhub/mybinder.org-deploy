@@ -51,5 +51,16 @@ include:
       stage: lint
       dir: mybinder
     rules:
-    - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_PIPELINE_SOURCE == 'merge_request_event'
-    - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_PIPELINE_SOURCE == 'merge_request_event'
+      - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+  - component: $CI_SERVER_FQDN/rse/docker/images/helm/helm-deploy@1.0.2
+    inputs:
+      stage: deploy-acceptance-helm
+      environment: acceptance
+      dir: mybinder
+      k8s_context: acceptance
+      extra_values: '--values ./config/gesis-acceptance.yml --values ./secrets/config/common/common.yaml --values ./secrets/config/common/cryptnono.yaml --values ./secrets/config/common/gesis.yaml --values secrets/config/gesis-acceptance.yaml'
+      git_crypt: 'true'
+    rules:
+      - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_PIPELINE_SOURCE == 'merge_request_event'
