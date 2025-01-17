@@ -3,6 +3,7 @@ variables:
   GIT_CLEAN_FLAGS: "-ffdx"
   # Change pip's cache directory to be inside the project directory since we can only cache local items.
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  EXTRA_VALUES: '--values ./secrets/config/common/common.yaml --values ./secrets/config/common/cryptnono.yaml --values ./secrets/config/common/gesis.yaml --values ./config/gesis-acceptance.yml --values ./secrets/config/gesis-acceptance.yaml'
 
 # This workflow:rules are required to enable merge request pipelines!
 workflow:
@@ -47,21 +48,23 @@ build helm chart:
       - mybinder/values.yaml
 
 include:
-  - component: $CI_SERVER_FQDN/rse/docker/images/helm/helm-lint@1.0.2
+  - component: $CI_SERVER_FQDN/rse/docker/images/helm/helm-lint@1.1.5
     inputs:
       stage: lint
       dir: mybinder
+      extra_values: ${EXTRA_VALUES}
+      git_crypt: 'true'
     rules:
       - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_PIPELINE_SOURCE == 'merge_request_event'
       - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
-  - component: $CI_SERVER_FQDN/rse/docker/images/helm/helm-deploy@1.0.2
+  - component: $CI_SERVER_FQDN/rse/docker/images/helm/helm-deploy@1.1.5
     inputs:
       stage: deploy-acceptance-helm
       environment: acceptance
       dir: mybinder
-      k8s_context: acceptance
-      extra_values: '--values ./config/gesis-acceptance.yml --values ./secrets/config/common/common.yaml --values ./secrets/config/common/cryptnono.yaml --values ./secrets/config/common/gesis.yaml --values secrets/config/gesis-acceptance.yaml'
+      k8s_context: methods-hub/binder.methodshub.gesis.org:acceptance
+      extra_values: ${EXTRA_VALUES}
       git_crypt: 'true'
     rules:
       - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_PIPELINE_SOURCE == 'merge_request_event'
