@@ -1,0 +1,46 @@
+variables:
+  GIT_STRATEGY: clone
+  GIT_CLEAN_FLAGS: "-ffdx"
+  # Change pip's cache directory to be inside the project directory since we can only cache local items.
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+# This workflow:rules are required to enable merge request pipelines!
+workflow:
+  rules:
+    - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+stages:
+  - build
+  - lint
+  - deploy-acceptance-helm
+  - test-acceptance
+  - deploy-production-helm
+  - test-production
+
+build helm chart:
+  stage: build
+  rules:
+    - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  image: python:3.13.1-bookworm
+  cache:
+    paths:
+      - .cache/pip
+  script:
+    - python -V
+    - pip install virtualenv
+    - virtualenv venv
+    - source venv/bin/activate
+    - pip install --upgrade setuptools pip
+    - pip install --upgrade -r requirements.txt
+    - |
+      chartpress \
+      --no-build
+  artifacts:
+    expire_in: 1h
+    paths:
+      - mybinder-kube-system/Chart.yaml
+      - mybinder-tigera-operator/Chart.yaml
+      - mybinder/Chart.yaml
+      - mybinder/values.yaml
