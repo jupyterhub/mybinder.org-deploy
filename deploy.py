@@ -30,6 +30,9 @@ GCP_ZONES = {
     "prod": "us-central1",
 }
 
+# Projects using raw KUBECONFIG files
+KUBECONFIG_CLUSTERS = {"ovh2", "hetzner-2i2c"}
+
 # Mapping of config name to cluster name for AWS EKS deployments
 AWS_DEPLOYMENTS = {"curvenote": "binderhub"}
 
@@ -100,17 +103,15 @@ def setup_auth_azure(cluster, dry_run=False):
     print(stdout)
 
 
-def setup_auth_ovh(release, cluster, dry_run=False):
+def setup_auth_kubeconfig(release, cluster, dry_run=False):
     """
-    Set up authentication with 'ovh' K8S from the ovh-kubeconfig.yml
+    Setup authentication with a pure kubeconfig file
     """
-    print(f"Setup the OVH authentication for namespace {release}")
+    print(f"Setup authentication for namespace {release} with kubeconfig")
 
-    ovh_kubeconfig = os.path.join(ABSOLUTE_HERE, "secrets", f"{release}-kubeconfig.yml")
-    os.environ["KUBECONFIG"] = ovh_kubeconfig
-    print(f"Current KUBECONFIG='{ovh_kubeconfig}'")
-    stdout = check_output(["kubectl", "config", "use-context", cluster], dry_run)
-    print(stdout)
+    kubeconfig = os.path.join(ABSOLUTE_HERE, "secrets", f"{release}-kubeconfig.yml")
+    os.environ["KUBECONFIG"] = kubeconfig
+    print(f"Current KUBECONFIG='{kubeconfig}'")
 
 
 def setup_auth_gcloud(release, cluster=None, dry_run=False):
@@ -442,6 +443,7 @@ def main():
             "ovh",
             "ovh2",
             "curvenote",
+            "hetzner-2i2c"
         ],
     )
     argparser.add_argument(
@@ -511,8 +513,8 @@ def main():
         # script is running on CI, proceed with auth and helm setup
 
         if args.stage in ("all", "auth"):
-            if cluster.startswith("ovh"):
-                setup_auth_ovh(args.release, cluster, args.dry_run)
+            if cluster in KUBECONFIG_CLUSTERS:
+                setup_auth_kubeconfig(args.release, cluster, args.dry_run)
                 patch_coredns(args.dry_run, args.diff)
             elif cluster in AZURE_RGs:
                 setup_auth_azure(cluster, args.dry_run)
