@@ -1,5 +1,14 @@
 projectName: hetzner-2i2c
 
+registry:
+  enabled: true
+  storage:
+    filesystem:
+      storageClassName: "local-path"
+  ingress:
+    hosts:
+      - registry.2i2c.mybinder.org
+
 cryptnono:
   detectors:
     monero:
@@ -11,7 +20,8 @@ binderhub:
       hub_url: https://hub.2i2c.mybinder.org
       badge_base_url: https://mybinder.org
       sticky_builds: true
-      image_prefix: quay.io/mybinder-hetzner-2i2c/image-
+      image_prefix: registry.2i2c.mybinder.org/i-
+      # image_prefix: quay.io/mybinder-hetzner-2i2c/image-
       # build_docker_host: /var/run/dind/docker.sock
     # TODO: we should have CPU requests, too
     # use this to limit the number of builds per node

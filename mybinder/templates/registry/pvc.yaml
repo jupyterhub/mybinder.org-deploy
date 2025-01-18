@@ -1,0 +1,17 @@
+{{- if .Values.registry.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: registry
+  labels:
+    app: registry
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  storageClassName: {{ .Values.registry.storage.filesystem.storageClassName }}
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.registry.storage.filesystem.size }}
+{{- end }}

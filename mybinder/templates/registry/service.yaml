@@ -1,0 +1,20 @@
+{{- if .Values.registry.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry
+  labels:
+    app: registry
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  type: {{ .Values.registry.service.type }}
+  selector:
+    app: registry
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  ports:
+    - name: registry
+      protocol: TCP
+      port: 5000
+{{- end }}
