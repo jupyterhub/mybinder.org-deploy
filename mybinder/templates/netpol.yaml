@@ -73,7 +73,7 @@ spec:
       to:
         - podSelector:
             matchLabels:
-              app: nginx-ingress
-              component: controller
+              app.kubernetes.io/component: controller
+              app.kubernetes.io/name: ingress-nginx
 
 {{- end }}
