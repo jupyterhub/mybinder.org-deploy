@@ -12,6 +12,8 @@ cryptnono:
 
 registry:
   enabled: false
+  # Passed through to docker distribution / registry config
+  # https://distribution.github.io/distribution/about/configuration/
   config:
     version: 0.1
     auth:
