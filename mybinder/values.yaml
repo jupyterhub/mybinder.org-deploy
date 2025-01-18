@@ -10,6 +10,20 @@ cryptnono:
       containerdHostPath: /run/containerd/containerd.sock
       dockerHostPath: /run/dind/docker.sock
 
+registry:
+  enabled: false
+  config:
+    version: 0.1
+    auth:
+      htpasswd:
+        path: /etc/distribution/auth.htpasswd
+  service:
+    type: ClusterIP
+  storage:
+    filesystem:
+      storageClassName: ""
+      size: 10Gi
+
 imagePullSecrets:
 
 tags: {}
