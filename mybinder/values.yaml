@@ -22,6 +22,7 @@ registry:
   storage:
     filesystem:
       storageClassName: ""
+      # Size is currently ignored- using local path provisioner
       size: 10Gi
 
 imagePullSecrets:
