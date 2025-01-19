@@ -37,6 +37,19 @@ This runs for a minute, but should set up latest `k3s` on that node! You can ver
 
 Follow https://docs.k3s.io/cluster-access#accessing-the-cluster-from-outside-with-kubectl
 
+## Setup DNS entries
+
+There's only one IP to set DNS entries for - the public IP of the VM. No loadbalancers or similar here.
+
+mybinder.org's DNS is managed via Cloudflare. You should have access, or ask someone in the mybinder team who does!
+
+Add the following entries:
+
+- An `A` record for `X.mybinder.org` pointing to wards the public IP. `X` should be an organizational identifier that identifies and thanks whoever is donating this.
+- Another `A` record for `*.X.mybinder.org` to the same public IP
+
+Give this a few minutes because it may take a while to propagate.
+
 ## Make a config copy for this new member
 
 TODO
