@@ -39,10 +39,16 @@ spec:
           claimName: registry
       containers:
       - name: registry
-        image: registry:2.8.3
+        image: registry:3.0.0-rc.2
         volumeMounts:
           - name: registry-config
+            # This path is what registry documentation *says* we should put
+            # our config files in
             mountPath: /etc/distribution/config.yml
+            subPath: config.yml
+          - name: registry-config
+            # This path is what registry *actually* seems to read lol
+            mountPath: /etc/docker/registry/config.yml
             subPath: config.yml
           - name: registry-storage
             mountPath: /var/lib/registry

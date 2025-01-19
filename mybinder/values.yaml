@@ -18,7 +18,20 @@ registry:
     version: 0.1
     auth:
       htpasswd:
+        realm: basic-realm
         path: /etc/distribution/auth.htpasswd
+
+    http:
+      addr: :5000
+    log:
+      level: debug
+      accesslog:
+        disabled: false
+    storage:
+      s3:
+        regionendpoint: https://fsn1.your-objectstorage.com
+        bucket: mybinder-2i2c-registry-hetzner
+        region: does-not-matter
   service:
     type: ClusterIP
   storage:
