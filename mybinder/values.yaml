@@ -12,6 +12,7 @@ cryptnono:
 
 registry:
   enabled: false
+  replicas: 2
   # Passed through to docker distribution / registry config
   # https://distribution.github.io/distribution/about/configuration/
   config:
