@@ -2,6 +2,15 @@ projectName: hetzner-2i2c
 
 registry:
   enabled: true
+  config:
+    storage:
+      # Uncomment this and comment out the s3 config to use filesystem
+      # filesystem:
+      #   rootdirectory: /var/lib/registry
+      s3:
+        regionendpoint: https://fsn1.your-objectstorage.com
+        bucket: mybinder-2i2c-registry-hetzner
+        region: does-not-matter
   storage:
     filesystem:
       storageClassName: "local-path"
