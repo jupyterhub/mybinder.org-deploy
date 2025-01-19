@@ -1,7 +1,7 @@
 # Deploy a new mybinder.org federation member on a bare VM with `k3s`
 
 [k3s](https://k3s.io/) is a popular kubernetes distribution that we can use
-to build *single node* kubernetes installations that satisfy the needs of the
+to build _single node_ kubernetes installations that satisfy the needs of the
 mybinder project. By focusing on the simplest possible kubernetes installation,
 we can get all the benefits of kubernetes (simplified deployment, cloud agnosticity,
 unified tooling, etc) **except** autoscaling, and deploy **anywhere we can get a VM
@@ -23,7 +23,7 @@ but we have a slightly more opinionated list.
 ## Installing `k3s`
 
 We can use the [quickstart](https://docs.k3s.io/quick-start) on the `k3s` website, with the added
-config of *disabling traefik* that comes built in. We deploy nginx as part of our deployment, so we
+config of _disabling traefik_ that comes built in. We deploy nginx as part of our deployment, so we
 do not need traefik.
 
 ```bash
