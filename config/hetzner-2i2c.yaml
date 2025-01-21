@@ -40,7 +40,7 @@ binderhub:
       docker_host: /var/run/dind/docker.sock
 
     LaunchQuota:
-      total_quota: 300
+      total_quota: 20
 
     # DockerRegistry:
     # token_url: "https://2lmrrh8f.gra7.container-registry.ovh.net/service/token?service=harbor-registry"
