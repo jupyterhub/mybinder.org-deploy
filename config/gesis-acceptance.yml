@@ -55,11 +55,6 @@ binderhub:
     imageGCThresholdLow: 50e9
     imageGCThresholdType: absolute
   ingress:
-    # Don't change the className
-    className: nginx
-    # Don't change the annotations
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt
     hosts:
       - notebooks-test.gesis.org
   jupyterhub:
@@ -74,11 +69,6 @@ binderhub:
       nodeSelector:
         jupyterhub_single_user: "true"
     ingress:
-      # Don't change the className
-      className: nginx
-      # Don't change the annotations
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt
       hosts:
         - notebooks-test.gesis.org
   replicas: 1
