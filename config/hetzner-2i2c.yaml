@@ -64,7 +64,14 @@ binderhub:
   extraEnv:
     GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
 
-  dind: {}
+  dind:
+    resources:
+      requests:
+        cpu: "2"
+        memory: 12Gi
+      limits:
+        cpu: "6"
+        memory: 12Gi
 
   ingress:
     hosts:
