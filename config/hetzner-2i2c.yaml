@@ -2,6 +2,7 @@ projectName: hetzner-2i2c
 
 registry:
   enabled: true
+  replicas: 4
   config:
     storage:
       # Uncomment this and comment out the s3 config to use filesystem
