@@ -127,7 +127,7 @@ ingress-nginx:
     scope:
       enabled: true
     service:
-      loadBalancerIP: 138.199.149.127
+      loadBalancerIP: 116.203.245.43
 
 static:
   ingress:

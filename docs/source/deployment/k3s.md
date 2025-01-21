@@ -26,12 +26,32 @@ We can use the [quickstart](https://docs.k3s.io/quick-start) on the `k3s` websit
 config of _disabling traefik_ that comes built in. We deploy nginx as part of our deployment, so we
 do not need traefik.
 
-```bash
-curl -sfL https://get.k3s.io | sh -s - --disable-traefik
-```
+1. Create a Kubelet Config file in `/etc/kubelet.yaml` so we can
+   tweak various kubelet options, including maximum number of pods on a single
+   node:
 
-This runs for a minute, but should set up latest `k3s` on that node! You can verify that by running
-`kubectl get node` and `kubectl version`.
+   ```yaml
+   apiVersion: kubelet.config.k8s.io/v1beta1
+   kind: KubeletConfiguration
+   maxPods: 300
+   ```
+
+   We will need to develop better intuition for how many pods per node, but given we offer about
+   450M of RAM per user, and RAM is the limiting factor (not CPU), let's roughly start with the
+   following formula to determine this:
+
+   maxPods = 1.75 * amount of ram in GB
+
+   This adds a good amount of margin. We can tweak this later
+
+2. Install `k3s`!
+
+   ```bash
+   curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --kubelet-arg=config=/etc/kubelet.yaml" sh -s - --disable=traefik
+   ```
+
+   This runs for a minute, but should set up latest `k3s` on that node! You can verify that by running
+   `kubectl get node` and `kubectl version`.
 
 ## Extracting authentication information via a `KUBECONFIG` file
 
