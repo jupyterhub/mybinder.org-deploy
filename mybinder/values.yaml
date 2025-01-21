@@ -497,7 +497,7 @@ ingress-nginx:
         memory: 150Mi
       limits:
         cpu: 800m
-        memory: 500Mi
+        memory: 1Gi
     tolerations:
       - key: "node.kubernetes.io/unschedulable"
         operator: "Exists"
