@@ -40,7 +40,7 @@ do not need traefik.
    450M of RAM per user, and RAM is the limiting factor (not CPU), let's roughly start with the
    following formula to determine this:
 
-   maxPods = 1.75 * amount of ram in GB
+   maxPods = 1.75 \* amount of ram in GB
 
    This adds a good amount of margin. We can tweak this later
 
