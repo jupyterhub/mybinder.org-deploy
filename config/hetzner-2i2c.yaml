@@ -39,6 +39,11 @@ binderhub:
     KubernetesBuildExecutor:
       memory_request: "2G"
       docker_host: /var/run/dind/docker.sock
+      repo2docker_extra_args:
+        # try to avoid timeout pushing to local registry
+        # default is 60
+        # this must have no spaces to be processed by repo2docker correctly
+        - '--DockerEngine.extra_init_args={"timeout":120}'
 
     LaunchQuota:
       total_quota: 20
@@ -59,7 +64,14 @@ binderhub:
   extraEnv:
     GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
 
-  dind: {}
+  dind:
+    resources:
+      requests:
+        cpu: "2"
+        memory: 12Gi
+      limits:
+        cpu: "6"
+        memory: 12Gi
 
   ingress:
     hosts:
