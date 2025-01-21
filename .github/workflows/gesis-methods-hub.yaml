@@ -10,6 +10,10 @@ jobs:
     if: github.repository == 'jupyterhub/mybinder.org-deploy'
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Create remote
         run: |
           if [ -z "$(git remote | grep methodshub)" ]
