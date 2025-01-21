@@ -1,0 +1,13 @@
+{{- if .Values.registry.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: registry-config
+  labels:
+    app: registry
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+data:
+  config.yml: |
+    {{ .Values.registry.config | toJson }}
+{{- end }}

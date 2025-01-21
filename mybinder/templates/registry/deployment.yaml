@@ -1,0 +1,62 @@
+{{- if .Values.registry.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry
+  labels:
+    app: registry
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    component: registry
+spec:
+  replicas: {{ .Values.registry.replicas }}
+  selector:
+    matchLabels:
+      app: registry
+      release: {{ .Release.Name }}
+      component: registry
+  template:
+    metadata:
+      annotations:
+        checksum/registry-config: {{ include (print $.Template.BasePath "/registry/configmap.yaml") . | sha256sum }}
+      labels:
+        app: registry
+        heritage: {{ .Release.Service }}
+        release: {{ .Release.Name }}
+        component: registry
+    spec:
+      automountServiceAccountToken: false
+      nodeSelector: {{ toJson .Values.registry.nodeSelector }}
+      volumes:
+      - name: registry-config
+        configMap:
+          name: registry-config
+      - name: registry-secret
+        secret:
+          secretName: registry-secret
+      - name: registry-storage
+        persistentVolumeClaim:
+          claimName: registry
+      containers:
+      - name: registry
+        image: registry:3.0.0-rc.2
+        volumeMounts:
+          - name: registry-config
+            # This path is what registry documentation *says* we should put
+            # our config files in
+            mountPath: /etc/distribution/config.yml
+            subPath: config.yml
+          - name: registry-config
+            # This path is what registry *actually* seems to read lol
+            mountPath: /etc/docker/registry/config.yml
+            subPath: config.yml
+          - name: registry-storage
+            mountPath: /var/lib/registry
+          - name: registry-secret
+            mountPath: /etc/distribution/auth.htpasswd
+            subPath: auth.htpasswd
+        {{- with .Values.registry.resources }}
+        resources:
+          {{- . | toYaml | nindent 10 }}
+        {{- end }}
+{{- end }}

@@ -8,3 +8,4 @@ Deployment and Operation
    prereqs
    how
    what
+   k3s

@@ -10,6 +10,32 @@ cryptnono:
       containerdHostPath: /run/containerd/containerd.sock
       dockerHostPath: /run/dind/docker.sock
 
+registry:
+  enabled: false
+  replicas: 2
+  # Passed through to docker distribution / registry config
+  # https://distribution.github.io/distribution/about/configuration/
+  config:
+    version: 0.1
+    auth:
+      htpasswd:
+        realm: basic-realm
+        path: /etc/distribution/auth.htpasswd
+
+    http:
+      addr: :5000
+    log:
+      level: debug
+      accesslog:
+        disabled: false
+  service:
+    type: ClusterIP
+  storage:
+    filesystem:
+      storageClassName: ""
+      # Size is currently ignored- using local path provisioner
+      size: 10Gi
+
 imagePullSecrets:
 
 tags: {}
@@ -152,7 +178,7 @@ binderhub:
             🤍 Donate to mybinder.org!
         </a>
         <div style="text-align:center;">
-        Thanks to <a href="https://www.ovh.com/">OVH</a>, <a href="https://notebooks.gesis.org">GESIS Notebooks</a> and <a href="https://curvenote.com">Curvenote</a> for supporting us! 🎉
+        Thanks to <a href="https://www.ovh.com/">OVH</a>, <a href="https://notebooks.gesis.org">GESIS Notebooks</a> and <a href="https://2i2c.org">2i2c</a> for supporting us! 🎉
         </div>
         <div style="text-align:center;">
         mybinder.org has updated the base image to Ubuntu 22.04! See the <a href="https://repo2docker.readthedocs.io/en/latest/howto/breaking_changes.html">upgrade guide</a> for details.
@@ -471,7 +497,7 @@ ingress-nginx:
         memory: 150Mi
       limits:
         cpu: 800m
-        memory: 500Mi
+        memory: 1Gi
     tolerations:
       - key: "node.kubernetes.io/unschedulable"
         operator: "Exists"
