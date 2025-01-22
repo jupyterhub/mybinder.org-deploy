@@ -9,8 +9,8 @@ registry:
       # filesystem:
       #   rootdirectory: /var/lib/registry
       s3:
-        regionendpoint: https://fsn1.your-objectstorage.com
-        bucket: mybinder-2i2c-registry-hetzner
+        regionendpoint: https://nbg1.your-objectstorage.com
+        bucket: mybinder-2i2c-registry
         region: does-not-matter
   storage:
     filesystem:
