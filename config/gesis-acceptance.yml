@@ -136,18 +136,6 @@ grafana:
     requests:
       cpu: "0"
       memory: 128Mi
-ingress-nginx:
-  controller:
-    replicaCount: 1
-    nodeSelector:
-      ingress: "true"
-    hostPort:
-      enable: true
-    scope:
-      enabled: true
-    service:
-      externalTrafficPolicy: null
-      type: LoadBalancer
 prometheus:
   enabled: true
   server:
