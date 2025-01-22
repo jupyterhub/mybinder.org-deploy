@@ -44,7 +44,7 @@ binderhub:
         # try to avoid timeout pushing to local registry
         # default is 60
         # this must have no spaces to be processed by repo2docker correctly
-        - '--DockerEngine.extra_init_args={"timeout":120}'
+        - '--DockerEngine.extra_init_args={"timeout":1200}'
 
     LaunchQuota:
       total_quota: 200
@@ -95,6 +95,8 @@ binderhub:
             - hub.2i2c.mybinder.org
 
   imageCleaner:
+    # disable image cleaner temporarily as it seems to wipe layers before they get pushed
+    enabled: false
     # Use 40GB as upper limit, size is given in bytes
     imageGCThresholdHigh: 40e9
     imageGCThresholdLow: 30e9
