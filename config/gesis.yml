@@ -1,0 +1,119 @@
+# The Kubernetes Cluster already have Ingress NGINX Controller
+ingress-nginx:
+  enabled: false
+binderhub:
+  nodeSelector:
+    binderhub: "true"
+  ingress:
+    # Don't change the className
+    ingressClassName: nginx
+    # Don't change the annotations
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+  config:
+    BinderHub:
+      base_url: /binder/
+      build_node_selector:
+        binderhub: "true"
+      image_prefix: gesiscss/binder-r2d-g5b5b759-
+      template_path: /etc/binderhub/templates
+      use_registry: true
+    KubernetesBuildExecutor:
+      node_selector:
+        binderhub: "true"
+        docker_available: "true"
+  extraConfig:
+    02-badge-base-url: |
+      c.BinderHub.badge_base_url = "https://mybinder.org/"
+  extraEnv:
+    GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+  extraVolumeMounts:
+    - mountPath: /secrets
+      name: secrets
+      readOnly: true
+  extraVolumes:
+    - name: secrets
+      secret:
+        secretName: events-archiver-secrets
+  imageCleaner:
+    enabled: true
+  jupyterhub:
+    ingress:
+      # Don't change the className
+      ingressClassName: nginx
+      # Don't change the annotations
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt
+    hub:
+      baseUrl: /jupyterhub
+      db:
+        pvc:
+          storageClassName: local-storage-jupyterhub
+      nodeSelector:
+        jupyterhub: "true"
+    singleuser:
+      nodeSelector:
+        jupyterhub_single_user: "true"
+  replicas: 1
+cryptnono:
+  enabled: true
+grafana:
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - editable: false
+          isDefault: true
+          name: GESIS Notebooks Prometheus
+          orgId: 1
+          type: prometheus
+          uid: gesis-notebooks-prometheus
+          url: http://binderhub-prometheus-server
+      prune: true
+  deploymentStrategy:
+    type: Recreate
+  enabled: true
+  grafana.ini:
+    auth.anonymous:
+      enabled: true
+      org_name: Main Org.
+      org_role: Viewer
+    auth.basic:
+      enabled: true
+    security:
+      allow_embedding: true
+    server:
+      http_port: 3000
+    smtp:
+      enabled: true
+  ingress:
+    # Don't change the className
+    className: nginx
+    # Don't change the annotations
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt
+    path: /grafana
+  nodeSelector:
+    grafana: "true"
+  persistence:
+    enabled: false
+prometheus:
+  enabled: true
+  server:
+    ingress:
+      # Don't change the className
+      className: nginx
+      # Don't change the annotations
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt
+      path: /prometheus
+    livenessProbeInitialDelay: 800
+    persistentVolume:
+      storageClass: local-storage-prometheus
+static:
+  ingress:
+    # Don't change the className
+    className: nginx
+    # Don't change the annotations
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt

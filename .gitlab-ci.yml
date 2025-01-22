@@ -3,7 +3,7 @@ variables:
   GIT_CLEAN_FLAGS: "-ffdx"
   # Change pip's cache directory to be inside the project directory since we can only cache local items.
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
-  EXTRA_VALUES: '--values ./secrets/config/common/common.yaml --values ./secrets/config/common/cryptnono.yaml --values ./secrets/config/common/gesis.yaml --values ./config/gesis-acceptance.yml --values ./secrets/config/gesis-acceptance.yaml'
+  EXTRA_VALUES_ACCEPTANCE: '--values ./secrets/config/common/common.yaml --values ./secrets/config/common/cryptnono.yaml --values ./secrets/config/common/gesis.yaml --values ./secrets/config/gesis-acceptance.yaml --values ./config/gesis.yml --values ./config/gesis-acceptance.yml'
 
 # This workflow:rules are required to enable merge request pipelines!
 workflow:
@@ -52,7 +52,7 @@ include:
     inputs:
       stage: lint
       dir: mybinder
-      extra_values: ${EXTRA_VALUES}
+      extra_values: ${EXTRA_VALUES_ACCEPTANCE}
       git_crypt: 'true'
     rules:
       - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_PIPELINE_SOURCE == 'merge_request_event'
@@ -64,7 +64,7 @@ include:
       environment: acceptance
       dir: mybinder
       k8s_context: methods-hub/binder.methodshub.gesis.org:acceptance
-      extra_values: ${EXTRA_VALUES}
+      extra_values: ${EXTRA_VALUES_ACCEPTANCE}
       git_crypt: 'true'
     rules:
       - if: $CI_SERVER_FQDN == "git.gesis.org" && $CI_PIPELINE_SOURCE == 'merge_request_event'

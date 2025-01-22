@@ -1,23 +1,12 @@
 analyticsPublisher:
   enabled: false
 binderhub:
-  nodeSelector:
-    binderhub: "true"
   config:
     BinderHub:
-      base_url: /binder/
-      build_node_selector:
-        binderhub: "true"
       hub_url: https://notebooks-test.gesis.org/binder/jupyter/
-      image_prefix: gesiscss/binder-r2d-g5b5b759-
-      template_path: /etc/binderhub/templates
-      use_registry: true
     KubernetesBuildExecutor:
       memory_limit: 3G
       memory_request: 1G
-      node_selector:
-        binderhub: "true"
-        docker_available: "true"
     LaunchQuota:
       total_quota: 30
   extraConfig:
@@ -37,41 +26,19 @@ binderhub:
       "binder/static/"
 
       c.BinderHub.template_variables.update(template_vars)
-    02-badge-base-url: |
-      c.BinderHub.badge_base_url = "https://mybinder.org/"
-  extraEnv:
-    GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
-  extraVolumeMounts:
-    - mountPath: /secrets
-      name: secrets
-      readOnly: true
-  extraVolumes:
-    - name: secrets
-      secret:
-        secretName: events-archiver-secrets
   imageCleaner:
-    enabled: true
-    imageGCThresholdHigh: 80e9
-    imageGCThresholdLow: 50e9
+    # 10e6 = 10GB
+    imageGCThresholdHigh: 10e6
+    # 5e6 = 5GB
+    imageGCThresholdLow: 5e6
     imageGCThresholdType: absolute
   ingress:
     hosts:
       - notebooks-test.gesis.org
   jupyterhub:
-    hub:
-      baseUrl: /jupyterhub
-      db:
-        pvc:
-          storageClassName: local-storage
-      nodeSelector:
-        jupyterhub: "true"
-    singleuser:
-      nodeSelector:
-        jupyterhub_single_user: "true"
     ingress:
       hosts:
         - notebooks-test.gesis.org
-  replicas: 1
 cryptnono:
   enabled: true
 grafana:
@@ -87,48 +54,13 @@ grafana:
             path: /var/lib/grafana/dashboards/notebooks.gesis.org
           orgId: 1
           type: file
-  datasources:
-    datasources.yaml:
-      apiVersion: 1
-      datasources:
-        - editable: false
-          isDefault: true
-          name: GESIS Notebooks Prometheus
-          orgId: 1
-          type: prometheus
-          uid: gesis-notebooks-prometheus
-          url: http://binderhub-prometheus-server
-      prune: true
-  deploymentStrategy:
-    type: Recreate
-  enabled: true
   grafana.ini:
-    auth.anonymous:
-      enabled: true
-      org_name: Main Org.
-      org_role: Viewer
-    auth.basic:
-      enabled: true
-    security:
-      allow_embedding: true
     server:
-      http_port: 3000
       root_url: https://notebooks.gesis.org/grafana/
-    smtp:
-      enabled: true
   ingress:
-    # Don't change the className
-    className: nginx
-    # Don't change the annotations
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt
     hosts:
       - notebooks-test.gesis.org
-    path: /grafana
   nodeSelector:
-    grafana: "true"
-  persistence:
-    enabled: false
   resources:
     limits:
       cpu: "0.25"
@@ -137,18 +69,10 @@ grafana:
       cpu: "0"
       memory: 128Mi
 prometheus:
-  enabled: true
   server:
     ingress:
-      # Don't change the className
-      className: nginx
-      # Don't change the annotations
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt
       hosts:
         - notebooks-test.gesis.org
-      path: /prometheus
-    livenessProbeInitialDelay: 800
     persistentVolume:
       size: 1Gi
       storageClass: local-storage-prometheus
@@ -162,11 +86,6 @@ prometheus:
     retention: 30d
 static:
   ingress:
-    # Don't change the className
-    className: nginx
-    # Don't change the annotations
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt
     hosts:
       - static.notebooks-test.gesis.org
 url: https://notebooks-test.gesis.org/binder/
