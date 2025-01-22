@@ -111,9 +111,4 @@ prometheus:
     persistentVolume:
       storageClass: local-storage-prometheus
 static:
-  ingress:
-    # Don't change the className
-    className: nginx
-    # Don't change the annotations
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt
+  enabled: false
