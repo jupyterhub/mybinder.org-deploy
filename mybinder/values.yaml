@@ -494,10 +494,11 @@ ingress-nginx:
     resources:
       requests:
         cpu: 100m
-        memory: 150Mi
+        memory: 512Mi
       limits:
-        cpu: 800m
-        memory: 1Gi
+        # Increasing these because docker registry also goes through this now
+        cpu: 2
+        memory: 4Gi
     tolerations:
       - key: "node.kubernetes.io/unschedulable"
         operator: "Exists"
