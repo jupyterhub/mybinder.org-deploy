@@ -104,16 +104,14 @@ grafana:
 prometheus:
   enabled: true
   server:
+    prefixURL: /prometheus
     ingress:
       # Don't change the className
       className: nginx
       # Don't change the annotations
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt
-        nginx.ingress.kubernetes.io/use-regex: "true"
-        nginx.ingress.kubernetes.io/rewrite-target: /$2
-      pathType: ImplementationSpecific
-      path: /prometheus(/|$)(.*)
+      path: /prometheus
     livenessProbeInitialDelay: 800
     persistentVolume:
       storageClass: local-storage-prometheus
