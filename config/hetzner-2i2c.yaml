@@ -47,7 +47,7 @@ binderhub:
         - '--DockerEngine.extra_init_args={"timeout":1200}'
 
     LaunchQuota:
-      total_quota: 250
+      total_quota: 100
 
     # DockerRegistry:
     # token_url: "https://2lmrrh8f.gra7.container-registry.ovh.net/service/token?service=harbor-registry"
@@ -100,11 +100,9 @@ binderhub:
             - hub.2i2c.mybinder.org
 
   imageCleaner:
-    # disable image cleaner temporarily as it seems to wipe layers before they get pushed
-    enabled: false
     # Use 40GB as upper limit, size is given in bytes
-    imageGCThresholdHigh: 40e9
-    imageGCThresholdLow: 30e9
+    imageGCThresholdHigh: 300e9
+    imageGCThresholdLow: 100e9
     imageGCThresholdType: "absolute"
 
 grafana:
