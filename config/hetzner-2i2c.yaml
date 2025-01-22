@@ -2,15 +2,15 @@ projectName: hetzner-2i2c
 
 registry:
   enabled: true
-  replicas: 4
+  replicas: 1
   config:
     storage:
       # Uncomment this and comment out the s3 config to use filesystem
       # filesystem:
       #   rootdirectory: /var/lib/registry
       s3:
-        regionendpoint: https://fsn1.your-objectstorage.com
-        bucket: mybinder-2i2c-registry-hetzner
+        regionendpoint: https://nbg1.your-objectstorage.com
+        bucket: mybinder-2i2c-registry
         region: does-not-matter
   storage:
     filesystem:
@@ -47,12 +47,12 @@ binderhub:
         - '--DockerEngine.extra_init_args={"timeout":1200}'
 
     LaunchQuota:
-      total_quota: 200
+      total_quota: 250
 
     # DockerRegistry:
     # token_url: "https://2lmrrh8f.gra7.container-registry.ovh.net/service/token?service=harbor-registry"
 
-  replicas: 1
+  replicas: 2
 
   extraVolumes:
     - name: secrets
@@ -68,11 +68,11 @@ binderhub:
   dind:
     resources:
       requests:
-        cpu: "2"
+        cpu: "4"
         memory: 12Gi
       limits:
-        cpu: "6"
-        memory: 12Gi
+        cpu: "8"
+        memory: 16Gi
 
   ingress:
     hosts:

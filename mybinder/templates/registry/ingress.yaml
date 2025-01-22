@@ -9,8 +9,10 @@ metadata:
     release: {{ .Release.Name }}
   annotations:
     kubernetes.io/tls-acme: "true"
-    # things be big yo
-    nginx.ingress.kubernetes.io/proxy-body-size: 4096m
+    # This has to accomodate the max size of a single docker layer, which can be huge.
+    # I had previously set this to 4G thinking 'that should be big enough' and was
+    # immediately proven wrong. This is set to 16G now
+    nginx.ingress.kubernetes.io/proxy-body-size: 16384m
 spec:
   ingressClassName: nginx
   rules:
