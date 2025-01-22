@@ -2,7 +2,7 @@ analyticsPublisher:
   enabled: false
 binderhub:
   nodeSelector:
-    ingress: "true"
+    binderhub: "true"
   config:
     BinderHub:
       base_url: /binder/
