@@ -150,8 +150,8 @@ prometheus:
       path: /prometheus
     livenessProbeInitialDelay: 800
     persistentVolume:
-      size: 10Gi
-      storageClass: local-storage
+      size: 1Gi
+      storageClass: local-storage-prometheus
     resources:
       limits:
         cpu: "1"
