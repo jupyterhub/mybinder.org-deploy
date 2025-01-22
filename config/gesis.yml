@@ -10,9 +10,10 @@ binderhub:
     # Don't change the annotations
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt
+    pathSuffix: binder
   config:
     BinderHub:
-      base_url: /
+      base_url: /binder
       build_node_selector:
         binderhub: "true"
       image_prefix: gesiscss/binder-r2d-g5b5b759-
