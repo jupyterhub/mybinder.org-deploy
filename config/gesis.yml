@@ -92,7 +92,10 @@ grafana:
     # Don't change the annotations
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt
-    path: /grafana
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/rewrite-target: /$2
+    pathType: ImplementationSpecific
+    path: /grafana(/|$)(.*)
   nodeSelector:
     grafana: "true"
   persistence:
@@ -106,7 +109,10 @@ prometheus:
       # Don't change the annotations
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt
-      path: /prometheus
+        nginx.ingress.kubernetes.io/use-regex: "true"
+        nginx.ingress.kubernetes.io/rewrite-target: /$2
+      pathType: ImplementationSpecific
+      path: /prometheus(/|$)(.*)
     livenessProbeInitialDelay: 800
     persistentVolume:
       storageClass: local-storage-prometheus
