@@ -28,10 +28,9 @@ binderhub:
 
       c.BinderHub.template_variables.update(template_vars)
   imageCleaner:
-    # 10e6 = 10GB
-    imageGCThresholdHigh: 10e6
-    # 5e6 = 5GB
-    imageGCThresholdLow: 5e6
+    # size is given in bytes, i.e. 1GB = 1e9
+    imageGCThresholdHigh: 10e9
+    imageGCThresholdLow: 5e9
     imageGCThresholdType: absolute
   ingress:
     hosts:
