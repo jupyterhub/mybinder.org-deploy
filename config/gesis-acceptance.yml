@@ -24,7 +24,7 @@ binderhub:
       template_vars['gesis_notebooks_static'] + "gesis-web-frontend-framework/"
 
       template_vars['binder_static'] = template_vars['gesis_notebooks_https'] +
-      "binder/static/"
+      "static/"
 
       c.BinderHub.template_variables.update(template_vars)
   imageCleaner:
@@ -88,4 +88,4 @@ static:
   ingress:
     hosts:
       - notebooks-test.gesis.org
-url: https://notebooks-test.gesis.org/binder/
+url: https://notebooks-test.gesis.org/

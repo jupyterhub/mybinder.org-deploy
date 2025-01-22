@@ -12,7 +12,7 @@ binderhub:
       cert-manager.io/cluster-issuer: letsencrypt
   config:
     BinderHub:
-      base_url: /binder/
+      base_url: /
       build_node_selector:
         binderhub: "true"
       image_prefix: gesiscss/binder-r2d-g5b5b759-
