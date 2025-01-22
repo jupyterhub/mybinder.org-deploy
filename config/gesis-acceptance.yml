@@ -1,3 +1,4 @@
+projectName: gesis-acceptance
 analyticsPublisher:
   enabled: false
 binderhub:
@@ -87,5 +88,5 @@ prometheus:
 static:
   ingress:
     hosts:
-      - static.notebooks-test.gesis.org
+      - notebooks-test.gesis.org
 url: https://notebooks-test.gesis.org/binder/
