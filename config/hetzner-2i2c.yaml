@@ -68,11 +68,11 @@ binderhub:
   dind:
     resources:
       requests:
-        cpu: "2"
+        cpu: "4"
         memory: 12Gi
       limits:
-        cpu: "6"
-        memory: 12Gi
+        cpu: "8"
+        memory: 16Gi
 
   ingress:
     hosts:
