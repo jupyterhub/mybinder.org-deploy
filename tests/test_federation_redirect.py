@@ -13,4 +13,4 @@ def test_active_hosts(helm_config, federation_url):
 def test_proxy_page(helm_config, federation_url):
     r = requests.get(federation_url)
     r.raise_for_status()
-    assert "How it works" in r.text
+    assert '<div id="root"></div>' in r.text
