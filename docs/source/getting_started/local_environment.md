@@ -52,8 +52,10 @@ done
 chartpress --skip-build
 ```
 
+`deploy.py` requires your IP address (represented by `xxx.xxx.xxx.xxx` in the next command).
+
 ```
-python deploy.py localhost
+python deploy.py localhost --local-ip xxx.xxx.xxx.xxx
 ```
 
 ## Access your mybinder.org
