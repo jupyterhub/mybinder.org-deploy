@@ -420,6 +420,9 @@ binderhub:
       enabled: true
       annotations:
         ingress.kubernetes.io/proxy-body-size: 64m
+        # Increase for websockets (default is 60s)
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
         kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
     scheduling:
