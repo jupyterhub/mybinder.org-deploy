@@ -34,18 +34,6 @@ kubectl get -A pods
 
 and a list of all running pods should be printed.
 
-## Deploy Harbor to Kubernetes
-
-Run the following command:
-
-```
-helm repo add harbor https://helm.goharbor.io
-```
-
-```
-helm install harbor harbor/harbor
-```
-
 ## Deploy mybinder.org to Kubernetes
 
 Run the following command:
