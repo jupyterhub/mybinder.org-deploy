@@ -31,7 +31,7 @@ GCP_ZONES = {
 }
 
 # Projects using raw KUBECONFIG files
-KUBECONFIG_CLUSTERS = {"ovh2", "hetzner-2i2c"}
+KUBECONFIG_CLUSTERS = {"ovh2", "hetzner-2i2c", "hetzner-2i2c-bare"}
 
 # Mapping of config name to cluster name for AWS EKS deployments
 AWS_DEPLOYMENTS = {"curvenote": "binderhub"}
@@ -437,7 +437,10 @@ def main():
     argparser.add_argument(
         "release",
         help="Release to deploy",
-        choices=["staging", "prod", "ovh", "ovh2", "curvenote", "hetzner-2i2c"],
+        choices=list(KUBECONFIG_CLUSTERS)
+        + list(GCP_PROJECTS.keys())
+        + list(AWS_DEPLOYMENTS.keys())
+        + list(AZURE_RGs.keys()),
     )
     argparser.add_argument(
         "--name",
