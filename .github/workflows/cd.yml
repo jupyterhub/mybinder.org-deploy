@@ -227,6 +227,11 @@ jobs:
             helm_version: ""
             experimental: false
 
+          - federation_member: hetzner-2i2c-bare
+            chartpress_args: ""
+            helm_version: ""
+            experimental: false
+
           # OVH deployment paused
           # - federation_member: ovh2
           #   helm_version: ""
