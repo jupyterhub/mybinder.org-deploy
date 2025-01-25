@@ -1,0 +1,165 @@
+projectName: hetzner-2i2c-bare
+
+registry:
+  enabled: true
+  replicas: 1
+  config:
+    storage:
+      # Uncomment this and comment out the s3 config to use filesystem
+      # filesystem:
+      #   rootdirectory: /var/lib/registry
+      s3:
+        regionendpoint: https://nbg1.your-objectstorage.com
+        bucket: mybinder-2i2c-registry
+        region: does-not-matter
+  storage:
+    filesystem:
+      storageClassName: "local-path"
+  ingress:
+    hosts:
+      - registry.2i2c-bare.mybinder.org
+
+cryptnono:
+  detectors:
+    monero:
+      enabled: false
+    execwhacker:
+      containerdHostPath: /run/k3s/containerd/containerd.sock
+
+binderhub:
+  config:
+    BinderHub:
+      hub_url: https://hub.2i2c-bare.mybinder.org
+      badge_base_url: https://mybinder.org
+      sticky_builds: true
+      image_prefix: registry.2i2c-bare.mybinder.org/i-
+      # image_prefix: quay.io/mybinder-hetzner-2i2c/image-
+      # build_docker_host: /var/run/dind/docker.sock
+    # TODO: we should have CPU requests, too
+    # use this to limit the number of builds per node
+    # complicated: dind memory request + KubernetesBuildExecutor.memory_request * builds_per_node ~= node memory
+    KubernetesBuildExecutor:
+      memory_request: "2G"
+      memory_limit: "4G"
+      docker_host: /var/run/dind/docker.sock
+      repo2docker_extra_args:
+        # try to avoid timeout pushing to local registry
+        # default is 60
+        # this must have no spaces to be processed by repo2docker correctly
+        - '--DockerEngine.extra_init_args={"timeout":1200}'
+
+    LaunchQuota:
+      total_quota: 64
+
+    # DockerRegistry:
+    # token_url: "https://2lmrrh8f.gra7.container-registry.ovh.net/service/token?service=harbor-registry"
+
+  replicas: 2
+
+  extraVolumes:
+    - name: secrets
+      secret:
+        secretName: events-archiver-secrets
+  extraVolumeMounts:
+    - name: secrets
+      mountPath: /secrets
+      readOnly: true
+  extraEnv:
+    GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+
+  dind:
+    daemonset:
+      extraArgs:
+        # Increase limit from default of 5, as we have only one builder node
+        # But there are enough resources on the node to handle it
+        - --max-concurrent-uploads=32
+    resources:
+      requests:
+        cpu: "4"
+        memory: 12Gi
+      limits:
+        cpu: "8"
+        memory: 16Gi
+
+  ingress:
+    hosts:
+      - 2i2c-bare.mybinder.org
+
+  jupyterhub:
+    # proxy:
+    #   chp:
+    #     resources:
+    #       requests:
+    #         cpu: "1"
+    #       limits:
+    #         cpu: "1"
+    ingress:
+      hosts:
+        - hub.2i2c-bare.mybinder.org
+      tls:
+        - secretName: kubelego-tls-hub
+          hosts:
+            - hub.2i2c-bare.mybinder.org
+
+  imageCleaner:
+    # Use 300GB as upper limit, size is given in bytes
+    imageGCThresholdHigh: 300e9
+    imageGCThresholdLow: 100e9
+    imageGCThresholdType: "absolute"
+    # don't cordon single-node cluster while cleaning
+    cordon: false
+
+grafana:
+  ingress:
+    hosts:
+      - grafana.2i2c-bare.mybinder.org
+    tls:
+      - hosts:
+          - grafana.2i2c-bare.mybinder.org
+        secretName: kubelego-tls-grafana
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: prometheus
+          orgId: 1
+          type: prometheus
+          url: https://prometheus.2i2c-bare.mybinder.org
+          access: direct
+          isDefault: true
+          editable: false
+  # persistence:
+  # storageClassName: csi-cinder-high-speed
+
+prometheus:
+  server:
+    persistentVolume:
+      size: 50Gi
+    retention: 30d
+    ingress:
+      hosts:
+        - prometheus.2i2c-bare.mybinder.org
+      tls:
+        - hosts:
+            - prometheus.2i2c-bare.mybinder.org
+          secretName: kubelego-tls-prometheus
+
+ingress-nginx:
+  controller:
+    replicas: 1
+    scope:
+      enabled: true
+    service:
+      loadBalancerIP:
+
+static:
+  ingress:
+    hosts:
+      - static.2i2c-bare.mybinder.org
+    tls:
+      secretName: kubelego-tls-static
+
+
+
+
+
