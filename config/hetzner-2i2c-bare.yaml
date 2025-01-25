@@ -158,8 +158,3 @@ static:
       - static.2i2c-bare.mybinder.org
     tls:
       secretName: kubelego-tls-static
-
-
-
-
-
