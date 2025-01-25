@@ -117,6 +117,7 @@ We also need a secrets file, so let's copy `secrets/config/hetzner-2i2c.yaml` to
 Let's tell `deploy.py` script that we have a new cluster by adding `<cluster-name>` to `KUBECONFIG_CLUSTERS` variable in `deploy.py`.
 
 Once done, you can do a deployment with `./deploy.py <cluster-name>`! If it errors out, tweak and debug until it works.
+
 ## Test and validate
 
 ## Add to the redirector

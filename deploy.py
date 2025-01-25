@@ -437,7 +437,10 @@ def main():
     argparser.add_argument(
         "release",
         help="Release to deploy",
-        choices=list(KUBECONFIG_CLUSTERS) + list(GCP_PROJECTS.keys()) + list(AWS_DEPLOYMENTS.keys()) + list(AZURE_RGs.keys())
+        choices=list(KUBECONFIG_CLUSTERS)
+        + list(GCP_PROJECTS.keys())
+        + list(AWS_DEPLOYMENTS.keys())
+        + list(AZURE_RGs.keys()),
     )
     argparser.add_argument(
         "--name",
