@@ -55,7 +55,30 @@ do not need traefik.
 
 ## Extracting authentication information via a `KUBECONFIG` file
 
-Follow https://docs.k3s.io/cluster-access#accessing-the-cluster-from-outside-with-kubectl
+Next, we extract the `KUBECONFIG` file that the `mybinder.org-deploy` repo and team members can use to access
+this cluster externally by following [upstream documentation](https://docs.k3s.io/cluster-access#accessing-the-cluster-from-outside-with-kubectl).
+The short version is:
+
+1. Copy the `/etc/rancher/k3s/k3s.yaml` into the `secrets/` directory in this repo:
+
+   ```bash
+   scp root@<public-ip>:/etc/rancher/k3s/k3s.yaml secrets/<cluster-name>-kubeconfig.yml
+   ```
+
+   Pick a `<cluster-name>` that describes what cluster this is - we will be consistently using it for other files too.
+
+   Note the `.yml` here - everything else is `.yaml`!
+
+2. Change the `server` field under `clusters.0.cluster` from `https://127.0.0.1:6443` to `https://<public-ip>:6443`.
+
+## Create a new ssh key for mybinder team members
+
+For easy access to this node for mybinder team members, we create and check-in an ssh key as
+a secret.
+
+1. Run `ssh-keygen -t ed25519 -f secrets/<cluster-name>.key` to create the ssh key. Leave the passphrase blank.
+2. Set appropriate permissions with `chmod 0400 secrets/<cluster-name>.key`.
+3. Copy `secrets/<cluster-name>.key.pub` (**NOTE THE .pub**) and paste it as a **new line** in `/root/.ssh/authorized_keys` on your server. Do not replace any existing lines in this file.
 
 ## Setup DNS entries
 
@@ -70,16 +93,30 @@ Add the following entries:
 
 Give this a few minutes because it may take a while to propagate.
 
-## Make a config copy for this new member
+## Make a config + secret copy for this new member
 
-TODO
+Now we gotta start a config file and a secret config file for this new member. We can start off by copying an existing one!
 
-## Make a secret config for this new member
+Let's copy `config/hetzner-2i2c.yaml` to `config/<cluster-name>.yaml` and make changes!
 
-TODO
+1. Find all hostnames, and change them to point to the DNS entries you made in the previous step.
+2. Change `ingress-nginx.controller.service.loadbalancerIP` to be the external public IP of your cluster
+3. Adjust the following parameters based on the size of the server:
+   a. `binderhub.config.LaunchQuota.total_quota`
+   b. `dind.resources`
+   c. `imageCleaner`
+4. TODO: Something about the registry.
+
+We also need a secrets file, so let's copy `secrets/config/hetzner-2i2c.yaml` to `secrets/config/<cluster-name>.yaml` and make changes!
+
+1. Find all hostnames, and change them to point to the DNS entries you made in the previous step.
+2. TODO: Something about the registry
 
 ## Deploy binder!
 
+Let's tell `deploy.py` script that we have a new cluster by adding `<cluster-name>` to `KUBECONFIG_CLUSTERS` variable in `deploy.py`.
+
+Once done, you can do a deployment with `./deploy.py <cluster-name>`! If it errors out, tweak and debug until it works.
 ## Test and validate
 
 ## Add to the redirector
