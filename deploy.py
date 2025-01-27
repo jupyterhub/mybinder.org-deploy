@@ -243,11 +243,11 @@ def deploy(release, name=None, dry_run=False, diff=False, ip_address=None, disab
         helm.extend(
             [
                 "--set",
-                f"binderhub.config.BinderHub.hub_url=http://jupyterhub.{ip_address}.nip.io",
+                f"binderhub.config.BinderHub.hub_url=http://jupyterhub.mybinder.{ip_address}.nip.io",
                 "--set",
-                f"binderhub.ingress.hosts={{{ip_address}.nip.io}}",
+                f"binderhub.ingress.hosts={{mybinder.{ip_address}.nip.io}}",
                 "--set",
-                f"binderhub.jupyterhub.ingress.hosts={{jupyterhub.{ip_address}.nip.io}}",
+                f"binderhub.jupyterhub.ingress.hosts={{jupyterhub.mybinder.{ip_address}.nip.io}}",
                 "--set",
                 f"static.ingress.hosts={{static.{ip_address}.nip.io}}",
             ]
