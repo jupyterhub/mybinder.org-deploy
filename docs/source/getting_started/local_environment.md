@@ -20,7 +20,7 @@ Install Docker Desktop on [Mac](https://docs.docker.com/desktop/setup/install/ma
 Once you have `kubectl` installed, you can connect it with your local Kubernetes.
 To do so, run the following command:
 
-```
+```bash
 kubectl config use-context k8s-context-name
 ```
 
@@ -28,7 +28,7 @@ If using Docker Desktop, `k8s-context-name` is `docker-desktop`.
 
 You can test this out by running:
 
-```
+```bash
 kubectl get -A pods
 ```
 
@@ -38,23 +38,23 @@ and a list of all running pods should be printed.
 
 Run the following command:
 
-```
+```bash
 source cert-manager.env
 ```
 
-```
+```bash
 for d in ./mybinder*/; do
     helm dependency update "$d"
 done
 ```
 
-```
+```bash
 chartpress --skip-build
 ```
 
 `deploy.py` requires your IP address (represented by `xxx.xxx.xxx.xxx` in the next command).
 
-```
+```bash
 python deploy.py localhost --local-ip xxx.xxx.xxx.xxx
 ```
 
