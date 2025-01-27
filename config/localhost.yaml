@@ -5,8 +5,9 @@ binderhub:
   config:
     BinderHub:
       # Use Kubernetes DNS
-      hub_url: http://jupyterhub.127.0.0.1.nip.io
+      hub_url: http://jupyterhub.mybinder.127.0.0.1.nip.io
       use_registry: false
+      image_prefix: dummy.io/localhost/binder-
 
   extraConfig:
     # Disable send events to StackDriver on Google Cloud
@@ -22,12 +23,12 @@ binderhub:
       # This is unsafe! Only se for local development
       enabled: false
     hosts:
-      - 127.0.0.1.nip.io
+      - mybinder.127.0.0.1.nip.io
 
   jupyterhub:
     ingress:
       hosts:
-        - jupyterhub.127.0.0.1.nip.io
+        - jupyterhub.mybinder.127.0.0.1.nip.io
 
 static:
   ingress:
