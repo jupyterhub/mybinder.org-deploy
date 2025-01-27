@@ -199,7 +199,7 @@ def get_config_files(release, config_dir="config"):
     return config_files
 
 
-def deploy(release, name=None, dry_run=False, diff=False, ip_address=None):
+def deploy(release, name=None, dry_run=False, diff=False, ip_address=None, disable_ingress_nginx=False):
     """Deploys a federation member to a k8s cluster.
 
     Waits for deployments and daemonsets to become Ready
@@ -250,6 +250,14 @@ def deploy(release, name=None, dry_run=False, diff=False, ip_address=None):
                 f"binderhub.jupyterhub.ingress.hosts={{jupyterhub.{ip_address}.nip.io}}",
                 "--set",
                 f"static.ingress.hosts={{static.{ip_address}.nip.io}}",
+            ]
+        )
+
+    if disable_ingress_nginx:
+        helm.extend(
+            [
+                "--set",
+                f"ingress-nginx.enabled=false",
             ]
         )
 
@@ -492,6 +500,11 @@ def main():
         default=stages[0],
         help="Stage to deploy, default all",
     )
+    argparser.add_argument(
+        "--disable-ingress-nginx",
+        action="store_true",
+        help="Disable the installation of ingress-nginx. Use this is the Kubernetes cluster already has ingress-nginx installed.",
+    )
 
     args = argparser.parse_args()
 
@@ -554,7 +567,7 @@ def main():
     if args.stage in ("all", "certmanager") and cluster != "localhost":
         setup_certmanager(args.dry_run, args.diff)
     if args.stage in ("all", "mybinder"):
-        deploy(args.release, args.name, args.dry_run, args.diff, args.local_ip)
+        deploy(args.release, args.name, args.dry_run, args.diff, args.local_ip, args.disable_ingress_nginx)
 
 
 if __name__ == "__main__":
