@@ -551,7 +551,7 @@ def main():
         update_networkbans(cluster, args.dry_run)
     if args.stage in ("all", "system"):
         deploy_system_charts(args.release, args.name, args.dry_run, args.diff)
-    if args.stage in ("all", "certmanager"):
+    if args.stage in ("all", "certmanager") and cluster != "localhost":
         setup_certmanager(args.dry_run, args.diff)
     if args.stage in ("all", "mybinder"):
         deploy(args.release, args.name, args.dry_run, args.diff, args.local_ip)
