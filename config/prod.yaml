@@ -231,13 +231,13 @@ federationRedirect:
     hetzner-2i2c:
       prime: true
       url: https://2i2c.mybinder.org
-      weight: 70
+      weight: 75
       health: https://2i2c.mybinder.org/health
       versions: https://2i2c.mybinder.org/versions
     hetzner-2i2c-bare:
       prime: false
       url: https://2i2c-bare.mybinder.org
-      weight: 5
+      weight: 0
       health: https://2i2c-bare.mybinder.org/health
       versions: https://2i2c-bare.mybinder.org/versions
     gesis:
