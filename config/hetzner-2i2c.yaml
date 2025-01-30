@@ -40,7 +40,6 @@ binderhub:
     # complicated: dind memory request + KubernetesBuildExecutor.memory_request * builds_per_node ~= node memory
     KubernetesBuildExecutor:
       memory_request: "2G"
-      memory_limit: "4G"
       docker_host: /var/run/dind/docker.sock
       repo2docker_extra_args:
         # try to avoid timeout pushing to local registry
