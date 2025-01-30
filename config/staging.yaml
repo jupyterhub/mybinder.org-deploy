@@ -10,7 +10,6 @@ binderhub:
       badge_base_url: https://staging.mybinder.org
       image_prefix: us-central1-docker.pkg.dev/binderhub-288415/staging/r2d-2023-04-
       sticky_builds: true
-      build_memory_limit: "2G"
     DockerRegistry:
       token_url: "https://us-central1-docker.pkg.dev/v2/token"
 
