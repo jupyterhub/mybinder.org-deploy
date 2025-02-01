@@ -723,6 +723,5 @@ awsEcrRegistryCleaner:
     annotations: {}
   priorityClassName: ""
 
-
 localpv-provisioner:
   enabled: false
