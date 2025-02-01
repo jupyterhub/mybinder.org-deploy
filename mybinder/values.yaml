@@ -32,8 +32,8 @@ registry:
     type: ClusterIP
   storage:
     filesystem:
+      enabled: false
       storageClassName: ""
-      # Size is currently ignored- using local path provisioner
       size: 10Gi
 
 imagePullSecrets:
@@ -722,3 +722,7 @@ awsEcrRegistryCleaner:
     name: binderhub-ecr-registry-cleaner
     annotations: {}
   priorityClassName: ""
+
+
+localpv-provisioner:
+  enabled: false

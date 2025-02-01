@@ -6,15 +6,17 @@ registry:
   config:
     storage:
       # Uncomment this and comment out the s3 config to use filesystem
-      # filesystem:
-      #   rootdirectory: /var/lib/registry
-      s3:
-        regionendpoint: https://nbg1.your-objectstorage.com
-        bucket: mybinder-2i2c-registry
-        region: does-not-matter
+      filesystem:
+        rootdirectory: /var/lib/registry
+      # s3:
+      #   regionendpoint: https://nbg1.your-objectstorage.com
+      #   bucket: mybinder-2i2c-registry
+      #   region: does-not-matter
   storage:
     filesystem:
-      storageClassName: "local-path"
+      enabled: true
+      size: 300Gi
+      storageClassName: "openebs-hostpath"
   ingress:
     hosts:
       - registry.2i2c-bare.mybinder.org
@@ -86,6 +88,11 @@ binderhub:
       - 2i2c-bare.mybinder.org
 
   jupyterhub:
+    hub:
+      db:
+        pvc:
+          storage: 1Gi
+          storageClassName: openebs-hostpath
     # proxy:
     #   chp:
     #     resources:
@@ -128,13 +135,14 @@ grafana:
           access: direct
           isDefault: true
           editable: false
-  # persistence:
-  # storageClassName: csi-cinder-high-speed
+  persistence:
+    storageClassName: openebs-hostpath
 
 prometheus:
   server:
     persistentVolume:
       size: 50Gi
+      storageClass: openebs-hostpath
     retention: 30d
     ingress:
       hosts:
@@ -158,3 +166,15 @@ static:
       - static.2i2c-bare.mybinder.org
     tls:
       secretName: kubelego-tls-static
+
+localpv-provisioner:
+  enabled: true
+
+  hostpathClass:
+    reclaimPolicy: Retain
+
+    xfsQuota:
+      enabled: true
+
+  analytics:
+    enabled: false

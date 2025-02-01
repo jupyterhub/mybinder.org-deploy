@@ -34,9 +34,12 @@ spec:
       - name: registry-secret
         secret:
           secretName: registry-secret
+
+      {{- if .Values.registry.storage.filesystem.enabled }}
       - name: registry-storage
         persistentVolumeClaim:
           claimName: registry
+      {{- end }}
       containers:
       - name: registry
         image: registry:3.0.0-rc.2
@@ -50,8 +53,10 @@ spec:
             # This path is what registry *actually* seems to read lol
             mountPath: /etc/docker/registry/config.yml
             subPath: config.yml
+          {{- if .Values.registry.storage.filesystem.enabled }}
           - name: registry-storage
             mountPath: /var/lib/registry
+          {{- end }}
           - name: registry-secret
             mountPath: /etc/distribution/auth.htpasswd
             subPath: auth.htpasswd
