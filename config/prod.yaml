@@ -126,7 +126,6 @@ prometheus:
     persistentVolume:
       size: 50G
       storageClass: standard
-    retention: 30d
     ingress:
       hosts:
         - prometheus.mybinder.org

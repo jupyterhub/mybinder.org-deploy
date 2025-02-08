@@ -119,7 +119,6 @@ prometheus:
     nodeSelector: *coreNodeSelector
     persistentVolume:
       size: 50Gi
-    retention: 30d
     ingress:
       hosts:
         - prometheus.ovh2.mybinder.org
