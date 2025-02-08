@@ -130,7 +130,6 @@ prometheus:
   server:
     persistentVolume:
       size: 50Gi
-    retention: 30d
     ingress:
       hosts:
         - prometheus.2i2c.mybinder.org

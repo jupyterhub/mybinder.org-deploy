@@ -227,7 +227,6 @@ prometheus:
     priorityClassName: binderhub-core
     persistentVolume:
       size: 50Gi
-    retention: 30d
     ingress:
       hosts:
         - prometheus.binder.curvenote.dev

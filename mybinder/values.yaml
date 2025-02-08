@@ -606,6 +606,8 @@ prometheus:
       # mounted on one pod, so we need to use Recreate that first shut down the
       # pod and then starts it up during updates.
       type: Recreate
+    # Keep 3 months of metrics
+    retention: 90d
     ingress:
       enabled: true
       annotations:

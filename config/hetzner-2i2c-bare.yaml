@@ -138,7 +138,6 @@ prometheus:
     persistentVolume:
       size: 50Gi
       storageClass: openebs-hostpath
-    retention: 30d
     ingress:
       hosts:
         - prometheus.2i2c-bare.mybinder.org
