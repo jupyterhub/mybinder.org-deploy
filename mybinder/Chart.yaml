@@ -57,3 +57,8 @@ dependencies:
     version: 0.2.4
     repository: https://www.manicstreetpreacher.co.uk/binderhub-container-registry-helper/
     condition: binderhub-container-registry-helper.enabled
+
+  - name: localpv-provisioner
+    version: 4.2.0
+    repository: https://openebs.github.io/dynamic-localpv-provisioner
+    condition: localpv-provisioner.enabled

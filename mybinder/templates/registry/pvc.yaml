@@ -1,4 +1,5 @@
 {{- if .Values.registry.enabled }}
+{{- if .Values.registry.storage.filesystem.enabled }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -14,4 +15,5 @@ spec:
   resources:
     requests:
       storage: {{ .Values.registry.storage.filesystem.size }}
+{{- end }}
 {{- end }}
