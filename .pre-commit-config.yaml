@@ -71,6 +71,13 @@ repos:
           images/minesweeper/requirements.txt|
           images/federation-redirect/requirements.txt
 
+  # Autoformat jinja2 templates
+  - repo: https://github.com/Riverside-Healthcare/djLint
+    rev: v1.36.4
+    hooks:
+      - id: djlint-reformat-jinja
+      - id: djlint-jinja
+
   # Lint: Python code
   - repo: https://github.com/PyCQA/flake8
     rev: "7.1.1"
