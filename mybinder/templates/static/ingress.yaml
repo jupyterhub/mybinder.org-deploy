@@ -1,3 +1,4 @@
+{{- if .Values.static.enabled }}
 # Ingress that serves whitelisted static images only
 # This allows end users to include our badges without us
 # accidentally tracking all the people who see the badges.
@@ -36,3 +37,4 @@ spec:
         {{- range $host := .Values.static.ingress.hosts }}
         - {{ $host }}
         {{- end }}
+{{- end }}
