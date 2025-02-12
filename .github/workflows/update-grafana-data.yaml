@@ -8,9 +8,9 @@ on:
   push:
     paths:
       - ".github/workflows/update-grafana-data.yaml"
-  schedule:
-    # Run at 05:00 every day, ref: https://crontab.guru/#0_5_*_*_*
-    - cron: "0 5 * * *"
+  # schedule:
+  #   # Run at 05:00 every day, ref: https://crontab.guru/#0_5_*_*_*
+  #   - cron: "0 5 * * *"
   workflow_dispatch:
 
 jobs:
