@@ -42,7 +42,7 @@ tags: {}
 
 etcJupyter:
   jupyter_notebook_config.json:
-    NotebookApp:
+    ServerApp:
       allow_origin: "*"
       tornado_settings:
         trust_xheaders: true
