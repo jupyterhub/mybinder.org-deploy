@@ -727,3 +727,6 @@ awsEcrRegistryCleaner:
 
 localpv-provisioner:
   enabled: false
+
+clusterIssuer:
+  enabled: true
