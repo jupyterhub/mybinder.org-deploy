@@ -2,7 +2,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: hello
+  name: build-cache-prune
 spec:
   schedule: {{ .Values.buildkitPruner.schedule | quote }}
   # If the previous run is still going, replace it with our new one
@@ -23,8 +23,9 @@ spec:
             - docker
             - builder
             - prune
+            - --force
             - --all
-            - --keep-storage={{ .Values.buildkitPruner.buildkitCacheSize }}
+            - --max-storage={{ .Values.buildkitPruner.buildkitCacheSize }}
             volumeMounts:
             - name: dind-socket
               mountPath: /var/run/dind/docker.sock
