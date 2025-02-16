@@ -19,6 +19,9 @@ spec:
           containers:
           - name: pruner
             image: {{ .Values.buildkitPruner.image }}
+            env:
+              - name: DOCKER_HOST
+                value: "unix:///var/run/dind/docker.sock"
             command:
             - docker
             - builder
