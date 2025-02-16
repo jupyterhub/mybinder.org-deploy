@@ -28,7 +28,7 @@ spec:
             - prune
             - --force
             - --all
-            - --max-storage={{ .Values.buildkitPruner.buildkitCacheSize }}
+            - --keep-storage={{ .Values.buildkitPruner.buildkitCacheSize }}
             volumeMounts:
             - name: dind-socket
               mountPath: /var/run/dind/docker.sock
