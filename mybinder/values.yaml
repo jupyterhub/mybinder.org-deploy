@@ -1,4 +1,3 @@
-# values ref: https://github.com/yuvipanda/cryptnono/blob/main/cryptnono/values.yaml
 cryptnono:
   enabled: true
   detectors:
@@ -9,6 +8,14 @@ cryptnono:
       # Override if K8s uses a different path for containerd
       containerdHostPath: /run/containerd/containerd.sock
       dockerHostPath: /run/dind/docker.sock
+
+buildkitPruner:
+  enabled: true
+  # Use the same image as we use for dind
+  image: docker:27.5.1-dind
+  buildkitCacheSize: 300G
+  # Run this every 30min
+  schedule: "*/30 * * * *"
 
 registry:
   enabled: false
