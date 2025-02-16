@@ -19,7 +19,7 @@ spec:
           containers:
           - name: pruner
             image: {{ .Values.buildkitPruner.image }}
-            cmd:
+            command:
             - docker
             - builder
             - prune
