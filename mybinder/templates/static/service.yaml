@@ -1,3 +1,4 @@
+{{- if .Values.static.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -15,3 +16,4 @@ spec:
     app: static
     component: nginx
     release: {{ .Release.Name }}
+{{- end }}

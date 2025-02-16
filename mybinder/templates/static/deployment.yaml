@@ -1,3 +1,4 @@
+{{- if .Values.static.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -41,3 +42,4 @@ spec:
             name: config
           - mountPath: /www/data/
             name: files
+{{- end }}
