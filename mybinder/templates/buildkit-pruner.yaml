@@ -1,0 +1,34 @@
+{{ if .Values.buildkitPruner.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: build-cache-prune
+spec:
+  schedule: {{ .Values.buildkitPruner.schedule | quote }}
+  # If the previous run is still going, replace it with our new one
+  concurrencyPolicy: Replace
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          volumes:
+          - name: dind-socket
+            hostPath:
+              path: /var/run/dind/docker.sock
+          containers:
+          - name: pruner
+            image: {{ .Values.buildkitPruner.image }}
+            env:
+              - name: DOCKER_HOST
+                value: "unix:///var/run/dind/docker.sock"
+            command:
+            - /bin/sh
+            - -c
+            - |
+              docker builder prune --force --all --keep-storage={{ .Values.buildkitPruner.buildkitCacheSize }} && \
+              docker system df
+            volumeMounts:
+            - name: dind-socket
+              mountPath: /var/run/dind/docker.sock
+{{- end }}
