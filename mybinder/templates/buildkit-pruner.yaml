@@ -23,12 +23,11 @@ spec:
               - name: DOCKER_HOST
                 value: "unix:///var/run/dind/docker.sock"
             command:
-            - docker
-            - builder
-            - prune
-            - --force
-            - --all
-            - --keep-storage={{ .Values.buildkitPruner.buildkitCacheSize }}
+            - /bin/sh
+            - -c
+            - |
+              docker builder prune --force --all --keep-storage={{ .Values.buildkitPruner.buildkitCacheSize }} && \
+              docker system df
             volumeMounts:
             - name: dind-socket
               mountPath: /var/run/dind/docker.sock
