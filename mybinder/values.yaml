@@ -224,7 +224,9 @@ binderhub:
             })();
           }
     KubernetesBuildExecutor:
-      build_image: quay.io/jupyterhub/repo2docker:2024.07.0-114.g80d186a
+      build_image: quay.io/jupyterhub/repo2docker:2024.07.0-79.gb0cfd45
+      memory_limit: "6G"
+      memory_request: "2G"
 
   extraConfig:
     # Send Events to StackDriver on Google Cloud
