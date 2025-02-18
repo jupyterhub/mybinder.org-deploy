@@ -85,12 +85,6 @@ binderhub:
       userScheduler:
         nodeSelector: *coreNodeSelector
 
-  imageCleaner:
-    # Use 40GB as upper limit, size is given in bytes
-    imageGCThresholdHigh: 40e9
-    imageGCThresholdLow: 30e9
-    imageGCThresholdType: "absolute"
-
 grafana:
   nodeSelector: *coreNodeSelector
   ingress:

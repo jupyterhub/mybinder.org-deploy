@@ -103,14 +103,6 @@ binderhub:
           hosts:
             - hub.2i2c-bare.mybinder.org
 
-  imageCleaner:
-    # Use 300GB as upper limit, size is given in bytes
-    imageGCThresholdHigh: 300e9
-    imageGCThresholdLow: 100e9
-    imageGCThresholdType: "absolute"
-    # don't cordon single-node cluster while cleaning
-    cordon: false
-
 grafana:
   ingress:
     hosts:
