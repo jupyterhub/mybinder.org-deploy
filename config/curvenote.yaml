@@ -188,7 +188,6 @@ binderhub:
     #   # maxAge: 1 hour since we're just testing
     #   maxAge: 3600
 
-
 cryptnono:
   enabled: true
   priorityClassName: binderhub-core
