@@ -188,13 +188,6 @@ binderhub:
     #   # maxAge: 1 hour since we're just testing
     #   maxAge: 3600
 
-  imageCleaner:
-    # TODO: priorityClassName: binderhub-core
-    enabled: true
-    # Use 40GB as upper limit, size is given in bytes
-    imageGCThresholdHigh: 40e9
-    imageGCThresholdLow: 30e9
-    imageGCThresholdType: "absolute"
 
 cryptnono:
   enabled: true
