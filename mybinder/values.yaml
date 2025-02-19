@@ -355,10 +355,10 @@ binderhub:
 
   imageCleaner:
     enabled: true
-    # when 80% of inodes are used,
-    # cull images until only 40% are used.
-    imageGCThresholdHigh: 80
-    imageGCThresholdLow: 40
+    # Use 40GB as upper limit, size is given in bytes
+    imageGCThresholdHigh: 40e9
+    imageGCThresholdLow: 10e9
+    imageGCThresholdType: "absolute"
 
   jupyterhub:
     cull:
