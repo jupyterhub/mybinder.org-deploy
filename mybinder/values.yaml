@@ -14,8 +14,8 @@ buildkitPruner:
   # Use the same image as we use for dind
   image: docker:27.5.1-dind
   buildkitCacheSize: 300GB
-  # Run this every 30min
-  schedule: "*/30 * * * *"
+  # Run this every 10min
+  schedule: "*/10 * * * *"
 
 registry:
   enabled: false
