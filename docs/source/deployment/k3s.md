@@ -27,13 +27,16 @@ config of _disabling traefik_ that comes built in. We deploy nginx as part of ou
 do not need traefik.
 
 1. Create a Kubelet Config file in `/etc/kubelet.yaml` so we can
-   tweak various kubelet options, including maximum number of pods on a single
-   node:
+   tweak various kubelet options, including maximum number of pods on a single node and when to cleanup unused images:
 
    ```yaml
    apiVersion: kubelet.config.k8s.io/v1beta1
    kind: KubeletConfiguration
    maxPods: 300
+   # Clean up images pulled by kubernetes anytime we are over
+   # 40% disk usage until we hit 20%
+   imageGCHighThresholdPercent: 40
+   imageGCLowThresholdPercent: 20
    ```
 
    We will need to develop better intuition for how many pods per node, but given we offer about
