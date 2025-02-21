@@ -63,11 +63,6 @@ binderhub:
     GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
 
   dind:
-    daemonset:
-      extraArgs:
-        # Increase limit from default of 5, as we have only one builder node
-        # But there are enough resources on the node to handle it
-        - --max-concurrent-uploads=32
     resources:
       requests:
         cpu: "4"
