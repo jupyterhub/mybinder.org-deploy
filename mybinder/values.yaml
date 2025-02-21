@@ -345,6 +345,14 @@ binderhub:
 
   imageBuilderType: dind
   dind:
+    daemonset:
+      extraArgs:
+        # Allow for concurrent pushes so pushes are faster
+        - --max-concurrent-uploads=32
+        # Set mtu explicitly to 1450, as sometimes docker sets it to 1500
+        # instead and that breaks *some* websites randomly *some* of the time
+        # See https://discourse.jupyter.org/t/error-in-mybinder-org-there-is-no-package-called-irkernel/32478/17
+        - --mtu=1450
     resources:
       requests:
         cpu: "0.5"
