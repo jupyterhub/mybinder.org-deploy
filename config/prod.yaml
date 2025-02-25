@@ -228,13 +228,13 @@ federationRedirect:
       health: https://gke.mybinder.org/health
       versions: https://gke.mybinder.org/versions
     hetzner-2i2c:
-      prime: false
+      prime: true
       url: https://2i2c.mybinder.org
-      weight: 0
+      weight: 50
       health: https://2i2c.mybinder.org/health
       versions: https://2i2c.mybinder.org/versions
     hetzner-2i2c-bare:
-      prime: true
+      prime: false
       url: https://2i2c-bare.mybinder.org
       weight: 0
       health: https://2i2c-bare.mybinder.org/health
@@ -242,7 +242,7 @@ federationRedirect:
     gesis:
       prime: false
       url: https://notebooks.gesis.org/binder
-      weight: 75
+      weight: 50
       health: https://notebooks.gesis.org/binder/health
       versions: https://notebooks.gesis.org/binder/versions
     ovh2:
