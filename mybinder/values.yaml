@@ -70,7 +70,7 @@ etcJupyter:
       # when people leave a notebook open and wander off
       cull_connected: true
 
-binderhub-service:
+binderhub:
   replicas: 1
 
   resources:
@@ -322,7 +322,7 @@ binderhub-service:
           event_loop_interval_log_threshold = 1
           def _event_loop_tick(self):
               """Measure a single tick of the event loop
-          
+
               This measures the time since the last tick
               """
               now = time.perf_counter()
@@ -332,8 +332,8 @@ binderhub-service:
               if tick_duration >= self.event_loop_interval_log_threshold:
                   # warn about slow ticks
                   self.log.warning("Event loop was unresponsive for %.2fs!", tick_duration)
-              
-          
+
+
           def start(self):
               self.log = get_logger()
               self.log.info("starting!")

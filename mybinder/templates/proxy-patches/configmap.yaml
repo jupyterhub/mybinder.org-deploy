@@ -34,7 +34,7 @@ data:
     <html>
     <head>
     <title>Binder not found</title>
-    {{ $rootUrl := printf "https://%s" (index (index .Values "binderhub-service").ingress.hosts 0) }}
+    {{ $rootUrl := printf "https://%s" (index .Values.binderhub.ingress.hosts 0) }}
     <link href="{{ $rootUrl }}/static/dist/styles.css" rel="stylesheet">
     </head>
     <body>
