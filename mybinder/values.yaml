@@ -70,11 +70,8 @@ etcJupyter:
       # when people leave a notebook open and wander off
       cull_connected: true
 
-# values ref: https://github.com/jupyterhub/binderhub/blob/main/helm-chart/binderhub/values.yaml
-# can't use binderhub.enabled due to validation errors
-binderhubEnabled: true
-binderhub:
-  replicas: 2
+binderhub-service:
+  replicas: 1
 
   resources:
     requests:
@@ -84,27 +81,47 @@ binderhub:
       cpu: "2"
       memory: 1Gi
 
-  hpa:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 1
-    targetCPU: 100 # this is in percent of requests.cpu
+  extraVolumes:
+    - name: secrets
+      secret:
+        secretName: events-archiver-secrets
+  extraVolumeMounts:
+    - name: secrets
+      mountPath: /secrets
+      readOnly: true
 
-  networkPolicy:
-    enabled: true
-    egress:
-      tcpPorts:
-        - 80 # http
-        - 443 # https
-        - 9418 # git
-        - 873 # rsync
-        - 1094 # xroot
-        - 1095 # xroot
-        - 16286 # Wolfram Engine on-demand licensing
-        - 4001 # IPFS
-      cidr: 0.0.0.0/0
-    ingress:
-      bannedIps: []
+  extraEnv:
+    - name: JUPYTERHUB_API_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: hub
+          key: hub.services.binder.apiToken
+    - name: JUPYTERHUB_CLIENT_ID
+      value: "service-binder"
+    - name: JUPYTERHUB_API_URL
+      value: "https://hub.2i2c-bare.mybinder.org/hub/api"
+    # Without this, the redirect URL to /hub/api/... gets
+    # appended to binderhub's URL instead of the hub's
+    - name: JUPYTERHUB_BASE_URL
+      value: "https://hub.2i2c-bare.mybinder.org"
+    # This should be somewhere else
+    - name: GOOGLE_APPLICATION_CREDENTIALS
+      value: /secrets/service-account.json
+  # networkPolicy:
+  #   enabled: true
+  #   egress:
+  #     tcpPorts:
+  #       - 80 # http
+  #       - 443 # https
+  #       - 9418 # git
+  #       - 873 # rsync
+  #       - 1094 # xroot
+  #       - 1095 # xroot
+  #       - 16286 # Wolfram Engine on-demand licensing
+  #       - 4001 # IPFS
+  #     cidr: 0.0.0.0/0
+  #   ingress:
+  #     bannedIps: []
 
   config:
     GitHubRepoProvider:
@@ -130,8 +147,7 @@ binderhub:
         - ^ajiBal/.*
         - ^wyattsanchez54/.*
         - ^walterpowell201/.*
-      high_quota_specs:
-        []
+      high_quota_specs: []
         # - ^jupyterlab/.*
         # - ^jupyter/.*
         # - ^jupyterhub/.*
@@ -173,6 +189,9 @@ binderhub:
       spec_config: []
 
     BinderHub:
+      sticky_builds: false # Seems to cause failures. We will be removing this functionality soon anyeway
+      enable_api_only_mode: false
+      base_url: /
       use_registry: true
       per_repo_quota: 100
       per_repo_quota_higher: 200
@@ -303,7 +322,7 @@ binderhub:
           event_loop_interval_log_threshold = 1
           def _event_loop_tick(self):
               """Measure a single tick of the event loop
-          
+
               This measures the time since the last tick
               """
               now = time.perf_counter()
@@ -313,8 +332,8 @@ binderhub:
               if tick_duration >= self.event_loop_interval_log_threshold:
                   # warn about slow ticks
                   self.log.warning("Event loop was unresponsive for %.2fs!", tick_duration)
-              
-          
+
+
           def start(self):
               self.log = get_logger()
               self.log.info("starting!")
@@ -329,30 +348,24 @@ binderhub:
       metric = EventLoopMetric()
       metric.start()
 
-  registry:
-    url: https://gcr.io
 
   service:
     type: ClusterIP
 
   ingress:
     enabled: true
+    ingressClassName: nginx
     annotations:
-      kubernetes.io/ingress.class: nginx
-    https:
-      enabled: true
-      type: kube-lego
-
-  imageBuilderType: dind
-  dind:
-    daemonset:
-      extraArgs:
-        # Allow for concurrent pushes so pushes are faster
-        - --max-concurrent-uploads=32
-        # Set mtu explicitly to 1450, as sometimes docker sets it to 1500
-        # instead and that breaks *some* websites randomly *some* of the time
-        # See https://discourse.jupyter.org/t/error-in-mybinder-org-there-is-no-package-called-irkernel/32478/17
-        - --mtu=1450
+      nginx.ingress.kubernetes.io/proxy-body-size: 256m
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+  dockerApi:
+    extraArgs:
+      # Allow for concurrent pushes so pushes are faster
+      - --max-concurrent-uploads=32
+      # Set mtu explicitly to 1450, as sometimes docker sets it to 1500
+      # instead and that breaks *some* websites randomly *some* of the time
+      # See https://discourse.jupyter.org/t/error-in-mybinder-org-there-is-no-package-called-irkernel/32478/17
+      - --mtu=1450
     resources:
       requests:
         cpu: "0.5"
@@ -368,133 +381,308 @@ binderhub:
     imageGCThresholdLow: 10e9
     imageGCThresholdType: "absolute"
 
-  jupyterhub:
-    cull:
-      # cull every 11 minutes so it is out of phase
-      # with the proxy check-routes interval of five minutes
-      every: 660
-      timeout: 600
-      # maxAge is 6 hours: 6 * 3600 = 21600
-      maxAge: 21600
-    hub:
+jupyterhub:
+  prePuller:
+    hook:
+      enabled: false
+    continuous:
+      enabled: false
+  cull:
+    # cull every 11 minutes so it is out of phase
+    # with the proxy check-routes interval of five minutes
+    every: 660
+    timeout: 600
+    # maxAge is 6 hours: 6 * 3600 = 21600
+    maxAge: 21600
+  hub:
+    services:
+      binder:
+        display: false
+        url: http://binderhub:8090
+    loadRoles:
+      binder:
+        services:
+          - binder
+        scopes:
+          - servers
+          - admin:users
+      user:
+        scopes:
+          - self
+          - access:services!service=binder
+    networkPolicy:
+      enabled: true
+    resources:
+      requests:
+        cpu: "0.25"
+        memory: 1Gi
+      limits:
+        cpu: "2"
+        memory: 1Gi
+    extraConfig:
+      # This is copy-pasted exactly from https://github.com/jupyterhub/binderhub/blob/c6c5dc8fe73f81ca538c47b420b33f317c3aa8ae/helm-chart/binderhub/values.yaml#L87
+      # Should be updated every time the upstream code changes
+      0-binderspawnermixin: |
+        """
+        Helpers for creating BinderSpawners
+
+        FIXME:
+        This file is defined in binderhub/binderspawner_mixin.py
+        and is copied to helm-chart/binderhub/values.yaml
+        by ci/check_embedded_chart_code.py
+
+        The BinderHub repo is just used as the distribution mechanism for this spawner,
+        BinderHub itself doesn't require this code.
+
+        Longer term options include:
+        - Move BinderSpawnerMixin to a separate Python package and include it in the Z2JH Hub
+          image
+        - Override the Z2JH hub with a custom image built in this repository
+        - Duplicate the code here and in binderhub/binderspawner_mixin.py
+        """
+
+        from tornado import web
+        from traitlets import Bool, Unicode
+        from traitlets.config import Configurable
+
+
+        class BinderSpawnerMixin(Configurable):
+            """
+            Mixin to convert a JupyterHub container spawner to a BinderHub spawner
+
+            Container spawner must support the following properties that will be set
+            via spawn options:
+            - image: Container image to launch
+            - token: JupyterHub API token
+            """
+
+            def __init__(self, *args, **kwargs):
+                # Is this right? Is it possible to having multiple inheritance with both
+                # classes using traitlets?
+                # https://stackoverflow.com/questions/9575409/calling-parent-class-init-with-multiple-inheritance-whats-the-right-way
+                # https://github.com/ipython/traitlets/pull/175
+                super().__init__(*args, **kwargs)
+
+            auth_enabled = Bool(
+                False,
+                help="""
+                Enable authenticated binderhub setup.
+
+                Requires `jupyterhub-singleuser` to be available inside the repositories
+                being built.
+                """,
+                config=True,
+            )
+
+            cors_allow_origin = Unicode(
+                "",
+                help="""
+                Origins that can access the spawned notebooks.
+
+                Sets the Access-Control-Allow-Origin header in the spawned
+                notebooks. Set to '*' to allow any origin to access spawned
+                notebook servers.
+
+                See also BinderHub.cors_allow_origin in binderhub config
+                for controlling CORS policy for the BinderHub API endpoint.
+                """,
+                config=True,
+            )
+
+            def get_args(self):
+                if self.auth_enabled:
+                    args = super().get_args()
+                else:
+                    args = [
+                        "--ip=0.0.0.0",
+                        f"--port={self.port}",
+                        f"--NotebookApp.base_url={self.server.base_url}",
+                        f"--NotebookApp.token={self.user_options['token']}",
+                        "--NotebookApp.trust_xheaders=True",
+                    ]
+                    if self.default_url:
+                        args.append(f"--NotebookApp.default_url={self.default_url}")
+
+                    if self.cors_allow_origin:
+                        args.append("--NotebookApp.allow_origin=" + self.cors_allow_origin)
+                    # allow_origin=* doesn't properly allow cross-origin requests to single files
+                    # see https://github.com/jupyter/notebook/pull/5898
+                    if self.cors_allow_origin == "*":
+                        args.append("--NotebookApp.allow_origin_pat=.*")
+                    args += self.args
+                    # ServerApp compatibility: duplicate NotebookApp args
+                    for arg in list(args):
+                        if arg.startswith("--NotebookApp."):
+                            args.append(arg.replace("--NotebookApp.", "--ServerApp."))
+                return args
+
+            def start(self):
+                if not self.auth_enabled:
+                    if "token" not in self.user_options:
+                        raise web.HTTPError(400, "token required")
+                    if "image" not in self.user_options:
+                        raise web.HTTPError(400, "image required")
+                if "image" in self.user_options:
+                    self.image = self.user_options["image"]
+                return super().start()
+
+            def get_env(self):
+                env = super().get_env()
+                if "repo_url" in self.user_options:
+                    env["BINDER_REPO_URL"] = self.user_options["repo_url"]
+                for key in (
+                    "binder_ref_url",
+                    "binder_launch_host",
+                    "binder_persistent_request",
+                    "binder_request",
+                ):
+                    if key in self.user_options:
+                        env[key.upper()] = self.user_options[key]
+                return env
+
+        from kubespawner import KubeSpawner
+
+        class BinderSpawner(BinderSpawnerMixin, KubeSpawner):
+            pass
+
+        c.JupyterHub.spawner_class = BinderSpawner
+      neverRestart: |
+        c.KubeSpawner.extra_pod_config.update({'restart_policy': 'Never'})
+      noPrivilegeEscalation: |
+        c.KubeSpawner.allow_privilege_escalation = False
+      noAuthMetrics: |
+        c.JupyterHub.authenticate_prometheus = False
+    config:
+      BinderSpawner:
+        cors_allow_origin: "*"
+        auth_enabled: false
+      JupyterHub:
+        authenticator_class: "null"
+        # only serve the hub's API, not full UI
+        hub_routespec: "/hub/api/"
+      Proxy:
+        # default-route to our nginx "Binder not found" service
+        extra_routes:
+          "/": "http://proxy-patches"
+    service:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/hub/metrics"
+  proxy:
+    service:
+      type: ClusterIP
+    chp:
       networkPolicy:
         enabled: true
       resources:
         requests:
-          cpu: "0.25"
-          memory: 1Gi
+          memory: 320Mi
+          cpu: "0.1"
         limits:
-          cpu: "2"
-          memory: 1Gi
-      extraConfig:
-        neverRestart: |
-          c.KubeSpawner.extra_pod_config.update({'restart_policy': 'Never'})
-        noPrivilegeEscalation: |
-          c.KubeSpawner.allow_privilege_escalation = False
-        noAuthMetrics: |
-          c.JupyterHub.authenticate_prometheus = False
-      config:
-        BinderSpawner:
-          cors_allow_origin: "*"
-        JupyterHub:
-          # only serve the hub's API, not full UI
-          hub_routespec: "/hub/api/"
-        Proxy:
-          # default-route to our nginx "Binder not found" service
-          extra_routes:
-            "/": "http://proxy-patches"
-      service:
-        annotations:
-          prometheus.io/scrape: "true"
-          prometheus.io/path: "/hub/metrics"
-    proxy:
-      service:
-        type: ClusterIP
-      chp:
-        networkPolicy:
-          enabled: true
-        resources:
-          requests:
-            memory: 320Mi
-            cpu: "0.1"
-          limits:
-            memory: 320Mi
-            cpu: "0.5"
-        # FIXME: move to errorTarget/defaultTarget when hub chart dependency is bumped
-        # to include https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2079
-        # this still works, though, as repeatedly specifying CLI flags overrides earlier values
-        extraCommandLineFlags:
-          # defaultTarget needs to wait for jupyterhub 1.4
-          # https://github.com/jupyterhub/jupyterhub/pull/3373
-          # - --default-target=http://$(PROXY_PATCHES_SERVICE_HOST):$(PROXY_PATCHES_SERVICE_PORT)
-          - --error-target=http://$(PROXY_PATCHES_SERVICE_HOST):$(PROXY_PATCHES_SERVICE_PORT)/hub/error
-          - --log-level=error
-    ingress:
+          memory: 320Mi
+          cpu: "0.5"
+      # FIXME: move to errorTarget/defaultTarget when hub chart dependency is bumped
+      # to include https://github.com/jupyterhub/zero-to-jupyterhub-k8s/pull/2079
+      # this still works, though, as repeatedly specifying CLI flags overrides earlier values
+      extraCommandLineFlags:
+        # defaultTarget needs to wait for jupyterhub 1.4
+        # https://github.com/jupyterhub/jupyterhub/pull/3373
+        # - --default-target=http://$(PROXY_PATCHES_SERVICE_HOST):$(PROXY_PATCHES_SERVICE_PORT)
+        - --error-target=http://$(PROXY_PATCHES_SERVICE_HOST):$(PROXY_PATCHES_SERVICE_PORT)/hub/error
+        - --log-level=error
+  ingress:
+    enabled: true
+    annotations:
+      ingress.kubernetes.io/proxy-body-size: 64m
+      # Increase for websockets (default is 60s)
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
+  scheduling:
+    userScheduler:
       enabled: true
-      annotations:
-        ingress.kubernetes.io/proxy-body-size: 64m
-        # Increase for websockets (default is 60s)
-        nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-        nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "true"
-    scheduling:
-      userScheduler:
-        enabled: true
-        replicas: 2
-      podPriority:
-        enabled: true
-      userPlaceholder:
-        enabled: true
-        # replicas set in config/<deployment>
-    singleuser:
-      # clear singleuser.defaultUrl config from chart
-      defaultUrl:
-      cloudMetadata:
-        # we do this in our own network policy
-        blockWithIptables: false
-      networkPolicy:
-        enabled: true
-        egress: []
-        egressAllowRules:
-          nonPrivateIPs: false
-      memory:
-        guarantee: 450M
-        limit: 2G
-      cpu:
-        guarantee: 0.01
-        limit: 1
-      storage:
-        extraVolumes:
-          - name: etc-jupyter
-            configMap:
-              name: user-etc-jupyter
-          - name: etc-jupyter-templates
-            configMap:
-              name: user-etc-jupyter-templates
-        extraVolumeMounts:
-          - name: etc-jupyter
-            mountPath: /etc/jupyter
-          - name: etc-jupyter-templates
-            mountPath: /etc/jupyter/templates
+      replicas: 2
+    podPriority:
+      enabled: true
+    userPlaceholder:
+      enabled: true
+      # replicas set in config/<deployment>
+  singleuser:
+    # clear singleuser.defaultUrl config from chart
+    defaultUrl:
+    cmd:
+      - python3
+      - "-c"
+      - |
+        import os
+        import sys
 
-      initContainers:
-        - name: tc-init
-          image: jupyterhub/mybinder.org-tc-init:set-by-chartpress
-          imagePullPolicy: IfNotPresent
-          env:
-            - name: WHITELIST_CIDR
-              value: 10.0.0.0/8
-            - name: EGRESS_BANDWIDTH
-              value: 1mbit
-          securityContext:
-            # capabilities.add seems to be disabled
-            # by the `runAsUser: 1000` in the pod-level securityContext
-            # unless we explicitly run as root
-            runAsUser: 0
-            capabilities:
-              add:
-                - NET_ADMIN
+        try:
+            import jupyterlab
+            import jupyterlab.labapp
+            major = int(jupyterlab.__version__.split(".", 1)[0])
+        except Exception as e:
+            print("Failed to import jupyterlab: {e}", file=sys.stderr)
+            have_lab = False
+        else:
+            have_lab = major >= 3
+
+        if have_lab:
+            # technically, we could accept another jupyter-server-based frontend
+            print("Launching jupyter-lab", file=sys.stderr)
+            exe = "jupyter-lab"
+        else:
+            print("jupyter-lab not found, launching jupyter-notebook", file=sys.stderr)
+            exe = "jupyter-notebook"
+
+        # launch the notebook server
+        os.execvp(exe, sys.argv)
+    cloudMetadata:
+      # we do this in our own network policy
+      blockWithIptables: false
+    networkPolicy:
+      enabled: true
+      egress: []
+      egressAllowRules:
+        nonPrivateIPs: false
+    memory:
+      guarantee: 450M
+      limit: 2G
+    cpu:
+      guarantee: 0.01
+      limit: 1
+    storage:
+      extraVolumes:
+        - name: etc-jupyter
+          configMap:
+            name: user-etc-jupyter
+        - name: etc-jupyter-templates
+          configMap:
+            name: user-etc-jupyter-templates
+      extraVolumeMounts:
+        - name: etc-jupyter
+          mountPath: /etc/jupyter
+        - name: etc-jupyter-templates
+          mountPath: /etc/jupyter/templates
+
+    initContainers:
+      - name: tc-init
+        image: jupyterhub/mybinder.org-tc-init:2020.12.4-0.dev.git.5524.ha41b617b
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: WHITELIST_CIDR
+            value: 10.0.0.0/8
+          - name: EGRESS_BANDWIDTH
+            value: 1mbit
+        securityContext:
+          # capabilities.add seems to be disabled
+          # by the `runAsUser: 1000` in the pod-level securityContext
+          # unless we explicitly run as root
+          runAsUser: 0
+          capabilities:
+            add:
+              - NET_ADMIN
 
 # values ref: https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
 ingress-nginx:
