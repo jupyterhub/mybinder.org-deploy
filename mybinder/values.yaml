@@ -70,7 +70,7 @@ etcJupyter:
       # when people leave a notebook open and wander off
       cull_connected: true
 
-binderhub-service:
+binderhub:
   replicas: 1
 
   resources:

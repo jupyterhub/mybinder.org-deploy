@@ -8,11 +8,11 @@ dependencies:
     version: 4.0.0
     repository: https://jupyterhub.github.io/helm-chart/
 
-  - name: binderhub-service
-    repository: file:///Users/yuvipanda/code/binderhub-service/binderhub-service/
+  - name: binderhub
+    repository: file:///Users/yuvipanda/code/binderhub/helm-chart/binderhub/
     # repository: https://2i2c.org/binderhub-service/
-    condition: binderhub-service.enabled
-    version: "0.1.0-0.dev.git.300.h3f0b9be"
+    condition: binderhub.enabled
+    version: "1.0.0-0.dev.git.4013.hd0c659e9"
 
   # https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx
   - name: ingress-nginx
