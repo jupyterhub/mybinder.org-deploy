@@ -26,6 +26,7 @@ spec:
             - /bin/sh
             - -c
             - |
+              docker image prune ---force -all && \
               docker builder prune --force --all --keep-storage={{ .Values.buildkitPruner.buildkitCacheSize }} && \
               docker system df
             volumeMounts:
