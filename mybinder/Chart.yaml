@@ -1,44 +1,41 @@
 apiVersion: v2
 description: A meta-chart for the binderhub deployment on mybinder.org
 name: mybinder
-version: "0.0.1-set.by.chartpress"
+version: "2020.12.4-0.dev.git.6239.h41940d65"
 kubeVersion: ">= 1.15.0-0"
 dependencies:
-  # BinderHub
-  # Source code:    https://github.com/jupyterhub/binderhub/tree/main/helm-chart
-  # App changelog:  https://github.com/jupyterhub/binderhub/blob/main/CHANGES.md
-  - name: binderhub
-    version: "1.0.0-0.dev.git.3704.h3883aac1"
-    repository: https://jupyterhub.github.io/helm-chart
-    condition: binderhubEnabled
+  - name: jupyterhub
+    version: 4.0.0
+    repository: https://jupyterhub.github.io/helm-chart/
 
-  # Ingress-Nginx to route network traffic according to Ingress resources using
-  # this controller from within k8s.
-  # Source code:   https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx
-  # App changelog: https://github.com/kubernetes/ingress-nginx/blob/main/Changelog.md
+  - name: binderhub
+    repository: file:///Users/yuvipanda/code/binderhub/helm-chart/binderhub/
+    # repository: https://2i2c.org/binderhub-service/
+    condition: binderhub.enabled
+    version: "1.0.0-0.dev.git.4013.hd0c659e9"
+
+  # https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx
   - name: ingress-nginx
     version: "4.12.0"
     repository: https://kubernetes.github.io/ingress-nginx
     condition: ingress-nginx.enabled
 
   # Prometheus for collection of metrics.
-  # Source code:   https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus
-  # App changelog: https://github.com/prometheus/prometheus/blob/main/CHANGELOG.md
+  # https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus
   - name: prometheus
     version: "26.1.0"
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
 
   # Grafana for dashboarding of metrics.
-  # Source code:   https://github.com/grafana/helm-charts/tree/main/charts/grafana
-  # App changelog: https://github.com/grafana/grafana/blob/main/CHANGELOG.md
+  # https://github.com/grafana/helm-charts/tree/main/charts/grafana
   - name: grafana
     version: "8.8.2"
     repository: https://grafana.github.io/helm-charts
     condition: grafana.enabled
 
   # cryptnono, counters crypto mining
-  # Source code: https://github.com/cryptnono/cryptnono/
+  # https://github.com/cryptnono/cryptnono/
   - name: cryptnono
     version: "0.3.2-0.dev.git.156.hdab4ec8"
     repository: https://cryptnono.github.io/cryptnono/
