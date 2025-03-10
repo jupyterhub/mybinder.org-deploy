@@ -230,7 +230,7 @@ federationRedirect:
     hetzner-2i2c:
       prime: true
       url: https://2i2c.mybinder.org
-      weight: 50
+      weight: 100
       health: https://2i2c.mybinder.org/health
       versions: https://2i2c.mybinder.org/versions
     hetzner-2i2c-bare:
@@ -242,7 +242,7 @@ federationRedirect:
     gesis:
       prime: false
       url: https://notebooks.gesis.org/binder
-      weight: 50
+      weight: 0
       health: https://notebooks.gesis.org/binder/health
       versions: https://notebooks.gesis.org/binder/versions
     ovh2:
