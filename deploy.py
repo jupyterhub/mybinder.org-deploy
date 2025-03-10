@@ -199,7 +199,7 @@ def get_config_files(release, config_dir="config"):
     return config_files
 
 
-def deploy(release, name=None, dry_run=False, diff=False, ip_address=None, disable_ingress_nginx=False):
+def deploy(release, name=None, dry_run=False, diff=False, ip_address=None, additional_helm_args=[]):
     """Deploys a federation member to a k8s cluster.
 
     Waits for deployments and daemonsets to become Ready
@@ -250,15 +250,7 @@ def deploy(release, name=None, dry_run=False, diff=False, ip_address=None, disab
                 f"binderhub.jupyterhub.ingress.hosts={{jupyterhub.mybinder.{ip_address}.nip.io}}",
                 "--set",
                 f"static.ingress.hosts={{static.{ip_address}.nip.io}}",
-            ]
-        )
-
-    if disable_ingress_nginx:
-        helm.extend(
-            [
-                "--set",
-                f"ingress-nginx.enabled=false",
-            ]
+            ].extend(additional_helm_args)
         )
 
     check_call(helm, dry_run)
@@ -501,9 +493,9 @@ def main():
         help="Stage to deploy, default all",
     )
     argparser.add_argument(
-        "--disable-ingress-nginx",
-        action="store_true",
-        help="Disable the installation of ingress-nginx. Use this is the Kubernetes cluster already has ingress-nginx installed.",
+        "--additional-helm-args",
+        action="append",
+        help="Additional argument for Helm. For example, '--additional-helm-args=--set=ingress-nginx.enabled=false' to disable the installation of ingress-nginx.",
     )
 
     args = argparser.parse_args()
@@ -567,7 +559,7 @@ def main():
     if args.stage in ("all", "certmanager") and cluster != "localhost":
         setup_certmanager(args.dry_run, args.diff)
     if args.stage in ("all", "mybinder"):
-        deploy(args.release, args.name, args.dry_run, args.diff, args.local_ip, args.disable_ingress_nginx)
+        deploy(args.release, args.name, args.dry_run, args.diff, args.local_ip, args.additional_helm_args)
 
 
 if __name__ == "__main__":
