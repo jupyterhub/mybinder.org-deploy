@@ -362,7 +362,7 @@ binderhub:
         memory: 4Gi
 
   imageCleaner:
-    enabled: false
+    enabled: true
     # Use 40GB as upper limit, size is given in bytes
     imageGCThresholdHigh: 40e9
     imageGCThresholdLow: 10e9
