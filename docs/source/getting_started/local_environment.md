@@ -6,10 +6,12 @@ This page contains a starting point for people who want to know more about the B
 
 You will need a local Kubernetes cluster. A few options are
 
-- [Kubernetes with Docker Desktop](https://docs.docker.com/desktop/features/kubernetes/) (recommended)
+- [K3s](https://k3s.io/)
+  - [Kubernetes with Rancher Desktop](https://www.rancher.com/products/rancher-desktop)
 - [minikube](https://minikube.sigs.k8s.io/docs/)
 - [k3d](https://k3d.io/stable/)
 - [kind](https://kind.sigs.k8s.io/)
+  - [Kubernetes with Docker Desktop](https://docs.docker.com/desktop/features/kubernetes/)
 
 ### Install Docker Desktop
 
