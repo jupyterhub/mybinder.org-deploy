@@ -1,3 +1,4 @@
+{{- if .Values.static.enabled }}
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -23,3 +24,4 @@ metadata:
     release: {{ .Release.Name }}
 data:
   {{- (.Files.Glob "files/static/*").AsConfig | nindent 2 }}
+{{- end }}

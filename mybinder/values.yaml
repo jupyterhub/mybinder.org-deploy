@@ -566,6 +566,7 @@ redirector:
       secretName: kubelego-tls-redirector
 
 static:
+  enabled: true
   ingress:
     annotations:
       kubernetes.io/ingress.class: nginx
