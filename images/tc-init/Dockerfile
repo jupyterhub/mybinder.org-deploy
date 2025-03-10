@@ -1,4 +1,4 @@
-FROM alpine:3.13
+FROM alpine:3.21
 RUN apk add --no-cache iproute2
 
 ADD tc-init /usr/local/bin/tc-init
