@@ -92,8 +92,8 @@ binderhub:
             - hub.2i2c.mybinder.org
 
   imageCleaner:
-    # don't cordon single-node cluster while cleaning
-    cordon: false
+    # handled by buildkit pruner
+    enabled: false
 
 grafana:
   ingress:
