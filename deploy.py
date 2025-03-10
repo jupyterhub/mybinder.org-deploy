@@ -199,7 +199,14 @@ def get_config_files(release, config_dir="config"):
     return config_files
 
 
-def deploy(release, name=None, dry_run=False, diff=False, ip_address=None, additional_helm_args=[]):
+def deploy(
+    release,
+    name=None,
+    dry_run=False,
+    diff=False,
+    ip_address=None,
+    additional_helm_args=[],
+):
     """Deploys a federation member to a k8s cluster.
 
     Waits for deployments and daemonsets to become Ready
@@ -559,7 +566,14 @@ def main():
     if args.stage in ("all", "certmanager") and cluster != "localhost":
         setup_certmanager(args.dry_run, args.diff)
     if args.stage in ("all", "mybinder"):
-        deploy(args.release, args.name, args.dry_run, args.diff, args.local_ip, args.additional_helm_args)
+        deploy(
+            args.release,
+            args.name,
+            args.dry_run,
+            args.diff,
+            args.local_ip,
+            args.additional_helm_args,
+        )
 
 
 if __name__ == "__main__":
