@@ -571,6 +571,7 @@ static:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
     tls:
+      enabled: true
       secretName: kubelego-tls-static
 
 # values ref: https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
