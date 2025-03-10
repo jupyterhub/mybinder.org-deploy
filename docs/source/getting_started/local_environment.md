@@ -62,4 +62,4 @@ python deploy.py localhost --local-ip xxx.xxx.xxx.xxx
 
 ## Access your mybinder.org
 
-Open http://localhost with your favourite web browser.
+Open http://xxx.xxx.xxx.xxx with your favourite web browser.
