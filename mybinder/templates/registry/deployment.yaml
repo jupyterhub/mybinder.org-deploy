@@ -42,7 +42,7 @@ spec:
       {{- end }}
       containers:
       - name: registry
-        image: registry:3.0.0-rc.2
+        image: registry:3.0.0-rc.3
         volumeMounts:
           - name: registry-config
             # This path is what registry documentation *says* we should put
