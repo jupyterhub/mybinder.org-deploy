@@ -46,5 +46,7 @@ We use [GitHub Actions](https://docs.github.com/en/actions) for doing all our de
 [`.github/workflows/cd.yml`](https://github.com/jupyterhub/mybinder.org-deploy/blob/main/.github/workflows/cd.yml) file
 contains the entire configuration for our **continuous** deployment.
 
+Because mybinder.org dependes on JupyterHub, BinderHub and repo2docker, we also use [GitHub Actions to watch those dependencies](https://github.com/jupyterhub/mybinder.org-deploy/blob/main/.github/workflows/watch-dependencies.yaml) once every day and, if needed, create a pull request. In some sporadically cases, the mybinder.org operators might manually trigger a dependencies check by clicking the "[Run workflow](https://github.com/jupyterhub/mybinder.org-deploy/actions/workflows/watch-dependencies.yaml)" button.
+
 [mybinder.org]: https://mybinder.org
 [staging.mybinder.org]: https://staging.mybinder.org
