@@ -9,6 +9,7 @@ permissions, as well as contextual information about the mybinder.org deployment
 .. toctree::
     :maxdepth: 3
 
+    local_environment
     getting_started
     production_environment
     terminology

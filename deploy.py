@@ -31,7 +31,7 @@ GCP_ZONES = {
 }
 
 # Projects using raw KUBECONFIG files
-KUBECONFIG_CLUSTERS = {"ovh2", "hetzner-2i2c", "hetzner-2i2c-bare"}
+KUBECONFIG_CLUSTERS = {"localhost", "ovh2", "hetzner-2i2c", "hetzner-2i2c-bare"}
 
 # Mapping of config name to cluster name for AWS EKS deployments
 AWS_DEPLOYMENTS = {"curvenote": "binderhub"}
@@ -199,7 +199,14 @@ def get_config_files(release, config_dir="config"):
     return config_files
 
 
-def deploy(release, name=None, dry_run=False, diff=False):
+def deploy(
+    release,
+    name=None,
+    dry_run=False,
+    diff=False,
+    ip_address=None,
+    additional_helm_args=[],
+):
     """Deploys a federation member to a k8s cluster.
 
     Waits for deployments and daemonsets to become Ready
@@ -238,6 +245,20 @@ def deploy(release, name=None, dry_run=False, diff=False):
     # add config files to helm command
     for config_file in config_files:
         helm.extend(["-f", config_file])
+
+    if release == "localhost":
+        helm.extend(
+            [
+                "--set",
+                f"binderhub.config.BinderHub.hub_url=http://jupyterhub.mybinder.{ip_address}.nip.io",
+                "--set",
+                f"binderhub.ingress.hosts={{mybinder.{ip_address}.nip.io}}",
+                "--set",
+                f"binderhub.jupyterhub.ingress.hosts={{jupyterhub.mybinder.{ip_address}.nip.io}}",
+                "--set",
+                f"static.ingress.hosts={{static.{ip_address}.nip.io}}",
+            ].extend(additional_helm_args)
+        )
 
     check_call(helm, dry_run)
     print(
@@ -458,6 +479,10 @@ def main():
         help="If the script is running locally, skip auth step",
     )
     argparser.add_argument(
+        "--local-ip",
+        help="IP address of the local machine",
+    )
+    argparser.add_argument(
         "--dry-run",
         action="store_true",
         help="Print commands, but don't run them",
@@ -474,8 +499,19 @@ def main():
         default=stages[0],
         help="Stage to deploy, default all",
     )
+    argparser.add_argument(
+        "--additional-helm-args",
+        action="append",
+        help="Additional argument for Helm. For example, '--additional-helm-args=--set=ingress-nginx.enabled=false' to disable the installation of ingress-nginx.",
+    )
 
     args = argparser.parse_args()
+
+    if args.release == "localhost":
+        args.local = True
+
+        if args.local_ip is None:
+            raise ValueError("Cluster localhost requires IP address.")
 
     # if one argument given make cluster == release
     cluster = args.cluster or args.release
@@ -518,6 +554,8 @@ def main():
                 setup_auth_gcloud(args.release, cluster, args.dry_run)
             elif cluster in AWS_DEPLOYMENTS:
                 setup_auth_aws(cluster, args.dry_run)
+            elif cluster == "localhost":
+                pass
             else:
                 raise Exception("Cloud cluster not recognised!")
 
@@ -525,10 +563,17 @@ def main():
         update_networkbans(cluster, args.dry_run)
     if args.stage in ("all", "system"):
         deploy_system_charts(args.release, args.name, args.dry_run, args.diff)
-    if args.stage in ("all", "certmanager"):
+    if args.stage in ("all", "certmanager") and cluster != "localhost":
         setup_certmanager(args.dry_run, args.diff)
     if args.stage in ("all", "mybinder"):
-        deploy(args.release, args.name, args.dry_run, args.diff)
+        deploy(
+            args.release,
+            args.name,
+            args.dry_run,
+            args.diff,
+            args.local_ip,
+            args.additional_helm_args,
+        )
 
 
 if __name__ == "__main__":

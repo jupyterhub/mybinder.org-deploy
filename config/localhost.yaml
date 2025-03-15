@@ -1,0 +1,54 @@
+# 127.0.0.1.nip.io will not work because when pods try to use it,
+# the domain will resolve to the pod itself.
+# The deploy.py overwrite the 127.0.0.1 to the user IP address.
+binderhub:
+  config:
+    BinderHub:
+      # Use Kubernetes DNS
+      hub_url: http://jupyterhub.mybinder.127.0.0.1.nip.io
+      use_registry: false
+      image_prefix: dummy.io/localhost/binder-
+
+  extraConfig:
+    # Disable send events to StackDriver on Google Cloud
+    01-eventlog:
+
+  registry:
+    username: "your-username"
+    # This is unsafe! Only se for local development
+    password: "your-password"
+
+  ingress:
+    https:
+      # This is unsafe! Only se for local development
+      enabled: false
+    hosts:
+      - mybinder.127.0.0.1.nip.io
+
+  jupyterhub:
+    ingress:
+      hosts:
+        - jupyterhub.mybinder.127.0.0.1.nip.io
+
+static:
+  ingress:
+    tls:
+      # This is unsafe! Only se for local development
+      enabled: false
+    hosts:
+      - static.127.0.0.1.nip.io
+
+analyticsPublisher:
+  enabled: false
+
+prometheus:
+  enabled: false
+
+grafana:
+  enabled: false
+
+cryptnono:
+  enabled: false
+
+cluster-autoscaler:
+  enabled: false
