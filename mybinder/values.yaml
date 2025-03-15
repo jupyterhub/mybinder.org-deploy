@@ -14,6 +14,8 @@ buildkitPruner:
   # Use the same image as we use for dind
   image: docker:27.5.1-dind
   buildkitCacheSize: 300GB
+  # Only prune images older than
+  olderThanMinutes: 120
   # Run this every 5min
   schedule: "*/5 * * * *"
 
