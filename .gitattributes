@@ -1,1 +1,3 @@
 **/secrets/** filter=git-crypt diff=git-crypt
+# SCM syntax highlighting & preventing 3-way merges
+pixi.lock merge=binary linguist-language=YAML linguist-generated=true
