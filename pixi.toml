@@ -1,0 +1,10 @@
+[workspace]
+authors = ["Project Jupyter Contributors <jupyter@googlegroups.com>"]
+channels = ["conda-forge"]
+name = "interactive-environment"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+
+[dependencies]
