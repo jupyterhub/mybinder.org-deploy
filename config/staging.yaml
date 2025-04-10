@@ -118,6 +118,10 @@ prometheus:
             - prometheus.staging.mybinder.org
             - prometheus.gke2.staging.mybinder.org
           secretName: kubelego-tls-prometheus
+    persistentVolume:
+      size: 12G
+    # reduce retention for staging
+    retention: 30d
 
 ingress-nginx:
   controller:
