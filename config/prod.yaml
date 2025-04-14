@@ -239,12 +239,12 @@ federationRedirect:
       weight: 0
       health: https://2i2c-bare.mybinder.org/health
       versions: https://2i2c-bare.mybinder.org/versions
-    gesis:
+    hetzner-gesis:
       prime: false
-      url: https://notebooks.gesis.org/binder
-      weight: 50
-      health: https://notebooks.gesis.org/binder/health
-      versions: https://notebooks.gesis.org/binder/versions
+      url: https://gesis.mybinder.org
+      weight: 5
+      health: https://gesis.mybinder.org/health
+      versions: https://gesis.mybinder.org/versions
     ovh2:
       prime: false
       url: https://ovh2.mybinder.org
