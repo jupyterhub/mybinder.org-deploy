@@ -245,12 +245,6 @@ federationRedirect:
       weight: 5
       health: https://gesis.mybinder.org/health
       versions: https://gesis.mybinder.org/versions
-    gesis:
-      prime: false
-      url: https://notebooks.gesis.org/binder
-      weight: 50
-      health: https://notebooks.gesis.org/binder/health
-      versions: https://notebooks.gesis.org/binder/versions
     ovh2:
       prime: false
       url: https://ovh2.mybinder.org
