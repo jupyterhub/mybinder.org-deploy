@@ -13,11 +13,7 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 spec:
-  {{ if gt .Values.matomo.replicas 1 }}
   minAvailable: 1
-  {{ else }}
-  minAvailable: 0
-  {{ end }}
   selector:
     matchLabels:
       app: matomo
