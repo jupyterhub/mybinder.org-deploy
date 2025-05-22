@@ -35,7 +35,6 @@ KUBECONFIG_CLUSTERS = {
     "localhost",
     "ovh2",
     "hetzner-2i2c",
-    "hetzner-2i2c-bare",
     "hetzner-gesis",
 }
 
