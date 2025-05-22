@@ -22,25 +22,6 @@
   "access": "proxy",
   "basicAuth": false,
   "database": "",
-  "id": 9,
-  "isDefault": false,
-  "jsonData": {
-   "httpMethod": "POST"
-  },
-  "name": "2i2c-bare",
-  "orgId": 1,
-  "readOnly": false,
-  "type": "prometheus",
-  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
-  "typeName": "Prometheus",
-  "uid": "beb0q0oe5vpj4e",
-  "url": "https://prometheus.2i2c-bare.mybinder.org",
-  "user": ""
- },
- {
-  "access": "proxy",
-  "basicAuth": false,
-  "database": "",
   "id": 7,
   "isDefault": false,
   "jsonData": {

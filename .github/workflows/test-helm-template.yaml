@@ -43,8 +43,6 @@ jobs:
             k3s-channel: "v1.24"
           - release: hetzner-2i2c
             k3s-channel: "v1.24"
-          - release: hetzner-2i2c-bare
-            k3s-channel: "v1.24"
 
     steps:
       - uses: actions/checkout@v4
