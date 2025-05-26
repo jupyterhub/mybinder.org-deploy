@@ -27,12 +27,10 @@ cryptnono:
 binderhub:
   config:
     BinderHub:
-      use_registry: false
       hub_url: https://hub.gesis.mybinder.org
       badge_base_url: https://mybinder.org
+      image_prefix: registry.gesis.mybinder.org/i-
       sticky_builds: true
-      # We share the registry with 2i2c
-      image_prefix: registry.2i2c.mybinder.org/i-
     KubernetesBuildExecutor:
       docker_host: /var/run/dind/docker.sock
       repo2docker_extra_args:
