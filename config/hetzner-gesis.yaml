@@ -27,7 +27,6 @@ cryptnono:
 binderhub:
   config:
     BinderHub:
-      use_registry: false
       hub_url: https://hub.gesis.mybinder.org
       badge_base_url: https://mybinder.org
       sticky_builds: true
