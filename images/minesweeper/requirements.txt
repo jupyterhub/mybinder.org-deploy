@@ -32,7 +32,7 @@ python-dateutil==2.8.2
     # via kubernetes
 pyyaml==6.0
     # via kubernetes
-requests==2.31.0
+requests==2.32.4
     # via
     #   kubernetes
     #   requests-oauthlib
