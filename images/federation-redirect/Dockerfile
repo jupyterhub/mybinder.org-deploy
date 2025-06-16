@@ -1,6 +1,6 @@
 # The build stage
 # ---------------
-FROM python:3.13-bookworm as build-stage
+FROM python:3.13-bookworm AS build-stage
 
 RUN curl -sSLo /tini "https://github.com/krallin/tini/releases/download/v0.19.0/tini-amd64" \
  && chmod +x /tini

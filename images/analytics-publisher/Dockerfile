@@ -1,6 +1,6 @@
 # The build stage
 # ---------------
-FROM python:3.13-bookworm as build-stage
+FROM python:3.13-bookworm AS build-stage
 
 # Build wheels
 #
