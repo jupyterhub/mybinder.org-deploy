@@ -87,7 +87,7 @@ six==1.16.0
     #   python-dateutil
 tomli==2.0.1
     # via pytest
-urllib3==1.26.19
+urllib3==1.26.20
     # via
     #   kubernetes
     #   requests
