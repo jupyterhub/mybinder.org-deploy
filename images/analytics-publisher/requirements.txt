@@ -80,7 +80,7 @@ pyasn1-modules==0.2.8
     # via google-auth
 python-dateutil==2.8.2
     # via -r requirements.in
-requests==2.32.2
+requests==2.32.4
     # via
     #   google-api-core
     #   google-cloud-storage
