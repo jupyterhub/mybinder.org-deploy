@@ -19,8 +19,6 @@ updates:
           - "*"
     schedule:
       interval: monthly
-      time: "05:00"
-      timezone: Etc/UTC
     labels:
       - dependencies
 
@@ -30,8 +28,6 @@ updates:
     labels: [ci]
     schedule:
       interval: monthly
-      time: "05:00"
-      timezone: Etc/UTC
 
   # Python dependencies in our deployment environment (pip-compile)
   - package-ecosystem: pip
@@ -42,8 +38,6 @@ updates:
       - dependency-type: all
     schedule:
       interval: weekly
-      time: "05:00"
-      timezone: Etc/UTC
     labels:
       - dependencies
 
@@ -58,8 +52,6 @@ updates:
           - "*"
     schedule:
       interval: weekly
-      time: "05:00"
-      timezone: Etc/UTC
     labels:
       - dependencies
 
@@ -73,8 +65,6 @@ updates:
           - "*"
     schedule:
       interval: weekly
-      time: "05:00"
-      timezone: Etc/UTC
     labels:
       - dependencies
 
@@ -88,8 +78,6 @@ updates:
           - "*"
     schedule:
       interval: weekly
-      time: "05:00"
-      timezone: Etc/UTC
     labels:
       - dependencies
 
@@ -103,8 +91,6 @@ updates:
           - "*"
     schedule:
       interval: weekly
-      time: "05:00"
-      timezone: Etc/UTC
     labels:
       - dependencies
 
@@ -118,8 +104,6 @@ updates:
           - "*"
     schedule:
       interval: weekly
-      time: "05:00"
-      timezone: Etc/UTC
     labels:
       - dependencies
 
@@ -133,7 +117,5 @@ updates:
           - "*"
     schedule:
       interval: weekly
-      time: "05:00"
-      timezone: Etc/UTC
     labels:
       - dependencies
