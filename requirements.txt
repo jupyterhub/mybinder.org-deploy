@@ -90,5 +90,5 @@ urllib3==1.26.20
     #   docker
     #   kubernetes
     #   requests
-websocket-client==1.3.2
+websocket-client==1.8.0
     # via kubernetes
