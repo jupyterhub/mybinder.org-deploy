@@ -12,7 +12,7 @@ updates:
   - package-ecosystem: pip
     directory: /docs
     allow:
-      dependency-type: all
+      - dependency-type: all
     groups:
       docs:
         patterns:
@@ -39,7 +39,7 @@ updates:
     allow:
       # need 'all' here to update everything in requirements.txt
       # because the default 'direct' only updates what's in requirements.in
-      dependency-type: all
+      - dependency-type: all
     schedule:
       interval: weekly
       time: "05:00"
