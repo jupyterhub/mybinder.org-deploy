@@ -80,7 +80,7 @@ ruamel-yaml==0.17.21
     # via chartpress
 ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
-six==1.16.0
+six==1.17.0
     # via
     #   google-auth
     #   kubernetes
