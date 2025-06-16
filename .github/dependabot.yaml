@@ -37,6 +37,8 @@ updates:
   - package-ecosystem: pip
     directory: "/"
     allow:
+      # need 'all' here to update everything in requirements.txt
+      # because the default 'direct' only updates what's in requirements.in
       dependency-type: all
     schedule:
       interval: weekly
