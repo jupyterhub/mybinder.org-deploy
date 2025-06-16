@@ -11,6 +11,12 @@ updates:
   # Maintain Python dependencies for building documentation
   - package-ecosystem: pip
     directory: /docs
+    allow:
+      dependency-type: all
+    groups:
+      docs:
+        patterns:
+          - "*"
     schedule:
       interval: monthly
       time: "05:00"
@@ -30,6 +36,8 @@ updates:
   # Python dependencies in our deployment environment (pip-compile)
   - package-ecosystem: pip
     directory: "/"
+    allow:
+      dependency-type: all
     schedule:
       interval: weekly
       time: "05:00"
