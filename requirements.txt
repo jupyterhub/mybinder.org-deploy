@@ -22,7 +22,7 @@ execnet==2.1.1
     # via pytest-xdist
 google-auth==2.7.0
     # via kubernetes
-idna==3.7
+idna==3.10
     # via requests
 iniconfig==1.1.1
     # via pytest
