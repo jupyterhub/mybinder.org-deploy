@@ -20,7 +20,7 @@ exceptiongroup==1.1.0
     # via pytest
 execnet==2.1.1
     # via pytest-xdist
-google-auth==2.7.0
+google-auth==2.40.3
     # via kubernetes
 idna==3.7
     # via requests
@@ -82,7 +82,6 @@ ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
 six==1.16.0
     # via
-    #   google-auth
     #   kubernetes
     #   python-dateutil
 tomli==2.0.1
