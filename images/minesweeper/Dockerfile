@@ -1,6 +1,6 @@
 # The build stage
 # ---------------
-FROM python:3.9-bullseye as build-stage
+FROM python:3.13-bookworm as build-stage
 
 RUN curl -sSLo /tini "https://github.com/krallin/tini/releases/download/v0.19.0/tini-amd64" \
  && chmod +x /tini
@@ -12,7 +12,7 @@ RUN pip wheel --wheel-dir /wheelhouse \
 
 # The final stage
 # ---------------
-FROM python:3.9-slim-bullseye
+FROM python:3.13-slim-bookworm
 ENV PYTHONUNBUFFERED=1
 
 # fix known vulnerabilities

@@ -36,6 +36,11 @@ Because `pip-compile` resolves `requirements.txt` with the current Python for
 the current platform, it should be run on the same Python version and platform
 as our Dockerfile.
 
+Dependabot should keep this file up-to-date.
+The top-level `.python-requirements` file governs the Python version used.
+
+To manually upgrade all dependencies:
+
 ```shell
 # run from images/analytics-publisher
 # update requirements.txt based on requirements.in
@@ -44,6 +49,6 @@ docker run --rm \
     --volume=$PWD:/io \
     --workdir=/io \
     --user=root \
-    python:3.9-slim-bullseye \
+    python:3.13-slim-bookworm \
     sh -c 'pip install pip-tools==6.* && pip-compile --upgrade'
 ```
