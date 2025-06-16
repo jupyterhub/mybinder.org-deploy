@@ -24,7 +24,7 @@ google-auth==2.7.0
     # via kubernetes
 idna==3.7
     # via requests
-iniconfig==1.1.1
+iniconfig==2.1.0
     # via pytest
 kubernetes==28.1.0
     # via -r requirements.in
