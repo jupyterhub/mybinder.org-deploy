@@ -75,9 +75,10 @@ def publish_daily_cost(
         target_bucket = storage.Bucket(client, target_bucket_name)
         blob = target_bucket.blob(target_object_name)
 
-        target_buffer = io.StringIO()
+        target_buffer = io.BytesIO()
         for item in sorted_items:
-            target_buffer.write(json.dumps(item) + "\n")
+            target_buffer.write(json.dumps(item).encode())
+            target_buffer.write(b"\n")
 
         target_buffer.seek(0)
 
