@@ -71,9 +71,10 @@ def archive_events(
     if not dry_run:
         # Timestamp is ISO8601 in UTC, so can be sorted lexicographically
         all_events.sort(key=lambda event: event["timestamp"])
-        with tempfile.TemporaryFile(mode="w+") as out:
+        with tempfile.TemporaryFile(mode="wb+") as out:
             for event in all_events:
-                out.write(json.dumps(event) + "\n")
+                out.write(json.dumps(event).encode())
+                out.write(b"\n")
             out.seek(0)
             blob_name = object_name_template.format(date=date.strftime("%Y-%m-%d"))
             blob = dest_bucket.blob(blob_name)
