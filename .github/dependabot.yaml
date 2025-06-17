@@ -19,8 +19,6 @@ updates:
           - "*"
     schedule:
       interval: monthly
-      time: "05:00"
-      timezone: Etc/UTC
     labels:
       - dependencies
 
@@ -30,8 +28,6 @@ updates:
     labels: [ci]
     schedule:
       interval: monthly
-      time: "05:00"
-      timezone: Etc/UTC
 
   # Python dependencies in our deployment environment (pip-compile)
   - package-ecosystem: pip
@@ -41,8 +37,85 @@ updates:
       # because the default 'direct' only updates what's in requirements.in
       - dependency-type: all
     schedule:
-      interval: weekly
-      time: "05:00"
-      timezone: Etc/UTC
+      interval: monthly
+    labels:
+      - dependencies
+
+  # repeat for each image
+  - package-ecosystem: pip
+    directory: "/images/analytics-publisher"
+    allow:
+      - dependency-type: all
+    groups:
+      analytics-publisher:
+        patterns:
+          - "*"
+    schedule:
+      interval: monthly
+    labels:
+      - dependencies
+
+  - package-ecosystem: pip
+    directory: "/images/federation-redirect"
+    allow:
+      - dependency-type: all
+    groups:
+      federation-redirect:
+        patterns:
+          - "*"
+    schedule:
+      interval: monthly
+    labels:
+      - dependencies
+
+  - package-ecosystem: pip
+    directory: "/images/minesweeper"
+    allow:
+      - dependency-type: all
+    groups:
+      minesweeper:
+        patterns:
+          - "*"
+    schedule:
+      interval: monthly
+    labels:
+      - dependencies
+
+  - package-ecosystem: pip
+    directory: "/images/minesweeper"
+    allow:
+      - dependency-type: all
+    groups:
+      minesweeper:
+        patterns:
+          - "*"
+    schedule:
+      interval: monthly
+    labels:
+      - dependencies
+
+  - package-ecosystem: pip
+    directory: "/images/minesweeper"
+    allow:
+      - dependency-type: all
+    groups:
+      minesweeper:
+        patterns:
+          - "*"
+    schedule:
+      interval: monthly
+    labels:
+      - dependencies
+
+  - package-ecosystem: pip
+    directory: "/images/pod-cleaner"
+    allow:
+      - dependency-type: all
+    groups:
+      pod-cleaner:
+        patterns:
+          - "*"
+    schedule:
+      interval: monthly
     labels:
       - dependencies

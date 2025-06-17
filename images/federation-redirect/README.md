@@ -35,9 +35,10 @@ Because `pip-compile` resolves `requirements.txt` with the current Python for
 the current platform, it should be run on the same Python version and platform
 as our Dockerfile.
 
-Note that as of 2022-05-30, `pip-compile` has issues with `pycurl`, but we
-workaround them by by omitting the `-slim` part from the image in the command
-below.
+Dependabot should keep this file up-to-date.
+The top-level `.python-requirements` file governs the Python version used.
+
+To manually upgrade all dependencies:
 
 ```shell
 # run from images/federation-redirect
@@ -47,6 +48,6 @@ docker run --rm \
     --volume=$PWD:/io \
     --workdir=/io \
     --user=root \
-    python:3.9-bullseye \
+    python:3.13-bookworm \
     sh -c 'pip install pip-tools==6.* && pip-compile --upgrade'
 ```

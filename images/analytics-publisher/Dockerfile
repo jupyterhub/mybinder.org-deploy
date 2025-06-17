@@ -1,6 +1,6 @@
 # The build stage
 # ---------------
-FROM python:3.9-bullseye as build-stage
+FROM python:3.13-bookworm AS build-stage
 
 # Build wheels
 #
@@ -25,7 +25,7 @@ RUN if [ "$(uname -m)" = x86_64 ]; then ARCH=amd64; fi; \
 
 # The final stage
 # ---------------
-FROM python:3.9-slim-bullseye
+FROM python:3.13-slim-bookworm
 ENV PYTHONUNBUFFERED=1
 
 # fix known vulnerabilities
