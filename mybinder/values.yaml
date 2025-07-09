@@ -187,7 +187,7 @@ binderhub:
             🤍 Donate to mybinder.org!
         </a>
         <div style="text-align:center;">
-        Thanks to <a href="https://www.ovh.com/">OVH</a>, <a href="https://www.gesis.org">GESIS</a> and <a href="https://2i2c.org">2i2c</a> for supporting us! 🎉
+        Thanks to <a href="https://www.gesis.org">GESIS</a> and <a href="https://2i2c.org">2i2c</a> for supporting us! 🎉
         </div>
         <div style="text-align:center;">
         mybinder.org has updated the base image to Ubuntu 22.04! See the <a href="https://repo2docker.readthedocs.io/en/latest/howto/breaking_changes.html">upgrade guide</a> for details.
