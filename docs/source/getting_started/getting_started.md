@@ -31,8 +31,10 @@ Once you have `kubectl` installed, you can connect it with `mybinder.org`.
 To do so, run the following command:
 
 ```
-gcloud container clusters get-credentials prod --zone us-central1 --project binderhub
+gcloud container clusters get-credentials prod --zone us-central1 --project binderhub-<NNNNNN>
 ```
+
+Get the value of `binderhub-<NNNNNN>` from https://console.cloud.google.com
 
 This will open a log-in page in your browser. If you've got access, you'll
 be able to log in and your `kubectl` will now be able to run commands
@@ -52,7 +54,7 @@ Now that you're connected to prod it's time to connect to staging. To do so,
 pull the staging credentials on to your local machine:
 
 ```
-gcloud container clusters get-credentials staging --zone us-central1-a --project binderhub
+gcloud container clusters get-credentials staging --zone us-central1-a --project binderhub-<NNNNNN>
 ```
 
 You can now switch between the `prod` and `staging` deployments by changing your
