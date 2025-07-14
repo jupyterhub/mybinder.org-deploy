@@ -78,7 +78,6 @@ main.
     folder. This will print out a URL that describes the changes made to both
     BinderHub and repo2docker.
 4.  Make a PR to the `main` branch with the changes you want.
-
     - Name the PR like so: `<TOOL-CHANGED>: <OLD-HASH>...<NEW-HASH>`
     - In the description of the PR, paste the full URL that you printed out
       `list_new_commits.py`. It should have the following form:
