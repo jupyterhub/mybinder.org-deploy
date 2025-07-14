@@ -70,7 +70,6 @@ All **Stage 1** failures can be attributed to one of the following causes:
    but to restart the Travis Build.
 
    If a restart also fails, there are two possible reasons:
-
    1. Travis is having some infrastructure issues. Check the [Travis Status Page](https://www.traviscistatus.com/)
       to see if this is the case.
    2. The method we are using to install any of these bits of software is
