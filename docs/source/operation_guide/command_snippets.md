@@ -298,7 +298,6 @@ To pre-emptively bump the cluster size beyond current occupancy, follow these st
 
 - Increase autoscaler minimum size. (note this will lead to a brief period where
   the kubernetes API is not available.)
-
   - Go to https://console.cloud.google.com/
   - Click "Kubernetes engine" -> "edit" button
   - Under "Node Pools" find the "minimum size" field and update it.
