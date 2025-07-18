@@ -132,8 +132,7 @@ binderhub:
         - ^ajiBal/.*
         - ^wyattsanchez54/.*
         - ^walterpowell201/.*
-      high_quota_specs:
-        []
+      high_quota_specs: []
         # - ^jupyterlab/.*
         # - ^jupyter/.*
         # - ^jupyterhub/.*
