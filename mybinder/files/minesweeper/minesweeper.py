@@ -409,7 +409,6 @@ def load_config():
 
     may change during run, so reload from file each time
     """
-    global config
     prior_config = copy.deepcopy(config)
     config.update(default_config)
     config_file = "/etc/minesweeper/minesweeper.json"
