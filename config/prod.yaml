@@ -230,13 +230,13 @@ federationRedirect:
     hetzner-2i2c:
       prime: true
       url: https://2i2c.mybinder.org
-      weight: 50
+      weight: 0
       health: https://2i2c.mybinder.org/health
       versions: https://2i2c.mybinder.org/versions
     hetzner-gesis:
       prime: false
       url: https://gesis.mybinder.org
-      weight: 0
+      weight: 50
       health: https://gesis.mybinder.org/health
       versions: https://gesis.mybinder.org/versions
     ovh2:
