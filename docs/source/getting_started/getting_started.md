@@ -1,42 +1,61 @@
 # Getting started with the `mybinder.org` dev team
 
 This page contains a starting point for people who would like to help
-maintain the BinderHub deployment at `mybinder.org`.
+maintain the BinderHub deployment at <https://mybinder.org>.
 
 ## Make sure you have access on the Google Cloud project
 
-Go to `console.cloud.google.com` and see if you have `binderhub` listed
-in your projects. If not, message one of the Binder devs on the [Gitter Channel](https://gitter.im/jupyterhub/binder)
+Go to <https://console.cloud.google.com> and see if you have `binderhub` listed
+in your projects. If not, message one of the Binder devs on [Jupyter instance of Zulip](https://jupyter.zulipchat.com/)
 to get access.
 
-## Install `kubectl` and the `gcloud` SDK
+## Install `kubectl`
 
-The most important tool for keeping an eye on the Kubernetes deployment is
-`kubectl` and the `gcloud` SDK. These will let you run queries on the
-`mybinder.org` deployment from your command line. To set this up, check
-out the [Zero to JupyterHub Google SDK section](https://zero-to-jupyterhub.readthedocs.io/en/latest/kubernetes/google/step-zero-gcp.html).
-(everything before the part where you create a google cloud cluster).
+To install `kubectl`, check out [Kubernetes Documentation / Tasks / Install Tools](https://kubernetes.io/docs/tasks/tools/#kubectl).
+
+## Install Google Cloud CLI
+
+To install `gcloud`, check out [Cloud SDK / Documentation / Guides / Install the Google Cloud CLI](https://cloud.google.com/sdk/docs/install-sdk).
+
+Also, the installation of some [additional Google Cloud CLI components](https://cloud.google.com/sdk/docs/components#additional_components) are **required**:
+
+- `gke-gcloud-auth-plugin`
+
+## Configure Google Cloud CLI
 
 When you run `gcloud init` for the first time, it'll ask you to authenticate
 and to choose a project / default region. You should authenticate with
-the email that's been given privileges to work on `mybinder.org`, choose
+the email that's been given privileges to work on <https://mybinder.org>, choose
 the project `binderhub`, and use the region `us-central1`.
 
-We recommend enabling [`kubectl` autocompletion](https://kubernetes.io/docs/tasks/tools/#kubectl)
-as well.
+:::{note}
+You can also authenticate to Google Cloud using a service account.
+
+```bash
+gcloud \
+    auth \
+    activate-service-account \
+    --key-file=secrets/key.json
+```
+
+:::
 
 ## Set up `kubectl` to connect to `mybinder.org`
 
-Once you have `kubectl` installed, you can connect it with `mybinder.org`.
+Once you have `kubectl` installed, you can connect it with <https://mybinder.org>.
 To do so, run the following command:
 
-```
-gcloud container clusters get-credentials prod --zone us-central1 --project binderhub-288415
+```bash
+gcloud \
+    container \
+    clusters \
+    get-credentials \
+    prod \
+    --zone us-central1 \
+    --project binderhub-288415
 ```
 
-This will open a log-in page in your browser. If you've got access, you'll
-be able to log in and your `kubectl` will now be able to run commands
-with `mybinder.org`.
+Your `kubectl` will now be able to run commands with <https://mybinder.org>.
 
 You can test this out by running:
 
@@ -48,11 +67,17 @@ and a list of all running Binder pods should be printed.
 
 ### Connect to the staging deployment
 
-Now that you're connected to prod it's time to connect to staging. To do so,
+Now that you're connected to `prod` it's time to connect to `staging`. To do so,
 pull the staging credentials on to your local machine:
 
 ```
-gcloud container clusters get-credentials staging --zone us-central1-a --project binderhub-288415
+gcloud \
+    container \
+    clusters \
+    get-credentials \
+    staging \
+    --zone us-central1-a \
+    --project binderhub-288415
 ```
 
 You can now switch between the `prod` and `staging` deployments by changing your
@@ -68,6 +93,6 @@ useful in spotting and debugging problems in the future.
 ## Start helping out!
 
 There are many ways that you can help debug/maintain/improve the `mybinder.org`
-deployment. The best way to get started is to keep an eye on the [Gitter Channel](https://gitter.im/jupyterhub/binder)
+deployment. The best way to get started is to keep an eye on the [Jupyter instance of Zulip](https://jupyter.zulipchat.com/)
 as well as the Grafana dashboard. If you see something interesting, don't hesitate
 to ask questions or make suggestions!
