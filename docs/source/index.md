@@ -35,7 +35,7 @@ team via ["Interested in joining the mybinder.org operations team?"](https://dis
 ```{toctree}
 :maxdepth: 2
 :caption: Guide
-getting_started/index.rst
+getting_started/index.md
 deployment/index.rst
 operation_guide/index.rst
 components/index.rst
