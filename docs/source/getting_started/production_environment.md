@@ -1,23 +1,23 @@
 # Production environment
 
 This section is an overview of the repositories, projects, and
-systems used in a mybinder.org production deployment.
+systems used in the <https://mybinder.org> production deployment.
 
 Reference: [Google SRE book section on Production Environment](https://sre.google/sre-book/production-environment/)
 
 ## Repository structure
 
-This repository contains a 'meta chart' (`mybinder`) that fully captures the
-state of the deployment on mybinder.org. Since it is a full helm chart, you
-can read the [official helm chart structure](https://docs.helm.sh/developing_charts/#the-chart-file-structure)
-document to know more about its structure.
+This repository contains a Helm "meta chart" (`mybinder`) that fully captures the
+state of the deployment on <https://mybinder.org>. Since it is a full Helm chart, you
+can read the [official helm chart structure documentation](https://docs.helm.sh/developing_charts/#the-chart-file-structure)
+to know more about its structure.
 
 ## Dependent charts
 
-The core of the meta-chart pattern is to install a bunch of [dependent charts](https://docs.helm.sh/developing_charts/#chart-dependencies),
+The core of the "meta chart" pattern is to install a bunch of [dependent charts](https://docs.helm.sh/developing_charts/#chart-dependencies),
 specified in `mybinder/Chart.yaml`. This contains both support
-charts like nginx-ingress, grafana, prometheus, but also the core application chart
-`binderhub`. Everything is version pinned here.
+charts like `nginx-ingress`, `grafana`, `prometheus`, **and** the core application chart
+`binderhub`. Everything is version pinned in `mybinder/Chart.yaml`.
 
 ## Configuration values
 
@@ -39,22 +39,29 @@ The following files fully capture the state of the production deployment:
 3. `config/prod.yaml` - Non-secret values specific to the production
    deployment
 
-**Important**: For maintainability and consistency, we try to keep the contents
+```{important}
+For maintainability and consistency, we try to keep the contents
 of `staging.yaml` and `prod.yaml` super minimal - they should be as close
 to each other as possible. We want all common config in `values.yaml` so testing
-on staging gives us confidence it will work on prod. We also never share the same
-secrets between staging & prod for security boundary reasons.
+on staging gives us confidence it will work on production. We also never share the same
+secrets between staging and production for security boundary reasons.
+```
 
 ## Deployment nodes and pools
 
+## Staging
+
 The staging cluster has one node pool, which makes things simple.
+
+## Production
+
 The production cluster has two, one for "core" pods (the hub, etc.)
 and another dedicated to "user" pods (builds and user servers).
 This strategy helps protect our key services from potential issues caused by users and helps us drain user nodes when we need to.
 
-Since ~only user pods should be running on the user nodes,
+Since "only" user pods should be running on the user nodes,
 cordoning that node should result in it being drained and reclaimed
-after the max-pod-age lifetime limit
+after the `max-pod-age` lifetime limit
 which often wouldn't happen without manual intervention.
 
 It is still _not quite true_ that only user pods are running on the user nodes at this point.
@@ -69,13 +76,13 @@ Users and core pods are assigned to their pools via a `nodeSelector` in `config/
 We use a custom label `mybinder.org/node-purpose = core | user`
 to select which node a pod should run on.
 
-## mybinder.org specific extra software
+## `mybinder.org` specific extra software
 
-We sometimes want to run additional software for the mybinder deployment that
+We sometimes want to run additional software for the <https://mybinder.org> deployment that
 does not already have a chart, or would be too cumbersome to use with a chart.
 For those cases, we can create kubernetes objects directly from the `mybinder`
 meta chart. You can see an example of this under `mybinder/templates/redirector`
-that is used to set up a simple nginx based HTTP redirector.
+that is used to set up a simple NGINX based HTTP redirector.
 
 ## Related repositories
 
