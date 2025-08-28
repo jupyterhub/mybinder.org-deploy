@@ -1,4 +1,5 @@
 (analytics/cloud-costs)=
+
 # Cloud Costs Data
 
 In an effort to be transparent about how we use our funds, we publish the amount of money spent each day in cloud compute costs for running mybinder.org.
@@ -9,7 +10,7 @@ You can find the data in the [Analytics Archive](https://archive.analytics.mybin
 
 1.  **version**
 
-    Currently *1*, will be incremented when the structure of this format changes.
+    Currently _1_, will be incremented when the structure of this format changes.
 
 2.  **start_time** and **end_time**
 

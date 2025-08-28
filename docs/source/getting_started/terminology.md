@@ -3,6 +3,7 @@
 This page contains common words or phrases in the dev-ops community that will be useful in understanding and maintaining the `mybinder.org` deployment.
 
 (term-cordoning)=
+
 ## "cordoning" a node
 
 [Kubernetes page on cordoning](https://kubernetes.io/docs/concepts/architecture/nodes/#manual-node-administration).

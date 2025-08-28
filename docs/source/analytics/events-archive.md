@@ -1,4 +1,5 @@
 (analytics/events-archive)=
+
 # The Analytics Events Archive
 
 BinderHub emits an event each time a repository is launched. They are recorded as JSON, and made available to the public at [archive.analytics.mybinder.org](https://archive.analytics.mybinder.org).
@@ -45,7 +46,7 @@ Some popular ways of reading this event data into a useful data structure are pr
 
 #### `pandas`
 
-``` python
+```python
 import pandas as pd
 df = pd.read_json("https://archive.analytics.mybinder.org/events-2018-11-05.jsonl", lines=True)
 df
@@ -53,7 +54,7 @@ df
 
 #### Plain Python
 
-``` python
+```python
 import requests
 import json
 
