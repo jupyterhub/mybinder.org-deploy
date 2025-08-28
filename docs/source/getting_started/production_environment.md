@@ -1,7 +1,7 @@
 # Production environment
 
 This section is an overview of the repositories, projects, and
-systems used in the <https://mybinder.org> production deployment.
+systems used in the [mybinder.org] production deployment.
 
 Reference: [Google SRE book section on Production Environment](https://sre.google/sre-book/production-environment/)
 
@@ -284,15 +284,3 @@ People who currently have the git-crypt secret include:
 - _add yourself here if you have it_
 
 Contact one of them if you need access to the git-crypt key.
-
-[mybinder.org-deploy]: https://github.com/jupyterhub/mybinder.org-deploy
-[prod]: https://mybinder.org
-[mybinder.org]: https://mybinder.org
-[staging.mybinder.org]: https://staging.mybinder.org
-[staging]: https://staging.mybinder.org
-[binderhub]: https://github.com/jupyterhub/binderhub
-[`jupyterhub/binderhub`]: https://github.com/jupyterhub/binderhub
-[binderhub documentation]: https://binderhub.readthedocs.io/en/latest/
-[repo2docker]: https://github.com/jupyterhub/repo2docker
-[git-crypt]: https://github.com/AGWA/git-crypt
-[ssh-vault]: https://github.com/ssh-vault/ssh-vault

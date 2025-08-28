@@ -6,7 +6,7 @@ maintain the BinderHub deployment at <https://mybinder.org>.
 ## Make sure you have access on the Google Cloud project
 
 Go to <https://console.cloud.google.com> and see if you have `binderhub` listed
-in your projects. If not, message one of the Binder devs on [Jupyter instance of Zulip](https://jupyter.zulipchat.com/)
+in your projects. If not, message one of the Binder devs on [Jupyter instance of Zulip]
 to get access.
 
 ## Install `kubectl`
@@ -93,6 +93,6 @@ useful in spotting and debugging problems in the future.
 ## Start helping out!
 
 There are many ways that you can help debug/maintain/improve the `mybinder.org`
-deployment. The best way to get started is to keep an eye on the [Jupyter instance of Zulip](https://jupyter.zulipchat.com/)
+deployment. The best way to get started is to keep an eye on the [Jupyter instance of Zulip]
 as well as the Grafana dashboard. If you see something interesting, don't hesitate
 to ask questions or make suggestions!
