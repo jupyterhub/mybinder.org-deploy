@@ -19,9 +19,6 @@ extensions = [
     "jupyterhub_sphinx_theme",
 ]
 
-# The suffix(es) of source filenames.
-source_suffix = [".rst", ".md"]
-
 # The root toctree document.
 root_doc = master_doc = "index"
 
