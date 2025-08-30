@@ -32,6 +32,9 @@ author = "Binder Team"
 # This patterns also effect to html_static_path and html_extra_path
 exclude_patterns = []
 
+# A string of reStructuredText that will be included at the end of every source file that is read.
+with open("hyperlink-targets.md", encoding="utf-8") as _hyperlink_targets:
+    rst_epilog = _hyperlink_targets.read()
 
 # -- Options for HTML output ----------------------------------------------
 # ref: http://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
