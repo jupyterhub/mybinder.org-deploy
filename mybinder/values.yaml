@@ -199,6 +199,11 @@ binderhub:
         security vulnerability please see: <a href="https://mybinder.readthedocs.io/en/latest/faq.html#where-can-i-report-a-security-issue">Where can I report a security issue</a><br /><br />
         For more information about the Binder Project, see <a href="https://mybinder.readthedocs.io/en/latest/about.html">the About Binder page</a></p>
 
+      extra_header_html:
+        01-plausible: |
+          <script defer data-domain="mybinder.org" src="https://plausible.io/js/script.file-downloads.outbound-links.js"></script>
+          <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+
       extra_footer_scripts:
         01-matomo: |
           // Only load Matomo if DNT is not set.
