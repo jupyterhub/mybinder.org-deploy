@@ -86,7 +86,7 @@ six==1.17.0
     #   python-dateutil
 tomli==2.2.1
     # via pytest
-typing-extensions==4.14.1
+typing-extensions==4.15.0
     # via exceptiongroup
 urllib3==2.5.0
     # via
