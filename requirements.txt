@@ -48,7 +48,7 @@ pyasn1-modules==0.4.2
     # via google-auth
 pygments==2.19.2
     # via pytest
-pytest==8.4.1
+pytest==8.4.2
     # via
     #   -r requirements.in
     #   pytest-rerunfailures
