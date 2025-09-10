@@ -352,6 +352,10 @@ binderhub:
   imageBuilderType: dind
   dind:
     daemonset:
+      image:
+        # Investigating https://github.com/jupyterhub/mybinder.org-deploy/issues/3387#issuecomment-3239287733
+        # Downgrade dind, reverts https://github.com/jupyterhub/binderhub/pull/1937
+        tag: 27.5.1-dind
       extraArgs:
         # Allow for concurrent pushes so pushes are faster
         - --max-concurrent-uploads=32
