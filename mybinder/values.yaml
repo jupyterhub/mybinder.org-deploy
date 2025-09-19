@@ -186,9 +186,9 @@ binderhub:
             🤍 Donate to mybinder.org!
         </a>
         <div style="text-align:center;">
-        🚀 JupyterCon 2025 is on November 5th in San Diego, CA!
-        See the <a href="https://events.linuxfoundation.org/jupytercon/program/schedule/?ajs_aid=53afb00d-be65-4a99-9112-28cdaac99463">JupyterCon schedule</a>
-        and <a href="https://events.linuxfoundation.org/jupytercon/register/?ajs_aid=53afb00d-be65-4a99-9112-28cdaac99463">register here</a>
+        🚀 JupyterCon 2025 is November 5th in San Diego, CA!
+        See the <a href="https://events.linuxfoundation.org/jupytercon/program/schedule/?ajs_aid=53afb00d-be65-4a99-9112-28cdaac99463">JupyterCon schedule here</a>.
+        <a href="https://events.linuxfoundation.org/jupytercon/register/?ajs_aid=53afb00d-be65-4a99-9112-28cdaac99463"><button class="btn btn-primary">Register for JupyterCon</button></a>
         </div>
         <!-- Un-comment when we are past JupyterCon
         <div style="text-align:center;">
