@@ -1,6 +1,8 @@
 cryptnono:
   enabled: true
   detectors:
+    tcpflowkiller:
+      enabled: true
     execwhacker:
       metrics:
         enabled: true
