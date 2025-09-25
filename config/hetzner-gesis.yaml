@@ -40,7 +40,7 @@ binderhub:
         - '--DockerEngine.extra_init_args={"timeout":1200}'
 
     LaunchQuota:
-      total_quota: 120
+      total_quota: 180
 
   replicas: 2
 
