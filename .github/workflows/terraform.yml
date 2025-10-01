@@ -25,7 +25,7 @@ jobs:
 
       # https://github.com/terraform-linters/setup-tflint
       - name: Install tflint
-        uses: terraform-linters/setup-tflint@v4
+        uses: terraform-linters/setup-tflint@v5
         with:
           tflint_version: v0.47.0
 
