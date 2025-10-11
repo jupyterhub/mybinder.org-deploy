@@ -3,7 +3,7 @@ from distutils.version import LooseVersion as V
 
 import notebook
 
-c.NotebookApp.extra_template_paths.append("/etc/jupyter/templates")
+c.ServerApp.extra_template_paths.append("/etc/jupyter/templates")
 
 
 # For old notebook versions we have to explicitly enable the translation
@@ -21,7 +21,7 @@ repo_url = os.environ.get("BINDER_REPO_URL", "")
 # Disable JITSI integration for now
 jitsi_url = ""
 
-c.NotebookApp.jinja_template_vars.update(
+c.ServerApp.jinja_template_vars.update(
     {
         "binder_url": binder_launch_host + binder_request,
         "persistent_binder_url": binder_launch_host + binder_persistent_request,
