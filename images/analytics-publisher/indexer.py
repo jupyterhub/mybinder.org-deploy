@@ -44,15 +44,12 @@ def index_events(project, bucket, debug=False, dry_run=False):
         )
 
     html_index = html_template.render(
-        archives=sorted(
-            archives, key=lambda archive: archive["date"], reverse=True
-        ),
+        archives=sorted(archives, key=lambda archive: archive["date"], reverse=True),
         generated_time=datetime.utcnow().isoformat() + "Z",
     )
 
     if debug:
         print(html_index)
-
 
     for archive in archives:
         jsonl_index = json.dumps(archive) + "\n"
