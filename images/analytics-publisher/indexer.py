@@ -10,7 +10,6 @@ import argparse
 import json
 import mimetypes
 import os
-import tempfile
 from datetime import datetime
 from glob import glob
 
