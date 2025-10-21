@@ -18,5 +18,3 @@ resource "ovh_cloud_project_containerregistry_user" "admin" {
   email        = "mybinder-admin@mybinder.org"
   login        = "mybinder-admin"
 }
-
-

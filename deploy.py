@@ -30,13 +30,7 @@ GCP_ZONES = {
 }
 
 # Projects using raw KUBECONFIG files
-KUBECONFIG_CLUSTERS = {
-    "localhost",
-    "ovh2",
-    "hetzner-2i2c",
-    "hetzner-gesis",
-    "staging"
-}
+KUBECONFIG_CLUSTERS = {"localhost", "ovh2", "hetzner-2i2c", "hetzner-gesis", "staging"}
 
 # Mapping of config name to cluster name for AWS EKS deployments
 AWS_DEPLOYMENTS = {"curvenote": "binderhub"}
