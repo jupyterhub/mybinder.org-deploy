@@ -1,17 +1,14 @@
 data "ovh_cloud_project_capabilities_containerregistry_filter" "registry_plan" {
-  service_name = local.service_name
-  # SMALL is 200GB (too small)
-  # MEDIUM is 600GB
-  # LARGE is 5TiB
-  plan_name = "LARGE"
-  region    = local.region
+  service_name = var.service_name
+  plan_name = var.registry_plan
+  region    = var.region
 }
 
 resource "ovh_cloud_project_containerregistry" "registry" {
-  service_name = local.service_name
+  service_name = var.service_name
   plan_id      = data.ovh_cloud_project_capabilities_containerregistry_filter.registry_plan.id
   region       = data.ovh_cloud_project_capabilities_containerregistry_filter.registry_plan.region
-  name         = "mybinder-ovh"
+  name         = var.registry_name
 }
 
 # admin user (needed for harbor provider)
