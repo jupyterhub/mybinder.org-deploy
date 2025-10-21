@@ -7,6 +7,7 @@ __pycache__
 
 config/common/datacenter-*.yaml
 secrets/banned_hosts.txt
+secrets/banned_ipv4-*.txt
 secrets/config/common/bans.yaml
 mybinder*/charts
 mybinder*/requirements.lock
