@@ -1,4 +1,4 @@
-projectName: binderhub-288415
+projectName: staging
 
 # binderhubEnabled: false
 
@@ -6,16 +6,10 @@ binderhub:
   config:
     BinderHub:
       pod_quota: 20
-      hub_url: https://hub.gke2.staging.mybinder.org
+      hub_url: https://hub.ovh.staging.mybinder.org
       badge_base_url: https://staging.mybinder.org
-      image_prefix: us-central1-docker.pkg.dev/binderhub-288415/staging/r2d-2023-04-
+      image_prefix: 985ed7pp.c1.va1.container-registry.ovh.us/mybinder-builds/
       sticky_builds: true
-    DockerRegistry:
-      token_url: "https://us-central1-docker.pkg.dev/v2/token"
-
-  registry:
-    url: "https://us-central1-docker.pkg.dev"
-    username: "_json_key"
 
   extraEnv:
     EVENT_LOG_NAME: "binderhub-staging-events-text"
@@ -24,12 +18,6 @@ binderhub:
     requests:
       cpu: 0.1
       memory: 512Mi
-
-  hpa:
-    enabled: true
-    maxReplicas: 3
-    minReplicas: 1
-    targetCPU: 90 # 90% of cpu request, so 90m CPU
 
   dind:
     resources:
@@ -42,8 +30,7 @@ binderhub:
 
   ingress:
     hosts:
-      - gke.staging.mybinder.org
-      - gke2.staging.mybinder.org
+      - ovh.staging.mybinder.org
 
   jupyterhub:
     hub:
@@ -60,13 +47,11 @@ binderhub:
         limit: 0.5
     ingress:
       hosts:
-        - hub.gke.staging.mybinder.org
-        - hub.gke2.staging.mybinder.org
+        - hub.ovh.staging.mybinder.org
       tls:
         - secretName: kubelego-tls-jupyterhub-staging
           hosts:
-            - hub.gke.staging.mybinder.org
-            - hub.gke2.staging.mybinder.org
+            - hub.ovh.staging.mybinder.org
     scheduling:
       userPlaceholder:
         replicas: 1
@@ -87,12 +72,10 @@ minesweeper:
 grafana:
   ingress:
     hosts:
-      - grafana.staging.mybinder.org
-      - grafana.gke2.staging.mybinder.org
+      - grafana.ovh.staging.mybinder.org
     tls:
       - hosts:
-          - grafana.staging.mybinder.org
-          - grafana.gke2.staging.mybinder.org
+          - grafana.ovh.staging.mybinder.org
         secretName: kubelego-tls-grafana
   datasources:
     datasources.yaml:
@@ -101,7 +84,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.staging.mybinder.org
+          url: https://prometheus.ovh.staging.mybinder.org
           isDefault: true
           editable: false
   persistence:
@@ -111,12 +94,10 @@ prometheus:
   server:
     ingress:
       hosts:
-        - prometheus.staging.mybinder.org
-        - prometheus.gke2.staging.mybinder.org
+        - prometheus.ovh.staging.mybinder.org
       tls:
         - hosts:
-            - prometheus.staging.mybinder.org
-            - prometheus.gke2.staging.mybinder.org
+            - prometheus.ovh.staging.mybinder.org
           secretName: kubelego-tls-prometheus
     persistentVolume:
       size: 12G
@@ -126,8 +107,8 @@ prometheus:
 ingress-nginx:
   controller:
     replicaCount: 2
-    service:
-      loadBalancerIP: 35.222.35.25
+    # service:
+    #   loadBalancerIP: 35.222.35.25
     resources:
       requests:
         cpu: 10m
@@ -139,8 +120,7 @@ ingress-nginx:
 static:
   ingress:
     hosts:
-      - static.staging.mybinder.org
-      - static.gke2.staging.mybinder.org
+      - static.ovh.staging.mybinder.org
 
 redirector:
   enabled: true
@@ -151,7 +131,8 @@ redirector:
         to: mybinder.readthedocs.io
 
 analyticsPublisher:
-  enabled: true
+  # FIXME: Enable this
+  enabled: false
   project: binderhub-288415
   destinationBucket: binder-staging-events-archive
   events:
@@ -165,7 +146,8 @@ analyticsPublisher:
     sourceBucket: binder-billing-archive
 
 gcsProxy:
-  enabled: true
+  # FIXME: Enable this
+  enabled: false
   buckets:
     - name: binder-staging-events-archive
       host: archive.analytics.gke2.staging.mybinder.org
@@ -185,12 +167,7 @@ federationRedirect:
   hosts:
     gke:
       prime: true
-      url: https://gke2.staging.mybinder.org
-      weight: 4
-      health: https://gke2.staging.mybinder.org/health
-      versions: https://gke2.staging.mybinder.org/versions
-    gesis:
-      url: https://notebooks.gesis.org/binder
+      url: https://ovh.staging.mybinder.org
       weight: 100
-      health: https://notebooks.gesis.org/binder/health
-      versions: https://notebooks.gesis.org/binder/versions
+      health: https://ovh.staging.mybinder.org/health
+      versions: https://ovh.staging.mybinder.org/versions

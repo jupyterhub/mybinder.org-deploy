@@ -21,14 +21,6 @@ terraform {
 }
 
 provider "ovh" {
-  endpoint = "ovh-us"
+  endpoint = var.endpoint
   # credentials loaded via source ./secrets/ovh-creds.sh
 }
-
-locals {
-  # FIXME: Turn this into variables when we have more than 1
-  service_name = "5e4c805d3c614a1085d7b7bc1fee46d6" # id of the project `mybinder-2i2c`
-  # Locate near our hetzner nodes, just in case we want to do data transfer in the future
-  region = "US-EAST-VA"
-}
-
