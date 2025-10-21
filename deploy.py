@@ -175,7 +175,10 @@ def setup_auth_aws(cluster, dry_run=False):
 
 def update_networkbans(cluster, dry_run=False):
     """
-    Run secrets/ban.py to update network bans
+    Run ban scripts to update network and cryptnono bans
+
+    These must be run before deploying the mybinder chart as they
+    may setup some application config
     """
 
     print(BOLD + GREEN + f"Updating network-bans for {cluster}" + NC, flush=True)
@@ -186,6 +189,9 @@ def update_networkbans(cluster, dry_run=False):
     if cluster in {"ovh", "ovh2"}:
         ban_command.append(cluster)
 
+    check_call(ban_command, dry_run)
+
+    ban_command = [sys.executable, "secrets/generate-cryptnono-config.py"]
     check_call(ban_command, dry_run)
 
 
