@@ -21,7 +21,6 @@ HERE = os.path.dirname(__file__)
 ABSOLUTE_HERE = os.path.dirname(os.path.realpath(__file__))
 
 GCP_PROJECTS = {
-    "staging": "binderhub-288415",
     "prod": "binderhub-288415",
 }
 
@@ -36,6 +35,7 @@ KUBECONFIG_CLUSTERS = {
     "ovh2",
     "hetzner-2i2c",
     "hetzner-gesis",
+    "staging"
 }
 
 # Mapping of config name to cluster name for AWS EKS deployments
