@@ -139,6 +139,9 @@ redirector:
         from: docs.staging.mybinder.2i2c.cloud
         to: mybinder.readthedocs.io
 
+matomo:
+  enabled: false
+
 analyticsPublisher:
   # FIXME: Enable this
   enabled: false
