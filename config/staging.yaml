@@ -6,12 +6,21 @@ binderhub:
   config:
     BinderHub:
       pod_quota: 20
-      hub_url: https://hub.ovh.staging.mybinder.org
-      badge_base_url: https://staging.mybinder.org
+      hub_url: https://hub.ovh.staging.mybinder.2i2c.cloud
+      badge_base_url: https://staging.mybinder.2i2c.cloud
       image_prefix: 985ed7pp.c1.va1.container-registry.ovh.us/mybinder-builds/
       sticky_builds: true
 
+  extraVolumes:
+    - name: secrets
+      secret:
+        secretName: events-archiver-secrets
+  extraVolumeMounts:
+    - name: secrets
+      mountPath: /secrets
+      readOnly: true
   extraEnv:
+    GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
     EVENT_LOG_NAME: "binderhub-staging-events-text"
 
   resources:
@@ -30,7 +39,7 @@ binderhub:
 
   ingress:
     hosts:
-      - ovh.staging.mybinder.org
+      - ovh.staging.mybinder.2i2c.cloud
 
   jupyterhub:
     hub:
@@ -47,11 +56,11 @@ binderhub:
         limit: 0.5
     ingress:
       hosts:
-        - hub.ovh.staging.mybinder.org
+        - hub.ovh.staging.mybinder.2i2c.cloud
       tls:
         - secretName: kubelego-tls-jupyterhub-staging
           hosts:
-            - hub.ovh.staging.mybinder.org
+            - hub.ovh.staging.mybinder.2i2c.cloud
     scheduling:
       userPlaceholder:
         replicas: 1
@@ -72,10 +81,10 @@ minesweeper:
 grafana:
   ingress:
     hosts:
-      - grafana.ovh.staging.mybinder.org
+      - grafana.ovh.staging.mybinder.2i2c.cloud
     tls:
       - hosts:
-          - grafana.ovh.staging.mybinder.org
+          - grafana.ovh.staging.mybinder.2i2c.cloud
         secretName: kubelego-tls-grafana
   datasources:
     datasources.yaml:
@@ -84,7 +93,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.ovh.staging.mybinder.org
+          url: https://prometheus.ovh.staging.mybinder.2i2c.cloud
           isDefault: true
           editable: false
   persistence:
@@ -94,10 +103,10 @@ prometheus:
   server:
     ingress:
       hosts:
-        - prometheus.ovh.staging.mybinder.org
+        - prometheus.ovh.staging.mybinder.2i2c.cloud
       tls:
         - hosts:
-            - prometheus.ovh.staging.mybinder.org
+            - prometheus.ovh.staging.mybinder.2i2c.cloud
           secretName: kubelego-tls-prometheus
     persistentVolume:
       size: 12G
@@ -120,14 +129,14 @@ ingress-nginx:
 static:
   ingress:
     hosts:
-      - static.ovh.staging.mybinder.org
+      - static.ovh.staging.mybinder.2i2c.cloud
 
 redirector:
   enabled: true
   redirects:
     - type: host
       host:
-        from: docs.staging.mybinder.org
+        from: docs.staging.mybinder.2i2c.cloud
         to: mybinder.readthedocs.io
 
 analyticsPublisher:
@@ -150,12 +159,12 @@ gcsProxy:
   enabled: false
   buckets:
     - name: binder-staging-events-archive
-      host: archive.analytics.gke2.staging.mybinder.org
+      host: archive.analytics.gke2.staging.mybinder.2i2c.cloud
     - name: binder-staging-events-archive
-      host: archive.analytics.staging.mybinder.org
+      host: archive.analytics.staging.mybinder.2i2c.cloud
 
 federationRedirect:
-  host: staging.mybinder.org
+  host: staging.mybinder.2i2c.cloud
   enabled: true
   resources:
     requests:
@@ -167,7 +176,7 @@ federationRedirect:
   hosts:
     gke:
       prime: true
-      url: https://ovh.staging.mybinder.org
+      url: https://ovh.staging.mybinder.2i2c.cloud
       weight: 100
-      health: https://ovh.staging.mybinder.org/health
-      versions: https://ovh.staging.mybinder.org/versions
+      health: https://ovh.staging.mybinder.2i2c.cloud/health
+      versions: https://ovh.staging.mybinder.2i2c.cloud/versions
