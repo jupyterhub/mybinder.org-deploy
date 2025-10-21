@@ -140,14 +140,7 @@ redirector:
         to: mybinder.readthedocs.io
 
 matomo:
-  enabled: true
-  db:
-    instanceName: binderhub-288415:us-central1:matomo-staging
-  trustedHosts:
-    - staging.mybinder.2i2c.cloud
-  ingress:
-    hosts:
-      - staging.mybinder.2i2c.cloud
+  enabled: false
 
 analyticsPublisher:
   # FIXME: Enable this
