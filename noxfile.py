@@ -8,7 +8,7 @@ nox.options.reuse_existing_virtualenvs = True
 @nox.session(default=False)
 def docs(session):
     """
-    Build the documentation and, optionally with '-- live', run a web server. 
+    Build the documentation and, optionally with '-- live', run a web server.
     """
     docs_dir = "docs"
     source_dir = os.path.join(docs_dir, "source")  # where conf.py is located
