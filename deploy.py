@@ -191,7 +191,7 @@ def update_networkbans(cluster, dry_run=False):
 
     check_call(ban_command, dry_run)
 
-    ban_command = [sys.executable, "secrets/generate-cryptnono-config.py"]
+    ban_command = [sys.executable, "secrets/generate-banned-ips.py"]
     check_call(ban_command, dry_run)
 
 
