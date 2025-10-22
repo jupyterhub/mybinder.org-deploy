@@ -96,8 +96,6 @@ grafana:
           url: https://prometheus.ovh.staging.mybinder.2i2c.cloud
           isDefault: true
           editable: false
-  persistence:
-    storageClassName: standard
 
 prometheus:
   server:
