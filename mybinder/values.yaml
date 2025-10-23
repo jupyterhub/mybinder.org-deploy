@@ -3,6 +3,10 @@ cryptnono:
   detectors:
     tcpflowkiller:
       enabled: true
+      config:
+        FlowKiller:
+          banned_ipv4_file_globs:
+            - "/ban-config/*.txt"
     execwhacker:
       metrics:
         enabled: true
