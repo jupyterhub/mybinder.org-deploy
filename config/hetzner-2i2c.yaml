@@ -25,6 +25,8 @@ cryptnono:
       enabled: false
     execwhacker:
       containerdHostPath: /run/k3s/containerd/containerd.sock
+    tcpflowkiller:
+      containerdHostPath: /run/k3s/containerd/containerd.sock
 
 binderhub:
   config:
