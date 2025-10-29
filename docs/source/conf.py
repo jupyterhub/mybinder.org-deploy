@@ -17,7 +17,10 @@ extensions = [
     "myst_parser",
     "sphinx_copybutton",
     "jupyterhub_sphinx_theme",
+    "sphinxcontrib.mermaid",
 ]
+
+myst_enable_extensions = {"deflist"}
 
 # The root toctree document.
 root_doc = master_doc = "index"

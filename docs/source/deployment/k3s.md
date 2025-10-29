@@ -20,6 +20,12 @@ but we have a slightly more opinionated list.
 4. "As big as possible", as we will be using all the capacity of this one VM
 5. Ability to grant same access to the VM to all the operators of the mybinder federation.
 
+## VM configuration
+
+1. Allow clock synchronization based on [Network Time Protocol (NTP)](https://en.wikipedia.org/wiki/Network_Time_Protocol).
+
+   The VM provider might have its own NTP server and envorce the use of it.
+
 ## Installing `k3s`
 
 We can use the [quickstart](https://docs.k3s.io/quick-start) on the `k3s` website, with the added
