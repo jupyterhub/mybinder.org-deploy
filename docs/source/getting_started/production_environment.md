@@ -70,10 +70,17 @@ The staging cluster has one node, which makes things simple.
 In earlier 2025, we moved from a multi node Kubernetes cluster to a single node K3s, read more at "[2i2c joins the mybinder.org federation with a cheaper and faster way to deploy Binderhub](https://2i2c.org/blog/2025/binder-singlenode/)".
 ```
 
-The production cluster has
+The production federation has
 
 1. a single proxy
 2. one or more BinderHub servers operated by members of the federation.
+
+```{mermaid}
+flowchart LR
+    Proxy --> f1(Federation member)
+    Proxy --> f2(Federation member)
+    Proxy --> f3(Federation member)
+```
 
 ## `mybinder.org` specific extra software
 
