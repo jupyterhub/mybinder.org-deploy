@@ -19,6 +19,8 @@ extensions = [
     "jupyterhub_sphinx_theme",
 ]
 
+myst_enable_extensions = {"deflist"}
+
 # The root toctree document.
 root_doc = master_doc = "index"
 
