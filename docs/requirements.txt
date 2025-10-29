@@ -1,3 +1,4 @@
 jupyterhub-sphinx-theme
 myst-parser
 sphinx_copybutton
+sphinxcontrib-mermaid
