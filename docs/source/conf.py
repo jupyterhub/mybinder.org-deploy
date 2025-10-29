@@ -17,7 +17,7 @@ extensions = [
     "myst_parser",
     "sphinx_copybutton",
     "jupyterhub_sphinx_theme",
-    "sphinxcontrib.mermaid"
+    "sphinxcontrib.mermaid",
 ]
 
 myst_enable_extensions = {"deflist"}
