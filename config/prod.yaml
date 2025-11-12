@@ -173,33 +173,6 @@ redirector:
       host:
         from: status.mybinder.org
         to: mybinder.readthedocs.io/en/latest/status.html
-    - type: url
-      host:
-        from: matomo.mybinder.org
-        to: mybinder.org/matomo/index.php
-
-matomo:
-  enabled: true
-  replicas: 2
-  nodeSelector: *coreNodeSelector
-  db:
-    instanceName: binderhub-288415:us-central1:matomo-prod
-  trustedHosts:
-    - mybinder.org
-    - gke.mybinder.org
-    - gke2.mybinder.org
-  ingress:
-    hosts:
-      - mybinder.org
-      - gke.mybinder.org
-      - gke2.mybinder.org
-  resources:
-    requests:
-      cpu: 10m
-      memory: 256Mi
-    limits:
-      cpu: 200m
-      memory: 1Gi
 
 analyticsPublisher:
   enabled: true

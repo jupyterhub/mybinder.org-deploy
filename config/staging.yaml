@@ -150,18 +150,6 @@ redirector:
         from: docs.staging.mybinder.org
         to: mybinder.readthedocs.io
 
-matomo:
-  enabled: true
-  db:
-    instanceName: binderhub-288415:us-central1:matomo-staging
-  trustedHosts:
-    - staging.mybinder.org
-    - gke2.staging.mybinder.org
-  ingress:
-    hosts:
-      - staging.mybinder.org
-      - gke2.staging.mybinder.org
-
 analyticsPublisher:
   enabled: true
   project: binderhub-288415
