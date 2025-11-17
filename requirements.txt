@@ -20,7 +20,7 @@ durationpy==0.10
     # via kubernetes
 exceptiongroup==1.3.0
     # via pytest
-execnet==2.1.1
+execnet==2.1.2
     # via pytest-xdist
 google-auth==2.43.0
     # via kubernetes
