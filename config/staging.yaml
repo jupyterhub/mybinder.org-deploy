@@ -11,16 +11,16 @@ binderhub:
       image_prefix: 985ed7pp.c1.va1.container-registry.ovh.us/mybinder-builds/
       sticky_builds: true
 
-  extraVolumes:
-    - name: secrets
-      secret:
-        secretName: events-archiver-secrets
-  extraVolumeMounts:
-    - name: secrets
-      mountPath: /secrets
-      readOnly: true
+  # extraVolumes:
+  #   - name: secrets
+  #     secret:
+  #       secretName: events-archiver-secrets
+  # extraVolumeMounts:
+  #   - name: secrets
+  #     mountPath: /secrets
+  #     readOnly: true
   extraEnv:
-    GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+    # GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
     EVENT_LOG_NAME: "binderhub-staging-events-text"
 
   resources:
