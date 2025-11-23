@@ -77,11 +77,6 @@ output "private_keys" {
   sensitive   = true
 }
 
-output "matomo_password" {
-  value     = module.mybinder.matomo_password
-  sensitive = true
-}
-
 output "events_archiver_keys" {
   value     = module.mybinder.events_archiver_keys
   sensitive = true

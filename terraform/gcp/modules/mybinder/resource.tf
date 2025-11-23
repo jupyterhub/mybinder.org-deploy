@@ -6,10 +6,6 @@ locals {
       display_name = "Deployment account for ${var.name}",
       role         = "roles/container.admin",
     },
-    matomo = {
-      display_name = "SQL account for ${var.name} Matomo",
-      role         = "roles/cloudsql.client",
-    },
     events-archiver = {
       display_name = "Storage access for ${var.name} events archiver",
       role         = "roles/storage.objectAdmin",
@@ -80,54 +76,6 @@ output "cluster_name" {
 # output "public_ip" {
 #   value = google_compute_global_address.cluster_ip.address
 # }
-
-resource "google_sql_database_instance" "matomo" {
-  name             = "matomo-${var.name}"
-  database_version = "MYSQL_5_7"
-
-  settings {
-    tier = var.sql_tier
-    backup_configuration {
-      enabled  = true
-      location = "us"
-    }
-    database_flags {
-      name  = "table_open_cache"
-      value = "10000"
-    }
-    maintenance_window {
-        day = 1
-        hour = 1
-    }
-  }
-}
-
-resource "random_id" "sql_root_password" {
-  byte_length = 16
-}
-
-resource "random_id" "matomo_password" {
-  byte_length = 16
-}
-
-resource "google_sql_user" "root" {
-  name     = "root"
-  host     = "%"
-  instance = google_sql_database_instance.matomo.name
-  password = random_id.sql_root_password.hex
-}
-
-resource "google_sql_user" "matomo" {
-  name     = "matomo"
-  host     = "%"
-  instance = google_sql_database_instance.matomo.name
-  password = random_id.matomo_password.hex
-}
-
-output "matomo_password" {
-  value     = google_sql_user.matomo.password
-  sensitive = true
-}
 
 # create mapping of service accounts
 resource "google_service_account" "sa" {
