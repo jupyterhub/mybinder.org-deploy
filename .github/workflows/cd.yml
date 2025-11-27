@@ -232,11 +232,6 @@ jobs:
             helm_version: ""
             experimental: false
 
-          # OVH deployment paused
-          # - federation_member: ovh2
-          #   helm_version: ""
-          #   experimental: false
-
     # These permissions are needed to interact with GitHub's OIDC Token endpoint.
     permissions:
       id-token: write
