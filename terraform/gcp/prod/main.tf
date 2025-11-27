@@ -101,11 +101,6 @@ resource "google_storage_bucket" "billing" {
 #   description = "store in ingress-nginx.controller.service.loadBalancerIP"
 # }
 
-output "matomo_password" {
-  value     = module.mybinder.matomo_password
-  sensitive = true
-}
-
 output "private_keys" {
   value       = module.mybinder.private_keys
   description = "GCP service account keys"

@@ -1,5 +1,10 @@
 # Matomo (formerly Piwik) analytics
 
+:::{warning} Matomo is no longer used
+Matomo was disabled in PRs [#3505](https://github.com/jupyterhub/mybinder.org-deploy/pull/3505) and [#3513](https://github.com/jupyterhub/mybinder.org-deploy/pull/3513) as we're now using [Plausible](https://plausible.io/mybinder.org).
+This documentation is kept in case Matomo is resurrected in future.
+:::
+
 [Matomo](https://matomo.org/) is a self-hosted free & open source alternative to [Google Analytics](https://analytics.google.com).
 
 ## Why?
