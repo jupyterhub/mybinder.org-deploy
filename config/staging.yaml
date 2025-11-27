@@ -61,9 +61,6 @@ binderhub:
         - secretName: kubelego-tls-jupyterhub-staging
           hosts:
             - hub.ovh.staging.mybinder.org
-    scheduling:
-      userPlaceholder:
-        replicas: 1
 
     proxy:
       chp:

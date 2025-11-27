@@ -434,13 +434,9 @@ binderhub:
         kubernetes.io/tls-acme: "true"
     scheduling:
       userScheduler:
-        enabled: true
-        replicas: 2
-      podPriority:
-        enabled: true
+        enabled: false
       userPlaceholder:
-        enabled: true
-        # replicas set in config/<deployment>
+        enabled: false
     singleuser:
       # clear singleuser.defaultUrl config from chart
       defaultUrl:
