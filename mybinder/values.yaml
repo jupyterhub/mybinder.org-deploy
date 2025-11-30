@@ -17,6 +17,7 @@ cryptnono:
         enabled: true
       containerdHostPath: /run/containerd/containerd.sock
       dockerHostPath: /run/dind/docker.sock
+  priorityClassName: binderhub-core
 
 buildkitPruner:
   enabled: true
@@ -319,6 +320,9 @@ binderhub:
       metric = EventLoopMetric()
       metric.start()
 
+  extraPodSpec:
+    priorityClassName: binderhub-core
+
   registry:
     url: https://gcr.io
 
@@ -397,6 +401,8 @@ binderhub:
           # default-route to our nginx "Binder not found" service
           extra_routes:
             "/": "http://proxy-patches"
+      extraPodSpec:
+        priorityClassName: binderhub-core
       service:
         annotations:
           prometheus.io/scrape: "true"
@@ -423,6 +429,8 @@ binderhub:
           # - --default-target=http://$(PROXY_PATCHES_SERVICE_HOST):$(PROXY_PATCHES_SERVICE_PORT)
           - --error-target=http://$(PROXY_PATCHES_SERVICE_HOST):$(PROXY_PATCHES_SERVICE_PORT)/hub/error
           - --log-level=error
+        extraPodSpec:
+          priorityClassName: binderhub-core
     ingress:
       enabled: true
       annotations:
@@ -501,6 +509,7 @@ ingress-nginx:
   controller:
     admissionWebhooks:
       enabled: false
+    priorityClassName: binderhub-core
     resources:
       requests:
         cpu: 100m
@@ -609,6 +618,7 @@ prometheus:
     podLabels:
       # needs access to the Hub API
       hub.jupyter.org/network-access-hub: "true"
+    priorityClassName: binderhub-core
     strategy:
       # The default of RollingUpdate fail because attached storage can only be
       # mounted on one pod, so we need to use Recreate that first shut down the
@@ -717,10 +727,12 @@ cluster-autoscaler:
 
 # Name:Priority pairs of priority classes to create
 # https://kubernetes.io/blog/2023/01/12/protect-mission-critical-pods-priorityclass/
-priorityClasses: {}
+priorityClasses:
+  binderhub-core: 10000
 
 binderhub-container-registry-helper:
   enabled: false
+  priorityClassName: binderhub-core
 
 awsEcrRegistryCleaner:
   enabled: false
@@ -731,7 +743,7 @@ awsEcrRegistryCleaner:
   serviceAccount:
     name: binderhub-ecr-registry-cleaner
     annotations: {}
-  priorityClassName: ""
+  priorityClassName: binderhub-core
 
 localpv-provisioner:
   enabled: false
