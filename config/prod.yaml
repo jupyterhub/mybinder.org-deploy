@@ -212,15 +212,3 @@ federationRedirect:
       weight: 50
       health: https://gesis.mybinder.org/health
       versions: https://gesis.mybinder.org/versions
-    ovh2:
-      prime: false
-      url: https://ovh2.mybinder.org
-      weight: 0
-      health: https://ovh2.mybinder.org/health
-      versions: https://ovh2.mybinder.org/versions
-    curvenote:
-      prime: false
-      url: https://binder.curvenote.dev
-      weight: 0
-      health: https://binder.curvenote.dev/health
-      versions: https://binder.curvenote.dev/versions
