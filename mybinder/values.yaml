@@ -13,10 +13,12 @@ cryptnono:
       containerdHostPath: /run/containerd/containerd.sock
       dockerHostPath: /run/dind/docker.sock
     execwhacker:
-      metrics:
-        enabled: true
       containerdHostPath: /run/containerd/containerd.sock
       dockerHostPath: /run/dind/docker.sock
+  metrics:
+    enabled: true
+  collector:
+    enabled: true
   priorityClassName: binderhub-core
 
 buildkitPruner:
