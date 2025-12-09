@@ -17,8 +17,8 @@ cryptnono:
       dockerHostPath: /run/dind/docker.sock
   metrics:
     enabled: true
-  collector:
-    enabled: true
+    collector:
+      enabled: true
   priorityClassName: binderhub-core
 
 buildkitPruner:
