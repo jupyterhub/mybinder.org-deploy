@@ -207,7 +207,7 @@ federationRedirect:
       health: https://2i2c.mybinder.org/health
       versions: https://2i2c.mybinder.org/versions
     hetzner-gesis:
-      prime: true
+      prime: false
       url: https://gesis.mybinder.org
       weight: 0
       health: https://gesis.mybinder.org/health
