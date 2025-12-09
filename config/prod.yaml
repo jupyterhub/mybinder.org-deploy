@@ -209,6 +209,6 @@ federationRedirect:
     hetzner-gesis:
       prime: false
       url: https://gesis.mybinder.org
-      weight: 0
+      weight: 50
       health: https://gesis.mybinder.org/health
       versions: https://gesis.mybinder.org/versions
