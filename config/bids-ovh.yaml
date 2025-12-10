@@ -1,0 +1,137 @@
+projectName: bids-ovh
+
+harbor:
+  enabled: true
+  expose:
+    type: ingress
+    ingress:
+      className: nginx
+      hosts:
+        core: registry.bids-ovh.minrk.net
+
+cryptnono:
+  detectors:
+    monero:
+      enabled: false
+    execwhacker:
+      containerdHostPath: /run/k3s/containerd/containerd.sock
+    tcpflowkiller:
+      containerdHostPath: /run/k3s/containerd/containerd.sock
+
+binderhub:
+  config:
+    BinderHub:
+      hub_url: https://hub.bids-ovh.minrk.net
+      badge_base_url: https://mybinder.org
+      sticky_builds: true
+      image_prefix: registry.bids-ovh.minrk.net/i-
+      # image_prefix: quay.io/mybinder-hetzner-2i2c/image-
+      # build_docker_host: /var/run/dind/docker.sock
+    KubernetesBuildExecutor:
+      docker_host: /var/run/dind/docker.sock
+      repo2docker_extra_args:
+        # try to avoid timeout pushing to local registry
+        # default is 60
+        # this must have no spaces to be processed by repo2docker correctly
+        - '--DockerEngine.extra_init_args={"timeout":1200}'
+
+    LaunchQuota:
+      total_quota: 100
+
+    # DockerRegistry:
+    # token_url: "https://2lmrrh8f.gra7.container-registry.ovh.net/service/token?service=harbor-registry"
+
+  replicas: 2
+
+  extraVolumes:
+    - name: secrets
+      secret:
+        secretName: events-archiver-secrets
+  extraVolumeMounts:
+    - name: secrets
+      mountPath: /secrets
+      readOnly: true
+  extraEnv:
+    GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+
+  dind:
+    resources:
+      requests:
+        cpu: "4"
+        memory: 12Gi
+      limits:
+        cpu: "8"
+        memory: 16Gi
+
+  ingress:
+    hosts:
+      - bids-ovh.minrk.net
+
+  jupyterhub:
+    # proxy:
+    #   chp:
+    #     resources:
+    #       requests:
+    #         cpu: "1"
+    #       limits:
+    #         cpu: "1"
+    ingress:
+      hosts:
+        - hub.bids-ovh.minrk.net
+      tls:
+        - secretName: kubelego-tls-hub
+          hosts:
+            - hub.bids-ovh.minrk.net
+
+  imageCleaner:
+    # handled by buildkit pruner
+    enabled: false
+
+grafana:
+  ingress:
+    hosts:
+      - grafana.bids-ovh.minrk.net
+    tls:
+      - hosts:
+          - grafana.bids-ovh.minrk.net
+        secretName: kubelego-tls-grafana
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: prometheus
+          orgId: 1
+          type: prometheus
+          url: https://prometheus.bids-ovh.minrk.net
+          access: direct
+          isDefault: true
+          editable: false
+  # persistence:
+  # storageClassName: csi-cinder-high-speed
+
+prometheus:
+  server:
+    persistentVolume:
+      size: 20Gi
+    ingress:
+      hosts:
+        - prometheus.bids-ovh.minrk.net
+      tls:
+        - hosts:
+            - prometheus.bids-ovh.minrk.net
+          secretName: kubelego-tls-prometheus
+
+ingress-nginx:
+  controller:
+    replicas: 1
+    scope:
+      enabled: true
+    service:
+      loadBalancerIP: 40.160.14.49
+
+static:
+  ingress:
+    hosts:
+      - static.bids-ovh.minrk.net
+    tls:
+      secretName: kubelego-tls-static
