@@ -6,8 +6,25 @@ harbor:
     type: ingress
     ingress:
       className: nginx
+      annotations:
+        kubernetes.io/tls-acme: "true"
       hosts:
-        core: registry.bids-ovh.minrk.net
+        core: registry.bids.mybinder.org
+    tls:
+      certSource: secret
+      secret:
+        secretName: tls-harbor
+  persistence:
+    imageChartStorage:
+      type: s3
+      s3:
+        # https://github.com/goharbor/harbor-helm/blob/v1.18.1/values.yaml#L225
+        region: us-east-va
+        bucket: mybinder-registry-bids-ovh
+        regionendpoint: https://s3.us-east-va.io.cloud.ovh.us
+        rootdirectory: harbor
+  trivy:
+    enabled: false
 
 cryptnono:
   detectors:
@@ -21,10 +38,10 @@ cryptnono:
 binderhub:
   config:
     BinderHub:
-      hub_url: https://hub.bids-ovh.minrk.net
+      hub_url: https://hub.bids.mybinder.org
       badge_base_url: https://mybinder.org
       sticky_builds: true
-      image_prefix: registry.bids-ovh.minrk.net/i-
+      image_prefix: registry.bids.mybinder.org/mybinder-builds/i-
       # image_prefix: quay.io/mybinder-hetzner-2i2c/image-
       # build_docker_host: /var/run/dind/docker.sock
     KubernetesBuildExecutor:
@@ -65,7 +82,7 @@ binderhub:
 
   ingress:
     hosts:
-      - bids-ovh.minrk.net
+      - bids.mybinder.org
 
   jupyterhub:
     # proxy:
@@ -77,11 +94,11 @@ binderhub:
     #         cpu: "1"
     ingress:
       hosts:
-        - hub.bids-ovh.minrk.net
+        - hub.bids.mybinder.org
       tls:
         - secretName: kubelego-tls-hub
           hosts:
-            - hub.bids-ovh.minrk.net
+            - hub.bids.mybinder.org
 
   imageCleaner:
     # handled by buildkit pruner
@@ -90,10 +107,10 @@ binderhub:
 grafana:
   ingress:
     hosts:
-      - grafana.bids-ovh.minrk.net
+      - grafana.bids.mybinder.org
     tls:
       - hosts:
-          - grafana.bids-ovh.minrk.net
+          - grafana.bids.mybinder.org
         secretName: kubelego-tls-grafana
   datasources:
     datasources.yaml:
@@ -102,7 +119,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.bids-ovh.minrk.net
+          url: https://prometheus.bids.mybinder.org
           access: direct
           isDefault: true
           editable: false
@@ -115,10 +132,10 @@ prometheus:
       size: 20Gi
     ingress:
       hosts:
-        - prometheus.bids-ovh.minrk.net
+        - prometheus.bids.mybinder.org
       tls:
         - hosts:
-            - prometheus.bids-ovh.minrk.net
+            - prometheus.bids.mybinder.org
           secretName: kubelego-tls-prometheus
 
 ingress-nginx:
@@ -132,6 +149,6 @@ ingress-nginx:
 static:
   ingress:
     hosts:
-      - static.bids-ovh.minrk.net
+      - static.bids.mybinder.org
     tls:
       secretName: kubelego-tls-static

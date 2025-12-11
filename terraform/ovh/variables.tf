@@ -8,7 +8,6 @@ variable "endpoint" {
   EOT
 }
 
-
 variable "region" {
   type        = string
   description = <<-EOT
@@ -25,7 +24,6 @@ variable "zone" {
   EOT
 }
 
-
 variable "service_name" {
   type        = string
   description = <<-EOT
@@ -34,7 +32,7 @@ variable "service_name" {
 }
 
 variable "name" {
-  type = string
+  type        = string
   description = <<-EOT
     The name of the deployment.
     Used in various names.
@@ -44,11 +42,23 @@ variable "name" {
 variable "vm" {
   type = object({
     # flavor and image: see lookup_flavor_image.py
-    flavor_id: string,
-    image_id: string,
+    flavor_id : string,
+    image_id : string,
   })
-  default = null
-  nullable = true
+  default     = null
+  nullable    = true
+  description = <<-EOT
+  VM instance configuration.
+  EOT
+}
+
+variable "harbor" {
+  type = object({
+    # flavor and image: see lookup_flavor_image.py
+    url : string,
+  })
+  default     = null
+  nullable    = true
   description = <<-EOT
   VM instance configuration.
   EOT
