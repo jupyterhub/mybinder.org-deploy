@@ -217,7 +217,7 @@ binderhub:
           <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
 
     KubernetesBuildExecutor:
-      build_image: quay.io/jupyterhub/repo2docker:2025.08.0-83.g2456a4d
+      build_image: quay.io/jupyterhub/repo2docker:2025.12.0
 
   extraConfig:
     # Send Events to StackDriver on Google Cloud
