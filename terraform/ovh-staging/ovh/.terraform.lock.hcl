@@ -1,11 +1,11 @@
-# This file is maintained automatically by "terraform init".
+# This file is maintained automatically by "tofu init".
 # Manual edits may be lost in future updates.
 
-provider "registry.terraform.io/goharbor/harbor" {
+provider "registry.opentofu.org/goharbor/harbor" {
   version     = "3.11.2"
   constraints = "3.11.2"
   hashes = [
-    "h1:xrkyj3mTMJJTNRQBAkKrj6MxO26/ZqxFT9qFIsiXnMU=",
+    "h1:bWhMf7dZQVK9OFe+fjl2PzTLT27rz/7NZJMiKK00b5A=",
     "zh:11541d4d34740e1266635e9358feb88c10e28a9ca165334343f6a9877d76415a",
     "zh:81954bf1f3ca1d2a825af1039ebad0b98cff7f9cd4759481c26958c64e0c4ee3",
     "zh:83f64ba231d3c568fbf7d7db07b8ee79a9d5ea300804bf6fc86034ca0be2f511",
@@ -24,11 +24,11 @@ provider "registry.terraform.io/goharbor/harbor" {
   ]
 }
 
-provider "registry.terraform.io/ovh/ovh" {
+provider "registry.opentofu.org/ovh/ovh" {
   version     = "2.8.0"
   constraints = "2.8.0"
   hashes = [
-    "h1:8SrZVeAm9bai2v8L2G/3d3dCuv4/iDrk1+Ur4tIPFUo=",
+    "h1:zbnPL6Y4k/dY1X2u2JVyTid5hXwcCIfz65VC9UbkDrE=",
     "zh:026d6590900388d8845af9d99a438e3cd90fcf50ef5f95a24b9dc646f391aa5c",
     "zh:1375f3947bbdfe19c05abf0dbc0cb6f319d79976909282a269f4eb934a67fb18",
     "zh:13cc7536d366935cb31b89f2b714c5ac8eac7e825e6897477fe56caebb04992e",
