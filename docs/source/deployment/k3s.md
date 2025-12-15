@@ -24,7 +24,45 @@ but we have a slightly more opinionated list.
 
 1. Allow clock synchronization based on [Network Time Protocol (NTP)](https://en.wikipedia.org/wiki/Network_Time_Protocol).
 
-   The VM provider might have its own NTP server and envorce the use of it.
+   The VM provider might have its own NTP server and enforce the use of it.
+
+### Node setup on OVH
+
+We have [OpenTofu] configuration for deploying a new instance on OVH.
+Because we deploy harbor ourselves, this as 3 components:
+
+Steps:
+
+1. create ssh key in `secrets/${cluster_name}.key` (see below for commands)
+2. create a secret file like `secrets/ovh-creds.sh` with credentials for the OVH API
+3. create an s3 bucket for terraform state in the OVH project
+4. create an s3 user with access to the bucket
+5. create a `.tfvars` file like `bids-ovh.tfvars` with the variables for the deployment.
+   `service_name` is the UUID of the cloud project.
+6. set `TF_CLI_ARGS=-var-file=my-file.tfvars`
+
+Now you're ready to start deploying to OVH.
+It's a little tricky because we can't deploy all at once, we have to:
+
+1. deploy the vm and s3 bucket for the registry:
+   ```
+   tofu apply -target ovh_cloud_project_instance.vm
+   tofu apply -target=ovh_cloud_project_user_s3_policy.harbor
+   ```
+2. setup k3s (follow steps below)
+3. configure harbor s3 secrets in `secrets/config/${name}.yaml` from
+   ```
+   tofu output registry_s3
+   ```
+4. deploy via helm (`CI=1 python3 deploy.py ${name}`). This is safe to do for `KUBECONFIG` clusters.
+5. finally complete the terraform deployment configuring harbor with Tofu:
+   ```
+   tofu apply
+   ```
+6. Add registry account secrets into `secrets/config/${name}.yaml`
+   ```
+   tofu output -show-sensitive
+   ```
 
 ## Installing `k3s`
 
