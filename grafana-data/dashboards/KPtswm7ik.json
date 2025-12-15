@@ -437,16 +437,17 @@
     "canEdit": true
    },
    "organization": {
-    "canAdd": false,
-    "canDelete": false,
-    "canEdit": false
+    "canAdd": true,
+    "canDelete": true,
+    "canEdit": true
    }
   },
-  "canAdmin": false,
-  "canDelete": false,
-  "canEdit": false,
-  "canSave": false,
-  "canStar": false,
+  "apiVersion": "v0alpha1",
+  "canAdmin": true,
+  "canDelete": true,
+  "canEdit": true,
+  "canSave": true,
+  "canStar": true,
   "created": "2020-09-22T09:29:52Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
@@ -458,9 +459,6 @@
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
-  "publicDashboardAccessToken": "",
-  "publicDashboardEnabled": false,
-  "publicDashboardUid": "",
   "slug": "service-level-objectives",
   "type": "db",
   "updated": "2021-11-18T15:40:31Z",

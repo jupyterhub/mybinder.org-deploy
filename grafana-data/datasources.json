@@ -12,29 +12,10 @@
   "orgId": 1,
   "readOnly": false,
   "type": "prometheus",
-  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+  "typeLogoUrl": "public/plugins/prometheus/img/prometheus_logo.svg",
   "typeName": "Prometheus",
   "uid": "deanf4vbxbcaod",
   "url": "https://prometheus.2i2c.mybinder.org",
-  "user": ""
- },
- {
-  "access": "proxy",
-  "basicAuth": false,
-  "database": "",
-  "id": 7,
-  "isDefault": false,
-  "jsonData": {
-   "httpMethod": "POST"
-  },
-  "name": "curvenote",
-  "orgId": 1,
-  "readOnly": false,
-  "type": "prometheus",
-  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
-  "typeName": "Prometheus",
-  "uid": "b67087d4-25bd-41aa-8ecd-940252a85e24",
-  "url": "https://prometheus.binder.curvenote.dev",
   "user": ""
  },
  {
@@ -53,29 +34,10 @@
   "orgId": 1,
   "readOnly": false,
   "type": "prometheus",
-  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+  "typeLogoUrl": "public/plugins/prometheus/img/prometheus_logo.svg",
   "typeName": "Prometheus",
   "uid": "000000002",
   "url": "https://prometheus.gesis.mybinder.org",
-  "user": ""
- },
- {
-  "access": "proxy",
-  "basicAuth": false,
-  "database": "",
-  "id": 4,
-  "isDefault": false,
-  "jsonData": {
-   "httpMethod": "POST"
-  },
-  "name": "OVH",
-  "orgId": 1,
-  "readOnly": false,
-  "type": "prometheus",
-  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
-  "typeName": "Prometheus",
-  "uid": "000000004",
-  "url": "https://prometheus.ovh2.mybinder.org",
   "user": ""
  },
  {
@@ -89,27 +51,10 @@
   "orgId": 1,
   "readOnly": true,
   "type": "prometheus",
-  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+  "typeLogoUrl": "public/plugins/prometheus/img/prometheus_logo.svg",
   "typeName": "Prometheus",
   "uid": "000000001",
   "url": "https://prometheus.mybinder.org",
-  "user": ""
- },
- {
-  "access": "proxy",
-  "basicAuth": false,
-  "database": "",
-  "id": 10,
-  "isDefault": false,
-  "jsonData": {},
-  "name": "prometheus-1",
-  "orgId": 1,
-  "readOnly": false,
-  "type": "prometheus",
-  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
-  "typeName": "Prometheus",
-  "uid": "ceivtekinzh1cc",
-  "url": "",
   "user": ""
  }
 ]
