@@ -53,10 +53,7 @@ binderhub:
         - '--DockerEngine.extra_init_args={"timeout":1200}'
 
     LaunchQuota:
-      total_quota: 100
-
-    # DockerRegistry:
-    # token_url: "https://2lmrrh8f.gra7.container-registry.ovh.net/service/token?service=harbor-registry"
+      total_quota: 20
 
   replicas: 2
 
