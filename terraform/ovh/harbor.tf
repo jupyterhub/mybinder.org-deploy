@@ -3,7 +3,7 @@
 # load harbor credentials from harbor chart config
 # (avoids redundancy)
 locals {
-  config = yamldecode(file("${path.module}/../../config/${var.name}.yaml"))
+  config        = yamldecode(file("${path.module}/../../config/${var.name}.yaml"))
   secret_config = yamldecode(file("${path.module}/../../secrets/config/${var.name}.yaml"))
 }
 
@@ -78,7 +78,7 @@ resource "harbor_retention_policy" "builds" {
 resource "harbor_garbage_collection" "gc" {
   # run garbage collection on Sunday morning
   # try to make sure it's not run at the same time as the retention policy
-  schedule = "0 0 7 * * 0"
+  schedule        = "0 0 7 * * 0"
   delete_untagged = true
 }
 
