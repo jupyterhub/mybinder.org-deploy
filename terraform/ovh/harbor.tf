@@ -17,6 +17,7 @@ provider "harbor" {
 # these are separate for easier separation of retention policies
 resource "harbor_project" "mybinder-builds" {
   name = "mybinder-builds"
+  storage_quota = var.registry_quota_gb
 }
 
 resource "harbor_robot_account" "builder" {

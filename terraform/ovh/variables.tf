@@ -52,14 +52,10 @@ variable "vm" {
   EOT
 }
 
-variable "harbor" {
-  type = object({
-    # flavor and image: see lookup_flavor_image.py
-    url : string,
-  })
-  default     = null
-  nullable    = true
+variable "registry_quota_gb" {
+  type = number
+  default = 10000
   description = <<-EOT
-  VM instance configuration.
+  harbor registry project quota size in gigabytes
   EOT
 }
