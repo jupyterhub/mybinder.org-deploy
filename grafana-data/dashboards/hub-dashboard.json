@@ -1202,16 +1202,17 @@
     "canEdit": true
    },
    "organization": {
-    "canAdd": false,
-    "canDelete": false,
-    "canEdit": false
+    "canAdd": true,
+    "canDelete": true,
+    "canEdit": true
    }
   },
-  "canAdmin": false,
-  "canDelete": false,
-  "canEdit": false,
-  "canSave": false,
-  "canStar": false,
+  "apiVersion": "v0alpha1",
+  "canAdmin": true,
+  "canDelete": true,
+  "canEdit": true,
+  "canSave": true,
+  "canStar": true,
   "created": "2021-06-28T08:39:03Z",
   "createdBy": "Anonymous",
   "expires": "0001-01-01T00:00:00Z",
@@ -1223,9 +1224,6 @@
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
-  "publicDashboardAccessToken": "",
-  "publicDashboardEnabled": false,
-  "publicDashboardUid": "",
   "slug": "jupyterhub-dashboard",
   "type": "db",
   "updated": "2022-09-06T09:45:36Z",

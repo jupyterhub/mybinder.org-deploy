@@ -1103,16 +1103,17 @@
     "canEdit": true
    },
    "organization": {
-    "canAdd": false,
-    "canDelete": false,
-    "canEdit": false
+    "canAdd": true,
+    "canDelete": true,
+    "canEdit": true
    }
   },
-  "canAdmin": false,
-  "canDelete": false,
-  "canEdit": false,
-  "canSave": false,
-  "canStar": false,
+  "apiVersion": "v0alpha1",
+  "canAdmin": true,
+  "canDelete": true,
+  "canEdit": true,
+  "canSave": true,
+  "canStar": true,
   "created": "2022-06-17T07:52:58Z",
   "createdBy": "Anonymous",
   "expires": "0001-01-01T00:00:00Z",
@@ -1124,9 +1125,6 @@
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
-  "publicDashboardAccessToken": "",
-  "publicDashboardEnabled": false,
-  "publicDashboardUid": "",
   "slug": "nfs-and-support-information",
   "type": "db",
   "updated": "2022-06-17T08:01:22Z",

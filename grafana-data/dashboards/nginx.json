@@ -1474,16 +1474,17 @@
     "canEdit": true
    },
    "organization": {
-    "canAdd": false,
-    "canDelete": false,
-    "canEdit": false
+    "canAdd": true,
+    "canDelete": true,
+    "canEdit": true
    }
   },
-  "canAdmin": false,
-  "canDelete": false,
-  "canEdit": false,
-  "canSave": false,
-  "canStar": false,
+  "apiVersion": "v0alpha1",
+  "canAdmin": true,
+  "canDelete": true,
+  "canEdit": true,
+  "canSave": true,
+  "canStar": true,
   "created": "2020-11-02T08:31:21Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
@@ -1495,9 +1496,6 @@
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
-  "publicDashboardAccessToken": "",
-  "publicDashboardEnabled": false,
-  "publicDashboardUid": "",
   "slug": "nginx-ingress-controller",
   "type": "db",
   "updated": "2020-11-02T08:33:16Z",
