@@ -21,8 +21,9 @@ resource "harbor_project" "mybinder-builds" {
 }
 
 resource "harbor_robot_account" "builder" {
-  name        = "builder"
-  description = "BinderHub builder: push new user images"
+  for_each    = var.registry_users
+  name        = "${each.key}-builder"
+  description = "BinderHub builder for ${each.key}: push new user images"
   level       = "project"
   permissions {
     access {
@@ -39,8 +40,9 @@ resource "harbor_robot_account" "builder" {
 }
 
 resource "harbor_robot_account" "user-puller" {
-  name        = "user-puller"
-  description = "Pull access to user images"
+  for_each    = var.registry_users
+  name        = "${each.key}-user-puller"
+  description = "Pull access to user images for ${each.key}"
   level       = "project"
   permissions {
     access {
@@ -84,32 +86,15 @@ resource "harbor_garbage_collection" "gc" {
 }
 
 # registry outputs
-
-# output "registry_culler_name" {
-#   value     = harbor_user.culler.username
-#   sensitive = true
-# }
-
-# output "registry_culler_password" {
-#   value     = harbor_user.culler.password
-#   sensitive = true
-# }
-
-output "registry_builder_name" {
-  value     = harbor_robot_account.builder.full_name
-  sensitive = true
-}
-
-output "registry_builder_token" {
-  value     = harbor_robot_account.builder.secret
-  sensitive = true
-}
-
-output "registry_user_puller_name" {
-  value     = harbor_robot_account.user-puller.full_name
-  sensitive = true
-}
-output "registry_user_puller_token" {
-  value     = harbor_robot_account.user-puller.secret
+output "registry_creds" {
+  value = merge(
+    {
+      for name in var.registry_users:
+        harbor_robot_account.builder[name].full_name => harbor_robot_account.builder[name].secret
+    }, {
+      for name in var.registry_users:
+        harbor_robot_account.user-puller[name].full_name => harbor_robot_account.user-puller[name].secret
+    },
+  )
   sensitive = true
 }

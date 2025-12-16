@@ -59,3 +59,13 @@ variable "registry_quota_gb" {
   harbor registry project quota size in gigabytes
   EOT
 }
+
+variable "registry_users" {
+  type = set(string)
+  default = []
+  description = <<-EOT
+  harbor registry users
+  One builder (push/pull) and one puller (pull-only) robot account
+  will be created for each name listed here.
+  EOT
+}
