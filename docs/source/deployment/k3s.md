@@ -28,12 +28,15 @@ but we have a slightly more opinionated list.
 
 ### Node setup on OVH
 
-We have [OpenTofu] configuration for deploying a new instance on OVH.
-Because we deploy harbor ourselves, this as 3 components:
+We have [OpenTofu](http://opentofu.org) configuration for deploying a new registry on OVH.
+The cheapest way to deploy a node on OVH is via [VPS](https://www.ovhcloud.com/en/vps/).
+A VPS-6 (24 core, 92GB RAM) with backups and an extra disk costs $90/month, whereas a _smaller_ b3-64 (16 core, 64GB) costs over $300.
+
+Because we deploy harbor ourselves in the helm chart, tofu needs to be split in steps.
 
 Steps:
 
-1. create ssh key in `secrets/${cluster_name}.key` (see below for commands)
+1. setup k3s on the VM (steps below)
 2. create a secret file like `secrets/ovh-creds.sh` with credentials for the OVH API
 3. create an s3 bucket for terraform state in the OVH project
 4. create an s3 user with access to the bucket
@@ -44,25 +47,40 @@ Steps:
 Now you're ready to start deploying to OVH.
 It's a little tricky because we can't deploy all at once, we have to:
 
-1. deploy the vm and s3 bucket for the registry:
+1. deploy the s3 bucket for the registry:
    ```
-   tofu apply -target ovh_cloud_project_instance.vm
    tofu apply -target=ovh_cloud_project_user_s3_policy.harbor
    ```
-2. setup k3s (follow steps below)
-3. configure harbor s3 secrets in `secrets/config/${name}.yaml` from
+2. configure harbor s3 secrets in `secrets/config/${name}.yaml` from
    ```
    tofu output registry_s3
    ```
-4. deploy via helm (`CI=1 python3 deploy.py ${name}`). This is safe to do for `KUBECONFIG` clusters.
-5. finally complete the terraform deployment configuring harbor with Tofu:
+3. deploy via helm (`CI=1 python3 deploy.py ${name}`). (This is safe to do for `KUBECONFIG` clusters).
+4. finally complete the terraform deployment configuring harbor with Tofu:
    ```
    tofu apply
    ```
-6. Add registry account secrets into `secrets/config/${name}.yaml`
+5. Add registry account secrets into `secrets/config/${name}.yaml` from
    ```
    tofu output -show-sensitive
    ```
+
+### Attaching a disk
+
+If the VM has an additional disk for dind, it needs to be partitioned and mounted, [following this guide](https://help.ovhcloud.com/csm/en-gb-vps-config-additional-disk?id=kb_article_view&sysparm_article=KB0047555).
+We made only the following changes:
+
+- use `mkfs.xfs` instead of `mkfs.ext4`
+
+This disk is where dind state should live, so set:
+
+```yaml
+binderhub:
+  dind:
+    hostLibDir: /mnt/disk/dind
+```
+
+to put dind state on the external disk.
 
 ## Installing `k3s`
 

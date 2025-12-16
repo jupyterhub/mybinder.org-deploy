@@ -69,6 +69,7 @@ binderhub:
     GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
 
   dind:
+    hostLibDir: /mnt/disk/dind
     resources:
       requests:
         cpu: "4"
