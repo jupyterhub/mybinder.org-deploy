@@ -124,6 +124,19 @@ prometheus:
         - hosts:
             - prometheus.bids.mybinder.org
           secretName: kubelego-tls-prometheus
+  extraScrapeConfigs: |
+    - job_name: 'harbor-exporter'
+      static_configs:
+        - targets:
+            - bids-ovh-harbor-exporter:8001
+    - job_name: 'harbor-registry'
+      static_configs:
+        - targets:
+            - bids-ovh-harbor-registry:8001
+    - job_name: 'harbor-jobservice'
+      static_configs:
+        - targets:
+            - bids-ovh-harbor-jobservice:8001
 
 ingress-nginx:
   controller:
