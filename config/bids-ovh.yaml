@@ -3,28 +3,17 @@ projectName: bids-ovh
 harbor:
   enabled: true
   expose:
-    type: ingress
     ingress:
-      className: nginx
-      annotations:
-        kubernetes.io/tls-acme: "true"
       hosts:
         core: registry.bids.mybinder.org
-    tls:
-      certSource: secret
-      secret:
-        secretName: tls-harbor
   persistence:
     imageChartStorage:
-      type: s3
       s3:
         # https://github.com/goharbor/harbor-helm/blob/v1.18.1/values.yaml#L225
         region: us-east-va
         bucket: mybinder-registry-bids-ovh
         regionendpoint: https://s3.us-east-va.io.cloud.ovh.us
         rootdirectory: harbor
-  trivy:
-    enabled: false
 
 cryptnono:
   detectors:
