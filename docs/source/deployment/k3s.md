@@ -136,6 +136,32 @@ The short version is:
 
 2. Change the `server` field under `clusters.0.cluster` from `https://127.0.0.1:6443` to `https://<public-ip>:6443`.
 
+You should now be able to:
+
+```
+KUBECONFIG=$PWD/secrets/$name-kubeconfig.yml kubectl get node
+```
+
+## Enable k3s auto-upgrade
+
+k3s supports automatic upgrades.
+We follow [the documented auto-upgrade setup](https://docs.k3s.io/upgrades/automated).
+First, enable the automatic upgrade components:
+
+```bash
+export KUBECONFIG=$PWD/secrets/$name-kubeconfig.yml
+kubectl apply -f https://github.com/rancher/system-upgrade-controller/releases/latest/download/crd.yaml -f https://github.com/rancher/system-upgrade-controller/releases/latest/download/system-upgrade-controller.yaml
+```
+
+Next, apply our auto-upgrade configuration:
+
+```
+kubectl apply -f config/k3s/k3s-upgrade-plan.yaml
+```
+
+Now k3s should self-update every Sunday.
+If there's a problem, we'll see it Monday.
+
 ## Create a new ssh key for mybinder team members
 
 For easy access to this node for mybinder team members, we create and check-in an ssh key as

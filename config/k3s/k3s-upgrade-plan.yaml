@@ -1,0 +1,20 @@
+# Upgrade plan
+apiVersion: upgrade.cattle.io/v1
+kind: Plan
+metadata:
+  name: upgrade-plan
+  namespace: system-upgrade
+spec:
+  concurrency: 1
+  cordon: false
+  serviceAccountName: system-upgrade
+  upgrade:
+    image: rancher/k3s-upgrade
+  channel: https://update.k3s.io/v1-release/channels/stable
+  # Sunday 0-2/UTC is our current lowest traffic time
+  window:
+    days:
+      - sunday
+    startTime: 00:00
+    endTime: 02:00
+    timeZone: UTC
