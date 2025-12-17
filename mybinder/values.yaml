@@ -69,10 +69,17 @@ harbor:
       certSource: secret
       secret:
         secretName: tls-harbor
+  metrics:
+    enabled: true
+
   persistence:
     imageChartStorage:
       type: s3
       s3: {}
+  core:
+    serviceAnnotations:
+      prometheus.io/port: "8001"
+      prometheus.io/scrape: "true"
   trivy:
     enabled: false
 
