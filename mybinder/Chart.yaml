@@ -62,3 +62,8 @@ dependencies:
     version: 4.2.0
     repository: https://openebs.github.io/dynamic-localpv-provisioner
     condition: localpv-provisioner.enabled
+
+  - name: harbor
+    version: 1.18.1
+    repository: https://helm.goharbor.io
+    condition: harbor.enabled

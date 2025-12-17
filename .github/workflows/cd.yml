@@ -232,6 +232,11 @@ jobs:
             helm_version: ""
             experimental: false
 
+          - federation_member: bids-ovh
+            chartpress_args: ""
+            helm_version: ""
+            experimental: false
+
     # These permissions are needed to interact with GitHub's OIDC Token endpoint.
     permissions:
       id-token: write

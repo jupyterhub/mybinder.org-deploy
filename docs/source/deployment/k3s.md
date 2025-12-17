@@ -24,7 +24,63 @@ but we have a slightly more opinionated list.
 
 1. Allow clock synchronization based on [Network Time Protocol (NTP)](https://en.wikipedia.org/wiki/Network_Time_Protocol).
 
-   The VM provider might have its own NTP server and envorce the use of it.
+   The VM provider might have its own NTP server and enforce the use of it.
+
+### Node setup on OVH
+
+We have [OpenTofu](http://opentofu.org) configuration for deploying a new registry on OVH.
+The cheapest way to deploy a node on OVH is via [VPS](https://www.ovhcloud.com/en/vps/).
+A VPS-6 (24 core, 92GB RAM) with backups and an extra disk costs $90/month, whereas a _smaller_ b3-64 (16 core, 64GB) costs over $300.
+
+Because we deploy harbor ourselves in the helm chart, tofu needs to be split in steps.
+
+Steps:
+
+1. setup k3s on the VM (steps below)
+2. create a secret file like `secrets/ovh-creds.sh` with credentials for the OVH API
+3. create an s3 bucket for terraform state in the OVH project
+4. create an s3 user with access to the bucket
+5. create a `.tfvars` file like `bids-ovh.tfvars` with the variables for the deployment.
+   `service_name` is the UUID of the cloud project.
+6. set `TF_CLI_ARGS=-var-file=my-file.tfvars`
+
+Now you're ready to start deploying to OVH.
+It's a little tricky because we can't deploy all at once, we have to:
+
+1. deploy the s3 bucket for the registry:
+   ```
+   tofu apply -target=ovh_cloud_project_user_s3_policy.harbor
+   ```
+2. configure harbor s3 secrets in `secrets/config/${name}.yaml` from
+   ```
+   tofu output registry_s3
+   ```
+3. deploy via helm (`CI=1 python3 deploy.py ${name}`). (This is safe to do for `KUBECONFIG` clusters).
+4. finally complete the terraform deployment configuring harbor with Tofu:
+   ```
+   tofu apply
+   ```
+5. Add registry account secrets into `secrets/config/${name}.yaml` from
+   ```
+   tofu output -show-sensitive
+   ```
+
+### Attaching a disk
+
+If the VM has an additional disk for dind, it needs to be partitioned and mounted, [following this guide](https://help.ovhcloud.com/csm/en-gb-vps-config-additional-disk?id=kb_article_view&sysparm_article=KB0047555).
+We made only the following changes:
+
+- use `mkfs.xfs` instead of `mkfs.ext4`
+
+This disk is where dind state should live, so set:
+
+```yaml
+binderhub:
+  dind:
+    hostLibDir: /mnt/disk/dind
+```
+
+to put dind state on the external disk.
 
 ## Installing `k3s`
 
@@ -79,6 +135,32 @@ The short version is:
    Note the `.yml` here - everything else is `.yaml`!
 
 2. Change the `server` field under `clusters.0.cluster` from `https://127.0.0.1:6443` to `https://<public-ip>:6443`.
+
+You should now be able to:
+
+```
+KUBECONFIG=$PWD/secrets/$name-kubeconfig.yml kubectl get node
+```
+
+## Enable k3s auto-upgrade
+
+k3s supports automatic upgrades.
+We follow [the documented auto-upgrade setup](https://docs.k3s.io/upgrades/automated).
+First, enable the automatic upgrade components:
+
+```bash
+export KUBECONFIG=$PWD/secrets/$name-kubeconfig.yml
+kubectl apply -f https://github.com/rancher/system-upgrade-controller/releases/latest/download/crd.yaml -f https://github.com/rancher/system-upgrade-controller/releases/latest/download/system-upgrade-controller.yaml
+```
+
+Next, apply our auto-upgrade configuration:
+
+```
+kubectl apply -f config/k3s/k3s-upgrade-plan.yaml
+```
+
+Now k3s should self-update every Sunday.
+If there's a problem, we'll see it Monday.
 
 ## Create a new ssh key for mybinder team members
 
