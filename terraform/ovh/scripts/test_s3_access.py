@@ -4,6 +4,8 @@ but not more.
 
 Should have full access to the registry bucket,
 but no access to other buckets or bucket creation.
+
+# TODO: make the region a parameter
 """
 
 import time

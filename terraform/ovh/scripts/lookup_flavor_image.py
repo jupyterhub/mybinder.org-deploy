@@ -4,6 +4,8 @@ Get UUID for OVH flavor and image
 OVH provider needs UUID,
 but UI only presents name.
 Need to use the API to produce a mapping.
+
+# TODO: make the region a parameter
 """
 
 from operator import itemgetter
