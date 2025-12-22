@@ -4,7 +4,7 @@
 #
 #    pip-compile
 #
-cachetools==6.2.3
+cachetools==6.2.4
     # via google-auth
 certifi==2025.11.12
     # via
