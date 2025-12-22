@@ -22,7 +22,7 @@ exceptiongroup==1.3.1
     # via pytest
 execnet==2.1.2
     # via pytest-xdist
-google-auth==2.43.0
+google-auth==2.45.0
     # via kubernetes
 idna==3.11
     # via requests
