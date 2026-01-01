@@ -53,7 +53,7 @@ def check_call(cmd, dry_run):
     Print a command if dry_run is true, otherwise run it with subprocess.check_call
     """
     if dry_run:
-        print("dry-run:", " ".join(cmd))
+        print("dry-run:", " ".join([str(c) for c in cmd]))
     else:
         subprocess.check_call(cmd)
 
@@ -116,7 +116,7 @@ def setup_auth_kubeconfig(release, cluster, dry_run=False):
     print(f"Setup authentication for namespace {release} with kubeconfig")
 
     kubeconfig = ABSOLUTE_HERE / "secrets" / f"{release}-kubeconfig.yml"
-    os.environ["KUBECONFIG"] = kubeconfig
+    os.environ["KUBECONFIG"] = str(kubeconfig)
     print(f"Current KUBECONFIG='{kubeconfig}'")
 
 
