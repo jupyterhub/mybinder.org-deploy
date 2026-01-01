@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import argparse
-import glob
 import json
 import os
 import re
 import subprocess
 import sys
+from pathlib import Path
 
 # Color codes for colored output!
 if os.environ.get("TERM"):
@@ -17,8 +17,8 @@ else:
     # no term, no colors
     BOLD = RED = GREEN = NC = ""
 
-HERE = os.path.dirname(__file__)
-ABSOLUTE_HERE = os.path.dirname(os.path.realpath(__file__))
+HERE = Path(__file__).parent
+ABSOLUTE_HERE = HERE.resolve()
 
 GCP_PROJECTS = {
     "prod": "binderhub-288415",
@@ -77,7 +77,7 @@ def setup_auth_azure(cluster, dry_run=False):
     """
     # Read in auth info. Note that we assume a file name convention of
     # secrets/{CLUSTER_NAME}-auth-key-prod.json
-    azure_file = os.path.join(ABSOLUTE_HERE, "secrets", f"{cluster}-auth-key-prod.json")
+    azure_file = ABSOLUTE_HERE / "secrets" / f"{cluster}-auth-key-prod.json"
     with open(azure_file) as stream:
         azure = json.load(stream)
 
@@ -115,7 +115,7 @@ def setup_auth_kubeconfig(release, cluster, dry_run=False):
     """
     print(f"Setup authentication for namespace {release} with kubeconfig")
 
-    kubeconfig = os.path.join(ABSOLUTE_HERE, "secrets", f"{release}-kubeconfig.yml")
+    kubeconfig = ABSOLUTE_HERE / "secrets" / f"{release}-kubeconfig.yml"
     os.environ["KUBECONFIG"] = kubeconfig
     print(f"Current KUBECONFIG='{kubeconfig}'")
 
@@ -206,14 +206,15 @@ def update_networkbans(cluster, release, name, dry_run=False):
 def get_config_files(release, config_dir="config"):
     """Return the list of config files to load"""
     # common config files
-    config_files = sorted(glob.glob(os.path.join(config_dir, "common", "*.yaml")))
-    config_files.extend(
-        sorted(glob.glob(os.path.join("secrets", config_dir, "common", "*.yaml")))
-    )
+    config_dir = Path(config_dir)
+    secret_config_dir = Path("secrets") / config_dir
+
+    config_files = sorted(config_dir.glob("common/*.yaml"))
+    config_files.extend(sorted(secret_config_dir.glob("common/*.yaml")))
     # release-specific config files
-    for config_dir in (config_dir, os.path.join("secrets", config_dir)):
-        f = os.path.join(config_dir, release + ".yaml")
-        if os.path.exists(f):
+    for config_dir in (config_dir, secret_config_dir):
+        f = config_dir / f"{release}.yaml"
+        if f.exists():
             config_files.append(f)
     return config_files
 
