@@ -198,7 +198,7 @@ def update_networkbans(cluster, release, name, dry_run=False):
         sys.executable,
         "secrets/generate-banned-ips.py",
         f"--namespace={name}",
-        "--allowed-ips-file=secrets/allowed_ips.txt",
+        "--allowed-cidrs-file=secrets/allowed_ips.txt",
     ]
     check_call(ban_command, dry_run)
 
