@@ -15,15 +15,6 @@ harbor:
         regionendpoint: https://s3.us-east-va.io.cloud.ovh.us
         rootdirectory: harbor
 
-cryptnono:
-  detectors:
-    monero:
-      enabled: false
-    execwhacker:
-      containerdHostPath: /run/k3s/containerd/containerd.sock
-    tcpflowkiller:
-      containerdHostPath: /run/k3s/containerd/containerd.sock
-
 binderhub:
   config:
     BinderHub:
