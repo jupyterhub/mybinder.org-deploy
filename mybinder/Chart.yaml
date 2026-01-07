@@ -25,7 +25,7 @@ dependencies:
   # Source code:   https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus
   # App changelog: https://github.com/prometheus/prometheus/blob/main/CHANGELOG.md
   - name: prometheus
-    version: "28.0.0"
+    version: "28.2.0"
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
 
