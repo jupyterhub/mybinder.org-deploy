@@ -82,7 +82,115 @@
   "panels": [
    {
     "datasource": {
-     "uid": "$cluster"
+     "type": "prometheus",
+     "uid": "000000001"
+    },
+    "description": "",
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "fixedColor": "green",
+       "mode": "fixed"
+      },
+      "custom": {
+       "axisPlacement": "auto",
+       "fillOpacity": 70,
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "insertNulls": false,
+       "lineWidth": 0,
+       "spanNulls": false
+      },
+      "mappings": [
+       {
+        "options": {
+         "0": {
+          "color": "red",
+          "index": 1,
+          "text": "Unhealthy"
+         },
+         "1": {
+          "color": "blue",
+          "index": 0,
+          "text": "OK"
+         }
+        },
+        "type": "value"
+       }
+      ],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "red",
+         "value": 0
+        }
+       ]
+      },
+      "unit": "bool_yes_no"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 12,
+     "w": 24,
+     "x": 0,
+     "y": 0
+    },
+    "id": 36,
+    "options": {
+     "alignValue": "left",
+     "legend": {
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "mergeValues": true,
+     "rowHeight": 0.9,
+     "showValue": "never",
+     "tooltip": {
+      "hideZeros": false,
+      "mode": "single",
+      "sort": "none"
+     }
+    },
+    "pluginVersion": "12.3.1",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000001"
+      },
+      "exemplar": true,
+      "expr": "max(federation_health) by (member)",
+      "hide": false,
+      "interval": "",
+      "legendFormat": "{{ member }}",
+      "refId": "A"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000001"
+      },
+      "exemplar": true,
+      "expr": "max(federation_health_check) by (member, check)",
+      "hide": false,
+      "interval": "",
+      "legendFormat": "{{ member }} {{ check }}",
+      "refId": "B"
+     }
+    ],
+    "title": "Federation health",
+    "type": "state-timeline"
+   },
+   {
+    "datasource": {
+     "type": "datasource",
+     "uid": "-- Mixed --"
     },
     "fieldConfig": {
      "defaults": {
@@ -93,12 +201,12 @@
        "axisBorderShow": false,
        "axisCenteredZero": false,
        "axisColorMode": "text",
-       "axisLabel": "Launches",
+       "axisLabel": "",
        "axisPlacement": "auto",
        "barAlignment": 0,
        "barWidthFactor": 0.6,
        "drawStyle": "line",
-       "fillOpacity": 0,
+       "fillOpacity": 10,
        "gradientMode": "none",
        "hideFrom": {
         "legend": false,
@@ -117,15 +225,13 @@
        "spanNulls": true,
        "stacking": {
         "group": "A",
-        "mode": "none"
+        "mode": "normal"
        },
        "thresholdsStyle": {
         "mode": "off"
        }
       },
-      "links": [],
       "mappings": [],
-      "min": 0,
       "thresholds": {
        "mode": "absolute",
        "steps": [
@@ -138,39 +244,17 @@
          "value": 80
         }
        ]
-      },
-      "unit": "none"
-     },
-     "overrides": [
-      {
-       "matcher": {
-        "id": "byRegexp",
-        "options": "/.*build.*/"
-       },
-       "properties": [
-        {
-         "id": "custom.fillOpacity",
-         "value": 30
-        },
-        {
-         "id": "unit",
-         "value": "short"
-        },
-        {
-         "id": "custom.axisLabel",
-         "value": "Builds"
-        }
-       ]
       }
-     ]
+     },
+     "overrides": []
     },
     "gridPos": {
-     "h": 7,
-     "w": 12,
+     "h": 8,
+     "w": 8,
      "x": 0,
-     "y": 0
+     "y": 12
     },
-    "id": 17,
+    "id": 38,
     "options": {
      "legend": {
       "calcs": [],
@@ -184,45 +268,170 @@
       "sort": "none"
      }
     },
-    "pluginVersion": "12.3.0",
+    "pluginVersion": "12.3.1",
     "targets": [
      {
       "datasource": {
-       "uid": "$cluster"
+       "type": "prometheus",
+       "uid": "000000002"
       },
-      "expr": "sum(increase(binderhub_build_time_seconds_count[10m]))",
-      "format": "time_series",
-      "intervalFactor": 2,
-      "legendFormat": "build-watch-requests (10m)",
+      "editorMode": "code",
+      "expr": "sum(kube_pod_status_phase{pod=~\"build-.*\", pod!~\"build-cache-prune-.*\", kubernetes_namespace!=\"jhub-ns\"})",
+      "instant": false,
+      "legendFormat": "GESIS",
+      "range": true,
       "refId": "A"
      },
      {
       "datasource": {
-       "uid": "$cluster"
+       "type": "prometheus",
+       "uid": "deanf4vbxbcaod"
       },
-      "expr": "sum(increase(binderhub_launch_time_seconds_count[10m]))",
-      "format": "time_series",
-      "intervalFactor": 2,
-      "legendFormat": "Total new launches (10m)",
+      "editorMode": "code",
+      "expr": "sum(kube_pod_status_phase{pod=~\"build-.*\", pod!~\"build-cache-prune-.*\", kubernetes_namespace!=\"jhub-ns\"})",
+      "hide": false,
+      "legendFormat": "2i2c",
+      "range": true,
       "refId": "B"
      },
      {
       "datasource": {
-       "uid": "$cluster"
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
       },
-      "expr": "sum(kube_pod_status_phase{pod=~\"build-.*\", kubernetes_namespace!=\"jhub-ns\"})",
-      "legendFormat": "Running builds",
+      "editorMode": "code",
+      "expr": "sum(kube_pod_status_phase{pod=~\"build-.*\", pod!~\"build-cache-prune-.*\", kubernetes_namespace!=\"jhub-ns\"})",
+      "hide": false,
+      "legendFormat": "BIDS",
+      "range": true,
       "refId": "C"
+     }
+    ],
+    "title": "Builds over time",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "datasource",
+     "uid": "-- Mixed --"
+    },
+    "description": "Total new launches (10m)",
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "axisBorderShow": false,
+       "axisCenteredZero": false,
+       "axisColorMode": "text",
+       "axisLabel": "",
+       "axisPlacement": "auto",
+       "barAlignment": 0,
+       "barWidthFactor": 0.6,
+       "drawStyle": "line",
+       "fillOpacity": 10,
+       "gradientMode": "none",
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "insertNulls": false,
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "scaleDistribution": {
+        "type": "linear"
+       },
+       "showPoints": "never",
+       "showValues": false,
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "normal"
+       },
+       "thresholdsStyle": {
+        "mode": "off"
+       }
+      },
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": 0
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 8,
+     "x": 8,
+     "y": 12
+    },
+    "id": 37,
+    "options": {
+     "legend": {
+      "calcs": [],
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "hideZeros": false,
+      "mode": "multi",
+      "sort": "none"
+     }
+    },
+    "pluginVersion": "12.3.1",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000002"
+      },
+      "editorMode": "code",
+      "expr": "sum(increase(binderhub_launch_time_seconds_count[10m]))",
+      "instant": false,
+      "legendFormat": "GESIS",
+      "range": true,
+      "refId": "A"
      },
      {
       "datasource": {
-       "uid": "$cluster"
+       "type": "prometheus",
+       "uid": "deanf4vbxbcaod"
       },
-      "expr": "",
-      "refId": "D"
+      "editorMode": "code",
+      "expr": "sum(increase(binderhub_launch_time_seconds_count[10m]))",
+      "hide": false,
+      "legendFormat": "2i2c",
+      "range": true,
+      "refId": "B"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "sum(increase(binderhub_launch_time_seconds_count[10m]))",
+      "hide": false,
+      "legendFormat": "BIDS",
+      "range": true,
+      "refId": "C"
      }
     ],
-    "title": "Total launches/builds",
+    "title": "Launches over time",
     "type": "timeseries"
    },
    {
@@ -290,10 +499,10 @@
      "overrides": []
     },
     "gridPos": {
-     "h": 9,
-     "w": 12,
-     "x": 12,
-     "y": 0
+     "h": 8,
+     "w": 8,
+     "x": 16,
+     "y": 12
     },
     "id": 31,
     "options": {
@@ -309,7 +518,7 @@
       "sort": "none"
      }
     },
-    "pluginVersion": "12.3.0",
+    "pluginVersion": "12.3.1",
     "targets": [
      {
       "datasource": {
@@ -319,7 +528,7 @@
       "editorMode": "code",
       "expr": "sum(kube_pod_status_phase{pod=~\"^jupyter-.*\", phase=\"Running\"})",
       "hide": false,
-      "legendFormat": "2i2c",
+      "legendFormat": "GESIS",
       "range": true,
       "refId": "A"
      },
@@ -332,19 +541,19 @@
       "expr": "sum(kube_pod_status_phase{pod=~\"^jupyter-.*\", phase=\"Running\"})",
       "hide": false,
       "interval": "",
-      "legendFormat": "GESIS",
+      "legendFormat": "2i2c",
       "range": true,
       "refId": "B"
      },
      {
       "datasource": {
        "type": "prometheus",
-       "uid": "000000001"
+       "uid": "df7dz1gqa20aoc"
       },
       "editorMode": "code",
       "expr": "sum(kube_pod_status_phase{pod=~\"^jupyter-.*\", phase=\"Running\"})",
       "hide": false,
-      "legendFormat": "__auto",
+      "legendFormat": "BIDS",
       "range": true,
       "refId": "C"
      }
@@ -354,9 +563,9 @@
    },
    {
     "datasource": {
-     "uid": "$cluster"
+     "type": "datasource",
+     "uid": "-- Mixed --"
     },
-    "description": "The number of currently outstanding requests waiting on a launch or build.\n\nThis does correspond to the number of launches, but has little relationship to the number of builds because many requests could be waiting on the same build, and some builds may no longer have anyone waiting for them.",
     "fieldConfig": {
      "defaults": {
       "color": {
@@ -366,12 +575,12 @@
        "axisBorderShow": false,
        "axisCenteredZero": false,
        "axisColorMode": "text",
-       "axisLabel": "Launches",
+       "axisLabel": "",
        "axisPlacement": "auto",
        "barAlignment": 0,
        "barWidthFactor": 0.6,
        "drawStyle": "line",
-       "fillOpacity": 0,
+       "fillOpacity": 10,
        "gradientMode": "none",
        "hideFrom": {
         "legend": false,
@@ -390,16 +599,13 @@
        "spanNulls": true,
        "stacking": {
         "group": "A",
-        "mode": "none"
+        "mode": "normal"
        },
        "thresholdsStyle": {
         "mode": "off"
        }
       },
-      "decimals": 0,
-      "links": [],
       "mappings": [],
-      "min": 0,
       "thresholds": {
        "mode": "absolute",
        "steps": [
@@ -412,39 +618,17 @@
          "value": 80
         }
        ]
-      },
-      "unit": "none"
-     },
-     "overrides": [
-      {
-       "matcher": {
-        "id": "byRegexp",
-        "options": "/.*builds.*/"
-       },
-       "properties": [
-        {
-         "id": "custom.fillOpacity",
-         "value": 30
-        },
-        {
-         "id": "unit",
-         "value": "short"
-        },
-        {
-         "id": "custom.axisLabel",
-         "value": "Builds"
-        }
-       ]
       }
-     ]
+     },
+     "overrides": []
     },
     "gridPos": {
-     "h": 7,
-     "w": 12,
+     "h": 8,
+     "w": 8,
      "x": 0,
-     "y": 7
+     "y": 20
     },
-    "id": 34,
+    "id": 39,
     "options": {
      "legend": {
       "calcs": [],
@@ -458,139 +642,526 @@
       "sort": "none"
      }
     },
-    "pluginVersion": "12.3.0",
+    "pluginVersion": "12.3.1",
     "targets": [
      {
       "datasource": {
-       "uid": "$cluster"
+       "type": "prometheus",
+       "uid": "000000002"
       },
+      "editorMode": "code",
       "expr": "sum(binderhub_inprogress_builds)",
-      "interval": "",
-      "intervalFactor": 1,
-      "legendFormat": "builds",
+      "legendFormat": "GESIS",
+      "range": true,
       "refId": "A"
      },
      {
       "datasource": {
-       "uid": "$cluster"
+       "type": "prometheus",
+       "uid": "deanf4vbxbcaod"
       },
-      "expr": "sum(binderhub_inprogress_launches)",
+      "editorMode": "code",
+      "expr": "sum(binderhub_inprogress_builds)",
+      "hide": false,
       "instant": false,
-      "interval": "",
-      "intervalFactor": 1,
-      "legendFormat": "launches",
+      "legendFormat": "2i2c",
+      "range": true,
       "refId": "B"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "sum(binderhub_inprogress_builds)",
+      "hide": false,
+      "legendFormat": "BIDS",
+      "range": true,
+      "refId": "C"
      }
     ],
-    "title": "Requests waiting on launches/builds",
+    "title": "Requests waiting build",
     "type": "timeseries"
    },
    {
     "datasource": {
-     "type": "prometheus",
-     "uid": "000000001"
+     "type": "datasource",
+     "uid": "-- Mixed --"
     },
-    "description": "",
     "fieldConfig": {
      "defaults": {
       "color": {
-       "fixedColor": "green",
-       "mode": "fixed"
+       "mode": "palette-classic"
       },
       "custom": {
+       "axisBorderShow": false,
+       "axisCenteredZero": false,
+       "axisColorMode": "text",
+       "axisLabel": "",
        "axisPlacement": "auto",
-       "fillOpacity": 70,
+       "barAlignment": 0,
+       "barWidthFactor": 0.6,
+       "drawStyle": "line",
+       "fillOpacity": 10,
+       "gradientMode": "none",
        "hideFrom": {
         "legend": false,
         "tooltip": false,
         "viz": false
        },
        "insertNulls": false,
-       "lineWidth": 0,
-       "spanNulls": false
-      },
-      "mappings": [
-       {
-        "options": {
-         "0": {
-          "color": "red",
-          "index": 1,
-          "text": "Unhealthy"
-         },
-         "1": {
-          "color": "blue",
-          "index": 0,
-          "text": "OK"
-         }
-        },
-        "type": "value"
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "scaleDistribution": {
+        "type": "linear"
+       },
+       "showPoints": "never",
+       "showValues": false,
+       "spanNulls": true,
+       "stacking": {
+        "group": "A",
+        "mode": "normal"
+       },
+       "thresholdsStyle": {
+        "mode": "off"
        }
-      ],
+      },
+      "mappings": [],
       "thresholds": {
        "mode": "absolute",
        "steps": [
         {
-         "color": "red",
+         "color": "green",
          "value": 0
+        },
+        {
+         "color": "red",
+         "value": 80
         }
        ]
-      },
-      "unit": "bool_yes_no"
+      }
      },
      "overrides": []
     },
     "gridPos": {
-     "h": 12,
-     "w": 12,
-     "x": 12,
-     "y": 9
+     "h": 8,
+     "w": 8,
+     "x": 8,
+     "y": 20
     },
-    "id": 36,
+    "id": 40,
     "options": {
-     "alignValue": "left",
      "legend": {
+      "calcs": [],
       "displayMode": "list",
       "placement": "bottom",
       "showLegend": true
      },
-     "mergeValues": true,
-     "rowHeight": 0.9,
-     "showValue": "never",
      "tooltip": {
       "hideZeros": false,
       "mode": "single",
       "sort": "none"
      }
     },
-    "pluginVersion": "12.3.0",
+    "pluginVersion": "12.3.1",
     "targets": [
      {
       "datasource": {
        "type": "prometheus",
-       "uid": "000000001"
+       "uid": "000000002"
       },
-      "exemplar": true,
-      "expr": "max(federation_health) by (member)",
-      "hide": false,
-      "interval": "",
-      "legendFormat": "{{ member }}",
+      "editorMode": "code",
+      "expr": "sum(binderhub_inprogress_launches)",
+      "instant": false,
+      "legendFormat": "GESIS",
+      "range": true,
       "refId": "A"
      },
      {
       "datasource": {
        "type": "prometheus",
-       "uid": "000000001"
+       "uid": "deanf4vbxbcaod"
       },
-      "exemplar": true,
-      "expr": "max(federation_health_check) by (member, check)",
+      "editorMode": "code",
+      "expr": "sum(binderhub_inprogress_launches)",
       "hide": false,
-      "interval": "",
-      "legendFormat": "{{ member }} {{ check }}",
+      "legendFormat": "2i2c",
+      "range": true,
       "refId": "B"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "sum(binderhub_inprogress_launches)",
+      "hide": false,
+      "legendFormat": "BIDS",
+      "range": true,
+      "refId": "C"
      }
     ],
-    "title": "Federation health",
-    "type": "state-timeline"
+    "title": "Requests waiting launch",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "datasource",
+     "uid": "-- Mixed --"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "scaleDistribution": {
+        "type": "linear"
+       }
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 24,
+     "x": 0,
+     "y": 28
+    },
+    "id": 25,
+    "options": {
+     "calculate": true,
+     "calculation": {
+      "xBuckets": {
+       "mode": "size",
+       "value": "30m"
+      },
+      "yBuckets": {
+       "mode": "size",
+       "value": "5"
+      }
+     },
+     "cellGap": 2,
+     "cellValues": {},
+     "color": {
+      "exponent": 0.5,
+      "fill": "#b4ff00",
+      "min": 0,
+      "mode": "scheme",
+      "reverse": false,
+      "scale": "exponential",
+      "scheme": "Spectral",
+      "steps": 128
+     },
+     "exemplars": {
+      "color": "rgba(255,0,255,0.7)"
+     },
+     "filterValues": {
+      "le": 1e-09
+     },
+     "legend": {
+      "show": true
+     },
+     "rowsFrame": {
+      "layout": "auto"
+     },
+     "showValue": "never",
+     "tooltip": {
+      "mode": "single",
+      "showColorScale": false,
+      "yHistogram": true
+     },
+     "yAxis": {
+      "axisPlacement": "left",
+      "max": "120",
+      "reverse": false,
+      "unit": "m"
+     }
+    },
+    "pluginVersion": "12.3.1",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000002"
+      },
+      "editorMode": "code",
+      "expr": "(time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60",
+      "instant": false,
+      "legendFormat": "__auto",
+      "queryType": "randomWalk",
+      "range": true,
+      "refId": "A"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "deanf4vbxbcaod"
+      },
+      "editorMode": "code",
+      "expr": "(time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60",
+      "hide": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "B"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "(time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60",
+      "hide": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "C"
+     }
+    ],
+    "title": "Distribution of user pod age over time (max 2 hr)",
+    "type": "heatmap"
+   },
+   {
+    "datasource": {
+     "type": "datasource",
+     "uid": "-- Mixed --"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "scaleDistribution": {
+        "type": "linear"
+       }
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 24,
+     "x": 0,
+     "y": 36
+    },
+    "id": 24,
+    "options": {
+     "calculate": true,
+     "calculation": {
+      "xBuckets": {
+       "mode": "size",
+       "value": "30m"
+      },
+      "yBuckets": {
+       "mode": "size",
+       "value": "60"
+      }
+     },
+     "cellGap": 2,
+     "cellValues": {},
+     "color": {
+      "exponent": 0.5,
+      "fill": "#b4ff00",
+      "mode": "scheme",
+      "reverse": false,
+      "scale": "exponential",
+      "scheme": "Spectral",
+      "steps": 128
+     },
+     "exemplars": {
+      "color": "rgba(255,0,255,0.7)"
+     },
+     "filterValues": {
+      "le": 1e-09
+     },
+     "legend": {
+      "show": true
+     },
+     "rowsFrame": {
+      "layout": "auto"
+     },
+     "showValue": "never",
+     "tooltip": {
+      "mode": "single",
+      "showColorScale": false,
+      "yHistogram": true
+     },
+     "yAxis": {
+      "axisPlacement": "left",
+      "reverse": false,
+      "unit": "m"
+     }
+    },
+    "pluginVersion": "12.3.1",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000002"
+      },
+      "editorMode": "code",
+      "expr": "(time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60",
+      "format": "time_series",
+      "interval": "30m",
+      "intervalFactor": 2,
+      "legendFormat": "GESIS",
+      "range": true,
+      "refId": "A"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "deanf4vbxbcaod"
+      },
+      "editorMode": "code",
+      "expr": "(time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60",
+      "hide": false,
+      "legendFormat": "2i2c",
+      "range": true,
+      "refId": "B"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "(time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60",
+      "hide": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "C"
+     }
+    ],
+    "title": "Distribution of user pod age over time (stale pods)",
+    "type": "heatmap"
+   },
+   {
+    "datasource": {
+     "type": "datasource",
+     "uid": "-- Mixed --"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "custom": {
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "scaleDistribution": {
+        "type": "linear"
+       }
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 24,
+     "x": 0,
+     "y": 44
+    },
+    "id": 29,
+    "options": {
+     "calculate": true,
+     "calculation": {
+      "xBuckets": {
+       "mode": "size",
+       "value": "10m"
+      },
+      "yBuckets": {
+       "mode": "size",
+       "value": "5"
+      }
+     },
+     "cellGap": 2,
+     "cellValues": {},
+     "color": {
+      "exponent": 0.5,
+      "fill": "#b4ff00",
+      "min": 0,
+      "mode": "scheme",
+      "reverse": false,
+      "scale": "exponential",
+      "scheme": "Spectral",
+      "steps": 128
+     },
+     "exemplars": {
+      "color": "rgba(255,0,255,0.7)"
+     },
+     "filterValues": {
+      "le": 1e-09
+     },
+     "legend": {
+      "show": true
+     },
+     "rowsFrame": {
+      "layout": "auto"
+     },
+     "showValue": "never",
+     "tooltip": {
+      "mode": "single",
+      "showColorScale": false,
+      "yHistogram": true
+     },
+     "yAxis": {
+      "axisPlacement": "left",
+      "reverse": false,
+      "unit": "m"
+     }
+    },
+    "pluginVersion": "12.3.1",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "000000002"
+      },
+      "editorMode": "code",
+      "expr": "(time() - kube_pod_created{pod=~\"^build-.*\", pod!~\"build-cache-prune-.*\"}) / 60",
+      "format": "time_series",
+      "interval": "",
+      "intervalFactor": 2,
+      "legendFormat": "",
+      "range": true,
+      "refId": "A"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "deanf4vbxbcaod"
+      },
+      "editorMode": "code",
+      "expr": "(time() - kube_pod_created{pod=~\"^build-.*\", pod!~\"build-cache-prune-.*\"}) / 60",
+      "hide": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "B"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "(time() - kube_pod_created{pod=~\"^build-.*\", pod!~\"build-cache-prune-.*\"}) / 60",
+      "hide": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "C"
+     }
+    ],
+    "title": "Distribution of build pod age over time",
+    "type": "heatmap"
    },
    {
     "datasource": {
@@ -722,10 +1293,10 @@
      ]
     },
     "gridPos": {
-     "h": 7,
-     "w": 12,
+     "h": 8,
+     "w": 24,
      "x": 0,
-     "y": 14
+     "y": 53
     },
     "id": 16,
     "options": {
@@ -741,7 +1312,7 @@
       "sort": "none"
      }
     },
-    "pluginVersion": "12.3.0",
+    "pluginVersion": "12.3.1",
     "targets": [
      {
       "datasource": {
@@ -792,6 +1363,153 @@
      }
     ],
     "title": "Launch/Build Success % [10m]",
+    "type": "timeseries"
+   },
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "${cluster}"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "axisBorderShow": false,
+       "axisCenteredZero": false,
+       "axisColorMode": "text",
+       "axisLabel": "",
+       "axisPlacement": "auto",
+       "barAlignment": 0,
+       "barWidthFactor": 0.6,
+       "drawStyle": "line",
+       "fillOpacity": 0,
+       "gradientMode": "none",
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "insertNulls": false,
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "scaleDistribution": {
+        "type": "linear"
+       },
+       "showPoints": "auto",
+       "showValues": false,
+       "spanNulls": false,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       },
+       "thresholdsStyle": {
+        "mode": "off"
+       }
+      },
+      "links": [],
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": 0
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 12,
+     "x": 0,
+     "y": 59
+    },
+    "id": 27,
+    "options": {
+     "alertThreshold": true,
+     "legend": {
+      "calcs": [],
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "hideZeros": false,
+      "mode": "single",
+      "sort": "none"
+     }
+    },
+    "pluginVersion": "12.3.1",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "${cluster}"
+      },
+      "expr": "histogram_quantile(0.1, sum(rate(binderhub_build_time_seconds_bucket[2m])) without (instance, provider, repo)) > 0",
+      "format": "time_series",
+      "hide": true,
+      "intervalFactor": 2,
+      "legendFormat": "10th-percentile-{{status}}",
+      "refId": "A"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "${cluster}"
+      },
+      "expr": "histogram_quantile(0.25, sum(rate(binderhub_build_time_seconds_bucket[2m])) without (instance, provider, repo)) > 0",
+      "format": "time_series",
+      "hide": true,
+      "intervalFactor": 2,
+      "legendFormat": "25th-percentile-{{status}}",
+      "refId": "B"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "${cluster}"
+      },
+      "expr": "histogram_quantile(0.5, sum(rate(binderhub_build_time_seconds_bucket[2m])) without (instance, provider, repo)) > 0",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "50th-percentile-{{status}}",
+      "refId": "C"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "${cluster}"
+      },
+      "expr": "histogram_quantile(0.75, sum(rate(binderhub_build_time_seconds_bucket[2m])) without (instance, provider, repo)) > 0",
+      "format": "time_series",
+      "hide": true,
+      "intervalFactor": 2,
+      "legendFormat": "75th-percentile-{{status}}",
+      "refId": "D"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "${cluster}"
+      },
+      "expr": "histogram_quantile(0.9, sum(rate(binderhub_build_time_seconds_bucket[2m])) without (instance, provider, repo)) > 0",
+      "format": "time_series",
+      "intervalFactor": 2,
+      "legendFormat": "90th-percentile-{{status}}",
+      "refId": "E"
+     }
+    ],
+    "title": "Build time percentiles",
     "type": "timeseries"
    },
    {
@@ -1011,8 +1729,8 @@
     "gridPos": {
      "h": 8,
      "w": 12,
-     "x": 0,
-     "y": 21
+     "x": 12,
+     "y": 59
     },
     "id": 28,
     "options": {
@@ -1028,7 +1746,7 @@
       "sort": "none"
      }
     },
-    "pluginVersion": "12.3.0",
+    "pluginVersion": "12.3.1",
     "targets": [
      {
       "datasource": {
@@ -1100,624 +1818,18 @@
     ],
     "title": "Launch time percentiles",
     "type": "timeseries"
-   },
-   {
-    "datasource": {
-     "uid": "$cluster"
-    },
-    "fieldConfig": {
-     "defaults": {
-      "color": {
-       "mode": "palette-classic"
-      },
-      "custom": {
-       "axisBorderShow": false,
-       "axisCenteredZero": false,
-       "axisColorMode": "text",
-       "axisLabel": "",
-       "axisPlacement": "auto",
-       "barAlignment": 0,
-       "barWidthFactor": 0.6,
-       "drawStyle": "line",
-       "fillOpacity": 0,
-       "gradientMode": "none",
-       "hideFrom": {
-        "legend": false,
-        "tooltip": false,
-        "viz": false
-       },
-       "insertNulls": false,
-       "lineInterpolation": "linear",
-       "lineWidth": 1,
-       "pointSize": 5,
-       "scaleDistribution": {
-        "type": "linear"
-       },
-       "showPoints": "never",
-       "showValues": false,
-       "spanNulls": true,
-       "stacking": {
-        "group": "A",
-        "mode": "none"
-       },
-       "thresholdsStyle": {
-        "mode": "line"
-       }
-      },
-      "links": [],
-      "mappings": [],
-      "max": 1,
-      "min": 0,
-      "thresholds": {
-       "mode": "absolute",
-       "steps": [
-        {
-         "color": "orange",
-         "value": 0
-        },
-        {
-         "color": "transparent",
-         "value": 0.4
-        }
-       ]
-      },
-      "unit": "percentunit"
-     },
-     "overrides": [
-      {
-       "matcher": {
-        "id": "byName",
-        "options": "Total Usage"
-       },
-       "properties": [
-        {
-         "id": "color",
-         "value": {
-          "fixedColor": "rgb(124, 124, 124)",
-          "mode": "fixed"
-         }
-        },
-        {
-         "id": "custom.lineWidth",
-         "value": 5
-        }
-       ]
-      }
-     ]
-    },
-    "gridPos": {
-     "h": 10,
-     "w": 12,
-     "x": 12,
-     "y": 21
-    },
-    "id": 26,
-    "options": {
-     "legend": {
-      "calcs": [],
-      "displayMode": "list",
-      "placement": "bottom",
-      "showLegend": true
-     },
-     "tooltip": {
-      "hideZeros": false,
-      "mode": "multi",
-      "sort": "none"
-     }
-    },
-    "pluginVersion": "12.3.0",
-    "targets": [
-     {
-      "datasource": {
-       "uid": "$cluster"
-      },
-      "expr": "sum(kube_pod_container_resource_requests_memory_bytes and on (pod) (kube_pod_container_status_ready)) / sum(kube_node_status_allocatable_memory_bytes) ",
-      "format": "time_series",
-      "intervalFactor": 2,
-      "legendFormat": "Total Usage",
-      "refId": "A"
-     },
-     {
-      "datasource": {
-       "uid": "$cluster"
-      },
-      "expr": "sum(kube_pod_container_resource_requests_memory_bytes and on (pod) (kube_pod_container_status_ready)) by (node) / sum(kube_node_status_allocatable_memory_bytes) by (node)",
-      "format": "time_series",
-      "intervalFactor": 2,
-      "legendFormat": "{{node}}",
-      "refId": "B"
-     }
-    ],
-    "title": "Cluster utilization",
-    "type": "timeseries"
-   },
-   {
-    "datasource": {
-     "uid": "$cluster"
-    },
-    "fieldConfig": {
-     "defaults": {
-      "links": []
-     },
-     "overrides": []
-    },
-    "gridPos": {
-     "h": 7,
-     "w": 12,
-     "x": 0,
-     "y": 29
-    },
-    "id": 27,
-    "options": {
-     "alertThreshold": true
-    },
-    "pluginVersion": "10.2.2",
-    "targets": [
-     {
-      "datasource": {
-       "uid": "$cluster"
-      },
-      "expr": "histogram_quantile(0.1, sum(rate(binderhub_build_time_seconds_bucket[2m])) without (instance, provider, repo)) > 0",
-      "format": "time_series",
-      "hide": true,
-      "intervalFactor": 2,
-      "legendFormat": "10th-percentile-{{status}}",
-      "refId": "A"
-     },
-     {
-      "datasource": {
-       "uid": "$cluster"
-      },
-      "expr": "histogram_quantile(0.25, sum(rate(binderhub_build_time_seconds_bucket[2m])) without (instance, provider, repo)) > 0",
-      "format": "time_series",
-      "hide": true,
-      "intervalFactor": 2,
-      "legendFormat": "25th-percentile-{{status}}",
-      "refId": "B"
-     },
-     {
-      "datasource": {
-       "uid": "$cluster"
-      },
-      "expr": "histogram_quantile(0.5, sum(rate(binderhub_build_time_seconds_bucket[2m])) without (instance, provider, repo)) > 0",
-      "format": "time_series",
-      "intervalFactor": 2,
-      "legendFormat": "50th-percentile-{{status}}",
-      "refId": "C"
-     },
-     {
-      "datasource": {
-       "uid": "$cluster"
-      },
-      "expr": "histogram_quantile(0.75, sum(rate(binderhub_build_time_seconds_bucket[2m])) without (instance, provider, repo)) > 0",
-      "format": "time_series",
-      "hide": true,
-      "intervalFactor": 2,
-      "legendFormat": "75th-percentile-{{status}}",
-      "refId": "D"
-     },
-     {
-      "datasource": {
-       "uid": "$cluster"
-      },
-      "expr": "histogram_quantile(0.9, sum(rate(binderhub_build_time_seconds_bucket[2m])) without (instance, provider, repo)) > 0",
-      "format": "time_series",
-      "intervalFactor": 2,
-      "legendFormat": "90th-percentile-{{status}}",
-      "refId": "E"
-     }
-    ],
-    "title": "Build time percentiles",
-    "type": "timeseries"
-   },
-   {
-    "datasource": {
-     "type": "datasource",
-     "uid": "-- Mixed --"
-    },
-    "description": "Cordoned nodes on each cluster",
-    "fieldConfig": {
-     "defaults": {
-      "color": {
-       "mode": "palette-classic"
-      },
-      "custom": {
-       "axisBorderShow": false,
-       "axisCenteredZero": false,
-       "axisColorMode": "text",
-       "axisLabel": "",
-       "axisPlacement": "auto",
-       "barAlignment": 0,
-       "drawStyle": "line",
-       "fillOpacity": 10,
-       "gradientMode": "none",
-       "hideFrom": {
-        "legend": false,
-        "tooltip": false,
-        "viz": false
-       },
-       "insertNulls": false,
-       "lineInterpolation": "linear",
-       "lineWidth": 1,
-       "pointSize": 5,
-       "scaleDistribution": {
-        "type": "linear"
-       },
-       "showPoints": "never",
-       "spanNulls": true,
-       "stacking": {
-        "group": "A",
-        "mode": "none"
-       },
-       "thresholdsStyle": {
-        "mode": "off"
-       }
-      },
-      "links": [],
-      "mappings": [],
-      "thresholds": {
-       "mode": "absolute",
-       "steps": [
-        {
-         "color": "green"
-        },
-        {
-         "color": "red",
-         "value": 80
-        }
-       ]
-      },
-      "unit": "short"
-     },
-     "overrides": []
-    },
-    "gridPos": {
-     "h": 8,
-     "w": 12,
-     "x": 12,
-     "y": 31
-    },
-    "id": 33,
-    "options": {
-     "legend": {
-      "calcs": [],
-      "displayMode": "list",
-      "placement": "bottom",
-      "showLegend": true
-     },
-     "tooltip": {
-      "mode": "single",
-      "sort": "none"
-     }
-    },
-    "pluginVersion": "8.2.1",
-    "repeat": "cluster",
-    "repeatDirection": "v",
-    "targets": [
-     {
-      "datasource": {
-       "uid": "$cluster"
-      },
-      "expr": "sum(kube_node_spec_unschedulable)",
-      "legendFormat": "GKE",
-      "refId": "A"
-     },
-     {
-      "datasource": {
-       "type": "prometheus",
-       "uid": "000000002"
-      },
-      "expr": "sum(kube_node_spec_unschedulable)",
-      "legendFormat": "GESIS",
-      "refId": "B"
-     },
-     {
-      "datasource": {
-       "type": "prometheus",
-       "uid": "000000004"
-      },
-      "editorMode": "code",
-      "expr": "sum(kube_node_spec_unschedulable)",
-      "legendFormat": "OVH",
-      "range": true,
-      "refId": "C"
-     },
-     {
-      "datasource": {
-       "type": "prometheus",
-       "uid": "b67087d4-25bd-41aa-8ecd-940252a85e24"
-      },
-      "editorMode": "code",
-      "expr": "sum(kube_node_spec_unschedulable)",
-      "hide": false,
-      "legendFormat": "curvenote",
-      "range": true,
-      "refId": "D"
-     }
-    ],
-    "title": "Cordoned nodes",
-    "type": "timeseries"
-   },
-   {
-    "datasource": {
-     "uid": "$cluster"
-    },
-    "fieldConfig": {
-     "defaults": {
-      "custom": {
-       "hideFrom": {
-        "legend": false,
-        "tooltip": false,
-        "viz": false
-       },
-       "scaleDistribution": {
-        "type": "linear"
-       }
-      }
-     },
-     "overrides": []
-    },
-    "gridPos": {
-     "h": 6,
-     "w": 12,
-     "x": 0,
-     "y": 36
-    },
-    "id": 29,
-    "options": {
-     "calculate": true,
-     "calculation": {
-      "xBuckets": {
-       "mode": "size",
-       "value": "10m"
-      },
-      "yBuckets": {
-       "mode": "size",
-       "value": "5"
-      }
-     },
-     "cellGap": 2,
-     "cellValues": {},
-     "color": {
-      "exponent": 0.5,
-      "fill": "#b4ff00",
-      "min": 0,
-      "mode": "scheme",
-      "reverse": false,
-      "scale": "exponential",
-      "scheme": "Spectral",
-      "steps": 128
-     },
-     "exemplars": {
-      "color": "rgba(255,0,255,0.7)"
-     },
-     "filterValues": {
-      "le": 1e-09
-     },
-     "legend": {
-      "show": true
-     },
-     "rowsFrame": {
-      "layout": "auto"
-     },
-     "showValue": "never",
-     "tooltip": {
-      "show": true,
-      "yHistogram": true
-     },
-     "yAxis": {
-      "axisPlacement": "left",
-      "reverse": false,
-      "unit": "m"
-     }
-    },
-    "pluginVersion": "10.2.2",
-    "targets": [
-     {
-      "datasource": {
-       "uid": "$cluster"
-      },
-      "expr": "(time() - kube_pod_created{pod=~\"^build-.*\"}) / 60",
-      "format": "time_series",
-      "interval": "",
-      "intervalFactor": 2,
-      "legendFormat": "",
-      "refId": "A"
-     }
-    ],
-    "title": "Distribution of build pod age over time",
-    "type": "heatmap"
-   },
-   {
-    "datasource": {
-     "uid": "$cluster"
-    },
-    "fieldConfig": {
-     "defaults": {
-      "custom": {
-       "hideFrom": {
-        "legend": false,
-        "tooltip": false,
-        "viz": false
-       },
-       "scaleDistribution": {
-        "type": "linear"
-       }
-      }
-     },
-     "overrides": []
-    },
-    "gridPos": {
-     "h": 6,
-     "w": 12,
-     "x": 12,
-     "y": 39
-    },
-    "id": 25,
-    "options": {
-     "calculate": true,
-     "calculation": {
-      "xBuckets": {
-       "mode": "size",
-       "value": "30m"
-      },
-      "yBuckets": {
-       "mode": "size",
-       "value": "5"
-      }
-     },
-     "cellGap": 2,
-     "cellValues": {},
-     "color": {
-      "exponent": 0.5,
-      "fill": "#b4ff00",
-      "min": 0,
-      "mode": "scheme",
-      "reverse": false,
-      "scale": "exponential",
-      "scheme": "Spectral",
-      "steps": 128
-     },
-     "exemplars": {
-      "color": "rgba(255,0,255,0.7)"
-     },
-     "filterValues": {
-      "le": 1e-09
-     },
-     "legend": {
-      "show": true
-     },
-     "rowsFrame": {
-      "layout": "auto"
-     },
-     "showValue": "never",
-     "tooltip": {
-      "show": true,
-      "yHistogram": true
-     },
-     "yAxis": {
-      "axisPlacement": "left",
-      "max": "120",
-      "reverse": false,
-      "unit": "m"
-     }
-    },
-    "pluginVersion": "10.2.2",
-    "targets": [
-     {
-      "datasource": {
-       "uid": "$cluster"
-      },
-      "expr": "(time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60",
-      "format": "time_series",
-      "interval": "30m",
-      "intervalFactor": 2,
-      "refId": "A"
-     }
-    ],
-    "title": "Distribution of user pod age over time (max 2 hr)",
-    "type": "heatmap"
-   },
-   {
-    "datasource": {
-     "uid": "$cluster"
-    },
-    "fieldConfig": {
-     "defaults": {
-      "custom": {
-       "hideFrom": {
-        "legend": false,
-        "tooltip": false,
-        "viz": false
-       },
-       "scaleDistribution": {
-        "type": "linear"
-       }
-      }
-     },
-     "overrides": []
-    },
-    "gridPos": {
-     "h": 6,
-     "w": 12,
-     "x": 12,
-     "y": 45
-    },
-    "id": 24,
-    "options": {
-     "calculate": true,
-     "calculation": {
-      "xBuckets": {
-       "mode": "size",
-       "value": "30m"
-      },
-      "yBuckets": {
-       "mode": "size",
-       "value": "60"
-      }
-     },
-     "cellGap": 2,
-     "cellValues": {},
-     "color": {
-      "exponent": 0.5,
-      "fill": "#b4ff00",
-      "mode": "scheme",
-      "reverse": false,
-      "scale": "exponential",
-      "scheme": "Spectral",
-      "steps": 128
-     },
-     "exemplars": {
-      "color": "rgba(255,0,255,0.7)"
-     },
-     "filterValues": {
-      "le": 1e-09
-     },
-     "legend": {
-      "show": true
-     },
-     "rowsFrame": {
-      "layout": "auto"
-     },
-     "showValue": "never",
-     "tooltip": {
-      "show": true,
-      "yHistogram": true
-     },
-     "yAxis": {
-      "axisPlacement": "left",
-      "reverse": false,
-      "unit": "m"
-     }
-    },
-    "pluginVersion": "10.2.2",
-    "targets": [
-     {
-      "datasource": {
-       "uid": "$cluster"
-      },
-      "expr": "(time() - kube_pod_created{pod=~\"^jupyter.*\"}) / 60",
-      "format": "time_series",
-      "interval": "30m",
-      "intervalFactor": 2,
-      "refId": "A"
-     }
-    ],
-    "title": "Distribution of user pod age over time (stale pods)",
-    "type": "heatmap"
    }
   ],
   "preload": false,
-  "refresh": "",
+  "refresh": "5m",
   "schemaVersion": 42,
   "tags": [],
   "templating": {
    "list": [
     {
      "current": {
-      "tags": [],
       "text": "prometheus",
-      "value": "prometheus"
+      "value": "000000001"
      },
      "includeAll": false,
      "label": "Cluster",
@@ -1731,35 +1843,35 @@
    ]
   },
   "time": {
-   "from": "now-3h",
+   "from": "now-24h",
    "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "1. Overview",
   "uid": "3SpLQinmk",
-  "version": 31,
+  "version": 52,
   "weekStart": ""
  },
  "meta": {
   "annotationsPermissions": {
    "dashboard": {
-    "canAdd": true,
-    "canDelete": true,
-    "canEdit": true
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
    },
    "organization": {
-    "canAdd": true,
-    "canDelete": true,
-    "canEdit": true
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
    }
   },
   "apiVersion": "v0alpha1",
-  "canAdmin": true,
-  "canDelete": true,
-  "canEdit": true,
-  "canSave": true,
-  "canStar": true,
+  "canAdmin": false,
+  "canDelete": false,
+  "canEdit": false,
+  "canSave": false,
+  "canStar": false,
   "created": "2020-09-22T09:29:52Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
@@ -1769,14 +1881,13 @@
   "folderUrl": "",
   "hasAcl": false,
   "isFolder": false,
-  "isStarred": true,
   "provisioned": false,
   "provisionedExternalId": "",
   "slug": "1-overview",
   "type": "db",
-  "updated": "2025-12-11T14:58:31Z",
+  "updated": "2026-01-08T09:40:40Z",
   "updatedBy": "admin",
   "url": "/d/3SpLQinmk/1-overview",
-  "version": 31
+  "version": 52
  }
 }
