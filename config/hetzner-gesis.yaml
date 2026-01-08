@@ -17,15 +17,6 @@ registry:
     hosts:
       - registry.gesis.mybinder.org
 
-cryptnono:
-  detectors:
-    monero:
-      enabled: false
-    execwhacker:
-      containerdHostPath: /run/k3s/containerd/containerd.sock
-    tcpflowkiller:
-      containerdHostPath: /run/k3s/containerd/containerd.sock
-
 binderhub:
   config:
     BinderHub:
