@@ -61,8 +61,12 @@
     "fieldConfig": {
      "defaults": {
       "custom": {
+       "align": "auto",
        "cellOptions": {
         "type": "auto"
+       },
+       "footer": {
+        "reducers": []
        },
        "inspect": false
       },
@@ -74,7 +78,7 @@
        "steps": [
         {
          "color": "green",
-         "value": null
+         "value": 0
         },
         {
          "color": "red",
@@ -96,7 +100,7 @@
          "value": "Time"
         },
         {
-         "id": "custom.hidden",
+         "id": "custom.hideFrom.viz",
          "value": true
         },
         {
@@ -134,17 +138,9 @@
     "id": 2,
     "options": {
      "cellHeight": "sm",
-     "footer": {
-      "countRows": false,
-      "fields": "",
-      "reducer": [
-       "sum"
-      ],
-      "show": false
-     },
      "showHeader": true
     },
-    "pluginVersion": "11.4.0",
+    "pluginVersion": "12.3.0",
     "targets": [
      {
       "datasource": {
@@ -193,6 +189,7 @@
         "type": "linear"
        },
        "showPoints": "never",
+       "showValues": false,
        "spanNulls": false,
        "stacking": {
         "group": "A",
@@ -209,7 +206,7 @@
        "steps": [
         {
          "color": "green",
-         "value": null
+         "value": 0
         },
         {
          "color": "red",
@@ -237,11 +234,12 @@
       "showLegend": true
      },
      "tooltip": {
+      "hideZeros": false,
       "mode": "multi",
       "sort": "none"
      }
     },
-    "pluginVersion": "11.4.0",
+    "pluginVersion": "12.3.0",
     "targets": [
      {
       "datasource": {
@@ -290,6 +288,7 @@
         "type": "linear"
        },
        "showPoints": "never",
+       "showValues": false,
        "spanNulls": false,
        "stacking": {
         "group": "A",
@@ -306,7 +305,7 @@
        "steps": [
         {
          "color": "green",
-         "value": null
+         "value": 0
         },
         {
          "color": "red",
@@ -334,11 +333,12 @@
       "showLegend": true
      },
      "tooltip": {
+      "hideZeros": false,
       "mode": "single",
       "sort": "none"
      }
     },
-    "pluginVersion": "11.4.0",
+    "pluginVersion": "12.3.0",
     "targets": [
      {
       "datasource": {
@@ -387,6 +387,7 @@
         "type": "linear"
        },
        "showPoints": "never",
+       "showValues": false,
        "spanNulls": false,
        "stacking": {
         "group": "A",
@@ -404,7 +405,7 @@
        "steps": [
         {
          "color": "green",
-         "value": null
+         "value": 0
         },
         {
          "color": "red",
@@ -473,11 +474,12 @@
       "showLegend": true
      },
      "tooltip": {
+      "hideZeros": false,
       "mode": "single",
       "sort": "none"
      }
     },
-    "pluginVersion": "11.4.0",
+    "pluginVersion": "12.3.0",
     "targets": [
      {
       "datasource": {
@@ -527,6 +529,7 @@
         "type": "linear"
        },
        "showPoints": "never",
+       "showValues": false,
        "spanNulls": false,
        "stacking": {
         "group": "A",
@@ -543,7 +546,7 @@
        "steps": [
         {
          "color": "green",
-         "value": null
+         "value": 0
         },
         {
          "color": "red",
@@ -571,11 +574,12 @@
       "showLegend": true
      },
      "tooltip": {
+      "hideZeros": false,
       "mode": "single",
       "sort": "none"
      }
     },
-    "pluginVersion": "11.4.0",
+    "pluginVersion": "12.3.0",
     "targets": [
      {
       "datasource": {
@@ -627,6 +631,7 @@
         "type": "linear"
        },
        "showPoints": "never",
+       "showValues": false,
        "spanNulls": false,
        "stacking": {
         "group": "A",
@@ -644,7 +649,7 @@
        "steps": [
         {
          "color": "green",
-         "value": null
+         "value": 0
         },
         {
          "color": "red",
@@ -733,20 +738,23 @@
       "showLegend": true
      },
      "tooltip": {
+      "hideZeros": false,
       "mode": "multi",
       "sort": "desc"
      }
     },
-    "pluginVersion": "11.4.0",
+    "pluginVersion": "12.3.0",
     "targets": [
      {
       "datasource": {
        "uid": "$cluster"
       },
-      "expr": "sum(kube_pod_status_phase{pod=~\"build-.*\", kubernetes_namespace!=\"jhub-ns\"}) by (phase)",
+      "editorMode": "code",
+      "expr": "sum(kube_pod_status_phase{pod=~\"build-.*\", pod!~\"build-cache-prune-.*\", kubernetes_namespace!=\"jhub-ns\"}) by (phase)",
       "format": "time_series",
       "intervalFactor": 2,
       "legendFormat": "{{phase}}",
+      "range": true,
       "refId": "A"
      },
      {
@@ -807,6 +815,7 @@
         "type": "linear"
        },
        "showPoints": "never",
+       "showValues": false,
        "spanNulls": false,
        "stacking": {
         "group": "A",
@@ -823,7 +832,7 @@
        "steps": [
         {
          "color": "green",
-         "value": null
+         "value": 0
         },
         {
          "color": "red",
@@ -851,11 +860,12 @@
       "showLegend": true
      },
      "tooltip": {
+      "hideZeros": false,
       "mode": "multi",
       "sort": "none"
      }
     },
-    "pluginVersion": "11.4.0",
+    "pluginVersion": "12.3.0",
     "targets": [
      {
       "datasource": {
@@ -905,6 +915,7 @@
         "type": "linear"
        },
        "showPoints": "never",
+       "showValues": false,
        "spanNulls": false,
        "stacking": {
         "group": "A",
@@ -921,7 +932,7 @@
        "steps": [
         {
          "color": "green",
-         "value": null
+         "value": 0
         },
         {
          "color": "red",
@@ -1004,11 +1015,12 @@
       "showLegend": true
      },
      "tooltip": {
+      "hideZeros": false,
       "mode": "multi",
       "sort": "none"
      }
     },
-    "pluginVersion": "11.4.0",
+    "pluginVersion": "12.3.0",
     "targets": [
      {
       "datasource": {
@@ -1077,6 +1089,7 @@
         "type": "linear"
        },
        "showPoints": "never",
+       "showValues": false,
        "spanNulls": true,
        "stacking": {
         "group": "A",
@@ -1094,7 +1107,7 @@
        "steps": [
         {
          "color": "green",
-         "value": null
+         "value": 0
         },
         {
          "color": "red",
@@ -1125,11 +1138,12 @@
       "showLegend": true
      },
      "tooltip": {
+      "hideZeros": false,
       "mode": "single",
       "sort": "none"
      }
     },
-    "pluginVersion": "11.4.0",
+    "pluginVersion": "12.3.0",
     "targets": [
      {
       "datasource": {
@@ -1182,6 +1196,7 @@
         "type": "linear"
        },
        "showPoints": "never",
+       "showValues": false,
        "spanNulls": false,
        "stacking": {
         "group": "A",
@@ -1199,7 +1214,7 @@
        "steps": [
         {
          "color": "green",
-         "value": null
+         "value": 0
         },
         {
          "color": "red",
@@ -1227,11 +1242,12 @@
       "showLegend": true
      },
      "tooltip": {
+      "hideZeros": false,
       "mode": "multi",
       "sort": "none"
      }
     },
-    "pluginVersion": "11.4.0",
+    "pluginVersion": "12.3.0",
     "targets": [
      {
       "datasource": {
@@ -1293,6 +1309,7 @@
         "type": "linear"
        },
        "showPoints": "never",
+       "showValues": false,
        "spanNulls": false,
        "stacking": {
         "group": "A",
@@ -1310,7 +1327,7 @@
        "steps": [
         {
          "color": "green",
-         "value": null
+         "value": 0
         },
         {
          "color": "red",
@@ -1381,11 +1398,12 @@
       "showLegend": true
      },
      "tooltip": {
+      "hideZeros": false,
       "mode": "multi",
       "sort": "desc"
      }
     },
-    "pluginVersion": "11.4.0",
+    "pluginVersion": "12.3.0",
     "targets": [
      {
       "datasource": {
@@ -1452,8 +1470,7 @@
        "mode": "absolute",
        "steps": [
         {
-         "color": "green",
-         "value": null
+         "color": "green"
         },
         {
          "color": "red",
@@ -1639,8 +1656,7 @@
        "mode": "absolute",
        "steps": [
         {
-         "color": "green",
-         "value": null
+         "color": "green"
         },
         {
          "color": "red",
@@ -1860,8 +1876,7 @@
        "mode": "absolute",
        "steps": [
         {
-         "color": "green",
-         "value": null
+         "color": "green"
         },
         {
          "color": "red",
@@ -2023,8 +2038,7 @@
        "mode": "absolute",
        "steps": [
         {
-         "color": "green",
-         "value": null
+         "color": "green"
         },
         {
          "color": "red",
@@ -2151,7 +2165,7 @@
   ],
   "preload": false,
   "refresh": "",
-  "schemaVersion": 40,
+  "schemaVersion": 42,
   "tags": [],
   "templating": {
    "list": [
@@ -2179,28 +2193,28 @@
   "timezone": "",
   "title": "Pod Activity",
   "uid": "fZWsQmnmz",
-  "version": 24,
+  "version": 25,
   "weekStart": ""
  },
  "meta": {
   "annotationsPermissions": {
    "dashboard": {
-    "canAdd": true,
-    "canDelete": true,
-    "canEdit": true
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
    },
    "organization": {
-    "canAdd": true,
-    "canDelete": true,
-    "canEdit": true
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
    }
   },
   "apiVersion": "v0alpha1",
-  "canAdmin": true,
-  "canDelete": true,
-  "canEdit": true,
-  "canSave": true,
-  "canStar": true,
+  "canAdmin": false,
+  "canDelete": false,
+  "canEdit": false,
+  "canSave": false,
+  "canStar": false,
   "created": "2020-09-22T09:29:52Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
@@ -2210,14 +2224,13 @@
   "folderUrl": "",
   "hasAcl": false,
   "isFolder": false,
-  "isStarred": true,
   "provisioned": false,
   "provisionedExternalId": "",
   "slug": "pod-activity",
   "type": "db",
-  "updated": "2025-01-22T08:58:25Z",
+  "updated": "2025-12-17T23:53:43Z",
   "updatedBy": "admin",
   "url": "/d/fZWsQmnmz/pod-activity",
-  "version": 24
+  "version": 25
  }
 }

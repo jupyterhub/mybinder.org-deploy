@@ -210,8 +210,10 @@
       "datasource": {
        "uid": "$cluster"
       },
-      "expr": "sum(kube_pod_status_phase{pod=~\"build-.*\", kubernetes_namespace!=\"jhub-ns\"})",
+      "editorMode": "code",
+      "expr": "sum(kube_pod_status_phase{pod=~\"build-.*\", pod!~\"build-cache-prune-.*\", kubernetes_namespace!=\"jhub-ns\"})",
       "legendFormat": "Running builds",
+      "range": true,
       "refId": "C"
      },
      {
@@ -319,7 +321,7 @@
       "editorMode": "code",
       "expr": "sum(kube_pod_status_phase{pod=~\"^jupyter-.*\", phase=\"Running\"})",
       "hide": false,
-      "legendFormat": "2i2c",
+      "legendFormat": "GESIS",
       "range": true,
       "refId": "A"
      },
@@ -332,19 +334,19 @@
       "expr": "sum(kube_pod_status_phase{pod=~\"^jupyter-.*\", phase=\"Running\"})",
       "hide": false,
       "interval": "",
-      "legendFormat": "GESIS",
+      "legendFormat": "2i2c",
       "range": true,
       "refId": "B"
      },
      {
       "datasource": {
        "type": "prometheus",
-       "uid": "000000001"
+       "uid": "df7dz1gqa20aoc"
       },
       "editorMode": "code",
       "expr": "sum(kube_pod_status_phase{pod=~\"^jupyter-.*\", phase=\"Running\"})",
       "hide": false,
-      "legendFormat": "__auto",
+      "legendFormat": "BIDS",
       "range": true,
       "refId": "C"
      }
@@ -1237,7 +1239,58 @@
     },
     "fieldConfig": {
      "defaults": {
-      "links": []
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "axisBorderShow": false,
+       "axisCenteredZero": false,
+       "axisColorMode": "text",
+       "axisLabel": "",
+       "axisPlacement": "auto",
+       "barAlignment": 0,
+       "barWidthFactor": 0.6,
+       "drawStyle": "line",
+       "fillOpacity": 0,
+       "gradientMode": "none",
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "insertNulls": false,
+       "lineInterpolation": "linear",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "scaleDistribution": {
+        "type": "linear"
+       },
+       "showPoints": "auto",
+       "showValues": false,
+       "spanNulls": false,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       },
+       "thresholdsStyle": {
+        "mode": "off"
+       }
+      },
+      "links": [],
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": 0
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      }
      },
      "overrides": []
     },
@@ -1249,9 +1302,20 @@
     },
     "id": 27,
     "options": {
-     "alertThreshold": true
+     "alertThreshold": true,
+     "legend": {
+      "calcs": [],
+      "displayMode": "list",
+      "placement": "bottom",
+      "showLegend": true
+     },
+     "tooltip": {
+      "hideZeros": false,
+      "mode": "single",
+      "sort": "none"
+     }
     },
-    "pluginVersion": "10.2.2",
+    "pluginVersion": "12.3.0",
     "targets": [
      {
       "datasource": {
@@ -1328,6 +1392,7 @@
        "axisLabel": "",
        "axisPlacement": "auto",
        "barAlignment": 0,
+       "barWidthFactor": 0.6,
        "drawStyle": "line",
        "fillOpacity": 10,
        "gradientMode": "none",
@@ -1344,6 +1409,7 @@
         "type": "linear"
        },
        "showPoints": "never",
+       "showValues": false,
        "spanNulls": true,
        "stacking": {
         "group": "A",
@@ -1359,7 +1425,8 @@
        "mode": "absolute",
        "steps": [
         {
-         "color": "green"
+         "color": "green",
+         "value": 0
         },
         {
          "color": "red",
@@ -1386,11 +1453,12 @@
       "showLegend": true
      },
      "tooltip": {
+      "hideZeros": false,
       "mode": "single",
       "sort": "none"
      }
     },
-    "pluginVersion": "8.2.1",
+    "pluginVersion": "12.3.0",
     "repeat": "cluster",
     "repeatDirection": "v",
     "targets": [
@@ -1502,7 +1570,8 @@
      },
      "showValue": "never",
      "tooltip": {
-      "show": true,
+      "mode": "single",
+      "showColorScale": false,
       "yHistogram": true
      },
      "yAxis": {
@@ -1511,17 +1580,19 @@
       "unit": "m"
      }
     },
-    "pluginVersion": "10.2.2",
+    "pluginVersion": "12.3.0",
     "targets": [
      {
       "datasource": {
        "uid": "$cluster"
       },
-      "expr": "(time() - kube_pod_created{pod=~\"^build-.*\"}) / 60",
+      "editorMode": "code",
+      "expr": "(time() - kube_pod_created{pod=~\"^build-.*\", pod!~\"build-cache-prune-.*\"}) / 60",
       "format": "time_series",
       "interval": "",
       "intervalFactor": 2,
       "legendFormat": "",
+      "range": true,
       "refId": "A"
      }
     ],
@@ -1592,7 +1663,8 @@
      },
      "showValue": "never",
      "tooltip": {
-      "show": true,
+      "mode": "single",
+      "showColorScale": false,
       "yHistogram": true
      },
      "yAxis": {
@@ -1602,7 +1674,7 @@
       "unit": "m"
      }
     },
-    "pluginVersion": "10.2.2",
+    "pluginVersion": "12.3.0",
     "targets": [
      {
       "datasource": {
@@ -1681,7 +1753,8 @@
      },
      "showValue": "never",
      "tooltip": {
-      "show": true,
+      "mode": "single",
+      "showColorScale": false,
       "yHistogram": true
      },
      "yAxis": {
@@ -1690,7 +1763,7 @@
       "unit": "m"
      }
     },
-    "pluginVersion": "10.2.2",
+    "pluginVersion": "12.3.0",
     "targets": [
      {
       "datasource": {
@@ -1738,28 +1811,28 @@
   "timezone": "",
   "title": "1. Overview",
   "uid": "3SpLQinmk",
-  "version": 31,
+  "version": 38,
   "weekStart": ""
  },
  "meta": {
   "annotationsPermissions": {
    "dashboard": {
-    "canAdd": true,
-    "canDelete": true,
-    "canEdit": true
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
    },
    "organization": {
-    "canAdd": true,
-    "canDelete": true,
-    "canEdit": true
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
    }
   },
   "apiVersion": "v0alpha1",
-  "canAdmin": true,
-  "canDelete": true,
-  "canEdit": true,
-  "canSave": true,
-  "canStar": true,
+  "canAdmin": false,
+  "canDelete": false,
+  "canEdit": false,
+  "canSave": false,
+  "canStar": false,
   "created": "2020-09-22T09:29:52Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
@@ -1769,14 +1842,13 @@
   "folderUrl": "",
   "hasAcl": false,
   "isFolder": false,
-  "isStarred": true,
   "provisioned": false,
   "provisionedExternalId": "",
   "slug": "1-overview",
   "type": "db",
-  "updated": "2025-12-11T14:58:31Z",
+  "updated": "2025-12-17T20:50:26Z",
   "updatedBy": "admin",
   "url": "/d/3SpLQinmk/1-overview",
-  "version": 31
+  "version": 38
  }
 }

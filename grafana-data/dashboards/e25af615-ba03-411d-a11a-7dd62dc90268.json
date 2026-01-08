@@ -178,22 +178,22 @@
  "meta": {
   "annotationsPermissions": {
    "dashboard": {
-    "canAdd": true,
-    "canDelete": true,
-    "canEdit": true
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
    },
    "organization": {
-    "canAdd": true,
-    "canDelete": true,
-    "canEdit": true
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
    }
   },
   "apiVersion": "v0alpha1",
-  "canAdmin": true,
-  "canDelete": true,
-  "canEdit": true,
-  "canSave": true,
-  "canStar": true,
+  "canAdmin": false,
+  "canDelete": false,
+  "canEdit": false,
+  "canSave": false,
+  "canStar": false,
   "created": "2023-12-16T14:18:12Z",
   "createdBy": "admin",
   "expires": "0001-01-01T00:00:00Z",
