@@ -21,6 +21,20 @@ cryptnono:
       enabled: true
   priorityClassName: binderhub-core
 
+# Currently we just monitor cryptnono pods to look for "action":"killed"
+k8s-log-alerter-zulip:
+  enabled: true
+  zulip:
+    site: https://jupyter.zulipchat.com
+    # bot_email:
+    # bot_key:
+    # channel:
+  rules:
+    "Cryptnono killed":
+      pod_labels:
+        app.kubernetes.io/name: cryptnono
+      regex: "\"action\":\\s*\"killed\""
+
 buildkitPruner:
   enabled: true
   # Use the same image as we use for dind
