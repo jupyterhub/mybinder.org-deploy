@@ -1,0 +1,1589 @@
+{
+ "dashboard": {
+  "annotations": {
+   "list": [
+    {
+     "builtIn": 1,
+     "datasource": {
+      "type": "grafana",
+      "uid": "-- Grafana --"
+     },
+     "enable": true,
+     "hide": true,
+     "iconColor": "rgba(0, 211, 255, 1)",
+     "name": "Annotations & Alerts",
+     "type": "dashboard"
+    }
+   ]
+  },
+  "description": "Overview Dashboard for the open-source Harbor Image Repository",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "gnetId": 19716,
+  "graphTooltip": 0,
+  "id": 30,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 0
+    },
+    "id": 8,
+    "panels": [],
+    "title": "System info",
+    "type": "row"
+   },
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "df7dz1gqa20aoc"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "thresholds"
+      },
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "blue",
+         "value": null
+        }
+       ]
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 6,
+     "w": 6,
+     "x": 0,
+     "y": 1
+    },
+    "id": 3,
+    "options": {
+     "colorMode": "background_solid",
+     "graphMode": "area",
+     "justifyMode": "auto",
+     "orientation": "auto",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "/^instance$/",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "pluginVersion": "10.1.2",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "disableTextWrap": false,
+      "editorMode": "builder",
+      "expr": "label_replace(harbor_system_info{instance=~\"$instance\", job=\"harbor-exporter\"}, \"instance\", \"$1\", \"instance\", \"(.*):9090\")",
+      "fullMetaSearch": false,
+      "includeNullMetadata": true,
+      "instant": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "A",
+      "useBackend": false
+     }
+    ],
+    "title": "Harbor instance",
+    "transformations": [
+     {
+      "id": "labelsToFields",
+      "options": {
+       "keepLabels": [
+        "instance"
+       ]
+      }
+     }
+    ],
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "df7dz1gqa20aoc"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "thresholds"
+      },
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "blue",
+         "value": null
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 6,
+     "w": 5,
+     "x": 6,
+     "y": 1
+    },
+    "id": 2,
+    "options": {
+     "colorMode": "background_solid",
+     "graphMode": "area",
+     "justifyMode": "auto",
+     "orientation": "auto",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "/^harbor_version$/",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "pluginVersion": "10.1.2",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "harbor_system_info{instance=~\"$instance\",job=\"harbor-exporter\"}",
+      "instant": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "A"
+     }
+    ],
+    "title": "Harbor version",
+    "transformations": [
+     {
+      "id": "labelsToFields",
+      "options": {
+       "keepLabels": [
+        "__name__",
+        "harbor_version",
+        "instance"
+       ]
+      }
+     }
+    ],
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "df7dz1gqa20aoc"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "thresholds"
+      },
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "blue",
+         "value": null
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 6,
+     "w": 4,
+     "x": 11,
+     "y": 1
+    },
+    "id": 4,
+    "options": {
+     "colorMode": "background_solid",
+     "graphMode": "area",
+     "justifyMode": "auto",
+     "orientation": "auto",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "/^self_registration$/",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "pluginVersion": "10.1.2",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "harbor_system_info{instance=~\"$instance\",job=\"harbor-exporter\"}",
+      "instant": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "A"
+     }
+    ],
+    "title": "Self registration",
+    "transformations": [
+     {
+      "id": "labelsToFields",
+      "options": {
+       "keepLabels": [
+        "self_registration"
+       ]
+      }
+     }
+    ],
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "df7dz1gqa20aoc"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "thresholds"
+      },
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "blue",
+         "value": null
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 6,
+     "w": 4,
+     "x": 15,
+     "y": 1
+    },
+    "id": 16,
+    "options": {
+     "colorMode": "background_solid",
+     "graphMode": "area",
+     "justifyMode": "auto",
+     "orientation": "auto",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "/^auth_mode$/",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "pluginVersion": "10.1.2",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "harbor_system_info{instance=~\"$instance\",job=\"harbor-exporter\"}",
+      "instant": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "A"
+     }
+    ],
+    "title": "Auth mode",
+    "transformations": [
+     {
+      "id": "labelsToFields",
+      "options": {
+       "keepLabels": [
+        "auth_mode"
+       ]
+      }
+     }
+    ],
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "df7dz1gqa20aoc"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "thresholds"
+      },
+      "mappings": [
+       {
+        "options": {
+         "0": {
+          "color": "red",
+          "index": 1,
+          "text": "error"
+         },
+         "1": {
+          "color": "green",
+          "index": 0,
+          "text": "ok"
+         }
+        },
+        "type": "value"
+       }
+      ],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": null
+        },
+        {
+         "color": "red",
+         "value": 80
+        }
+       ]
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 6,
+     "w": 5,
+     "x": 19,
+     "y": 1
+    },
+    "id": 1,
+    "options": {
+     "colorMode": "background_solid",
+     "graphMode": "none",
+     "justifyMode": "auto",
+     "orientation": "auto",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "pluginVersion": "10.1.2",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "harbor_health{instance=~\"$instance\",job=\"harbor-exporter\"}",
+      "instant": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "A"
+     }
+    ],
+    "title": "Health",
+    "type": "stat"
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 7
+    },
+    "id": 10,
+    "panels": [],
+    "title": "Component status",
+    "type": "row"
+   },
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "df7dz1gqa20aoc"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "thresholds"
+      },
+      "mappings": [
+       {
+        "options": {
+         "1": {
+          "color": "green",
+          "index": 0,
+          "text": "ok"
+         }
+        },
+        "type": "value"
+       }
+      ],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "red",
+         "value": null
+        },
+        {
+         "color": "green",
+         "value": 1
+        }
+       ]
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 5,
+     "w": 24,
+     "x": 0,
+     "y": 8
+    },
+    "id": 7,
+    "options": {
+     "colorMode": "background_solid",
+     "graphMode": "none",
+     "justifyMode": "auto",
+     "orientation": "auto",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "pluginVersion": "10.1.2",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "disableTextWrap": false,
+      "editorMode": "code",
+      "expr": "harbor_up{instance=~\"$instance\",job=\"harbor-exporter\"}",
+      "fullMetaSearch": false,
+      "includeNullMetadata": true,
+      "instant": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "A",
+      "useBackend": false
+     }
+    ],
+    "title": "Component status",
+    "transformations": [
+     {
+      "id": "labelsToFields",
+      "options": {
+       "keepLabels": [
+        "component"
+       ],
+       "mode": "columns",
+       "valueLabel": "component"
+      }
+     }
+    ],
+    "type": "stat"
+   },
+   {
+    "collapsed": false,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 13
+    },
+    "id": 9,
+    "panels": [],
+    "title": "Projects",
+    "type": "row"
+   },
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "df7dz1gqa20aoc"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "thresholds"
+      },
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "blue",
+         "value": null
+        }
+       ]
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 6,
+     "w": 5,
+     "x": 0,
+     "y": 14
+    },
+    "id": 6,
+    "options": {
+     "colorMode": "background_solid",
+     "graphMode": "none",
+     "justifyMode": "auto",
+     "orientation": "auto",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "pluginVersion": "10.1.2",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "sum (harbor_project_total{instance=~\"$instance\",job=\"harbor-exporter\"})",
+      "instant": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "A"
+     }
+    ],
+    "title": "Total projects",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "df7dz1gqa20aoc"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "thresholds"
+      },
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "blue",
+         "value": null
+        }
+       ]
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 6,
+     "w": 5,
+     "x": 5,
+     "y": 14
+    },
+    "id": 14,
+    "options": {
+     "colorMode": "background_solid",
+     "graphMode": "none",
+     "justifyMode": "auto",
+     "orientation": "auto",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "pluginVersion": "10.1.2",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "disableTextWrap": false,
+      "editorMode": "builder",
+      "exemplar": false,
+      "expr": "sum(changes(harbor_project_total{instance=~\"$instance\", job=\"harbor-exporter\"}[24h]))",
+      "fullMetaSearch": false,
+      "includeNullMetadata": true,
+      "instant": true,
+      "legendFormat": "__auto",
+      "range": false,
+      "refId": "A",
+      "useBackend": false
+     }
+    ],
+    "title": "New projects last 24h",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "df7dz1gqa20aoc"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "fixedColor": "blue",
+       "mode": "fixed"
+      },
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "blue",
+         "value": null
+        }
+       ]
+      }
+     },
+     "overrides": [
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "false"
+       },
+       "properties": [
+        {
+         "id": "displayName",
+         "value": "Private"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "true"
+       },
+       "properties": [
+        {
+         "id": "displayName",
+         "value": "Public"
+        }
+       ]
+      },
+      {
+       "matcher": {
+        "id": "byName",
+        "options": "sum (harbor_project_total{instance=~\"192.168.110.131:9090\",job=\"harbor-exporter\"})"
+       },
+       "properties": [
+        {
+         "id": "displayName",
+         "value": "Total"
+        }
+       ]
+      }
+     ]
+    },
+    "gridPos": {
+     "h": 6,
+     "w": 10,
+     "x": 10,
+     "y": 14
+    },
+    "id": 5,
+    "options": {
+     "colorMode": "background_solid",
+     "graphMode": "none",
+     "justifyMode": "auto",
+     "orientation": "auto",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "pluginVersion": "10.1.2",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "sum (harbor_project_total{instance=~\"$instance\",job=\"harbor-exporter\"})",
+      "hide": false,
+      "instant": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "B"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "sum by (public)(harbor_project_total{instance=~\"$instance\"})",
+      "instant": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "A"
+     }
+    ],
+    "title": "Project type",
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "df7dz1gqa20aoc"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "thresholds"
+      },
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "blue",
+         "value": null
+        }
+       ]
+      },
+      "unit": "bytes"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 6,
+     "w": 4,
+     "x": 20,
+     "y": 14
+    },
+    "id": 28,
+    "options": {
+     "colorMode": "background_solid",
+     "graphMode": "none",
+     "justifyMode": "auto",
+     "orientation": "auto",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "/^Value$/",
+      "values": false
+     },
+     "textMode": "auto"
+    },
+    "pluginVersion": "10.1.2",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "sum (harbor_project_quota_usage_byte{instance=~\"$instance\",job=\"harbor-exporter\"})",
+      "instant": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "A"
+     }
+    ],
+    "title": "Storage used",
+    "transformations": [
+     {
+      "id": "labelsToFields",
+      "options": {
+       "keepLabels": [
+        "auth_mode"
+       ]
+      }
+     }
+    ],
+    "type": "stat"
+   },
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "df7dz1gqa20aoc"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       }
+      },
+      "mappings": [],
+      "unit": "none"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 8,
+     "x": 0,
+     "y": 20
+    },
+    "id": 23,
+    "options": {
+     "displayLabels": [
+      "value"
+     ],
+     "legend": {
+      "displayMode": "list",
+      "placement": "right",
+      "showLegend": true,
+      "values": []
+     },
+     "pieType": "pie",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "tooltip": {
+      "mode": "single",
+      "sort": "none"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "sum by (project_name)(harbor_project_repo_total{instance=~\"$instance\"})",
+      "instant": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "A"
+     }
+    ],
+    "title": "Repositories by project",
+    "type": "piechart"
+   },
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "df7dz1gqa20aoc"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       }
+      },
+      "mappings": [],
+      "unit": "bytes"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 8,
+     "x": 8,
+     "y": 20
+    },
+    "id": 24,
+    "options": {
+     "displayLabels": [],
+     "legend": {
+      "displayMode": "list",
+      "placement": "right",
+      "showLegend": true,
+      "values": [
+       "value"
+      ]
+     },
+     "pieType": "pie",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "tooltip": {
+      "mode": "single",
+      "sort": "none"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "editorMode": "code",
+      "expr": "sum by (project_name) (harbor_project_quota_usage_byte{instance=~\"$instance\"})",
+      "instant": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "A"
+     }
+    ],
+    "title": "Quota usage by project",
+    "type": "piechart"
+   },
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "df7dz1gqa20aoc"
+    },
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       }
+      },
+      "mappings": [],
+      "unit": "none"
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 8,
+     "w": 8,
+     "x": 16,
+     "y": 20
+    },
+    "id": 25,
+    "options": {
+     "displayLabels": [
+      "value"
+     ],
+     "legend": {
+      "displayMode": "list",
+      "placement": "right",
+      "showLegend": true
+     },
+     "pieType": "pie",
+     "reduceOptions": {
+      "calcs": [
+       "lastNotNull"
+      ],
+      "fields": "",
+      "values": false
+     },
+     "tooltip": {
+      "mode": "single",
+      "sort": "none"
+     }
+    },
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "disableTextWrap": false,
+      "editorMode": "builder",
+      "expr": "sum by(project_name) (harbor_project_member_total{instance=~\"$instance\"})",
+      "fullMetaSearch": false,
+      "includeNullMetadata": true,
+      "instant": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "A",
+      "useBackend": false
+     }
+    ],
+    "title": "Members by project",
+    "type": "piechart"
+   },
+   {
+    "collapsed": true,
+    "gridPos": {
+     "h": 1,
+     "w": 24,
+     "x": 0,
+     "y": 28
+    },
+    "id": 15,
+    "panels": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "fieldConfig": {
+       "defaults": {
+        "color": {
+         "mode": "thresholds"
+        },
+        "mappings": [],
+        "thresholds": {
+         "mode": "absolute",
+         "steps": [
+          {
+           "color": "blue",
+           "value": null
+          }
+         ]
+        }
+       },
+       "overrides": []
+      },
+      "gridPos": {
+       "h": 8,
+       "w": 6,
+       "x": 0,
+       "y": 4
+      },
+      "id": 13,
+      "options": {
+       "colorMode": "background_solid",
+       "graphMode": "none",
+       "justifyMode": "auto",
+       "orientation": "auto",
+       "reduceOptions": {
+        "calcs": [
+         "lastNotNull"
+        ],
+        "fields": "",
+        "values": false
+       },
+       "textMode": "auto"
+      },
+      "pluginVersion": "10.1.2",
+      "targets": [
+       {
+        "datasource": {
+         "type": "prometheus",
+         "uid": "df7dz1gqa20aoc"
+        },
+        "disableTextWrap": false,
+        "editorMode": "builder",
+        "expr": "sum(harbor_project_artifact_total{instance=~\"$instance\"})",
+        "fullMetaSearch": false,
+        "includeNullMetadata": true,
+        "instant": false,
+        "legendFormat": "__auto",
+        "range": true,
+        "refId": "A",
+        "useBackend": false
+       }
+      ],
+      "title": "Total artifacts",
+      "type": "stat"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "fieldConfig": {
+       "defaults": {
+        "color": {
+         "mode": "thresholds"
+        },
+        "mappings": [],
+        "thresholds": {
+         "mode": "absolute",
+         "steps": [
+          {
+           "color": "blue",
+           "value": null
+          }
+         ]
+        }
+       },
+       "overrides": []
+      },
+      "gridPos": {
+       "h": 8,
+       "w": 6,
+       "x": 6,
+       "y": 4
+      },
+      "id": 11,
+      "options": {
+       "colorMode": "background_solid",
+       "graphMode": "none",
+       "justifyMode": "auto",
+       "orientation": "auto",
+       "reduceOptions": {
+        "calcs": [
+         "lastNotNull"
+        ],
+        "fields": "",
+        "values": false
+       },
+       "textMode": "auto"
+      },
+      "pluginVersion": "10.1.2",
+      "targets": [
+       {
+        "datasource": {
+         "type": "prometheus",
+         "uid": "df7dz1gqa20aoc"
+        },
+        "disableTextWrap": false,
+        "editorMode": "builder",
+        "expr": "sum by(project_name) (harbor_project_artifact_total{instance=~\"$instance\"})",
+        "fullMetaSearch": false,
+        "includeNullMetadata": true,
+        "instant": false,
+        "legendFormat": "__auto",
+        "range": true,
+        "refId": "A",
+        "useBackend": false
+       }
+      ],
+      "title": "Artifacts by Project",
+      "type": "stat"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "fieldConfig": {
+       "defaults": {
+        "color": {
+         "mode": "palette-classic"
+        },
+        "custom": {
+         "axisCenteredZero": false,
+         "axisColorMode": "text",
+         "axisLabel": "",
+         "axisPlacement": "auto",
+         "barAlignment": 0,
+         "drawStyle": "line",
+         "fillOpacity": 0,
+         "gradientMode": "none",
+         "hideFrom": {
+          "legend": false,
+          "tooltip": false,
+          "viz": false
+         },
+         "insertNulls": false,
+         "lineInterpolation": "linear",
+         "lineWidth": 1,
+         "pointSize": 5,
+         "scaleDistribution": {
+          "type": "linear"
+         },
+         "showPoints": "auto",
+         "spanNulls": false,
+         "stacking": {
+          "group": "A",
+          "mode": "none"
+         },
+         "thresholdsStyle": {
+          "mode": "off"
+         }
+        },
+        "mappings": [],
+        "thresholds": {
+         "mode": "absolute",
+         "steps": [
+          {
+           "color": "green",
+           "value": null
+          },
+          {
+           "color": "red",
+           "value": 80
+          }
+         ]
+        }
+       },
+       "overrides": []
+      },
+      "gridPos": {
+       "h": 8,
+       "w": 12,
+       "x": 12,
+       "y": 4
+      },
+      "id": 12,
+      "options": {
+       "legend": {
+        "calcs": [],
+        "displayMode": "list",
+        "placement": "bottom",
+        "showLegend": true
+       },
+       "tooltip": {
+        "mode": "single",
+        "sort": "none"
+       }
+      },
+      "targets": [
+       {
+        "datasource": {
+         "type": "prometheus",
+         "uid": "df7dz1gqa20aoc"
+        },
+        "editorMode": "code",
+        "expr": "sum by (project_name)(harbor_project_artifact_total{instance=~\"$instance\"})",
+        "instant": false,
+        "legendFormat": "__auto",
+        "range": true,
+        "refId": "A"
+       }
+      ],
+      "title": "Artifacts by project",
+      "type": "timeseries"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "fieldConfig": {
+       "defaults": {
+        "color": {
+         "mode": "palette-classic"
+        },
+        "custom": {
+         "hideFrom": {
+          "legend": false,
+          "tooltip": false,
+          "viz": false
+         }
+        },
+        "mappings": []
+       },
+       "overrides": []
+      },
+      "gridPos": {
+       "h": 8,
+       "w": 12,
+       "x": 0,
+       "y": 12
+      },
+      "id": 27,
+      "options": {
+       "displayLabels": [
+        "value"
+       ],
+       "legend": {
+        "displayMode": "list",
+        "placement": "right",
+        "showLegend": true,
+        "values": []
+       },
+       "pieType": "pie",
+       "reduceOptions": {
+        "calcs": [
+         "lastNotNull"
+        ],
+        "fields": "",
+        "values": false
+       },
+       "tooltip": {
+        "mode": "single",
+        "sort": "none"
+       }
+      },
+      "pluginVersion": "10.1.2",
+      "targets": [
+       {
+        "datasource": {
+         "type": "prometheus",
+         "uid": "df7dz1gqa20aoc"
+        },
+        "disableTextWrap": false,
+        "editorMode": "builder",
+        "expr": "sum by(project_name) (harbor_artifact_pulled{instance=~\"$instance\"})",
+        "fullMetaSearch": false,
+        "includeNullMetadata": true,
+        "instant": false,
+        "legendFormat": "__auto",
+        "range": true,
+        "refId": "A",
+        "useBackend": false
+       }
+      ],
+      "title": "Artifacts pulled by project",
+      "type": "piechart"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "df7dz1gqa20aoc"
+      },
+      "fieldConfig": {
+       "defaults": {
+        "color": {
+         "mode": "palette-classic"
+        },
+        "custom": {
+         "axisCenteredZero": false,
+         "axisColorMode": "text",
+         "axisLabel": "",
+         "axisPlacement": "auto",
+         "barAlignment": 0,
+         "drawStyle": "line",
+         "fillOpacity": 0,
+         "gradientMode": "none",
+         "hideFrom": {
+          "legend": false,
+          "tooltip": false,
+          "viz": false
+         },
+         "insertNulls": false,
+         "lineInterpolation": "linear",
+         "lineWidth": 1,
+         "pointSize": 5,
+         "scaleDistribution": {
+          "type": "linear"
+         },
+         "showPoints": "auto",
+         "spanNulls": false,
+         "stacking": {
+          "group": "A",
+          "mode": "none"
+         },
+         "thresholdsStyle": {
+          "mode": "off"
+         }
+        },
+        "mappings": [],
+        "thresholds": {
+         "mode": "absolute",
+         "steps": [
+          {
+           "color": "green",
+           "value": null
+          },
+          {
+           "color": "red",
+           "value": 80
+          }
+         ]
+        }
+       },
+       "overrides": []
+      },
+      "gridPos": {
+       "h": 8,
+       "w": 12,
+       "x": 12,
+       "y": 12
+      },
+      "id": 26,
+      "options": {
+       "legend": {
+        "calcs": [],
+        "displayMode": "list",
+        "placement": "bottom",
+        "showLegend": true
+       },
+       "tooltip": {
+        "mode": "single",
+        "sort": "none"
+       }
+      },
+      "targets": [
+       {
+        "datasource": {
+         "type": "prometheus",
+         "uid": "df7dz1gqa20aoc"
+        },
+        "disableTextWrap": false,
+        "editorMode": "builder",
+        "expr": "sum by(project_name) (harbor_artifact_pulled{instance=~\"$instance\"})",
+        "fullMetaSearch": false,
+        "includeNullMetadata": true,
+        "instant": false,
+        "legendFormat": "__auto",
+        "range": true,
+        "refId": "A",
+        "useBackend": false
+       }
+      ],
+      "title": "Artifacts pulled by project",
+      "type": "timeseries"
+     }
+    ],
+    "title": "Artifacts",
+    "type": "row"
+   }
+  ],
+  "refresh": "1m",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [
+   "harbor"
+  ],
+  "templating": {
+   "list": [
+    {
+     "current": {},
+     "datasource": {
+      "type": "prometheus",
+      "uid": "df7dz1gqa20aoc"
+     },
+     "definition": "label_values(harbor_system_info,instance)",
+     "hide": 0,
+     "includeAll": false,
+     "label": "Harbor instance",
+     "multi": false,
+     "name": "instance",
+     "options": [],
+     "query": {
+      "query": "label_values(harbor_system_info,instance)",
+      "refId": "PrometheusVariableQueryEditor-VariableQuery"
+     },
+     "refresh": 1,
+     "regex": "",
+     "skipUrlSync": false,
+     "sort": 0,
+     "type": "query"
+    },
+    {
+     "current": {},
+     "datasource": {
+      "type": "prometheus",
+      "uid": "df7dz1gqa20aoc"
+     },
+     "definition": "label_values(harbor_project_artifact_total{instance=~\"$instance\"},project_name)",
+     "hide": 0,
+     "includeAll": true,
+     "label": "Project",
+     "multi": false,
+     "name": "project",
+     "options": [],
+     "query": {
+      "query": "label_values(harbor_project_artifact_total{instance=~\"$instance\"},project_name)",
+      "refId": "PrometheusVariableQueryEditor-VariableQuery"
+     },
+     "refresh": 1,
+     "regex": "",
+     "skipUrlSync": false,
+     "sort": 5,
+     "type": "query"
+    }
+   ]
+  },
+  "time": {
+   "from": "now-24h",
+   "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Harbor",
+  "uid": "a65d2835-5027-46c8-951f-3799fb702232",
+  "version": 1,
+  "weekStart": ""
+ },
+ "meta": {
+  "annotationsPermissions": {
+   "dashboard": {
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
+   },
+   "organization": {
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
+   }
+  },
+  "apiVersion": "v0alpha1",
+  "canAdmin": false,
+  "canDelete": false,
+  "canEdit": false,
+  "canSave": false,
+  "canStar": false,
+  "created": "2025-12-17T22:10:16Z",
+  "createdBy": "admin",
+  "expires": "0001-01-01T00:00:00Z",
+  "folderId": 0,
+  "folderTitle": "General",
+  "folderUid": "",
+  "folderUrl": "",
+  "hasAcl": false,
+  "isFolder": false,
+  "provisioned": false,
+  "provisionedExternalId": "",
+  "slug": "harbor",
+  "type": "db",
+  "updated": "2025-12-17T22:10:16Z",
+  "updatedBy": "admin",
+  "url": "/d/a65d2835-5027-46c8-951f-3799fb702232/harbor",
+  "version": 1
+ }
+}

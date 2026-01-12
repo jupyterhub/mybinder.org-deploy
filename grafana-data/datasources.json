@@ -22,6 +22,25 @@
   "access": "proxy",
   "basicAuth": false,
   "database": "",
+  "id": 11,
+  "isDefault": false,
+  "jsonData": {
+   "pdcInjected": false
+  },
+  "name": "BIDS",
+  "orgId": 1,
+  "readOnly": false,
+  "type": "prometheus",
+  "typeLogoUrl": "public/plugins/prometheus/img/prometheus_logo.svg",
+  "typeName": "Prometheus",
+  "uid": "df7dz1gqa20aoc",
+  "url": "https://prometheus.bids.mybinder.org",
+  "user": ""
+ },
+ {
+  "access": "proxy",
+  "basicAuth": false,
+  "database": "",
   "id": 2,
   "isDefault": false,
   "jsonData": {
@@ -55,6 +74,25 @@
   "typeName": "Prometheus",
   "uid": "000000001",
   "url": "https://prometheus.mybinder.org",
+  "user": ""
+ },
+ {
+  "access": "proxy",
+  "basicAuth": false,
+  "database": "",
+  "id": 12,
+  "isDefault": false,
+  "jsonData": {
+   "pdcInjected": false
+  },
+  "name": "staging",
+  "orgId": 1,
+  "readOnly": false,
+  "type": "prometheus",
+  "typeLogoUrl": "public/plugins/prometheus/img/prometheus_logo.svg",
+  "typeName": "Prometheus",
+  "uid": "cf7e9eary718ga",
+  "url": "https://prometheus.ovh.staging.mybinder.org",
   "user": ""
  }
 ]
