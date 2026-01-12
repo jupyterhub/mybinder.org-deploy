@@ -85,10 +85,10 @@ to put dind state on the external disk.
 ## Installing `k3s`
 
 We can use the [quickstart](https://docs.k3s.io/quick-start) on the `k3s` website, with the added
-config of _disabling traefik_ that comes built in. We deploy nginx as part of our deployment, so we
-do not need traefik.
+config of _disabling traefik_ that comes built in. We deploy nginx as part of our deployment,
+so we do not need traefik.
 
-1. Create a Kubelet Config file in `/etc/kubelet.yaml` so we can
+1. Create a Kubelet Config file in `/var/lib/rancher/k3s/agent/etc/kubelet.conf.d/99-kubelet.conf` so we can
    tweak various kubelet options, including maximum number of pods on a single node and when to cleanup unused images:
 
    ```yaml
@@ -109,10 +109,17 @@ do not need traefik.
 
    This adds a good amount of margin. We can tweak this later
 
-2. Install `k3s`!
+2. disable traefik (because we deploy the ingress controller as part of our chart):
 
    ```bash
-   curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="server --kubelet-arg=config=/etc/kubelet.yaml" sh -s - --disable=traefik
+   mkdir -p /var/lib/rancher/k3s/server/manifests
+   touch /var/lib/rancher/k3s/server/manifests/traefik.yaml.skip
+   ```
+
+3. Install `k3s`!
+
+   ```bash
+   curl -sfL https://get.k3s.io | sh -s -
    ```
 
    This runs for a minute, but should set up latest `k3s` on that node! You can verify that by running
@@ -135,6 +142,37 @@ The short version is:
    Note the `.yml` here - everything else is `.yaml`!
 
 2. Change the `server` field under `clusters.0.cluster` from `https://127.0.0.1:6443` to `https://<public-ip>:6443`.
+
+3. Find-replace `default` to the cluster name, and add `namespace: CLUSTERNAME` to the default context, e.g. changing
+
+   ```yaml
+      name: default
+    contexts:
+    - context:
+        cluster: default
+        user: default
+      name: default
+    current-context: default
+    kind: Config
+    users:
+    - name: default
+   ```
+
+to:
+
+```yaml
+   name: staging
+ contexts:
+ - context:
+     cluster: staging
+     namespace: staging
+     user: staging
+   name: staging
+ current-context: staging
+ kind: Config
+ users:
+ - name: staging
+```
 
 You should now be able to:
 
