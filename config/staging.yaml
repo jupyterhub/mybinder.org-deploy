@@ -8,7 +8,7 @@ binderhub:
       pod_quota: 20
       hub_url: https://hub.ovh.staging.mybinder.org
       badge_base_url: https://staging.mybinder.org
-      image_prefix: 985ed7pp.c1.va1.container-registry.ovh.us/mybinder-builds/
+      image_prefix: registry.bids.mybinder.org/mybinder-staging/i-
       sticky_builds: true
 
   extraVolumes:
