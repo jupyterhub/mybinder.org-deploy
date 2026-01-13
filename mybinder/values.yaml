@@ -41,7 +41,7 @@ imagePullSecrets:
 tags: {}
 
 etcJupyter:
-  jupyter_notebook_config.json:
+  jupyter_server_config.json:
     ServerApp:
       allow_origin: "*"
       tornado_settings:
