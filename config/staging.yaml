@@ -6,7 +6,7 @@ binderhub:
   config:
     BinderHub:
       pod_quota: 20
-      hub_url: https://hub.staging2.mybinder.org
+      hub_url: https://hub.ovh.staging.mybinder.org
       badge_base_url: https://staging.mybinder.org
       image_prefix: registry.bids.mybinder.org/mybinder-staging/i-
       sticky_builds: true
@@ -40,7 +40,7 @@ binderhub:
 
   ingress:
     hosts:
-      - staging2.mybinder.org
+      - ovh.staging.mybinder.org
 
   jupyterhub:
     hub:
@@ -57,11 +57,11 @@ binderhub:
         limit: 0.5
     ingress:
       hosts:
-        - hub.staging2.mybinder.org
+        - hub.ovh.staging.mybinder.org
       tls:
         - secretName: kubelego-tls-jupyterhub-staging
           hosts:
-            - hub.staging2.mybinder.org
+            - hub.ovh.staging.mybinder.org
 
     proxy:
       chp:
@@ -79,10 +79,10 @@ minesweeper:
 grafana:
   ingress:
     hosts:
-      - grafana.staging2.mybinder.org
+      - grafana.ovh.staging.mybinder.org
     tls:
       - hosts:
-          - grafana.staging2.mybinder.org
+          - grafana.ovh.staging.mybinder.org
         secretName: kubelego-tls-grafana
   datasources:
     datasources.yaml:
@@ -91,7 +91,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.staging2.mybinder.org
+          url: https://prometheus.ovh.staging.mybinder.org
           isDefault: true
           editable: false
 
@@ -99,10 +99,10 @@ prometheus:
   server:
     ingress:
       hosts:
-        - prometheus.staging2.mybinder.org
+        - prometheus.ovh.staging.mybinder.org
       tls:
         - hosts:
-            - prometheus.staging2.mybinder.org
+            - prometheus.ovh.staging.mybinder.org
           secretName: kubelego-tls-prometheus
     persistentVolume:
       size: 12G
@@ -125,14 +125,14 @@ ingress-nginx:
 static:
   ingress:
     hosts:
-      - static.staging2.mybinder.org
+      - static.ovh.staging.mybinder.org
 
 redirector:
   enabled: true
   redirects:
     - type: host
       host:
-        from: docs.staging2.mybinder.org
+        from: docs.staging.mybinder.org
         to: mybinder.readthedocs.io
 
 matomo:
@@ -176,7 +176,7 @@ federationRedirect:
   hosts:
     staging:
       prime: true
-      url: https://staging2.mybinder.org
+      url: https://ovh.staging.mybinder.org
       weight: 100
-      health: https://staging2.mybinder.org/health
-      versions: https://staging2.mybinder.org/versions
+      health: https://ovh.staging.mybinder.org/health
+      versions: https://ovh.staging.mybinder.org/versions
