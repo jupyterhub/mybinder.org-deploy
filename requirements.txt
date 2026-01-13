@@ -80,7 +80,7 @@ six==1.17.0
     # via
     #   kubernetes
     #   python-dateutil
-tomli==2.3.0
+tomli==2.4.0
     # via pytest
 typing-extensions==4.15.0
     # via exceptiongroup
