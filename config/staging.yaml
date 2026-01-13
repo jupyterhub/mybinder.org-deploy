@@ -48,10 +48,13 @@ binderhub:
         requests:
           memory: 100M
           cpu: "10m"
+      config:
+        JupyterHub:
+          active_server_limit: 10
     singleuser:
       memory:
-        guarantee: 100M
-        limit: 256M
+        guarantee: 400M
+        limit: 500M
       cpu:
         guarantee: .01
         limit: 0.5
