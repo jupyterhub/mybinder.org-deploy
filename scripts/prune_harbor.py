@@ -7,13 +7,17 @@ There appears to be a cost to all the empty repos left over time.
 
 This script prunes any repositories that lack any artifacts.
 Artifacts are pruned by retention policy and garbage collection.
-
-Requires:
-
-- requests
-- ruamel.yaml
-- tqdm
 """
+
+# PEP 723 requirements
+# /// script
+# requires-python = ">=3.11"
+# dependencies = [
+#   "requests",
+#   "ruamel.yaml",
+#   "tqdm",
+# ]
+# ///
 
 from argparse import ArgumentParser
 from pathlib import Path
@@ -99,15 +103,15 @@ def load_config(member: str) -> dict:
     image_prefix = config["binderhub"]["config"]["BinderHub"]["image_prefix"]
     host, project_name, prefix = image_prefix.rsplit("/", 2)
     harbor_url = f"https://{host}/api/v2.0"
-    harbor_config_file = repo / "secrets" / f"{member}-harbor.yaml"
+    harbor_config_file = repo / "secrets/config" / f"{member}.yaml"
     with harbor_config_file.open() as f:
         harbor_config = yaml.load(f)
 
     return dict(
         harbor_url=harbor_url,
         project_name=project_name,
-        username=harbor_config["harbor"]["username"],
-        password=harbor_config["harbor"]["password"],
+        username="admin",
+        password=harbor_config["harbor"]["harborAdminPassword"],
     )
 
 
