@@ -1,0 +1,8 @@
+# scp me to bids.mybinder.org:/var/lib/rancher/k3s/agent/etc/kubelet.conf.d/99-kubelet.conf
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+maxPods: 200
+# Clean up images pulled by kubernetes anytime we are over
+# 40% disk usage until we hit 20%
+imageGCHighThresholdPercent: 40
+imageGCLowThresholdPercent: 20

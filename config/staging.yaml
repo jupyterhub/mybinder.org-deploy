@@ -8,7 +8,7 @@ binderhub:
       pod_quota: 20
       hub_url: https://hub.ovh.staging.mybinder.org
       badge_base_url: https://staging.mybinder.org
-      image_prefix: 985ed7pp.c1.va1.container-registry.ovh.us/mybinder-builds/
+      image_prefix: registry.bids.mybinder.org/mybinder-staging/i-
       sticky_builds: true
 
   extraVolumes:
@@ -29,6 +29,7 @@ binderhub:
       memory: 512Mi
 
   dind:
+    hostLibDir: /mnt/disk/dind
     resources:
       requests:
         cpu: "0"
@@ -173,7 +174,7 @@ federationRedirect:
       cpu: 0.2
       memory: 200Mi
   hosts:
-    gke:
+    staging:
       prime: true
       url: https://ovh.staging.mybinder.org
       weight: 100
