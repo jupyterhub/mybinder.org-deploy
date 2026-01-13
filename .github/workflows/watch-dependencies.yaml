@@ -62,16 +62,8 @@ jobs:
 
       - name: Get latest tag of ${{ matrix.registry }}/${{ matrix.repository }}
         id: latest
-        # The skopeo image helps us list tags consistently from different docker
-        # registries. We use jq to filter out tags of the x.y.z(-a) format, and
-        # then sort based on the numerical x, y, z, and a values. Finally, we
-        # pick the last value in the list.
-        #
         run: |
-          latest_tag=$(
-              docker run --rm quay.io/skopeo/stable list-tags docker://${{ matrix.registry }}/${{ matrix.repository }} \
-            | jq -r '[.Tags[] | select(. | match("^\\d+\\.\\d+\\.\\d+"))] | max_by(. | scan("\\d+") | tonumber? // 0)'
-          )
+          latest_tag=$(python3 scripts/latest_tag.py ${{ matrix.registry }}/${{ matrix.repository }})
           echo "tag=$latest_tag" >> $GITHUB_OUTPUT
 
       - name: Update values.yaml pinned tag
