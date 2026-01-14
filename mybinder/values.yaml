@@ -88,8 +88,8 @@ imagePullSecrets:
 tags: {}
 
 etcJupyter:
-  jupyter_notebook_config.json:
-    NotebookApp:
+  jupyter_server_config.json:
+    ServerApp:
       allow_origin: "*"
       tornado_settings:
         trust_xheaders: true
