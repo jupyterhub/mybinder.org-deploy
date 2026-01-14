@@ -209,6 +209,6 @@ federationRedirect:
     bids-ovh:
       prime: false
       url: https://bids.mybinder.org
-      weight: 30
+      weight: 50
       health: https://bids.mybinder.org/health
       versions: https://bids.mybinder.org/versions
