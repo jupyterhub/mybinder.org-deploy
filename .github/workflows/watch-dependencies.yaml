@@ -63,6 +63,7 @@ jobs:
       - name: Get latest tag of ${{ matrix.registry }}/${{ matrix.repository }}
         id: latest
         run: |
+          pip install packaging
           latest_tag=$(python3 scripts/latest_tag.py ${{ matrix.registry }}/${{ matrix.repository }})
           echo "tag=$latest_tag" >> $GITHUB_OUTPUT
 
