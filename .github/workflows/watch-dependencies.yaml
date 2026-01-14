@@ -46,7 +46,13 @@ jobs:
 
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.10"
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: .github/watch-dependency-requirements.txt
+
+      - name: Install requirements
+        run: |
+          python -mpip install -r .github/watch-dependency-requirements.txt
 
       - name: Get values.yaml pinned tag of ${{ matrix.registry }}/${{ matrix.repository }}
         id: local
@@ -78,7 +84,6 @@ jobs:
         id: prsummary
         if: steps.local.outputs.tag != steps.latest.outputs.tag
         run: |
-          pip install PyGithub
           ./scripts/get-prs.py \
               ${{ matrix.repository }} \
               ${{ steps.local.outputs.tag }} \
