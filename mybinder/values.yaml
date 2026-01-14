@@ -1,8 +1,6 @@
 cryptnono:
   enabled: true
   detectors:
-    monero:
-      enabled: false
     # execwhacker and flowkiller need access to containerd, and docker on build hosts,
     # to lookup the container.
     # Override containerdHostPath if K8s uses a different path for containerd
