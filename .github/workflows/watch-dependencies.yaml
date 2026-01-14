@@ -173,7 +173,7 @@ jobs:
 
       - name: Install requirements
         run: |
-          python -npip install -r .github/watch-dependency-requirements.txt
+          python -mpip install -r .github/watch-dependency-requirements.txt
 
       - name: Get Chart.yaml pinned version and fetch associated appVersion of ${{ matrix.chart_dep_name }} chart
         id: local
