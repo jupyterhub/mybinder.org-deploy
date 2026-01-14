@@ -10,10 +10,10 @@ cryptnono:
         FlowKiller:
           banned_ipv4_file_globs:
             - "/ban-config/*.txt"
-      containerdHostPath: /run/containerd/containerd.sock
+      containerdHostPath: /run/k3s/containerd/containerd.sock
       dockerHostPath: /run/dind/docker.sock
     execwhacker:
-      containerdHostPath: /run/containerd/containerd.sock
+      containerdHostPath: /run/k3s/containerd/containerd.sock
       dockerHostPath: /run/dind/docker.sock
   metrics:
     enabled: true
