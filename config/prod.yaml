@@ -7,6 +7,9 @@ coreNodeSelector: &coreNodeSelector
 
 binderhubEnabled: false
 
+cryptnono:
+  enabled: false
+
 binderhub:
   config:
     BinderHub:
