@@ -36,7 +36,7 @@ packaging==25.0
     #   pytest-rerunfailures
 pluggy==1.6.0
     # via pytest
-pyasn1==0.6.1
+pyasn1==0.6.2
     # via
     #   pyasn1-modules
     #   rsa
