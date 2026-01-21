@@ -115,7 +115,7 @@ def setup_auth_kubeconfig(release, cluster, dry_run=False):
     """
     print(f"Setup authentication for namespace {release} with kubeconfig")
 
-    kubeconfig = ABSOLUTE_HERE / "secrets" / f"{release}-kubeconfig.yml"
+    kubeconfig = ABSOLUTE_HERE / "secrets" / f"{release}-kubeconfig.yaml"
     os.environ["KUBECONFIG"] = str(kubeconfig)
     print(f"Current KUBECONFIG='{kubeconfig}'")
 
