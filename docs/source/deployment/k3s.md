@@ -82,6 +82,28 @@ binderhub:
 
 to put dind state on the external disk.
 
+## Create a new ssh key for mybinder team members
+
+For easy access to this node for mybinder team members, we create and check-in an ssh key as
+a secret.
+
+1. Run `ssh-keygen -t ed25519 -f secrets/<cluster-name>.key` to create the ssh key. Leave the passphrase blank.
+2. Set appropriate permissions with `chmod 0400 secrets/<cluster-name>.key`.
+3. Copy `secrets/<cluster-name>.key.pub` (**NOTE THE .pub**) and paste it as a **new line** in `/root/.ssh/authorized_keys` on your server. Do not replace any existing lines in this file.
+
+## Setup DNS entries
+
+There's only one IP to set DNS entries for - the public IP of the VM. No loadbalancers or similar here.
+
+mybinder.org's DNS is managed via Cloudflare. You should have access, or ask someone in the mybinder team who does!
+
+Add the following entries:
+
+- An `A` record for `X.mybinder.org` pointing to wards the public IP. `X` should be an organizational identifier that identifies and thanks whoever is donating this.
+- Another `A` record for `*.X.mybinder.org` to the same public IP
+
+Give this a few minutes because it may take a while to propagate.
+
 ## Installing `k3s`
 
 We can use the [quickstart](https://docs.k3s.io/quick-start) on the `k3s` website, with the added
@@ -129,17 +151,32 @@ so we do not need traefik.
 
 Next, we extract the `KUBECONFIG` file that the `mybinder.org-deploy` repo and team members can use to access
 this cluster externally by following [upstream documentation](https://docs.k3s.io/cluster-access#accessing-the-cluster-from-outside-with-kubectl).
-The short version is:
+
+We have a script for this in `scripts/fetch_k3s_kubeconfig.py`.
+If DNS is setup and we have a `config/{cluster_name}.yaml` with at least:
+
+```yaml
+binderhub:
+  ingress:
+    hosts:
+      - some-hostname
+```
+
+the script should run:
+
+```
+python3 scripts/fetch_k3s_clusters.py CLUSTER_NAME
+```
+
+What this script does:
 
 1. Copy the `/etc/rancher/k3s/k3s.yaml` into the `secrets/` directory in this repo:
 
    ```bash
-   scp root@<public-ip>:/etc/rancher/k3s/k3s.yaml secrets/<cluster-name>-kubeconfig.yml
+   scp root@<public-ip>:/etc/rancher/k3s/k3s.yaml secrets/<cluster-name>-kubeconfig.yaml
    ```
 
    Pick a `<cluster-name>` that describes what cluster this is - we will be consistently using it for other files too.
-
-   Note the `.yml` here - everything else is `.yaml`!
 
 2. Change the `server` field under `clusters.0.cluster` from `https://127.0.0.1:6443` to `https://<public-ip>:6443`.
 
@@ -177,7 +214,7 @@ to:
 You should now be able to:
 
 ```
-KUBECONFIG=$PWD/secrets/$name-kubeconfig.yml kubectl get node
+KUBECONFIG=$PWD/secrets/$name-kubeconfig.yaml kubectl get node
 ```
 
 ## Enable k3s auto-upgrade
@@ -199,28 +236,6 @@ kubectl apply -f config/k3s/k3s-upgrade-plan.yaml
 
 Now k3s should self-update every Sunday.
 If there's a problem, we'll see it Monday.
-
-## Create a new ssh key for mybinder team members
-
-For easy access to this node for mybinder team members, we create and check-in an ssh key as
-a secret.
-
-1. Run `ssh-keygen -t ed25519 -f secrets/<cluster-name>.key` to create the ssh key. Leave the passphrase blank.
-2. Set appropriate permissions with `chmod 0400 secrets/<cluster-name>.key`.
-3. Copy `secrets/<cluster-name>.key.pub` (**NOTE THE .pub**) and paste it as a **new line** in `/root/.ssh/authorized_keys` on your server. Do not replace any existing lines in this file.
-
-## Setup DNS entries
-
-There's only one IP to set DNS entries for - the public IP of the VM. No loadbalancers or similar here.
-
-mybinder.org's DNS is managed via Cloudflare. You should have access, or ask someone in the mybinder team who does!
-
-Add the following entries:
-
-- An `A` record for `X.mybinder.org` pointing to wards the public IP. `X` should be an organizational identifier that identifies and thanks whoever is donating this.
-- Another `A` record for `*.X.mybinder.org` to the same public IP
-
-Give this a few minutes because it may take a while to propagate.
 
 ## Make a config + secret copy for this new member
 
