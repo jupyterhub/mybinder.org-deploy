@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import re
+import sys
 import uuid
 from argparse import ArgumentParser
 
@@ -17,8 +18,9 @@ def extract_gitref(s):
     - 0.2.0 -> 0.2.0
     - 0.2.0-n1011.hb49edf6 -> b49edf6
     - 0.2.0-0.dev.git.2752.h3450e52 -> 3450e52
+    - 2025.12.1.dev39-g8ff237f9d -> 8ff237f9d
     """
-    m = re.match(r"[\d\.]+-[\w\.]+[gh]([0-9a-f]+)", s)
+    m = re.match(r"v?[\d\.]+.*[\.\-][gh]([0-9a-f]+)", s)
     if m:
         return m.group(1)
     return s
@@ -48,6 +50,7 @@ r = gh.get_repo(args.repo)
 
 start = extract_gitref(args.start)
 end = extract_gitref(args.end)
+print(f"Comparing {start}...{end}", file=sys.stderr)
 
 prs = set()
 git_compare = r.compare(start, end)
