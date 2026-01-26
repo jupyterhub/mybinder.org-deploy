@@ -185,6 +185,12 @@ binderhub:
         - ^wyattsanchez54/.*
         - ^walterpowell201/.*
         - ^justanotherday001shouldbebanned/.*
+        - ^hoanqson2107/.*
+        - ^aanksatriani/.*
+        - ^luckfactorone-netizen/.*
+        - ^ojode1991/.*
+        - ^aannbb1122pp-lgtm/.*
+
       high_quota_specs: []
         # - ^jupyterlab/.*
         # - ^jupyter/.*
@@ -217,7 +223,11 @@ binderhub:
         - ^(git|https?)%3A%2F%2Fgitlab.com%2Fjasmt507%2F.*
         - ^(git|https?)%3A%2F%2Fgitlab.com%2Fh4j3s1978%2F.*
         - .*%2Fabooz.*
-        - .*%2Firw4ns1.*
+        - .*%2Fhoanqson2107.*
+        - .*%2Faanksatriani.*
+        - .*%2Fluckfactorone.*
+        - .*%2Fojode1991.*
+        - .*%2Faannbb1122pp.*
 
     GitLabRepoProvider:
       banned_specs:
