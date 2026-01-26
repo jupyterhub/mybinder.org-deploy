@@ -28,7 +28,7 @@ kubernetes==35.0.0
     # via -r requirements.in
 oauthlib==3.3.1
     # via requests-oauthlib
-packaging==25.0
+packaging==26.0
     # via
     #   pytest
     #   pytest-rerunfailures
