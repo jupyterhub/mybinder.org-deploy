@@ -799,3 +799,11 @@ localpv-provisioner:
 
 clusterIssuer:
   enabled: true
+
+podLogs:
+  # disable podLogs for managed cloud with log aggregators
+  # enable for k3s (all federation members, so the default)
+  enabled: true
+  image: jupyterhub/mybinder.org-rsyslog:set-by-chartpress
+  # TODO: figure out what reasonable resources are
+  resources: {}

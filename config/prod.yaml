@@ -215,3 +215,6 @@ federationRedirect:
       weight: 50
       health: https://bids.mybinder.org/health
       versions: https://bids.mybinder.org/versions
+
+podLogs:
+  enabled: false
