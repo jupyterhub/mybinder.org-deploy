@@ -8,6 +8,8 @@ charts:
         valuesPath: federationRedirect.image
       minesweeper:
         valuesPath: minesweeper.image
+      rsyslog:
+        valuesPath: podLogs.image
       tc-init:
         valuesPath: binderhub.jupyterhub.singleuser.initContainers.0.image
   - name: mybinder-kube-system

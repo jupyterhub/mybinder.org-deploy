@@ -1,0 +1,74 @@
+{{- if .Values.podLogs.enabled -}}
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: pod-logs
+spec:
+  selector:
+    matchLabels:
+      name:  pod-logs
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        name: pod-logs
+        app: binder
+        component: pod-logs
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/pod-logs/configmap.yaml") . | sha256sum }}
+
+    spec:
+      tolerations:
+      - effect: NoSchedule
+        key: hub.jupyter.org/dedicated
+        operator: Equal
+        value: user
+      - effect: NoSchedule
+        key: hub.jupyter.org_dedicated
+        operator: Equal
+        value: user
+      serviceAccountName: minesweeper
+
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+      {{- . | toYaml | nindent 8 }}
+      {{- end }}
+
+      containers:
+      - name: pod-logs
+        image: {{ .Values.podLogs.image }}
+        {{- with .Values.podLogs.resources }}
+        resources:
+          {{- . | toYaml | nindent 10 }}
+        {{- end }}
+        volumeMounts:
+          - name: syslog-socket
+            mountPath:  /run/host-syslog
+          - name: config
+            mountPath: /etc/rsyslog.conf
+            subPath: rsyslog.conf
+            readOnly: true
+          - name: pod-logs
+            mountPath: /var/log/pods
+            readOnly: true
+        env:
+        - name: RSYSLOG_HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+      terminationGracePeriodSeconds: 0
+      volumes:
+        - name: config
+          configMap:
+            name: pod-logs-config
+        - name: syslog-socket
+          hostPath:
+            path: /run/systemd/journal/syslog
+            type: Socket
+        - name: pod-logs
+          hostPath:
+            path: /var/log/pods
+            type: Directory
+{{- end }}
