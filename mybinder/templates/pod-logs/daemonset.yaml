@@ -17,7 +17,7 @@ spec:
         release: {{ .Release.Name }}
         heritage: {{ .Release.Service }}
       annotations:
-        checksum/configmap: {{ include (print $.Template.BasePath "/rsyslog/configmap.yaml") . | sha256sum }}
+        checksum/configmap: {{ include (print $.Template.BasePath "/pod-logs/configmap.yaml") . | sha256sum }}
 
     spec:
       tolerations:
@@ -53,9 +53,6 @@ spec:
           - name: pod-logs
             mountPath: /var/log/pods
             readOnly: true
-        # args:
-        #   - rsyslogd
-        #   - -n
         env:
         - name: RSYSLOG_HOSTNAME
           valueFrom:
