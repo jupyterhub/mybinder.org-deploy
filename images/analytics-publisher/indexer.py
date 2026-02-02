@@ -6,6 +6,7 @@ This script reads the bucket containing archived events
 generating a human readable index.html & a machine readable
 index.jsonl.
 """
+
 import argparse
 import json
 import mimetypes
