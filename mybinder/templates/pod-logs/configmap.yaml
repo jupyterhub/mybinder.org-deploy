@@ -36,7 +36,7 @@ data:
       type="imfile"
       # pods/podname/containername/0.txt
       file="/var/log/pods/*/*/*.log"
-      tag="podlog"
+      tag="podlogs"
     )
 
     ### Outputs
