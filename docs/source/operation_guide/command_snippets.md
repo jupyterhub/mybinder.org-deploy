@@ -465,33 +465,33 @@ Pod logs are forwarded to syslog (`/var/log/syslog`) on k3s nodes.
 A pod log line looks like:
 
 ```
-2026-01-28T17:23:29.346934+00:00 vps-3f5cfacc podlog staging_jupyter-binderhub-ci-re-imal-dockerfile-u3zjxfdq  2026-01-28T17:23:29.346708409Z stderr F [I 2026-01-28 17:23:29.346 ServerApp] Jupyter Server 2.17.0 is running at:
+2026-01-28T17:23:29.346934+00:00 vps-3f5cfacc podlogs staging_jupyter-binderhub-ci-re-imal-dockerfile-u3zjxfdq  2026-01-28T17:23:29.346708409Z stderr F [I 2026-01-28 17:23:29.346 ServerApp] Jupyter Server 2.17.0 is running at:
 ```
 
 with the format
 
 ```
-{syslog_timestamp} {hostname} podlog {namespace}_{pod_name} {pod_timestamp} std[out|err] F {msg}
+{syslog_timestamp} {hostname} podlogs {namespace}_{pod_name} {pod_timestamp} std[out|err] F {msg}
 ```
 
 so there are often at least 3 timestamps, first from when the host syslog received it, second from kubernetes, and a third (often) in the actual pod log message itself.
 
-To see logs on a node, ssh to the node and search `/var/log/syslog` for the `podlog` tag:
+To see logs on a node, ssh to the node and search `/var/log/syslog` for the `podlogs` tag:
 
 ```bash
-ssh -i secrets/staging.key root@staging.mybinder.org grep -o 'podlog.*' /var/log/syslog
+ssh -i secrets/staging.key root@staging.mybinder.org grep -o 'podlogs.*' /var/log/syslog
 ```
 
 Careful, this is typically a _lot_ of logs (100s of MB), so more filters are recommended, e.g.
 
 ```bash
-grep -o 'podlog.*jupyter-.*' /var/log/syslog
+grep -o 'podlogs.*jupyter-.*' /var/log/syslog
 ```
 
 for just single-user server logs, or be even more specific if you have a specific pod and/or repo in mind, e.g. all logs for `ipython-in-depth`:
 
 ```bash
-grep -o 'podlog.*ipython-(2d)?in-(2d)?depth.*' /var/log/syslog
+grep -o 'podlogs.*ipython-(2d)?in-(2d)?depth.*' /var/log/syslog
 ```
 
 If you know specifically what pod you're looking for, then just the little hash bit on the end ought to be unique enough within the log file.
@@ -511,5 +511,5 @@ syslog.4.gz
 If you want to search _all_ the logs, you can use `zgrep`, which handles gzip-compressed files (as well as uncompressed):
 
 ```
-zgrep -E 'podlog.*jupyter.*binder-examples' /var/log/syslog*
+zgrep -E 'podlogs.*jupyter.*binder-examples' /var/log/syslog*
 ```
