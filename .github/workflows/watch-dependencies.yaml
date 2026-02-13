@@ -19,6 +19,11 @@ on:
     - cron: "0 5 * * *"
   workflow_dispatch:
 
+defaults:
+  run:
+    # Propagate errors in subshells and pipes to the parent shell
+    shell: bash -e -E -o pipefail {0}
+
 jobs:
   update-image-dependencies:
     name: update ${{ matrix.name }} image
