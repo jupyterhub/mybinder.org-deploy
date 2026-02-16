@@ -300,9 +300,9 @@
  "meta": {
   "annotationsPermissions": {
    "dashboard": {
-    "canAdd": true,
-    "canDelete": true,
-    "canEdit": true
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
    },
    "organization": {
     "canAdd": false,
@@ -310,6 +310,7 @@
     "canEdit": false
    }
   },
+  "apiVersion": "v0alpha1",
   "canAdmin": false,
   "canDelete": false,
   "canEdit": false,
@@ -326,9 +327,6 @@
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
-  "publicDashboardAccessToken": "",
-  "publicDashboardEnabled": false,
-  "publicDashboardUid": "",
   "slug": "event-loop-diagnostics",
   "type": "db",
   "updated": "2023-11-13T07:48:44Z",

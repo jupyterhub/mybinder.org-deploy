@@ -558,9 +558,9 @@
  "meta": {
   "annotationsPermissions": {
    "dashboard": {
-    "canAdd": true,
-    "canDelete": true,
-    "canEdit": true
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
    },
    "organization": {
     "canAdd": false,
@@ -568,6 +568,7 @@
     "canEdit": false
    }
   },
+  "apiVersion": "v0alpha1",
   "canAdmin": false,
   "canDelete": false,
   "canEdit": false,
@@ -584,9 +585,6 @@
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
-  "publicDashboardAccessToken": "",
-  "publicDashboardEnabled": false,
-  "publicDashboardUid": "",
   "slug": "network-activity",
   "type": "db",
   "updated": "2023-04-28T12:22:19Z",

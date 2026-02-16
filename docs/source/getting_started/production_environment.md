@@ -3,7 +3,18 @@
 This section is an overview of the repositories, projects, and
 systems used in the <https://mybinder.org> production deployment.
 
-Reference: [Google SRE book section on Production Environment](https://sre.google/sre-book/production-environment/)
+## Glossary
+
+Some of the terms that we use are from [Google SRE book section on Production Environment](https://sre.google/sre-book/production-environment/) and [Kubernetes Documentation > Reference > Glossary](https://kubernetes.io/docs/reference/glossary/).
+
+Machine
+: A piece of hardware (or perhaps a VM).
+
+Node
+: A worker machine in Kubernetes.
+
+Server
+: A piece of software that implements a service.
 
 ## Repository structure
 
@@ -47,34 +58,29 @@ on staging gives us confidence it will work on production. We also never share t
 secrets between staging and production for security boundary reasons.
 ```
 
-## Deployment nodes and pools
+## Deployment
 
 ## Staging
 
-The staging cluster has one node pool, which makes things simple.
+The staging cluster has one node, which makes things simple.
 
 ## Production
 
-The production cluster has two, one for "core" pods (the hub, etc.)
-and another dedicated to "user" pods (builds and user servers).
-This strategy helps protect our key services from potential issues caused by users and helps us drain user nodes when we need to.
+```{note}
+In earlier 2025, we moved from a multi node Kubernetes cluster to a single node K3s, read more at "[2i2c joins the mybinder.org federation with a cheaper and faster way to deploy Binderhub](https://2i2c.org/blog/2025/binder-singlenode/)".
+```
 
-Since "only" user pods should be running on the user nodes,
-cordoning that node should result in it being drained and reclaimed
-after the `max-pod-age` lifetime limit
-which often wouldn't happen without manual intervention.
+The production federation has
 
-It is still _not quite true_ that only user pods are running on the user nodes at this point.
-There can be some pods such as heapster and kube-dns that may run on user nodes,
-and need to be manually removed from the pod after cordoning before the autoscaler will allow culling.
+1. a single proxy
+2. one or more BinderHub servers operated by members of the federation.
 
-In the future, when we implement a pod packing strategy and node taints,
-nodes could get reclaimed truly automatically without any intervention,
-but we are not there yet.
-
-Users and core pods are assigned to their pools via a `nodeSelector` in `config/prod.yaml`.
-We use a custom label `mybinder.org/node-purpose = core | user`
-to select which node a pod should run on.
+```{mermaid}
+flowchart LR
+    Proxy --> f1(Federation member)
+    Proxy --> f2(Federation member)
+    Proxy --> f3(Federation member)
+```
 
 ## `mybinder.org` specific extra software
 

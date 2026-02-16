@@ -10,7 +10,6 @@ import argparse
 import json
 import mimetypes
 import os
-import tempfile
 from datetime import datetime
 from glob import glob
 
@@ -43,33 +42,23 @@ def index_events(project, bucket, debug=False, dry_run=False):
             }
         )
 
-    with tempfile.TemporaryFile(mode="w+") as htmlfile, tempfile.TemporaryFile(
-        mode="w+"
-    ) as jsonlfile:
-        html_index = html_template.render(
-            archives=sorted(
-                archives, key=lambda archive: archive["date"], reverse=True
-            ),
-            generated_time=datetime.utcnow().isoformat() + "Z",
-        )
+    html_index = html_template.render(
+        archives=sorted(archives, key=lambda archive: archive["date"], reverse=True),
+        generated_time=datetime.utcnow().isoformat() + "Z",
+    )
 
-        if debug:
-            print(html_index)
+    if debug:
+        print(html_index)
 
-        htmlfile.write(html_index)
+    for archive in archives:
+        jsonl_index = json.dumps(archive) + "\n"
 
-        for archive in archives:
-            jsonlfile.write(json.dumps(archive) + "\n")
-
-        htmlfile.seek(0)
-        jsonlfile.seek(0)
-
-        if not dry_run:
-            html_blob = bucket.blob("index.html")
-            html_blob.upload_from_file(htmlfile, content_type="text/html")
-            print("Uploaded index.html")
-            bucket.blob("index.jsonl").upload_from_file(jsonlfile)
-            print("Uploaded index.jsonl")
+    if not dry_run:
+        html_blob = bucket.blob("index.html")
+        html_blob.upload_from_string(html_index, content_type="text/html")
+        print("Uploaded index.html")
+        bucket.blob("index.jsonl").upload_from_string(jsonl_index)
+        print("Uploaded index.jsonl")
 
     # Upload static assets
     for static_file in STATIC_FILES:

@@ -17,13 +17,6 @@ registry:
     hosts:
       - registry.gesis.mybinder.org
 
-cryptnono:
-  detectors:
-    monero:
-      enabled: false
-    execwhacker:
-      containerdHostPath: /run/k3s/containerd/containerd.sock
-
 binderhub:
   config:
     BinderHub:
@@ -40,7 +33,7 @@ binderhub:
         - '--DockerEngine.extra_init_args={"timeout":1200}'
 
     LaunchQuota:
-      total_quota: 300
+      total_quota: 180
 
   replicas: 2
 

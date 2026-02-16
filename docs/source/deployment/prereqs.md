@@ -11,11 +11,8 @@ here if something specific could be clearer!
 MyBinder.org currently runs on Google Cloud. There are two Google Cloud projects
 that we use:
 
-1. `binder-staging` contains all resources for the staging deployment
+1. `binder-staging` is no longer in use
 2. `binder-prod` contains all resources for the production deployment
-
-We'll hand out credentials to anyone who wants to play with the staging deployment,
-so please just ask!
 
 While you only need merge access in this repository to deploy changes, ideally
 you should also have access to the two Google Cloud Projects so you can debug

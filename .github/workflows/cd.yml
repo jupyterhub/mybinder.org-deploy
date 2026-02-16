@@ -94,19 +94,19 @@ jobs:
           fi
 
       - name: "Stage 0: Checkout repo"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: "Stage 0: Setup Python"
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         id: setup-python
         with:
           python-version-file: ".python-version"
 
       # Action Repo: https://github.com/actions/cache
       - name: "Stage 0: Cache pip dependencies"
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/*requirements.txt') }}
@@ -138,7 +138,7 @@ jobs:
 
       # Action Repo: https://github.com/google-github-actions/setup-gcloud
       - name: "Stage 1: Install gcloud ${{ env.GCLOUD_SDK_VERION }}"
-        uses: google-github-actions/setup-gcloud@v2
+        uses: google-github-actions/setup-gcloud@v3
         with:
           version: ${{ env.GCLOUD_SDK_VERION }}
 
@@ -232,10 +232,10 @@ jobs:
             helm_version: ""
             experimental: false
 
-          # OVH deployment paused
-          # - federation_member: ovh2
-          #   helm_version: ""
-          #   experimental: false
+          - federation_member: bids-ovh
+            chartpress_args: ""
+            helm_version: ""
+            experimental: false
 
     # These permissions are needed to interact with GitHub's OIDC Token endpoint.
     permissions:
@@ -250,19 +250,19 @@ jobs:
           fi
 
       - name: "Stage 0: Checkout repo"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: "Stage 0: Setup Python"
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         id: setup-python
         with:
           python-version-file: ".python-version"
 
       # Action Repo: https://github.com/actions/cache
       - name: "Stage 0: Cache pip dependencies"
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/pip
           key: python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/*requirements.txt') }}
@@ -295,7 +295,7 @@ jobs:
 
       - name: "Stage 1: Install gcloud ${{ env.GCLOUD_SDK_VERION }}"
         if: matrix.federation_member == 'prod'
-        uses: google-github-actions/setup-gcloud@v2
+        uses: google-github-actions/setup-gcloud@v3
         with:
           version: ${{ env.GCLOUD_SDK_VERION }}
 
@@ -377,7 +377,7 @@ jobs:
 
       - name: Comment on PR with Job Status and delete the test branch
         if: ${{ steps.staging-deploy-status.outputs.status }} == 'completed'
-        uses: actions/github-script@v7
+        uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.jupyterhub_bot_pat }}
           script: |

@@ -26,7 +26,7 @@ oauthlib==3.2.2
     #   requests-oauthlib
 psutil==7.0.0
     # via -r requirements.in
-pyasn1==0.6.1
+pyasn1==0.6.2
     # via
     #   pyasn1-modules
     #   rsa
@@ -48,7 +48,7 @@ six==1.17.0
     # via
     #   kubernetes
     #   python-dateutil
-urllib3==2.5.0
+urllib3==2.6.3
     # via
     #   kubernetes
     #   requests

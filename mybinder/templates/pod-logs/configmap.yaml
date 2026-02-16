@@ -1,0 +1,78 @@
+{{- if .Values.podLogs.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pod-logs-config
+data:
+  "rsyslog.conf": |
+    ### Global directives ####
+
+    global(
+      # Sets the directory that rsyslog uses for work files.
+      workDirectory="/var/lib/rsyslog"
+      # exit if our config is invalid
+      abortOnUncleanConfig="on"
+    )
+
+    ### Modules
+
+    # debug: local
+    # enable `logger` testing
+    module(load="imuxsock")
+    # enable test file output
+    module(load="builtin:omfile")
+
+    # real ones
+    module(load="immark")
+    # read files
+    module(load="imfile" PollingInterval="10")
+    # output to socket
+    module(load="omuxsock")
+    
+    ### Inputs
+
+    # watch all pod log files
+    input(
+      type="imfile"
+      # pods/podname/containername/0.txt
+      file="/var/log/pods/*/*/*.log"
+      tag="podlogs"
+    )
+
+    ### Outputs
+
+    # format container logs
+    # avods redundant timestamp, since
+    # _both_ host syslog and the container logs add one
+    template(name="ContainerLogs" type="list") {
+      # leading two spaces seem to get chomped
+      constant(value="  ")
+      property(name="syslogtag")
+      constant(value=" ")
+      # pod log filename looks like
+      #  /var/log/pods/staging_minesweeper-bzdhk_54780289-879f-4f68-b0a4-ddc9ca7cc148/minesweeper/0.log
+      # format /var/log/pods/{namespace}_{pod_name}_{uuid}/{container}/{n}.log
+      # extract {namespace}_{pod_name}
+      property(
+          name="$!metadata!filename"
+          regex.type="ERE"
+          regex.nomatchmode="FIELD"
+          regex.expression="/var/log/pods/([^/]+)_([a-f0-9-]+)/.*"
+          regex.submatch="1"
+      )
+      constant(value=" ")
+      property(name="msg" spifno1stsp="on")
+      property(name="msg" droplastlf="on")
+      constant(value="\n")
+    }
+
+    # for debug: send logs to a local file
+    # *.* action(type="omfile" Template="ContainerLogs" File="/var/log/test.log")
+
+    # actual rule: forward logs to host-mounted syslog socket
+    *.* action(
+      type="omuxsock"
+      socketName="/run/host-syslog" 
+      template="ContainerLogs"
+    )
+{{- end }}

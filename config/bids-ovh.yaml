@@ -1,0 +1,145 @@
+projectName: bids-ovh
+
+harbor:
+  enabled: true
+  expose:
+    ingress:
+      hosts:
+        core: registry.bids.mybinder.org
+  persistence:
+    imageChartStorage:
+      s3:
+        # https://github.com/goharbor/harbor-helm/blob/v1.18.1/values.yaml#L225
+        region: us-east-va
+        bucket: mybinder-registry-bids-ovh
+        regionendpoint: https://s3.us-east-va.io.cloud.ovh.us
+        rootdirectory: harbor
+
+binderhub:
+  config:
+    BinderHub:
+      hub_url: https://hub.bids.mybinder.org
+      badge_base_url: https://mybinder.org
+      sticky_builds: true
+      image_prefix: registry.bids.mybinder.org/mybinder-builds/i-
+      # image_prefix: quay.io/mybinder-hetzner-2i2c/image-
+      # build_docker_host: /var/run/dind/docker.sock
+    KubernetesBuildExecutor:
+      docker_host: /var/run/dind/docker.sock
+      repo2docker_extra_args:
+        # try to avoid timeout pushing to local registry
+        # default is 60
+        # this must have no spaces to be processed by repo2docker correctly
+        - '--DockerEngine.extra_init_args={"timeout":1200}'
+
+    LaunchQuota:
+      total_quota: 60
+
+  replicas: 2
+
+  extraVolumes:
+    - name: secrets
+      secret:
+        secretName: events-archiver-secrets
+  extraVolumeMounts:
+    - name: secrets
+      mountPath: /secrets
+      readOnly: true
+  extraEnv:
+    GOOGLE_APPLICATION_CREDENTIALS: /secrets/service-account.json
+
+  dind:
+    hostLibDir: /mnt/disk/dind
+    resources:
+      requests:
+        cpu: "4"
+        memory: 12Gi
+      limits:
+        cpu: "8"
+        memory: 16Gi
+
+  ingress:
+    hosts:
+      - bids.mybinder.org
+
+  jupyterhub:
+    # proxy:
+    #   chp:
+    #     resources:
+    #       requests:
+    #         cpu: "1"
+    #       limits:
+    #         cpu: "1"
+    ingress:
+      hosts:
+        - hub.bids.mybinder.org
+      tls:
+        - secretName: kubelego-tls-hub
+          hosts:
+            - hub.bids.mybinder.org
+
+  imageCleaner:
+    # handled by buildkit pruner
+    enabled: false
+
+grafana:
+  ingress:
+    hosts:
+      - grafana.bids.mybinder.org
+    tls:
+      - hosts:
+          - grafana.bids.mybinder.org
+        secretName: kubelego-tls-grafana
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: prometheus
+          orgId: 1
+          type: prometheus
+          url: https://prometheus.bids.mybinder.org
+          access: direct
+          isDefault: true
+          editable: false
+  # persistence:
+  # storageClassName: csi-cinder-high-speed
+
+prometheus:
+  server:
+    persistentVolume:
+      size: 20Gi
+    ingress:
+      hosts:
+        - prometheus.bids.mybinder.org
+      tls:
+        - hosts:
+            - prometheus.bids.mybinder.org
+          secretName: kubelego-tls-prometheus
+  extraScrapeConfigs: |
+    - job_name: 'harbor-exporter'
+      static_configs:
+        - targets:
+            - bids-ovh-harbor-exporter:8001
+    - job_name: 'harbor-registry'
+      static_configs:
+        - targets:
+            - bids-ovh-harbor-registry:8001
+    - job_name: 'harbor-jobservice'
+      static_configs:
+        - targets:
+            - bids-ovh-harbor-jobservice:8001
+
+ingress-nginx:
+  controller:
+    replicas: 1
+    scope:
+      enabled: true
+    service:
+      loadBalancerIP: 15.204.207.87
+
+static:
+  ingress:
+    hosts:
+      - static.bids.mybinder.org
+    tls:
+      secretName: kubelego-tls-static

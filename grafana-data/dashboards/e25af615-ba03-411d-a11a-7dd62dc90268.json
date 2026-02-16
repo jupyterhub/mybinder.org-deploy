@@ -1,0 +1,215 @@
+{
+ "dashboard": {
+  "annotations": {
+   "list": [
+    {
+     "builtIn": 1,
+     "datasource": {
+      "type": "grafana",
+      "uid": "-- Grafana --"
+     },
+     "enable": true,
+     "hide": true,
+     "iconColor": "rgba(0, 211, 255, 1)",
+     "name": "Annotations & Alerts",
+     "type": "dashboard"
+    }
+   ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 24,
+  "links": [],
+  "panels": [
+   {
+    "datasource": {
+     "type": "prometheus",
+     "uid": "${datasource}"
+    },
+    "description": "Cryptnono processes killed per hour (${datasource})",
+    "fieldConfig": {
+     "defaults": {
+      "color": {
+       "mode": "palette-classic"
+      },
+      "custom": {
+       "axisBorderShow": false,
+       "axisCenteredZero": false,
+       "axisColorMode": "text",
+       "axisLabel": "",
+       "axisPlacement": "auto",
+       "barAlignment": 0,
+       "barWidthFactor": 0.6,
+       "drawStyle": "line",
+       "fillOpacity": 0,
+       "gradientMode": "none",
+       "hideFrom": {
+        "legend": false,
+        "tooltip": false,
+        "viz": false
+       },
+       "insertNulls": false,
+       "lineInterpolation": "stepBefore",
+       "lineWidth": 1,
+       "pointSize": 5,
+       "scaleDistribution": {
+        "type": "linear"
+       },
+       "showPoints": "auto",
+       "showValues": false,
+       "spanNulls": false,
+       "stacking": {
+        "group": "A",
+        "mode": "none"
+       },
+       "thresholdsStyle": {
+        "mode": "off"
+       }
+      },
+      "mappings": [],
+      "thresholds": {
+       "mode": "absolute",
+       "steps": [
+        {
+         "color": "green",
+         "value": 0
+        },
+        {
+         "color": "red",
+         "value": 1
+        }
+       ]
+      }
+     },
+     "overrides": []
+    },
+    "gridPos": {
+     "h": 4,
+     "w": 24,
+     "x": 0,
+     "y": 0
+    },
+    "id": 1,
+    "options": {
+     "legend": {
+      "calcs": [],
+      "displayMode": "list",
+      "placement": "right",
+      "showLegend": false
+     },
+     "tooltip": {
+      "hideZeros": false,
+      "mode": "multi",
+      "sort": "desc"
+     }
+    },
+    "pluginVersion": "12.3.0",
+    "repeat": "datasource",
+    "repeatDirection": "v",
+    "targets": [
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "${datasource}"
+      },
+      "editorMode": "code",
+      "expr": "sum by (source) (rate(cryptnono_execwhacker_processes_killed_total[1h])) * 60 * 59",
+      "instant": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "A"
+     },
+     {
+      "datasource": {
+       "type": "prometheus",
+       "uid": "${datasource}"
+      },
+      "editorMode": "code",
+      "expr": "sum by (reason) (rate(cryptnono_flowkiller_processes_killed_total[1h])) * 60 * 59",
+      "hide": false,
+      "instant": false,
+      "legendFormat": "__auto",
+      "range": true,
+      "refId": "B"
+     }
+    ],
+    "title": "Cryptnono killed/hour (${datasource})",
+    "type": "timeseries"
+   }
+  ],
+  "preload": false,
+  "refresh": "",
+  "schemaVersion": 42,
+  "tags": [],
+  "templating": {
+   "list": [
+    {
+     "current": {
+      "text": [
+       "All"
+      ],
+      "value": [
+       "$__all"
+      ]
+     },
+     "includeAll": true,
+     "multi": true,
+     "name": "datasource",
+     "options": [],
+     "query": "prometheus",
+     "refresh": 1,
+     "regex": "",
+     "type": "datasource"
+    }
+   ]
+  },
+  "time": {
+   "from": "now-24h",
+   "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Cryptnono",
+  "uid": "e25af615-ba03-411d-a11a-7dd62dc90268",
+  "version": 10,
+  "weekStart": ""
+ },
+ "meta": {
+  "annotationsPermissions": {
+   "dashboard": {
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
+   },
+   "organization": {
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
+   }
+  },
+  "apiVersion": "v0alpha1",
+  "canAdmin": false,
+  "canDelete": false,
+  "canEdit": false,
+  "canSave": false,
+  "canStar": false,
+  "created": "2023-12-16T14:18:12Z",
+  "createdBy": "admin",
+  "expires": "0001-01-01T00:00:00Z",
+  "folderId": 0,
+  "folderTitle": "General",
+  "folderUid": "",
+  "folderUrl": "",
+  "hasAcl": false,
+  "isFolder": false,
+  "provisioned": false,
+  "provisionedExternalId": "",
+  "slug": "cryptnono",
+  "type": "db",
+  "updated": "2025-12-09T13:53:49Z",
+  "updatedBy": "admin",
+  "url": "/d/e25af615-ba03-411d-a11a-7dd62dc90268/cryptnono",
+  "version": 10
+ }
+}

@@ -19,13 +19,6 @@ registry:
     hosts:
       - registry.2i2c.mybinder.org
 
-cryptnono:
-  detectors:
-    monero:
-      enabled: false
-    execwhacker:
-      containerdHostPath: /run/k3s/containerd/containerd.sock
-
 binderhub:
   config:
     BinderHub:

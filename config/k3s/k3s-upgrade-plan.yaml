@@ -1,0 +1,25 @@
+# Upgrade plan
+# this is _not_ automatically applied during CD (yet)
+apiVersion: upgrade.cattle.io/v1
+kind: Plan
+metadata:
+  name: upgrade-plan
+  namespace: system-upgrade
+spec:
+  concurrency: 1
+  cordon: false
+  serviceAccountName: system-upgrade
+  upgrade:
+    image: rancher/k3s-upgrade
+  channel: https://update.k3s.io/v1-release/channels/stable
+  # it appears nodeSelector can't be empty
+  nodeSelector:
+    matchLabels:
+      node.kubernetes.io/instance-type: k3s
+  # Sunday 0-2/UTC is our current lowest traffic time
+  window:
+    days:
+      - sunday
+    startTime: 00:00
+    endTime: 02:00
+    timeZone: UTC

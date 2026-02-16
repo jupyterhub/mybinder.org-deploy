@@ -349,9 +349,9 @@
  "meta": {
   "annotationsPermissions": {
    "dashboard": {
-    "canAdd": true,
-    "canDelete": true,
-    "canEdit": true
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
    },
    "organization": {
     "canAdd": false,
@@ -359,6 +359,7 @@
     "canEdit": false
    }
   },
+  "apiVersion": "v0alpha1",
   "canAdmin": false,
   "canDelete": false,
   "canEdit": false,
@@ -375,9 +376,6 @@
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
-  "publicDashboardAccessToken": "",
-  "publicDashboardEnabled": false,
-  "publicDashboardUid": "",
   "slug": "usage-dashboard",
   "type": "db",
   "updated": "2022-06-17T08:01:17Z",

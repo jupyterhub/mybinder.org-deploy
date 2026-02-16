@@ -1,13 +1,39 @@
 cryptnono:
   enabled: true
   detectors:
-    execwhacker:
-      metrics:
-        enabled: true
-      # execwhacker needs access to containerd, and docker on build hosts, to lookup the container.
-      # Override if K8s uses a different path for containerd
-      containerdHostPath: /run/containerd/containerd.sock
+    # execwhacker and flowkiller need access to containerd, and docker on build hosts,
+    # to lookup the container.
+    # Override containerdHostPath if K8s uses a different path for containerd
+    tcpflowkiller:
+      enabled: true
+      config:
+        FlowKiller:
+          banned_ipv4_file_globs:
+            - "/ban-config/*.txt"
+      containerdHostPath: /run/k3s/containerd/containerd.sock
       dockerHostPath: /run/dind/docker.sock
+    execwhacker:
+      containerdHostPath: /run/k3s/containerd/containerd.sock
+      dockerHostPath: /run/dind/docker.sock
+  metrics:
+    enabled: true
+    collector:
+      enabled: true
+  priorityClassName: binderhub-core
+
+# Currently we just monitor cryptnono pods to look for "action":"killed"
+k8s-log-alerter-zulip:
+  enabled: true
+  zulip:
+    site: https://jupyter.zulipchat.com
+    # bot_email:
+    # bot_key:
+    # channel:
+  rules:
+    "Cryptnono killed":
+      pod_labels:
+        app.kubernetes.io/name: cryptnono
+      regex: "\"action\":\\s*\"killed\""
 
 buildkitPruner:
   enabled: true
@@ -45,13 +71,39 @@ registry:
       storageClassName: ""
       size: 10Gi
 
+harbor:
+  enabled: false
+  expose:
+    type: ingress
+    ingress:
+      className: nginx
+      annotations:
+        kubernetes.io/tls-acme: "true"
+    tls:
+      certSource: secret
+      secret:
+        secretName: tls-harbor
+  metrics:
+    enabled: true
+
+  persistence:
+    imageChartStorage:
+      type: s3
+      s3: {}
+  core:
+    serviceAnnotations:
+      prometheus.io/port: "8001"
+      prometheus.io/scrape: "true"
+  trivy:
+    enabled: false
+
 imagePullSecrets:
 
 tags: {}
 
 etcJupyter:
-  jupyter_notebook_config.json:
-    NotebookApp:
+  jupyter_server_config.json:
+    ServerApp:
       allow_origin: "*"
       tornado_settings:
         trust_xheaders: true
@@ -132,6 +184,13 @@ binderhub:
         - ^ajiBal/.*
         - ^wyattsanchez54/.*
         - ^walterpowell201/.*
+        - ^justanotherday001shouldbebanned/.*
+        - ^hoanqson2107/.*
+        - ^aanksatriani/.*
+        - ^luckfactorone-netizen/.*
+        - ^ojode1991/.*
+        - ^aannbb1122pp-lgtm/.*
+
       high_quota_specs: []
         # - ^jupyterlab/.*
         # - ^jupyter/.*
@@ -164,7 +223,11 @@ binderhub:
         - ^(git|https?)%3A%2F%2Fgitlab.com%2Fjasmt507%2F.*
         - ^(git|https?)%3A%2F%2Fgitlab.com%2Fh4j3s1978%2F.*
         - .*%2Fabooz.*
-        - .*%2Firw4ns1.*
+        - .*%2Fhoanqson2107.*
+        - .*%2Faanksatriani.*
+        - .*%2Fluckfactorone.*
+        - .*%2Fojode1991.*
+        - .*%2Faannbb1122pp.*
 
     GitLabRepoProvider:
       banned_specs:
@@ -186,7 +249,7 @@ binderhub:
             🤍 Donate to mybinder.org!
         </a>
         <div style="text-align:center;">
-        Thanks to <a href="https://www.gesis.org">GESIS</a> and <a href="https://2i2c.org">2i2c</a> for supporting us! 🎉
+        Thanks to <a href="https://www.gesis.org">GESIS</a>, <a href="https://2i2c.org">2i2c</a>, and <a href="https://bids.berkeley.edu">BIDS</a> for supporting us! 🎉
         </div>
         <div style="text-align:center;">
         mybinder.org has updated the base image to Ubuntu 22.04! See the <a href="https://repo2docker.readthedocs.io/en/latest/howto/breaking_changes.html">upgrade guide</a> for details.
@@ -199,33 +262,13 @@ binderhub:
         security vulnerability please see: <a href="https://mybinder.readthedocs.io/en/latest/faq.html#where-can-i-report-a-security-issue">Where can I report a security issue</a><br /><br />
         For more information about the Binder Project, see <a href="https://mybinder.readthedocs.io/en/latest/about.html">the About Binder page</a></p>
 
-      extra_footer_scripts:
-        01-matomo: |
-          // Only load Matomo if DNT is not set.
-          // This respects user preferences, and gives us a full score on uBlock origin
-          if (navigator.doNotTrack != "1" && // Most Firefox & Chrome
-            window.doNotTrack != "1" && // IE & Safari
-            navigator.msDoNotTrack != "1" // Old IE
-          ) {
-          console.log("Loading Matomo tracking, since Do Not Track is off");
-            var _paq = _paq || [];
-            /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-            // this is matomo's own respect-DoNotTrack
-            // should be redundant, but good to be extra explicit
-            _paq.push(["setDoNotTrack", true]);
-            // disable tracking cookies
-            _paq.push(["disableCookies"]);
-            _paq.push(['trackPageView']);
-            (function() {
-              var u="//" + window.location.hostname + "/matomo/";
-              _paq.push(['setTrackerUrl', u+'piwik.php']);
-              _paq.push(['setSiteId', '1']);
-              var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-              g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-            })();
-          }
+      extra_header_html:
+        01-plausible: |
+          <script defer data-domain="mybinder.org" src="https://plausible.io/js/script.file-downloads.outbound-links.js"></script>
+          <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
+
     KubernetesBuildExecutor:
-      build_image: quay.io/jupyterhub/repo2docker:2025.08.0-43.g664c272
+      build_image: quay.io/jupyterhub/repo2docker:2025.12.1.dev53-ga0a7fec67
 
   extraConfig:
     # Send Events to StackDriver on Google Cloud
@@ -330,6 +373,9 @@ binderhub:
       metric = EventLoopMetric()
       metric.start()
 
+  extraPodSpec:
+    priorityClassName: binderhub-core
+
   registry:
     url: https://gcr.io
 
@@ -408,6 +454,8 @@ binderhub:
           # default-route to our nginx "Binder not found" service
           extra_routes:
             "/": "http://proxy-patches"
+      extraPodSpec:
+        priorityClassName: binderhub-core
       service:
         annotations:
           prometheus.io/scrape: "true"
@@ -434,6 +482,8 @@ binderhub:
           # - --default-target=http://$(PROXY_PATCHES_SERVICE_HOST):$(PROXY_PATCHES_SERVICE_PORT)
           - --error-target=http://$(PROXY_PATCHES_SERVICE_HOST):$(PROXY_PATCHES_SERVICE_PORT)/hub/error
           - --log-level=error
+        extraPodSpec:
+          priorityClassName: binderhub-core
     ingress:
       enabled: true
       annotations:
@@ -445,13 +495,9 @@ binderhub:
         kubernetes.io/tls-acme: "true"
     scheduling:
       userScheduler:
-        enabled: true
-        replicas: 2
-      podPriority:
-        enabled: true
+        enabled: false
       userPlaceholder:
-        enabled: true
-        # replicas set in config/<deployment>
+        enabled: false
     singleuser:
       # clear singleuser.defaultUrl config from chart
       defaultUrl:
@@ -512,6 +558,7 @@ ingress-nginx:
   controller:
     admissionWebhooks:
       enabled: false
+    priorityClassName: binderhub-core
     resources:
       requests:
         cpu: 100m
@@ -620,6 +667,7 @@ prometheus:
     podLabels:
       # needs access to the Hub API
       hub.jupyter.org/network-access-hub: "true"
+    priorityClassName: binderhub-core
     strategy:
       # The default of RollingUpdate fail because attached storage can only be
       # mounted on one pod, so we need to use Recreate that first shut down the
@@ -728,10 +776,12 @@ cluster-autoscaler:
 
 # Name:Priority pairs of priority classes to create
 # https://kubernetes.io/blog/2023/01/12/protect-mission-critical-pods-priorityclass/
-priorityClasses: {}
+priorityClasses:
+  binderhub-core: 10000
 
 binderhub-container-registry-helper:
   enabled: false
+  priorityClassName: binderhub-core
 
 awsEcrRegistryCleaner:
   enabled: false
@@ -742,10 +792,18 @@ awsEcrRegistryCleaner:
   serviceAccount:
     name: binderhub-ecr-registry-cleaner
     annotations: {}
-  priorityClassName: ""
+  priorityClassName: binderhub-core
 
 localpv-provisioner:
   enabled: false
 
 clusterIssuer:
   enabled: true
+
+podLogs:
+  # disable podLogs for managed cloud with log aggregators
+  # enable for k3s (all federation members, so the default)
+  enabled: true
+  image: jupyterhub/mybinder.org-rsyslog:set-by-chartpress
+  # TODO: figure out what reasonable resources are
+  resources: {}

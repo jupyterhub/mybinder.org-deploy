@@ -305,9 +305,9 @@
  "meta": {
   "annotationsPermissions": {
    "dashboard": {
-    "canAdd": true,
-    "canDelete": true,
-    "canEdit": true
+    "canAdd": false,
+    "canDelete": false,
+    "canEdit": false
    },
    "organization": {
     "canAdd": false,
@@ -315,6 +315,7 @@
     "canEdit": false
    }
   },
+  "apiVersion": "v0alpha1",
   "canAdmin": false,
   "canDelete": false,
   "canEdit": false,
@@ -331,9 +332,6 @@
   "isFolder": false,
   "provisioned": false,
   "provisionedExternalId": "",
-  "publicDashboardAccessToken": "",
-  "publicDashboardEnabled": false,
-  "publicDashboardUid": "",
   "slug": "matomo",
   "type": "db",
   "updated": "2020-09-22T09:29:59Z",

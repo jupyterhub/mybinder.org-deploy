@@ -12,7 +12,7 @@
   "orgId": 1,
   "readOnly": false,
   "type": "prometheus",
-  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+  "typeLogoUrl": "public/plugins/prometheus/img/prometheus_logo.svg",
   "typeName": "Prometheus",
   "uid": "deanf4vbxbcaod",
   "url": "https://prometheus.2i2c.mybinder.org",
@@ -22,19 +22,19 @@
   "access": "proxy",
   "basicAuth": false,
   "database": "",
-  "id": 7,
+  "id": 11,
   "isDefault": false,
   "jsonData": {
-   "httpMethod": "POST"
+   "pdcInjected": false
   },
-  "name": "curvenote",
+  "name": "BIDS",
   "orgId": 1,
   "readOnly": false,
   "type": "prometheus",
-  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+  "typeLogoUrl": "public/plugins/prometheus/img/prometheus_logo.svg",
   "typeName": "Prometheus",
-  "uid": "b67087d4-25bd-41aa-8ecd-940252a85e24",
-  "url": "https://prometheus.binder.curvenote.dev",
+  "uid": "df7dz1gqa20aoc",
+  "url": "https://prometheus.bids.mybinder.org",
   "user": ""
  },
  {
@@ -53,29 +53,10 @@
   "orgId": 1,
   "readOnly": false,
   "type": "prometheus",
-  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+  "typeLogoUrl": "public/plugins/prometheus/img/prometheus_logo.svg",
   "typeName": "Prometheus",
   "uid": "000000002",
   "url": "https://prometheus.gesis.mybinder.org",
-  "user": ""
- },
- {
-  "access": "proxy",
-  "basicAuth": false,
-  "database": "",
-  "id": 4,
-  "isDefault": false,
-  "jsonData": {
-   "httpMethod": "POST"
-  },
-  "name": "OVH",
-  "orgId": 1,
-  "readOnly": false,
-  "type": "prometheus",
-  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
-  "typeName": "Prometheus",
-  "uid": "000000004",
-  "url": "https://prometheus.ovh2.mybinder.org",
   "user": ""
  },
  {
@@ -89,7 +70,7 @@
   "orgId": 1,
   "readOnly": true,
   "type": "prometheus",
-  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+  "typeLogoUrl": "public/plugins/prometheus/img/prometheus_logo.svg",
   "typeName": "Prometheus",
   "uid": "000000001",
   "url": "https://prometheus.mybinder.org",
@@ -99,17 +80,19 @@
   "access": "proxy",
   "basicAuth": false,
   "database": "",
-  "id": 10,
+  "id": 12,
   "isDefault": false,
-  "jsonData": {},
-  "name": "prometheus-1",
+  "jsonData": {
+   "pdcInjected": false
+  },
+  "name": "staging",
   "orgId": 1,
   "readOnly": false,
   "type": "prometheus",
-  "typeLogoUrl": "public/app/plugins/datasource/prometheus/img/prometheus_logo.svg",
+  "typeLogoUrl": "public/plugins/prometheus/img/prometheus_logo.svg",
   "typeName": "Prometheus",
-  "uid": "ceivtekinzh1cc",
-  "url": "",
+  "uid": "cf7e9eary718ga",
+  "url": "https://prometheus.ovh.staging.mybinder.org",
   "user": ""
  }
 ]

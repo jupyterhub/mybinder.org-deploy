@@ -7,6 +7,9 @@ coreNodeSelector: &coreNodeSelector
 
 binderhubEnabled: false
 
+cryptnono:
+  enabled: false
+
 binderhub:
   config:
     BinderHub:
@@ -173,33 +176,6 @@ redirector:
       host:
         from: status.mybinder.org
         to: mybinder.readthedocs.io/en/latest/status.html
-    - type: url
-      host:
-        from: matomo.mybinder.org
-        to: mybinder.org/matomo/index.php
-
-matomo:
-  enabled: true
-  replicas: 2
-  nodeSelector: *coreNodeSelector
-  db:
-    instanceName: binderhub-288415:us-central1:matomo-prod
-  trustedHosts:
-    - mybinder.org
-    - gke.mybinder.org
-    - gke2.mybinder.org
-  ingress:
-    hosts:
-      - mybinder.org
-      - gke.mybinder.org
-      - gke2.mybinder.org
-  resources:
-    requests:
-      cpu: 10m
-      memory: 256Mi
-    limits:
-      cpu: 200m
-      memory: 1Gi
 
 analyticsPublisher:
   enabled: true
@@ -221,33 +197,24 @@ gcsProxy:
 federationRedirect:
   enabled: true
   hosts:
-    gke:
-      prime: false
-      url: https://gke.mybinder.org
-      weight: 0
-      health: https://gke.mybinder.org/health
-      versions: https://gke.mybinder.org/versions
     hetzner-2i2c:
-      prime: false
+      prime: true
       url: https://2i2c.mybinder.org
       weight: 50
       health: https://2i2c.mybinder.org/health
       versions: https://2i2c.mybinder.org/versions
     hetzner-gesis:
-      prime: true
+      prime: false
       url: https://gesis.mybinder.org
       weight: 50
       health: https://gesis.mybinder.org/health
       versions: https://gesis.mybinder.org/versions
-    ovh2:
+    bids-ovh:
       prime: false
-      url: https://ovh2.mybinder.org
-      weight: 0
-      health: https://ovh2.mybinder.org/health
-      versions: https://ovh2.mybinder.org/versions
-    curvenote:
-      prime: false
-      url: https://binder.curvenote.dev
-      weight: 0
-      health: https://binder.curvenote.dev/health
-      versions: https://binder.curvenote.dev/versions
+      url: https://bids.mybinder.org
+      weight: 50
+      health: https://bids.mybinder.org/health
+      versions: https://bids.mybinder.org/versions
+
+podLogs:
+  enabled: false

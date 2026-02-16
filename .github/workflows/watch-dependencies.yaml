@@ -42,11 +42,17 @@ jobs:
             source_url: https://github.com/jupyterhub/repo2docker
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
-          python-version: "3.10"
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: .github/watch-dependency-requirements.txt
+
+      - name: Install requirements
+        run: |
+          python -mpip install -r .github/watch-dependency-requirements.txt
 
       - name: Get values.yaml pinned tag of ${{ matrix.registry }}/${{ matrix.repository }}
         id: local
@@ -62,16 +68,8 @@ jobs:
 
       - name: Get latest tag of ${{ matrix.registry }}/${{ matrix.repository }}
         id: latest
-        # The skopeo image helps us list tags consistently from different docker
-        # registries. We use jq to filter out tags of the x.y.z(-a) format, and
-        # then sort based on the numerical x, y, z, and a values. Finally, we
-        # pick the last value in the list.
-        #
         run: |
-          latest_tag=$(
-              docker run --rm quay.io/skopeo/stable list-tags docker://${{ matrix.registry }}/${{ matrix.repository }} \
-            | jq -r '[.Tags[] | select(. | match("^\\d+\\.\\d+\\.\\d+(-\\d+\\..*)?$"))] | max_by(scan("[^-.]+") | tonumber? // 0)'
-          )
+          latest_tag=$(python3 scripts/latest_tag.py ${{ matrix.registry }}/${{ matrix.repository }})
           echo "tag=$latest_tag" >> $GITHUB_OUTPUT
 
       - name: Update values.yaml pinned tag
@@ -86,7 +84,6 @@ jobs:
         id: prsummary
         if: steps.local.outputs.tag != steps.latest.outputs.tag
         run: |
-          pip install PyGithub
           ./scripts/get-prs.py \
               ${{ matrix.repository }} \
               ${{ steps.local.outputs.tag }} \
@@ -97,7 +94,7 @@ jobs:
 
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         # Don't try open PRs in forks or when the job is triggered by a push to
         # a branch other than the default branch.
         if: github.repository == 'jupyterhub/mybinder.org-deploy' && (github.event_name != 'push' || github.ref == 'refs/heads/main')
@@ -171,11 +168,17 @@ jobs:
             chart_dep_devel_flag: "--devel"
             github_repo: cryptnono/cryptnono
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
-          python-version: "3.10"
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: .github/watch-dependency-requirements.txt
+
+      - name: Install requirements
+        run: |
+          python -mpip install -r .github/watch-dependency-requirements.txt
 
       - name: Get Chart.yaml pinned version and fetch associated appVersion of ${{ matrix.chart_dep_name }} chart
         id: local
@@ -219,7 +222,6 @@ jobs:
         id: prsummary
         if: matrix.github_repo && (steps.local.outputs.version != steps.latest.outputs.version)
         run: |
-          pip install PyGithub
           ./scripts/get-prs.py \
               ${{ matrix.github_repo }} \
               ${{ steps.local.outputs.version }} \
@@ -230,7 +232,7 @@ jobs:
 
       # ref: https://github.com/peter-evans/create-pull-request
       - name: Create a PR
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         # Don't try open PRs in forks or when the job is triggered by a push to
         # a branch other than the default branch.
         if: github.repository == 'jupyterhub/mybinder.org-deploy' && (github.event_name != 'push' || github.ref == 'refs/heads/main')

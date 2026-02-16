@@ -39,14 +39,12 @@ jobs:
             k3s-channel: "v1.24"
           - release: prod
             k3s-channel: "v1.24"
-          - release: ovh2
-            k3s-channel: "v1.24"
           - release: hetzner-2i2c
             k3s-channel: "v1.24"
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
         with:
           python-version-file: ".python-version"
 

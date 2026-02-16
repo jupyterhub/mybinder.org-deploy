@@ -14,15 +14,15 @@ exclude: "(.*/)?secrets/.*"
 repos:
   # Autoformat: Python code, syntax patterns are modernized
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.20.0
+    rev: v3.21.2
     hooks:
       - id: pyupgrade
         args:
           - --py37-plus
 
   # Autoformat: Python code
-  - repo: https://github.com/psf/black
-    rev: 25.1.0
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 25.12.0
     hooks:
       - id: black
         args:
@@ -34,7 +34,7 @@ repos:
 
   # Autoformat: Python code
   - repo: https://github.com/pycqa/isort
-    rev: 6.0.1
+    rev: 7.0.0
     hooks:
       - id: isort
         args:
@@ -57,7 +57,7 @@ repos:
 
   # Misc autoformatting and linting
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: end-of-file-fixer
         exclude_types: [svg, css, json]

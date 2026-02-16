@@ -8,7 +8,7 @@ dependencies:
   # Source code:    https://github.com/jupyterhub/binderhub/tree/main/helm-chart
   # App changelog:  https://github.com/jupyterhub/binderhub/blob/main/CHANGES.md
   - name: binderhub
-    version: "1.0.0-0.dev.git.3815.h33bcc37c"
+    version: "1.0.0-0.dev.git.3901.h0dd2abb9"
     repository: https://jupyterhub.github.io/helm-chart
     condition: binderhubEnabled
 
@@ -17,7 +17,7 @@ dependencies:
   # Source code:   https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx
   # App changelog: https://github.com/kubernetes/ingress-nginx/blob/main/Changelog.md
   - name: ingress-nginx
-    version: "4.13.2"
+    version: "4.14.3"
     repository: https://kubernetes.github.io/ingress-nginx
     condition: ingress-nginx.enabled
 
@@ -25,7 +25,7 @@ dependencies:
   # Source code:   https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus
   # App changelog: https://github.com/prometheus/prometheus/blob/main/CHANGELOG.md
   - name: prometheus
-    version: "27.32.0"
+    version: "28.9.0"
     repository: https://prometheus-community.github.io/helm-charts
     condition: prometheus.enabled
 
@@ -33,14 +33,14 @@ dependencies:
   # Source code:   https://github.com/grafana/helm-charts/tree/main/charts/grafana
   # App changelog: https://github.com/grafana/grafana/blob/main/CHANGELOG.md
   - name: grafana
-    version: "9.4.3"
+    version: "10.5.15"
     repository: https://grafana.github.io/helm-charts
     condition: grafana.enabled
 
   # cryptnono, counters crypto mining
   # Source code: https://github.com/cryptnono/cryptnono/
   - name: cryptnono
-    version: "0.3.2-0.dev.git.177.hd39ed79"
+    version: "0.3.2-0.dev.git.256.he86658e"
     repository: https://cryptnono.github.io/cryptnono/
     condition: cryptnono.enabled
 
@@ -62,3 +62,14 @@ dependencies:
     version: 4.2.0
     repository: https://openebs.github.io/dynamic-localpv-provisioner
     condition: localpv-provisioner.enabled
+
+  - name: harbor
+    version: 1.18.1
+    repository: https://helm.goharbor.io
+    condition: harbor.enabled
+
+  # Watch pod logs, send alerts to Zulip
+  - name: k8s-log-alerter-zulip
+    version: 0.1.2
+    repository: https://www.manicstreetpreacher.co.uk/k8s-log-alerter-zulip/
+    condition: k8s-log-alerter-zulip.enabled

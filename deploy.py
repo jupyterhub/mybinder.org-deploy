@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import argparse
-import glob
 import json
 import os
 import re
 import subprocess
 import sys
+from pathlib import Path
 
 # Color codes for colored output!
 if os.environ.get("TERM"):
@@ -17,11 +17,10 @@ else:
     # no term, no colors
     BOLD = RED = GREEN = NC = ""
 
-HERE = os.path.dirname(__file__)
-ABSOLUTE_HERE = os.path.dirname(os.path.realpath(__file__))
+HERE = Path(__file__).parent
+ABSOLUTE_HERE = HERE.resolve()
 
 GCP_PROJECTS = {
-    "staging": "binderhub-288415",
     "prod": "binderhub-288415",
 }
 
@@ -36,6 +35,8 @@ KUBECONFIG_CLUSTERS = {
     "ovh2",
     "hetzner-2i2c",
     "hetzner-gesis",
+    "staging",
+    "bids-ovh",
 }
 
 # Mapping of config name to cluster name for AWS EKS deployments
@@ -52,7 +53,7 @@ def check_call(cmd, dry_run):
     Print a command if dry_run is true, otherwise run it with subprocess.check_call
     """
     if dry_run:
-        print("dry-run:", " ".join(cmd))
+        print("dry-run:", " ".join([str(c) for c in cmd]))
     else:
         subprocess.check_call(cmd)
 
@@ -76,7 +77,7 @@ def setup_auth_azure(cluster, dry_run=False):
     """
     # Read in auth info. Note that we assume a file name convention of
     # secrets/{CLUSTER_NAME}-auth-key-prod.json
-    azure_file = os.path.join(ABSOLUTE_HERE, "secrets", f"{cluster}-auth-key-prod.json")
+    azure_file = ABSOLUTE_HERE / "secrets" / f"{cluster}-auth-key-prod.json"
     with open(azure_file) as stream:
         azure = json.load(stream)
 
@@ -114,8 +115,8 @@ def setup_auth_kubeconfig(release, cluster, dry_run=False):
     """
     print(f"Setup authentication for namespace {release} with kubeconfig")
 
-    kubeconfig = os.path.join(ABSOLUTE_HERE, "secrets", f"{release}-kubeconfig.yml")
-    os.environ["KUBECONFIG"] = kubeconfig
+    kubeconfig = ABSOLUTE_HERE / "secrets" / f"{release}-kubeconfig.yaml"
+    os.environ["KUBECONFIG"] = str(kubeconfig)
     print(f"Current KUBECONFIG='{kubeconfig}'")
 
 
@@ -173,10 +174,15 @@ def setup_auth_aws(cluster, dry_run=False):
     print(stdout)
 
 
-def update_networkbans(cluster, dry_run=False):
+def update_networkbans(cluster, release, name, dry_run=False):
     """
-    Run secrets/ban.py to update network bans
+    Run ban scripts to update network and cryptnono bans
+
+    These must be run before deploying the mybinder chart as they
+    may setup some application config
     """
+    if not name:
+        name = release
 
     print(BOLD + GREEN + f"Updating network-bans for {cluster}" + NC, flush=True)
 
@@ -188,18 +194,27 @@ def update_networkbans(cluster, dry_run=False):
 
     check_call(ban_command, dry_run)
 
+    ban_command = [
+        sys.executable,
+        "secrets/generate-banned-ips.py",
+        f"--namespace={name}",
+        "--allowed-cidrs-file=secrets/allowed_ips.txt",
+    ]
+    check_call(ban_command, dry_run)
+
 
 def get_config_files(release, config_dir="config"):
     """Return the list of config files to load"""
     # common config files
-    config_files = sorted(glob.glob(os.path.join(config_dir, "common", "*.yaml")))
-    config_files.extend(
-        sorted(glob.glob(os.path.join("secrets", config_dir, "common", "*.yaml")))
-    )
+    config_dir = Path(config_dir)
+    secret_config_dir = Path("secrets") / config_dir
+
+    config_files = sorted(config_dir.glob("common/*.yaml"))
+    config_files.extend(sorted(secret_config_dir.glob("common/*.yaml")))
     # release-specific config files
-    for config_dir in (config_dir, os.path.join("secrets", config_dir)):
-        f = os.path.join(config_dir, release + ".yaml")
-        if os.path.exists(f):
+    for config_dir in (config_dir, secret_config_dir):
+        f = config_dir / f"{release}.yaml"
+        if f.exists():
             config_files.append(f)
     return config_files
 
@@ -565,7 +580,7 @@ def main():
                 raise Exception("Cloud cluster not recognised!")
 
     if args.stage in ("all", "networkban"):
-        update_networkbans(cluster, args.dry_run)
+        update_networkbans(cluster, args.release, args.name, args.dry_run)
     if args.stage in ("all", "system"):
         deploy_system_charts(args.release, args.name, args.dry_run, args.diff)
     if args.stage in ("all", "certmanager") and cluster != "localhost":
