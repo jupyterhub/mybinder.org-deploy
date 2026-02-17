@@ -36,11 +36,11 @@ jobs:
           #        idea on how to get that version dynamically.
           #
           - release: staging
-            k3s-channel: "v1.24"
+            k3s-channel: "v1.33"
           - release: prod
-            k3s-channel: "v1.24"
+            k3s-channel: "v1.33"
           - release: hetzner-2i2c
-            k3s-channel: "v1.24"
+            k3s-channel: "v1.33"
 
     steps:
       - uses: actions/checkout@v6
