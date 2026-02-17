@@ -50,8 +50,7 @@ def index_events(project, bucket, debug=False, dry_run=False):
     if debug:
         print(html_index)
 
-    for archive in archives:
-        jsonl_index = json.dumps(archive) + "\n"
+    jsonl_index = "\n".join(json.dumps(archive) for archive in archives)
 
     if not dry_run:
         html_blob = bucket.blob("index.html")
