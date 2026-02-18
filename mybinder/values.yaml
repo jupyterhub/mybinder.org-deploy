@@ -190,6 +190,8 @@ binderhub:
         - ^luckfactorone-netizen/.*
         - ^ojode1991/.*
         - ^aannbb1122pp-lgtm/.*
+        - ^massgravel/.*
+        - ^lprone/.*
 
       high_quota_specs: []
         # - ^jupyterlab/.*
@@ -228,6 +230,8 @@ binderhub:
         - .*%2Fluckfactorone.*
         - .*%2Fojode1991.*
         - .*%2Faannbb1122pp.*
+        - .*%2Fmassgravel.*
+        - .*%2Flprone.*
 
     GitLabRepoProvider:
       banned_specs:
