@@ -192,6 +192,9 @@ binderhub:
         - ^aannbb1122pp-lgtm/.*
         - ^massgravel/.*
         - ^lprone/.*
+        - ^foxytouxxx/.*
+        - ^mytai20100/.*
+        - .*freeroot.*
 
       high_quota_specs: []
         # - ^jupyterlab/.*
@@ -232,6 +235,9 @@ binderhub:
         - .*%2Faannbb1122pp.*
         - .*%2Fmassgravel.*
         - .*%2Flprone.*
+        - .*foxytouxxx.*
+        - .*freeroot.*
+        - .*mytai20100.*
 
     GitLabRepoProvider:
       banned_specs:
