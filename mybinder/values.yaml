@@ -43,6 +43,11 @@ k8s-log-alerter-zulip:
       limit_first_n: 4
       limit_interval_seconds: 60
       limit_reset_seconds: 600
+    "Minesweeper killed":
+      pod_labels:
+        name: minesweeper
+      # https://github.com/jupyterhub/mybinder.org-deploy/blob/68c2fe58b4a8eddd07f08fa48a3d1259557b7eab/mybinder/files/minesweeper/minesweeper.py#L314
+      regex: "^Deleting pod "
 
 buildkitPruner:
   enabled: true
