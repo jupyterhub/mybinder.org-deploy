@@ -70,6 +70,6 @@ dependencies:
 
   # Watch pod logs, send alerts to Zulip
   - name: k8s-log-alerter-zulip
-    version: 0.1.2
+    version: 0.1.3
     repository: https://www.manicstreetpreacher.co.uk/k8s-log-alerter-zulip/
     condition: k8s-log-alerter-zulip.enabled
