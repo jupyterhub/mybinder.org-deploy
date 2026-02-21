@@ -195,6 +195,7 @@ binderhub:
         - ^foxytouxxx/.*
         - ^mytai20100/.*
         - .*freeroot.*
+        - .*mdkuhjani.*
 
       high_quota_specs: []
         # - ^jupyterlab/.*
