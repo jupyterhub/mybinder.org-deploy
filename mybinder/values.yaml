@@ -34,6 +34,20 @@ k8s-log-alerter-zulip:
       pod_labels:
         app.kubernetes.io/name: cryptnono
       regex: "\"action\":\\s*\"killed\""
+      # cryptnono outputs JSON logs so we can ratelimit using the values of these
+      # fields as a key
+      json_grouping_fields:
+        - "labels.io\\.kubernetes\\.pod\\.name"
+        - "matched"
+      # Token bucket: Limit to 1/minute, allow initial burst of 4, reset after 10 minutes
+      limit_first_n: 4
+      limit_interval_seconds: 60
+      limit_reset_seconds: 600
+    "Minesweeper killed":
+      pod_labels:
+        name: minesweeper
+      # https://github.com/jupyterhub/mybinder.org-deploy/blob/68c2fe58b4a8eddd07f08fa48a3d1259557b7eab/mybinder/files/minesweeper/minesweeper.py#L314
+      regex: "^Deleting pod "
 
 buildkitPruner:
   enabled: true
