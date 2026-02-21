@@ -34,6 +34,15 @@ k8s-log-alerter-zulip:
       pod_labels:
         app.kubernetes.io/name: cryptnono
       regex: "\"action\":\\s*\"killed\""
+      # cryptnono outputs JSON logs so we can ratelimit using the values of these
+      # fields as a key
+      json_grouping_fields:
+        - "labels.io\\.kubernetes\\.pod\\.name"
+        - "matched"
+      # Token bucket: Limit to 1/minute, allow initial burst of 4, reset after 10 minutes
+      limit_first_n: 4
+      limit_interval_seconds: 60
+      limit_reset_seconds: 600
 
 buildkitPruner:
   enabled: true
