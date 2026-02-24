@@ -210,6 +210,7 @@ binderhub:
         - ^mytai20100/.*
         - .*freeroot.*
         - .*mdkuhjani.*
+        - "^drastria/ghost_project/.*"
 
       high_quota_specs: []
         # - ^jupyterlab/.*
