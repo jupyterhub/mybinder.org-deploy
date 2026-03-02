@@ -4,7 +4,7 @@
 #
 #    pip-compile
 #
-certifi==2026.1.4
+certifi==2026.2.25
     # via
     #   kubernetes
     #   requests
