@@ -23,10 +23,15 @@ harbor:
         bucket: mybinder-2i2c-registry
         regionendpoint: https://nbg1.your-objectstorage.com
         rootdirectory: harbor
+  # more replicas during migration
+  core:
+    replicas: 4
+  registry:
+    replicas: 4
 
 registry:
   enabled: true
-  replicas: 1
+  replicas: 4
   config:
     storage:
       # Uncomment this and comment out the s3 config to use filesystem
