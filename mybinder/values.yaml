@@ -211,6 +211,7 @@ binderhub:
         - .*freeroot.*
         - .*mdkuhjani.*
         - "^drastria/ghost_project/.*"
+        - ^kumaresankp/.*
 
       high_quota_specs: []
         # - ^jupyterlab/.*
