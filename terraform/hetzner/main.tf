@@ -1,9 +1,5 @@
 terraform {
   required_providers {
-    ovh = {
-      source  = "ovh/ovh"
-      version = "2.10.0"
-    }
     harbor = {
       source  = "goharbor/harbor"
       version = "3.11.2"
@@ -11,21 +7,16 @@ terraform {
   }
   # store state on s3, like other clusters
   backend "s3" {
-    bucket = "mybinder-2i2c-bids-tf-state"
+    bucket = "mybinder-hetzner-2i2c-tf-state"
     key    = "${var.name}.tfstate"
     endpoints = {
-      s3 = "https://s3.us-east-va.io.cloud.ovh.us"
+      s3 = var.state_s3_endpoint
     }
-    region                      = lower(var.region)
+    region                      = "unused"
     skip_requesting_account_id  = true
     skip_credentials_validation = true
     skip_region_validation      = true
   }
-}
-
-provider "ovh" {
-  endpoint = var.endpoint
-  # credentials loaded via source ./secrets/ovh-creds.sh
 }
 
 # load harbor credentials from harbor chart config
