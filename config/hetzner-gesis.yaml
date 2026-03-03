@@ -2,7 +2,7 @@ projectName: hetzner-gesis
 
 registry:
   enabled: true
-  replicas: 1
+  replicas: 4
   config:
     storage:
       # We share the same S3 storage with 2i2c
