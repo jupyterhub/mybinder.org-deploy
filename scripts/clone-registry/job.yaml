@@ -1,0 +1,45 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: image-migration
+spec:
+  template:
+    metadata:
+      labels:
+        component: migrator
+        app: mybinder-clone-registry
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: migrate
+          image: ghcr.io/minrk/mybinder-clone-registry
+          imagePullPolicy: Always
+          # if we just sleep in the container,
+          # can use
+          # cat clone-registry.py | kubectl exec -i image-migration-abc123 -- python3
+          # to do local editing
+          # args:
+          #   - sh
+          #   - -c
+          #   - sleep 3600
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+            - name: XDG_RUNTIME_DIR
+              value: /run
+          volumeMounts:
+            - mountPath: /etc/binderhub/config/
+              name: config
+              readOnly: true
+            - mountPath: /run/containers
+              name: registry-auth
+              readOnly: true
+      volumes:
+        - name: config
+          secret:
+            defaultMode: 420
+            secretName: binder-secret
+        - name: registry-auth
+          secret:
+            defaultMode: 420
+            secretName: migrate-registry-auth
