@@ -27,3 +27,16 @@ provider "ovh" {
   endpoint = var.endpoint
   # credentials loaded via source ./secrets/ovh-creds.sh
 }
+
+# load harbor credentials from harbor chart config
+# (avoids redundancy)
+locals {
+  config        = yamldecode(file("${path.module}/../../config/${var.name}.yaml"))
+  secret_config = yamldecode(file("${path.module}/../../secrets/config/${var.name}.yaml"))
+}
+
+provider "harbor" {
+  url      = "https://${local.config.harbor.expose.ingress.hosts.core}"
+  username = "admin"
+  password = local.secret_config.harbor.harborAdminPassword
+}
