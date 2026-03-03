@@ -4,6 +4,15 @@ harbor:
   enabled: true
   expose:
     ingress:
+      annotations:
+        # increase a bunch of timeouts to avoid connections being dropped for large uploads
+        nginx.ingress.kubernetes.io/client-body-timeout: "600"
+        nginx.ingress.kubernetes.io/client-header-timeout: "600"
+        nginx.ingress.kubernetes.io/keep-alive: "600"
+        nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+        nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+        nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+        nginx.ingress.kubernetes.io/upstream-keepalive-timeout: "600"
       hosts:
         core: oci.2i2c.mybinder.org
   persistence:
