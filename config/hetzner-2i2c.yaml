@@ -1,5 +1,20 @@
 projectName: hetzner-2i2c
 
+harbor:
+  enabled: true
+  expose:
+    ingress:
+      hosts:
+        core: oci.2i2c.mybinder.org
+  persistence:
+    imageChartStorage:
+      s3:
+        # https://github.com/goharbor/harbor-helm/blob/v1.18.1/values.yaml#L225
+        region: does-not-matter
+        bucket: mybinder-2i2c-registry
+        regionendpoint: https://nbg1.your-objectstorage.com
+        rootdirectory: harbor
+
 registry:
   enabled: true
   replicas: 1
