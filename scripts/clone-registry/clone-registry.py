@@ -32,6 +32,7 @@ _needs_resolved_ref = (
 values_yaml = Path("/etc/binderhub/config/values.yaml")
 
 CONCURRENCY = int(os.environ.get("CONCURRENCY") or 4)
+DAYS = int(os.environ.get("DAYS") or 2)
 DRY_RUN = os.environ.get("DRY_RUN", "") not in {"", "0"}
 DEST_PREFIX = os.environ.get("DEST_PREFIX", "oci.2i2c.mybinder.org/mybinder-builds/")
 REGISTRIES = os.environ.get(
@@ -97,7 +98,7 @@ async def compute_image(build_event: dict):
     return image_name
 
 
-async def list_recent_images(days: int = 1, members=set()):
+async def list_recent_images(days: int = 2, members=set()):
     seen_events = set()
     seen_images = set()
     today = date.today()
@@ -209,7 +210,7 @@ async def main():
     with tqdm(desc="found") as image_progress, tqdm(
         desc="copied", total=0
     ) as copy_progress, cancel_on_error(pool):
-        async for image in list_recent_images():
+        async for image in list_recent_images(DAYS):
             image_progress.update(1)
             copy_progress.total += 1
             # cf = pool.submit(migrate_image, image, DEST_PREFIX)

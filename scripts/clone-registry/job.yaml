@@ -27,6 +27,8 @@ spec:
               value: "1"
             - name: XDG_RUNTIME_DIR
               value: /run
+            - name: DAYS
+              value: "2"
           volumeMounts:
             - mountPath: /etc/binderhub/config/
               name: config
