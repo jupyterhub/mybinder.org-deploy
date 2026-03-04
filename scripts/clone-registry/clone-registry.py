@@ -105,7 +105,13 @@ async def list_recent_images(days: int = 1, members=set()):
         day = today - timedelta(days=i)
         url = f"https://archive.analytics.mybinder.org/events-{day.strftime("%Y-%m-%d")}.jsonl"
         for line in requests.get(url).text.splitlines():
-            event = json.loads(line)
+            if not line.strip():
+                continue
+            try:
+                event = json.loads(line)
+            except Exception:
+                print(f"ERROR loading event: {line}")
+                continue
             key = (event["provider"], event["spec"], event["ref"], event["origin"])
             if key in seen_events:
                 continue
