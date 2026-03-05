@@ -3,6 +3,7 @@ kind: Job
 metadata:
   name: image-migration
 spec:
+  parallelism: 1
   template:
     metadata:
       labels:

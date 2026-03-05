@@ -152,6 +152,9 @@ def migrate_image(src_image: str, dest_prefix: str):
         [
             "skopeo",
             "copy",
+            "--dest-precompute-digests",
+            "--preserve-digests",
+            "--all",
             f"--retry-times={RETRY_TIMES}",
             f"docker://{src_image}",
             f"docker://{dest_image}",
