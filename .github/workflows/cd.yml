@@ -376,7 +376,7 @@ jobs:
           echo "prnum=$PR_NUM" >> $GITHUB_OUTPUT
 
       - name: Comment on PR with Job Status and delete the test branch
-        if: ${{ steps.staging-deploy-status.outputs.status }} == 'completed'
+        if: ${{ steps.staging-deploy-status.outputs.status == 'completed' }}
         uses: actions/github-script@v8
         with:
           github-token: ${{ secrets.jupyterhub_bot_pat }}
