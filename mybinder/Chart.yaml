@@ -8,7 +8,7 @@ dependencies:
   # Source code:    https://github.com/jupyterhub/binderhub/tree/main/helm-chart
   # App changelog:  https://github.com/jupyterhub/binderhub/blob/main/CHANGES.md
   - name: binderhub
-    version: "1.0.0-0.dev.git.3917.h0e256d2a"
+    version: "1.0.0-0.dev.git.3919.ha0c55e87"
     repository: https://jupyterhub.github.io/helm-chart
     condition: binderhubEnabled
 
