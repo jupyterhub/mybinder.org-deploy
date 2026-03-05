@@ -27,6 +27,7 @@ on:
       - "!.github/workflows/cd.yml"
   pull_request:
     types: [labeled]
+  workflow_dispatch:
 
 # Global environment variables
 env:
