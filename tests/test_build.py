@@ -64,7 +64,9 @@ def test_build_binder(binder_url):
     ):
         build_url = binder_url + f"/build/gh/{repo}/{branch}"
         print(f"building {build_url}")
-        r = requests.get(build_url, stream=True)
+        r = requests.get(
+            build_url, stream=True, headers={"Accept": "text/event-stream"}
+        )
         r.raise_for_status()
         for line in r.iter_lines():
             line = line.decode("utf8")

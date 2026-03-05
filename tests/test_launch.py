@@ -13,7 +13,7 @@ def test_launch_binder(binder_url):
     repo = "binder-examples/requirements"
     ref = "50533eb"
     build_url = binder_url + f"/build/gh/{repo}/{ref}"
-    r = requests.get(build_url, stream=True)
+    r = requests.get(build_url, stream=True, headers={"Accept": "text/event-stream"})
     r.raise_for_status()
     for line in r.iter_lines():
         line = line.decode("utf8")
