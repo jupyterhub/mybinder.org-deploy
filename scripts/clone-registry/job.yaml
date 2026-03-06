@@ -31,7 +31,7 @@ spec:
             - name: DAYS
               value: "7"
             - name: CONCURRENCY
-              value: "4"
+              value: "1"
           volumeMounts:
             - mountPath: /etc/binderhub/config/
               name: config
