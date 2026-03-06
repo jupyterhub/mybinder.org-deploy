@@ -84,10 +84,10 @@ grafana:
   resources:
     requests:
       cpu: 10m
-      memory: 128Mi
+      memory: 256Mi
     limits:
       cpu: 250m
-      memory: 128Mi
+      memory: 256Mi
   ingress:
     hosts:
       - grafana.mybinder.org
