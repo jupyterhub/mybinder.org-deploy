@@ -164,6 +164,7 @@ def migrate_image(src_image: str, dest_prefix: str, stream):
             f"docker://{dest_image}",
         ],
         capture_output=not interactive,
+        text=True,
         check=False,
     )
     if p.returncode:
@@ -242,6 +243,7 @@ async def main():
 
             def handle_done(f):
                 copy_progress.update(1)
+                error_progress.total += 1
                 if f.exception():
                     error_progress.update(1)
                 else:
@@ -262,7 +264,6 @@ async def main():
             await asyncio.gather(*done)
         image_progress.total = image_progress.n
         copy_progress.total = image_progress.n
-        error_progress.total = image_progress.n
         image_progress.close()
         await asyncio.gather(*futures)
 
