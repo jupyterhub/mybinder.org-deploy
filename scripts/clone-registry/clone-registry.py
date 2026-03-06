@@ -1,6 +1,8 @@
 import asyncio
 import json
 import os
+import sys
+import time
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from datetime import date, timedelta
@@ -40,6 +42,8 @@ REGISTRIES = os.environ.get(
 ).split(",")
 ORIGINS = os.environ.get("ORIGINS", "gesis.mybinder.org,2i2c.mybinder.org").split(",")
 RETRY_TIMES = int(os.environ.get("RETRY_TIMES") or 5)
+
+interactive = sys.stdin.isatty()
 
 
 def load_incluster_config():
@@ -128,10 +132,10 @@ async def list_recent_images(days: int = 2, members=set()):
             yield image
 
 
-def migrate_image(src_image: str, dest_prefix: str):
+def migrate_image(src_image: str, dest_prefix: str, stream):
     registry, _, image = src_image.partition("/")
     dest_image = f"{dest_prefix}{image}"
-    print(f"{'DRY RUN: ' * DRY_RUN}copying {src_image} -> {dest_image}")
+    stream.write(f"{'DRY RUN: ' * DRY_RUN}copying {src_image} -> {dest_image}")
     if DRY_RUN:
         p = run(
             [
@@ -159,10 +163,15 @@ def migrate_image(src_image: str, dest_prefix: str):
             f"docker://{src_image}",
             f"docker://{dest_image}",
         ],
+        capture_output=not interactive,
         check=False,
     )
     if p.returncode:
-        print(f"Error copying {src_image} -> {dest_image}")
+        stream.write(f"Error copying {src_image} -> {dest_image}")
+        if p.stdout:
+            stream.write(p.stdout)
+        if p.stderr:
+            stream.write(p.stderr)
 
     return p.returncode
 
@@ -214,27 +223,39 @@ async def main():
     loop = asyncio.get_running_loop()
     futures = set()
     pool = ThreadPoolExecutor(CONCURRENCY)
-    with tqdm(desc="found") as image_progress, tqdm(
-        desc="copied", total=0
-    ) as copy_progress, tqdm(desc="errors", total=0) as error_progress, cancel_on_error(
+    start = time.monotonic()
+    with tqdm(desc="found", disable=False) as image_progress, tqdm(
+        desc="copied", total=0, disable=False
+    ) as copy_progress, tqdm(
+        desc="errors", total=0, disable=False
+    ) as error_progress, cancel_on_error(
         pool
     ):
+
         async for image in list_recent_images(DAYS):
             image_progress.update(1)
             copy_progress.total += 1
-            f = loop.run_in_executor(pool, migrate_image, image, DEST_PREFIX)
+            f = loop.run_in_executor(
+                pool, migrate_image, image, DEST_PREFIX, copy_progress
+            )
             futures.add(f)
 
             def handle_done(f):
-
+                copy_progress.update(1)
                 if f.exception():
                     error_progress.update(1)
                 else:
                     result = f.result()
                     if result:
                         error_progress.update(1)
-                    else:
-                        copy_progress.update(1)
+
+            if False and not interactive:
+                duration = time.monotonic() - start
+                td = timedelta(seconds=int(duration))
+                total = image_progress.total or "?"
+                print(f"Duration: {td}")
+                print(f"copied: {copy_progress.n} / {total}")
+                print(f"errors: {error_progress.n} / {copy_progress.n}")
 
             f.add_done_callback(handle_done)
             done, futures = await asyncio.wait(futures, timeout=0)
