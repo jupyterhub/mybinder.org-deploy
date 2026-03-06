@@ -656,6 +656,13 @@ static:
 # values ref: https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
 grafana:
   enabled: true
+  resources:
+    requests:
+      cpu: 10m
+      memory: 256Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
   ingress:
     enabled: true
     annotations:
