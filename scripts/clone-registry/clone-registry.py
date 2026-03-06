@@ -148,7 +148,7 @@ def migrate_image(src_image: str, dest_prefix: str):
         print(f"{src_image}: {total_bytes / 1e9:.1f}GB")
         return
 
-    run(
+    p = run(
         [
             "skopeo",
             "copy",
@@ -159,8 +159,12 @@ def migrate_image(src_image: str, dest_prefix: str):
             f"docker://{src_image}",
             f"docker://{dest_image}",
         ],
-        check=True,
+        check=False,
     )
+    if p.returncode:
+        print(f"Error copying {src_image} -> {dest_image}")
+
+    return p.returncode
 
 
 def skopeo_login(registry: str, cluster_name: str):
@@ -212,18 +216,32 @@ async def main():
     pool = ThreadPoolExecutor(CONCURRENCY)
     with tqdm(desc="found") as image_progress, tqdm(
         desc="copied", total=0
-    ) as copy_progress, cancel_on_error(pool):
+    ) as copy_progress, tqdm(desc="errors", total=0) as error_progress, cancel_on_error(
+        pool
+    ):
         async for image in list_recent_images(DAYS):
             image_progress.update(1)
             copy_progress.total += 1
-            # cf = pool.submit(migrate_image, image, DEST_PREFIX)
-            # f = asyncio.wrap_future(cf)
             f = loop.run_in_executor(pool, migrate_image, image, DEST_PREFIX)
             futures.add(f)
-            f.add_done_callback(lambda f: copy_progress.update(1))
+
+            def handle_done(f):
+
+                if f.exception():
+                    error_progress.update(1)
+                else:
+                    result = f.result()
+                    if result:
+                        error_progress.update(1)
+                    else:
+                        copy_progress.update(1)
+
+            f.add_done_callback(handle_done)
             done, futures = await asyncio.wait(futures, timeout=0)
             await asyncio.gather(*done)
         image_progress.total = image_progress.n
+        copy_progress.total = image_progress.n
+        error_progress.total = image_progress.n
         image_progress.close()
         await asyncio.gather(*futures)
 
