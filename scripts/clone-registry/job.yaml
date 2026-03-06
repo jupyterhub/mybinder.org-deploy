@@ -29,9 +29,9 @@ spec:
             - name: XDG_RUNTIME_DIR
               value: /run
             - name: DAYS
-              value: "2"
+              value: "7"
             - name: CONCURRENCY
-              value: "1"
+              value: "4"
           volumeMounts:
             - mountPath: /etc/binderhub/config/
               name: config
