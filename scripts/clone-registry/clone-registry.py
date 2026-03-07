@@ -117,7 +117,10 @@ async def list_recent_images(days: int = 2, members=set()):
             except Exception:
                 print(f"ERROR loading event: {line}")
                 continue
-            key = (event["provider"], event["spec"], event["ref"], event["origin"])
+
+            # omit resolved ref to only preserve latest build of a given spec (no need to preserve outdated builds)
+            # omit origin because they currently point to the same storage
+            key = (event["provider"], event["spec"])
             if key in seen_events:
                 continue
             else:
