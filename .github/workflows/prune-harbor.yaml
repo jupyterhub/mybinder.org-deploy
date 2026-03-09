@@ -20,6 +20,7 @@ jobs:
       matrix:
         include:
           - name: bids-ovh
+          - name: hetzner-2i2c
 
     steps:
       - uses: actions/checkout@v6
