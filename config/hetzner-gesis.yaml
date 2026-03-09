@@ -1,22 +1,5 @@
 projectName: hetzner-gesis
 
-registry:
-  enabled: false
-  replicas: 1
-  config:
-    storage:
-      # We share the same S3 storage with 2i2c
-      s3:
-        regionendpoint: https://nbg1.your-objectstorage.com
-        bucket: mybinder-2i2c-registry
-        region: does-not-matter
-  storage:
-    filesystem:
-      storageClassName: "local-path"
-  ingress:
-    hosts:
-      - registry.gesis.mybinder.org
-
 binderhub:
   config:
     BinderHub:

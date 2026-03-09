@@ -59,32 +59,6 @@ buildkitPruner:
   # Run this every 5min
   schedule: "*/5 * * * *"
 
-registry:
-  enabled: false
-  replicas: 2
-  # Passed through to docker distribution / registry config
-  # https://distribution.github.io/distribution/about/configuration/
-  config:
-    version: 0.1
-    auth:
-      htpasswd:
-        realm: basic-realm
-        path: /etc/distribution/auth.htpasswd
-
-    http:
-      addr: :5000
-    log:
-      level: debug
-      accesslog:
-        disabled: false
-  service:
-    type: ClusterIP
-  storage:
-    filesystem:
-      enabled: false
-      storageClassName: ""
-      size: 10Gi
-
 harbor:
   enabled: false
   expose:
