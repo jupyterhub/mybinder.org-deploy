@@ -53,7 +53,7 @@ binderhub:
       hub_url: https://hub.2i2c.mybinder.org
       badge_base_url: https://mybinder.org
       sticky_builds: true
-      image_prefix: oci.2i2c.mybinder.org/i-
+      image_prefix: oci.2i2c.mybinder.org/mybinder-builds/i-
     KubernetesBuildExecutor:
       docker_host: /var/run/dind/docker.sock
       repo2docker_extra_args:
