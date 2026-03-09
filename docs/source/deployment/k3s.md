@@ -91,6 +91,19 @@ a secret.
 2. Set appropriate permissions with `chmod 0400 secrets/<cluster-name>.key`.
 3. Copy `secrets/<cluster-name>.key.pub` (**NOTE THE .pub**) and paste it as a **new line** in `/root/.ssh/authorized_keys` on your server. Do not replace any existing lines in this file.
 
+## Increase some fs limits
+
+To avoid errors like
+
+> failed to create fsnotify watcher: too many open files
+
+Increase the fs.inotify limits:
+
+```bash
+sudo sysctl -w fs.inotify.max_user_instances=8192
+sudo sysctl -w fs.inotify.max_user_watches=524288
+```
+
 ## Setup DNS entries
 
 There's only one IP to set DNS entries for - the public IP of the VM. No loadbalancers or similar here.
