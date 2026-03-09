@@ -147,6 +147,19 @@ prometheus:
         - hosts:
             - prometheus.2i2c.mybinder.org
           secretName: kubelego-tls-prometheus
+  extraScrapeConfigs: |
+    - job_name: 'harbor-exporter'
+      static_configs:
+        - targets:
+            - hetzner-2i2c-harbor-exporter:8001
+    - job_name: 'harbor-registry'
+      static_configs:
+        - targets:
+            - hetzner-2i2c-harbor-registry:8001
+    - job_name: 'harbor-jobservice'
+      static_configs:
+        - targets:
+            - hetzner-2i2c-harbor-jobservice:8001
 
 ingress-nginx:
   controller:
