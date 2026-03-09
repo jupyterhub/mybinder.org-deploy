@@ -175,6 +175,9 @@ binderhub:
       bannedIps: []
 
   config:
+    DataverseProvider:
+      banned_specs:
+        - 10.7910/DVN/7RVV9N
     GitHubRepoProvider:
       # Add banned repositories to the list below
       # They should be strings that will match "^<org-name>/<repo-name>.*"
