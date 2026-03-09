@@ -1,7 +1,7 @@
 projectName: hetzner-gesis
 
 registry:
-  enabled: true
+  enabled: false
   replicas: 1
   config:
     storage:
