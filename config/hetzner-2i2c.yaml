@@ -29,7 +29,7 @@ harbor:
     replicas: 1
 
 registry:
-  enabled: true
+  enabled: false
   replicas: 1
   config:
     storage:
