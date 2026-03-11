@@ -28,25 +28,6 @@ harbor:
   registry:
     replicas: 1
 
-registry:
-  enabled: false
-  replicas: 1
-  config:
-    storage:
-      # Uncomment this and comment out the s3 config to use filesystem
-      # filesystem:
-      #   rootdirectory: /var/lib/registry
-      s3:
-        regionendpoint: https://nbg1.your-objectstorage.com
-        bucket: mybinder-2i2c-registry
-        region: does-not-matter
-  storage:
-    filesystem:
-      storageClassName: "local-path"
-  ingress:
-    hosts:
-      - registry.2i2c.mybinder.org
-
 binderhub:
   config:
     BinderHub:
@@ -64,9 +45,6 @@ binderhub:
 
     LaunchQuota:
       total_quota: 300
-
-    # DockerRegistry:
-    # token_url: "https://2lmrrh8f.gra7.container-registry.ovh.net/service/token?service=harbor-registry"
 
   replicas: 2
 
