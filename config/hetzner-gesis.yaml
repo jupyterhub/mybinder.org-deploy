@@ -68,7 +68,6 @@ harbor:
   enabled: true
   expose:
     ingress:
-      annotations:
       hosts:
         core: registry.gesis.mybinder.org
   persistence:
