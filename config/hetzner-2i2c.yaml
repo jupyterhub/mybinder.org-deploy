@@ -24,9 +24,9 @@ harbor:
         regionendpoint: https://nbg1.your-objectstorage.com
         rootdirectory: harbor
   core:
-    replicas: 1
+    replicas: 2
   registry:
-    replicas: 1
+    replicas: 2
 
 binderhub:
   config:
