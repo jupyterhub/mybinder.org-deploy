@@ -64,6 +64,26 @@ binderhub:
     # handled by buildkit pruner
     enabled: false
 
+harbor:
+  enabled: true
+  expose:
+    ingress:
+      annotations:
+      hosts:
+        core: registry.gesis.mybinder.org
+  persistence:
+    imageChartStorage:
+      s3:
+        # https://github.com/goharbor/harbor-helm/blob/v1.18.1/values.yaml#L225
+        region: does-not-matter
+        bucket: mybinder-2i2c-gesis-registry
+        regionendpoint: https://nbg1.your-objectstorage.com
+        rootdirectory: harbor
+  core:
+    replicas: 2
+  registry:
+    replicas: 2
+
 grafana:
   ingress:
     hosts:
@@ -97,6 +117,19 @@ prometheus:
         - hosts:
             - prometheus.gesis.mybinder.org
           secretName: kubelego-tls-prometheus
+  extraScrapeConfigs: |
+    - job_name: 'harbor-exporter'
+      static_configs:
+        - targets:
+            - hetzner-gesis-harbor-exporter:8001
+    - job_name: 'harbor-registry'
+      static_configs:
+        - targets:
+            - hetzner-gesis-harbor-registry:8001
+    - job_name: 'harbor-jobservice'
+      static_configs:
+        - targets:
+            - hetzner-gesis-harbor-jobservice:8001
 
 ingress-nginx:
   controller:
