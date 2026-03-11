@@ -1,7 +1,7 @@
 data "ovh_cloud_project_capabilities_containerregistry_filter" "registry_plan" {
   service_name = var.service_name
-  plan_name = var.registry_plan
-  region    = var.region
+  plan_name    = var.registry_plan
+  region       = var.region
 }
 
 resource "ovh_cloud_project_containerregistry" "registry" {

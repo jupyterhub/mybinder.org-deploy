@@ -11,12 +11,12 @@ terraform {
 # user builds go in mybinder-builds
 # these are separate for easier separation of retention policies
 resource "harbor_project" "mybinder-builds" {
-  name = "mybinder-builds"
+  name          = "mybinder-builds"
   storage_quota = var.registry_quota_gb
 }
 
 resource "harbor_project" "mybinder-staging" {
-  name = "mybinder-staging"
+  name          = "mybinder-staging"
   storage_quota = 25
 }
 
@@ -121,17 +121,39 @@ resource "harbor_garbage_collection" "gc" {
   delete_untagged = true
 }
 
+resource "harbor_registry" "mirrors" {
+  for_each      = var.push_mirrors
+  provider_name = "harbor"
+  name          = each.value.name
+  endpoint_url  = each.value.url
+  access_id     = each.value.access_id
+}
+
+resource "harbor_replication" "push" {
+  for_each               = var.push_mirrors
+  name                   = "push_${each.value.name}"
+  action                 = "push"
+  registry_id            = harbor_registry.mirrors[each.key].registry_id
+  schedule               = "event_based"
+  override               = false
+  dest_namespace         = "mybinder-builds"
+  dest_namespace_replace = 1
+  filters {
+    name = "mybinder-builds/**"
+  }
+}
+
 # registry outputs
 output "registry_creds" {
   value = merge(
     {
-      for name in var.registry_users:
-        harbor_robot_account.builder[name].full_name => harbor_robot_account.builder[name].secret
-    }, {
-      for name in var.registry_users:
-        harbor_robot_account.user-puller[name].full_name => harbor_robot_account.user-puller[name].secret
+      for name in var.registry_users :
+      harbor_robot_account.builder[name].full_name => harbor_robot_account.builder[name].secret
+      }, {
+      for name in var.registry_users :
+      harbor_robot_account.user-puller[name].full_name => harbor_robot_account.user-puller[name].secret
     },
-    { 
+    {
       "${harbor_robot_account.staging.full_name}" = harbor_robot_account.staging.secret
     },
   )
