@@ -53,16 +53,16 @@ variable "vm" {
 }
 
 variable "registry_quota_gb" {
-  type = number
-  default = 10000
+  type        = number
+  default     = 10000
   description = <<-EOT
   harbor registry project quota size in gigabytes
   EOT
 }
 
 variable "registry_users" {
-  type = set(string)
-  default = []
+  type        = set(string)
+  default     = []
   description = <<-EOT
   harbor registry users
   One builder (push/pull) and one puller (pull-only) robot account
