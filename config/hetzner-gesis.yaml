@@ -5,7 +5,7 @@ binderhub:
     BinderHub:
       hub_url: https://hub.gesis.mybinder.org
       badge_base_url: https://mybinder.org
-      image_prefix: oci.2i2c.mybinder.org/mybinder-builds/i-
+      image_prefix: registry.gesis.mybinder.org/mybinder-builds/i-
       sticky_builds: true
     KubernetesBuildExecutor:
       docker_host: /var/run/dind/docker.sock
