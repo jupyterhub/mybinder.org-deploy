@@ -8,5 +8,5 @@ prometheus-client==0.22.1
     # via -r requirements.in
 pycurl==7.45.6
     # via -r requirements.in
-tornado==6.5.1
+tornado==6.5.5
     # via -r requirements.in
