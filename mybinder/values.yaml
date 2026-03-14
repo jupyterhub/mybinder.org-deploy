@@ -454,6 +454,10 @@ binderhub:
         JupyterHub:
           # only serve the hub's API, not full UI
           hub_routespec: "/hub/api/"
+        KubeSpawner:
+          # Disable Kubernetes service environment variables
+          extra_pod_config:
+            enableServiceLinks: false
         Proxy:
           # default-route to our nginx "Binder not found" service
           extra_routes:
