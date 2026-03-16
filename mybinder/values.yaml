@@ -273,6 +273,10 @@ binderhub:
 
     KubernetesBuildExecutor:
       build_image: quay.io/jupyterhub/repo2docker:2025.12.1.dev66-g6b59fafc3
+      repo2docker_extra_args:
+        # disable default buildpack, builds without
+        # an environment will fail
+        - "--Repo2Docker.default_buildpack=None"
 
   extraConfig:
     # Send Events to StackDriver on Google Cloud
