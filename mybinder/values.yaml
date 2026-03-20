@@ -189,6 +189,7 @@ binderhub:
         - .*mdkuhjani.*
         - "^drastria/ghost_project/.*"
         - ^kumaresankp/.*
+        - ^spyboy-productions/.*
 
       high_quota_specs: []
         # - ^jupyterlab/.*
@@ -232,6 +233,8 @@ binderhub:
         - .*foxytouxxx.*
         - .*freeroot.*
         - .*mytai20100.*
+        - .*kumaresankp.*
+        - .*%2Fspyboy-productions.*
 
     GitLabRepoProvider:
       banned_specs:
