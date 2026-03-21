@@ -280,6 +280,10 @@ binderhub:
         # disable default buildpack, builds without
         # an environment will fail
         - "--Repo2Docker.default_buildpack=None"
+        # try to avoid timeout pushing to local registry
+        # default is 60
+        # this must have no spaces to be processed by repo2docker correctly
+        - '--DockerEngine.extra_init_args={"timeout":1200}'
 
   extraConfig:
     # Send Events to StackDriver on Google Cloud

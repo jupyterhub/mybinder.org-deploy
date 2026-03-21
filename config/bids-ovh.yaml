@@ -26,11 +26,6 @@ binderhub:
       # build_docker_host: /var/run/dind/docker.sock
     KubernetesBuildExecutor:
       docker_host: /var/run/dind/docker.sock
-      repo2docker_extra_args:
-        # try to avoid timeout pushing to local registry
-        # default is 60
-        # this must have no spaces to be processed by repo2docker correctly
-        - '--DockerEngine.extra_init_args={"timeout":1200}'
 
     LaunchQuota:
       total_quota: 60
