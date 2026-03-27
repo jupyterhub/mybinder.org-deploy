@@ -20,7 +20,7 @@ harbor:
       s3:
         # https://github.com/goharbor/harbor-helm/blob/v1.18.1/values.yaml#L225
         region: does-not-matter
-        bucket: mybinder-2i2c-registry
+        bucket: mybinder-2i2c-registry-2026
         regionendpoint: https://nbg1.your-objectstorage.com
         rootdirectory: harbor
   core:
