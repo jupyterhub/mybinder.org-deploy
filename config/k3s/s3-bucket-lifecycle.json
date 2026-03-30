@@ -1,0 +1,12 @@
+{
+  "Rules": [
+    {
+      "ID": "expiry",
+      "Prefix": "",
+      "Status": "Enabled",
+      "AbortIncompleteMultipartUpload": {
+        "DaysAfterInitiation": 1
+      }
+    }
+  ]
+}
