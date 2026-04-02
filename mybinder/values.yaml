@@ -275,7 +275,7 @@ binderhub:
           <script>window.plausible = window.plausible || function() { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
 
     KubernetesBuildExecutor:
-      build_image: quay.io/jupyterhub/repo2docker:2025.12.1.dev66-g6b59fafc3
+      build_image: quay.io/jupyterhub/repo2docker:2025.12.1.dev74-g9a7a36b91
       repo2docker_extra_args:
         # disable default buildpack, builds without
         # an environment will fail
