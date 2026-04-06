@@ -73,7 +73,7 @@ resource "harbor_retention_policy" "builds" {
   rule {
     repo_matching          = "**"
     tag_matching           = "**"
-    n_days_since_last_push = 7
+    n_days_since_last_push = 30
     untagged_artifacts     = false
   }
 }

@@ -8,4 +8,10 @@ push_mirrors = {
     access_id = "robot$mybinder-builds+gesis-harbor-builder"
     # add secret via ui
   }
+  bids_ovh = {
+    name      = "bids"
+    url       = "https://registry.bids.mybinder.org"
+    access_id = "robot$mybinder-builds+gesis-harbor-builder"
+    # add secret via ui
+  }
 }
