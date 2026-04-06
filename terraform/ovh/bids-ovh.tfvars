@@ -14,6 +14,6 @@ push_mirrors = {
     name      = "2i2c"
     url       = "https://oci.2i2c.mybinder.org"
     access_id = "robot$mybinder-builds+bids-harbor-builder"
-    # add secret via ui
+    # secret in secrets/bids-ovh.tfvars
   }
 }

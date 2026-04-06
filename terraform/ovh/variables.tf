@@ -69,3 +69,25 @@ variable "registry_users" {
   will be created for each name listed here.
   EOT
 }
+
+variable "push_mirrors" {
+  type = map(object({
+    name : string,
+    url : string,
+    access_id : string,
+  }))
+  default     = {}
+  description = <<-EOT
+  harbor registries to mirror to
+  EOT
+}
+
+variable "push_mirror_secrets" {
+  type = map(object({
+    access_secret : string,
+  }))
+  default     = {}
+  description = <<-EOT
+  harbor registries to mirror to
+  EOT
+}

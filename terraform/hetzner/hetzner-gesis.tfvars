@@ -6,12 +6,12 @@ push_mirrors = {
     name      = "2i2c"
     url       = "https://oci.2i2c.mybinder.org"
     access_id = "robot$mybinder-builds+gesis-harbor-builder"
-    # add secret via ui
+    # access_secret in secrets/hetzner-gesis.tfvars
   }
   bids_ovh = {
     name      = "bids"
     url       = "https://registry.bids.mybinder.org"
     access_id = "robot$mybinder-builds+gesis-harbor-builder"
-    # add secret via ui
+    # access_secret in secrets/hetzner-gesis.tfvars
   }
 }

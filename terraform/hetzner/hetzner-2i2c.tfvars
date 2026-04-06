@@ -6,6 +6,6 @@ push_mirrors = {
     name      = "gesis"
     url       = "https://registry.gesis.mybinder.org"
     access_id = "robot$mybinder-builds+2i2c-harbor-builder"
-    # add secret via ui
+    # access_secret in secrets/hetzner-2i2c.tfvars
   }
 }

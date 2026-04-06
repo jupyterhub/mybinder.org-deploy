@@ -42,3 +42,13 @@ variable "push_mirrors" {
   harbor registries to mirror to
   EOT
 }
+
+variable "push_mirror_secrets" {
+  type = map(object({
+    access_secret : string,
+  }))
+  default     = {}
+  description = <<-EOT
+  harbor registries to mirror to
+  EOT
+}
