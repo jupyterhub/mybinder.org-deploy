@@ -73,7 +73,7 @@ resource "harbor_retention_policy" "builds" {
   rule {
     repo_matching          = "**"
     tag_matching           = "**"
-    n_days_since_last_push = 7
+    n_days_since_last_push = 30
     untagged_artifacts     = false
   }
 }
@@ -127,6 +127,7 @@ resource "harbor_registry" "mirrors" {
   name          = each.value.name
   endpoint_url  = each.value.url
   access_id     = each.value.access_id
+  access_secret = var.push_mirror_secrets[each.key].access_secret
 }
 
 resource "harbor_replication" "push" {

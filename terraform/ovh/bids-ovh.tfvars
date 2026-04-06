@@ -7,4 +7,13 @@ zone         = "US-EAST-VA-1"
 
 name = "bids-ovh"
 
-registry_users = ["bids-ovh"]
+registry_users = ["bids-ovh", "gesis-harbor"]
+
+push_mirrors = {
+  hetzner_2i2c = {
+    name      = "2i2c"
+    url       = "https://oci.2i2c.mybinder.org"
+    access_id = "robot$mybinder-builds+bids-harbor-builder"
+    # secret in secrets/bids-ovh.tfvars
+  }
+}
