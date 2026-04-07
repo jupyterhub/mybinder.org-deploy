@@ -65,6 +65,12 @@ It's a little tricky because we can't deploy all at once, we have to:
    tofu output -show-sensitive
    ```
 
+```{todo}
+we should separate harbor to its own tofu deployment.
+This is done on hetzner, which doesn't use tofu to create the s3 buckets themselves,
+they are created manually, and _only_ harbor is deployed with s3.
+```
+
 ### Attaching a disk
 
 If the VM has an additional disk for dind, it needs to be partitioned and mounted, [following this guide](https://help.ovhcloud.com/csm/en-gb-vps-config-additional-disk?id=kb_article_view&sysparm_article=KB0047555).
@@ -250,6 +256,34 @@ kubectl apply -f config/k3s/k3s-upgrade-plan.yaml
 Now k3s should self-update every Sunday.
 If there's a problem, we'll see it Monday.
 
+## Prepare registry storage
+
+We use [Harbor] to operate our registry, because it includes retention rules which let us use the registry as a _cache_, expiring unused images.
+
+Our Harbor deployments use local S3-compatible storage.
+We need a bucket and s3 credentials to access the bucket.
+On OVH, this is handled in Tofu above.
+On Hetzner, it is manual via the Console.
+
+1. Create a bucket
+2. Create S3 access credentials for the bucket.
+   Ideally, these credentials should only have access to this particular bucket.
+3. Configure multi-part upload expiration rules, in `config/k3s/`
+
+For example, for the Hetzner Nuremburg datacenter:
+
+```
+# from credentials you created
+export AWS_ACCESS_KEY_ID=...
+export AWS_SECRET_KEY=...
+# nuremburg s3 endpoint
+export AWS_ENDPOINT_URL=https://nbg1.your-objectstorage.com
+# create the bucket lifecycle configuration
+aws s3api put-bucket-lifecycle-configuration --bucket bucket-name  --lifecycle-configuration file://config/k3s/s3-bucket-lifecycle.json
+```
+
+[Harbor]: https://goharbor.io
+
 ## Make a config + secret copy for this new member
 
 Now we gotta start a config file and a secret config file for this new member. We can start off by copying an existing one!
@@ -262,18 +296,77 @@ Let's copy `config/hetzner-2i2c.yaml` to `config/<cluster-name>.yaml` and make c
    a. `binderhub.config.LaunchQuota.total_quota`
    b. `dind.resources`
    c. `imageCleaner`
-4. TODO: Something about the registry.
+4. Configure Harbor registry storage in `config/cluster.yaml`, under `harbor.persistence.imageChartStorage.s3`:
+   a. `bucket` (bucket name)
+   b. `regionendpoint` (provider endpoint)
+   c. `rootdirectory` (usually `/harbor`)
+   d. `region` (depends on provider, not usually necessary)
 
 We also need a secrets file, so let's copy `secrets/config/hetzner-2i2c.yaml` to `secrets/config/<cluster-name>.yaml` and make changes!
 
 1. Find all hostnames, and change them to point to the DNS entries you made in the previous step.
-2. TODO: Something about the registry
+2. add your s3 credentials to:
+   a. `harbor.persistence.imageChartStorage.s3.accesskey`
+   b. `harbor.persistence.imageChartStorage.s3.secretkey`
+3. generate fresh random secrets:
+   a. `grafana.adminPassword`
+   b. `harbor.harborAdminPassword`
+4. _remove_ most of Harbor's secret config, other than the above (we'll populate this later)
 
 ## Deploy binder!
 
 Let's tell `deploy.py` script that we have a new cluster by adding `<cluster-name>` to `KUBECONFIG_CLUSTERS` variable in `deploy.py`.
 
 Once done, you can do a deployment with `./deploy.py <cluster-name>`! If it errors out, tweak and debug until it works.
+
+## Configure harbor registry
+
+Harbor requires some configuration _after_ it has been deployed for the first time.
+
+### Stabilize Harbor secrets to avoid churn
+
+Harbor has several configured secret values,
+but generates these automatically on each deploy if left unspecified,
+causing restart of Harbor pods on each deploy.
+To avoid that, we can retrieve and store the values generated on the first deploy.
+
+Add these to `secrets/config/${name}.yaml`:
+
+```bash
+name=cluster_name
+# gets core.secret, core.xsrfKey, core.tokenKey, core.tokenCert, registry.credentials.password
+for key in secret CSRF_KEY tls.key tls.crt REGISTRY_CREDENTIAL_PASSWORD; do
+  echo $key
+  kubectl get secret ${name}-harbor-core -o json | jq -r ".data[\"${key}\"]" | base64 --decode
+  echo
+done
+# jobservice.secret
+kubectl get secret ${name}-harbor-jobservice -o json | jq -r .data.JOBSERVICE_SECRET | base64 --decode
+# registry.secret
+kubectl get secret hetzner-2i2c-harbor-registry -o json | jq -r .data.REGISTRY_HTTP_SECRET | base64 --decode
+# registry.credentials.htpasswdString
+kubectl get secret ${name}-harbor-registry -o json | jq -r .data.REGISTRY_HTPASSWD | base64 --decode
+# registry.credentials.htpasswdString
+kubectl get secret ${name}-harbor-registry-htpasswd -o json | jq -r .data.REGISTRY_HTPASSWD | base64 --decode
+```
+
+### Configure Harbor project, quota, and accounts with Tofu
+
+We have Harbor configuration in `terraform/modules/harbor`, which are configured from `terraform/hetzner`.
+
+If, for example, deploying a new hetzner node:
+
+1. `cd terraform/hetzner`
+2. copy `hetzner-2i2c.tfvars` to `${cluster_name}.tfvars` and edit name, endpoint, and registry_users as appropriate.
+3. `source secrets/creds.sh`
+4. ` export TF_CLI_ARGS="-var-file=${cluster_name}.tfvars"`
+5. `tofu init`
+6. `tofu apply` - check that it makes sense
+7. `tofu output --show-sensitive` to see the registry credentials created
+8. copy the `robot$mybinder-builds+{name}-builder` username and password to `binderhub.registry.username,password` in `secrets/config/${name}.yaml`
+9. copy the `robot$mybinder-builds+{name}-user-puller` username and password to `  jupyterhub.imagePullSecret.username,password` in `secrets/config/${name}.yaml`
+10. if replicating, add appropriate credentials by editing the Registry entry at
+    `https://registry.{host}.mybinder.org/harbor/registries` from the target registry configuration.
 
 ## Test and validate
 
