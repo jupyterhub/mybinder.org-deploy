@@ -54,7 +54,7 @@ pyyaml==6.0.3
     # via
     #   -r requirements.in
     #   kubernetes
-requests==2.33.0
+requests==2.33.1
     # via
     #   -r requirements.in
     #   docker
