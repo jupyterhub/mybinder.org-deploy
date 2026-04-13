@@ -284,6 +284,18 @@ binderhub:
         # default is 60
         # this must have no spaces to be processed by repo2docker correctly
         - '--DockerEngine.extra_init_args={"timeout":1200}'
+      # resources for repo2docker pod
+      # mainly limits repo size
+      # ephemeral-storage should affect the clone itself,
+      # while memory affects sending the build context tarball to dind
+      resources:
+        limits:
+          ephemeral-storage: 2G
+          memory: 2G
+          cpu: "1"
+        requests:
+          memory: 2G
+          cpu: 100m
 
   extraConfig:
     # Send Events to StackDriver on Google Cloud
