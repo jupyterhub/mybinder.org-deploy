@@ -77,6 +77,9 @@ binderhub:
     # handled by buildkit pruner
     enabled: false
 
+buildkitPruner:
+  buildkitCacheSize: 200GB
+
 grafana:
   ingress:
     hosts:

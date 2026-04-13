@@ -52,7 +52,7 @@ k8s-log-alerter-zulip:
 buildkitPruner:
   enabled: true
   # Use the same image as we use for dind
-  image: docker:27.5.1-dind
+  image: docker:28.3.3-dind
   buildkitCacheSize: 300GB
   # Only prune images older than
   olderThanMinutes: 120
