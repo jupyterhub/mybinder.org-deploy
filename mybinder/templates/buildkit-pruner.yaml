@@ -27,7 +27,7 @@ spec:
             - -c
             - |
               docker image prune --force --all --filter until={{ .Values.buildkitPruner.olderThanMinutes }}m && \
-              docker builder prune --force --all --max-storage={{ .Values.buildkitPruner.buildkitCacheSize }} && \
+              docker builder prune --force --all --max-used-space={{ .Values.buildkitPruner.buildkitCacheSize }} && \
               docker system df
             volumeMounts:
             - name: dind-socket
