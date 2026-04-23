@@ -18,7 +18,7 @@ Server
 
 ## Repository structure
 
-This repository contains a Helm "meta chart" (`mybinder`) that fully captures the
+The [`mybinder.org-deploy` repository](https://github.com/jupyterhub/mybinder.org-deploy) contains a Helm "meta chart" (`mybinder`) that fully captures the
 state of the deployment on <https://mybinder.org>. Since it is a full Helm chart, you
 can read the [official helm chart structure documentation](https://docs.helm.sh/developing_charts/#the-chart-file-structure)
 to know more about its structure.
