@@ -60,11 +60,11 @@ secrets between staging and production for security boundary reasons.
 
 ## Deployment
 
-## Staging
+### Staging
 
 The staging cluster has one node, which makes things simple.
 
-## Production
+### Production
 
 ```{note}
 In earlier 2025, we moved from a multi node Kubernetes cluster to a single node K3s, read more at "[2i2c joins the mybinder.org federation with a cheaper and faster way to deploy Binderhub](https://2i2c.org/blog/2025/binder-singlenode/)".
