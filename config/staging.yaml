@@ -110,7 +110,7 @@ prometheus:
     persistentVolume:
       size: 12G
     # reduce retention for staging
-    retention: 30d
+    retention: 15d
 
 ingress-nginx:
   controller:
