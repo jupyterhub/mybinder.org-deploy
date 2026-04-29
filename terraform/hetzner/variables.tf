@@ -15,7 +15,7 @@ variable "name" {
 
 variable "registry_quota_gb" {
   type        = number
-  default     = 10000
+  default     = 15000
   description = <<-EOT
   harbor registry project quota size in gigabytes
   EOT

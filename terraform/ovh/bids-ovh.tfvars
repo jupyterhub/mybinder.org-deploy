@@ -8,6 +8,7 @@ zone         = "US-EAST-VA-1"
 name = "bids-ovh"
 
 registry_users = ["bids-ovh", "gesis-harbor"]
+registry_quota_gb = 15000
 
 push_mirrors = {
   hetzner_2i2c = {
