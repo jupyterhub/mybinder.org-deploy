@@ -259,7 +259,7 @@ class RedirectHandler(RequestHandler):
                 host_name = rendezvous_rank(self.names_and_weights, cache_key(path))[0]
             # "random" is our default or fall-back
             else:
-                host_name = random.choices(self.host_keys, self.host_weights)[0]
+                host_name = random.choices(self.host_names, self.host_weights)[0]
             host_url = self.hosts[host_name]["url"]
             reason = "load_balancer"
         else:
