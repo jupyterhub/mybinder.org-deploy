@@ -10,7 +10,7 @@ certifi==2026.4.22
     #   requests
 charset-normalizer==3.4.7
     # via requests
-chartpress==2.3.0
+chartpress==2.4.0
     # via -r requirements.in
 docker==7.1.0
     # via chartpress
