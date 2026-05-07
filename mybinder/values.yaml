@@ -248,6 +248,7 @@ binderhub:
       per_repo_quota: 100
       per_repo_quota_higher: 200
       cors_allow_origin: "*"
+      build_max_age: 3600
 
       banner_message: |
         <a class="btn" style="width:fit-content;height:fit-content;padding:10px;background-color:#e66581;color:white;font-weight:bold;position:absolute;right:4px;"
