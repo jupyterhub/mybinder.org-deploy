@@ -259,7 +259,7 @@ binderhub:
         Thanks to <a href="https://www.gesis.org">GESIS</a>, <a href="https://2i2c.org">2i2c</a>, and <a href="https://bids.berkeley.edu">BIDS</a> for supporting us! 🎉
         </div>
         <div style="text-align:center;">
-        mybinder.org has updated the base image to Ubuntu 22.04! See the <a href="https://repo2docker.readthedocs.io/en/latest/howto/breaking_changes.html">upgrade guide</a> for details.
+        mybinder.org has updated the base image to Ubuntu 24.04! See the <a href="https://repo2docker.readthedocs.io/en/latest/howto/breaking_changes.html">upgrade guide</a> for details.
         </div>
       about_message: |
         <p>mybinder.org is public infrastructure operated by the <a href="https://jupyterhub-team-compass.readthedocs.io/en/latest/team.html#binder-team">Binder Project team</a>.<br /><br />
