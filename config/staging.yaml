@@ -73,6 +73,9 @@ binderhub:
             memory: 100M
             cpu: 10m
 
+buildkitPruner:
+  buildkitCacheSize: 25GB
+
 minesweeper:
   resources:
     requests:
