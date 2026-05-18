@@ -302,6 +302,8 @@ binderhub:
         requests:
           memory: 2G
           cpu: 100m
+    KubernetesCleaner:
+      max_age: 3600
 
   extraConfig:
     # Send Events to StackDriver on Google Cloud
