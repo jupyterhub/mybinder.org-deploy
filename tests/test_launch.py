@@ -20,7 +20,7 @@ def test_launch_binder(binder_url):
         if line.startswith("data:"):
             data = json.loads(line.split(":", 1)[1])
             if data.get("phase") == "ready":
-                notebook_url = data["url"]
+                notebook_url = data["url"].rstrip("/")
                 token = data["token"]
                 break
     else:
