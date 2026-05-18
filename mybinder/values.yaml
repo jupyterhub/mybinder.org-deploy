@@ -1,3 +1,12 @@
+clusterEntryPoint:
+  enabled: true
+  annotations: {}
+  # specify target by name (known label combinations in template)
+  # only ingress-nginx or null for now
+  target: ingress-nginx
+  # allow specifying raw selector (if target is null)
+  selector:
+
 cryptnono:
   enabled: true
   detectors:
