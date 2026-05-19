@@ -13,6 +13,9 @@ cryptnono:
           log_container_envs:
             - BINDER_CLIENT_IP
             - BINDER_REF_URL
+          # most pods killed by the default of 15 look like false-positives,
+          # e.g. parallel package installers or emulated browsers
+          unique_destinations_threshold: 24
       containerdHostPath: /run/k3s/containerd/containerd.sock
       dockerHostPath: /run/dind/docker.sock
     execwhacker:
