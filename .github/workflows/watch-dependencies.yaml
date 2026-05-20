@@ -223,7 +223,7 @@ jobs:
           latest_version=$(helm show chart ${{ matrix.chart_dep_devel_flag }} $chart_dep | yq e '.version' -)
           echo "version=$latest_version" >> $GITHUB_OUTPUT
 
-          latest_app_version=$(helm show chart ${{ matrix.chart_dep_devel_flag }} --repo=$chart_dep_repo ${{ matrix.chart_dep_name }} | yq e '.appVersion' -)
+          latest_app_version=$(helm show chart ${{ matrix.chart_dep_devel_flag }} $chart_dep | yq e '.appVersion' -)
           echo "appVersion=$latest_app_version" >> $GITHUB_OUTPUT
 
       - name: Update Chart.yaml pinned version
