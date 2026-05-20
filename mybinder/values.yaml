@@ -681,6 +681,10 @@ traefik:
       port: 80
     websecure:
       port: 443
+      transport:
+        respondingTimeouts:
+          readTimeout: 600
+          idleTimeout: 600
   priorityClassName: binderhub-core
   providers:
     kubernetesCRD:
