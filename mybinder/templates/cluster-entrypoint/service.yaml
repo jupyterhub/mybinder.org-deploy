@@ -12,11 +12,14 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
 spec:
+  externalTrafficPolicy: Local
   ports:
   - port: 80
     targetPort: 80
+    name: http
   - port: 443
     targetPort: 443
+    name: https
   selector:
     {{- if .Values.clusterEntryPoint.target }}
     {{- if eq .Values.clusterEntryPoint.target "ingress-nginx" }}
@@ -29,5 +32,5 @@ spec:
     {{- else }}
     {{ .Values.clusterEntryPoint.selector | toYaml | nindent 4 }}
     {{- end }}
-  externalTrafficPolicy: Local
+  type: LoadBalancer
 {{- end }}
