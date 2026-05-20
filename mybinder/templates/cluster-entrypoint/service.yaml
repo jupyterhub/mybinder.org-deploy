@@ -26,6 +26,9 @@ spec:
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/name: ingress-nginx
+    {{- else if eq .Values.clusterEntrypoint.target "traefik" }}
+    app.kubernetes.io/instance: {{ .Release.Name }}-{{ .Release.Namespace }}
+    app.kubernetes.io/name: traefik
     {{- else }}
     {{ fail "clusterEntrypoint.target must be 'ingress-nginx' or null" }}
     {{- end }}
