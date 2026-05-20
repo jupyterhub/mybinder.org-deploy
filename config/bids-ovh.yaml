@@ -127,15 +127,14 @@ prometheus:
         - targets:
             - bids-ovh-harbor-jobservice:8001
 
+clusterEntrypoint:
+  target: traefik
+
 ingress-nginx:
   controller:
     replicas: 1
     scope:
       enabled: true
-    service:
-      # clusterEntrypoint is the only LoadBalancer Service
-      type: ClusterIP
-      externalTrafficPolicy:
 
 static:
   ingress:
