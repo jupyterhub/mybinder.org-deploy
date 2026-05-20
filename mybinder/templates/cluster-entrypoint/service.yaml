@@ -19,7 +19,7 @@ spec:
     targetPort: 443
   selector:
     {{- if .Values.clusterEntryPoint.target }}
-    {{- if eq .Values.clusterEntryPoint.target 'ingress-nginx' }}
+    {{- if eq .Values.clusterEntryPoint.target "ingress-nginx" }}
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/name: ingress-nginx
