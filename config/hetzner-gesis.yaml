@@ -1,8 +1,5 @@
 projectName: hetzner-gesis
 
-clusterEntryPoint:
-  enabled: false
-
 binderhub:
   config:
     BinderHub:
@@ -133,8 +130,6 @@ ingress-nginx:
     replicas: 1
     scope:
       enabled: true
-    service:
-      loadBalancerIP: 116.203.245.43
 
 static:
   ingress:

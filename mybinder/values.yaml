@@ -654,8 +654,8 @@ ingress-nginx:
           prometheus.io/scrape: "true"
           prometheus.io/port: "10254"
     service:
-      # Preserve client IPs
-      externalTrafficPolicy: Local
+      # clusterEntrypoint is the public Service
+      type: ClusterIP
 
 redirector:
   enabled: false
