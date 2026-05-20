@@ -208,6 +208,7 @@ jobs:
           else
             chart_dep="--repo=${chart_dep_repo} ${{ matrix.chart_dep_name }}"
           fi
+          echo "chart_dep=${chart_dep}" >> $GITHUB_ENV
 
           local_app_version=$(helm show chart --version=$local_version $chart_dep | yq e '.appVersion' -)
           echo "appVersion=$local_app_version" >> $GITHUB_OUTPUT
@@ -219,12 +220,6 @@ jobs:
         # optionally passing `--devel` to get pre-releases as well.
         #
         run: |
-          if [[ "$chart_dep_repo" = oci:* ]]; then
-            chart_dep="${chart_dep_repo}/${{ matrix.chart_dep_name }}"
-          else
-            chart_dep="--repo=${chart_dep_repo} ${{ matrix.chart_dep_name }}"
-          fi
-
           latest_version=$(helm show chart ${{ matrix.chart_dep_devel_flag }} $chart_dep | yq e '.version' -)
           echo "version=$latest_version" >> $GITHUB_OUTPUT
 
