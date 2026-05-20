@@ -658,7 +658,7 @@ ingress-nginx:
       type: ClusterIP
 
 # values ref: https://github.com/traefik/traefik-helm-chart/blob/HEAD/traefik/VALUES.md
-traefikEnabled: false
+traefikEnabled: true
 traefik:
   api:
     dashboard: false
