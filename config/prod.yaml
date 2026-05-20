@@ -7,6 +7,12 @@ coreNodeSelector: &coreNodeSelector
 
 binderhubEnabled: false
 
+clusterEntrypoint:
+  annotations:
+    # preserve ip if service gets recreated
+    cloud.google.com/l4-rbs: "enabled"
+    networking.gke.io/load-balancer-ip-addresses: "cluster-entrypoint"
+
 cryptnono:
   enabled: false
 
