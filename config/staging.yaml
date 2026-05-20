@@ -118,8 +118,8 @@ prometheus:
 ingress-nginx:
   controller:
     replicaCount: 2
-    # service:
-    #   loadBalancerIP: 35.222.35.25
+    service:
+      type: ClusterIP
     resources:
       requests:
         cpu: 10m
