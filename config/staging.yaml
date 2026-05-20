@@ -120,6 +120,7 @@ ingress-nginx:
     replicaCount: 2
     service:
       type: ClusterIP
+      externalTrafficPolicy:
     resources:
       requests:
         cpu: 10m
