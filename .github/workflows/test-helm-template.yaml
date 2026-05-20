@@ -81,8 +81,8 @@ jobs:
           . cert-manager.env
           echo "cert-manager version: ${CERT_MANAGER_VERSION}"
 
-          helm template --validate cert-manager cert-manager \
-              --repo=https://charts.jetstack.io \
+          helm template --validate cert-manager \
+              oci://quay.io/jetstack/charts/cert-manager \
               --version=${CERT_MANAGER_VERSION} \
               --values=config/cert-manager.yaml
 

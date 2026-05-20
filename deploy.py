@@ -374,8 +374,7 @@ def setup_certmanager(dry_run=False, diff=False):
         + helm_commands
         + [
             "--namespace=cert-manager",
-            "--repo=https://charts.jetstack.io",
-            "cert-manager",
+            "oci://quay.io/jetstack/charts/cert-manager",
             "cert-manager",
             f"--version={version}",
             "--values=config/cert-manager.yaml",
