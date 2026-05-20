@@ -4,7 +4,7 @@ binderhub:
   config:
     BinderHub:
       pod_quota: 20
-      hub_url: https://hub.ovh.staging.mybinder.org
+      hub_url: https://hub.staging.mybinder.org
       badge_base_url: https://staging.mybinder.org
       image_prefix: registry.bids.mybinder.org/mybinder-staging/i-
       sticky_builds: true
@@ -58,10 +58,12 @@ binderhub:
         limit: 0.5
     ingress:
       hosts:
+        - hub.staging.mybinder.org
         - hub.ovh.staging.mybinder.org
       tls:
         - secretName: kubelego-tls-jupyterhub-staging
           hosts:
+            - hub.staging.mybinder.org
             - hub.ovh.staging.mybinder.org
 
     proxy:
@@ -83,9 +85,11 @@ minesweeper:
 grafana:
   ingress:
     hosts:
+      - grafana.staging.mybinder.org
       - grafana.ovh.staging.mybinder.org
     tls:
       - hosts:
+          - grafana.staging.mybinder.org
           - grafana.ovh.staging.mybinder.org
         secretName: kubelego-tls-grafana
   datasources:
@@ -95,7 +99,7 @@ grafana:
         - name: prometheus
           orgId: 1
           type: prometheus
-          url: https://prometheus.ovh.staging.mybinder.org
+          url: https://prometheus.staging.mybinder.org
           isDefault: true
           editable: false
 
@@ -103,9 +107,11 @@ prometheus:
   server:
     ingress:
       hosts:
+        - prometheus.staging.mybinder.org
         - prometheus.ovh.staging.mybinder.org
       tls:
         - hosts:
+            - prometheus.staging.mybinder.org
             - prometheus.ovh.staging.mybinder.org
           secretName: kubelego-tls-prometheus
     persistentVolume:
@@ -141,6 +147,7 @@ traefik:
 static:
   ingress:
     hosts:
+      - static.staging.mybinder.org
       - static.ovh.staging.mybinder.org
 
 redirector:
