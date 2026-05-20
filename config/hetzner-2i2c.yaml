@@ -1,8 +1,5 @@
 projectName: hetzner-2i2c
 
-clusterEntryPoint:
-  enabled: false
-
 harbor:
   enabled: true
   expose:
@@ -142,8 +139,6 @@ ingress-nginx:
     replicas: 1
     scope:
       enabled: true
-    service:
-      loadBalancerIP: 116.203.245.43
 
 static:
   ingress:
