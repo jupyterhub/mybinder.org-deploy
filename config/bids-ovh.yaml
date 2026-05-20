@@ -1,8 +1,5 @@
 projectName: bids-ovh
 
-clusterEntryPoint:
-  enabled: false
-
 harbor:
   enabled: true
   expose:
@@ -136,7 +133,9 @@ ingress-nginx:
     scope:
       enabled: true
     service:
-      loadBalancerIP: 15.204.207.87
+      # clusterEntrypoint is the only LoadBalancer Service
+      type: ClusterIP
+      externalTrafficPolicy:
 
 static:
   ingress:
