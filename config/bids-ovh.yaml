@@ -1,5 +1,8 @@
 projectName: bids-ovh
 
+clusterEntryPoint:
+  enabled: false
+
 harbor:
   enabled: true
   expose:

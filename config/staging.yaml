@@ -1,7 +1,5 @@
 projectName: staging
 
-# binderhubEnabled: false
-
 binderhub:
   config:
     BinderHub:

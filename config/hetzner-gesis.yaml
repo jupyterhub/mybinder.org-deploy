@@ -1,5 +1,8 @@
 projectName: hetzner-gesis
 
+clusterEntryPoint:
+  enabled: false
+
 binderhub:
   config:
     BinderHub:

@@ -1,4 +1,4 @@
-clusterEntryPoint:
+clusterEntrypoint:
   enabled: true
   annotations: {}
   # specify target by name (known label combinations in template)
