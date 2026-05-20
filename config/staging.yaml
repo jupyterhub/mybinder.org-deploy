@@ -124,6 +124,20 @@ ingress-nginx:
         cpu: 500m
         memory: 500Mi
 
+clusterEntrypoint:
+  target: traefik
+
+traefikEnabled: true
+
+traefik:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 100Mi
+    limits:
+      cpu: 500m
+      memory: 500Mi
+
 static:
   ingress:
     hosts:

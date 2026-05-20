@@ -21,6 +21,14 @@ dependencies:
     repository: https://kubernetes.github.io/ingress-nginx
     condition: ingress-nginx.enabled
 
+  # traefik ingress controller
+  # Source: https://github.com/traefik/traefik-helm-chart
+  # Changelog: https://github.com/traefik/traefik-helm-chart/blob/HEAD/traefik/Changelog.md
+  - name: traefik
+    version: "40.2.0"
+    repository: oci://ghcr.io/traefik/helm
+    condition: traefikEnabled
+
   # Prometheus for collection of metrics.
   # Source code:   https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus
   # App changelog: https://github.com/prometheus/prometheus/blob/main/CHANGELOG.md

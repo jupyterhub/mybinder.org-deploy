@@ -152,6 +152,13 @@ jobs:
             chart_dep_devel_flag: ""
             github_repo: ""
 
+          - chart_dep_name: traefik
+            chart_dep_chart_changelog_url: "https://github.com/traefik/traefik-helm-chart/blob/HEAD/traefik/Changelog.md"
+            chart_dep_app_changelog_url: "https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md"
+            chart_dep_source_url: "https://github.com/traefik/traefik-helm-chart"
+            chart_dep_devel_flag: ""
+            github_repo: "traefik/traefik-helm-chart"
+
           - chart_dep_name: prometheus
             chart_dep_chart_changelog_url: "https://github.com/prometheus-community/helm-charts/tree/HEAD/charts/prometheus#upgrading-chart"
             chart_dep_app_changelog_url: "https://github.com/prometheus/prometheus/blob/HEAD/CHANGELOG.md"
@@ -196,7 +203,13 @@ jobs:
           echo "version=$local_version" >> $GITHUB_OUTPUT
 
           chart_dep_repo=$(cat mybinder/Chart.yaml | yq e '.dependencies[] | select(.name == "${{ matrix.chart_dep_name }}") | .repository' -)
-          local_app_version=$(helm show chart --version=$local_version --repo=$chart_dep_repo ${{ matrix.chart_dep_name }} | yq e '.appVersion' -)
+          if [[ "$chart_dep_repo" = oci:* ]]; then
+            chart_dep="${chart_dep_repo}/${{ matrix.chart_dep_name }}"
+          else
+            chart_dep="--repo=${chart_dep_repo} ${{ matrix.chart_dep_name }}"
+          fi
+
+          local_app_version=$(helm show chart --version=$local_version $chart_dep | yq e '.appVersion' -)
           echo "appVersion=$local_app_version" >> $GITHUB_OUTPUT
 
       - name: Fetch latest version/appVersion of ${{ matrix.chart_dep_name }} chart
@@ -206,9 +219,13 @@ jobs:
         # optionally passing `--devel` to get pre-releases as well.
         #
         run: |
-          chart_dep_repo=$(cat mybinder/Chart.yaml | yq e '.dependencies[] | select(.name == "${{ matrix.chart_dep_name }}") | .repository' -)
+          if [[ "$chart_dep_repo" = oci:* ]]; then
+            chart_dep="${chart_dep_repo}/${{ matrix.chart_dep_name }}"
+          else
+            chart_dep="--repo=${chart_dep_repo} ${{ matrix.chart_dep_name }}"
+          fi
 
-          latest_version=$(helm show chart ${{ matrix.chart_dep_devel_flag }} --repo=$chart_dep_repo ${{ matrix.chart_dep_name }} | yq e '.version' -)
+          latest_version=$(helm show chart ${{ matrix.chart_dep_devel_flag }} $chart_dep | yq e '.version' -)
           echo "version=$latest_version" >> $GITHUB_OUTPUT
 
           latest_app_version=$(helm show chart ${{ matrix.chart_dep_devel_flag }} --repo=$chart_dep_repo ${{ matrix.chart_dep_name }} | yq e '.appVersion' -)
