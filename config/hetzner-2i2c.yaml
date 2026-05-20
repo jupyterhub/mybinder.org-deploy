@@ -1,5 +1,8 @@
 projectName: hetzner-2i2c
 
+clusterEntryPoint:
+  enabled: false
+
 harbor:
   enabled: true
   expose:

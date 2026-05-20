@@ -1,0 +1,36 @@
+{{- if .Values.clusterEntrypoint.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: cluster-entrypoint
+  annotations:
+    {{- with .Values.clusterEntrypoint.annotations }}
+    {{ . | toYaml | nindent 4 }}
+    {{- end }}
+  labels:
+    app: cluster-entrypoint
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  externalTrafficPolicy: Local
+  ports:
+  - port: 80
+    targetPort: 80
+    name: http
+  - port: 443
+    targetPort: 443
+    name: https
+  selector:
+    {{- if .Values.clusterEntrypoint.target }}
+    {{- if eq .Values.clusterEntrypoint.target "ingress-nginx" }}
+    app.kubernetes.io/component: controller
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/name: ingress-nginx
+    {{- else }}
+    {{ fail "clusterEntrypoint.target must be 'ingress-nginx' or null" }}
+    {{- end }}
+    {{- else }}
+    {{ .Values.clusterEntrypoint.selector | toYaml | nindent 4 }}
+    {{- end }}
+  type: LoadBalancer
+{{- end }}
