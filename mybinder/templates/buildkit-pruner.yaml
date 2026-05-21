@@ -1,4 +1,4 @@
-{{ if .Values.buildkitPruner.enabled }}
+{{ if and .Values.binderhubEnabled .Values.buildkitPruner.enabled }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
