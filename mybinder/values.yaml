@@ -82,7 +82,6 @@ harbor:
   expose:
     type: ingress
     ingress:
-      className: nginx
       annotations:
         kubernetes.io/tls-acme: "true"
         traefik.ingress.kubernetes.io/router.middlewares: "harbor@file"
