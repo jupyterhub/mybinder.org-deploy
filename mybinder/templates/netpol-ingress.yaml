@@ -11,9 +11,8 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: ingress-nginx
-      app.kubernetes.io/component: controller
-      app.kubernetes.io/instance: {{ .Release.Name }}
+      app.kubernetes.io/name: traefik
+      app.kubernetes.io/instance: {{ .Release.Name }}-{{ .Release.Namespace }}
   policyTypes:
     - Ingress
   # block ingress from banned client ips
