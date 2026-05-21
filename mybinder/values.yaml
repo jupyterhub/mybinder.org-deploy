@@ -671,7 +671,8 @@ traefik:
   logs:
     access:
       enabled: true
-      format: json
+      # use json for most detailed access logs
+      # format: json
       fields:
         headers:
           defaultMode: drop
