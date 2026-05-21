@@ -743,6 +743,7 @@ redirector:
 
 static:
   ingress:
+    ingressClassName: traefik
     annotations:
       kubernetes.io/ingress.class: nginx
       kubernetes.io/tls-acme: "true"
