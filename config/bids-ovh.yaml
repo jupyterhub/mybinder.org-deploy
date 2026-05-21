@@ -1,5 +1,8 @@
 projectName: bids-ovh
 
+clusterEntrypoint:
+  target: traefik
+
 harbor:
   enabled: true
   expose:
