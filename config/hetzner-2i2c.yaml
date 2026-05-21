@@ -134,12 +134,6 @@ prometheus:
         - targets:
             - hetzner-2i2c-harbor-jobservice:8001
 
-ingress-nginx:
-  controller:
-    replicas: 1
-    scope:
-      enabled: true
-
 static:
   ingress:
     hosts:

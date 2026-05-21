@@ -73,10 +73,6 @@ spec:
       to:
         - podSelector:
             matchLabels:
-              app.kubernetes.io/component: controller
-              app.kubernetes.io/name: ingress-nginx
-        - podSelector:
-            matchLabels:
               app.kubernetes.io/name: traefik
 
 {{- end }}

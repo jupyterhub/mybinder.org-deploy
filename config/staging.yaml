@@ -119,17 +119,6 @@ prometheus:
     # reduce retention for staging
     retention: 15d
 
-ingress-nginx:
-  controller:
-    replicaCount: 2
-    resources:
-      requests:
-        cpu: 10m
-        memory: 100Mi
-      limits:
-        cpu: 500m
-        memory: 500Mi
-
 traefik:
   resources:
     requests:
