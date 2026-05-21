@@ -808,8 +808,8 @@ prometheus:
     retention: 90d
     ingress:
       enabled: true
+      ingressClassName: traefik
       annotations:
-        kubernetes.io/ingress.class: nginx
         kubernetes.io/tls-acme: "true"
 
   # make sure we collect metrics on pods by app/component at least
