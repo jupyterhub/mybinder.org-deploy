@@ -8,6 +8,7 @@ coreNodeSelector: &coreNodeSelector
 binderhubEnabled: false
 
 clusterEntrypoint:
+  target: ingress-nginx
   annotations:
     # preserve ip if service gets recreated
     cloud.google.com/l4-rbs: "enabled"
