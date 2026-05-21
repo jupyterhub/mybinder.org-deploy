@@ -148,7 +148,7 @@ Sometimes we need to make changes to the mybinder.org core infrastructure.
 These are changes to the infrastructure that don't directly touch binderhub or
 repo2docker, and often require more expertise. Examples for these include:
 
-1. Upgrading nginx Ingress controller
+1. Upgrading traefik Ingress controller
 2. Re-configuring our prometheus servers
 3. Upgrading to a new JupyterHub release
 4. Re-configuring autoscaling for the cluster

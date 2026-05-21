@@ -87,11 +87,10 @@ these containers using right now', etc. These are usually prefixed with
 
 #### HTTP request information
 
-We use the [nginx-ingress helm chart](https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx)
-to let all HTTP traffic into our cluster. This allows us to use
-the [nginx VTS exporter](https://hnlq715.github.io/nginx-vts-exporter/)
-to collect information in prometheus about requests / responses.
-These metrics are prefixed with `nginx_`.
+We use the [traefik helm chart](https://github.com/traefik/traefik-helm-chart)
+to let all HTTP traffic into our cluster.
+Traefik [exports metrics to prometheus](https://doc.traefik.io/traefik/reference/install-configuration/observability/metrics/#prometheus)
+These metrics are prefixed with `traefik_`.
 
 #### BinderHub information
 
