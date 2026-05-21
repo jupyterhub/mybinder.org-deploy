@@ -153,9 +153,6 @@ redirector:
         from: docs.staging.mybinder.org
         to: mybinder.readthedocs.io
 
-matomo:
-  enabled: false
-
 analyticsPublisher:
   # FIXME: Enable this
   enabled: false
