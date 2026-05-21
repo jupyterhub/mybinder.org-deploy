@@ -85,6 +85,7 @@ harbor:
       className: nginx
       annotations:
         kubernetes.io/tls-acme: "true"
+        traefik.ingress.kubernetes.io/router.middlewares: "harbor@file"
     tls:
       certSource: secret
       secret:
@@ -538,6 +539,9 @@ binderhub:
     ingress:
       enabled: true
       annotations:
+        # traefik (not used yet)
+        traefik.ingress.kubernetes.io/router.middlewares: "hub@file"
+        # FIXME: ingress-nginx (on its way out)
         ingress.kubernetes.io/proxy-body-size: 64m
         # Increase for websockets (default is 60s)
         nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
@@ -674,8 +678,7 @@ traefik:
           names:
             User-Agent: keep
     general:
-      # TODO: remove when things are stable
-      level: DEBUG
+      level: INFO
   ports:
     web:
       port: 80
@@ -683,10 +686,30 @@ traefik:
       port: 443
       transport:
         respondingTimeouts:
+          # Increase for websockets (default is 60s)
           readTimeout: 600
           idleTimeout: 600
   priorityClassName: binderhub-core
   providers:
+    file:
+      enabled: true
+      # hack: remove `|` to edit & format yaml, then re-add it
+      # content expects yaml as a string, not yaml values
+      content: |
+        http:
+          middlewares:
+            harbor:
+              buffering:
+                # no limit for harbor requests
+                maxRequestBodyBytes: 0
+            hub:
+              buffering:
+                # 64MB for large notebook saves
+                maxRequestBodyBytes: 64000000
+            default:
+              buffering:
+                # other endpoints don't expect large requests
+                maxRequestBodyBytes: 1000000
     kubernetesCRD:
       enabled: false
     kubernetesIngress:
