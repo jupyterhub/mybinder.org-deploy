@@ -127,9 +127,6 @@ prometheus:
         - targets:
             - bids-ovh-harbor-jobservice:8001
 
-clusterEntrypoint:
-  target: traefik
-
 ingress-nginx:
   controller:
     replicas: 1
