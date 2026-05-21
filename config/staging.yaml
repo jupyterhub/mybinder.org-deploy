@@ -1,5 +1,8 @@
 projectName: staging
 
+clusterEntrypoint:
+  target: traefik
+
 binderhub:
   config:
     BinderHub:
