@@ -126,8 +126,8 @@ Give this a few minutes because it may take a while to propagate.
 ## Installing `k3s`
 
 We can use the [quickstart](https://docs.k3s.io/quick-start) on the `k3s` website, with the added
-config of _disabling traefik_ that comes built in. We deploy nginx as part of our deployment,
-so we do not need traefik.
+config of _disabling traefik_ that comes built in. We deploy an ingress controller as part of our deployment,
+so we do not need the managed traefik.
 
 1. Create a Kubelet Config file in `/var/lib/rancher/k3s/agent/etc/kubelet.conf.d/99-kubelet.conf` so we can
    tweak various kubelet options, including maximum number of pods on a single node and when to cleanup unused images:
@@ -291,12 +291,11 @@ Now we gotta start a config file and a secret config file for this new member. W
 Let's copy `config/hetzner-2i2c.yaml` to `config/<cluster-name>.yaml` and make changes!
 
 1. Find all hostnames, and change them to point to the DNS entries you made in the previous step.
-2. Change `ingress-nginx.controller.service.loadbalancerIP` to be the external public IP of your cluster
-3. Adjust the following parameters based on the size of the server:
+2. Adjust the following parameters based on the size of the server:
    a. `binderhub.config.LaunchQuota.total_quota`
    b. `dind.resources`
    c. `imageCleaner`
-4. Configure Harbor registry storage in `config/cluster.yaml`, under `harbor.persistence.imageChartStorage.s3`:
+3. Configure Harbor registry storage in `config/cluster.yaml`, under `harbor.persistence.imageChartStorage.s3`:
    a. `bucket` (bucket name)
    b. `regionendpoint` (provider endpoint)
    c. `rootdirectory` (usually `/harbor`)

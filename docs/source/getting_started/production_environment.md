@@ -27,7 +27,7 @@ to know more about its structure.
 
 The core of the "meta chart" pattern is to install a bunch of [dependent charts](https://docs.helm.sh/developing_charts/#chart-dependencies),
 specified in `mybinder/Chart.yaml`. This contains both support
-charts like `nginx-ingress`, `grafana`, `prometheus`, **and** the core application chart
+charts like `traefik`, `grafana`, `prometheus`, **and** the core application chart
 `binderhub`. Everything is version pinned in `mybinder/Chart.yaml`.
 
 ## Configuration values
@@ -147,42 +147,31 @@ file for each, and we can deploy them all at the same time.
 
 ## HTTPS configuration for `mybinder.org`
 
-Using HTTPS requires having a signed certificate. BinderHub uses [kube-lego](https://github.com/jetstack/kube-lego),
+Using HTTPS requires having a signed certificate. MyBinder uses [Cert Manager](https://cert-manager.io),
 a tool that obtains and deploys a free _Let's Encrypt_ certificate automatically.
-This section describes how to use `kube-lego` to configure and deploy HTTPS support.
+This section describes how to use `cert-manager` to configure and deploy HTTPS support.
 
-`kube-lego` provides 90 day SSL certificates for `mybinder.org` through
+`cert-manager` provides 90 day SSL certificates for `mybinder.org` through
 the [letsencrypt](https://letsencrypt.org/) service. As the 90
-day cycle nears its end, `kube-lego` will automatically request a new
+day cycle nears its end, `cert-manager` will automatically request a new
 certificate and configure the kubernetes deployment to use it.
 
-`kube-lego` is a kubernetes application, with its own Helm Chart that is
-referenced in the [`mybinder.org` Meta Chart](https://github.com/jupyterhub/mybinder.org-deploy/blob/5aa6dde60c9b5f3012686f9ba2b23b176c19b224/mybinder/values.yaml#L152). This tells kubernetes which
-account to use for letsencrypt certification.
+`cert-manager` is a kubernetes application, with its own Helm Chart,
+which we deploy separately in the `cert-manager` namespace.
 
 Once we have a letsencrypt account set up, we need to attach the SSL
 certificate to a particular `ingress` object. This is a Kubernetes object
 that controls how traffic is routed _into_ the deployment. This is also
-done with the `mybinder.org` Helm Chart ([see here for example](https://github.com/jupyterhub/mybinder.org-deploy/blob/5aa6dde60c9b5f3012686f9ba2b23b176c19b224/mybinder/values.yaml#L13)).
+done with the `mybinder.org` Helm Chart ([see here for example](https://github.com/jupyterhub/mybinder.org-deploy/blob/db2da6a1fa773671c17a16abdf9c8aec19ab77c1/mybinder/values.yaml#L747)).
 
-Note that letsencrypt will send you an email if your SSL certificate is
-about to expire. If you get such an email, it might mean that the automatic
-`kube-lego` renewal process hasn't worked properly. To debug this, we
-recommend running the standard Kubernetes debugging commands with the
-`kube-lego` object used with your deployment. For example:
+Note that letsencrypt _no longer_ sends emails if your SSL certificate is about to expire.
+You can check the [cert-manager dashboard](https://grafana.mybinder.org/d/cdhrcds8aosg0c/) to see the status of certificates.
+To debug certificate issues, we recommend running the standard Kubernetes debugging commands with the `cert-manager` pod in your deployment.
+For example:
 
 ```
-kubectl --namespace=<my-namespace> logs <kube-lego-object>
+kubectl --namespace=cert-manager logs cert-manager-...
 ```
-
-### Exceptions on the OVH cluster
-
-On the OVH cluster all the binder components use a specific certificate on `*.mybinder.ovh` domain.
-
-Traffic for `ovh.mybinder.org` is redirected with a CNAME on `binder.mybinder.ovh`. That's why the OVH cluster should be able to serve 2 different certificates.
-
-- The `*.mybinder.ovh` certificate is managed by ingresses in the ovh helm configuration.
-- The `ovh.mybinder.org` certificate is managed by a specific ingress and `kube-lego` on the launch of `deploy.py` on the ovh stack.
 
 ## Secrets
 
