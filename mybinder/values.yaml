@@ -812,18 +812,6 @@ proxyPatches:
   enabled: true
   nodeSelector: {}
 
-matomo:
-  enabled: false
-  nodeSelector: {}
-  resources: {}
-  replicas: 1
-  service:
-    type: ClusterIP
-  db:
-    username: matomo
-    name: matomo
-    tables_prefix: matomo_
-
 gcsProxy:
   enabled: false
   replicas: 1

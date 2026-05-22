@@ -8,5 +8,4 @@ metrics.md
 dashboards.md
 ingress.md
 cloud.md
-matomo.md
 ```
