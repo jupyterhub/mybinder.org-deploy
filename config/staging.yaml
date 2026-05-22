@@ -144,6 +144,7 @@ static:
     hosts:
       - static.staging.mybinder.org
       - static.ovh.staging.mybinder.org
+      - static22.staging.mybinder.org
 
 redirector:
   enabled: true
