@@ -83,7 +83,7 @@ harbor:
     type: ingress
     ingress:
       annotations:
-        kubernetes.io/ingress.class: nginx
+        kubernetes.io/ingress.class: traefik
         kubernetes.io/tls-acme: "true"
         traefik.ingress.kubernetes.io/router.middlewares: "harbor@file"
     tls:
@@ -433,7 +433,7 @@ binderhub:
   ingress:
     enabled: true
     annotations:
-      kubernetes.io/ingress.class: nginx
+      kubernetes.io/ingress.class: traefik
     https:
       enabled: true
       type: kube-lego
@@ -539,14 +539,8 @@ binderhub:
     ingress:
       enabled: true
       annotations:
-        # traefik (not used yet)
         traefik.ingress.kubernetes.io/router.middlewares: "hub@file"
-        # FIXME: ingress-nginx (on its way out)
-        ingress.kubernetes.io/proxy-body-size: 64m
-        # Increase for websockets (default is 60s)
-        nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
-        nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
-        kubernetes.io/ingress.class: nginx
+        kubernetes.io/ingress.class: traefik
         kubernetes.io/tls-acme: "true"
     scheduling:
       userScheduler:
@@ -715,12 +709,6 @@ traefik:
       enabled: false
     kubernetesIngress:
       enabled: true
-    kubernetesIngressNGINX:
-      # pick up nginx ingresses automatically
-      # so we can migrate incrementally
-      enabled: true
-      proxyReadTimeout: 600
-      proxySendTimeout: 600
   resources:
     requests:
       cpu: 100m
