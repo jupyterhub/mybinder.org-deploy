@@ -48,7 +48,7 @@ This way, we can change the _implementation_ (ingress controller or gateway cont
 We run on a changing variety of Kubernetes providers, including Google Cloud's Kubernetes Engine
 and single-node K3S clusters.
 Even though GKE, K3S, and other managed Kubernetes come pre-installed with an Ingress controller such as [Google Cloud Load Balancer Ingress provider](https://github.com/kubernetes/ingress-gce),
-we decided deploy our own instance of traefik instead because using the same ingress controller across deployments simplifies management considerably,
+we deploy our own instance of traefik instead because using the same ingress controller across deployments simplifies management considerably,
 and gives us access to configuration often not available for host-provided ingress controllers.
 
 We migrated to traefik from the official Kubernetes `ingress-nginx` ingress controller because it
