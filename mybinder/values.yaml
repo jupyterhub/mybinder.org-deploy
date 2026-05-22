@@ -719,6 +719,8 @@ traefik:
       # pick up nginx ingresses automatically
       # so we can migrate incrementally
       enabled: true
+      proxyReadTimeout: 600
+      proxySendTimeout: 600
   resources:
     requests:
       cpu: 100m
