@@ -12,15 +12,6 @@ dependencies:
     repository: https://jupyterhub.github.io/helm-chart
     condition: binderhubEnabled
 
-  # Ingress-Nginx to route network traffic according to Ingress resources using
-  # this controller from within k8s.
-  # Source code:   https://github.com/kubernetes/ingress-nginx/tree/main/charts/ingress-nginx
-  # App changelog: https://github.com/kubernetes/ingress-nginx/blob/main/Changelog.md
-  - name: ingress-nginx
-    version: "4.15.1"
-    repository: https://kubernetes.github.io/ingress-nginx
-    condition: ingress-nginx.enabled
-
   # traefik ingress controller
   # Source: https://github.com/traefik/traefik-helm-chart
   # Changelog: https://github.com/traefik/traefik-helm-chart/blob/HEAD/traefik/Changelog.md
