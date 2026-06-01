@@ -36,7 +36,11 @@ import psutil
 from herorat import inspect_pod, inspect_process
 from kubernetes.stream import stream
 
-kubernetes.config.load_incluster_config()
+try:
+    kubernetes.config.load_incluster_config()
+except kubernetes.config.ConfigException:
+    kubernetes.config.load_kube_config()
+
 kube = kubernetes.client.CoreV1Api()
 local = threading.local()
 config = {}
@@ -311,7 +315,26 @@ def terminate_pod(pod):
     """Call in a thread to terminate a pod"""
     namespace = pod["metadata"]["namespace"]
     name = pod["metadata"]["name"]
-    print(f"Deleting pod {name}")
+    # Log just enough information to be useful for remote alerting
+    message = {
+        "action": "delete",
+        "pod": name,
+        "env": {},
+        "minesweeper": {k: v for k, v in pod["minesweeper"].items() if k != "procs"},
+    }
+    # Only include interesting procs, the full list is too long for alerts
+    message["minesweeper"]["procs"] = [
+        p for p in pod["minesweeper"]["procs"] if p.suspicious or p.should_terminate
+    ]
+    # These pod env vars let us link the pod to the Binder request
+    for container in pod["spec"]["containers"]:
+        for envvar in container["env"]:
+            if (
+                envvar["name"] in {"BINDER_CLIENT_IP", "BINDER_REF_URL"}
+                and envvar["value"]
+            ):
+                message["env"][envvar["name"]] = envvar["value"]
+    print(json.dumps(message))
     kube = get_kube()
     kube.delete_namespaced_pod(name=name, namespace=namespace)
 
