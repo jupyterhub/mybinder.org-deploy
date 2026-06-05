@@ -64,8 +64,8 @@ k8s-log-alerter-zulip:
     "Minesweeper killed":
       pod_labels:
         name: minesweeper
-      # https://github.com/jupyterhub/mybinder.org-deploy/blob/68c2fe58b4a8eddd07f08fa48a3d1259557b7eab/mybinder/files/minesweeper/minesweeper.py#L314
-      regex: "^Deleting pod "
+      # https://github.com/jupyterhub/mybinder.org-deploy/blob/7623bf26e03bf124e1d13bca91e1bfc9b306391b/mybinder/files/minesweeper/minesweeper.py#L318-L324
+      regex: "\"action\":\\s*\"delete\""
 
 buildkitPruner:
   enabled: true
