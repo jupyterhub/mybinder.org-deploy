@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Binder{% endblock %}</title>
+  {% block meta_social %}
+  {# Social media previews #}
+  <meta property="og:title" content="{{opengraph_title}}">
+  <meta property="og:image" content="{{static_url("images/logo_social.png")}}">
+  <meta property="og:description" content="Reproducible, sharable, open, interactive computing environments.">
+  <meta property="og:image:width" content="1334">
+  <meta property="og:image:height" content="700">
+  <meta property="og:image:alt" content="The Binder Project Logo" />
+  <meta name="twitter:card" content="summary_large_image">
+  {% endblock meta_social %}
+  <link id="favicon" rel="shortcut icon" type="image/png" href="{{static_url("favicon.ico")}}" />
+  <link rel="stylesheet" href="https://www.gesis.org/typo3conf/ext/gesis_web_ext/Resources/Public/webpack/dist/gesis-web.css?1737388935" media="all" />
+  <link href="{{static_url("dist/styles.css")}}" rel="stylesheet"></link>
+  
+
+  <script>
+    window.pageConfig = {{page_config|tojson}};
+  </script>
+</head>
+<body>
+  <header
+    id="top"
+    class="microsite-header"
+  >
+    <div class="logo-and-navigations">
+      <div class="logo-and-navigations--inner">
+        <div class="logo-wrapper">
+          <a
+            title="GESIS Leibniz Institute for the Social Sciences: Go to homepage"
+            href="https://www.gesis.org/en/home"
+          >
+            <picture>
+              <img
+                src="https://www.gesis.org/typo3conf/ext/gesis_web_ext/Resources/Public/webpack/dist/img/logo_gesis_microsite_en.svg"
+                height="37"
+                alt="GESIS Leibniz Institute for the Social Sciences: Go to homepage"
+              />
+            </picture>
+          </a>
+        </div>
+        <div class="navigations-wrapper">
+          <section class="desktop-only">
+            <a
+              title="GESIS Leibniz Institute for the Social Sciences: Go to homepage"
+              href="https://www.gesis.org/en/home"
+            >
+              <picture>
+                <img
+                  src="https://www.gesis.org/typo3conf/ext/gesis_web_ext/Resources/Public/webpack/dist/img/back-2-gesis.svg"
+                  height="37"
+                  alt="GESIS Leibniz Institute for the Social Sciences: Go to homepage"
+                />
+              </picture>
+            </a>
+            <nav
+              class="gs_topnav"
+              aria-label="Quick Links"
+            >
+              <ul class="list-group list-group-horizontal">
+                <li>
+                  <span class="icon-gs-lang pe-1 text-disabled"></span><span
+                    class="text-disabled d-none d-md-inline"
+                    role="note"
+                    aria-hidden="true"
+                  >Deutsch</span><span class="visually-hidden">Keine deutsche Seitenversion verfügbar</span>
+                </li>
+                <li>
+                  <a href="https://www.gesis.org/en/contact"><span class="icon-gs-contact pe-1"></span><span class="d-md-inline">Contact</span></a>
+                </li>
+                <li>
+                  <a href="https://www.gesis.org/en/institute/career"><span class="icon-gs-help pe-1"></span><span class=" d-md-inline">Career</span></a>
+                </li>
+              </ul>
+            </nav>
+          </section>
+        </div>
+      </div>
+    </div>
+    <div class="gesis-search-wrapper">
+      <div
+        class="col col-sm-10 col-md-9 col-lg-8 mx-auto"
+        role="search"
+        aria-label="GESIS Search"
+      >
+        <div
+          id="gs_gws_combobox"
+          class="gs_combobox py-3 px-1"
+          role="combobox"
+          aria-expanded="false"
+          aria-haspopup="listbox"
+          aria-atomic="false"
+          aria-live="assertive"
+        >
+          <div class="gs-search-input-wrapper d-flex justify-content-between">
+            <div class="gs_search_facet col col-md-3 col-sm-3 col-lg-2 mx-auto">
+              <select>
+                <option>Alles</option>
+                <!--<option>Daten</option>-->
+                <!--<option>Publikationen</option>-->
+              </select>
+            </div>
+            <div class="col clear-input-container">
+              <input
+                name="query"
+                id="gs_searchterm"
+                class="gs_searchterm clear-input facetview_freetext"
+                type="search"
+                size="15"
+                placeholder="Search GESIS…"
+                aria-controls="gs_hitlist"
+                aria-owns="gs_hitlist"
+                aria-label="search query"
+              >
+              <button
+                id="clear-input-button"
+                type="reset"
+                aria-label="Clear search"
+                title="Clear search"
+              ><i class="bi bi-x-lg"></i></button>
+            </div>
+            <button
+              id="gs_search_toggle"
+              class="gs_search_toggle col-1"
+              tabindex="-1"
+              title="Show or hide search results"
+              aria-label="Show or hide search results"
+            ></button>
+          </div>
+          <div
+            id="gs_hitlist"
+            class="gs_hitlist position-absolute start-0 mt-3 w-100 bg-light"
+            role="listbox"
+            tabindex="-1"
+            aria-hidden="true"
+          ></div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <section
+    class="page-banner microsite has-bg-color"
+    style="background-image: url(https://www.gesis.org/typo3conf/ext/gesis_web_ext/Resources/Public/webpack/dist/img/banner_gesis_microsite.svg);"
+  >
+    <div class="page-banner--inner">
+      <div>
+        <!-- microsite breadcrumb -->
+        <nav
+          class="gs_rootline d-lg-flex align-items-center"
+          aria-labelledby="gs_rootline_label"
+        >
+          <ol class="list-group list-group-horizontal flex-wrap">
+            <li>
+              <a aria-current="page">GESIS Notebooks</a>
+            </li>
+          </ol>
+        </nav>
+        <!-- microsite site title -->
+        <span class="h1">
+          <a
+            href="#link"
+            data-auto-event-observed="true"
+          > GESIS Notebooks </a>
+        </span>
+      </div>
+    </div>
+  </section>
+  <nav class="microsite-menu">
+    <nav
+      class="gs_megamenu_nav"
+      aria-labelledby="gs_mm_toggle_button-"
+    >
+      <ul
+        role="menu"
+        id="gs_megamenu-"
+        class="gs_megamenu"
+      >
+        <li class="gs_active">
+          <a
+            role="menuitem"
+            class=""
+            href="#link"
+          >Launcher</a>
+        </li>
+      </ul>
+      <section class="mobile-only">
+        <nav
+          class="gs_topnav"
+          aria-label="Quick Links"
+        >
+          <ul class="list-group list-group-horizontal">
+            <li>
+              <span class="icon-gs-lang pe-1 text-disabled"></span><span
+                class="text-disabled d-none d-md-inline"
+                role="note"
+                aria-hidden="true"
+              >Deutsch</span><span class="visually-hidden">Keine deutsche Seitenversion verfügbar</span>
+            </li>
+            <li>
+              <a
+                href="https://www.gesis.org/en/contact"
+                data-auto-event-observed="true"
+              ><span class="icon-gs-contact pe-1"></span><span class="d-md-inline">Contact</span></a>
+            </li>
+            <li>
+              <a
+                href="https://www.gesis.org/en/institute/career"
+                data-auto-event-observed="true"
+              ><span class="icon-gs-help pe-1"></span><span class="d-md-inline">Career</span></a>
+            </li>
+          </ul>
+        </nav>
+      </section>
+    </nav>
+    <button
+      id="gs_mm_toggle_button-"
+      class="gs_mm_toggle_button microsite"
+      aria-haspopup="true"
+      aria-controls="gs_megamenu-"
+      aria-label="page navigation menu"
+    >
+      <span class="gesis-icon-list-view"></span>
+    </button>
+  </nav>
+  <main class="microsite-main">
+    <div id="root"></div>
+  </main>
+  <footer class="page-footer">
+    <div class="page-footer--inner">
+      <div class="contact-info standort-mannheim">
+        <p>
+          <b>Location in Mannheim</b> <br /> GESIS – Leibniz Institute for the Social Sciences <br /> Square B6, 4-5 <br /> 68159 Mannheim
+        </p>
+        <p> Phone: <a href="tel:+4962112460">+49-(0)621-1246-0</a> <br /> Fax: +49-(0)621-1246-100 </p>
+      </div>
+      <div class="contact-info standort-koeln">
+        <p>
+          <b>Location in Cologne</b> <br /> GESIS – Leibniz Institute for the Social Sciences<br /> Unter Sachsenhausen 6-8 <br /> 50667 Köln
+        </p>
+        <p> Phone: <a href="tel:+49221476940">+49-(0)221-47694-0</a> <br /> Fax: +49-(0)221-47694-199 </p>
+      </div>
+      <div class="social-media-icons">
+        <a
+          href="https://bsky.app/profile/gesis.org"
+          title="GESIS @Bluesky"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn"
+        >
+          <svg
+            width="100%"
+            height="2.6rem"
+            viewBox="0 0 568 501"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            xml:space="preserve"
+            xmlns:serif="http://www.serif.com/"
+            style="
+                      fill-rule: evenodd;
+                      clip-rule: evenodd;
+                      stroke-linejoin: round;
+                      stroke-miterlimit: 2;
+                      vertical-align:top;
+                    "
+          >
+            <g transform="matrix(1,0,0,1,-228,-281.442)">
+              <path
+                d="M351.121,315.106C416.241,363.994 486.281,463.123 512,516.315C537.719,463.123 607.759,363.994 672.879,315.106C719.866,279.83 796,252.536 796,339.388C796,356.734 786.055,485.101 780.222,505.943C759.947,578.396 686.067,596.876 620.347,585.691C735.222,605.242 764.444,670.002 701.333,734.762C581.473,857.754 529.061,703.903 515.631,664.481C513.169,657.254 512.017,653.873 512,656.748C511.983,653.873 510.831,657.254 508.369,664.481C494.939,703.903 442.527,857.754 322.667,734.762C259.556,670.002 288.778,605.242 403.653,585.691C337.933,596.876 264.053,578.396 243.778,505.943C237.945,485.101 228,356.734 228,339.388C228,252.536 304.134,279.83 351.121,315.106Z"
+                style="fill: white; fill-rule: nonzero"
+              />
+            </g>
+          </svg>
+        </a>
+        <a
+          href="https://www.facebook.com/gesis.org/"
+          title="GESIS @Facebook"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn"
+        >
+          <i class="gesis-icon-facebook"></i>
+        </a>
+        <a
+          href="https://www.linkedin.com/company/gesis-org"
+          title="GESIS @LinkedIn"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn"
+        >
+          <i class="gesis-icon-linkedin"></i>
+        </a>
+        <a
+          href="https://www.instagram.com/gesis_lifs/"
+          title="GESIS @Instagram"
+          target="_blank"
+          rel="noreferrer"
+          class="btn"
+        >
+          <i class="gesis-icon-instagram"></i>
+        </a>
+        <a
+          href="https://www.youtube.com/user/GESIStv"
+          title="GESIS @YouTube"
+          target="_blank"
+          rel="noreferrer"
+          class="btn"
+        >
+          <i class="gesis-icon-youtube"></i>
+        </a>
+        <a
+          href="https://sciences.social/@GESIS"
+          title="GESIS @Mastodon"
+          target="_blank"
+          rel="noreferrer"
+          class="btn"
+        >
+          <i class="gesis-icon-mastodon"></i>
+        </a>
+      </div>
+      <div class="leibniz-logo-wrapper">
+        <img
+          src="https://www.gesis.org/typo3conf/ext/gesis_web_ext/Resources/Public/webpack/dist/img/leibniz_logo_en_white.svg"
+          alt="GESIS is a Leibniz Association institute"
+        />
+      </div>
+      <nav class="footer">
+        <a href="https://www.gesis.org/en/institute/imprint"> Imprint </a>
+        <a href="https://www.gesis.org/en/institute/data-protection"> Data Protection. </a>
+      </nav>
+    </div>
+  </footer>
+</body>
+
+<script src="{{static_url("dist/bundle.js")}}"></script>
+
+{% if extra_footer_scripts %}
+{% for script in extra_footer_scripts|dictsort %}
+<script>
+  {{ script[1]|safe }}
+</script>
+{% endfor %}
+{% endif %}
+
+</html>
