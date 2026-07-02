@@ -47,7 +47,7 @@ jobs:
             source_url: https://github.com/jupyterhub/repo2docker
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v6
         with:
@@ -180,7 +180,7 @@ jobs:
             chart_dep_devel_flag: "--devel"
             github_repo: cryptnono/cryptnono
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/setup-python@v6
         with:
