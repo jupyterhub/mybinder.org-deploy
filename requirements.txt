@@ -94,7 +94,7 @@ six==1.17.0
     #   python-dateutil
 tomli==2.4.1
     # via pytest
-typing-extensions==4.15.0
+typing-extensions==4.16.0
     # via
     #   aiohttp
     #   aiosignal
