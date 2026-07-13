@@ -47,7 +47,7 @@ jobs:
             k3s-channel: "v1.34"
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: actions/setup-python@v6
         with:
           python-version-file: ".python-version"
