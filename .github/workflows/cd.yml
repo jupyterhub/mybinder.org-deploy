@@ -104,13 +104,8 @@ jobs:
         id: setup-python
         with:
           python-version-file: ".python-version"
-
-      # Action Repo: https://github.com/actions/cache
-      - name: "Stage 0: Cache pip dependencies"
-        uses: actions/cache@v6
-        with:
-          path: ~/.cache/pip
-          key: python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/*requirements.txt') }}
+          cache: pip
+          cache-dependency-path: "**/*requirements.txt"
 
       - name: "Stage 1: Install dependencies"
         # --upgrade is important since we carry a cache and may risk grow very
@@ -236,13 +231,8 @@ jobs:
         id: setup-python
         with:
           python-version-file: ".python-version"
-
-      # Action Repo: https://github.com/actions/cache
-      - name: "Stage 0: Cache pip dependencies"
-        uses: actions/cache@v6
-        with:
-          path: ~/.cache/pip
-          key: python-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/*requirements.txt') }}
+          cache: pip
+          cache-dependency-path: "**/*requirements.txt"
 
       - name: "Stage 1: Install dependencies"
         # --upgrade is important since we carry a cache and may risk grow very
