@@ -157,7 +157,7 @@ jobs:
             chart_dep_app_changelog_url: "https://github.com/traefik/traefik/blob/HEAD/CHANGELOG.md"
             chart_dep_source_url: "https://github.com/traefik/traefik-helm-chart"
             chart_dep_devel_flag: ""
-            github_repo: "traefik/traefik-helm-chart"
+            github_repo: ""
 
           - chart_dep_name: prometheus
             chart_dep_chart_changelog_url: "https://github.com/prometheus-community/helm-charts/tree/HEAD/charts/prometheus#upgrading-chart"
