@@ -100,7 +100,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Stage 0: Setup Python"
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         id: setup-python
         with:
           python-version-file: ".python-version"
@@ -227,7 +227,7 @@ jobs:
           fetch-depth: 0
 
       - name: "Stage 0: Setup Python"
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         id: setup-python
         with:
           python-version-file: ".python-version"
