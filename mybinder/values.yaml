@@ -168,48 +168,11 @@ binderhub:
       bannedIps: []
 
   config:
-    DataverseProvider:
-      banned_specs:
-        - 10.7910/DVN/7RVV9N
-    GitHubRepoProvider:
-      # Add banned repositories to the list below
-      # They should be strings that will match "^<org-name>/<repo-name>.*"
-      banned_specs:
-        # e.g. '^org/repo.*'
-        - .*xmrig.*
-        - ^a2nk/.*
-        - ^imhajes/.*
-        - ^ines/spacy-binder.*
-        - ^soft4voip/rak.*
-        - ^hmharshit/cn-ait.*
-        - ^shishirchoudharygic/mltraining.*
-        - ^hmharshit/mltraining.*
-        - ^FDesnoyer/MathExp.*
-        - ^GuitarsAI/.*
-        # ferarussia is clearly a fake GitHub account created by GuitarsAI to get around ban
-        # it was created the day GuitarsAI was blocked and does the same thing
-        - ^ferarussia/.*
-        - ^irw4ns1/.*
-        # CryptoCurrency mining bans
-        - ^ajiBal/.*
-        - ^wyattsanchez54/.*
-        - ^walterpowell201/.*
-        - ^justanotherday001shouldbebanned/.*
-        - ^hoanqson2107/.*
-        - ^aanksatriani/.*
-        - ^luckfactorone-netizen/.*
-        - ^ojode1991/.*
-        - ^aannbb1122pp-lgtm/.*
-        - ^massgravel/.*
-        - ^lprone/.*
-        - ^foxytouxxx/.*
-        - ^mytai20100/.*
-        - .*freeroot.*
-        - .*mdkuhjani.*
-        - "^drastria/ghost_project/.*"
-        - ^kumaresankp/.*
-        - ^spyboy-productions/.*
+    # banned_specs are in secrets/config/common/common.yaml
 
+    DataverseProvider: {}
+
+    GitHubRepoProvider:
       high_quota_specs: []
         # - ^jupyterlab/.*
         # - ^jupyter/.*
@@ -232,34 +195,9 @@ binderhub:
           config:
             quota: 300
 
-    GitRepoProvider:
-      banned_specs:
-        - ^(git|https?)%3A%2F%2Fgithub.com%2Fa2nk%2F.*
-        - ^https%3A%2F%2Fbitbucket.org%2Fnikiubel%2Fnikiubel.bitbucket.io.git/.*
-        - ^https%3A%2F%2Fjovian.ml%2Fapi%2Fgit%2F.*
-        - ^https%3A%2F%2Fframagit.org%2FCecGhesq%2Flic_mdf_nsi_1.*
-        - ^(git|https?)%3A%2F%2Fnotabug.org%2FulslcuRux3Y%2F.*
-        - ^(git|https?)%3A%2F%2Fgitlab.com%2Fjasmt507%2F.*
-        - ^(git|https?)%3A%2F%2Fgitlab.com%2Fh4j3s1978%2F.*
-        - .*%2Fabooz.*
-        - .*%2Fhoanqson2107.*
-        - .*%2Faanksatriani.*
-        - .*%2Fluckfactorone.*
-        - .*%2Fojode1991.*
-        - .*%2Faannbb1122pp.*
-        - .*%2Fmassgravel.*
-        - .*%2Flprone.*
-        - .*foxytouxxx.*
-        - .*freeroot.*
-        - .*mytai20100.*
-        - .*kumaresankp.*
-        - .*%2Fspyboy-productions.*
+    GitRepoProvider: {}
 
     GitLabRepoProvider:
-      banned_specs:
-        - ^h4j3s1978%2F.*
-        - ^jasmt507%2F.*
-        - .*%2Fabooz.*
       spec_config: []
 
     BinderHub:
