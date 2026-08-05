@@ -541,18 +541,17 @@ traefik:
     dashboard: false
   deployment:
     replicas: 2
-  logs:
-    access:
-      enabled: true
-      # use json for most detailed access logs
-      # format: json
-      fields:
-        headers:
-          defaultMode: drop
-          names:
-            User-Agent: keep
-    general:
-      level: INFO
+  log:
+    level: INFO
+  accessLog:
+    enabled: true
+    # use json for most detailed access logs
+    # format: json
+    fields:
+      headers:
+        defaultMode: drop
+        names:
+          User-Agent: keep
   ports:
     web:
       port: 80
