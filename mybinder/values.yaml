@@ -567,9 +567,7 @@ traefik:
   providers:
     file:
       enabled: true
-      # hack: remove `|` to edit & format yaml, then re-add it
-      # content expects yaml as a string, not yaml values
-      content: |
+      content:
         http:
           middlewares:
             harbor:
