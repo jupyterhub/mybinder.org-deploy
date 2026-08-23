@@ -47,6 +47,10 @@ binderhub:
     #         cpu: "1"
     #       limits:
     #         cpu: "1"
+    hub:
+      config:
+        JupyterHub:
+          public_url: https://hub.gesis.mybinder.org/
     ingress:
       hosts:
         - hub.gesis.mybinder.org
