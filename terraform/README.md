@@ -11,5 +11,3 @@ within this folder:
 
 - `gcp`: This folder contains terraform config that interacts with Google
   Cloud Platform
-- `aws`: This folder contains terraform config that interacts with Amazon
-  Web Services

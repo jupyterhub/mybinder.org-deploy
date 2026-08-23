@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import argparse
-import json
 import os
 import re
 import subprocess
@@ -39,11 +38,6 @@ KUBECONFIG_CLUSTERS = {
     "bids-ovh",
 }
 
-# Mapping of config name to cluster name for AWS EKS deployments
-AWS_DEPLOYMENTS = {"curvenote": "binderhub"}
-
-# Mapping of cluster names (keys) to resource group names (values) for Azure deployments
-AZURE_RGs = {}
 
 DIFF_CONTEXT = 3
 
@@ -69,44 +63,6 @@ def check_output(cmd, dry_run):
     else:
         out = subprocess.check_output(cmd)
         return out.decode("utf-8")
-
-
-def setup_auth_azure(cluster, dry_run=False):
-    """
-    Set up authentication with a k8s cluster on Azure.
-    """
-    # Read in auth info. Note that we assume a file name convention of
-    # secrets/{CLUSTER_NAME}-auth-key-prod.json
-    azure_file = ABSOLUTE_HERE / "secrets" / f"{cluster}-auth-key-prod.json"
-    with open(azure_file) as stream:
-        azure = json.load(stream)
-
-    # Login in to Azure
-    login_cmd = [
-        "az",
-        "login",
-        "--service-principal",
-        "--username",
-        azure["sp-app-id"],
-        "--password",
-        azure["sp-app-key"],
-        "--tenant",
-        azure["tenant-id"],
-    ]
-    check_output(login_cmd, dry_run)
-
-    # Set kubeconfig
-    creds_cmd = [
-        "az",
-        "aks",
-        "get-credentials",
-        "--name",
-        cluster,
-        "--resource-group",
-        AZURE_RGs[cluster],
-    ]
-    stdout = check_output(creds_cmd, dry_run)
-    print(stdout)
 
 
 def setup_auth_kubeconfig(release, cluster, dry_run=False):
@@ -151,27 +107,6 @@ def setup_auth_gcloud(release, cluster=None, dry_run=False):
         ],
         dry_run,
     )
-
-
-def setup_auth_aws(cluster, dry_run=False):
-    """
-    Set up authentication for EKS on AWS
-
-    Assumes you already have an AWS CLI profile setup with access to EKS,
-    and that either this is the default profile (e.g. on CI) or you have set the
-    AWS_PROFILE environment variable.
-    """
-    print(BOLD + GREEN + f"Obtaining AWS EKS kubeconfig for {cluster}" + NC, flush=True)
-
-    eks_kubeconfig = [
-        "aws",
-        "eks",
-        "update-kubeconfig",
-        "--name",
-        AWS_DEPLOYMENTS[cluster],
-    ]
-    stdout = check_output(eks_kubeconfig, dry_run)
-    print(stdout)
 
 
 def update_networkbans(cluster, release, name, dry_run=False):
@@ -416,10 +351,7 @@ def main():
     argparser.add_argument(
         "release",
         help="Release to deploy",
-        choices=list(KUBECONFIG_CLUSTERS)
-        + list(GCP_PROJECTS.keys())
-        + list(AWS_DEPLOYMENTS.keys())
-        + list(AZURE_RGs.keys()),
+        choices=list(KUBECONFIG_CLUSTERS) + list(GCP_PROJECTS.keys()),
     )
     argparser.add_argument(
         "--name",
@@ -506,12 +438,8 @@ def main():
             if cluster in KUBECONFIG_CLUSTERS:
                 setup_auth_kubeconfig(args.release, cluster, args.dry_run)
                 patch_coredns(args.dry_run, args.diff)
-            elif cluster in AZURE_RGs:
-                setup_auth_azure(cluster, args.dry_run)
             elif cluster in GCP_PROJECTS:
                 setup_auth_gcloud(args.release, cluster, args.dry_run)
-            elif cluster in AWS_DEPLOYMENTS:
-                setup_auth_aws(cluster, args.dry_run)
             elif cluster == "localhost":
                 pass
             else:
