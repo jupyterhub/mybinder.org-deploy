@@ -410,67 +410,6 @@ def patch_coredns(dry_run=False, diff=False):
     )
 
 
-def deploy_system_charts(release, name=None, dry_run=False, diff=False):
-    """
-    Some charts must be deployed into other namespaces
-    """
-    if not name:
-        name = release
-
-    charts = ["mybinder-kube-system", "mybinder-tigera-operator"]
-
-    for chart in charts:
-        log_name = f"{chart} {release}"
-        ns = chart[9:]
-
-        config_files = get_config_files(release, config_dir=f"system-config/{ns}")
-        if not config_files:
-            print(
-                BOLD + GREEN + f"No config files found for {log_name}" + NC, flush=True
-            )
-            return
-
-        print(BOLD + GREEN + f"Starting helm upgrade for {log_name}" + NC, flush=True)
-        if diff:
-            helm_commands = [
-                "diff",
-                "--context",
-                str(DIFF_CONTEXT),
-                "upgrade",
-                "--install",
-            ]
-        else:
-            helm_commands = [
-                "upgrade",
-                "--install",
-                "--create-namespace",
-                "--cleanup-on-fail",
-            ]
-        helm = (
-            ["helm"]
-            + helm_commands
-            + [
-                f"--namespace={ns}",
-                name,
-                chart,
-            ]
-        )
-        for config_file in config_files:
-            helm.extend(["-f", config_file])
-
-        check_call(helm, dry_run)
-        print(
-            BOLD
-            + GREEN
-            + f"SUCCESS: Helm {helm_commands[0]} for {log_name} completed"
-            + NC,
-            flush=True,
-        )
-
-        if not diff:
-            wait_for_deployments_daemonsets(ns, dry_run)
-
-
 def main():
     # parse command line args
     argparser = argparse.ArgumentParser()
@@ -511,7 +450,7 @@ def main():
         action="store_true",
         help="Run helm/kubectl diff (plugins must be installed), do not make any changes",
     )
-    stages = ["all", "auth", "networkban", "system", "certmanager", "mybinder"]
+    stages = ["all", "auth", "networkban", "certmanager", "mybinder"]
     argparser.add_argument(
         "--stage",
         choices=stages,
@@ -580,8 +519,6 @@ def main():
 
     if args.stage in ("all", "networkban"):
         update_networkbans(cluster, args.release, args.name, args.dry_run)
-    if args.stage in ("all", "system"):
-        deploy_system_charts(args.release, args.name, args.dry_run, args.diff)
     if args.stage in ("all", "certmanager") and cluster != "localhost":
         setup_certmanager(args.dry_run, args.diff)
     if args.stage in ("all", "mybinder"):

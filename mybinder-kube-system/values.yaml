@@ -1,7 +1,0 @@
-# AWS EKS load-balancer controller
-aws-load-balancer-controller:
-  enabled: false
-
-# AWS EKS storage (EBS) controller
-aws-ebs-csi-driver:
-  enabled: false
