@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import argparse
-import json
 import os
 import re
 import subprocess
@@ -39,11 +38,6 @@ KUBECONFIG_CLUSTERS = {
     "bids-ovh",
 }
 
-# Mapping of config name to cluster name for AWS EKS deployments
-AWS_DEPLOYMENTS = {"curvenote": "binderhub"}
-
-# Mapping of cluster names (keys) to resource group names (values) for Azure deployments
-AZURE_RGs = {}
 
 DIFF_CONTEXT = 3
 
@@ -69,44 +63,6 @@ def check_output(cmd, dry_run):
     else:
         out = subprocess.check_output(cmd)
         return out.decode("utf-8")
-
-
-def setup_auth_azure(cluster, dry_run=False):
-    """
-    Set up authentication with a k8s cluster on Azure.
-    """
-    # Read in auth info. Note that we assume a file name convention of
-    # secrets/{CLUSTER_NAME}-auth-key-prod.json
-    azure_file = ABSOLUTE_HERE / "secrets" / f"{cluster}-auth-key-prod.json"
-    with open(azure_file) as stream:
-        azure = json.load(stream)
-
-    # Login in to Azure
-    login_cmd = [
-        "az",
-        "login",
-        "--service-principal",
-        "--username",
-        azure["sp-app-id"],
-        "--password",
-        azure["sp-app-key"],
-        "--tenant",
-        azure["tenant-id"],
-    ]
-    check_output(login_cmd, dry_run)
-
-    # Set kubeconfig
-    creds_cmd = [
-        "az",
-        "aks",
-        "get-credentials",
-        "--name",
-        cluster,
-        "--resource-group",
-        AZURE_RGs[cluster],
-    ]
-    stdout = check_output(creds_cmd, dry_run)
-    print(stdout)
 
 
 def setup_auth_kubeconfig(release, cluster, dry_run=False):
@@ -151,27 +107,6 @@ def setup_auth_gcloud(release, cluster=None, dry_run=False):
         ],
         dry_run,
     )
-
-
-def setup_auth_aws(cluster, dry_run=False):
-    """
-    Set up authentication for EKS on AWS
-
-    Assumes you already have an AWS CLI profile setup with access to EKS,
-    and that either this is the default profile (e.g. on CI) or you have set the
-    AWS_PROFILE environment variable.
-    """
-    print(BOLD + GREEN + f"Obtaining AWS EKS kubeconfig for {cluster}" + NC, flush=True)
-
-    eks_kubeconfig = [
-        "aws",
-        "eks",
-        "update-kubeconfig",
-        "--name",
-        AWS_DEPLOYMENTS[cluster],
-    ]
-    stdout = check_output(eks_kubeconfig, dry_run)
-    print(stdout)
 
 
 def update_networkbans(cluster, release, name, dry_run=False):
@@ -410,77 +345,13 @@ def patch_coredns(dry_run=False, diff=False):
     )
 
 
-def deploy_system_charts(release, name=None, dry_run=False, diff=False):
-    """
-    Some charts must be deployed into other namespaces
-    """
-    if not name:
-        name = release
-
-    charts = ["mybinder-kube-system", "mybinder-tigera-operator"]
-
-    for chart in charts:
-        log_name = f"{chart} {release}"
-        ns = chart[9:]
-
-        config_files = get_config_files(release, config_dir=f"system-config/{ns}")
-        if not config_files:
-            print(
-                BOLD + GREEN + f"No config files found for {log_name}" + NC, flush=True
-            )
-            return
-
-        print(BOLD + GREEN + f"Starting helm upgrade for {log_name}" + NC, flush=True)
-        if diff:
-            helm_commands = [
-                "diff",
-                "--context",
-                str(DIFF_CONTEXT),
-                "upgrade",
-                "--install",
-            ]
-        else:
-            helm_commands = [
-                "upgrade",
-                "--install",
-                "--create-namespace",
-                "--cleanup-on-fail",
-            ]
-        helm = (
-            ["helm"]
-            + helm_commands
-            + [
-                f"--namespace={ns}",
-                name,
-                chart,
-            ]
-        )
-        for config_file in config_files:
-            helm.extend(["-f", config_file])
-
-        check_call(helm, dry_run)
-        print(
-            BOLD
-            + GREEN
-            + f"SUCCESS: Helm {helm_commands[0]} for {log_name} completed"
-            + NC,
-            flush=True,
-        )
-
-        if not diff:
-            wait_for_deployments_daemonsets(ns, dry_run)
-
-
 def main():
     # parse command line args
     argparser = argparse.ArgumentParser()
     argparser.add_argument(
         "release",
         help="Release to deploy",
-        choices=list(KUBECONFIG_CLUSTERS)
-        + list(GCP_PROJECTS.keys())
-        + list(AWS_DEPLOYMENTS.keys())
-        + list(AZURE_RGs.keys()),
+        choices=list(KUBECONFIG_CLUSTERS) + list(GCP_PROJECTS.keys()),
     )
     argparser.add_argument(
         "--name",
@@ -511,7 +382,7 @@ def main():
         action="store_true",
         help="Run helm/kubectl diff (plugins must be installed), do not make any changes",
     )
-    stages = ["all", "auth", "networkban", "system", "certmanager", "mybinder"]
+    stages = ["all", "auth", "networkban", "certmanager", "mybinder"]
     argparser.add_argument(
         "--stage",
         choices=stages,
@@ -567,12 +438,8 @@ def main():
             if cluster in KUBECONFIG_CLUSTERS:
                 setup_auth_kubeconfig(args.release, cluster, args.dry_run)
                 patch_coredns(args.dry_run, args.diff)
-            elif cluster in AZURE_RGs:
-                setup_auth_azure(cluster, args.dry_run)
             elif cluster in GCP_PROJECTS:
                 setup_auth_gcloud(args.release, cluster, args.dry_run)
-            elif cluster in AWS_DEPLOYMENTS:
-                setup_auth_aws(cluster, args.dry_run)
             elif cluster == "localhost":
                 pass
             else:
@@ -580,8 +447,6 @@ def main():
 
     if args.stage in ("all", "networkban"):
         update_networkbans(cluster, args.release, args.name, args.dry_run)
-    if args.stage in ("all", "system"):
-        deploy_system_charts(args.release, args.name, args.dry_run, args.diff)
     if args.stage in ("all", "certmanager") and cluster != "localhost":
         setup_certmanager(args.dry_run, args.diff)
     if args.stage in ("all", "mybinder"):
