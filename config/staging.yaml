@@ -49,6 +49,7 @@ binderhub:
       config:
         JupyterHub:
           active_server_limit: 10
+          public_url: https://hub.staging.mybinder.org/
     singleuser:
       memory:
         guarantee: 400M
