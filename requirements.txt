@@ -42,7 +42,7 @@ iniconfig==2.3.0
     # via pytest
 kubernetes==36.0.3
     # via -r requirements.in
-multidict==6.7.1
+multidict==6.8.0
     # via
     #   aiohttp
     #   yarl
