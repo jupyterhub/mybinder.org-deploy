@@ -107,5 +107,5 @@ urllib3==2.7.0
     #   requests
 websocket-client==1.9.2
     # via kubernetes
-yarl==1.24.5
+yarl==1.25.1
     # via aiohttp
