@@ -54,7 +54,7 @@ packaging==26.3
     #   pytest-rerunfailures
 pluggy==1.6.0
     # via pytest
-propcache==0.5.2
+propcache==0.5.4
     # via
     #   aiohttp
     #   yarl
