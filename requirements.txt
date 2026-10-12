@@ -38,7 +38,7 @@ idna==3.20
     # via
     #   requests
     #   yarl
-iniconfig==2.3.0
+iniconfig==2.3.1
     # via pytest
 kubernetes==36.0.3
     # via -r requirements.in
