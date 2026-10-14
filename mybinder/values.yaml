@@ -130,6 +130,10 @@ etcJupyter:
       # this is what allows us to shutdown servers
       # when people leave a notebook open and wander off
       cull_connected: true
+    # cull idle terminals as well
+    TerminalManager:
+      cull_inactive_timeout: 600
+      cull_interval: 60
 
 # values ref: https://github.com/jupyterhub/binderhub/blob/main/helm-chart/binderhub/values.yaml
 # can't use binderhub.enabled due to validation errors
