@@ -58,7 +58,7 @@ packaging==26.3
     # via
     #   pytest
     #   pytest-rerunfailures
-pluggy==1.6.0
+pluggy==1.7.0
     # via pytest
 propcache==0.5.4
     # via
