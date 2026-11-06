@@ -52,7 +52,7 @@ multidict==7.1.0
     # via
     #   aiohttp
     #   yarl
-oauthlib==4.0.0
+oauthlib==4.0.1
     # via requests-oauthlib
 packaging==26.3
     # via
