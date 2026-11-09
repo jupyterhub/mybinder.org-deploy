@@ -46,14 +46,16 @@ idna==3.20
     #   yarl
 iniconfig==2.3.1
     # via pytest
-kubernetes==37.0.1
+kubernetes==37.0.2
     # via -r requirements.in
 multidict==7.1.0
     # via
     #   aiohttp
     #   yarl
 oauthlib==4.0.1
-    # via requests-oauthlib
+    # via
+    #   kubernetes
+    #   requests-oauthlib
 packaging==26.3
     # via
     #   pytest
