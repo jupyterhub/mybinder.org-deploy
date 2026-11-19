@@ -26,6 +26,15 @@ def cidrs_aws():
     return [prefix["ip_prefix"] for prefix in r.json()["prefixes"]]
 
 
+def cidrs_cloudflare():
+    """Cloudflare IPs"""
+    url = "https://www.cloudflare.com/ips-v4"
+    r = requests.get(url)
+    r.raise_for_status()
+
+    return [line.strip() for line in r.text.splitlines() if line.strip()]
+
+
 def cidrs_gcp():
     """Google Cloud datacenters"""
     url = "https://www.gstatic.com/ipranges/cloud.json"
@@ -91,6 +100,10 @@ datacenters = {
     "gcp": {
         "message": "Google Cloud",
         "get_cidrs": cidrs_gcp,
+    },
+    "cloudflare": {
+        "message": "Cloudflare",
+        "get_cidrs": cidrs_cloudflare,
     },
     "azure": {
         "message": "Azure",
