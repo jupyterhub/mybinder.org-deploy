@@ -121,6 +121,9 @@ def update_networkbans(cluster, release, name, dry_run=False):
 
     print(BOLD + GREEN + f"Updating network-bans for {cluster}" + NC, flush=True)
 
+    # ban ingress from datacenter, proxy ips
+    check_call([sys.executable, "scripts/datacenters.py"], dry_run)
+
     # some members have special logic in ban.py,
     # in which case they must be specified on the command-line
     ban_command = [sys.executable, "secrets/ban.py"]
