@@ -561,7 +561,7 @@ traefik:
       port: 80
     websecure:
       port: 443
-      proxyProtocol:
+      forwardedHeaders:
         trustedIPs:
           # trust federation-redirect prod cluster egress ip
           - 35.253.65.222
