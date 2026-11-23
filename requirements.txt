@@ -46,7 +46,7 @@ idna==3.20
     #   yarl
 iniconfig==2.3.1
     # via pytest
-kubernetes==37.0.2
+kubernetes==37.0.3
     # via -r requirements.in
 multidict==7.1.0
     # via
