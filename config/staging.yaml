@@ -121,6 +121,13 @@ prometheus:
     retention: 15d
 
 traefik:
+  ports:
+    websecure:
+      forwardedHeaders:
+        trustedIPs:
+          # trust federation-redirect ip
+          # for staging, this comes from within the cluster
+          - 10.0.0.0/8
   resources:
     requests:
       cpu: 10m
