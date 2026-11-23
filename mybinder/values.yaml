@@ -561,6 +561,10 @@ traefik:
       port: 80
     websecure:
       port: 443
+      proxyProtocol:
+        trustedIPs:
+          # trust federation-redirect prod cluster egress ip
+          - 35.253.65.222
       transport:
         respondingTimeouts:
           # Increase for websockets (default is 60s)
